@@ -215,7 +215,7 @@ export default function PersonalInfoPage(props) {
                                 return prev + 1;
                             });
                         } else {
-                            props.changeValue(1);
+                            props.changeValue(3);
                         }
                     }}
                 />

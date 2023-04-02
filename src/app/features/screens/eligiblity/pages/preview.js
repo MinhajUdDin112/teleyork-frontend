@@ -4,80 +4,63 @@ import { Checkbox } from "primereact/checkbox";
 
 const Preview = () => {
     const [selectedPage, setSelectedPage] = useState(0);
-    const personalInfoTable = () => {
+    const pages = ["preview", "invoice"];
+
+    const previewDetails = () => {
         return (
-            <div className="flex justify-content-around">
-                <div className="border-2 w-5 pt-2">
-                    <div className="flex border-bottom-2">
-                        <p className="w-6 ml-4">Name:</p>
-                        <p className="w-6">Hammad</p>
-                    </div>
-                    <div className="flex border-bottom-2 pt-2">
-                        <p className="w-6 ml-4">City:</p>
-                        <p className="w-6">Abbottabad</p>
-                    </div>
-                    <div className="flex border-bottom-2 pt-2">
-                        <p className="w-6 ml-4">Zip Code:</p>
-                        <p className="w-6">22010</p>
-                    </div>
-                    <div className="flex border-bottom-2 pt-2">
-                        <p className="w-6 ml-4">Telephone:</p>
-                        <p className="w-6">03135522652</p>
-                    </div>
-                    <div className="flex pt-2">
-                        <p className="w-6 ml-4">DOB:</p>
-                        <p className="w-6">10-10-1999</p>
-                    </div>
-                </div>
-                <div className="border-2 w-5 ">
-                    <div className="flex border-bottom-2 pt-2">
-                        <p className="w-6 ml-4">Service Address:</p>
-                        <p className="w-6">Hammad</p>
-                    </div>
-                    <div className="flex border-bottom-2 pt-2">
-                        <p className="w-6 ml-4">State:</p>
-                        <p className="w-6">Hammad</p>
-                    </div>
-                    <div className="flex border-bottom-2 pt-2">
-                        <p className="w-6 ml-4">Email:</p>
-                        <p className="w-6">Hammad</p>
-                    </div>
-                    <div className="flex border-bottom-2 pt-2">
-                        <p className="w-6 ml-4">SSN:</p>
-                        <p className="w-6">Hammad</p>
-                    </div>
-                    <div className="flex pt-2">
-                        <p className="w-6 ml-4">Plan:</p>
-                        <p className="w-6">Hammad</p>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-    return (
-        <>
-            <div className="card">
-                <div className="flex flex-row justify-content-between">
-                    <Button label="Back" />
-                    <Button
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-                                });
-                            }
-                        }}
-                    />
-                </div>
-                <br></br>
+            <div>
                 <div>
                     <h6>Enrollment ID: ETC175698</h6>
                 </div>
                 <br></br>
                 <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                 <br />
-                {personalInfoTable()}
+                <div className="flex justify-content-around">
+                    <div className="border-2 w-5 pt-2">
+                        <div className="flex border-bottom-2">
+                            <p className="w-6 ml-4">Name:</p>
+                            <p className="w-6">Hammad</p>
+                        </div>
+                        <div className="flex border-bottom-2 pt-2">
+                            <p className="w-6 ml-4">City:</p>
+                            <p className="w-6">Abbottabad</p>
+                        </div>
+                        <div className="flex border-bottom-2 pt-2">
+                            <p className="w-6 ml-4">Zip Code:</p>
+                            <p className="w-6">22010</p>
+                        </div>
+                        <div className="flex border-bottom-2 pt-2">
+                            <p className="w-6 ml-4">Telephone:</p>
+                            <p className="w-6">03135522652</p>
+                        </div>
+                        <div className="flex pt-2">
+                            <p className="w-6 ml-4">DOB:</p>
+                            <p className="w-6">10-10-1999</p>
+                        </div>
+                    </div>
+                    <div className="border-2 w-5 ">
+                        <div className="flex border-bottom-2 pt-2">
+                            <p className="w-6 ml-4">Service Address:</p>
+                            <p className="w-6">Hammad</p>
+                        </div>
+                        <div className="flex border-bottom-2 pt-2">
+                            <p className="w-6 ml-4">State:</p>
+                            <p className="w-6">Hammad</p>
+                        </div>
+                        <div className="flex border-bottom-2 pt-2">
+                            <p className="w-6 ml-4">Email:</p>
+                            <p className="w-6">Hammad</p>
+                        </div>
+                        <div className="flex border-bottom-2 pt-2">
+                            <p className="w-6 ml-4">SSN:</p>
+                            <p className="w-6">Hammad</p>
+                        </div>
+                        <div className="flex pt-2">
+                            <p className="w-6 ml-4">Plan:</p>
+                            <p className="w-6">Hammad</p>
+                        </div>
+                    </div>
+                </div>
                 <br />
                 <br />
                 <div className="flex">
@@ -104,6 +87,233 @@ const Preview = () => {
                         <p>Electronically Signed by WEECY WIGGINS February 17,2023</p>
                     </label>
                 </div>
+            </div>
+        );
+    };
+    const billingInvoice = () => {
+        return (
+            <div>
+                <div className="card border-noround p-3 surface-50">
+                    <p className="font-bold text-xl">Invoices</p>
+                </div>
+
+                <div className="card p-1">
+                    <div className="flex flex-wrap">
+                        <div className="col-3">
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Current Plan Name:</p>
+                                <p className="text-sm m-0">City Communication special bundle plan</p>
+                            </div>
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Bill Generate:</p>
+                                <p className="text-sm m-0">Enabled</p>
+                            </div>
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Current Deposit Amount:</p>
+                                <p className="text-sm m-0">0.00</p>
+                            </div>
+                        </div>
+                        <div className="col-3">
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Current Plan Price($):</p>
+                                <p className="text-sm m-0">54.99</p>
+                            </div>
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Current credit Limit:</p>
+                                <p className="text-sm m-0">500</p>
+                            </div>
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Due date day is:</p>
+                                <p className="text-sm m-0">4th of month</p>
+                            </div>
+                        </div>
+                        <div className="col-3">
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Charging type:</p>
+                                <p className="text-sm m-0">Monthly</p>
+                            </div>
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Consumed Credit:</p>
+                                <p className="text-sm m-0">365</p>
+                            </div>
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Promo Discount:</p>
+                                <p className="text-sm m-0">For 3 invoices</p>
+                            </div>
+                        </div>
+                        <div className="col-3">
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Current Bill cycle day is:</p>
+                                <p className="text-sm m-0">$th of month</p>
+                            </div>
+                            <div className="mb-1">
+                                <p className="font-bold text-sm m-0">Available Postpaid Limit:</p>
+                                <p className="text-sm m-0">765</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-wrap mt-3">
+                    <div className="col-3">
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-medium justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-medium justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-medium justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-medium justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="col-3">
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                    </div>
+                    <div className="col-3">
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                    </div>
+                    <div className="col-3">
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                        <div className="flex align-items-center mb-3">
+                            <Button id="refundInvoice" className="w-9rem h-2rem text-base font-normal justify-content-center border-noround">
+                                Back
+                            </Button>
+                            <label htmlFor="refundInvoice" className="text-xs">
+                                (PC453)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-wrap ">
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button label="Secondary" className="border-noround mr-2 mb-2 p-button-outlined p-button-secondary" />
+                </div>
+                <div>
+                    <p className="m-0 text-xs font-bold" style={{ color: "red" }}>
+                        •Row in red color are unpaid invoices
+                    </p>
+                    <p className="text-xs font-bold" style={{ color: "blue" }}>
+                        •Row in blue color are paid invoices
+                    </p>
+                </div>
+            </div>
+        );
+    };
+    const builtPages = {
+        preview: previewDetails(),
+        invoice: billingInvoice(),
+    };
+    return (
+        <>
+            <div className="card">
+                <div className="flex flex-row justify-content-between">
+                    <Button label="Back" />
+                    <Button
+                        label="Continue"
+                        onClick={() => {
+                            if (selectedPage < 1) {
+                                setSelectedPage((prev) => {
+                                    return prev + 1;
+                                });
+                            }
+                        }}
+                    />
+                </div>
+                <br></br>
+                {builtPages[pages[selectedPage]]}
             </div>
         </>
     );
