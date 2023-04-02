@@ -5,27 +5,15 @@ import { Checkbox } from "primereact/checkbox";
 import { RadioButton } from "primereact/radiobutton";
 import "./eligibility.scss";
 
-const Eligibility = () => {
+const Eligibility = ({setActiveIndex}) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const data = [{ id: "1500 MB", name: "1500", age: 5000 }];
-    let page = ["eligibility", "agreement", "qualifier", "agree"];
+    let page = ["eligibility",  "agree"];
 
     const eligibilityCard = () => {
         return (
             <div>
-                <div className="flex flex-row justify-content-between">
-                    <Button label="Back" />
-                    <Button
-                        label="Submit"
-                        onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-                                });
-                            }
-                        }}
-                    />
-                </div>
+              
                 <br />
                 <br />
                 <div>
@@ -48,19 +36,7 @@ const Eligibility = () => {
                         </div>
                     </Card>
                 </div>
-                <div className="flex flex-row justify-content-between">
-                    <Button label="Back" />
-                    <Button
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 1) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-                                });
-                            }
-                        }}
-                    />
-                </div>
+                
             </div>
         );
     };
@@ -276,6 +252,9 @@ const Eligibility = () => {
                                     setSelectedPage((prev) => {
                                         return prev + 1;
                                     });
+                                }else{
+
+
                                 }
                             }}
                         />
@@ -382,22 +361,34 @@ const Eligibility = () => {
                         <label>No</label>
                     </div>
                 </div>
-                <div className="flex justify-content-between">
-                    <Button label="Back" />
-                    <Button label="Continue" />
-                </div>
+              
             </div>
         );
     };
 
     let buildpages = {
         eligibility: eligibilityCard(),
-        agreement: agreementPage(),
-        qualifier: acpQualifier(),
+        // agreement: agreementPage(),
+        // qualifier: acpQualifier(),
         agree: agreed(),
     };
     return (
         <>
+        <div className="flex flex-row justify-content-between">
+                    <Button label="Back" />
+                    <Button
+                        label="Continue"
+                        onClick={() => {
+                            if (selectedPage < 1) {
+                                setSelectedPage((prev) => {
+                                    return prev + 1;
+                                });
+                            }else{
+                                setActiveIndex(2);
+                            }
+                        }}
+                    />
+                </div>
             <div className="card">{buildpages[page[selectedPage]]}</div>
         </>
     );

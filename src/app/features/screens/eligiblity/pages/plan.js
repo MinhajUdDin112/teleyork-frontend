@@ -4,7 +4,7 @@ import { Card } from "primereact/card";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
-const Plan = () => {
+const Plan = ({setActiveIndex}) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const data = [{ id: "1500 MB", name: "1500", age: 5000 }];
 
@@ -16,11 +16,7 @@ const Plan = () => {
                     <Button
                         label="Continue"
                         onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-                                });
-                            }
+                           setActiveIndex(3);
                         }}
                     />
                 </div>

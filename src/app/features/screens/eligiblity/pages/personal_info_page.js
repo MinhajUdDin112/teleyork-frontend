@@ -6,7 +6,7 @@ import CustomInputField from "../../../components/custom_input_field";
 import { Checkbox } from "primereact/checkbox";
 import { RadioButton } from "primereact/radiobutton";
 
-export default function PersonalInfoPage(props) {
+export default function PersonalInfoPage({setActiveIndex}) {
     let pages = ["personal", "homeAddress", "question1", "question2", "question3"];
 
     const [selectedPage, setSelectedPage] = useState(0);
@@ -215,7 +215,7 @@ export default function PersonalInfoPage(props) {
                                 return prev + 1;
                             });
                         } else {
-                            props.changeValue(3);
+                            setActiveIndex(1);
                         }
                     }}
                 />
