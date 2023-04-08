@@ -4,7 +4,7 @@ import { Card } from "primereact/card";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
-const Plan = ({setActiveIndex}) => {
+const Plan = ({ setActiveIndex }) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const data = [{ id: "1500 MB", name: "1500", age: 5000 }];
 
@@ -16,11 +16,10 @@ const Plan = ({setActiveIndex}) => {
                     <Button
                         label="Continue"
                         onClick={() => {
-                           setActiveIndex(3);
+                            setActiveIndex(3);
                         }}
                     />
                 </div>
-                <br />
                 <br />
                 <div>
                     <h6>Enrollment ID: ETC175698</h6>
@@ -31,22 +30,22 @@ const Plan = ({setActiveIndex}) => {
                 </div>
 
                 <div className="flex justify-content-around flex-wrap">
-                    <Card style={{ width: "20em", marginBottom: "20px" }}>
-                        <Button label="Free" className="p-button-raised p-button-success w-full" />
-                        <div className="mt-5">
+                    <Card className="p-5 border-noround" style={{ width: "21em", marginBottom: "20px", boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)" }}>
+                        <Button label="Free" className="p-button-raised p-button-success w-full border-noround h-2rem text-base font-medium justify-content-center" />
+                        <div className="my-5">
                             <p className="font-semibold">Basic lite plan</p>
                         </div>
-                        <div className="mt-5">
+                        <div>
                             <DataTable value={data}>
                                 <Column field="id" header="Data"></Column>
                                 <Column field="name" header="Minutes"></Column>
                                 <Column field="age" header="Texts"></Column>
                             </DataTable>
                         </div>
-                        <div className="mt-3">
+                        <div className="my-3">
                             <p className="font-semibold">Free Every Month</p>
                         </div>
-                        <div>
+                        <div className="mb-2">
                             <ul>
                                 <li>Voice Minutes & Unlimited Texts!</li>
                                 <li>Voicemail/Caller Id/3-way Calling</li>
@@ -55,82 +54,26 @@ const Plan = ({setActiveIndex}) => {
                                 <li>Nationwide Coverge on America's Best Networks</li>
                             </ul>
                         </div>
-                        <div className="flex justify-content-center">
-                            <Button label="SELECT" className="p-button-raised" />
+                        <div className="flex justify-content-center mb-3">
+                            <Button label="SELECT" className="p-button-raised w-9rem h-2rem text-base font-medium justify-content-center" />
                         </div>
                     </Card>
-                    <Card style={{ width: "20em", marginBottom: "20px" }}>
-                        <Button label="Free" className="p-button-raised p-button-success w-full" />
-                        <div className="mt-5">
-                            <p className="font-semibold">Below Extreme Basic</p>
-                        </div>
-                        <div className="mt-5">
-                            <DataTable value={data}>
-                                <Column field="id" header="Data"></Column>
-                                <Column field="name" header="Minutes"></Column>
-                                <Column field="age" header="Texts"></Column>
-                            </DataTable>
-                        </div>
-                        <div className="mt-3">
-                            <p className="font-semibold">Free Every Month</p>
-                        </div>
-                        <div>
-                            <ul>
-                                <li>Voice Minutes & Unlimited Texts!</li>
-                                <li>Voicemail/Caller Id/3-way Calling</li>
-                                <li>911 Access</li>
-                                <li>411 Directory Assistance at No Additional Cost</li>
-                                <li>Nationwide Coverge on America's Best Networks</li>
-                            </ul>
-                        </div>
-                        <div className="flex justify-content-center">
-                            <Button label="SELECT" className="p-button-raised" />
-                        </div>
-                    </Card>
-                    <Card style={{ width: "20em", marginBottom: "20px" }}>
-                        <Button label="Free" className="p-button-raised p-button-success w-full" />
-                        <div className="mt-5">
-                            <p className="font-semibold">Extreme Basic ACP Plan</p>
-                        </div>
-                        <div className="mt-5">
-                            <DataTable value={data}>
-                                <Column field="id" header="Data"></Column>
-                                <Column field="name" header="Minutes"></Column>
-                                <Column field="age" header="Texts"></Column>
-                            </DataTable>
-                        </div>
-                        <div className="mt-3">
-                            <p className="font-semibold">Free Every Month</p>
-                        </div>
-                        <div>
-                            <ul>
-                                <li>Voice Minutes & Unlimited Texts!</li>
-                                <li>Voicemail/Caller Id/3-way Calling</li>
-                                <li>911 Access</li>
-                                <li>411 Directory Assistance at No Additional Cost</li>
-                                <li>Nationwide Coverge on America's Best Networks</li>
-                            </ul>
-                        </div>
-                        <div className="flex justify-content-center">
-                            <Button label="SELECT" className="p-button-raised" />
-                        </div>
-                    </Card>
-                    <Card style={{ width: "20em", marginBottom: "20px" }}>
-                        <Button label="Free" className="p-button-raised p-button-success w-full" />
-                        <div className="mt-5">
+                    <Card className="p-5 border-noround" style={{ width: "21em", marginBottom: "20px", boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)" }}>
+                        <Button label="Free" className="p-button-raised p-button-success w-full border-noround h-2rem text-base font-medium justify-content-center" />
+                        <div className="my-5">
                             <p className="font-semibold">Basic lite plan</p>
                         </div>
-                        <div className="mt-5">
+                        <div>
                             <DataTable value={data}>
                                 <Column field="id" header="Data"></Column>
                                 <Column field="name" header="Minutes"></Column>
                                 <Column field="age" header="Texts"></Column>
                             </DataTable>
                         </div>
-                        <div className="mt-3">
+                        <div className="my-3">
                             <p className="font-semibold">Free Every Month</p>
                         </div>
-                        <div>
+                        <div className="mb-2">
                             <ul>
                                 <li>Voice Minutes & Unlimited Texts!</li>
                                 <li>Voicemail/Caller Id/3-way Calling</li>
@@ -139,26 +82,26 @@ const Plan = ({setActiveIndex}) => {
                                 <li>Nationwide Coverge on America's Best Networks</li>
                             </ul>
                         </div>
-                        <div className="flex justify-content-center">
-                            <Button label="SELECT" className="p-button-raised" />
+                        <div className="flex justify-content-center mb-3">
+                            <Button label="SELECT" className="p-button-raised w-9rem h-2rem text-base font-medium justify-content-center" />
                         </div>
                     </Card>
-                    <Card style={{ width: "20em", marginBottom: "20px" }}>
-                        <Button label="Free" className="p-button-raised p-button-success w-full" />
-                        <div className="mt-5">
+                    <Card className="p-5 border-noround" style={{ width: "21em", marginBottom: "20px", boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)" }}>
+                        <Button label="Free" className="p-button-raised p-button-success w-full border-noround h-2rem text-base font-medium justify-content-center" />
+                        <div className="my-5">
                             <p className="font-semibold">Basic lite plan</p>
                         </div>
-                        <div className="mt-5">
+                        <div>
                             <DataTable value={data}>
                                 <Column field="id" header="Data"></Column>
                                 <Column field="name" header="Minutes"></Column>
                                 <Column field="age" header="Texts"></Column>
                             </DataTable>
                         </div>
-                        <div className="mt-3">
+                        <div className="my-3">
                             <p className="font-semibold">Free Every Month</p>
                         </div>
-                        <div>
+                        <div className="mb-2">
                             <ul>
                                 <li>Voice Minutes & Unlimited Texts!</li>
                                 <li>Voicemail/Caller Id/3-way Calling</li>
@@ -167,26 +110,26 @@ const Plan = ({setActiveIndex}) => {
                                 <li>Nationwide Coverge on America's Best Networks</li>
                             </ul>
                         </div>
-                        <div className="flex justify-content-center">
-                            <Button label="SELECT" className="p-button-raised" />
+                        <div className="flex justify-content-center mb-3">
+                            <Button label="SELECT" className="p-button-raised w-9rem h-2rem text-base font-medium justify-content-center" />
                         </div>
                     </Card>
-                    <Card style={{ width: "20em", marginBottom: "20px" }}>
-                        <Button label="Free" className="p-button-raised p-button-success w-full" />
-                        <div className="mt-5">
+                    <Card className="p-5 border-noround" style={{ width: "21em", marginBottom: "20px", boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)" }}>
+                        <Button label="Free" className="p-button-raised p-button-success w-full border-noround h-2rem text-base font-medium justify-content-center" />
+                        <div className="my-5">
                             <p className="font-semibold">Basic lite plan</p>
                         </div>
-                        <div className="mt-5">
+                        <div>
                             <DataTable value={data}>
                                 <Column field="id" header="Data"></Column>
                                 <Column field="name" header="Minutes"></Column>
                                 <Column field="age" header="Texts"></Column>
                             </DataTable>
                         </div>
-                        <div className="mt-3">
+                        <div className="my-3">
                             <p className="font-semibold">Free Every Month</p>
                         </div>
-                        <div>
+                        <div className="mb-2">
                             <ul>
                                 <li>Voice Minutes & Unlimited Texts!</li>
                                 <li>Voicemail/Caller Id/3-way Calling</li>
@@ -195,8 +138,8 @@ const Plan = ({setActiveIndex}) => {
                                 <li>Nationwide Coverge on America's Best Networks</li>
                             </ul>
                         </div>
-                        <div className="flex justify-content-center">
-                            <Button label="SELECT" className="p-button-raised" />
+                        <div className="flex justify-content-center mb-3">
+                            <Button label="SELECT" className="p-button-raised w-9rem h-2rem text-base font-medium justify-content-center" />
                         </div>
                     </Card>
                 </div>
