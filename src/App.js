@@ -22,6 +22,7 @@ import "./assets/layout/layout.scss";
 import "./App.scss";
 import ServiceAvailablityPage from "./app/features/screens/eligiblity/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblity/pages/enrollment_flow_page";
+import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -142,102 +143,120 @@ const App = () => {
                 },
             ],
         },
-       
-           {
+        {
             label: "",
             icon: "pi pi-fw pi-search",
             items: [
-                
                 {
                     label: "Lifeline Orders",
                     icon: "pi pi-fw pi-bookmark",
                     items: [
-                        { label: "New Enrollments", icon: "",to:"/eligibility" },
-                        { label: "All Enrollments", icon: "",to:"/api/enrollments/all" },
-                        { label: "With Proof Enrollments", icon: "",to:"/api/enrollments/proof" },
-                        { label: "Without Proof Enrollments", icon: "",to:"/api/enrollments/withoutproof" },
-                        { label: "Completed Enrollments", icon: "",to:"/api/enrollments/completed" },
-                        { label: "Incomplete Enrollments", icon: "",to:"/api/enrollments/incomplete" },
-                        { label: "Rejected Enrollments", icon: "",to:"/api/enrollments/rejected" },
-                        { label: "Handover Event Order", icon: "",to:"/api/enrollments/handover" },
-                        { label: "Pending Event Order", icon: "",to:"/api/enrollments/pending" },
-                      
-                    
-                       
+                        { label: "New Enrollments", icon: "", to: "/eligibility" },
+                        { label: "All Enrollments", icon: "", to: "/api/enrollments/all" },
+                        { label: "With Proof Enrollments", icon: "", to: "/api/enrollments/proof" },
+                        { label: "Without Proof Enrollments", icon: "", to: "/api/enrollments/withoutproof" },
+                        { label: "Completed Enrollments", icon: "", to: "/api/enrollments/completed" },
+                        { label: "Incomplete Enrollments", icon: "", to: "/api/enrollments/incomplete" },
+                        { label: "Rejected Enrollments", icon: "", to: "/api/enrollments/rejected" },
+                        { label: "Handover Event Order", icon: "", to: "/api/enrollments/handover" },
+                        { label: "Pending Event Order", icon: "", to: "/api/enrollments/pending" },
                     ],
                 },
-             
             ],
         },
-    ];
-    
-    const menu1 = [
         {
-            label: "Home",
             items: [
                 {
-                    label: "Dashboard",
-                    icon: "pi pi-fw pi-home",
-                    to: "/dashboard",
+                    label: "Customer Service  (PC400)",
+                    items: [
+                        {
+                            label: "Customer Profile (PC56)",
+                            icon: "",
+                            to: "",
+                        },
+                        {
+                            label: "Billing and Invoice (PC75)",
+                            icon: "",
+                            to: "/invoice",
+                        },
+                        {
+                            label: "Order History (PC76)",
+                            icon: "",
+                            to: "",
+                        },
+                    ],
                 },
             ],
         },
-        {
-            label: "UI Components",
-            icon: "pi pi-fw pi-sitemap",
-            items: [
-                { label: "Form Layout", icon: "pi pi-fw pi-id-card", to: "/formlayout" },
-                { label: "Input", icon: "pi pi-fw pi-check-square", to: "/input" },
-                { label: "Float Label", icon: "pi pi-fw pi-bookmark", to: "/floatlabel" },
-                { label: "Invalid State", icon: "pi pi-fw pi-exclamation-circle", to: "invalidstate" },
-                { label: "Button", icon: "pi pi-fw pi-mobile", to: "/button" },
-                { label: "Table", icon: "pi pi-fw pi-table", to: "/table" },
-                { label: "List", icon: "pi pi-fw pi-list", to: "/list" },
-                { label: "Tree", icon: "pi pi-fw pi-share-alt", to: "/tree" },
-                { label: "Panel", icon: "pi pi-fw pi-tablet", to: "/panel" },
-                { label: "Overlay", icon: "pi pi-fw pi-clone", to: "/overlay" },
-                { label: "Media", icon: "pi pi-fw pi-image", to: "/media" },
-                { label: "Menu", icon: "pi pi-fw pi-bars", to: "/menu" },
-                { label: "Message", icon: "pi pi-fw pi-comment", to: "/messages" },
-                { label: "File", icon: "pi pi-fw pi-file", to: "/file" },
-                { label: "Chart", icon: "pi pi-fw pi-chart-bar", to: "/chart" },
-                { label: "Misc", icon: "pi pi-fw pi-circle-off", to: "/misc" },
-            ],
-        },
-        {
-            label: "Icons",
-            items: [{ label: "PrimeIcons", icon: "pi pi-fw pi-prime", to: "/icons" }],
-        },
-        {
-            label: "Pages",
-            icon: "pi pi-fw pi-clone",
-            items: [
-                { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
-                { label: "Timeline", icon: "pi pi-fw pi-calendar", to: "/timeline" },
-                { label: "Empty", icon: "pi pi-fw pi-circle-off", to: "/empty" },
-            ],
-        },
-     
-        // {
-        //     label: "Get Started",
-        //     items: [
-        //         {
-        //             label: "Documentation",
-        //             icon: "pi pi-fw pi-question",
-        //             command: () => {
-        //                 window.location = "#/documentation";
-        //             },
-        //         },
-        //         {
-        //             label: "View Source",
-        //             icon: "pi pi-fw pi-search",
-        //             command: () => {
-        //                 window.location = "https://github.com/primefaces/sakai-react";
-        //             },
-        //         },
-        //     ],
-        // },
     ];
+
+    // const menu1 = [
+    //     {
+    //         label: "Home",
+    //         items: [
+    //             {
+    //                 label: "Dashboard",
+    //                 icon: "pi pi-fw pi-home",
+    //                 to: "/dashboard",
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         label: "UI Components",
+    //         icon: "pi pi-fw pi-sitemap",
+    //         items: [
+    //             { label: "Form Layout", icon: "pi pi-fw pi-id-card", to: "/formlayout" },
+    //             { label: "Input", icon: "pi pi-fw pi-check-square", to: "/input" },
+    //             { label: "Float Label", icon: "pi pi-fw pi-bookmark", to: "/floatlabel" },
+    //             { label: "Invalid State", icon: "pi pi-fw pi-exclamation-circle", to: "invalidstate" },
+    //             { label: "Button", icon: "pi pi-fw pi-mobile", to: "/button" },
+    //             { label: "Table", icon: "pi pi-fw pi-table", to: "/table" },
+    //             { label: "List", icon: "pi pi-fw pi-list", to: "/list" },
+    //             { label: "Tree", icon: "pi pi-fw pi-share-alt", to: "/tree" },
+    //             { label: "Panel", icon: "pi pi-fw pi-tablet", to: "/panel" },
+    //             { label: "Overlay", icon: "pi pi-fw pi-clone", to: "/overlay" },
+    //             { label: "Media", icon: "pi pi-fw pi-image", to: "/media" },
+    //             { label: "Menu", icon: "pi pi-fw pi-bars", to: "/menu" },
+    //             { label: "Message", icon: "pi pi-fw pi-comment", to: "/messages" },
+    //             { label: "File", icon: "pi pi-fw pi-file", to: "/file" },
+    //             { label: "Chart", icon: "pi pi-fw pi-chart-bar", to: "/chart" },
+    //             { label: "Misc", icon: "pi pi-fw pi-circle-off", to: "/misc" },
+    //         ],
+    //     },
+    //     {
+    //         label: "Icons",
+    //         items: [{ label: "PrimeIcons", icon: "pi pi-fw pi-prime", to: "/icons" }],
+    //     },
+    //     {
+    //         label: "Pages",
+    //         icon: "pi pi-fw pi-clone",
+    //         items: [
+    //             { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
+    //             { label: "Timeline", icon: "pi pi-fw pi-calendar", to: "/timeline" },
+    //             { label: "Empty", icon: "pi pi-fw pi-circle-off", to: "/empty" },
+    //         ],
+    //     },
+
+    //     // {
+    //     //     label: "Get Started",
+    //     //     items: [
+    //     //         {
+    //     //             label: "Documentation",
+    //     //             icon: "pi pi-fw pi-question",
+    //     //             command: () => {
+    //     //                 window.location = "#/documentation";
+    //     //             },
+    //     //         },
+    //     //         {
+    //     //             label: "View Source",
+    //     //             icon: "pi pi-fw pi-search",
+    //     //             command: () => {
+    //     //                 window.location = "https://github.com/primefaces/sakai-react";
+    //     //             },
+    //     //         },
+    //     //     ],
+    //     // },
+    // ];
 
     const addClass = (element, className) => {
         if (element.classList) element.classList.add(className);
@@ -280,6 +299,7 @@ const App = () => {
                     <div className="layout-main">
                         <Route exact path="/eligibility" component={ServiceAvailablityPage} />
                         <Route exact path="/enrollment" component={EnrollmentFlowPage} />
+                        <Route exact path="/invoice" component={InvoicePage} />
                         {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                     </div>
 
