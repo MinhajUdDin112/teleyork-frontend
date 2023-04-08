@@ -3,6 +3,8 @@ import CustomInputField from '../../../components/custom_input_field'
 import { useFormik } from 'formik';
 import * as Yup from "yup";
 import { Button } from 'primereact/button';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 import { useHistory } from 'react-router-dom';
 
 export default function ServiceAvailablityPage() {
@@ -31,8 +33,39 @@ export default function ServiceAvailablityPage() {
         },
       });
 
+      const data=[
+        {
+          name:{
+            first:"Waseem"
+          },
+          age:24,
+          height:"5.5",
+          designation:"SE"
+        },
+        {
+          name:{
+            first:"Waseem"
+          },
+          age:24,
+          height:"5.5",
+          designation:"SE"
+        },
+      ];
+
   return (
     <div className='flex flex-column justify-content-center' >
+
+<div>
+  <DataTable value={data} showGridlines responsiveLayout="scroll">
+    <Column field='name.first' header="Name of user" />
+    <Column field='age' header="AGe of user" />
+  </DataTable>
+  <DataTable value={data} showGridlines responsiveLayout="scroll">
+    <Column field='height' header="height of user" />
+    <Column field='designation' header="designation of user" />
+  </DataTable>
+</div>
+
 <div className='grid justify-content-center align-content-center my-5'>
 
 <div className='card col-4 '>

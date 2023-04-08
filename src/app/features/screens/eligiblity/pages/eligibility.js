@@ -374,7 +374,8 @@ const Eligibility = ({setActiveIndex}) => {
     };
     return (
         <>
-        <div className="flex flex-row justify-content-between">
+        
+        <div className="flex flex-row justify-content-between my-3">
                     <Button label="Back" />
                     <Button
                         label="Continue"
