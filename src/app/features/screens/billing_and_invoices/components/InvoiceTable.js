@@ -1,8 +1,9 @@
 import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { Button } from "primereact/button";
 
-const InvoiceTable = () => {
+const InvoiceTable = ({ setDetailedTransactionModal }) => {
     const cardData = [
         {
             Invoice_No: "2023-03-65910",
@@ -24,10 +25,23 @@ const InvoiceTable = () => {
             Invoice_Pdf: "",
         },
     ];
+    const handleCellClick = () => {
+        setDetailedTransactionModal(true);
+    };
+
     return (
         <div>
-            <DataTable value={cardData} showGridlines style={{ backgroundColor: "red" }}>
-                <Column field="Invoice_No" header="Invoice No." style={{ minWidth: "150px" }} />
+            <DataTable value={cardData} showGridlines>
+                <Column
+                    field="Invoice_No"
+                    header="Invoice No."
+                    style={{ minWidth: "150px" }}
+                    body={(rowData) => (
+                        <span style={{ cursor: "pointer" }} onClick={() => handleCellClick()}>
+                            {rowData.Invoice_No}
+                        </span>
+                    )}
+                />
                 <Column field="Invoice_Type" header="Invoice Type" style={{ minWidth: "150px" }} />
                 <Column field="Debit" header="Debit(A)" style={{ minWidth: "150px" }} />
                 <Column field="Tax" header="Tax(B)" style={{ minWidth: "150px" }} />
@@ -41,9 +55,9 @@ const InvoiceTable = () => {
                 <Column field="Created_By" header="Created By" style={{ minWidth: "150px" }} />
                 <Column field="Source" header="Source" style={{ minWidth: "150px" }} />
                 <Column field="Paid_Using" header="Paid Using" style={{ minWidth: "150px" }} />
-                <Column field="Paid_Unpaid" header="Paid Using" style={{ minWidth: "150px" }} />
-                <Column field="Action" header="Action (PC609)" style={{ minWidth: "150px" }} />
-                <Column field="Invoice_Pdf" header="Invoice Pdf" style={{ minWidth: "150px" }} />
+                <Column field="Paid_Unpaid" header="Paid/Unpaid" style={{ minWidth: "150px" }} />
+                <Column field="Action" body={<Button onClick={() => setDetailedTransactionModal(true)}>Void</Button>} header="Action (PC609)" style={{ minWidth: "150px" }} />
+                <Column field="Invoice_Pdf" body={<Button onClick={() => setDetailedTransactionModal(true)}>Download</Button>} header="Invoice Pdf" style={{ minWidth: "150px" }} />
             </DataTable>
         </div>
     );

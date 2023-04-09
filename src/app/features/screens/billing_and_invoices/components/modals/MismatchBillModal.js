@@ -3,27 +3,24 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 
-const NsfModal = ({ nsfModal, setNsfModal }) => {
+const MismatchBillModal = ({ misMatchBillModal, setMisMatchBillModal }) => {
     const [selectedCity1, setSelectedCity1] = useState(null);
-    const cities = [
-        { name: "NSF", code: "NY" },
-        { name: "Credit Card Fraud", code: "RM" },
-        { name: "Others Return Payment", code: "LDN" },
-    ];
+
+    const cities = [{ name: "Lifeline Wireless Plan", code: "NY" }];
     const onCityChange = (e) => {
         setSelectedCity1(e.value);
     };
     const renderFooter = () => {
         return (
-            <div className="flex justify-content-between">
-                <Button label="Submit" onClick={() => setNsfModal(false)} />
-                <Button label="Close" onClick={() => setNsfModal(false)} />
+            <div className="flex justify-content-between m-3">
+                <Button label="Submit" onClick={() => setMisMatchBillModal(false)} />
+                <Button label="Close" onClick={() => setMisMatchBillModal(false)} />
             </div>
         );
     };
     return (
         <div>
-            <Dialog header="Add NSF/Fraud Invoice" closable={false} visible={nsfModal} footer={renderFooter()} style={{ width: "50vw" }}>
+            <Dialog header="Add Mismatch Bill Pay" closable={false} visible={misMatchBillModal} footer={renderFooter()} style={{ width: "50vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID:</p>
@@ -48,15 +45,15 @@ const NsfModal = ({ nsfModal, setNsfModal }) => {
                         </p>
                     </div>
                     <div className="flex">
-                        <p className="col-4 font-semibold m-0 p-1">Invoice Amount:</p>
-                        <p className="col-8 m-0 p-2">
-                            <input placeholder="Enter Invoice Amount" className="h-2rem w-7 border-round-xs" />
+                        <p className="col-4 font-semibold m-0 p-1">Invoice No.:</p>
+                        <p className="col-8 m-0 p-1">
+                            <input placeholder="Enter Invoioce No" className="h-2rem w-7 border-round-xs" />
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Ref.No.:</p>
-                        <p className="col-8 m-0 p-2">
-                            <input placeholder="Enter Ref.No" className="h-2rem w-7 border-round-xs" />
+                        <p className="col-8 m-0 p-1">
+                            <input placeholder="Enter Ref No" className="h-2rem w-7 border-round-xs" />
                         </p>
                     </div>
                 </div>
@@ -65,4 +62,4 @@ const NsfModal = ({ nsfModal, setNsfModal }) => {
     );
 };
 
-export default NsfModal;
+export default MismatchBillModal;

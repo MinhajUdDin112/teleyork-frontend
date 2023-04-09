@@ -387,7 +387,7 @@ const Eligibility = ({ setActiveIndex }) => {
                     />
                 </div>
                 <div>{buildpages[page[selectedPage]]}</div>
-            </div>
+            
         </>
     );
 };

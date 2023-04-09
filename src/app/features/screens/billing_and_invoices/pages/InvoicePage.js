@@ -4,22 +4,69 @@ import PlanInfo from "../components/PlanInfo";
 import InvoiceTypes from "../components/InvoiceTypes";
 import EditabaleInvoices from "../components/EditableInvoices";
 import InvoiceTable from "../components/InvoiceTable";
+import DetailedTransactionModal from "../components/modals/DetailedTransactionModal";
 import NsfModal from "../components/modals/NsfModal";
+import AdHocModal from "../components/modals/AdHocModal";
+import MismatchInvoiceModal from "../components/modals/MismatchInvoiceModal";
+import EbillModal from "../components/modals/EbillModal";
+import MismatchBillModal from "../components/modals/MismatchBillModal";
+import AdjustBalanceModal from "../components/modals/AdjustBalanceModal";
+import PayInvoiceModal from "../components/modals/PayInvoiceModal";
+import DiscountCreditModal from "../components/modals/DiscountCreditModal";
+import AdjustWalletModal from "../components/modals/AdjustWalletModal";
+import AddWalletModal from "../components/modals/AddWalletModal";
+import PaymentModal from "../components/modals/PaymentModal";
+import PaymentDetailModal from "../components/modals/PaymentDetailModal";
 
 const InvoicePage = () => {
-    const [displayModal, setDisplayModal] = useState(false);
+    const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
+    const [nsfModal, setNsfModal] = useState(false);
+    const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
+    const [misMatchInvoiceModal, setMisMatchInvoiceModal] = useState(false);
+    const [ebillModal, setEbillModal] = useState(false);
+    const [misMatchBillModal, setMisMatchBillModal] = useState(false);
+    const [adjustBalanceModal, setAdjustBalanceModal] = useState(false);
+    const [payInvoiceModal, setPayInvoiceModal] = useState(false);
+    const [discountCreditModal, setDiscountCreditModal] = useState(false);
+    const [adjustWalletModal, setAdjustWalletModal] = useState(false);
+    const [addWalletModal, setAddWalletModal] = useState(false);
+    const [paymentModal, setPaymentModal] = useState(false);
+    const [paymentDetailModal, setPaymentDetailModal] = useState(false);
+
     return (
         <>
-            <BillingNavbar />
             <div className="card">
                 <div className="card border-noround p-3 surface-50">
                     <p className="font-bold text-xl">Invoices</p>
                 </div>
                 <PlanInfo />
-                <InvoiceTypes setDisplayModal={setDisplayModal} />
-                <EditabaleInvoices />
+                <InvoiceTypes
+                    setNsfModal={setNsfModal}
+                    setAdHocInvoiceModal={setAdHocInvoiceModal}
+                    setMisMatchInvoiceModal={setMisMatchInvoiceModal}
+                    setEbillModal={setEbillModal}
+                    setMisMatchBillModal={setMisMatchBillModal}
+                    setAdjustBalanceModal={setAdjustBalanceModal}
+                    setPayInvoiceModal={setPayInvoiceModal}
+                    setDiscountCreditModal={setDiscountCreditModal}
+                    setAdjustWalletModal={setAdjustWalletModal}
+                    setAddWalletModal={setAddWalletModal}
+                />
+                <EditabaleInvoices setPaymentModal={setPaymentModal} />
                 <div>
-                    <NsfModal displayModal={displayModal} setDisplayModal={setDisplayModal} />
+                    <DetailedTransactionModal detailedTransactionModal={detailedTransactionModal} setDetailedTransactionModal={setDetailedTransactionModal} />
+                    <NsfModal nsfModal={nsfModal} setNsfModal={setNsfModal} />
+                    <AdHocModal adHocInvoiceModal={adHocInvoiceModal} setAdHocInvoiceModal={setAdHocInvoiceModal} />
+                    <MismatchInvoiceModal misMatchInvoiceModal={misMatchInvoiceModal} setMisMatchInvoiceModal={setMisMatchInvoiceModal} />
+                    <EbillModal ebillModal={ebillModal} setEbillModal={setEbillModal} />
+                    <MismatchBillModal misMatchBillModal={misMatchBillModal} setMisMatchBillModal={setMisMatchBillModal} />
+                    <AdjustBalanceModal adjustBalanceModal={adjustBalanceModal} setAdjustBalanceModal={setAdjustBalanceModal} />
+                    <AdjustWalletModal adjustWalletModal={adjustWalletModal} setAdjustWalletModal={setAdjustWalletModal} />
+                    <PayInvoiceModal payInvoiceModal={payInvoiceModal} setPayInvoiceModal={setPayInvoiceModal} />
+                    <DiscountCreditModal discountCreditModal={discountCreditModal} setDiscountCreditModal={setDiscountCreditModal} />
+                    <AddWalletModal addWalletModal={addWalletModal} setAddWalletModal={setAddWalletModal} />
+                    <PaymentModal paymentModal={paymentModal} setPaymentModal={setPaymentModal} setPaymentDetailModal={setPaymentDetailModal} />
+                    <PaymentDetailModal paymentDetailModal={paymentDetailModal} setPaymentDetailModal={setPaymentDetailModal} />
                 </div>
                 <div>
                     <p className="m-0 text-xs font-bold" style={{ color: "red" }}>
@@ -30,7 +77,7 @@ const InvoicePage = () => {
                     </p>
                 </div>
                 <br />
-                <InvoiceTable />
+                <InvoiceTable setDetailedTransactionModal={setDetailedTransactionModal} />
             </div>
         </>
     );

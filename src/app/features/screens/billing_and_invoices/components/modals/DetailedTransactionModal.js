@@ -4,21 +4,11 @@ import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
-const TransactionModal = () => {
-    const [displayBasic, setDisplayBasic] = useState(false);
-    const dialogFuncMap = {
-        displayBasic: setDisplayBasic,
-    };
-    const onClick = (name) => {
-        dialogFuncMap[`${name}`](true);
-    };
-    const onHide = (name) => {
-        dialogFuncMap[`${name}`](false);
-    };
-    const renderFooter = (name) => {
+const DetailedTransactionModal = ({ detailedTransactionModal, setDetailedTransactionModal }) => {
+    const renderFooter = () => {
         return (
             <div>
-                <Button label="Close" onClick={() => onHide(name)}/>
+                <Button label="Close" onClick={() => setDetailedTransactionModal(false)} />
             </div>
         );
     };
@@ -49,9 +39,7 @@ const TransactionModal = () => {
     ];
     return (
         <div>
-            <h5>Detail Transaction</h5>
-            <Button label="Show" icon="pi pi-external-link" onClick={() => onClick("displayBasic")} />
-            <Dialog header="Detailed Transaction" visible={displayBasic} style={{ width: "80vw" }} footer={renderFooter("displayBasic")}>
+            <Dialog header="Detailed Transaction" closable={false} visible={detailedTransactionModal} style={{ width: "80vw" }} footer={renderFooter()}>
                 <DataTable value={tabledata}>
                     <Column field="invoiceno" header="Invoice No." />
                     <Column field="invicetype" header="Invoice Type" />
@@ -68,4 +56,4 @@ const TransactionModal = () => {
     );
 };
 
-export default TransactionModal;
+export default DetailedTransactionModal;
