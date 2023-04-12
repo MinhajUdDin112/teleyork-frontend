@@ -29,7 +29,7 @@ const PayInvoiceModal = ({ payInvoiceModal, setPayInvoiceModal }) => {
     };
     return (
         <div>
-            <Dialog header="Pay Invoice (s)" closable={false} visible={payInvoiceModal} footer={renderFooter()} style={{ width: "70vw" }}>
+            <Dialog header="Pay Invoice (s)" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={payInvoiceModal} footer={renderFooter()} style={{ width: "70vw" }}>
                 <div>
                     <p className="m-0">Note:</p>
                     <p className="m-0">1. If there is no pending outstanding invoice on this account hence default payable amount would be similar to customer plan amount.</p>
@@ -85,7 +85,7 @@ const PayInvoiceModal = ({ payInvoiceModal, setPayInvoiceModal }) => {
                                 </label>
                                 <RadioButton inputId="city1" name="city" value="No" onChange={(e) => setCity(e.value)} checked={city === "No"} />
                                 <label htmlFor="city1" className="mr-2 px-2">
-                                Money Gram (PC825)
+                                    Money Gram (PC825)
                                 </label>
                                 <RadioButton inputId="city1" name="city" value="No" onChange={(e) => setCity(e.value)} checked={city === "No"} />
                                 <label htmlFor="city1" className="mr-2 px-2">
@@ -108,7 +108,7 @@ const PayInvoiceModal = ({ payInvoiceModal, setPayInvoiceModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Type Of Card:</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown value={cardType} options={cards} onChange={onCardChange} placeholder="Select" optionLabel="name" className="h-2rem align-items-center w-full " />
+                            <Dropdown value={cardType} options={cards} onChange={onCardChange} placeholder="Select" optionLabel="name" className="h-2rem align-items-center w-full border-700" />
                         </p>
                     </div>
                     <div className="flex">
@@ -116,8 +116,8 @@ const PayInvoiceModal = ({ payInvoiceModal, setPayInvoiceModal }) => {
                         <div className="flex col-8 m-0 p-1">
                             <input className="w-2 h-2rem" />
                             <p className="w-2 ml-3">Exp Date</p>
-                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center" />
-                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center" />
+                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center border-700" />
+                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center border-700" />
                         </div>
                     </div>
                     <div className="flex">
@@ -147,7 +147,7 @@ const PayInvoiceModal = ({ payInvoiceModal, setPayInvoiceModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">State/Province</p>
                         <div className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" className="h-2rem align-items-center w-full" />
+                            <Dropdown placeholder="Select" className="h-2rem align-items-center w-full border-700" />
                             <div className="flex my-2">
                                 <Checkbox inputId="binary" checked={checked} onChange={() => setChecked(e.checked)} />
                                 <label htmlFor="binary" className="ml-2">

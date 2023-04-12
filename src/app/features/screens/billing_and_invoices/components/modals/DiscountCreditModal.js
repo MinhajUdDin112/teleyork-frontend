@@ -31,7 +31,7 @@ const DiscountCreditModal = ({ discountCreditModal, setDiscountCreditModal }) =>
     };
     return (
         <div>
-            <Dialog header="Discount Credit" closable={false} visible={discountCreditModal} footer={renderFooter()} style={{ width: "50vw" }}>
+            <Dialog header="Discount Credit" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={discountCreditModal} footer={renderFooter()} style={{ width: "50vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID</p>
@@ -52,7 +52,7 @@ const DiscountCreditModal = ({ discountCreditModal, setDiscountCreditModal }) =>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Discount Credit Option</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" value={selectedCity1} options={cities1} onChange={onCity1Change} optionLabel="name" className="h-2rem w-7 align-items-center  " />
+                            <Dropdown placeholder="Select" value={selectedCity1} options={cities1} onChange={onCity1Change} optionLabel="name" className="h-2rem w-7 align-items-center border-700 " />
                         </p>
                     </div>
                     <div className="flex">
@@ -64,7 +64,7 @@ const DiscountCreditModal = ({ discountCreditModal, setDiscountCreditModal }) =>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Discount Credit Option</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" value={selectedCity2} options={cities2} onChange={onCity2Change} optionLabel="name" className="h-2rem w-7 align-items-center" />
+                            <Dropdown placeholder="Select" value={selectedCity2} options={cities2} onChange={onCity2Change} optionLabel="name" className="h-2rem w-7 align-items-center border-700" />
                         </p>
                     </div>
                 </div>

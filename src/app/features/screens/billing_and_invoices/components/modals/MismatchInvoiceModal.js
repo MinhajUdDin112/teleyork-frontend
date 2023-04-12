@@ -23,7 +23,7 @@ const MismatchInvoiceModal = ({ misMatchInvoiceModal, setMisMatchInvoiceModal })
     };
     return (
         <div>
-            <Dialog header="Add Mismatch Invoice" closable={false} visible={misMatchInvoiceModal} footer={renderFooter()} style={{ width: "50vw" }}>
+            <Dialog header="Add Mismatch Invoice" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={misMatchInvoiceModal} footer={renderFooter()} style={{ width: "50vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID:</p>
@@ -44,7 +44,7 @@ const MismatchInvoiceModal = ({ misMatchInvoiceModal, setMisMatchInvoiceModal })
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Mismatch Type:</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center  " />
+                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center border-700 " />
                         </p>
                     </div>
                     <div className="flex">

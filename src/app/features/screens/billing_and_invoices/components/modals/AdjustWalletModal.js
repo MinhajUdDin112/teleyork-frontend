@@ -15,7 +15,7 @@ const AdjustWalletModal = ({ adjustWalletModal, setAdjustWalletModal }) => {
     };
     return (
         <div>
-            <Dialog header="CSR Screen For Adjust Wallet" closable={false} visible={adjustWalletModal} footer={renderFooter()} style={{ width: "50vw" }}>
+            <Dialog header="CSR Screen For Adjust Wallet" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={adjustWalletModal} footer={renderFooter()} style={{ width: "50vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID</p>
@@ -40,7 +40,7 @@ const AdjustWalletModal = ({ adjustWalletModal, setAdjustWalletModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Reason</p>
                         <p className="col-8 m-0 p-1">
-                            <InputTextarea className="w-7 h-4rem" value={value1} onChange={(e) => setValue1(e.target.value)} rows={5} cols={30} />
+                            <InputTextarea className="w-7 h-4rem border-700" value={value1} onChange={(e) => setValue1(e.target.value)} rows={5} cols={30} />
                         </p>
                     </div>
                 </div>

@@ -16,14 +16,14 @@ const NsfModal = ({ nsfModal, setNsfModal }) => {
     const renderFooter = () => {
         return (
             <div className="flex justify-content-between">
-                <Button label="Submit" onClick={() => setNsfModal(false)} />
-                <Button label="Close" onClick={() => setNsfModal(false)} />
+                <Button className="ml-3" label="Submit" onClick={() => setNsfModal(false)} />
+                <Button className="mr-3" label="Close" onClick={() => setNsfModal(false)} />
             </div>
         );
     };
     return (
         <div>
-            <Dialog header="Add NSF/Fraud Invoice" closable={false} visible={nsfModal} footer={renderFooter()} style={{ width: "50vw" }}>
+            <Dialog header="Add NSF/Fraud Invoice" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={nsfModal} footer={renderFooter()} style={{ width: "50vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID:</p>
@@ -44,7 +44,7 @@ const NsfModal = ({ nsfModal, setNsfModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Invoice Type:</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center  " />
+                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center border-700 " />
                         </p>
                     </div>
                     <div className="flex">

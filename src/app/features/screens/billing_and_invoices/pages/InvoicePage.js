@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import BillingNavbar from "../../../../../components/billing_navbar";
 import PlanInfo from "../components/PlanInfo";
 import InvoiceTypes from "../components/InvoiceTypes";
 import EditabaleInvoices from "../components/EditableInvoices";
@@ -17,6 +16,7 @@ import AdjustWalletModal from "../components/modals/AdjustWalletModal";
 import AddWalletModal from "../components/modals/AddWalletModal";
 import PaymentModal from "../components/modals/PaymentModal";
 import PaymentDetailModal from "../components/modals/PaymentDetailModal";
+import BillingNavbar from "../components/BillingNavbar";
 
 const InvoicePage = () => {
     const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
@@ -35,8 +35,9 @@ const InvoicePage = () => {
 
     return (
         <>
-            <div className="card">
-                <div className="card border-noround p-3 surface-50">
+            <div className="card p-0">
+                <BillingNavbar />
+                <div className="card border-noround p-3 surface-50 mx-4 mt-3">
                     <p className="font-bold text-xl">Invoices</p>
                 </div>
                 <PlanInfo />
@@ -68,7 +69,7 @@ const InvoicePage = () => {
                     <PaymentModal paymentModal={paymentModal} setPaymentModal={setPaymentModal} setPaymentDetailModal={setPaymentDetailModal} />
                     <PaymentDetailModal paymentDetailModal={paymentDetailModal} setPaymentDetailModal={setPaymentDetailModal} />
                 </div>
-                <div>
+                <div className="mx-4">
                     <p className="m-0 text-xs font-bold" style={{ color: "red" }}>
                         •Row in red color are unpaid invoices
                     </p>
@@ -77,7 +78,7 @@ const InvoicePage = () => {
                     </p>
                 </div>
                 <br />
-                <InvoiceTable setDetailedTransactionModal={setDetailedTransactionModal} />
+                <InvoiceTable className="mb-3" setDetailedTransactionModal={setDetailedTransactionModal} />
             </div>
         </>
     );

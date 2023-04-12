@@ -29,7 +29,7 @@ const AddWalletModal = ({ addWalletModal, setAddWalletModal }) => {
     };
     return (
         <div>
-            <Dialog header="Add Wallet" closable={false} visible={addWalletModal} footer={renderFooter()} style={{ width: "70vw" }}>
+            <Dialog header="Add Wallet" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={addWalletModal} footer={renderFooter()} style={{ width: "70vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID</p>
@@ -104,7 +104,7 @@ const AddWalletModal = ({ addWalletModal, setAddWalletModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Type Of Card:</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown value={cardType} options={cards} onChange={onCardChange} placeholder="Select" optionLabel="name" className="h-2rem align-items-center w-full " />
+                            <Dropdown value={cardType} options={cards} onChange={onCardChange} placeholder="Select" optionLabel="name" className="h-2rem align-items-center w-full border-700" />
                         </p>
                     </div>
                     <div className="flex">
@@ -112,8 +112,8 @@ const AddWalletModal = ({ addWalletModal, setAddWalletModal }) => {
                         <div className="flex col-8 m-0 p-1">
                             <input className="w-2 h-2rem" />
                             <p className="w-2 ml-3">Exp Date</p>
-                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center" />
-                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center" />
+                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center border-700" />
+                            <Dropdown placeholder="Select" className="h-2rem w-3 ml-3 align-items-center border-700" />
                         </div>
                     </div>
                     <div className="flex">
@@ -143,7 +143,7 @@ const AddWalletModal = ({ addWalletModal, setAddWalletModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">State/Province</p>
                         <div className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" className="h-2rem align-items-center w-full" />
+                            <Dropdown placeholder="Select" className="h-2rem align-items-center w-full border-700" />
                             <div className="flex my-2">
                                 <Checkbox inputId="binary" checked={checked} onChange={() => setChecked(e.checked)} />
                                 <label htmlFor="binary" className="ml-2">

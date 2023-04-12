@@ -25,7 +25,7 @@ const EbillModal = ({ ebillModal, setEbillModal }) => {
     };
     return (
         <div>
-            <Dialog header="Ebill Setting" closable={false} visible={ebillModal} footer={renderFooter()} style={{ width: "50vw" }}>
+            <Dialog header="Ebill Setting" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={ebillModal} footer={renderFooter()} style={{ width: "50vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID</p>
@@ -46,7 +46,7 @@ const EbillModal = ({ ebillModal, setEbillModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">E-Bill</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center  " />
+                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center border-700 " />
                         </p>
                     </div>
                 </div>

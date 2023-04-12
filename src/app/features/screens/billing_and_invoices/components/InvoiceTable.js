@@ -30,7 +30,7 @@ const InvoiceTable = ({ setDetailedTransactionModal }) => {
     };
 
     return (
-        <div>
+        <div className="mx-4">
             <DataTable value={cardData} showGridlines>
                 <Column
                     field="Invoice_No"

@@ -12,7 +12,7 @@ const PaymentDetailModal = ({ paymentDetailModal, setPaymentDetailModal }) => {
     };
     return (
         <div>
-            <Dialog header="Payment Detail" closable={false} visible={paymentDetailModal} footer={renderFooter()} style={{ width: "50vw" }}>
+            <Dialog header="Payment Detail" headerStyle={{ borderBottom: "1px solid #c5c5c5", paddingLeft: "35px" }} closable={false} visible={paymentDetailModal} footer={renderFooter()} style={{ width: "50vw" }}>
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID:</p>

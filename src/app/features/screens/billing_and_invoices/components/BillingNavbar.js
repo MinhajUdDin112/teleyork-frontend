@@ -29,7 +29,7 @@ const BillingNavbar = () => {
     ];
     return (
         <>
-            <Menubar model={items} className="border-noround text-xs bg-primary py-3 text-100" style={{ color: "red" }} />
+            <Menubar model={items} className="border-noround text-xs mx-0 surface-300"/>
         </>
     );
 };

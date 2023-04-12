@@ -2,7 +2,7 @@ import React from "react";
 
 const PlanInfo = () => {
     return (
-        <div className="card p-1">
+        <div className="card p-1 mx-4">
             <div className="flex flex-wrap">
                 <div className="col-3">
                     <div className="mb-1">
