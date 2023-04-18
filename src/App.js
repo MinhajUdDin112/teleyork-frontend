@@ -23,6 +23,15 @@ import "./App.scss";
 import ServiceAvailablityPage from "./app/features/screens/eligiblity/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblity/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
+import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
+import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
+import InCompletedEnrollments from "./app/features/screens/lifeline_orders/InCompleteEnrollments";
+import RejectedEnrollments from "./app/features/screens/lifeline_orders/RejectedEnrolments";
+import NLADResolutionStatus from "./app/features/screens/lifeline_orders/NLADResolutionStatus";
+import HandoverEventOrder from "./app/features/screens/lifeline_orders/HandoverEventOrder";
+import PendingEventOrder from "./app/features/screens/lifeline_orders/PendingEventOrder";
+import WithProofEnrollments from "./app/features/screens/lifeline_orders/WithProofEnrollments";
+import WithoutProofEnrollments from "./app/features/screens/lifeline_orders/WithoutProofEnrollments";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -152,14 +161,15 @@ const App = () => {
                     icon: "pi pi-fw pi-bookmark",
                     items: [
                         { label: "New Enrollments", icon: "", to: "/eligibility" },
-                        { label: "All Enrollments", icon: "", to: "/api/enrollments/all" },
-                        { label: "With Proof Enrollments", icon: "", to: "/api/enrollments/proof" },
-                        { label: "Without Proof Enrollments", icon: "", to: "/api/enrollments/withoutproof" },
-                        { label: "Completed Enrollments", icon: "", to: "/api/enrollments/completed" },
-                        { label: "Incomplete Enrollments", icon: "", to: "/api/enrollments/incomplete" },
-                        { label: "Rejected Enrollments", icon: "", to: "/api/enrollments/rejected" },
-                        { label: "Handover Event Order", icon: "", to: "/api/enrollments/handover" },
-                        { label: "Pending Event Order", icon: "", to: "/api/enrollments/pending" },
+                        { label: "All Enrollments", icon: "", to: "/allenrollments" },
+                        { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
+                        { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
+                        { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
+                        { label: "Incomplete Enrollments", icon: "", to: "/incompleteenrollments" },
+                        { label: "Rejected Enrollments", icon: "", to: "/rejectedenrollments" },
+                        { label: "NLAD Resolution Status (PC244)", icon: "", to: "/nladresolutionstatus" },
+                        { label: "Handover Event Order (PC261)", icon: "", to: "/handovereventorder" },
+                        { label: "Pending Event Order (PC262)", icon: "", to: "/pendingeventorder" },
                     ],
                 },
             ],
@@ -300,6 +310,15 @@ const App = () => {
                         <Route exact path="/eligibility" component={ServiceAvailablityPage} />
                         <Route exact path="/enrollment" component={EnrollmentFlowPage} />
                         <Route exact path="/invoice" component={InvoicePage} />
+                        <Route exact path="/allenrollments" component={AllEnrollments} />
+                        <Route exact path="/completedenrollments" component={CompletedEnrollments} />
+                        <Route exact path="/incompleteenrollments" component={InCompletedEnrollments} />
+                        <Route exact path="/rejectedenrollments" component={RejectedEnrollments} />
+                        <Route exact path="/nladresolutionstatus" component={NLADResolutionStatus} />
+                        <Route exact path="/handovereventorder" component={HandoverEventOrder} />
+                        <Route exact path="/pendingeventorder" component={PendingEventOrder} />
+                        <Route exact path="/withoutproofenrollments" component={WithoutProofEnrollments} />
+                        <Route exact path="/withproofenrollments" component={WithProofEnrollments} />
                         {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                     </div>
 
