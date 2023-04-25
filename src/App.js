@@ -32,6 +32,10 @@ import HandoverEventOrder from "./app/features/screens/lifeline_orders/HandoverE
 import PendingEventOrder from "./app/features/screens/lifeline_orders/PendingEventOrder";
 import WithProofEnrollments from "./app/features/screens/lifeline_orders/WithProofEnrollments";
 import WithoutProofEnrollments from "./app/features/screens/lifeline_orders/WithoutProofEnrollments";
+import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
+import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
+import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
+import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -198,6 +202,40 @@ const App = () => {
                 },
             ],
         },
+        {
+            items: [
+                {
+                    label: "Prepaid/Postpaid Oredrs (PC109)",
+                    items: [
+                        {
+                            label: "New Enrollments",
+                            icon: "",
+                            to: "",
+                        },
+                        {
+                            label: "All Enrollments",
+                            icon: "",
+                            to: "/allenrollmentorders",
+                        },
+                        {
+                            label: "Bulk Portin Report",
+                            icon: "",
+                            to: "/bulkportin",
+                        },
+                        {
+                            label: "Completed Enrollments",
+                            icon: "",
+                            to: "/completeenrollments",
+                        },
+                        {
+                            label: "Incomplete Enrolments",
+                            icon: "",
+                            to: "/incomplete",
+                        },
+                    ],
+                },
+            ],
+        },
     ];
 
     // const menu1 = [
@@ -319,6 +357,10 @@ const App = () => {
                         <Route exact path="/pendingeventorder" component={PendingEventOrder} />
                         <Route exact path="/withoutproofenrollments" component={WithoutProofEnrollments} />
                         <Route exact path="/withproofenrollments" component={WithProofEnrollments} />
+                        <Route exact path="/incomplete" component={IncompleteEnrollments} />
+                        <Route exact path="/completeenrollments" component={CompleteEnrollments} />
+                        <Route exact path="/bulkportin" component={BulkPortin} />
+                        <Route exact path="/allenrollmentorders" component={Allenrollments} />
                         {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                     </div>
 

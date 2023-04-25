@@ -1,48 +1,57 @@
 import React, { useState } from "react";
 import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
-const WithoutProofEnrollments = () => {
+const Allenrollments = () => {
     const [dateRange, setDateRange] = useState(null);
     const [search, setSearch] = useState(null);
 
     const tableData = [
         {
             SNo: "",
+            Option: "",
             EnrollmentID: "",
             Name: "",
             Address: "",
             City: "",
             State: "",
             Zip: "",
-            Dob: "",
             Planname: "",
             planprice: "",
-            Phonecost: "",
             Postingdate: "",
+            EsnNumber: "",
+            Telephone: "",
             Activationcall: "",
             Activationcalldatetime: "",
             Status: "",
-            Option: "",
+            Handover: "",
         },
     ];
 
     return (
         <div className="card p-0 border-noround">
-            <div className="card bg-teal-300 px-4 py-2 border-noround">
-                <p className="text-md font-medium text-0">WithOut Proof Enrollment</p>
+            <div className="card bg-teal-300 px-4 py-2  border-noround">
+                <p className="text-xl font-medium text-0">List of All Orders</p>
+            </div>
+            <div className="mx-5">
+                <p style={{ color: "red" }}>Note:- you can see only see your own enrollments (enrollments done by your user)</p>
             </div>
             <div className="flex flex-wrap mx-5 my-3">
                 <div className="mb-3 mr-3">
                     <p className="m-0 pb-1 text-sm font-semibold ">Date Range</p>
-                    <Calendar id="range" value={dateRange} onChange={(e) => setDateRange(e.value)} showIcon selectionMode="range" readOnlyInput style={{ width: "15rem" }} />
+                    <Calendar id="range" value={dateRange} onChange={(e) => setDateRange(e.value)} selectionMode="range" readOnlyInput style={{ width: "18rem" }} />
                 </div>
                 <div className="mb-3 mr-3">
                     <p className="m-0 pb-1 text-sm font-semibold ">Search</p>
-                    <InputText value={search} onChange={(e) => setSearch(e.value)} placeholder="Search by Customer F Name, L Name, Enrollment ID" style={{ width: "25rem" }} />
+                    <InputText value={search} onChange={(e) => setSearch(e.value)} placeholder="Search by Customer F Name, L Name" style={{ width: "18rem", fontSize: "12px" }} />
+                </div>
+                <div className="mb-3 mr-3">
+                    <p className="m-0 pb-1 text-sm font-semibold ">Source</p>
+                    <Dropdown placeholder="Select Source" optionLabel="name" style={{ width: "18rem" }} />
                 </div>
                 <div>
                     <Button label="Search" className="mt-4 text-sm" />
@@ -51,21 +60,22 @@ const WithoutProofEnrollments = () => {
             <div className="mx-5">
                 <DataTable value={tableData} showGridlines resizableColumns columnResizeMode="fit">
                     <Column header="#" field="SNo" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
-                    <Column header="Enrollment ID" field="EnrolmentID" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
+                    <Column header="Option" field="Option" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
+                    <Column header="Enrollment ID" field="EnrollmentID" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Name" field="Name" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Address" field="Address" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="City" field="City" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="State" field="State" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Zip" field="Zip" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
-                    <Column header="DOB" field="Dob" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Plan Name" field="Planname" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Plan Price" field="Planprice" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
-                    <Column header="Phone Cost" field="Phonecost" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Posting Date" field="Postingdate" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
-                    <Column header="Activation Call Made" field="Activationcall" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
+                    <Column header="ESN Number" field="EsnNumber" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
+                    <Column header="Telephone Number" field="Telephone" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
+                    <Column header="Activation Call" field="Activationcall" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Activation Call Date Time" field="Activationcalldatetime" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                     <Column header="Status" field="Status" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
-                    <Column header="Option" field="Option" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
+                    <Column header="Handover Equipment" field="Handover" resizeable={false} headerStyle={{ backgroundColor: "#76b5c5", color: "white", fontWeight: "medium" }}></Column>
                 </DataTable>
             </div>
             <br />
@@ -73,4 +83,4 @@ const WithoutProofEnrollments = () => {
     );
 };
 
-export default WithoutProofEnrollments;
+export default Allenrollments;
