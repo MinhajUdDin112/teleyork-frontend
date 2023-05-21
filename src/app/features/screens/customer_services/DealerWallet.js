@@ -315,7 +315,7 @@ const DealerWallet = () => {
                     <p className="text-xl font-bold">Dealer Wallet</p>
                 </div>
                 <div>
-                    <div className="m-5">
+                    <div className="flex m-5">
                         <Button icon="pi pi-folder" label="Dealer Wallet" className="p-button-raised p-button-secondary p-button-text surface-200" onClick={() => setActiveIndex(0)} />
                         <Button icon="pi pi-shopping-cart" label="Add Wallet" className="p-button-raised p-button-secondary p-button-text ml-3 surface-200" onClick={() => setActiveIndex(1)} />
                         <Button icon="pi pi-share-alt" label="Share Wallet" className="p-button-raised p-button-secondary p-button-text ml-3 surface-200" onClick={() => setActiveIndex(2)} />
