@@ -149,7 +149,7 @@ const PayInvoiceModal = ({ payInvoiceModal, setPayInvoiceModal }) => {
                         <div className="col-8 m-0 p-1">
                             <Dropdown placeholder="Select" className="h-2rem align-items-center w-full border-700" />
                             <div className="flex my-2">
-                                <Checkbox inputId="binary" checked={checked} onChange={() => setChecked(e.checked)} />
+                                <Checkbox inputId="binary" checked={checked} onChange={(e) => setChecked(e.checked)} />
                                 <label htmlFor="binary" className="ml-2">
                                     Apply Address Suggestion
                                 </label>
@@ -171,7 +171,7 @@ const PayInvoiceModal = ({ payInvoiceModal, setPayInvoiceModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Save card details (PC777)</p>
                         <div className="flex col-8 m-0 p-1">
-                            <Checkbox inputId="binary" checked={checked} onChange={() => setChecked(e.checked)} />
+                            <Checkbox inputId="binary" checked={checked} onChange={(e) => setChecked(e.checked)} />
                             <label htmlFor="binary" className="ml-2">
                                 Do you want to save card details?
                             </label>
