@@ -4,6 +4,7 @@ import { classNames } from "primereact/utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
+import { useEffect } from "react";
 
 export default function CustomInputField({ iden, formik, type = "text", className, label, placeHolder, options, optionLabel, optionValue, value, onChange, min }) {
     function titleCase(str) {
@@ -18,12 +19,15 @@ export default function CustomInputField({ iden, formik, type = "text", classNam
     const handleWheel = (e) => {
         e.preventDefault();
     };
+    useEffect(() => {
+        console.log(formik.values[iden]);
+    }, []);
 
     return (
         <div className={`field ${className}`}>
             <label htmlFor="name1">{label || titleCase(iden ?? "")}</label>
 
-            {onChange === undefined || value === undefined ? (
+            {onChange !== undefined || value !== undefined ? (
                 <InputText step="1" type={type} min={min} placeholder={placeHolder} />
             ) : type === "dropdown" ? (
                 <Dropdown
@@ -61,7 +65,7 @@ export default function CustomInputField({ iden, formik, type = "text", classNam
                     autoSave="off"
                     id={iden ?? ""}
                     name={iden ?? ""}
-                    value={value ? value : formik.values[iden]}
+                    value={formik.values[iden]}
                     onChange={onChange || formik.handleChange}
                     type={type}
                     min={min}

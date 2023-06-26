@@ -5,9 +5,9 @@ import App from "./App";
 //import * as serviceWorker from './serviceWorker';
 import { HashRouter } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
-import store from "./app/store";
 import { Provider } from "react-redux";
 import "./app.css";
+import store from "./store/store";
 
 ReactDOM.render(
     <HashRouter>

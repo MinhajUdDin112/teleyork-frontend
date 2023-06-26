@@ -4,21 +4,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchZipCode } from "../../../../../store/zipcodeSlice";
 
 export default function ServiceAvailablityPage() {
     const history = useHistory();
-
-    const validationSchema = Yup.object().shape({
-        // zip: Yup.number().required("Zip is required."),
-    });
+    const dispatch = useDispatch();
+    const data = useSelector((state) => state.zipCode);
     const formik = useFormik({
-        validationSchema: validationSchema,
         initialValues: {
-            zip: "",
+            zipCode: "",
         },
-
-        onSubmit: async (data) => {
-            history.push("/enrollment");
+        onSubmit: async (values, actions) => {
+            actions.setFieldValue("zipCode", values.zipCode);
+            let body = {
+                zipCode: values.zipCode,
+            };
+            dispatch(fetchZipCode(body));
         },
     });
 
@@ -29,7 +31,7 @@ export default function ServiceAvailablityPage() {
                     <form onSubmit={formik.handleSubmit}>
                         <h6>Please enter zip code to check service availablity</h6>
 
-                        <CustomInputField required={true} label="zip" type="number" min={0} className={"col-12 p-fluid"} formik={formik} iden="zip" />
+                        <CustomInputField iden="zipCode" required={true} label="zip" type="number" min={0} className={"col-12 p-fluid"} formik={formik} />
 
                         <Button label="Submit" type="submit" className="col-12" />
                     </form>
