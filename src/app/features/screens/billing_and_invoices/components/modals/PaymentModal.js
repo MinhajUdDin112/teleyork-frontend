@@ -57,7 +57,7 @@ const PaymentModal = ({ paymentModal, setPaymentModal, setPaymentDetailModal }) 
                     <Column field="Transaction_ID" header="Transaction ID" style={{ minWidth: "150px" }} />
                     <Column field="Created_DateTime" header="Created DateTime" style={{ minWidth: "150px" }} />
                     <Column field="Refunded_Amount" header="Refunded Amount" style={{ minWidth: "150px" }} />
-                    <Column field="Action" body={<Button onClick={() => setDetailedTransactionModal(true)}>Void</Button>} header="Action (PC609)" style={{ minWidth: "150px" }} />
+                    {/* <Column field="Action" body={<Button onClick={() => setDetailedTransactionModal(true)}>Void</Button>} header="Action (PC609)" style={{ minWidth: "150px" }} /> */}
                 </DataTable>
             </Dialog>
         </div>
