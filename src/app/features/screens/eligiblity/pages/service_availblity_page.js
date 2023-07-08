@@ -5,12 +5,9 @@ import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchZipCode } from "../../../../../store/zipcodeSlice";
 
 export default function ServiceAvailablityPage() {
     const history = useHistory();
-    const dispatch = useDispatch();
-    const data = useSelector((state) => state.zipCode);
     const formik = useFormik({
         initialValues: {
             zipCode: "",
@@ -20,7 +17,7 @@ export default function ServiceAvailablityPage() {
             let body = {
                 zipCode: values.zipCode,
             };
-            dispatch(fetchZipCode(body));
+            
         },
     });
 
@@ -28,7 +25,7 @@ export default function ServiceAvailablityPage() {
         <div className="flex flex-column justify-content-center">
             <div className="grid justify-content-center align-content-center my-5">
                 <div className="card col-4 ">
-                    <form onSubmit={formik.handleSubmit}>
+                    <form >
                         <h6>Please enter zip code to check service availablity</h6>
 
                         <CustomInputField iden="zipCode" required={true} label="zip" type="number" min={0} className={"col-12 p-fluid"} formik={formik} />

@@ -17,36 +17,41 @@ const PendingEventOrder = () => {
     ];
 
     return (
-        <div className="card p-0 border-noround">
-            <div className="card bg-teal-300 px-4 py-2  border-noround">
-                <p className="text-md font-medium text-0">Pending Event Order</p>
+        <div className="card bg-pink-50">
+            <div className="mx-5">
+                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Pending Event Order</h3>
             </div>
-            <div className="mx-5 my-0">
+            <div className="mb-3 mr-3">
                 <span>
-                    <a href="" className="flex text-sm font-semibold justify-content-end">
+                    <a href="" className="flex text-sm font-semibold justify-content-end mr-3">
                         Pending Event Order List
                     </a>
                 </span>
             </div>
-            <div className="flex flex-wrap mx-5 my-2">
-                <div className="mb-3 mr-3">
-                    <p className="m-0 pb-1 text-sm font-semibold ">Search Customer:</p>
-                    <Dropdown style={{ width: "18rem" }} placeholder="Select Master" value={customer} options={customerOptions} onChange={(e) => setCustomer(e.value)} optionLabel="name" />
+            <div className="card flex flex-column justify-content-center mx-5 border-noround">
+                <div className=" flex flex-wrap p-0 mx-3 mb-1">
+                    <div className="mr-5">
+                        <p className="m-0 pb-1 text-sm font-semibold ">Search Customer:</p>
+                        <Dropdown style={{ width: "23rem" }} placeholder="Select Master" value={customer} options={customerOptions} onChange={(e) => setCustomer(e.value)} optionLabel="name" />
+                    </div>
+                    <div className="mr-5">
+                        <InputText value={search} onChange={(e) => setSearch(e.value)} style={{ width: "23rem" }} className="mt-4" />
+                    </div>
+                    <div className="mr-5">
+                        <p className="m-0 pb-1 text-sm font-semibold ">Enter The DOB:</p>
+                        <Calendar id="icon" value={dob} onChange={(e) => setDob(e.value)} showIcon style={{ width: "23rem" }} />
+                    </div>
+                    <div>
+                        <p className="m-0 pb-1 text-sm font-semibold ">Enter SSN(Last 4 Digits):</p>
+                        <InputText value={ssn} onChange={(e) => setSsn(e.value)} style={{ width: "23rem" }} />
+                    </div>
                 </div>
-                <div className="mb-3 mr-3">
-                    <InputText value={search} onChange={(e) => setSearch(e.value)} style={{ width: "18rem" }} className="mt-4" />
+                <div className="flex justify-content-end pt-1">
+                    <Button label="Search" className=" bg-green-200 border-none w-15rem mr-2 mt-3" />
                 </div>
-                <div className="mb-3 mr-3">
-                    <p className="m-0 pb-1 text-sm font-semibold ">Enter The DOB:</p>
-                    <Calendar id="icon" value={dob} onChange={(e) => setDob(e.value)} showIcon style={{ width: "18rem" }} />
-                </div>
-                <div className="mb-3 mr-3">
-                    <p className="m-0 pb-1 text-sm font-semibold ">Enter SSN(Last 4 Digits):</p>
-                    <InputText value={ssn} onChange={(e) => setSsn(e.value)} style={{ width: "18rem" }} />
-                </div>
-                <div>
-                    <Button label="Search" className=" text-sm" />
-                </div>
+            </div>
+            <div className="card p-3 mx-5 mt-3 border-noround bg-green-200 ">
+                <p className="text-sm font-semibold">Search Result: 0</p>
             </div>
             <br />
         </div>

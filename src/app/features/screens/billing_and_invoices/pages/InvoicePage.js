@@ -35,9 +35,9 @@ const InvoicePage = () => {
 
     return (
         <>
-            <div className="card p-0">
+            <div className="card p-0 bg-pink-50">
                 <BillingNavbar />
-                <div className="card border-noround p-3 surface-50 mx-4 mt-3">
+                <div className="card border-noround p-3  mx-4 mt-3">
                     <p className="font-bold text-xl">Invoices</p>
                 </div>
                 <PlanInfo />

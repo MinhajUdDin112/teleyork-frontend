@@ -33,6 +33,7 @@ const InvoiceTable = ({ setDetailedTransactionModal }) => {
         <div className="mx-4">
             <DataTable value={cardData} showGridlines>
                 <Column
+                    InvoiceTable
                     field="Invoice_No"
                     header="Invoice No."
                     style={{ minWidth: "150px" }}
@@ -56,8 +57,26 @@ const InvoiceTable = ({ setDetailedTransactionModal }) => {
                 <Column field="Source" header="Source" style={{ minWidth: "150px" }} />
                 <Column field="Paid_Using" header="Paid Using" style={{ minWidth: "150px" }} />
                 <Column field="Paid_Unpaid" header="Paid/Unpaid" style={{ minWidth: "150px" }} />
-                <Column field="Action" body={<Button onClick={() => setDetailedTransactionModal(true)}>Void</Button>} header="Action (PC609)" style={{ minWidth: "150px" }} />
-                <Column field="Invoice_Pdf" body={<Button onClick={() => setDetailedTransactionModal(true)}>Download</Button>} header="Invoice Pdf" style={{ minWidth: "150px" }} />
+                <Column
+                    field="Action"
+                    body={
+                        <Button className="bg-green-200 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                            Void
+                        </Button>
+                    }
+                    header="Action (PC609)"
+                    style={{ minWidth: "150px" }}
+                />
+                <Column
+                    field="Invoice_Pdf"
+                    body={
+                        <Button className="bg-green-200 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                            Download{" "}
+                        </Button>
+                    }
+                    header="Invoice Pdf"
+                    style={{ minWidth: "150px" }}
+                />
             </DataTable>
         </div>
     );

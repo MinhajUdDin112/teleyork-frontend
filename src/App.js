@@ -266,6 +266,13 @@ const App = () => {
                 },
             ],
         },
+        {
+            items: [
+                {
+                    label: "SMS Notifications",
+                },
+            ],
+        },
     ];
 
     // const menu1 = [
