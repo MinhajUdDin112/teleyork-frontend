@@ -41,7 +41,10 @@ import PaymentSearchTool from "./app/features/screens/customer_services/PaymentS
 import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
 import EligibilityProofUpload from "./app/features/screens/customer_services/EligibilityProofUpload";
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
-import SmsNotification from "./app/features/screens/sms_notification/SmsNotification";
+import SmsNotification from "./app/features/screens/sms_notification/Upload";
+import Upload from "./app/features/screens/sms_notification/Upload";
+import Sent from "./app/features/screens/sms_notification/Sent";
+import Draft from "./app/features/screens/sms_notification/Draft";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -271,7 +274,20 @@ const App = () => {
             items: [
                 {
                     label: "SMS Notifications",
-                    to: "/smsnotification",
+                    items: [
+                        {
+                            label: "Upload Template",
+                            to: "/smsnotification",
+                        },
+                        {
+                            label: "Sent Template",
+                            to: "/sent",
+                        },
+                        {
+                            label: "Draft Template",
+                            to: "/draft",
+                        },
+                    ],
                 },
             ],
         },
@@ -405,7 +421,9 @@ const App = () => {
                         <Route exact path="/agentstorelocator" component={AgentStoreLocator} />
                         <Route exact path="/eligibilityproofupload" component={EligibilityProofUpload} />
                         <Route exact path="/dealerwallet" component={DealerWallet} />
-                        <Route exact path="/smsnotification" component={SmsNotification} />
+                        <Route exact path="/smsnotification" component={Upload} />
+                        <Route exact path="/sent" component={Sent} />
+                        <Route exact path="/draft" component={Draft} />
                         {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                     </div>
 
