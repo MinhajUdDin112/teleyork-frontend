@@ -41,6 +41,7 @@ import PaymentSearchTool from "./app/features/screens/customer_services/PaymentS
 import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
 import EligibilityProofUpload from "./app/features/screens/customer_services/EligibilityProofUpload";
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
+import SmsNotification from "./app/features/screens/sms_notification/SmsNotification";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -176,9 +177,9 @@ const App = () => {
                         { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
                         { label: "Incomplete Enrollments", icon: "", to: "/incompleteenrollments" },
                         { label: "Rejected Enrollments", icon: "", to: "/rejectedenrollments" },
-                        { label: "NLAD Resolution Status (PC244)", icon: "", to: "/nladresolutionstatus" },
-                        { label: "Handover Event Order (PC261)", icon: "", to: "/handovereventorder" },
-                        { label: "Pending Event Order (PC262)", icon: "", to: "/pendingeventorder" },
+                        { label: "NLAD Resolution Status", icon: "", to: "/nladresolutionstatus" },
+                        { label: "Handover Event Order", icon: "", to: "/handovereventorder" },
+                        { label: "Pending Event Order", icon: "", to: "/pendingeventorder" },
                     ],
                 },
             ],
@@ -186,45 +187,45 @@ const App = () => {
         {
             items: [
                 {
-                    label: "Customer Service  (PC400)",
+                    label: "Customer Service",
                     items: [
                         {
-                            label: "Customer Profile (PC56)",
+                            label: "Customer Profile",
                             icon: "",
                             to: "",
                         },
                         {
-                            label: "Billing and Invoice (PC75)",
+                            label: "Billing and Invoice",
                             icon: "",
                             to: "/invoice",
                         },
                         {
-                            label: "Order History (PC76)",
+                            label: "Order History",
                             icon: "",
                             to: "",
                         },
                         {
-                            label: "Recent Searches (PC295)",
+                            label: "Recent Searches",
                             icon: "",
                             to: "/recentsearches",
                         },
                         {
-                            label: "Payment Search Tool (PC339)",
+                            label: "Payment Search Tool",
                             icon: "",
                             to: "/paymentsearchtool",
                         },
                         {
-                            label: "Agent Store Locator (PC263)",
+                            label: "Agent Store Locator",
                             icon: "",
                             to: "/agentstorelocator",
                         },
                         {
-                            label: "Eligibility Proof Upload (PC267)",
+                            label: "Eligibility Proof Upload",
                             icon: "",
                             to: "/eligibilityproofupload",
                         },
                         {
-                            label: "Dealer Wallet (PC544)",
+                            label: "Dealer Wallet",
                             icon: "",
                             to: "/dealerwallet",
                         },
@@ -235,7 +236,7 @@ const App = () => {
         {
             items: [
                 {
-                    label: "Prepaid/Postpaid Oredrs (PC109)",
+                    label: "Prepaid/Postpaid Oredrs",
                     items: [
                         {
                             label: "New Enrollments",
@@ -270,6 +271,7 @@ const App = () => {
             items: [
                 {
                     label: "SMS Notifications",
+                    to: "/smsnotification",
                 },
             ],
         },
@@ -403,6 +405,7 @@ const App = () => {
                         <Route exact path="/agentstorelocator" component={AgentStoreLocator} />
                         <Route exact path="/eligibilityproofupload" component={EligibilityProofUpload} />
                         <Route exact path="/dealerwallet" component={DealerWallet} />
+                        <Route exact path="/smsnotification" component={SmsNotification} />
                         {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                     </div>
 
