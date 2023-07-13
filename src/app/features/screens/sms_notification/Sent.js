@@ -36,13 +36,13 @@ const Sent = () => {
                 <div className="">
                     <DataTable value={allSent} showGridlines >
                         <Column header="Sent By" field="sentBy.name" ></Column>
+                        <Column header="Mobile Number" field="mobileNo" ></Column>
+                        <Column header="Message" field="message" ></Column>
+                        <Column header="Status" field="status" ></Column>
                         <Column header="Tracking ID" field="trackingId" ></Column>
                         <Column header="Template Id" field="templateId" ></Column>
                         <Column header="Name" field="name" ></Column>
                         <Column header="Email" field="email" ></Column>
-                        <Column header="Mobile Number" field="mobileNo" ></Column>
-                        <Column header="Status" field="status" ></Column>
-                        <Column header="Message" field="message" ></Column>
                     </DataTable>
                 </div>
             </div>
