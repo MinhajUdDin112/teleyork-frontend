@@ -45,6 +45,12 @@ import SmsNotification from "./app/features/screens/sms_notification/Upload";
 import Upload from "./app/features/screens/sms_notification/Upload";
 import Sent from "./app/features/screens/sms_notification/Sent";
 import Draft from "./app/features/screens/sms_notification/Draft";
+import VerifyZip from "./app/features/screens/self_enrollment/VerifyZip";
+import PersonalInfo from "./app/features/screens/self_enrollment/PersonalInfo";
+import Address from "./app/features/screens/self_enrollment/Address";
+import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
+import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
+import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -173,7 +179,8 @@ const App = () => {
                     label: "Lifeline Orders",
                     icon: "pi pi-fw pi-bookmark",
                     items: [
-                        { label: "New Enrollments", icon: "", to: "/eligibility" },
+                        { label: "New Enrollment", icon: "", to: "/eligibility" },
+                        { label: "Self Enrollment", icon: "", to: "/verifyzip" },
                         { label: "All Enrollments", icon: "", to: "/allenrollments" },
                         { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                         { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
@@ -424,6 +431,12 @@ const App = () => {
                         <Route exact path="/smsnotification" component={Upload} />
                         <Route exact path="/sent" component={Sent} />
                         <Route exact path="/draft" component={Draft} />
+                        <Route exact path="/verifyzip" component={VerifyZip} />
+                        <Route exact path="/personalinfo" component={PersonalInfo} />
+                        <Route exact path="/address" component={Address} />
+                        <Route exact path="/eligibile" component={Eligibility} />
+                        <Route exact path="/nationalverifier" component={NationalVerifier} />
+                        <Route exact path="/resumeapplication" component={ResumeApplication} />
                         {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                     </div>
 
