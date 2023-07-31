@@ -1,97 +1,60 @@
-import { Button } from 'primereact/button'
-import { InputText } from 'primereact/inputtext'
-import React, { useEffect } from 'react'
-import appAssets from '../../../../constants/appAssets';
+import React, { useEffect } from "react";
+import { Button } from "primereact/button";
+import { NavLink, useHistory } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
-import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import CustomInputField from '../../../components/custom_input_field';
-import { loginUser } from '../../../../redux/auth_slices/login_user_slice';
-import { toast } from 'react-toastify';
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserLogin } from "../../../../store/logInSlice";
 
 export default function LoginScreen() {
+    const dispatch = useDispatch();
+    const { error } = useSelector((state) => state.login);
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema: Yup.object({
+            email: Yup.string().email("Invalid email").required("Email is required"),
+            password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+        }),
+        onSubmit: (values) => {
+            dispatch(fetchUserLogin(values));
+            console.log(formik.values);
+        },
+    });
 
-  //redux
-  const { success, error, loading } = useSelector((state) => state.loginUser);
-
-  //hooks
-
-  useEffect(() => {
-    if (success !== undefined) {
-      if (success === false) {
-        toast.error(error)
-
-      } else {
-
-      }
-    }
-  }, [success]);
-
-  const dispatch = useDispatch();
-
-  //forms
-
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (data) => {
-      dispatch(loginUser(data));
-
-      console.log(data);
-
-    },
-  });
-
-
-  const validationSchema = Yup.object().shape({
-
-    password: Yup.string().required("Password is required.").min(8, 'Minimum length should be 8'),
-    email: Yup.string().required("Email is required."),
-
-  });
-
-
-  return (
-    <>
-      <div className='background-wrapper-class'>
-
-        <div className='form-wrapper'>
-          <img src={appAssets.logo} />
-          <h2 className='auth-heading'>WELCOME TO HLP</h2>
-          <form style={{ width: '100%' }} className='grid p-fluid justify-content-center align-items-center' onSubmit={formik.handleSubmit}>
-            
-
-
-              <div className=' col-12 md:col-4'>
-
-
-                <CustomInputField iden='email' formik={formik} placeHolder='Enter email' type='email' />
-                <CustomInputField iden='password' formik={formik} placeHolder='Enter password' type='password' />
-
-
-                <Button loading={loading} type='submit' className='customButton' label='NEXT' />
-              </div>
-
-
-
-
-
-         
-          </form>
-
-        </div>
-
-
-
-
-
-
-      </div>
-
-
-    </>
-  )
+    return (
+        <>
+            <div className="flex justify-center items-center" style={{ height: "600px" }}>
+                <div className="card col-4 m-auto" style={{ height: "60%" }}>
+                    <div className="flex justify-content-center mt-8">
+                        <p className="text-xl font-semibold mt-5 mb-3 pt-3">Login</p>
+                    </div>
+                    {error ? (
+                        <div className="flex justify-content-center mb-2">
+                            <p style={{ color: "red" }} className="font-semibold text-xl">
+                                Invalid Credentials
+                            </p>
+                        </div>
+                    ) : null}
+                    <div className="flex justify-content-center align-items-center w-full">
+                        <form onSubmit={formik.handleSubmit}>
+                            <InputText type="text" name="email" className="p-inputtext-sm block mb-4 w-20rem" placeholder="Enter email" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                            {formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm mt-0">{formik.errors.email}</p> : null}
+                            <InputText type="text" name="password" className="p-inputtext-sm block mb-2 w-20rem" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                            {formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm mt-0">{formik.errors.password}</p> : null}
+                            <Button type="submit" className="w-20rem mt-3" label="Login" />
+                            <div>
+                                <NavLink className="font-semibold mt-3 justify-content-center flex " to={{ pathname: "/sendotp", state: { email: formik.values.email } }}>
+                                    Forget Password?
+                                </NavLink>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }

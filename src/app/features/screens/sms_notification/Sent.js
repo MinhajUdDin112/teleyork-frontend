@@ -11,7 +11,7 @@ const Sent = () => {
     //Get All Draft
     const getAllDraft = async () => {
         try {
-            const response = await Axios.get("http://192.168.4.153:2023/api/sms/sent");
+            const response = await Axios.get("http://localhost:2023/api/sms/sent");
             if (response.status === 200) {
                 const { data, msg } = response?.data;
                 console.log('data', data)

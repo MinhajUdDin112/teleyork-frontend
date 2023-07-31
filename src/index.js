@@ -7,7 +7,7 @@ import { HashRouter } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 import { Provider } from "react-redux";
 import "./app.css";
-import store from "./store/store";
+import store from "./app/store/store"
 
 ReactDOM.render(
     <HashRouter>

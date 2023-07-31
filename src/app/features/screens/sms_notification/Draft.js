@@ -11,7 +11,7 @@ const Draft = () => {
     //Get All Draft
     const getAllDraft = async () => {
         try {
-            const response = await Axios.get("http://192.168.4.153:2023/api/sms/draft");
+            const response = await Axios.get("http://localhost:2023/api/sms/draft");
             if (response.status === 200) {
                 const { data, msg } = response?.data;
                 setAllDraft(data);
@@ -27,7 +27,7 @@ const Draft = () => {
     }, []);
 
     const handleSubmit = () => {
-        const response = Axios.post("http://192.168.4.153:2023/api/sms/send/64ad9b07fc04dc6ca623b9c3")
+        const response = Axios.post("http://localhost:2023/api/sms/send/64ad9b07fc04dc6ca623b9c3")
         if (response.status === 200) {
             console.log("Send Successfully")
         }

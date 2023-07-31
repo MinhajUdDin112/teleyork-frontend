@@ -51,6 +51,10 @@ import Address from "./app/features/screens/self_enrollment/Address";
 import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
 import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
 import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
+import { useSelector } from "react-redux";
+import LoginScreen from "./app/features/screens/auth/pages/login_screen";
+import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
+import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -68,6 +72,7 @@ const App = () => {
 
     let menuClick = false;
     let mobileTopbarMenuClick = false;
+    const { user } = useSelector((state) => state.login);
 
     useEffect(() => {
         if (mobileMenuActive) {
@@ -283,6 +288,14 @@ const App = () => {
                     label: "SMS Notifications",
                     items: [
                         {
+                            label: "Manage Templates",
+                            to: "/managetemplate",
+                        },
+                        {
+                            label: "Create Template",
+                            to: "/createtemplate",
+                        },
+                        {
                             label: "Upload Template",
                             to: "/smsnotification",
                         },
@@ -407,6 +420,7 @@ const App = () => {
 
                 <div className="layout-main-container">
                     <div className="layout-main">
+                        <Route exact path="/" component={ServiceAvailablityPage} />
                         <Route exact path="/eligibility" component={ServiceAvailablityPage} />
                         <Route exact path="/enrollment" component={EnrollmentFlowPage} />
                         <Route exact path="/invoice" component={InvoicePage} />
@@ -437,6 +451,8 @@ const App = () => {
                         <Route exact path="/eligibile" component={Eligibility} />
                         <Route exact path="/nationalverifier" component={NationalVerifier} />
                         <Route exact path="/resumeapplication" component={ResumeApplication} />
+                        <Route exact path="/createtemplate" component={CreateTemplate} />
+                        <Route exact path="/managetemplate" component={ManageTemplate} />
                         {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                     </div>
 
