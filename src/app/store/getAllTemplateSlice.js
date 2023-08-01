@@ -28,7 +28,7 @@ export default GetAllTemplateSlice.reducer;
 
 export const GetAllTemplates = createAsyncThunk("add/template", async () => {
     try {
-        const response = await axios.get("http://localhost:2023/api/sms/all");
+        const response = await axios.get("http://dev-api-ijwireless.teleyork.com/api/sms/all");
         return response.data;
     } catch (error) {
         console.log(error);

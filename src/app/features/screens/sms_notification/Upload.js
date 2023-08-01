@@ -48,7 +48,7 @@ const Upload = () => {
             <div className="card flex flex-column justify-content-center mx-5 border-noround">
                 <FileUpload
                     name="file"
-                    url="http://localhost:2023/api/sms/upload/64ad9b07fc04dc6ca623b9c3"
+                    url="http://dev-api-ijwireless.teleyork.com/api/sms/upload/64ad9b07fc04dc6ca623b9c3"
                     onUpload={onUpload}
                     multiple
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

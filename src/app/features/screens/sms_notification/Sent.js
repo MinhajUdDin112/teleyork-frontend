@@ -1,30 +1,28 @@
-import Axios from 'axios'
-import { Button } from 'primereact/button'
-import { Column } from 'primereact/column'
-import { DataTable } from 'primereact/datatable'
-import React, { useEffect, useState } from 'react'
+import Axios from "axios";
+import { Button } from "primereact/button";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import React, { useEffect, useState } from "react";
 
 const Sent = () => {
-
-    const [allSent, setAllSent] = useState([])
+    const [allSent, setAllSent] = useState([]);
 
     //Get All Draft
     const getAllDraft = async () => {
         try {
-            const response = await Axios.get("http://localhost:2023/api/sms/sent");
+            const response = await Axios.get("http://dev-api-ijwireless.teleyork.com/api/sms/sent");
             if (response.status === 200) {
                 const { data, msg } = response?.data;
-                console.log('data', data)
+                console.log("data", data);
                 setAllSent(data);
             }
-        }
-        catch (error) {
-            console.log(error)
+        } catch (error) {
+            console.log(error);
         }
     };
 
     useEffect(() => {
-        getAllDraft()
+        getAllDraft();
     }, []);
 
     return (
@@ -34,20 +32,20 @@ const Sent = () => {
             </div>
             <div className="card mx-5 p-0 border-noround">
                 <div className="">
-                    <DataTable value={allSent} showGridlines >
-                        <Column header="Sent By" field="sentBy.name" ></Column>
-                        <Column header="Mobile Number" field="mobileNo" ></Column>
-                        <Column header="Message" field="message" ></Column>
-                        <Column header="Status" field="status" ></Column>
-                        <Column header="Tracking ID" field="trackingId" ></Column>
-                        <Column header="Template Id" field="templateId" ></Column>
-                        <Column header="Name" field="name" ></Column>
-                        <Column header="Email" field="email" ></Column>
+                    <DataTable value={allSent} showGridlines>
+                        <Column header="Sent By" field="sentBy.name"></Column>
+                        <Column header="Mobile Number" field="mobileNo"></Column>
+                        <Column header="Message" field="message"></Column>
+                        <Column header="Status" field="status"></Column>
+                        <Column header="Tracking ID" field="trackingId"></Column>
+                        <Column header="Template Id" field="templateId"></Column>
+                        <Column header="Name" field="name"></Column>
+                        <Column header="Email" field="email"></Column>
                     </DataTable>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Sent
+export default Sent;

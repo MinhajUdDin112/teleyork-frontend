@@ -28,7 +28,7 @@ export default GetOneTemplateSlice.reducer;
 
 export const GetOneTemplate = createAsyncThunk("allTemplates", async (id) => {
     try {
-        const response = await axios.get(`http://localhost:2023/api/sms/template/${id}`);
+        const response = await axios.get(`http://dev-api-ijwireless.teleyork.com/api/sms/template/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);

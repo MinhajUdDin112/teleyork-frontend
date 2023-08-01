@@ -28,8 +28,7 @@ const ManageTemplate = () => {
         dispatch(GetOneTemplate(templateId));
         setDownloadFlag(true);
     };
-    let templateList = templates.data
-        ? templates.data.map((template, index) => ({
+    let templateList = templates?.data?templates?.data.map((template, index) => ({
               sno: index + 1,
               name: template.name,
               templateId: template.templateId,
@@ -38,6 +37,7 @@ const ManageTemplate = () => {
               template: template.template,
           }))
         : [];
+    console.log("from manage template", templates.data);
     useEffect(() => {
         dispatch(GetAllTemplates());
     }, []);

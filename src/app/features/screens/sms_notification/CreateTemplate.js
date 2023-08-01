@@ -30,6 +30,7 @@ const CreateTemplate = () => {
             };
             dispatch(AddTemplate(dataToSend));
             resetForm();
+            alert("Template Added Successfully!");
         },
     });
 
@@ -55,7 +56,7 @@ const CreateTemplate = () => {
                         <InputTextarea name="template" value={formik.values.template} onChange={formik.handleChange} rows={10} cols={80} autoResize />
                     </div>
                     <div className="flex justify-content-end m-3">
-                        <Button label="Add Template" />
+                        <Button label="Add Template" type="submit" />
                     </div>
                 </div>
             </form>

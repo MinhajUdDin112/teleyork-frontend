@@ -28,8 +28,10 @@ export default CreateTemplateSlice.reducer;
 
 export const AddTemplate = createAsyncThunk("add/template", async (body) => {
     try {
-        const response = await axios.post("http://localhost:2023/api/sms/addTemplate", body);
-        return response.data;
+        const response = await axios.post("http://dev-api-ijwireless.teleyork.com/api/sms/addTemplate", body);
+        if (response.status === 200) {
+            return response.data;
+        }
     } catch (error) {
         console.log(error);
         throw error;
