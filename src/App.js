@@ -55,6 +55,8 @@ import { useSelector } from "react-redux";
 import LoginScreen from "./app/features/screens/auth/pages/login_screen";
 import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
+import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
+import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -404,67 +406,77 @@ const App = () => {
 
     return (
         <>
-            <Switch>
-                <Route exact path="/eligibile">
-                    <eligibility_info_page />
-                </Route>
-            </Switch>
-            <div className={wrapperClass} onClick={onWrapperClick}>
-                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+            {Object.keys(user).length === 0 ? (
+                <>
+                    <Route exact path="/" component={LoginScreen} />
+                </>
+            ) : (
+                <>
+                    <Switch>
+                        <Route exact path="/eligibile">
+                            <eligibility_info_page />
+                        </Route>
+                    </Switch>
+                    <div className={wrapperClass} onClick={onWrapperClick}>
+                        <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-                <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                        <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
-                <div className="layout-sidebar" onClick={onSidebarClick}>
-                    <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-                </div>
+                        <div className="layout-sidebar" onClick={onSidebarClick}>
+                            <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                        </div>
 
-                <div className="layout-main-container">
-                    <div className="layout-main">
-                        <Route exact path="/" component={ServiceAvailablityPage} />
-                        <Route exact path="/eligibility" component={ServiceAvailablityPage} />
-                        <Route exact path="/enrollment" component={EnrollmentFlowPage} />
-                        <Route exact path="/invoice" component={InvoicePage} />
-                        <Route exact path="/allenrollments" component={AllEnrollments} />
-                        <Route exact path="/completedenrollments" component={CompletedEnrollments} />
-                        <Route exact path="/incompleteenrollments" component={InCompletedEnrollments} />
-                        <Route exact path="/rejectedenrollments" component={RejectedEnrollments} />
-                        <Route exact path="/nladresolutionstatus" component={NLADResolutionStatus} />
-                        <Route exact path="/handovereventorder" component={HandoverEventOrder} />
-                        <Route exact path="/pendingeventorder" component={PendingEventOrder} />
-                        <Route exact path="/withoutproofenrollments" component={WithoutProofEnrollments} />
-                        <Route exact path="/withproofenrollments" component={WithProofEnrollments} />
-                        <Route exact path="/incomplete" component={IncompleteEnrollments} />
-                        <Route exact path="/completeenrollments" component={CompleteEnrollments} />
-                        <Route exact path="/bulkportin" component={BulkPortin} />
-                        <Route exact path="/allenrollmentorders" component={Allenrollments} />
-                        <Route exact path="/recentsearches" component={RecentSearches} />
-                        <Route exact path="/paymentsearchtool" component={PaymentSearchTool} />
-                        <Route exact path="/agentstorelocator" component={AgentStoreLocator} />
-                        <Route exact path="/eligibilityproofupload" component={EligibilityProofUpload} />
-                        <Route exact path="/dealerwallet" component={DealerWallet} />
-                        <Route exact path="/smsnotification" component={Upload} />
-                        <Route exact path="/sent" component={Sent} />
-                        <Route exact path="/draft" component={Draft} />
-                        <Route exact path="/verifyzip" component={VerifyZip} />
-                        <Route exact path="/personalinfo" component={PersonalInfo} />
-                        <Route exact path="/address" component={Address} />
-                        <Route exact path="/eligibile" component={Eligibility} />
-                        <Route exact path="/nationalverifier" component={NationalVerifier} />
-                        <Route exact path="/resumeapplication" component={ResumeApplication} />
-                        <Route exact path="/createtemplate" component={CreateTemplate} />
-                        <Route exact path="/managetemplate" component={ManageTemplate} />
-                        {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
+                        <div className="layout-main-container">
+                            <div className="layout-main">
+                                <Route exact path="/" component={ServiceAvailablityPage} />
+                                <Route exact path="/eligibility" component={ServiceAvailablityPage} />
+                                <Route exact path="/enrollment" component={EnrollmentFlowPage} />
+                                <Route exact path="/invoice" component={InvoicePage} />
+                                <Route exact path="/allenrollments" component={AllEnrollments} />
+                                <Route exact path="/completedenrollments" component={CompletedEnrollments} />
+                                <Route exact path="/incompleteenrollments" component={InCompletedEnrollments} />
+                                <Route exact path="/rejectedenrollments" component={RejectedEnrollments} />
+                                <Route exact path="/nladresolutionstatus" component={NLADResolutionStatus} />
+                                <Route exact path="/handovereventorder" component={HandoverEventOrder} />
+                                <Route exact path="/pendingeventorder" component={PendingEventOrder} />
+                                <Route exact path="/withoutproofenrollments" component={WithoutProofEnrollments} />
+                                <Route exact path="/withproofenrollments" component={WithProofEnrollments} />
+                                <Route exact path="/incomplete" component={IncompleteEnrollments} />
+                                <Route exact path="/completeenrollments" component={CompleteEnrollments} />
+                                <Route exact path="/bulkportin" component={BulkPortin} />
+                                <Route exact path="/allenrollmentorders" component={Allenrollments} />
+                                <Route exact path="/recentsearches" component={RecentSearches} />
+                                <Route exact path="/paymentsearchtool" component={PaymentSearchTool} />
+                                <Route exact path="/agentstorelocator" component={AgentStoreLocator} />
+                                <Route exact path="/eligibilityproofupload" component={EligibilityProofUpload} />
+                                <Route exact path="/dealerwallet" component={DealerWallet} />
+                                <Route exact path="/smsnotification" component={Upload} />
+                                <Route exact path="/sent" component={Sent} />
+                                <Route exact path="/draft" component={Draft} />
+                                <Route exact path="/draftall/:id" component={ShowDraftAll} />
+                                <Route exact path="/sentall/:id" component={ShowSentAll} />
+                                <Route exact path="/verifyzip" component={VerifyZip} />
+                                <Route exact path="/personalinfo" component={PersonalInfo} />
+                                <Route exact path="/address" component={Address} />
+                                <Route exact path="/eligibile" component={Eligibility} />
+                                <Route exact path="/nationalverifier" component={NationalVerifier} />
+                                <Route exact path="/resumeapplication" component={ResumeApplication} />
+                                <Route exact path="/createtemplate" component={CreateTemplate} />
+                                <Route exact path="/managetemplate" component={ManageTemplate} />
+                                {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
+                            </div>
+
+                            <AppFooter layoutColorMode={layoutColorMode} />
+                        </div>
+
+                        <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
+
+                        <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
+                            <div className="layout-mask p-component-overlay"></div>
+                        </CSSTransition>
                     </div>
-
-                    <AppFooter layoutColorMode={layoutColorMode} />
-                </div>
-
-                <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
-
-                <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
-                    <div className="layout-mask p-component-overlay"></div>
-                </CSSTransition>
-            </div>
+                </>
+            )}
         </>
     );
 };

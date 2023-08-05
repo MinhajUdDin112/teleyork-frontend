@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import BASE_URL from "../../config";
 
 const LoginSlice = createSlice({
     name: "login",
@@ -28,7 +29,7 @@ export default LoginSlice.reducer;
 
 export const fetchUserLogin = createAsyncThunk("user/login", async (body) => {
     try {
-        const response = await axios.post("http://localhost:2023/api/web/user/login", body);
+        const response = await axios.post(`${BASE_URL}/api/web/user/login`, body);
         console.log(response.data);
         return response.data;
     } catch (error) {

@@ -3,6 +3,7 @@ import { FileUpload } from "primereact/fileupload";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx"; // Import XLSX library
 import Axios from "axios";
+import BASE_URL from "../../../../config";
 
 const Upload = () => {
     const [loading, setLoading] = useState(false);
@@ -48,7 +49,7 @@ const Upload = () => {
             <div className="card flex flex-column justify-content-center mx-5 border-noround">
                 <FileUpload
                     name="file"
-                    url="http://dev-api-ijwireless.teleyork.com/api/sms/upload/64ad9b07fc04dc6ca623b9c3"
+                    url={`${BASE_URL}/api/sms/upload/64ad9b07fc04dc6ca623b9c3`}
                     onUpload={onUpload}
                     multiple
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

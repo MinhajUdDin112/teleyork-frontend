@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import BASE_URL from "../../config";
 
 const GetOneTemplateSlice = createSlice({
     name: "getOneTemplates",
@@ -28,7 +29,7 @@ export default GetOneTemplateSlice.reducer;
 
 export const GetOneTemplate = createAsyncThunk("allTemplates", async (id) => {
     try {
-        const response = await axios.get(`http://dev-api-ijwireless.teleyork.com/api/sms/template/${id}`);
+        const response = await axios.get(`${BASE_URL}/api/sms/template/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);
