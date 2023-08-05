@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { AddTemplate } from "../../../store/createTemplateSlice";
+import { Toast } from "primereact/toast";
 
 const CreateTemplate = () => {
     const dispatch = useDispatch();
@@ -30,9 +31,15 @@ const CreateTemplate = () => {
             };
             dispatch(AddTemplate(dataToSend));
             resetForm();
-            alert("Template Added Successfully!");
+            show()
         },
     });
+
+    const toast = useRef(null);
+
+    const show = () => {
+        toast.current.show({ severity: 'success', summary: 'Info', detail: 'Template Added' });
+    };
 
     return (
         <div className="card bg-pink-50">
@@ -40,6 +47,7 @@ const CreateTemplate = () => {
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">Create Template</h3>
             </div>
             <form onSubmit={formik.handleSubmit}>
+                <Toast ref={toast} />
                 <div className="card mx-5">
                     <div className="flex flex-wrap">
                         <div className="mr-3">

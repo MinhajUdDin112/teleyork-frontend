@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 const Draft = () => {
     const [allDraft, setAllDraft] = useState([]);
-    const {user}= useSelector((state)=>state.login)
+    const { user } = useSelector((state) => state.login)
     const userId = user?.data._id;
     const history = useHistory();
     //actions

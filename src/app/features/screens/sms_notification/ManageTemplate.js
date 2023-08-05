@@ -13,7 +13,7 @@ const ManageTemplate = () => {
     const [keys, setKeys] = useState([]);
     const [isDataReady, setIsDataReady] = useState(false);
     const [templateName, setTemplateName] = useState("");
-    const [templateId, setTemplateId] = useState("");
+    const [templateId, setTemplateId] = useState([]);
     const [downloadFlag, setDownloadFlag] = useState(false);
     const [allTemplates, setAllTemplates] = useState([]);
     const dispatch = useDispatch();
@@ -60,6 +60,21 @@ const ManageTemplate = () => {
         if (isDataReady && keys.length > 0) {
             let wb = XLSX.utils.book_new();
             let ws = XLSX.utils.aoa_to_sheet([keys]);
+
+            // Find the index of the header that contains 'templateId'
+            const templateIdHeaderIndex = keys.findIndex(row => row.includes('templateId'));
+
+            // Assuming your value is stored in a variable called 'valueToMap'
+            const valueToMap = templateId;
+
+            // Assuming you have a row number where you want to map the value, called 'rowNumberToMap'
+            const rowNumberToMap = 1; // Replace 1 with the appropriate row number.
+
+            // Map the value to the specific row and column (assuming the column is 0 in this example)
+            if (templateIdHeaderIndex !== -1) {
+                XLSX.utils.sheet_add_aoa(ws, [[valueToMap]], { origin: { r: rowNumberToMap, c: templateIdHeaderIndex } });
+            }
+
             XLSX.utils.book_append_sheet(wb, ws, "MySheet1");
             const fileName = `${templateName}.xlsx`;
             XLSX.writeFile(wb, fileName, { bookType: "xlsx", type: "binary" }, () => {
@@ -68,14 +83,13 @@ const ManageTemplate = () => {
             });
         }
     }, [isDataReady, keys, templateName]);
+
     const dataArray = Array.isArray(templates.data) ? templates.data : [templates.data];
     const templateType = (rowData) => {
-        console.log("row data", rowData);
         return <div>{rowData.type === 0 ? "SMS" : (rowData.type === 1 ? "Email" : "Both")}</div>;
     };
     const status = (rowData) => {
-        console.log("row data", rowData);
-        return <div>{rowData.active == true? "Active" : "False"}</div>;
+        return <div>{rowData.active == true ? "Active" : "False"}</div>;
     };
     return (
         <div className="card bg-pink-50">
