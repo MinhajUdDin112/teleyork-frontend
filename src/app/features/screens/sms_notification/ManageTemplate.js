@@ -13,13 +13,14 @@ const ManageTemplate = () => {
     const [keys, setKeys] = useState([]);
     const [isDataReady, setIsDataReady] = useState(false);
     const [templateName, setTemplateName] = useState("");
-    const [templateId, setTemplateId] = useState("");
+    const [templateId, setTemplateId] = useState([]);
     const [downloadFlag, setDownloadFlag] = useState(false);
     const [allTemplates, setAllTemplates] = useState([]);
     const dispatch = useDispatch();
     const { templates } = useSelector((state) => state.getalltemplates);
     const { singleTemplate } = useSelector((state) => state.getOneTemplate);
-
+  
+const array1 = [keys,templateId]
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -27,6 +28,8 @@ const ManageTemplate = () => {
             </div>
         );
     };
+
+    // const arrData = [[keys],[templateId]]
     const handleDownload = (rowData) => {
         const { templateId } = rowData;
         dispatch(GetOneTemplate(templateId));
@@ -52,6 +55,7 @@ const ManageTemplate = () => {
             setTemplateName(name);
             setTemplateId(id);
             setKeys(keySequence);
+            console.log("keyssssss",keys)
             setIsDataReady(true);
             setDownloadFlag(false);
         }
@@ -59,7 +63,7 @@ const ManageTemplate = () => {
     useEffect(() => {
         if (isDataReady && keys.length > 0) {
             let wb = XLSX.utils.book_new();
-            let ws = XLSX.utils.aoa_to_sheet([keys]);
+            let ws = XLSX.utils.aoa_to_sheet([keys,templateId]);
             XLSX.utils.book_append_sheet(wb, ws, "MySheet1");
             const fileName = `${templateName}.xlsx`;
             XLSX.writeFile(wb, fileName, { bookType: "xlsx", type: "binary" }, () => {
