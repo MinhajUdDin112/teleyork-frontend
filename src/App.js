@@ -76,6 +76,8 @@ const App = () => {
     let mobileTopbarMenuClick = false;
     const { user } = useSelector((state) => state.login);
 
+    console.log('user', user)
+
     useEffect(() => {
         if (mobileMenuActive) {
             addClass(document.body, "body-overflow-hidden");
@@ -428,41 +430,43 @@ const App = () => {
 
                         <div className="layout-main-container">
                             <div className="layout-main">
-                                <Route exact path="/" component={ServiceAvailablityPage} />
-                                <Route exact path="/eligibility" component={ServiceAvailablityPage} />
-                                <Route exact path="/enrollment" component={EnrollmentFlowPage} />
-                                <Route exact path="/invoice" component={InvoicePage} />
-                                <Route exact path="/allenrollments" component={AllEnrollments} />
-                                <Route exact path="/completedenrollments" component={CompletedEnrollments} />
-                                <Route exact path="/incompleteenrollments" component={InCompletedEnrollments} />
-                                <Route exact path="/rejectedenrollments" component={RejectedEnrollments} />
-                                <Route exact path="/nladresolutionstatus" component={NLADResolutionStatus} />
-                                <Route exact path="/handovereventorder" component={HandoverEventOrder} />
-                                <Route exact path="/pendingeventorder" component={PendingEventOrder} />
-                                <Route exact path="/withoutproofenrollments" component={WithoutProofEnrollments} />
-                                <Route exact path="/withproofenrollments" component={WithProofEnrollments} />
-                                <Route exact path="/incomplete" component={IncompleteEnrollments} />
-                                <Route exact path="/completeenrollments" component={CompleteEnrollments} />
-                                <Route exact path="/bulkportin" component={BulkPortin} />
-                                <Route exact path="/allenrollmentorders" component={Allenrollments} />
-                                <Route exact path="/recentsearches" component={RecentSearches} />
-                                <Route exact path="/paymentsearchtool" component={PaymentSearchTool} />
-                                <Route exact path="/agentstorelocator" component={AgentStoreLocator} />
-                                <Route exact path="/eligibilityproofupload" component={EligibilityProofUpload} />
-                                <Route exact path="/dealerwallet" component={DealerWallet} />
-                                <Route exact path="/smsnotification" component={Upload} />
-                                <Route exact path="/sent" component={Sent} />
-                                <Route exact path="/draft" component={Draft} />
-                                <Route exact path="/draftall/:id" component={ShowDraftAll} />
-                                <Route exact path="/sentall/:id" component={ShowSentAll} />
-                                <Route exact path="/verifyzip" component={VerifyZip} />
-                                <Route exact path="/personalinfo" component={PersonalInfo} />
-                                <Route exact path="/address" component={Address} />
-                                <Route exact path="/eligibile" component={Eligibility} />
-                                <Route exact path="/nationalverifier" component={NationalVerifier} />
-                                <Route exact path="/resumeapplication" component={ResumeApplication} />
-                                <Route exact path="/createtemplate" component={CreateTemplate} />
-                                <Route exact path="/managetemplate" component={ManageTemplate} />
+                                <Switch>
+                                    <Route exact path="/" component={ServiceAvailablityPage} />
+                                    <Route path="/eligibility" component={ServiceAvailablityPage} />
+                                    <Route path="/enrollment" component={EnrollmentFlowPage} />
+                                    <Route path="/invoice" component={InvoicePage} />
+                                    <Route path="/allenrollments" component={AllEnrollments} />
+                                    <Route path="/completedenrollments" component={CompletedEnrollments} />
+                                    <Route path="/incompleteenrollments" component={InCompletedEnrollments} />
+                                    <Route path="/rejectedenrollments" component={RejectedEnrollments} />
+                                    <Route path="/nladresolutionstatus" component={NLADResolutionStatus} />
+                                    <Route path="/handovereventorder" component={HandoverEventOrder} />
+                                    <Route path="/pendingeventorder" component={PendingEventOrder} />
+                                    <Route path="/withoutproofenrollments" component={WithoutProofEnrollments} />
+                                    <Route path="/withproofenrollments" component={WithProofEnrollments} />
+                                    <Route path="/incomplete" component={IncompleteEnrollments} />
+                                    <Route path="/completeenrollments" component={CompleteEnrollments} />
+                                    <Route path="/bulkportin" component={BulkPortin} />
+                                    <Route path="/allenrollmentorders" component={Allenrollments} />
+                                    <Route path="/recentsearches" component={RecentSearches} />
+                                    <Route path="/paymentsearchtool" component={PaymentSearchTool} />
+                                    <Route path="/agentstorelocator" component={AgentStoreLocator} />
+                                    <Route path="/eligibilityproofupload" component={EligibilityProofUpload} />
+                                    <Route path="/dealerwallet" component={DealerWallet} />
+                                    <Route path="/smsnotification" component={Upload} />
+                                    <Route path="/sent" component={Sent} />
+                                    <Route path="/draft" component={Draft} />
+                                    <Route path="/draftall/:id" component={ShowDraftAll} />
+                                    <Route path="/sentall/:id" component={ShowSentAll} />
+                                    <Route path="/verifyzip" component={VerifyZip} />
+                                    <Route path="/personalinfo" component={PersonalInfo} />
+                                    <Route path="/address" component={Address} />
+                                    <Route path="/eligibile" component={Eligibility} />
+                                    <Route path="/nationalverifier" component={NationalVerifier} />
+                                    <Route path="/resumeapplication" component={ResumeApplication} />
+                                    <Route path="/createtemplate" component={CreateTemplate} />
+                                    <Route path="/managetemplate" component={ManageTemplate} />
+                                </Switch>
                                 {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                             </div>
 
