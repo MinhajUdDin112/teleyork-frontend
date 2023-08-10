@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
-import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { AddTemplate } from "../../../store/createTemplateSlice";
+import { Editor } from 'primereact/editor';
 import { Toast } from "primereact/toast";
 
 const CreateTemplate = () => {
     const dispatch = useDispatch();
+    const [templateText, setTemplateText] = useState('');
+
     const type = [
         { label: "SMS", value: 0 },
         { label: "Email", value: 1 },
@@ -19,7 +21,6 @@ const CreateTemplate = () => {
         initialValues: {
             name: "",
             type: "",
-            template: "",
         },
         onSubmit: (values, { resetForm }) => {
             const name = values.template.match(/(?<=\$)\w+/g) || [];
@@ -61,7 +62,8 @@ const CreateTemplate = () => {
                     </div>
                     <div className="mt-2">
                         <p className="m-0">Template Body:</p>
-                        <InputTextarea name="template" value={formik.values.template} onChange={formik.handleChange} rows={10} cols={80} autoResize />
+                        {/* <InputTextarea name="template" value={formik.values.template} onChange={formik.handleChange} rows={10} cols={80} autoResize /> */}
+                        <Editor style={{ height: '320px' }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
                     </div>
                     <div className="flex justify-content-end m-3">
                         <Button label="Add Template" type="submit" />

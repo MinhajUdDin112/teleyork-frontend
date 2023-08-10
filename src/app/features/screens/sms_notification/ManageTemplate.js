@@ -97,6 +97,9 @@ const array1 = [keys,templateId]
     };
     return (
         <div className="card bg-pink-50">
+            <div className="mx-5">
+                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Manage Template</h3>
+            </div>
             <div className="card mx-5 p-0 border-noround">
                 <div className="">
                     <DataTable value={allTemplates} showGridlines>

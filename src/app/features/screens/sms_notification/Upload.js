@@ -44,7 +44,7 @@ const Upload = () => {
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
-                <h3 className="text-xl font-semibold border-bottom-1 pb-2">SMS Notifications</h3>
+                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Upload Template</h3>
             </div>
             <div className="card flex flex-column justify-content-center mx-5 border-noround">
                 <FileUpload

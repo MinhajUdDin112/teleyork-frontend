@@ -289,7 +289,7 @@ const App = () => {
         {
             items: [
                 {
-                    label: "SMS Notifications",
+                    label: "Notifications",
                     items: [
                         {
                             label: "Manage Templates",
@@ -304,11 +304,11 @@ const App = () => {
                             to: "/smsnotification",
                         },
                         {
-                            label: "Sent Template",
+                            label: "Sent",
                             to: "/sent",
                         },
                         {
-                            label: "Draft Template",
+                            label: "Draft",
                             to: "/draft",
                         },
                     ],

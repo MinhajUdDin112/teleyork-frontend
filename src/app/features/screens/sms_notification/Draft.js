@@ -65,7 +65,7 @@ const Draft = () => {
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
-                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Draft Template</h3>
+                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Draft</h3>
             </div>
             <div className="card mx-5 p-0 border-noround">
                 {/* <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">
