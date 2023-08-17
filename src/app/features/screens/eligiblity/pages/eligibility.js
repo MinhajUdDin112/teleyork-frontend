@@ -370,8 +370,8 @@ const Eligibility = ({ setActiveIndex }) => {
     };
     return (
         <>
-        
-        <div className="flex flex-row justify-content-between my-3">
+            <div className="card">
+                <div className="flex flex-row justify-content-between my-3">
                     <Button label="Back" />
                     <Button
                         label="Continue"
@@ -387,7 +387,7 @@ const Eligibility = ({ setActiveIndex }) => {
                     />
                 </div>
                 <div>{buildpages[page[selectedPage]]}</div>
-            
+            </div>
         </>
     );
 };

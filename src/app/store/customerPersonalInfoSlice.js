@@ -2,33 +2,32 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import BASE_URL from "../../config";
 import axios from "axios";
 
-const zipCode = createSlice({
-    name: "zipcode",
+const customerPersonalInfoSlice = createSlice({
+    name: "personalInfo",
     initialState: {
-        serviceAvailability: {},
-        isvald: false,
+        info: {},
         loading: false,
         error: null,
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchZipCode.pending, (state, action) => {
+        builder.addCase(postCustomerInfo.pending, (state, action) => {
             state.loading = true;
         });
-        builder.addCase(fetchZipCode.fulfilled, (state, action) => {
+        builder.addCase(postCustomerInfo.fulfilled, (state, action) => {
             state.serviceAvailability = action.payload;
             state.loading = false;
         });
-        builder.addCase(fetchZipCode.rejected, (state, action) => {
+        builder.addCase(postCustomerInfo.rejected, (state, action) => {
             state.error = state.action;
         });
     },
 });
 
-export default zipCode.reducer;
+export default customerPersonalInfoSlice.reducer;
 
-export const fetchZipCode = createAsyncThunk("users/zipcode", async (body) => {
+export const postCustomerInfo = createAsyncThunk("customer/info", async (body) => {
     try {
-        const response = await axios.post(`${BASE_URL}/api/user/verifyZip`, body);
+        const response = await axios.post(`${BASE_URL}/api/user/initialInformation`, body);
         console.log(response.data);
         return response.data;
     } catch (error) {

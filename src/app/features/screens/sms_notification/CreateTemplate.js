@@ -23,15 +23,18 @@ const CreateTemplate = () => {
             type: "",
         },
         onSubmit: (values, { resetForm }) => {
-            const name = values.template.match(/(?<=\$)\w+/g) || [];
+            const name = templateText.match(/(?<=\$)\w+/g) || [];
             const keySequence = ["templateId", ...name];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
                 ...values,
+                template:  templateText.replace(/<p>/g, '').replace(/<\/p>/g, ''),
                 keySequence: [...keySequence],
             };
+            console.log(dataToSend)
             dispatch(AddTemplate(dataToSend));
             resetForm();
+            setTemplateText("")
             show()
         },
     });

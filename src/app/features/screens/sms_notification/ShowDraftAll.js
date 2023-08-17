@@ -13,7 +13,7 @@ const ShowDraftAll = () => {
    const history = useHistory();
     const [allDraftData, setAllDraftData] = useState([]);
     const {user}= useSelector((state)=>state.login)
-    const userId = user?.data._id;
+    const userId = user?._id;
 
     //Get All Draft
     const getDraftData = async () => {

@@ -57,6 +57,8 @@ import CreateTemplate from "./app/features/screens/sms_notification/CreateTempla
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
 import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Dashboard from "./app/features/screens/dashboard/Dashboard";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -67,8 +69,10 @@ const App = () => {
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
+    const [protectedRoute, setProtectedRoute] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
+    const history = useHistory();
 
     PrimeReact.ripple = true;
 
@@ -76,7 +80,7 @@ const App = () => {
     let mobileTopbarMenuClick = false;
     const { user } = useSelector((state) => state.login);
 
-    console.log('user', user)
+    console.log("user", user);
 
     useEffect(() => {
         if (mobileMenuActive) {
@@ -188,8 +192,8 @@ const App = () => {
                     label: "Lifeline Orders",
                     icon: "pi pi-fw pi-bookmark",
                     items: [
-                        { label: "New Enrollment", icon: "", to: "/eligibility" },
-                        { label: "Self Enrollment", icon: "", to: "/verifyzip" },
+                        { label: "New Enrollment", icon: "", to: "/newenrolment" },
+                        { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                         { label: "All Enrollments", icon: "", to: "/allenrollments" },
                         { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                         { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
@@ -317,74 +321,6 @@ const App = () => {
         },
     ];
 
-    // const menu1 = [
-    //     {
-    //         label: "Home",
-    //         items: [
-    //             {
-    //                 label: "Dashboard",
-    //                 icon: "pi pi-fw pi-home",
-    //                 to: "/dashboard",
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         label: "UI Components",
-    //         icon: "pi pi-fw pi-sitemap",
-    //         items: [
-    //             { label: "Form Layout", icon: "pi pi-fw pi-id-card", to: "/formlayout" },
-    //             { label: "Input", icon: "pi pi-fw pi-check-square", to: "/input" },
-    //             { label: "Float Label", icon: "pi pi-fw pi-bookmark", to: "/floatlabel" },
-    //             { label: "Invalid State", icon: "pi pi-fw pi-exclamation-circle", to: "invalidstate" },
-    //             { label: "Button", icon: "pi pi-fw pi-mobile", to: "/button" },
-    //             { label: "Table", icon: "pi pi-fw pi-table", to: "/table" },
-    //             { label: "List", icon: "pi pi-fw pi-list", to: "/list" },
-    //             { label: "Tree", icon: "pi pi-fw pi-share-alt", to: "/tree" },
-    //             { label: "Panel", icon: "pi pi-fw pi-tablet", to: "/panel" },
-    //             { label: "Overlay", icon: "pi pi-fw pi-clone", to: "/overlay" },
-    //             { label: "Media", icon: "pi pi-fw pi-image", to: "/media" },
-    //             { label: "Menu", icon: "pi pi-fw pi-bars", to: "/menu" },
-    //             { label: "Message", icon: "pi pi-fw pi-comment", to: "/messages" },
-    //             { label: "File", icon: "pi pi-fw pi-file", to: "/file" },
-    //             { label: "Chart", icon: "pi pi-fw pi-chart-bar", to: "/chart" },
-    //             { label: "Misc", icon: "pi pi-fw pi-circle-off", to: "/misc" },
-    //         ],
-    //     },
-    //     {
-    //         label: "Icons",
-    //         items: [{ label: "PrimeIcons", icon: "pi pi-fw pi-prime", to: "/icons" }],
-    //     },
-    //     {
-    //         label: "Pages",
-    //         icon: "pi pi-fw pi-clone",
-    //         items: [
-    //             { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
-    //             { label: "Timeline", icon: "pi pi-fw pi-calendar", to: "/timeline" },
-    //             { label: "Empty", icon: "pi pi-fw pi-circle-off", to: "/empty" },
-    //         ],
-    //     },
-
-    //     // {
-    //     //     label: "Get Started",
-    //     //     items: [
-    //     //         {
-    //     //             label: "Documentation",
-    //     //             icon: "pi pi-fw pi-question",
-    //     //             command: () => {
-    //     //                 window.location = "#/documentation";
-    //     //             },
-    //     //         },
-    //     //         {
-    //     //             label: "View Source",
-    //     //             icon: "pi pi-fw pi-search",
-    //     //             command: () => {
-    //     //                 window.location = "https://github.com/primefaces/sakai-react";
-    //     //             },
-    //     //         },
-    //     //     ],
-    //     // },
-    // ];
-
     const addClass = (element, className) => {
         if (element.classList) element.classList.add(className);
         else element.className += " " + className;
@@ -405,20 +341,27 @@ const App = () => {
         "p-ripple-disabled": ripple === false,
         "layout-theme-light": layoutColorMode === "light",
     });
-
+    let token = JSON.parse(localStorage.getItem("accessToken"));
+    useEffect(() => {
+        if (token) {
+            setProtectedRoute(true);
+            history.push("/");
+        } else {
+            setProtectedRoute(false);
+            history.push("/login");
+        }
+    }, [token]);
     return (
         <>
-            {Object.keys(user).length === 0 ? (
+            {protectedRoute === false && <Route path="/login" component={LoginScreen} />}
+            {protectedRoute === true && (
                 <>
-                    <Route exact path="/" component={LoginScreen} />
-                </>
-            ) : (
-                <>
-                    <Switch>
-                        <Route exact path="/eligibile">
-                            <eligibility_info_page />
-                        </Route>
-                    </Switch>
+                    {/* <Switch>
+            
+                 <Route exact path="/eligibile">
+                     <eligibility_info_page />
+                 </Route>
+             </Switch> */}
                     <div className={wrapperClass} onClick={onWrapperClick}>
                         <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
@@ -431,8 +374,8 @@ const App = () => {
                         <div className="layout-main-container">
                             <div className="layout-main">
                                 <Switch>
-                                    <Route exact path="/" component={ServiceAvailablityPage} />
-                                    <Route path="/eligibility" component={ServiceAvailablityPage} />
+                                    <Route exact path="/" component={Dashboard} />
+                                    <Route path="/newenrolment" component={ServiceAvailablityPage} />
                                     <Route path="/enrollment" component={EnrollmentFlowPage} />
                                     <Route path="/invoice" component={InvoicePage} />
                                     <Route path="/allenrollments" component={AllEnrollments} />
@@ -458,7 +401,7 @@ const App = () => {
                                     <Route path="/draft" component={Draft} />
                                     <Route path="/draftall/:id" component={ShowDraftAll} />
                                     <Route path="/sentall/:id" component={ShowSentAll} />
-                                    <Route path="/verifyzip" component={VerifyZip} />
+                                    <Route path="/selfenrollment" component={VerifyZip} />
                                     <Route path="/personalinfo" component={PersonalInfo} />
                                     <Route path="/address" component={Address} />
                                     <Route path="/eligibile" component={Eligibility} />

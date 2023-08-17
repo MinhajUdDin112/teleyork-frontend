@@ -27,10 +27,10 @@ export default function LoginScreen() {
 
     return (
         <>
-            <div className="flex justify-center items-center" style={{ height: "600px" }}>
-                <div className="card col-4 m-auto" style={{ height: "60%" }}>
-                    <div className="flex justify-content-center mt-8">
-                        <p className="text-xl font-semibold mt-5 mb-3 pt-3">Login</p>
+            <div className="flex justify-center items-center" style={{ minHeight: "100vh" }}>
+                <div className="card col-4 m-auto" style={{ height: "50vh" }}>
+                    <div className="flex justify-content-center">
+                        <p className="text-xl font-semibold mb-3 pt-3">Login</p>
                     </div>
                     {error ? (
                         <div className="flex justify-content-center mb-2">
@@ -39,7 +39,7 @@ export default function LoginScreen() {
                             </p>
                         </div>
                     ) : null}
-                    <div className="flex justify-content-center align-items-center w-full">
+                    <div className="flex justify-content-center  w-full">
                         <form onSubmit={formik.handleSubmit}>
                             <InputText type="text" name="email" className="p-inputtext-sm block mb-4 w-20rem" placeholder="Enter email" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} />
                             {formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm mt-0">{formik.errors.email}</p> : null}
