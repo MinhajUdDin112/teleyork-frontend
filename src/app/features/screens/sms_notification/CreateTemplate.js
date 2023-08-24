@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { AddTemplate } from "../../../store/createTemplateSlice";
-import { Editor } from 'primereact/editor';
+import { Editor } from "primereact/editor";
 import { Toast } from "primereact/toast";
+import { addTemplateAction } from "../../../store/notification/NotificationAction";
 
 const CreateTemplate = () => {
     const dispatch = useDispatch();
-    const [templateText, setTemplateText] = useState('');
+    const [templateText, setTemplateText] = useState("");
 
     const type = [
         { label: "SMS", value: 0 },
@@ -22,27 +22,26 @@ const CreateTemplate = () => {
             name: "",
             type: "",
         },
-        onSubmit: (values, { resetForm }) => {
+        onSubmit: (values, actions) => {
             const name = templateText.match(/(?<=\$)\w+/g) || [];
             const keySequence = ["templateId", ...name];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
                 ...values,
-                template:  templateText.replace(/<p>/g, '').replace(/<\/p>/g, ''),
+                template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
             };
-            console.log(dataToSend)
-            dispatch(AddTemplate(dataToSend));
-            resetForm();
-            setTemplateText("")
-            show()
+            dispatch(addTemplateAction(dataToSend));
+            actions.resetForm();
+            setTemplateText("");
+            show();
         },
     });
 
     const toast = useRef(null);
 
     const show = () => {
-        toast.current.show({ severity: 'success', summary: 'Info', detail: 'Template Added' });
+        toast.current.show({ severity: "success", summary: "Info", detail: "Template Added" });
     };
 
     return (
@@ -65,8 +64,7 @@ const CreateTemplate = () => {
                     </div>
                     <div className="mt-2">
                         <p className="m-0">Template Body:</p>
-                        {/* <InputTextarea name="template" value={formik.values.template} onChange={formik.handleChange} rows={10} cols={80} autoResize /> */}
-                        <Editor style={{ height: '320px' }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
+                        <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
                     </div>
                     <div className="flex justify-content-end m-3">
                         <Button label="Add Template" type="submit" />

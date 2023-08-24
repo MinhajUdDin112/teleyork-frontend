@@ -1,20 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import LoginReducer from "./logInSlice";
-import AddTemplateReducer from "./createTemplateSlice";
-import GetAllTemplateReducer from "./getAllTemplateSlice";
-import GetOneTemplateReducer from "./getOneTemplateSlice";
-import GetZipCodeReducer from "./zipcodeSlice";
-import postCustomerInfoReducer from "./customerPersonalInfoSlice";
+import rootReducer from "./rootReducer";
 
 const store = configureStore({
-    reducer: {
-        login: LoginReducer,
-        getZipCode: GetZipCodeReducer,
-        addtemplate: AddTemplateReducer,
-        getalltemplates: GetAllTemplateReducer,
-        getOneTemplate: GetOneTemplateReducer,
-        customerinfo: postCustomerInfoReducer,
+    reducer: rootReducer,
+    devTools: true,
+    middleware: (getDefaultMiddleware) => {
+        return getDefaultMiddleware({
+            serializableCheck: false,
+        });
     },
 });
-
 export default store;

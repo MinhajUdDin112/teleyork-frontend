@@ -52,13 +52,13 @@ import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
 import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
 import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
 import { useSelector } from "react-redux";
-import LoginScreen from "./app/features/screens/auth/pages/login_screen";
 import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
 import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Dashboard from "./app/features/screens/dashboard/Dashboard";
+import LoginScreen from "./app/features/screens/auth/login_screen";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -80,7 +80,6 @@ const App = () => {
     let mobileTopbarMenuClick = false;
     const { user } = useSelector((state) => state.login);
 
-    console.log("user", user);
 
     useEffect(() => {
         if (mobileMenuActive) {

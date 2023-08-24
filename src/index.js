@@ -13,6 +13,7 @@ ReactDOM.render(
     <HashRouter>
         <ScrollToTop>
             <Provider store={store}>
+                
                 <App />
             </Provider>
         </ScrollToTop>

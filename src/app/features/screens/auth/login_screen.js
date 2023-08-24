@@ -5,7 +5,7 @@ import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserLogin } from "../../../../store/logInSlice";
+import { loginAction } from "../../../store/auth/AuthAction";
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export default function LoginScreen() {
             password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
         }),
         onSubmit: (values) => {
-            dispatch(fetchUserLogin(values));
+            dispatch(loginAction(values));
             console.log(formik.values);
         },
     });

@@ -6,8 +6,11 @@ import { Checkbox } from "primereact/checkbox";
 import { RadioButton } from "primereact/radiobutton";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
+import { useDispatch } from "react-redux";
+import { addCustomerInfoAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 
 export default function PersonalInfoPage({ setActiveIndex }) {
+    const dispatch = useDispatch();
     let pages = ["personal", "homeAddress", "question1", "question2", "question3"];
     const [selectedPage, setSelectedPage] = useState(0);
     const [ingredient, setIngredient] = useState("");
@@ -31,31 +34,37 @@ export default function PersonalInfoPage({ setActiveIndex }) {
             isSelfReceive: false,
             isACP: false,
         },
-
-        onSubmit: (values) => {
-            console.log(values);
-        },
     });
 
+    const submitHandler = () => {
+        switch (selectedPage) {
+            case 0:
+                //case 1 api
+                dispatch(addCustomerInfoAction(formik.values));
+                break;
+            case 1:
+                // case 2 api
+                break;
+            case 2:
+                // case 3 api
+                break;
+            default:
+            //default
+        }
+        if (selectedPage < 4) {
+            setSelectedPage((prev) => {
+                return prev + 1;
+            });
+        } else {
+            setActiveIndex(1);
+        }
+    };
     const reuturnPersonalInfo = () => {
         return (
             <>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment ID:</h6>
-                    <Button
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-
-                                    console.log(formik.values);
-                                });
-                            } else {
-                                setActiveIndex(1);
-                            }
-                        }}
-                    />
+                    <Button label="Continue" onClick={submitHandler} />
                 </div>
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
                 <p className="text-xl font-semibold">What is your full legal name?</p>
@@ -188,19 +197,7 @@ export default function PersonalInfoPage({ setActiveIndex }) {
             <>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment ID:</h6>
-                    <Button
-                        type="submit"
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-                                });
-                            } else {
-                                setActiveIndex(1);
-                            }
-                        }}
-                    />
+                    <Button type="submit" label="Continue" onClick={submitHandler} />
                 </div>
                 <br></br>
                 <p className="text-xl">What is your home address?</p>
@@ -238,20 +235,7 @@ export default function PersonalInfoPage({ setActiveIndex }) {
             <>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment ID:</h6>
-                    <Button
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-
-                                    console.log(formik.values);
-                                });
-                            } else {
-                                setActiveIndex(1);
-                            }
-                        }}
-                    />
+                    <Button label="Continue" onClick={submitHandler} />
                 </div>
                 <h3>Do you live with another adult?</h3>
                 <p>Adults are people who are 18 years or older, or who are emancipated minors. This can include a spouse, domestic partner, parent, adult son or daughter, adult in your family, adult roomate etc.</p>
@@ -267,20 +251,7 @@ export default function PersonalInfoPage({ setActiveIndex }) {
             <>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment ID:</h6>
-                    <Button
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-
-                                    console.log(formik.values);
-                                });
-                            } else {
-                                setActiveIndex(1);
-                            }
-                        }}
-                    />
+                    <Button label="Continue" onClick={submitHandler} />
                 </div>
                 <h3>Do they get the Affordable Connectivity Program?</h3>
                 <div className="flex flex-row justify-content-between">
@@ -295,20 +266,7 @@ export default function PersonalInfoPage({ setActiveIndex }) {
             <>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment ID:</h6>
-                    <Button
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 4) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-
-                                    console.log(formik.values);
-                                });
-                            } else {
-                                setActiveIndex(1);
-                            }
-                        }}
-                    />
+                    <Button label="Continue" onClick={submitHandler} />
                 </div>
                 <h3>Do yoy share money (incomeand expenses) with another adult who gets the Affordable Connectivity Program Benifit?</h3>
                 <p>This can be cost of bills, food etc and income. If you are married, you should check yes for this question.</p>

@@ -4,8 +4,7 @@ import classNames from "classnames";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
-import { clearUserData } from "./app/store/logInSlice";
-import { Button } from "primereact/button";
+import { logout } from "./app/store/auth/AuthSlice";
 
 export const AppTopbar = (props) => {
     const [visible, setVisible] = useState(false);
@@ -13,7 +12,7 @@ export const AppTopbar = (props) => {
     const history = useHistory();
 
     const handleLogout = () => {
-        dispatch(clearUserData());
+        dispatch(logout());
         history.push("/login");
     };
     return (

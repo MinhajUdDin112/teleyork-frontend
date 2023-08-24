@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FileUpload } from "primereact/fileupload";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx"; // Import XLSX library
-import Axios from "axios";
 import BASE_URL from "../../../../config";
 
 const Upload = () => {
@@ -54,7 +53,7 @@ const Upload = () => {
                     multiple
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     maxFileSize={1000000}
-                    emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}
+                    emptyTemplate={<p className="m-0">Drag and drop files here to upload.</p>}
                     onSelect={handleFileUpload}
                 />
             </div>
