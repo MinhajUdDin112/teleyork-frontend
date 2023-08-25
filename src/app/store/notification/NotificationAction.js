@@ -18,7 +18,7 @@ export const addTemplateAction = createAsyncThunk("notification/api/sms/addTempl
 });
 
 //get list of all templates action
-export const getAllTemplateAction = createAsyncThunk("notification/sms/template/draft", async () => {
+export const getAllTemplateAction = createAsyncThunk("notification/sms/template/draft", async ({ rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/template/draft`);
         return response.data;
@@ -29,7 +29,7 @@ export const getAllTemplateAction = createAsyncThunk("notification/sms/template/
 });
 
 //get one template action
-export const getOneTemplateAction = createAsyncThunk("notification/sms/template/${id}", async (id) => {
+export const getOneTemplateAction = createAsyncThunk("notification/sms/template/${id}", async (id , { rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/template/${id}`);
         return response.data;
@@ -39,7 +39,7 @@ export const getOneTemplateAction = createAsyncThunk("notification/sms/template/
 });
 
 //get all sent templates action
-export const getSentAllTemplateAction = createAsyncThunk("notification/sms/template/sent", async () => {
+export const getSentAllTemplateAction = createAsyncThunk("notification/sms/template/sent", async ({ rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/template/sent`);
         return response.data;
@@ -49,7 +49,7 @@ export const getSentAllTemplateAction = createAsyncThunk("notification/sms/templ
 });
 
 //show all sent data action
-export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent", async (id) => {
+export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent", async (id ,{ rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/sent/${id}`);
         return response.data;
@@ -59,7 +59,7 @@ export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent
 });
 
 //send template action
-export const submitTemplateAction = createAsyncThunk("notification/sms/send", async (body) => {
+export const submitTemplateAction = createAsyncThunk("notification/sms/send", async (body , { rejectWithValue }) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/sms/send?sentBy=${body.userId}&templateId=${body.templateId}`);
         return response.data;
@@ -69,7 +69,7 @@ export const submitTemplateAction = createAsyncThunk("notification/sms/send", as
 });
 
 //show all draft data action
-export const getDraftByTemplateIdAction = createAsyncThunk("notification/sms/draft", async (id) => {
+export const getDraftByTemplateIdAction = createAsyncThunk("notification/sms/draft", async (id , { rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/draft/${id}`);
         return response.data;
