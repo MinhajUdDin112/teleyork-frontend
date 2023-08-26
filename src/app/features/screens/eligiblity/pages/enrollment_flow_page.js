@@ -6,41 +6,37 @@ import plan from "./plan";
 import Preview from "./preview";
 export default function EnrollmentFlowPage() {
     const [activeIndex, setActiveIndex] = useState(0);
-    const changeValue = (val) => {
-        console.log("hello changevalue");
-        setActiveIndex(val);
-    };
     const toast = useRef(null);
+  
     const items = [
         {
             label: "Personal Info",
             command: (event) => {
-                toast.current.show({ severity: "info", summary: "First Step", detail: event.item.label });
+                setActiveIndex(0);
             },
         },
         {
             label: "Eligiblity",
             command: (event) => {
-                toast.current.show({ severity: "info", summary: "Seat Selection", detail: event.item.label });
-            },
+                setActiveIndex(1);            },
         },
         {
             label: "Plan",
             command: (event) => {
-                toast.current.show({ severity: "info", summary: "Pay with CC", detail: event.item.label });
-            },
+                setActiveIndex(2);        
+                },
         },
         {
             label: "Preview",
             command: (event) => {
-                toast.current.show({ severity: "info", summary: "Last Step", detail: event.item.label });
-            },
+                setActiveIndex(3);     
+                   },
         },
     ];
     let pages = [
-        PersonalInfoPage(),
-        Eligibility(),
-        plan(),
+        PersonalInfoPage({setActiveIndex:setActiveIndex}),
+        Eligibility({setActiveIndex:setActiveIndex}),
+        plan({setActiveIndex:setActiveIndex}),
         Preview()
     ];
     return (
@@ -48,9 +44,7 @@ export default function EnrollmentFlowPage() {
             <div className="card">
                 <Steps model={items} activeIndex={activeIndex} />
             </div>
-            <div>
-                <PersonalInfoPage changeValue={changeValue} />
-            </div>
+           
             <div>{pages[activeIndex]}</div>
         </div>
     );

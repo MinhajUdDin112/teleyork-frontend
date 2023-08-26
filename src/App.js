@@ -22,6 +22,43 @@ import "./assets/layout/layout.scss";
 import "./App.scss";
 import ServiceAvailablityPage from "./app/features/screens/eligiblity/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblity/pages/enrollment_flow_page";
+import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
+import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
+import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
+import InCompletedEnrollments from "./app/features/screens/lifeline_orders/InCompleteEnrollments";
+import RejectedEnrollments from "./app/features/screens/lifeline_orders/RejectedEnrolments";
+import NLADResolutionStatus from "./app/features/screens/lifeline_orders/NLADResolutionStatus";
+import HandoverEventOrder from "./app/features/screens/lifeline_orders/HandoverEventOrder";
+import PendingEventOrder from "./app/features/screens/lifeline_orders/PendingEventOrder";
+import WithProofEnrollments from "./app/features/screens/lifeline_orders/WithProofEnrollments";
+import WithoutProofEnrollments from "./app/features/screens/lifeline_orders/WithoutProofEnrollments";
+import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
+import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
+import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
+import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
+import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
+import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
+import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
+import EligibilityProofUpload from "./app/features/screens/customer_services/EligibilityProofUpload";
+import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
+import SmsNotification from "./app/features/screens/sms_notification/Upload";
+import Upload from "./app/features/screens/sms_notification/Upload";
+import Sent from "./app/features/screens/sms_notification/Sent";
+import Draft from "./app/features/screens/sms_notification/Draft";
+import VerifyZip from "./app/features/screens/self_enrollment/VerifyZip";
+import PersonalInfo from "./app/features/screens/self_enrollment/PersonalInfo";
+import Address from "./app/features/screens/self_enrollment/Address";
+import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
+import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
+import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
+import { useSelector } from "react-redux";
+import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
+import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
+import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
+import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Dashboard from "./app/features/screens/dashboard/Dashboard";
+import LoginScreen from "./app/features/screens/auth/login_screen";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -32,13 +69,17 @@ const App = () => {
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
+    const [protectedRoute, setProtectedRoute] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
+    const history = useHistory();
 
     PrimeReact.ripple = true;
 
     let menuClick = false;
     let mobileTopbarMenuClick = false;
+    const { user } = useSelector((state) => state.login);
+
 
     useEffect(() => {
         if (mobileMenuActive) {
@@ -143,9 +184,139 @@ const App = () => {
             ],
         },
         {
-            label: "Services",
-            icon: "pi pi-fw pi-sitemap",
-            items: [{ label: "Elibigility", icon: "pi pi-fw pi-id-card", to: "/eligibility" }],
+            label: "",
+            icon: "pi pi-fw pi-search",
+            items: [
+                {
+                    label: "Lifeline Orders",
+                    icon: "pi pi-fw pi-bookmark",
+                    items: [
+                        { label: "New Enrollment", icon: "", to: "/newenrolment" },
+                        { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
+                        { label: "All Enrollments", icon: "", to: "/allenrollments" },
+                        { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
+                        { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
+                        { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
+                        { label: "Incomplete Enrollments", icon: "", to: "/incompleteenrollments" },
+                        { label: "Rejected Enrollments", icon: "", to: "/rejectedenrollments" },
+                        { label: "NLAD Resolution Status", icon: "", to: "/nladresolutionstatus" },
+                        { label: "Handover Event Order", icon: "", to: "/handovereventorder" },
+                        { label: "Pending Event Order", icon: "", to: "/pendingeventorder" },
+                    ],
+                },
+            ],
+        },
+        {
+            items: [
+                {
+                    label: "Customer Service",
+                    items: [
+                        {
+                            label: "Customer Profile",
+                            icon: "",
+                            to: "",
+                        },
+                        {
+                            label: "Billing and Invoice",
+                            icon: "",
+                            to: "/invoice",
+                        },
+                        {
+                            label: "Order History",
+                            icon: "",
+                            to: "",
+                        },
+                        {
+                            label: "Recent Searches",
+                            icon: "",
+                            to: "/recentsearches",
+                        },
+                        {
+                            label: "Payment Search Tool",
+                            icon: "",
+                            to: "/paymentsearchtool",
+                        },
+                        {
+                            label: "Agent Store Locator",
+                            icon: "",
+                            to: "/agentstorelocator",
+                        },
+                        {
+                            label: "Eligibility Proof Upload",
+                            icon: "",
+                            to: "/eligibilityproofupload",
+                        },
+                        {
+                            label: "Dealer Wallet",
+                            icon: "",
+                            to: "/dealerwallet",
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            items: [
+                {
+                    label: "Prepaid/Postpaid Oredrs",
+                    items: [
+                        {
+                            label: "New Enrollments",
+                            icon: "",
+                            to: "",
+                        },
+                        {
+                            label: "All Enrollments",
+                            icon: "",
+                            to: "/allenrollmentorders",
+                        },
+                        {
+                            label: "Bulk Portin Report",
+                            icon: "",
+                            to: "/bulkportin",
+                        },
+                        {
+                            label: "Completed Enrollments",
+                            icon: "",
+                            to: "/completeenrollments",
+                        },
+                        {
+                            label: "Incomplete Enrolments",
+                            icon: "",
+                            to: "/incomplete",
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            items: [
+                {
+                    label: "Notifications",
+                    items: [
+                        {
+                            label: "Manage Templates",
+                            to: "/managetemplate",
+                        },
+                        {
+                            label: "Create Template",
+                            to: "/createtemplate",
+                        },
+                        {
+                            label: "Upload Template",
+                            to: "/smsnotification",
+                        },
+                        {
+                            label: "Sent",
+                            to: "/sent",
+                        },
+                        {
+                            label: "Draft",
+                            to: "/draft",
+                        },
+                    ],
+                },
+            ],
         },
     ];
 
@@ -169,39 +340,89 @@ const App = () => {
         "p-ripple-disabled": ripple === false,
         "layout-theme-light": layoutColorMode === "light",
     });
-
+    let token = JSON.parse(localStorage.getItem("accessToken"));
+    useEffect(() => {
+        if (token) {
+            setProtectedRoute(true);
+            history.push("/");
+        } else {
+            setProtectedRoute(false);
+            history.push("/login");
+        }
+    }, [token]);
     return (
         <>
-            <Switch>
-                <Route exact path="/eligibile">
-                    <eligibility_info_page />
-                </Route>
-            </Switch>
-            <div className={wrapperClass} onClick={onWrapperClick}>
-                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+            {protectedRoute === false && <Route path="/login" component={LoginScreen} />}
+            {protectedRoute === true && (
+                <>
+                    {/* <Switch>
+            
+                 <Route exact path="/eligibile">
+                     <eligibility_info_page />
+                 </Route>
+             </Switch> */}
+                    <div className={wrapperClass} onClick={onWrapperClick}>
+                        <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-                <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                        <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
-                <div className="layout-sidebar" onClick={onSidebarClick}>
-                    <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-                </div>
+                        <div className="layout-sidebar" onClick={onSidebarClick}>
+                            <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                        </div>
 
-                <div className="layout-main-container">
-                    <div className="layout-main">
-                        <Route exact path="/eligibility" component={ServiceAvailablityPage} />
-                        <Route exact path="/enrollment" component={EnrollmentFlowPage} />
-                        {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
+                        <div className="layout-main-container">
+                            <div className="layout-main">
+                                <Switch>
+                                    <Route exact path="/" component={Dashboard} />
+                                    <Route path="/newenrolment" component={ServiceAvailablityPage} />
+                                    <Route path="/enrollment" component={EnrollmentFlowPage} />
+                                    <Route path="/invoice" component={InvoicePage} />
+                                    <Route path="/allenrollments" component={AllEnrollments} />
+                                    <Route path="/completedenrollments" component={CompletedEnrollments} />
+                                    <Route path="/incompleteenrollments" component={InCompletedEnrollments} />
+                                    <Route path="/rejectedenrollments" component={RejectedEnrollments} />
+                                    <Route path="/nladresolutionstatus" component={NLADResolutionStatus} />
+                                    <Route path="/handovereventorder" component={HandoverEventOrder} />
+                                    <Route path="/pendingeventorder" component={PendingEventOrder} />
+                                    <Route path="/withoutproofenrollments" component={WithoutProofEnrollments} />
+                                    <Route path="/withproofenrollments" component={WithProofEnrollments} />
+                                    <Route path="/incomplete" component={IncompleteEnrollments} />
+                                    <Route path="/completeenrollments" component={CompleteEnrollments} />
+                                    <Route path="/bulkportin" component={BulkPortin} />
+                                    <Route path="/allenrollmentorders" component={Allenrollments} />
+                                    <Route path="/recentsearches" component={RecentSearches} />
+                                    <Route path="/paymentsearchtool" component={PaymentSearchTool} />
+                                    <Route path="/agentstorelocator" component={AgentStoreLocator} />
+                                    <Route path="/eligibilityproofupload" component={EligibilityProofUpload} />
+                                    <Route path="/dealerwallet" component={DealerWallet} />
+                                    <Route path="/smsnotification" component={Upload} />
+                                    <Route path="/sent" component={Sent} />
+                                    <Route path="/draft" component={Draft} />
+                                    <Route path="/draftall/:id" component={ShowDraftAll} />
+                                    <Route path="/sentall/:id" component={ShowSentAll} />
+                                    <Route path="/selfenrollment" component={VerifyZip} />
+                                    <Route path="/personalinfo" component={PersonalInfo} />
+                                    <Route path="/address" component={Address} />
+                                    <Route path="/eligibile" component={Eligibility} />
+                                    <Route path="/nationalverifier" component={NationalVerifier} />
+                                    <Route path="/resumeapplication" component={ResumeApplication} />
+                                    <Route path="/createtemplate" component={CreateTemplate} />
+                                    <Route path="/managetemplate" component={ManageTemplate} />
+                                </Switch>
+                                {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
+                            </div>
+
+                            <AppFooter layoutColorMode={layoutColorMode} />
+                        </div>
+
+                        <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
+
+                        <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
+                            <div className="layout-mask p-component-overlay"></div>
+                        </CSSTransition>
                     </div>
-
-                    <AppFooter layoutColorMode={layoutColorMode} />
-                </div>
-
-                <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
-
-                <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
-                    <div className="layout-mask p-component-overlay"></div>
-                </CSSTransition>
-            </div>
+                </>
+            )}
         </>
     );
 };
