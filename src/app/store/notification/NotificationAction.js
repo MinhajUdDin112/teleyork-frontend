@@ -4,7 +4,7 @@ import BASE_URL from "../../../config";
 import Toasts from "../../components/react-toast";
 
 //add template action
-export const addTemplateAction = createAsyncThunk("notification/api/sms/addTemplate", async (body, { rejectWithValue }) => {
+export const addTemplateAction = createAsyncThunk("notification/api/sms/addTemplate", async (body) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/sms/addTemplate`, body);
         if (response.status === 200) {
@@ -13,7 +13,7 @@ export const addTemplateAction = createAsyncThunk("notification/api/sms/addTempl
         }
     } catch (error) {
         // Toasts({ error: `Template ${error}` });s
-        return rejectWithValue(error);
+        return error;
     }
 });
 
@@ -24,7 +24,7 @@ export const getAllTemplateAction = createAsyncThunk("notification/sms/template/
         return response.data;
     } catch (error) {
         console.log(error);
-        return rejectWithValue(error);
+        return error;
     }
 });
 
@@ -34,7 +34,7 @@ export const getOneTemplateAction = createAsyncThunk("notification/sms/template/
         const response = await axios.get(`${BASE_URL}/api/sms/template/${id}`);
         return response.data;
     } catch (error) {
-        return rejectWithValue(error);
+        return error;
     }
 });
 
@@ -44,7 +44,7 @@ export const getSentAllTemplateAction = createAsyncThunk("notification/sms/templ
         const response = await axios.get(`${BASE_URL}/api/sms/template/sent`);
         return response.data;
     } catch (error) {
-        return rejectWithValue(error);
+        return error;
     }
 });
 
@@ -54,7 +54,7 @@ export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent
         const response = await axios.get(`${BASE_URL}/api/sms/sent/${id}`);
         return response.data;
     } catch (error) {
-        return rejectWithValue(error);
+        return error;
     }
 });
 
@@ -64,7 +64,7 @@ export const submitTemplateAction = createAsyncThunk("notification/sms/send", as
         const response = await axios.post(`${BASE_URL}/api/sms/send?sentBy=${body.userId}&templateId=${body.templateId}`);
         return response.data;
     } catch (error) {
-        return rejectWithValue(error);
+        return error;
     }
 });
 
@@ -74,6 +74,6 @@ export const getDraftByTemplateIdAction = createAsyncThunk("notification/sms/dra
         const response = await axios.get(`${BASE_URL}/api/sms/draft/${id}`);
         return response.data;
     } catch (error) {
-        return rejectWithValue(error);
+        return error;
     }
 });
