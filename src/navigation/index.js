@@ -118,6 +118,23 @@ export const menuNavigation = [
     {
         items: [
             {
+                label: "Roles and Rights",
+                items: [
+                    {
+                        label: "Manage Roles and Rights",
+                        to: "/managerolesandrights",
+                    },
+                    {
+                        label: "Create Role",
+                        to: "/createrole",
+                    }, 
+                ],
+            },
+        ],
+    },
+    {
+        items: [
+            {
                 label: "Notifications",
                 items: [
                     {
