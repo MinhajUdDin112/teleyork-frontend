@@ -34,7 +34,8 @@ export default function EnrollmentFlowPage() {
         },
     ];
     let pages = [
-        PersonalInfoPage({setActiveIndex:setActiveIndex}),
+       
+         PersonalInfoPage({setActiveIndex:setActiveIndex}),
         Eligibility({setActiveIndex:setActiveIndex}),
         plan({setActiveIndex:setActiveIndex}),
         Preview()
