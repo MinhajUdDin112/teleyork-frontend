@@ -58,7 +58,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Dashboard from "./app/features/screens/dashboard/Dashboard";
 import LoginScreen from "./app/features/screens/auth/login_screen";
 import { menuNavigation } from "./navigation";
-import AddRoles from "./app/features/screens/RolesAndRights/AddRoles";
+import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -255,7 +255,7 @@ const App = () => {
                                 <Route path="/resumeapplication" component={ResumeApplication} />
                                 <Route path="/createtemplate" component={CreateTemplate} />
                                 <Route path="/managetemplate" component={ManageTemplate} />
-                                <Route path="/createrole" component={AddRoles} />
+                                <Route path="/createrole" component={CreateRole} />
                             </Switch>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
