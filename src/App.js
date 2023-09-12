@@ -20,8 +20,6 @@ import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
-import ServiceAvailablityPage from "./app/features/screens/eligiblity/pages/service_availblity_page";
-import EnrollmentFlowPage from "./app/features/screens/eligiblity/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
@@ -60,6 +58,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Dashboard from "./app/features/screens/dashboard/Dashboard";
 import LoginScreen from "./app/features/screens/auth/login_screen";
 import { menuNavigation } from "./navigation";
+import AddRoles from "./app/features/screens/RolesAndRights/AddRoles";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -224,8 +223,6 @@ const App = () => {
                         <div className="layout-main">
                             <Switch>
                                 <Route exact path="/" component={Dashboard} />
-                                <Route path="/newenrolment" component={ServiceAvailablityPage} />
-                                <Route path="/enrollment" component={EnrollmentFlowPage} />
                                 <Route path="/invoice" component={InvoicePage} />
                                 <Route path="/allenrollments" component={AllEnrollments} />
                                 <Route path="/completedenrollments" component={CompletedEnrollments} />
@@ -258,6 +255,7 @@ const App = () => {
                                 <Route path="/resumeapplication" component={ResumeApplication} />
                                 <Route path="/createtemplate" component={CreateTemplate} />
                                 <Route path="/managetemplate" component={ManageTemplate} />
+                                <Route path="/createrole" component={AddRoles} />
                             </Switch>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
