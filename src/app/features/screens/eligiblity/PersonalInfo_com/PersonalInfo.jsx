@@ -6,13 +6,24 @@ import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import { Checkbox } from "primereact/checkbox";
 import { useState } from "react";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RadioButton } from "primereact/radiobutton";
 import { addCustomerInfoAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import { useDispatch } from "react-redux";
 
-const PersonalInfo = ({ handleNext }) => {
+const PersonalInfo = ({ handleNext, id }) => {
     const dispatch = useDispatch();
 
+    
+const zipStates= useSelector((state)=>{
+    return state.zip;
+})
+const _data= zipStates.serviceAvailability;
+console.log(_data)
+    
+
+
+    
     const [emailChecked, setEmailChecked] = useState(false);
     const [phoneChecked, setPhoneChecked] = useState(false);
     const [textChecked, setTextChecked] = useState(false);
@@ -34,7 +45,7 @@ const PersonalInfo = ({ handleNext }) => {
         email: Yup.string().required("Email is Required."),
         bestWayToReach: Yup.string().required("BestWayToReach is required."),
         isSelfReceive: Yup.string().required("SelfReceive is required."),
-        accept: Yup.string().required("Accept Term and condition"),
+        // accept: Yup.string().required("Accept Term and condition"),
         isACP: Yup.string().required("ACP is required."),
     });
 
@@ -52,16 +63,24 @@ const PersonalInfo = ({ handleNext }) => {
             email: "",
             bestWayToReach: "",
             isSelfReceive: true,
-            accept: false,
-            isACP: false,
+            // accept: false,
+            isACP: true,
         },
         onSubmit: (values, actions) => {
-            // console.log(values);
+            
             actions.resetForm();
             handleNext();
-            dispatch(values);
+            // const csr= "645c7bcfe5098ff6251a2255";
+            const csr=id;
+            const userId = id;
+            const dataToSend ={csr,userId,...values}
+             console.log(dataToSend);
+            dispatch(addCustomerInfoAction(dataToSend));
+          
         },
     });
+//    console.log({id})
+
     const handleBWTReach = (e) => {
         if (e.value === "email") {
             if (e.value == formik.values.bestWayToReach) {
@@ -105,6 +124,7 @@ const PersonalInfo = ({ handleNext }) => {
             formik.values.bestWayToReach = e.value;
         }
     };
+    
     const handleRadio = (e) => {
         if (e.value == "myself") {
             setMyself(true);
@@ -134,12 +154,12 @@ const PersonalInfo = ({ handleNext }) => {
             setAcp(true);
         }
     };
-
+ 
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
-                    <h6 className="font-semibold">Enrollment ID:</h6>
+                    <h6 className="font-semibold">Enrollment id: {id}</h6>
                     <Button label="Continue" type="submit" />
                 </div>
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>

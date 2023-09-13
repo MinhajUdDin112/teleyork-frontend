@@ -24,6 +24,7 @@ import ServiceAvailablityPage from "./app/features/screens/eligiblity/pages/serv
 import EnrollmentFlowPage from "./app/features/screens/eligiblity/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
+import manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
 import InCompletedEnrollments from "./app/features/screens/lifeline_orders/InCompleteEnrollments";
 import RejectedEnrollments from "./app/features/screens/lifeline_orders/RejectedEnrolments";
@@ -245,6 +246,7 @@ const App = () => {
                                 <Route path="/agentstorelocator" component={AgentStoreLocator} />
                                 <Route path="/eligibilityproofupload" component={EligibilityProofUpload} />
                                 <Route path="/dealerwallet" component={DealerWallet} />
+                                <Route path="/manageinventory" component={manage_inventory} />
                                 <Route path="/smsnotification" component={Upload} />
                                 <Route path="/sent" component={Sent} />
                                 <Route path="/draft" component={Draft} />

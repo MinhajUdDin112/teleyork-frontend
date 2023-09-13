@@ -116,6 +116,19 @@ export const menuNavigation = [
         ],
     },
     {
+        items:[
+            {
+                label: "Inventory (PC382)",
+                items:[
+                    {
+                        label: "Manage Inventory",
+                        to: "/manageinventory",
+                    }
+                ]
+            }
+        ]
+    },
+    {
         items: [
             {
                 label: "Notifications",

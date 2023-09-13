@@ -9,6 +9,7 @@ export const loginAction = createAsyncThunk("auth/web/user/login", async (body, 
         const response = await axios.post(`${BASE_URL}/api/web/user/login`, body);
         // Toasts({ success: response.data.msg });
         return response.data;
+        // console.log(response.data);
     } catch (error) {
         // Toasts({ error: "Email and Password incorrect" });
         return rejectWithValue(error);

@@ -6,8 +6,20 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { RadioButton } from "primereact/radiobutton";
 import { Checkbox } from "primereact/checkbox";
-const Address = ({ handleNext }) => {
-    const [ingredient, setIngredient] = useState("");
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
+const Address = ({ handleNext,id,handleBack }) => {
+    
+// const enroll_Id = useSelector((state)=>{
+//     return state.zip;})
+//     const _data = useSelector((state)=>{
+//         return state.login
+//     })
+//     console.log(_data)
+//     console.log(enroll_Id)
+
+    const dispatch= useDispatch();
     const [tempAdd, setTempAdd] = useState(false);
     const [permaAdd, setPermaAdd] = useState(false);
     const validationSchema = Yup.object().shape({
@@ -16,7 +28,7 @@ const Address = ({ handleNext }) => {
         city: Yup.string().required("city is required"),
         state: Yup.string().required("state is required"),
         zip: Yup.string().required("zip is required"),
-        confrimAddress: Yup.string().required("please confrim address"),
+        isTemporaryAddress: Yup.string().required("please confrim address"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -26,41 +38,50 @@ const Address = ({ handleNext }) => {
             city: "",
             state: "",
             zip: "",
-            confrimAddress: "",
+            isTemporaryAddress: "",
         },
         onSubmit: (values, actions) => {
-            console.log(values);
+           
             actions.resetForm();
             handleNext();
+            const userId = id;
+            const csr="645c7bcfe5098ff6251a2255";
+            const dataToSend={userId,csr,...values}
+            console.log(dataToSend);
+            dispatch(addCustomerAddressAction(dataToSend));
         },
     });
 
     const handleAddress = (e) => {
         if (e.value === "temp") {
-            if (e.value == formik.values.confrimAddress) {
+            if (e.value == formik.values.isTemporaryAddress) {
                 setTempAdd(false);
             } else {
                 setTempAdd(true);
             }
             setPermaAdd(false);
-            formik.values.confrimAddress = e.value;
+            formik.values.isTemporaryAddress = true;
         } else if (e.value === "permanent") {
-            if (e.value == formik.values.confrimAddress) {
+            if (e.value == formik.values.isTemporaryAddress) {
                 setPermaAdd(false);
             } else {
                 setPermaAdd(true);
             }
             setTempAdd(false);
-            formik.values.confrimAddress = e.value;
+            formik.values.isTemporaryAddress = false;
         }
     };
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
-                <div className="flex flex-row justify-content-between align-tems-center mb-2">
-                    <h6 className="font-semibold">Enrollment ID:</h6>
-                    <Button type="submit" label="Continue" />
-                </div>
+            <div className="flex flex-row justify-content-between align-items-center mb-2">
+                        <Button label="Back" type="button" onClick={handleBack} />
+                        <Button label="Continue" type="submit" />
+                    </div>
+                    <div>
+                        <h6>Enrollment ID: {id}8</h6>
+                    </div>
+                   
                 <br></br>
                 <p className="text-xl">What is your home address?</p>
                 <p>The address you will get service. Do not use P.O Box</p>
