@@ -20,8 +20,9 @@ import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
-import ServiceAvailablityPage from "./app/features/screens/eligiblity/pages/service_availblity_page";
-import EnrollmentFlowPage from "./app/features/screens/eligiblity/pages/enrollment_flow_page";
+
+import ServiceAvailablityPage from"./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
+import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
 import manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
