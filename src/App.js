@@ -21,7 +21,7 @@ import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
 
-import ServiceAvailablityPage from"./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
+import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
@@ -227,8 +227,8 @@ const App = () => {
                         <div className="layout-main">
                             <Switch>
                                 <Route exact path="/" component={Dashboard} />
-                                {/* <Route path="/newenrolment" component={ServiceAvailablityPage} /> */}
-                                {/* <Route path="/enrollment" component={EnrollmentFlowPage} /> */}
+                                <Route path="/newenrolment" component={ServiceAvailablityPage} />
+                                <Route path="/enrollment" component={EnrollmentFlowPage} />
                                 <Route path="/invoice" component={InvoicePage} />
                                 {/* <Route path="/allenrollments" component={AllEnrollments} /> */}
                                 <Route path="/completedenrollments" component={CompletedEnrollments} />
