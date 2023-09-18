@@ -9,15 +9,33 @@ import BASE_URL from '../../../../config';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useHistory } from "react-router-dom";
 
-const CreateUser = () => {
+const EditUser = () => {
 
     const [allRoles, setAllRoles] = useState([])
+
+    const location = useLocation();
+    const { rowData } = location.state || {};
+
+    const history = useHistory()
+
+    const handleUserDataMapping = () => {
+        if (rowData) { // Check if formik and rowData exist
+            Object.keys(rowData).forEach((key) => {
+                if (formik.initialValues.hasOwnProperty(key)) {
+                    formik.setFieldValue(key, rowData[key]);
+                    formik.setFieldValue("role", rowData?.role?._id);
+                }
+            });
+        }
+    }
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData")
     const parseLoginRes = JSON.parse(loginRes)
-    console.log('parseLoginRes', parseLoginRes)
 
     // Validation Schema
     const validationSchema = Yup.object().shape({
@@ -26,12 +44,6 @@ const CreateUser = () => {
         email: Yup.string().email('Invalid email format').required('This field is required.'),
         mobile: Yup.string()
             .matches(/^\d{1,10}$/, 'Maxumum 15 digits')
-            .required('This field is required.'),
-        password: Yup.string()
-            .matches(
-                /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                'Password must have at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
-            )
             .required('This field is required.'),
         city: Yup.string().required('This field is required.'),
         state: Yup.string().required('This field is required.'),
@@ -46,7 +58,6 @@ const CreateUser = () => {
             name: '',
             email: '',
             mobile: '',
-            password: '',
             city: '',
             state: '',
             address: '',
@@ -59,6 +70,7 @@ const CreateUser = () => {
                 compony: parseLoginRes?.compony,
                 createdBy: parseLoginRes?.createdDate,
                 roleId: formik.values.role,
+                userId: parseLoginRes?._id,
                 name: values.name,
                 email: values.email,
                 password: values.password,
@@ -71,10 +83,12 @@ const CreateUser = () => {
             };
 
             // Send the data to the server using Axios POST request
-            Axios.post(`${BASE_URL}/api/web/user`, data)
+            Axios.patch(`${BASE_URL}/api/web/user/`, data)
                 .then((response) => {
-                    // Handle a successful response here
-                    console.log('Response Data:', response.data);
+                    if (response?.status === 200) {
+                        toast.warn("User Updated")
+                        history.push('/manage-user')
+                    }
                 })
                 .catch((error) => {
                     // Handle errors here
@@ -88,15 +102,17 @@ const CreateUser = () => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
+    const getRoles = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=645a85198cd1ff499c8b99cd`);
+            setAllRoles(res?.data?.data || []);
+        } catch (error) {
+            console.error("Error fetching module data:", error);
+        }
+    };
+
     useEffect(() => {
-        const getRoles = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=645a85198cd1ff499c8b99cd`);
-                setAllRoles(res?.data?.data || []);
-            } catch (error) {
-                console.error("Error fetching module data:", error);
-            }
-        };
+        handleUserDataMapping()
         getRoles();
     }, []);
 
@@ -147,18 +163,6 @@ const CreateUser = () => {
                                 keyfilter={/^[a-zA-Z0-9_.@]*$/}
                             />
                             {getFormErrorMessage("email")}
-                        </div>
-
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Password</label>
-                            <Password
-                                id="password"
-                                value={formik.values.password}
-                                onChange={(e) => formik.setFieldValue("password", e.target.value)}
-                                toggleMask
-                                feedback={false}
-                            />
-                            {getFormErrorMessage('password')}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
@@ -235,6 +239,7 @@ const CreateUser = () => {
             </div>
         </>
     )
+
 }
 
-export default CreateUser
+export default EditUser

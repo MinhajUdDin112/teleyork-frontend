@@ -131,6 +131,23 @@ export const menuNavigation = [
     {
         items: [
             {
+                label: "User Management",
+                items: [
+                    {
+                        label: "Manage User",
+                        to: "/manage-user",
+                    },
+                    // {
+                    //     label: "Create User",
+                    //     to: "/create-user",
+                    // },
+                ],
+            },
+        ],
+    },
+    {
+        items: [
+            {
                 label: "Roles and Rights",
                 items: [
                     {
@@ -140,7 +157,7 @@ export const menuNavigation = [
                     {
                         label: "Create Role",
                         to: "/createrole",
-                    }, 
+                    },
                 ],
             },
         ],
