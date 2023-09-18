@@ -7,6 +7,7 @@ import { fetchPlanListAction } from "./LifelineOrdersAction";
 export const lifelineOrdersSlice = createSlice({
     name: "lifelineOrders",
     initialState: {
+
         //add customer info initial states
         addCustomerInfo: null,
         addCustomerInfoLoading: false,
@@ -22,8 +23,9 @@ export const lifelineOrdersSlice = createSlice({
             state.addCustomerInfoLoading = false;
         });
         builder.addCase(addCustomerInfoAction.rejected, (state, action) => {
-             state.addCustomerInfoError = state.action;
-        //    console.log(action.error.message);
+             state.addCustomerInfoError = action.error.message;
+             state.addCustomerInfoLoading = false;
+     
         });
     },
 });
@@ -34,6 +36,7 @@ export const lifelineOrdersSlice = createSlice({
  export const customerAddressSlice = createSlice({
     name: "customerAddress",
     initialState: {
+        
         //add customer address initial states
         addCustomerAddress: null,
         addCustomerAddressLoading: false,

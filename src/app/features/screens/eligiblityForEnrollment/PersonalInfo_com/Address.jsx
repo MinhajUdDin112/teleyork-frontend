@@ -11,13 +11,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 const Address = ({ handleNext,id,handleBack }) => {
     
-// const enroll_Id = useSelector((state)=>{
-//     return state.zip;})
-//     const _data = useSelector((state)=>{
-//         return state.login
-//     })
-//     console.log(_data)
-//     console.log(enroll_Id)
+
 
     const dispatch= useDispatch();
     const [tempAdd, setTempAdd] = useState(false);
@@ -79,7 +73,7 @@ const Address = ({ handleNext,id,handleBack }) => {
                         <Button label="Continue" type="submit" />
                     </div>
                     <div>
-                        <h6>Enrollment ID: {id}8</h6>
+                        <h6>Enrollment ID: {id}</h6>
                     </div>
                    
                 <br></br>

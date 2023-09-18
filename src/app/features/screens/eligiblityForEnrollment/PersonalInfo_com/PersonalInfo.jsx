@@ -1,5 +1,5 @@
-import React from "react";
-import {  useFormik } from "formik";
+import React, { useEffect } from "react";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -14,16 +14,30 @@ import { useDispatch } from "react-redux";
 const PersonalInfo = ({ handleNext, id }) => {
     const dispatch = useDispatch();
 
-    
-const zipStates= useSelector((state)=>{
-    return state.zip;
-})
-const _data= zipStates.serviceAvailability;
-console.log(_data)
-    
 
+    const apiResponse = useSelector((state) => {
+        return state.lifelineOrdersReducer;
+    });
+    const statusCode = apiResponse?.addCustomerInfo?.status;
+    console.log("status code",statusCode)
 
     
+
+      useEffect(() => {
+        const nextScreen =  () => {
+            if ( statusCode == "201") {
+           console.log("Save Successfully");
+           handleNext();
+         } else {
+           console.log("Save Failed"); 
+           //error    
+         }     
+     };
+     nextScreen();
+
+      }, [onsubmit,statusCode])
+      
+
     const [emailChecked, setEmailChecked] = useState(false);
     const [phoneChecked, setPhoneChecked] = useState(false);
     const [textChecked, setTextChecked] = useState(false);
@@ -32,7 +46,7 @@ console.log(_data)
     const [somebody, setSomebody] = useState(false);
     const [acp, setAcp] = useState(false);
     const [accept, setaccept] = useState(false);
-    
+
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("First Name is Required"),
         middleName: Yup.string().required("Middle Name is Required"),
@@ -67,19 +81,15 @@ console.log(_data)
             isACP: true,
         },
         onSubmit: (values, actions) => {
-            
             actions.resetForm();
-            handleNext();
-            // const csr= "645c7bcfe5098ff6251a2255";
-            const csr=id;
-            const userId = id;
-            const dataToSend ={csr,userId,...values}
-             console.log(dataToSend);
+
+            const csr = "64e0b1b135a9428007da3526";
+            const userId = "650344e84beea688bd85c752";
+            const dataToSend = { csr, userId, ...values };
             dispatch(addCustomerInfoAction(dataToSend));
-          
+            
         },
     });
-//    console.log({id})
 
     const handleBWTReach = (e) => {
         if (e.value === "email") {
@@ -124,7 +134,7 @@ console.log(_data)
             formik.values.bestWayToReach = e.value;
         }
     };
-    
+
     const handleRadio = (e) => {
         if (e.value == "myself") {
             setMyself(true);
@@ -154,7 +164,7 @@ console.log(_data)
             setAcp(true);
         }
     };
- 
+
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
@@ -297,10 +307,10 @@ console.log(_data)
                     </div>
                 </div>
             </div>
-            <div className=" mb-3">
+            {/* <div className=" mb-3">
                 <Checkbox inputId="accept" checked={accept} onChange={(e) => handleaccept(e)}></Checkbox>
                 <label className="ml-2">By checking this box and your signature below, you are agreeing to the terms and conditions.</label>
-            </div>
+            </div> */}
             <div className="mt-4">
                 <p className="font-semibold">Who recieved government assistance? (SNAP, Medicaid, etc)</p>
                 <div className="flex">
