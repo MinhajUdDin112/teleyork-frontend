@@ -59,6 +59,9 @@ import Dashboard from "./app/features/screens/dashboard/Dashboard";
 import LoginScreen from "./app/features/screens/auth/login_screen";
 import { menuNavigation } from "./navigation";
 import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole";
+import CreateUser from "./app/features/screens/user_management/CreateUser";
+import ManageUser from "./app/features/screens/user_management/ManageUser";
+import EditUser from "./app/features/screens/user_management/EditUser";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -256,6 +259,9 @@ const App = () => {
                                 <Route path="/createtemplate" component={CreateTemplate} />
                                 <Route path="/managetemplate" component={ManageTemplate} />
                                 <Route path="/createrole" component={CreateRole} />
+                                <Route path="/manage-user" component={ManageUser} />
+                                <Route path="/create-user" component={CreateUser} />
+                                <Route path="/edit-user" component={EditUser} />
                             </Switch>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
