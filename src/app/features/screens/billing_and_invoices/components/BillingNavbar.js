@@ -4,8 +4,8 @@ import { Menubar } from "primereact/menubar";
 const BillingNavbar = () => {
     const items = [
         {
-            label: "Hammad Ullah",
-            icon: "pi pi-fw pi-user",
+            label: "Hammad Ullah ",
+            icon: "pi pi-fw pi-user surface-800",
         },
         {
             label: "MDN",
@@ -29,7 +29,7 @@ const BillingNavbar = () => {
     ];
     return (
         <>
-            <Menubar model={items} className="border-noround text-xs mx-0 surface-300"/>
+            <Menubar model={items} className="border-noround text-sm mx-0 bg-white  mx-0 p-2" />
         </>
     );
 };

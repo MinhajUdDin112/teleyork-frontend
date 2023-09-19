@@ -30,36 +30,35 @@ const PaymentSearchTool = () => {
     ];
 
     return (
-        <div className="card p-2 min-h-screen border-noround">
-            <div className="card border-noround p-0">
-                <div className="surface-100 p-3 my-3 border-y-1">
-                    <p className="text-xl font-bold">Search</p>
-                </div>
-                <div className="flex flex-wrap mx-3 my-3">
+        <div className="card bg-pink-50">
+            <div className="mx-5">
+                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Search</h3>
+            </div>
+            <div className="card flex flex-column justify-content-center mx-5 border-noround">
+                <div className=" flex flex-wrap p-0 mx-3">
                     <div className="mb-3 mr-3">
                         <p className="m-0 pb-1 text-md font-semibold ">Search Type:</p>
-                        <Dropdown placeholder="Select Search Type" value={search} options={searchOptions} optionLabel="name" onChange={(e) => setSearch(e.value)} style={{ width: "18rem" }} />
+                        <Dropdown placeholder="Select Search Type" value={search} options={searchOptions} optionLabel="name" onChange={(e) => setSearch(e.value)} style={{ width: "23rem" }} />
                     </div>
                     <div className="mb-3 mr-3">
                         <p className="m-0 pb-1 text-md font-semibold ">Search by "Search type" optons</p>
-                        <InputText placeholder="Amount, Confirmation, Last 4 digits" style={{ width: "18rem" }} />
+                        <InputText placeholder="Amount, Confirmation, Last 4 digits" style={{ width: "23rem" }} />
                     </div>
-
                     <div className="mb-3 mr-3">
                         <p className="m-0 pb-1 text-md font-semibold ">From Date(MM-DD-YYYY)</p>
-                        <Calendar id="basic" value={dateFrom} onChange={(e) => setDateFrom(e.value)} style={{ width: "18rem" }} />
+                        <Calendar id="icon" value={dateFrom} onChange={(e) => setDateFrom(e.value)} showIcon style={{ width: "23rem" }} />
                     </div>
                     <div className="mb-3 mr-3">
                         <p className="m-0 pb-1 text-md font-semibold ">To Date(MM-DD-YYYY)</p>
-                        <Calendar id="basic" value={dateTo} onChange={(e) => setDateTo(e.value)} style={{ width: "18rem" }} />
+                        <Calendar id="icon" value={dateTo} onChange={(e) => setDateTo(e.value)} showIcon style={{ width: "23rem" }} />
                     </div>
                     <div className="mb-3 mr-3">
                         <p className="m-0 pb-1 text-md font-semibold ">Payment Type:</p>
-                        <Dropdown placeholder="Select Payment Type" value={payment} options={paymentOptions} optionLabel="name" onChange={(e) => setPayment(e.value)} style={{ width: "18rem" }} />
+                        <Dropdown placeholder="Select Payment Type" value={payment} options={paymentOptions} optionLabel="name" onChange={(e) => setPayment(e.value)} style={{ width: "23rem" }} />
                     </div>
-                    <div>
-                        <Button label="Search" className="mt-5 text-sm" />
-                    </div>
+                </div>
+                <div className="flex justify-content-end">
+                    <Button label="Search" className="w-15rem  mt-3 text-sm bg-green-200 border-none mr-2" />
                 </div>
             </div>
         </div>

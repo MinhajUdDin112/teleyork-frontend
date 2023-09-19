@@ -2,9 +2,9 @@ import React from "react";
 
 const PlanInfo = () => {
     return (
-        <div className="card p-1 mx-4">
-            <div className="flex flex-wrap">
-                <div className="col-3">
+        <div className="card p-1 mx-4 ">
+            <div className="flex flex-wrap mx-5">
+                <div className="col-3 ">
                     <div className="mb-1">
                         <p className="font-bold text-sm m-0">Current Plan Name:</p>
                         <p className="text-sm m-0">City Communication special bundle plan</p>
