@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { Dropdown } from "primereact/dropdown";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 
 const Eligibility = () => {
     const [tribal, setTribal] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
     const handleBack = () => {
-        history.push("/address");
+        navigate("/address");
     };
     const handleNext = () => {
-        history.push("/nationalverifier");
+        navigate("/nationalverifier");
     };
     return (
         <>

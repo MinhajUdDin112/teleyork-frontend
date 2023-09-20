@@ -3,13 +3,13 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDraftByTemplateIdAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 
 const ShowDraftAll = () => {
     const { id } = useParams();
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { getDraftByTemplateId, submitTemplate } = useSelector((state) => state.notification);
     const { loginData } = useSelector((state) => state.login);
@@ -26,7 +26,7 @@ const ShowDraftAll = () => {
         dispatch(submitTemplateAction(body));
     };
     const handleBack = () => {
-        history.push("/draft");
+        navigate("/draft");
     };
 
     return (

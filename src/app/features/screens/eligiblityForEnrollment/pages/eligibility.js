@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Agree from "../Eligibilty_com/Agree";
 import Select from "../Eligibilty_com/Select";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
 const Eligibility = ({ setActiveIndex }) => {
+
     const [currentComponent, setCurrentComponent] = useState(1);
-    const history = useHistory();
+
     const handleNext = () => {
         if (currentComponent < 2) {
             setCurrentComponent((prev) => {
@@ -23,7 +24,7 @@ const Eligibility = ({ setActiveIndex }) => {
         } else {
             setActiveIndex(0);
         }
-        
+
     };
     let render;
     switch (currentComponent) {

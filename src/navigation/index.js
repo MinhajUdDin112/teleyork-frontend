@@ -131,6 +131,40 @@ export const menuNavigation = [
     {
         items: [
             {
+                label: "User Management",
+                items: [
+                    {
+                        label: "Manage User",
+                        to: "/manage-user",
+                    },
+                    // {
+                    //     label: "Create User",
+                    //     to: "/create-user",
+                    // },
+                ],
+            },
+        ],
+    },
+    {
+        items: [
+            {
+                label: "Roles and Rights",
+                items: [
+                    {
+                        label: "Manage Roles and Rights",
+                        to: "/managerolesandrights",
+                    },
+                    {
+                        label: "Create Role",
+                        to: "/createrole",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        items: [
+            {
                 label: "Notifications",
                 items: [
                     {

@@ -2,7 +2,7 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSentByTemplateIdAction } from "../../../store/notification/NotificationAction";
 import CustomLoading from "../../components/custom_spinner";
@@ -11,13 +11,13 @@ const ShowSentAll = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { getSentByTemplateId, getSentByTemplateIdLoading } = useSelector((state) => state.notification);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getSentByTemplateIdAction(id));
     }, [id]);
     const handleBack = () => {
-        history.push("/sent");
+        navigate("/sent");
     };
 
     return (

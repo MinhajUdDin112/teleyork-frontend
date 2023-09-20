@@ -50,9 +50,7 @@ const [errorMesssage, setErrorMesssage] = useState();
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("First Name is Required"),
-        middleName: Yup.string().required("Middle Name is Required"),
         lastName: Yup.string().required("Last Name is Required"),
-        suffix: Yup.string().required("Suffix is Required."),
         SSN: Yup.string().required("SSN is Required."),
         DOB: Yup.string().required("DOB is Required."),
         contact: Yup.string().required("Contact is Required."),
@@ -192,7 +190,7 @@ const [errorMesssage, setErrorMesssage] = useState();
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Middle Name <span style={{ color: "red" }}>*</span>
+                            Middle Name
                         </p>
                         <InputText type="text" value={formik.values.middleName} name="middleName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.middleName && formik.errors.middleName ? (
@@ -214,7 +212,7 @@ const [errorMesssage, setErrorMesssage] = useState();
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Suffix <span style={{ color: "red" }}>*</span>
+                            Suffix (Last 4 Digit)
                         </p>
                         <InputText type="text" value={formik.values.suffix} name="suffix" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.suffix && formik.errors.suffix ? (
@@ -236,7 +234,7 @@ const [errorMesssage, setErrorMesssage] = useState();
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            DOB <span style={{ color: "red" }}>*</span>
+                            DOB (MM/DD/YYYY)<span style={{ color: "red" }}>*</span>
                         </p>
                         <Calendar id="icon" value={formik.values.DOB} name="DOB" onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className="w-21rem" />
                         {formik.touched.DOB && formik.errors.DOB ? (
