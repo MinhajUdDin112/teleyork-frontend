@@ -10,18 +10,17 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RadioButton } from "primereact/radiobutton";
 import { addCustomerInfoAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import { useDispatch } from "react-redux";
-
-const PersonalInfo = ({ handleNext, id ,enrollmentId}) => {
+import { Dropdown } from "primereact/dropdown";
+const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
     const dispatch = useDispatch();
-
 
     const apiResponse = useSelector((state) => {
         return state.lifelineOrdersReducer;
     });
     const statusCode = apiResponse?.addCustomerInfo?.status;
     const errormessage = apiResponse?.addCustomerInfoError;
-    
-//console.log("api response", apiResponse);
+
+    //console.log("api response", apiResponse);
 
     //   useEffect(() => {
     //     const nextScreen =  () => {
@@ -30,14 +29,14 @@ const PersonalInfo = ({ handleNext, id ,enrollmentId}) => {
     //        handleNext();
     //      } else {
     //       setErrorMesssage(errormessage)
-      
-    //      }     
+
+    //      }
     //  };
     //  nextScreen();
 
     //   }, [statusCode])
-      
-const [errorMesssage, setErrorMesssage] = useState();
+
+    const [errorMesssage, setErrorMesssage] = useState();
     const [emailChecked, setEmailChecked] = useState(false);
     const [phoneChecked, setPhoneChecked] = useState(false);
     const [textChecked, setTextChecked] = useState(false);
@@ -47,15 +46,16 @@ const [errorMesssage, setErrorMesssage] = useState();
     const [acp, setAcp] = useState(false);
     const [accept, setaccept] = useState(false);
 
-
     const validationSchema = Yup.object().shape({
-        firstName: Yup.string().required("First Name is Required"),
+        firstName: Yup.string()
+            .required("First Name is Required")
+            .matches(/^[A-Za-z]+$/),
         lastName: Yup.string().required("Last Name is Required"),
         SSN: Yup.string().required("SSN is Required."),
         DOB: Yup.string().required("DOB is Required."),
         contact: Yup.string().required("Contact is Required."),
         drivingLicense: Yup.string().required("DrivingLicense is Required."),
-        email: Yup.string().required("Email is Required."),
+        email: Yup.string().required("Email is Required.").email('Invalid email format. Please enter a valid email address.'),
         bestWayToReach: Yup.string().required("BestWayToReach is required."),
         isSelfReceive: Yup.string().required("SelfReceive is required."),
         // accept: Yup.string().required("Accept Term and condition"),
@@ -87,7 +87,6 @@ const [errorMesssage, setErrorMesssage] = useState();
             const userId = id;
             const dataToSend = { csr, userId, ...values };
             dispatch(addCustomerInfoAction(dataToSend));
-            
         },
     });
 
@@ -164,11 +163,19 @@ const [errorMesssage, setErrorMesssage] = useState();
             setAcp(true);
         }
     };
+    const options = [
+        { label: "JR.", value: "JR." },
+        { label: "SR.", value: "SR." },
+        { label: "II", value: "II" },
+        { label: "III", value: "III" },
+        { label: "IV", value: "IV" },
+        { label: "V", value: "V" },
+    ];
 
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
-            {errormessage && <p style={{color:'red'}}>{errormessage}</p>}
+                {errormessage && <p style={{ color: "red" }}>{errormessage}</p>}
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment id: {enrollmentId}</h6>
                     <Button label="Continue" type="submit" />
@@ -181,7 +188,7 @@ const [errorMesssage, setErrorMesssage] = useState();
                         <p className="m-0">
                             First Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.firstName} name="firstName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.firstName} name="firstName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^[a-zA-Z\s]*$/} />
                         {formik.touched.firstName && formik.errors.firstName ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.firstName}
@@ -189,10 +196,8 @@ const [errorMesssage, setErrorMesssage] = useState();
                         ) : null}
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            Middle Name
-                        </p>
-                        <InputText type="text" value={formik.values.middleName} name="middleName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <p className="m-0">Middle Name</p>
+                        <InputText type="text" value={formik.values.middleName} name="middleName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^[a-zA-Z\s]*$/} />
                         {formik.touched.middleName && formik.errors.middleName ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.middleName}
@@ -203,7 +208,7 @@ const [errorMesssage, setErrorMesssage] = useState();
                         <p className="m-0">
                             Last Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.lastName} name="lastName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.lastName} name="lastName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^[a-zA-Z\s]*$/} />
                         {formik.touched.lastName && formik.errors.lastName ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.lastName}
@@ -211,21 +216,16 @@ const [errorMesssage, setErrorMesssage] = useState();
                         ) : null}
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            Suffix (Last 4 Digit)
-                        </p>
-                        <InputText type="text" value={formik.values.suffix} name="suffix" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
-                        {formik.touched.suffix && formik.errors.suffix ? (
-                            <p className="mt-0" style={{ color: "red" }}>
-                                {formik.errors.suffix}
-                            </p>
-                        ) : null}
+                        <p className="m-0">Suffix </p>
+                        <Dropdown className="w-21rem" id="suffix" name="suffix" options={options} value={formik.values.suffix} onChange={(e) => formik.setFieldValue("suffix", e.value)} onBlur={formik.handleBlur} placeholder="Select " />
+                        {formik.touched.suffix && formik.errors.suffix && <small className="p-error">{formik.errors.suffix}</small>}
                     </div>
+
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            SSN <span style={{ color: "red" }}>*</span>
+                            SSN (Last 4 Digit)<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.SSN} name="SSN" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.SSN} name="SSN" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\d{0,4}$/} />
                         {formik.touched.SSN && formik.errors.SSN ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.SSN}
@@ -270,7 +270,7 @@ const [errorMesssage, setErrorMesssage] = useState();
                         <p className="m-0">
                             Contact Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.contact} name="contact" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.contact} name="contact" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\(\d{3}\)-\d{3}-\d{4}$/} />
                         {formik.touched.contact && formik.errors.contact ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.contact}
@@ -335,8 +335,9 @@ const [errorMesssage, setErrorMesssage] = useState();
                 <div className="flex">
                     <Checkbox inputId="isACP" checked={acp} onChange={(e) => handleACP(e)}></Checkbox>
                     <label htmlFor="isACP" className="p-checkbox-label mx-2">
-                        By continuing with your application, you affirm and understand that the Affordable Connectivity Program is an FCC benefit program that reduce your monthly broadband invoice. The program will be in effect for an indefinite amount of time. At the conclusion of the program, you
-                        will be given 30 days notice and may elect to keep your plan at an undiscounted rate. As a participant yoy may transfer your ACP benefit to another provider. The Affordable Connectivity Program is limited to one monthly service discount and one device discount per hoousehold.
+                        By continuing with your application, you affirm and understand that the Affordable Connectivity Program is an FCC benefit program that reduces your monthly broadband invoice. The program will be in effect for an indefinite amount of time. At the conclusion of the program, you
+                        will be given 30 days' notice and may elect to keep your plan at an undiscounted rate. As a participant, you may transfer your ACP benefit to another provider. The Affordable Connectivity Program is limited to one monthly service discount and one device discount per
+                        household.
                     </label>
                 </div>
             </div>

@@ -39,7 +39,7 @@ export default function ServiceAvailablityPage() {
                 <div className="card col-4 ">
                     <form className="my-4" onSubmit={formik.handleSubmit}>
                         <h6>Please enter zip code to check service availablity</h6>
-                        <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} />
+                        <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/ } />
                         <Button label="Submit" type="submit" className="col-12" />
                     </form>
                 </div>
