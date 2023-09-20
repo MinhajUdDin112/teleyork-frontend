@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CustomLoading from "../../components/custom_spinner";
 import { getSentAllTemplateAction } from "../../../store/notification/NotificationAction";
@@ -10,7 +10,7 @@ import { getSentAllTemplateAction } from "../../../store/notification/Notificati
 const Sent = () => {
     const dispatch = useDispatch();
     const { getSentAllTemplate, getSentAllTemplateLoading } = useSelector((state) => state.notification);
-    const history = useHistory();
+    const navigate = useNavigate();
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -21,7 +21,7 @@ const Sent = () => {
 
     const handleView = (rowData) => {
         const { templateId } = rowData;
-        history.push(`/sentall/${templateId}`);
+        navigate(`/sentall/${templateId}`);
     };
 
     useEffect(() => {

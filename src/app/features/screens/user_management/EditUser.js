@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button';
-import { Password } from 'primereact/password';
 import Axios from 'axios';
 import BASE_URL from '../../../../config';
 import { useEffect } from 'react';
@@ -11,7 +10,7 @@ import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const EditUser = () => {
 
@@ -20,7 +19,7 @@ const EditUser = () => {
     const location = useLocation();
     const { rowData } = location.state || {};
 
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const handleUserDataMapping = () => {
         if (rowData) { // Check if formik and rowData exist
@@ -87,7 +86,7 @@ const EditUser = () => {
                 .then((response) => {
                     if (response?.status === 200) {
                         toast.warn("User Updated")
-                        history.push('/manage-user')
+                        navigate('/manage-user')
                     }
                 })
                 .catch((error) => {

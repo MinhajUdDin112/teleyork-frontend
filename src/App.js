@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { Switch, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 
 import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
-import { Route } from "react-router-dom";
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
@@ -55,7 +55,6 @@ import CreateTemplate from "./app/features/screens/sms_notification/CreateTempla
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
 import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Dashboard from "./app/features/screens/dashboard/Dashboard";
 import LoginScreen from "./app/features/screens/auth/login_screen";
 import { menuNavigation } from "./navigation";
@@ -63,6 +62,7 @@ import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole"
 import CreateUser from "./app/features/screens/user_management/CreateUser";
 import ManageUser from "./app/features/screens/user_management/ManageUser";
 import EditUser from "./app/features/screens/user_management/EditUser";
+import NotFound from "./app/features/screens/not_found/NotFound"
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -75,7 +75,7 @@ const App = () => {
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     PrimeReact.ripple = true;
 
@@ -201,13 +201,13 @@ const App = () => {
     useEffect(() => {
         if (token) {
             if (protectedRoute === false) {
-                history.push("/");
+                navigate("/");
                 localStorage.setItem("protectedRoute", JSON.stringify(true));
             } else {
                 return;
             }
         } else {
-            history.push("/login");
+            navigate("/login");
         }
     }, [token]);
 
@@ -225,46 +225,48 @@ const App = () => {
 
                     <div className="layout-main-container">
                         <div className="layout-main">
-                            <Switch>
-                                <Route exact path="/" component={Dashboard} />
-                                <Route path="/invoice" component={InvoicePage} />
-                                {/* <Route path="/allenrollments" component={AllEnrollments} /> */}
-                                <Route path="/completedenrollments" component={CompletedEnrollments} />
-                                <Route path="/incompleteenrollments" component={InCompletedEnrollments} />
-                                <Route path="/rejectedenrollments" component={RejectedEnrollments} />
-                                <Route path="/nladresolutionstatus" component={NLADResolutionStatus} />
-                                <Route path="/handovereventorder" component={HandoverEventOrder} />
-                                <Route path="/pendingeventorder" component={PendingEventOrder} />
-                                <Route path="/withoutproofenrollments" component={WithoutProofEnrollments} />
-                                <Route path="/withproofenrollments" component={WithProofEnrollments} />
-                                <Route path="/incomplete" component={IncompleteEnrollments} />
-                                <Route path="/completeenrollments" component={CompleteEnrollments} />
-                                <Route path="/bulkportin" component={BulkPortin} />
-                                <Route path="/allenrollmentorders" component={Allenrollments} />
-                                <Route path="/recentsearches" component={RecentSearches} />
-                                <Route path="/paymentsearchtool" component={PaymentSearchTool} />
-                                <Route path="/agentstorelocator" component={AgentStoreLocator} />
-                                <Route path="/eligibilityproofupload" component={EligibilityProofUpload} />
-                                <Route path="/dealerwallet" component={DealerWallet} />
-                                <Route path="/manageinventory" component={manage_inventory} />
-                                <Route path="/smsnotification" component={Upload} />
-                                <Route path="/sent" component={Sent} />
-                                <Route path="/draft" component={Draft} />
-                                <Route path="/draftall/:id" component={ShowDraftAll} />
-                                <Route path="/sentall/:id" component={ShowSentAll} />
-                                <Route path="/selfenrollment" component={VerifyZip} />
-                                <Route path="/personalinfo" component={PersonalInfo} />
-                                <Route path="/address" component={Address} />
-                                <Route path="/eligibile" component={Eligibility} />
-                                <Route path="/nationalverifier" component={NationalVerifier} />
-                                <Route path="/resumeapplication" component={ResumeApplication} />
-                                <Route path="/createtemplate" component={CreateTemplate} />
-                                <Route path="/managetemplate" component={ManageTemplate} />
-                                <Route path="/createrole" component={CreateRole} />
-                                <Route path="/manage-user" component={ManageUser} />
-                                <Route path="/create-user" component={CreateUser} />
-                                <Route path="/edit-user" component={EditUser} />
-                            </Switch>
+
+                            <Routes>
+                                <Route path="*" element={<NotFound />} />
+                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/invoice" element={<InvoicePage />} />
+                                {/* <Route path="/allenrollments" element={AllEnrollments} /> */}
+                                <Route path="/completedenrollments" element={<CompletedEnrollments />} />
+                                <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
+                                <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />
+                                <Route path="/nladresolutionstatus" element={<NLADResolutionStatus />} />
+                                <Route path="/handovereventorder" element={<HandoverEventOrder />} />
+                                <Route path="/pendingeventorder" element={<PendingEventOrder />} />
+                                <Route path="/withoutproofenrollments" element={<WithoutProofEnrollments />} />
+                                <Route path="/withproofenrollments" element={<WithProofEnrollments />} />
+                                <Route path="/incomplete" element={<IncompleteEnrollments />} />
+                                <Route path="/completeenrollments" element={<CompleteEnrollments />} />
+                                <Route path="/bulkportin" element={<BulkPortin />} />
+                                <Route path="/allenrollmentorders" element={<Allenrollments />} />
+                                <Route path="/recentsearches" element={<RecentSearches />} />
+                                <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
+                                <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
+                                <Route path="/eligibilityproofupload" element={<EligibilityProofUpload />} />
+                                <Route path="/dealerwallet" element={<DealerWallet />} />
+                                <Route path="/manageinventory" element={<manage_inventory />} />
+                                <Route path="/smsnotification" element={<Upload />} />
+                                <Route path="/sent" element={<Sent />} />
+                                <Route path="/draft" element={<Draft />} />
+                                <Route path="/draftall/:id" element={<ShowDraftAll />} />
+                                <Route path="/sentall/:id" element={<ShowSentAll />} />
+                                <Route path="/selfenrollment" element={<VerifyZip />} />
+                                <Route path="/personalinfo" element={<PersonalInfo />} />
+                                <Route path="/address" element={<Address />} />
+                                <Route path="/eligibile" element={<Eligibility />} />
+                                <Route path="/nationalverifier" element={<NationalVerifier />} />
+                                <Route path="/resumeapplication" element={<ResumeApplication />} />
+                                <Route path="/createtemplate" element={<CreateTemplate />} />
+                                <Route path="/managetemplate" element={<ManageTemplate />} />
+                                <Route path="/createrole" element={<CreateRole />} />
+                                <Route path="/manage-user" element={<ManageUser />} />
+                                <Route path="/create-user" element={<CreateUser />} />
+                                <Route path="/edit-user" element={<EditUser />} />
+                            </Routes>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
 
@@ -278,7 +280,9 @@ const App = () => {
                     </CSSTransition>
                 </div>
             ) : (
-                <Route path="/login" component={LoginScreen} />
+                <Routes>
+                    <Route path="/login" element={<LoginScreen />} />
+                </Routes>
             )}
         </>
     );

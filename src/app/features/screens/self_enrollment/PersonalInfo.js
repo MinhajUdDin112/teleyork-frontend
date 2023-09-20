@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { Calendar } from "primereact/calendar";
 import { useFormik } from "formik";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../../../config";
 import axios from "axios";
 
@@ -13,7 +13,7 @@ const PersonalInfo = () => {
     const [isChecked, setIsChecked] = useState(false);
 
     // const [date3, setDate3] = useState(null);
-    const history = useHistory();
+    const navigate = useNavigate();
     const handleDate = (e) => {
         console.log(e);
     };
@@ -36,7 +36,7 @@ const PersonalInfo = () => {
             };
             console.log("values", newData);
             const res = axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
-            history.push("/address");
+            navigate("/address");
         },
     });
 
