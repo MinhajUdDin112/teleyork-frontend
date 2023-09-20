@@ -11,27 +11,31 @@ import BASE_URL from "../../../../../config";
 const Plan = ({ setActiveIndex }) => {
     const [apidata, setapidata] = useState([]);
     const dispatch = useDispatch();
-    // const { planData, loading, error } = useSelector((state) => state.planListReducer);
+
+    // const planList = useSelector((state) => {
+    //     return state.planListReducer;
 
     useEffect(() => {
         // dispatch(fetchPlanListAction());
         const fetchData = async () => {
             await axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=645a85198cd1ff499c8b99cd`).then((resp) => {
-                // console.log(response.data.data);
                 setapidata(resp.data.data);
             });
         };
         fetchData();
     }, []);
 
-    // const [selectedPage, setSelectedPage] = useState(0);
+     const [selectedPage, setSelectedPage] = useState(0);
 
 
     return (
         <>
             <div className="card">
                 <div className="flex flex-row justify-content-between">
-                    <Button label="Back" />
+                    <Button label="Back"
+                    onClick={()=>{
+                        setActiveIndex(1);
+                    }} />
                     <Button
                         label="Continue"
                         onClick={() => {

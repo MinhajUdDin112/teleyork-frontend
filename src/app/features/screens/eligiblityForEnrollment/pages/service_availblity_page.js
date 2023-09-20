@@ -9,24 +9,14 @@ import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
 import axios from "axios";
 import BASE_URL from "../../../../../config";
-import { UseSelector } from "react-redux/es/hooks/useSelector";
+
 
 export default function ServiceAvailablityPage() {
     
     const history = useHistory();
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    // const fetchCarrier = async()=>{
-    //      await axios.get(`${BASE_URL}/api/web/assignCarrier/getBySP?serviceProvider=64554fa3048e8c4bbf403742`)
-    //     .then((response) => {
-    //         console.log(response.data);
-           
-    //       })
-       
-    // }
-    // fetchCarrier();
-    // }, [])
+   
 
     const formik = useFormik({
         initialValues: {

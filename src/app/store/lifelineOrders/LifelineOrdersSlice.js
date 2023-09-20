@@ -3,6 +3,7 @@ import { addCustomerInfoAction } from "./LifelineOrdersAction";
 import { addCustomerAddressAction } from "./LifelineOrdersAction";
 import { addQuestion1Action } from "./LifelineOrdersAction";
 import { fetchPlanListAction } from "./LifelineOrdersAction";
+import { addTermsAction } from "./LifelineOrdersAction";
 
 export const lifelineOrdersSlice = createSlice({
     name: "lifelineOrders",
@@ -114,6 +115,33 @@ export const Question1Slice = createSlice({
 
 
 
+  export const termsSlice = createSlice({
+    name: "termAndCondition",
+    initialState: {
+        //add termAndCondition initial states
+        addTerms: null,
+        addTermsLoading: false,
+        addTermsError: null,
+    },
+    extraReducers: (builder) => {
+        //add termAndCondition  reducer function
+        builder.addCase(addTermsAction.pending, (state, action) => {
+            state.addTermsLoading = true;
+        });
+        builder.addCase(addTermsAction.fulfilled, (state, action) => {
+            state.addTerms = action.payload;
+            state.addTermsLoading = false;
+        });
+        builder.addCase(addTermsAction.rejected, (state, action) => {
+             state.addTermsError = state.action;
+           
+        });
+    },
+});
+
+
+
+
 
 
 
@@ -122,3 +150,4 @@ export const lifelineOrdersReducer = lifelineOrdersSlice.reducer;
 export const customerAddressReducer = customerAddressSlice.reducer;
 export const question1Reducer = Question1Slice.reducer;
 export const planListReducer = PlanListSlice.reducer;
+export const addTermReducer = termsSlice.reducer;

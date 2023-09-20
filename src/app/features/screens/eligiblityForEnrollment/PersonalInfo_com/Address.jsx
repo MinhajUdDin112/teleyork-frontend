@@ -9,10 +9,9 @@ import { Checkbox } from "primereact/checkbox";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
-const Address = ({ handleNext,id,handleBack }) => {
+
+const Address = ({ handleNext,id,handleBack,enrollmentId }) => {
     
-
-
     const dispatch= useDispatch();
     const [tempAdd, setTempAdd] = useState(false);
     const [permaAdd, setPermaAdd] = useState(false);
@@ -41,7 +40,7 @@ const Address = ({ handleNext,id,handleBack }) => {
             const userId = id;
             const csr="645c7bcfe5098ff6251a2255";
             const dataToSend={userId,csr,...values}
-            console.log(dataToSend);
+           
             dispatch(addCustomerAddressAction(dataToSend));
         },
     });
@@ -73,7 +72,7 @@ const Address = ({ handleNext,id,handleBack }) => {
                         <Button label="Continue" type="submit" />
                     </div>
                     <div>
-                        <h6>Enrollment ID: {id}</h6>
+                        <h6>Enrollment ID: {enrollmentId}</h6>
                     </div>
                    
                 <br></br>

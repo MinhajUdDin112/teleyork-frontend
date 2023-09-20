@@ -11,7 +11,7 @@ import { RadioButton } from "primereact/radiobutton";
 import { addCustomerInfoAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import { useDispatch } from "react-redux";
 
-const PersonalInfo = ({ handleNext, id }) => {
+const PersonalInfo = ({ handleNext, id ,enrollmentId}) => {
     const dispatch = useDispatch();
 
 
@@ -19,25 +19,25 @@ const PersonalInfo = ({ handleNext, id }) => {
         return state.lifelineOrdersReducer;
     });
     const statusCode = apiResponse?.addCustomerInfo?.status;
-    console.log("status code",statusCode)
-
+    const errormessage = apiResponse?.addCustomerInfoError;
     
+//console.log("api response", apiResponse);
 
-      useEffect(() => {
-        const nextScreen =  () => {
-            if ( statusCode == "201") {
-           console.log("Save Successfully");
-           handleNext();
-         } else {
-           console.log("Save Failed"); 
-           //error    
-         }     
-     };
-     nextScreen();
-
-      }, [onsubmit,statusCode])
+    //   useEffect(() => {
+    //     const nextScreen =  () => {
+    //         if ( statusCode == "201") {
+    //        console.log("Save Successfully");
+    //        handleNext();
+    //      } else {
+    //       setErrorMesssage(errormessage)
       
+    //      }     
+    //  };
+    //  nextScreen();
 
+    //   }, [statusCode])
+      
+const [errorMesssage, setErrorMesssage] = useState();
     const [emailChecked, setEmailChecked] = useState(false);
     const [phoneChecked, setPhoneChecked] = useState(false);
     const [textChecked, setTextChecked] = useState(false);
@@ -46,6 +46,7 @@ const PersonalInfo = ({ handleNext, id }) => {
     const [somebody, setSomebody] = useState(false);
     const [acp, setAcp] = useState(false);
     const [accept, setaccept] = useState(false);
+
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("First Name is Required"),
@@ -84,7 +85,8 @@ const PersonalInfo = ({ handleNext, id }) => {
             actions.resetForm();
 
             const csr = "64e0b1b135a9428007da3526";
-            const userId = "650344e84beea688bd85c752";
+            //const userId = "650344e84beea688bd85c752";
+            const userId = id;
             const dataToSend = { csr, userId, ...values };
             dispatch(addCustomerInfoAction(dataToSend));
             
@@ -168,8 +170,9 @@ const PersonalInfo = ({ handleNext, id }) => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
+            {errormessage && <p style={{color:'red'}}>{errormessage}</p>}
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
-                    <h6 className="font-semibold">Enrollment id: {id}</h6>
+                    <h6 className="font-semibold">Enrollment id: {enrollmentId}</h6>
                     <Button label="Continue" type="submit" />
                 </div>
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
