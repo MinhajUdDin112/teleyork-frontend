@@ -20,6 +20,10 @@ import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
+import AdjustmentFlowPage from "./app/features/screens/Inventory/adjustment/adjustment_flow_page.js";
+import ChangeESNSIMStatus from "./app/features/screens/Inventory/change_ESN/esn_sim_status.js"
+import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page"
+
 import ServiceAvailablityPage from "./app/features/screens/eligiblity/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblity/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
@@ -191,6 +195,10 @@ const App = () => {
                     label: "Lifeline Orders",
                     icon: "pi pi-fw pi-bookmark",
                     items: [
+                        {label:"Acp Programs",icon:"",to:"/acpprograms"},     
+                        {label:"Inventory Adjustments",icon:"",to:"/inventoryadjustments"},
+                        {label:"Change ESN/SIM Status",icon:"",to:"/changeesnsimstatus"},
+                        
                         { label: "New Enrollment", icon: "", to: "/newenrolment" },
                         { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                         { label: "All Enrollments", icon: "", to: "/allenrollments" },
@@ -340,7 +348,7 @@ const App = () => {
         "p-ripple-disabled": ripple === false,
         "layout-theme-light": layoutColorMode === "light",
     });
-    let token = JSON.parse(localStorage.getItem("accessToken"));
+    let token =JSON.parse(localStorage.getItem("accessToken"));
     useEffect(() => {
         if (token) {
             setProtectedRoute(true);
@@ -374,8 +382,13 @@ const App = () => {
                             <div className="layout-main">
                                 <Switch>
                                     <Route exact path="/" component={Dashboard} />
+                                   
                                     <Route path="/newenrolment" component={ServiceAvailablityPage} />
                                     <Route path="/enrollment" component={EnrollmentFlowPage} />
+                                    <Route path="/inventoryadjustments" component={AdjustmentFlowPage}/>
+                                <Route path="/changeesnsimstatus" component={ChangeESNSIMStatus} />
+                                <Route path="/acpprograms" component={AcpProgramsFlowPage}/>
+                               
                                     <Route path="/invoice" component={InvoicePage} />
                                     <Route path="/allenrollments" component={AllEnrollments} />
                                     <Route path="/completedenrollments" component={CompletedEnrollments} />
