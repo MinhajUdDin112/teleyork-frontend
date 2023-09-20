@@ -4,10 +4,23 @@ import PersonalInfoPage from "./personal_info_page";
 import Eligibility from "./eligibility";
 import plan from "./plan";
 import Preview from "./preview";
+import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
 export default function EnrollmentFlowPage() {
     const [activeIndex, setActiveIndex] = useState(0);
     const toast = useRef(null);
-  
+
+  //fetchinh _id from response of zip code
+    const id = useSelector((state)=>{
+        return state.zip;
+    })
+    const _id = id?.serviceAvailability?.data?._id;
+
+      
+  //fetchinh enrollment id  from response of zip code
+ 
+const enrollment_Id = id?.serviceAvailability?.data?.enrollmentId;
+
+
     const items = [
         {
             label: "Personal Info",
@@ -35,10 +48,10 @@ export default function EnrollmentFlowPage() {
     ];
     let pages = [
        
-         PersonalInfoPage({setActiveIndex:setActiveIndex}),
-        Eligibility({setActiveIndex:setActiveIndex}),
-        plan({setActiveIndex:setActiveIndex}),
-        Preview()
+         PersonalInfoPage({setActiveIndex:setActiveIndex,_id:_id,enrollmentId:enrollment_Id}),
+        Eligibility({setActiveIndex:setActiveIndex,_id:_id,enrollmentId:enrollment_Id}),
+        plan({setActiveIndex:setActiveIndex,_id:_id,enrollmentId:enrollment_Id}),
+        Preview({setActiveIndex:setActiveIndex,_id:_id,enrollmentId:enrollment_Id})
     ];
     return (
         <div className="steps-demo">

@@ -11,7 +11,7 @@ import { RadioButton } from "primereact/radiobutton";
 import { addCustomerInfoAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import { useDispatch } from "react-redux";
 
-const PersonalInfo = ({ handleNext, id }) => {
+const PersonalInfo = ({ handleNext, id ,enrollmentId}) => {
     const dispatch = useDispatch();
 
 
@@ -19,25 +19,25 @@ const PersonalInfo = ({ handleNext, id }) => {
         return state.lifelineOrdersReducer;
     });
     const statusCode = apiResponse?.addCustomerInfo?.status;
-    console.log("status code",statusCode)
-
+    const errormessage = apiResponse?.addCustomerInfoError;
     
+//console.log("api response", apiResponse);
 
-      useEffect(() => {
-        const nextScreen =  () => {
-            if ( statusCode == "201") {
-           console.log("Save Successfully");
-           handleNext();
-         } else {
-           console.log("Save Failed"); 
-           //error    
-         }     
-     };
-     nextScreen();
-
-      }, [onsubmit,statusCode])
+    //   useEffect(() => {
+    //     const nextScreen =  () => {
+    //         if ( statusCode == "201") {
+    //        console.log("Save Successfully");
+    //        handleNext();
+    //      } else {
+    //       setErrorMesssage(errormessage)
       
+    //      }     
+    //  };
+    //  nextScreen();
 
+    //   }, [statusCode])
+      
+const [errorMesssage, setErrorMesssage] = useState();
     const [emailChecked, setEmailChecked] = useState(false);
     const [phoneChecked, setPhoneChecked] = useState(false);
     const [textChecked, setTextChecked] = useState(false);
@@ -47,11 +47,10 @@ const PersonalInfo = ({ handleNext, id }) => {
     const [acp, setAcp] = useState(false);
     const [accept, setaccept] = useState(false);
 
+
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("First Name is Required"),
-        middleName: Yup.string().required("Middle Name is Required"),
         lastName: Yup.string().required("Last Name is Required"),
-        suffix: Yup.string().required("Suffix is Required."),
         SSN: Yup.string().required("SSN is Required."),
         DOB: Yup.string().required("DOB is Required."),
         contact: Yup.string().required("Contact is Required."),
@@ -84,7 +83,8 @@ const PersonalInfo = ({ handleNext, id }) => {
             actions.resetForm();
 
             const csr = "64e0b1b135a9428007da3526";
-            const userId = "650344e84beea688bd85c752";
+            //const userId = "650344e84beea688bd85c752";
+            const userId = id;
             const dataToSend = { csr, userId, ...values };
             dispatch(addCustomerInfoAction(dataToSend));
             
@@ -168,8 +168,9 @@ const PersonalInfo = ({ handleNext, id }) => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
+            {errormessage && <p style={{color:'red'}}>{errormessage}</p>}
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
-                    <h6 className="font-semibold">Enrollment id: {id}</h6>
+                    <h6 className="font-semibold">Enrollment id: {enrollmentId}</h6>
                     <Button label="Continue" type="submit" />
                 </div>
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
@@ -189,7 +190,7 @@ const PersonalInfo = ({ handleNext, id }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Middle Name <span style={{ color: "red" }}>*</span>
+                            Middle Name
                         </p>
                         <InputText type="text" value={formik.values.middleName} name="middleName" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.middleName && formik.errors.middleName ? (
@@ -211,7 +212,7 @@ const PersonalInfo = ({ handleNext, id }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Suffix <span style={{ color: "red" }}>*</span>
+                            Suffix (Last 4 Digit)
                         </p>
                         <InputText type="text" value={formik.values.suffix} name="suffix" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.suffix && formik.errors.suffix ? (
@@ -233,7 +234,7 @@ const PersonalInfo = ({ handleNext, id }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            DOB <span style={{ color: "red" }}>*</span>
+                            DOB (MM/DD/YYYY)<span style={{ color: "red" }}>*</span>
                         </p>
                         <Calendar id="icon" value={formik.values.DOB} name="DOB" onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className="w-21rem" />
                         {formik.touched.DOB && formik.errors.DOB ? (

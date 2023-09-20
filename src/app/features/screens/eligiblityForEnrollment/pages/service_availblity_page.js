@@ -7,23 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
+import axios from "axios";
+import BASE_URL from "../../../../../config";
+
 
 export default function ServiceAvailablityPage() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    // const fetchCarrier = async()=>{
-    //      await axios.get(`${BASE_URL}/api/web/assignCarrier/getBySP?serviceProvider=64554fa3048e8c4bbf403742`)
-    //     .then((response) => {
-    //         console.log(response.data);
-
-    //       })
-
-    // }
-    // fetchCarrier();
-    // }, [])
+   
 
     const formik = useFormik({
         initialValues: {

@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { addQuestion1Action } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import * as Yup from "yup";
-const Question1 = ({ handleNext,id , handleBack}) => {
+const Question1 = ({ handleNext,id , handleBack,enrollmentId}) => {
     const dispatch= useDispatch();
     const validationSchema = Yup.object().shape({
         livesWithAnotherAdult: Yup.string().required("Are you Living with Adult?"),
@@ -20,14 +20,12 @@ const Question1 = ({ handleNext,id , handleBack}) => {
             isSharesIncomeAndExpense: "",
         },
         onSubmit: (values, actions) => {
-          
-            actions.resetForm();
-            handleNext();
             const csr="645c7bcfe5098ff6251a2255";
             const userId=id;
             const dataToSend={csr,userId,...values}
-            console.log(dataToSend);
             dispatch(addQuestion1Action(dataToSend))
+            actions.resetForm();
+            handleNext();
         },
     });
 
@@ -60,7 +58,7 @@ const Question1 = ({ handleNext,id , handleBack}) => {
                         <Button label="Continue" type="submit" />
                     </div>
                     <div>
-                        <h6>Enrollment ID: {id}</h6>
+                        <h6>Enrollment ID: {enrollmentId}</h6>
                     </div>
                 <h3>Do you live with another adult?</h3>
                 <p>Adults are people who are 18 years or older, or who are emancipated minors. This can include a spouse, domestic partner, parent, adult son or daughter, adult in your family, adult roomate etc.</p>
