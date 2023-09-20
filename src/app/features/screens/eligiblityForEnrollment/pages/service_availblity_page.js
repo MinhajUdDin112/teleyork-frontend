@@ -3,17 +3,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect } from "react";
 import { Button } from "primereact/button";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
-import axios from "axios";
-import BASE_URL from "../../../../../config";
-import { UseSelector } from "react-redux/es/hooks/useSelector";
 
 export default function ServiceAvailablityPage() {
-    
-    const history = useHistory();
+
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -21,9 +18,9 @@ export default function ServiceAvailablityPage() {
     //      await axios.get(`${BASE_URL}/api/web/assignCarrier/getBySP?serviceProvider=64554fa3048e8c4bbf403742`)
     //     .then((response) => {
     //         console.log(response.data);
-           
+
     //       })
-       
+
     // }
     // fetchCarrier();
     // }, [])
@@ -37,9 +34,9 @@ export default function ServiceAvailablityPage() {
             const csr = "645c7bcfe5098ff6251a2255";
             const carrier = "6455532566d6fad6eac59e34";
             const dataToSend = { serviceProvider, csr, carrier, ...values };
-           // console.log(dataToSend);
+            // console.log(dataToSend);
             dispatch(fetchZipCode(dataToSend));
-            history.push("/enrollment")
+            navigate("/enrollment")
         },
     });
 

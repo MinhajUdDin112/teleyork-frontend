@@ -63,6 +63,8 @@ import CreateUser from "./app/features/screens/user_management/CreateUser";
 import ManageUser from "./app/features/screens/user_management/ManageUser";
 import EditUser from "./app/features/screens/user_management/EditUser";
 import NotFound from "./app/features/screens/not_found/NotFound"
+import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page"
+import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page"
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -229,8 +231,10 @@ const App = () => {
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
+                                <Route path="/newenrolment" component={<ServiceAvailablityPage />} />
+                                <Route path="/enrollment" component={<EnrollmentFlowPage />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
-                                {/* <Route path="/allenrollments" element={AllEnrollments} /> */}
+                                <Route path="/allenrollments" element={AllEnrollments} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
                                 <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />
