@@ -231,8 +231,8 @@ const App = () => {
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
-                                <Route path="/newenrolment" component={<ServiceAvailablityPage />} />
-                                <Route path="/enrollment" component={<EnrollmentFlowPage />} />
+                                <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
+                                <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/allenrollments" element={AllEnrollments} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
