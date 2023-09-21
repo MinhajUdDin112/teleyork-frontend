@@ -10,23 +10,19 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 
-const Address = ({ handleNext,id,handleBack,enrollmentId }) => {
-
-    const zipCode = useSelector((state)=>{
+const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
+    const zipCode = useSelector((state) => {
         return state.zip;
-    })
-const zipcode = zipCode?.serviceAvailability?.data?.zip;
+    });
+    const zipcode = zipCode?.serviceAvailability?.data?.zip;
 
-    
-    const dispatch= useDispatch();
+    const dispatch = useDispatch();
     const [tempAdd, setTempAdd] = useState(false);
     const [permaAdd, setPermaAdd] = useState(false);
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
-       
         city: Yup.string().required("city is required"),
         state: Yup.string().required("state is required"),
-       
         isTemporaryAddress: Yup.string().required("please confrim address"),
     });
     const formik = useFormik({
@@ -37,17 +33,19 @@ const zipcode = zipCode?.serviceAvailability?.data?.zip;
             city: "",
             state: "",
             isTemporaryAddress: "",
-            postalAddress:"",
+            postalAddress: "",
+            isSameServiceAddress: "",
+            isNotSameServiceAddress: "",
+            isPoBoxAddress: "",
         },
         onSubmit: (values, actions) => {
-           
             actions.resetForm();
             handleNext();
             const userId = id;
             const zip = zipcode;
-            const csr="645c7bcfe5098ff6251a2255";
-            const dataToSend={userId,csr,zip,...values}
-           
+            const csr = "645c7bcfe5098ff6251a2255";
+            const dataToSend = { userId, csr, zip, ...values };
+
             dispatch(addCustomerAddressAction(dataToSend));
         },
     });
@@ -74,14 +72,14 @@ const zipcode = zipCode?.serviceAvailability?.data?.zip;
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
-            <div className="flex flex-row justify-content-between align-items-center mb-2">
-                        <Button label="Back" type="button" onClick={handleBack} />
-                        <Button label="Continue" type="submit" />
-                    </div>
-                    <div>
-                        <h6>Enrollment ID: {enrollmentId}</h6>
-                    </div>
-                   
+                <div className="flex flex-row justify-content-between align-items-center mb-2">
+                    <Button label="Back" type="button" onClick={handleBack} />
+                    <Button label="Continue" type="submit" />
+                </div>
+                <div>
+                    <h6>Enrollment ID: {enrollmentId}</h6>
+                </div>
+
                 <br></br>
                 <p className="text-xl">What is your home address?</p>
                 <p>The address you will get service. Do not use P.O Box</p>
@@ -99,28 +97,16 @@ const zipcode = zipCode?.serviceAvailability?.data?.zip;
                         ) : null}
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            Address 2 <span style={{ color: "red" }}>*</span>
-                        </p>
+                        <p className="m-0">Address 2</p>
                         <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
-                        {formik.touched.address2 && formik.errors.address2 ? (
-                            <p className="mt-0" style={{ color: "red" }}>
-                                {formik.errors.address2}
-                            </p>
-                        ) : null}
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            Zip Code 
-                        </p>
+                        <p className="m-0">Zip Code</p>
                         <InputText value={zipcode} name="zip" className="w-21rem" disabled />
-                       
                     </div>
-                  
+
                     <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            State 
-                        </p>
+                        <p className="m-0">State</p>
                         <InputText type="text" value={formik.values.state} name="state" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.state && formik.errors.state ? (
                             <p className="mt-0" style={{ color: "red" }}>
@@ -129,9 +115,7 @@ const zipcode = zipCode?.serviceAvailability?.data?.zip;
                         ) : null}
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            City 
-                        </p>
+                        <p className="m-0">City</p>
                         <InputText type="text" value={formik.values.city} name="city" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.city && formik.errors.city ? (
                             <p className="mt-0" style={{ color: "red" }}>
@@ -140,26 +124,40 @@ const zipcode = zipCode?.serviceAvailability?.data?.zip;
                         ) : null}
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            Postal Code 
-                        </p>
+                        <p className="m-0">Postal Code</p>
                         <InputText type="text" value={formik.values.postalAddress} name="postalAddress" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
-                        
+                    </div>
                 </div>
+                <div>
+                    <p>Is this a temporary address?</p>
+                    <div className="flex">
+                        <div className="flex align-items-center">
+                            <Checkbox inputId="permaAdd" value="permanent" name="permanent" checked={permaAdd} onChange={(e) => handleAddress(e)}></Checkbox>
+                            <label className="ml-2">NO</label>
+                        </div>
+                        <div className="flex align-items-center ml-2">
+                            <Checkbox inputId="tempAdd" value="temp" name="temp" checked={tempAdd} onChange={(e) => handleAddress(e)}></Checkbox>
+                            <label className="ml-2">Yes</label>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-row ">
+                    <div className="p-col-12">
+                        <div >
+                            <RadioButton inputId="male" name="gender" value="male" onChange={formik.handleChange} checked={formik.values.gender === "male"} />
+                            <label htmlFor="male">Male</label>
+                        </div>
+                        <div >
+                            <RadioButton inputId="female" name="gender" value="female" onChange={formik.handleChange} checked={formik.values.gender === "female"} />
+                            <label htmlFor="female">Female</label>
+                        </div>
+                        <div >
+                            <RadioButton inputId="other" name="gender" value="other" onChange={formik.handleChange} checked={formik.values.gender === "other"} />
+                            <label htmlFor="other">Other</label>
+                        </div>
+                    </div>
                 </div>
             </form>
-
-            <p>Is this a temporary address?</p>
-            <div className="flex">
-                <div className="flex align-items-center">
-                    <Checkbox inputId="permaAdd" value="permanent" name="permanent" checked={permaAdd} onChange={(e) => handleAddress(e)}></Checkbox>
-                    <label className="ml-2">NO</label>
-                </div>
-                <div className="flex align-items-center ml-2">
-                    <Checkbox inputId="tempAdd" value="temp" name="temp" checked={tempAdd} onChange={(e) => handleAddress(e)}></Checkbox>
-                    <label className="ml-2">Yes</label>
-                </div>
-            </div>
         </>
     );
 };
