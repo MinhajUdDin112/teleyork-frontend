@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 export default function PersonalInfoPage({ setActiveIndex ,_id,enrollmentId}) {
 
-    const [currentComponent, setCurrentComponent] = useState(2);
+    const [currentComponent, setCurrentComponent] = useState(1);
 
 
 

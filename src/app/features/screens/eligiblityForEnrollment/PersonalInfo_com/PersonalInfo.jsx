@@ -270,7 +270,7 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
                         <p className="m-0">
                             Contact Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.contact} name="contact" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\(\d{3}\)-\d{3}-\d{4}$/} />
+                        <InputText type="text" value={formik.values.contact} name="contact" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  />
                         {formik.touched.contact && formik.errors.contact ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.contact}
