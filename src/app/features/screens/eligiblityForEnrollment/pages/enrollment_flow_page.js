@@ -8,7 +8,7 @@ import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
 
 export default function EnrollmentFlowPage() {
 
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(1);
     const toast = useRef(null);
 
     //fetchinh _id from response of zip code

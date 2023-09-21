@@ -1,3 +1,21 @@
 .custom-icon {
     font-size: 4rem ; /* Adjust the size as needed */
   }
+  
+   /* Custom Css */
+
+.field_label {
+    display: block !important;
+}
+
+.steric {
+    color: red;
+}
+
+.sp_small small {
+    display: block;
+    padding-top: 5px;
+}
+.acp_programs img{
+width: 100%;
+}
