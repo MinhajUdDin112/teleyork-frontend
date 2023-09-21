@@ -8,8 +8,7 @@ export const addCustomerInfoAction = createAsyncThunk("customer/info", async (bo
     try {
         const response = await axios.post(`${BASE_URL}/api/user/initialInformation`, body);
         console.log("response of api", response);
-        return response;
-        
+        return response;  
     } catch (error) {
         console.log(error);
         throw error;

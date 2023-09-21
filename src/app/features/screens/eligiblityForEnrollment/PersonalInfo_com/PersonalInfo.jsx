@@ -51,13 +51,13 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
             isACP: acp,
         },
         onSubmit: (values, actions) => {
-
-            console.log('values', values)
-            actions.resetForm();
+           
             const csr = "64e0b1b135a9428007da3526";
             const userId = id;
             const dataToSend = { csr, userId, ...values };
             dispatch(addCustomerInfoAction(dataToSend));
+            actions.resetForm();
+            handleNext();
         },
     });
 
@@ -81,10 +81,6 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
     });
     const statusCode = apiResponse?.addCustomerInfo?.status;
     const errormessage = apiResponse?.addCustomerInfoError;
-
-    //console.log('errormessage', errormessage)
-
-    //console.log("api response", apiResponse);
 
     //   useEffect(() => {
     //     const nextScreen =  () => {
@@ -161,7 +157,7 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">SSN <span className="steric">*</span> <small>(Last 4 Digits)</small></label>
-                        <InputText id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} />
+                        <InputText id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                         {getFormErrorMessage("SSN")}
                     </div>
 
@@ -185,13 +181,9 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Contact Number <span className="steric">*</span></label>
-                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+999-999-9999" placeholder="+999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
+                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+9999999999" placeholder="+999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
                         {getFormErrorMessage("contact")}
-                        {/* {formik.touched.contact && formik.errors.contact ? (
-                            <p className="mt-0" style={{ color: "red" }}>
-                                {formik.errors.contact}
-                            </p>
-                        ) : null} */}
+                        
                     </div>
                 </div>
 

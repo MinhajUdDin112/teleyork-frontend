@@ -9,21 +9,34 @@ import { Checkbox } from "primereact/checkbox";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
+import classNames from "classnames";
 
 const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
     const zipCode = useSelector((state) => {
         return state.zip;
     });
     const zipcode = zipCode?.serviceAvailability?.data?.zip;
-
     const dispatch = useDispatch();
+
     const [tempAdd, setTempAdd] = useState(false);
     const [permaAdd, setPermaAdd] = useState(false);
+    const [isSame, setIsSame] = useState(true);
+    const [isDifferent, setIsDifferent] = useState(false);
+    const [isPoBox, setIsPoBox] = useState(false);
+
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
         city: Yup.string().required("city is required"),
         state: Yup.string().required("state is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
+        mailingAddress1: Yup.string().required("Mailing Address1  is required"),
+        mailingZip: Yup.string().required("Zip code is required"),
+        mailingCity: Yup.string().required("city is required"),
+        mailingState: Yup.string().required("state is required"),
+        PoBoxAddress: Yup.string().required("This is required"),
+        poBoxZip: Yup.string().required("This is required"),
+        poBoxState: Yup.string().required("This is required"),
+        poBoxCity: Yup.string().required("This is required"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -34,9 +47,18 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
             state: "",
             isTemporaryAddress: "",
             postalAddress: "",
-            isSameServiceAddress: "",
-            isNotSameServiceAddress: "",
-            isPoBoxAddress: "",
+            isServiceAddress: isSame,
+            isNotServiceAddress: isDifferent,
+            isPOboxAddress: isPoBox,
+            mailingAddress1: "",
+            mailingAddress2: "",
+            mailingZip: "",
+            mailingCity: "",
+            mailingState: "",
+            PoBoxAddress:"",
+            poBoxZip: "",
+            poBoxState: "",
+            poBoxCity:""
         },
         onSubmit: (values, actions) => {
             actions.resetForm();
@@ -49,6 +71,21 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
             dispatch(addCustomerAddressAction(dataToSend));
         },
     });
+    const handleSame = () => {
+        setIsSame(true);
+        setIsDifferent(false);
+        setIsPoBox(false);
+    };
+    const handleDifferent = () => {
+        setIsSame(false);
+        setIsDifferent(true);
+        setIsPoBox(false);
+    };
+    const handlePobox = () => {
+        setIsSame(false);
+        setIsDifferent(false);
+        setIsPoBox(true);
+    };
 
     const handleAddress = (e) => {
         if (e.value === "temp") {
@@ -69,6 +106,11 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
             formik.values.isTemporaryAddress = false;
         }
     };
+    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+    const getFormErrorMessage = (name) => {
+        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+    };
+
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
@@ -141,22 +183,82 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row ">
-                    <div className="p-col-12">
-                        <div >
-                            <RadioButton inputId="male" name="gender" value="male" onChange={formik.handleChange} checked={formik.values.gender === "male"} />
-                            <label htmlFor="male">Male</label>
-                        </div>
-                        <div >
-                            <RadioButton inputId="female" name="gender" value="female" onChange={formik.handleChange} checked={formik.values.gender === "female"} />
-                            <label htmlFor="female">Female</label>
-                        </div>
-                        <div >
-                            <RadioButton inputId="other" name="gender" value="other" onChange={formik.handleChange} checked={formik.values.gender === "other"} />
-                            <label htmlFor="other">Other</label>
-                        </div>
+                <div className="flex flex-wrap mt-4">
+                    <div className="mr-3 flex alignitem-center">
+                        <Checkbox inputId="same" value="same" checked={isSame} onChange={handleSame} />
+                        <label className="mx-2">Same as Service address</label>
+                    </div>
+                    <div className="mr-3 flex alignitem-center">
+                        <Checkbox inputId="different" value="different" checked={isDifferent} onChange={handleDifferent} />
+                        <label className="mx-2">Different from Service address</label>
+                    </div>
+                    <div className="mr-3 flex alignitem-center">
+                        <Checkbox inputId="PoBox" value="PoBox" checked={isPoBox} onChange={handlePobox} />
+                        <label className="mx-2">My mailing address is a PO BOX</label>
                     </div>
                 </div>
+
+                {isDifferent && (
+                    <>
+                        <div className="p-fluid formgrid grid mt-5">
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    Mailing Address 1 <span className="steric">*</span>
+                                </label>
+                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                                {getFormErrorMessage("mailingAddress1")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">Mailing Address 2 </label>
+                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange}  keyfilter={/^[a-zA-Z\s]*$/}  />
+                                
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">Zip Code <span className="steric">*</span> </label>
+                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")}keyfilter={/^\d{0,5}$/ } maxLength={5} />
+                                {getFormErrorMessage("mailingZip")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">State <span className="steric">*</span> </label>
+                                <InputText id="mailingState" value={formik.values.mailingState} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingState") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                                {getFormErrorMessage("mailingState")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">City <span className="steric">*</span> </label>
+                                <InputText id="mailingCity" value={formik.values.mailingCity} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingCity") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                                {getFormErrorMessage("mailingCity")}
+                            </div>
+                        </div>
+                    </>
+                )}
+                {isPoBox && (
+                    <>
+                    <div className="p-fluid formgrid grid mt-5">
+                        <div className="field col-12 md:col-3">
+                            <label className="field_label">
+                            Mailing Address 1 <span className="steric">*</span>  PO BOX  
+                            </label>
+                            <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                            {getFormErrorMessage("PoBoxAddress")}
+                        </div>
+                        <div className="field col-12 md:col-3">
+                            <label className="field_label">Zip Code <span className="steric">*</span> </label>
+                            <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxZip") }, "input_text")}keyfilter={/^\d{0,5}$/ } maxLength={5} />
+                            {getFormErrorMessage("poBoxZip")}
+                        </div>
+                        <div className="field col-12 md:col-3">
+                            <label className="field_label">State <span className="steric">*</span> </label>
+                            <InputText id="poBoxState" value={formik.values.poBoxState} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxState") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                            {getFormErrorMessage("poBoxState")}
+                        </div>
+                        <div className="field col-12 md:col-3">
+                            <label className="field_label">City <span className="steric">*</span> </label>
+                            <InputText id="poBoxCity" value={formik.values.poBoxCity} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxCity") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                            {getFormErrorMessage("poBoxCity")}
+                        </div>
+                    </div>
+                </>
+                )}
             </form>
         </>
     );
