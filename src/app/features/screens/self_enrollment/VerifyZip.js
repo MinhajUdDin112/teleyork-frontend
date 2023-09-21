@@ -6,6 +6,7 @@ import BASE_URL from "../../../../config";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
+import { verifyZipAction } from "../../../store/selfEnrollment/SelfEnrollmentAction";
 
 const VerifyZip = () => {
     const history = useHistory();
@@ -23,7 +24,8 @@ const VerifyZip = () => {
                 carrier: "6455532566d6fad6eac59e34",
             };
             console.log("first", values);
-            const res = axios.post(`${BASE_URL}/api/enrollment/verifyZip`, newData);
+            dispatch(verifyZipAction(newData));
+            // const res = axios.post(`${BASE_URL}/api/enrollment/verifyZip`, newData);
             history.push("/personalinfo");
         },
     });

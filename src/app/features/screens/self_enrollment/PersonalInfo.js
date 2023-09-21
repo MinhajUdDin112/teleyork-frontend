@@ -22,21 +22,28 @@ const PersonalInfo = () => {
             firstName: "",
             middleName: "",
             lastName: "",
-            suffix: "",
             SSN: "",
-            DOB: "",
+            suffix: "",
             contact: "",
+            DOB: "",
+            isDifferentPerson: "",
+            BenifitFirstName: "",
+            BenifitMiddleName: "",
+            BenifitLastName: "",
+            BenifitSSN: "",
+            BenifitDOB: "",
         },
         onSubmit: (values) => {
             // const dob = values.DOB.toLocaleDateString();
             // values.DOB = dob;
+            values[isDifferentPerson] = formik.values.isDifferentPerson ? true : false;
             const newData = {
                 userId: "648dcb5aa3f7af983cd118e2",
                 ...values,
             };
             console.log("values", newData);
-            const res = axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
-            history.push("/address");
+            // const res = axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
+            // history.push("/address");
         },
     });
 
@@ -74,7 +81,7 @@ const PersonalInfo = () => {
                                     <Calendar className="mb-3" id="DOB" value={new Date(formik.values.DOB)} onChange={formik.handleChange} showIcon />
                                     <InputText className="mb-3" placeholder="Contact Phone" name="contact" value={formik.values.contact} onChange={formik.handleChange} />
                                     <div className="mb-3 flex justify-content-center">
-                                        <Checkbox inputId="binary" checked={isChecked} onChange={(e) => setIsChecked(e.checked)} />
+                                        <Checkbox inputId="binary" checked={formik.values.isDifferentPerson} onChange={formik.handleChange} />
                                         <label htmlFor="binary" className="text-xl flex align-items-center ml-2">
                                             Is the Benefit Qualifying Person different?
                                         </label>
