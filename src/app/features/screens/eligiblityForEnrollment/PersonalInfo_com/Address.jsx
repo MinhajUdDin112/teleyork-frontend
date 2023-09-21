@@ -11,16 +11,22 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 
 const Address = ({ handleNext,id,handleBack,enrollmentId }) => {
+
+    const zipCode = useSelector((state)=>{
+        return state.zip;
+    })
+const zipcode = zipCode?.serviceAvailability?.data?.zip;
+
     
     const dispatch= useDispatch();
     const [tempAdd, setTempAdd] = useState(false);
     const [permaAdd, setPermaAdd] = useState(false);
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
-        address2: Yup.string().required("Address is required"),
+       
         city: Yup.string().required("city is required"),
         state: Yup.string().required("state is required"),
-        zip: Yup.string().required("zip is required"),
+       
         isTemporaryAddress: Yup.string().required("please confrim address"),
     });
     const formik = useFormik({
@@ -30,16 +36,17 @@ const Address = ({ handleNext,id,handleBack,enrollmentId }) => {
             address2: "",
             city: "",
             state: "",
-            zip: "",
             isTemporaryAddress: "",
+            postalAddress:"",
         },
         onSubmit: (values, actions) => {
            
             actions.resetForm();
             handleNext();
             const userId = id;
+            const zip = zipcode;
             const csr="645c7bcfe5098ff6251a2255";
-            const dataToSend={userId,csr,...values}
+            const dataToSend={userId,csr,zip,...values}
            
             dispatch(addCustomerAddressAction(dataToSend));
         },
@@ -104,18 +111,26 @@ const Address = ({ handleNext,id,handleBack,enrollmentId }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Zip Code <span style={{ color: "red" }}>*</span>
+                            Zip Code 
                         </p>
-                        <InputText type="text" value={formik.values.zip} name="zip" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
-                        {formik.touched.zip && formik.errors.zip ? (
+                        <InputText value={zipcode} name="zip" className="w-21rem" disabled />
+                       
+                    </div>
+                  
+                    <div className="mr-3 mb-3">
+                        <p className="m-0">
+                            State 
+                        </p>
+                        <InputText type="text" value={formik.values.state} name="state" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        {formik.touched.state && formik.errors.state ? (
                             <p className="mt-0" style={{ color: "red" }}>
-                                {formik.errors.zip}
+                                {formik.errors.state}
                             </p>
                         ) : null}
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            City <span style={{ color: "red" }}>*</span>
+                            City 
                         </p>
                         <InputText type="text" value={formik.values.city} name="city" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.city && formik.errors.city ? (
@@ -126,15 +141,11 @@ const Address = ({ handleNext,id,handleBack,enrollmentId }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            State <span style={{ color: "red" }}>*</span>
+                            Postal Code 
                         </p>
-                        <InputText type="text" value={formik.values.state} name="state" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
-                        {formik.touched.state && formik.errors.state ? (
-                            <p className="mt-0" style={{ color: "red" }}>
-                                {formik.errors.state}
-                            </p>
-                        ) : null}
-                    </div>
+                        <InputText type="text" value={formik.values.postalAddress} name="postalAddress" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        
+                </div>
                 </div>
             </form>
 
