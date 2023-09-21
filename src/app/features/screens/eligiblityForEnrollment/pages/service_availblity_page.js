@@ -1,14 +1,10 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useEffect } from "react";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
-import axios from "axios";
-import BASE_URL from "../../../../../config";
 
 
 export default function ServiceAvailablityPage() {
@@ -16,7 +12,7 @@ export default function ServiceAvailablityPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-   
+
 
     const formik = useFormik({
         initialValues: {
@@ -39,7 +35,7 @@ export default function ServiceAvailablityPage() {
                 <div className="card col-4 ">
                     <form className="my-4" onSubmit={formik.handleSubmit}>
                         <h6>Please enter zip code to check service availablity</h6>
-                        <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/ } />
+                        <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} maxLength={5} />
                         <Button label="Submit" type="submit" className="col-12" />
                     </form>
                 </div>
