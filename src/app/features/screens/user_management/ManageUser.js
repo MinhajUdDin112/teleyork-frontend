@@ -75,7 +75,6 @@ const ManageUser = () => {
         )
     }
 
-
     return (
         <>
             <div className="card">

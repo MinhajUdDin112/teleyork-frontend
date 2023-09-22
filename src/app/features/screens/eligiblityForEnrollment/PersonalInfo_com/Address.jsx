@@ -29,14 +29,14 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
         city: Yup.string().required("city is required"),
         state: Yup.string().required("state is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
-        mailingAddress1: Yup.string().required("Mailing Address1  is required"),
-        mailingZip: Yup.string().required("Zip code is required"),
-        mailingCity: Yup.string().required("city is required"),
-        mailingState: Yup.string().required("state is required"),
-        PoBoxAddress: Yup.string().required("This is required"),
-        poBoxZip: Yup.string().required("This is required"),
-        poBoxState: Yup.string().required("This is required"),
-        poBoxCity: Yup.string().required("This is required"),
+        // mailingAddress1: Yup.string().required("Mailing Address1  is required"),
+        // mailingZip: Yup.string().required("Zip code is required"),
+        // mailingCity: Yup.string().required("city is required"),
+        // mailingState: Yup.string().required("state is required"),
+        // PoBoxAddress: Yup.string().required("This is required"),
+        // poBoxZip: Yup.string().required("This is required"),
+        // poBoxState: Yup.string().required("This is required"),
+        // poBoxCity: Yup.string().required("This is required"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -46,7 +46,7 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
             city: "",
             state: "",
             isTemporaryAddress: "",
-            postalAddress: "",
+            postal: "",
             isServiceAddress: isSame,
             isNotServiceAddress: isDifferent,
             isPOboxAddress: isPoBox,
@@ -167,7 +167,7 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Postal Code</p>
-                        <InputText type="text" value={formik.values.postalAddress} name="postalAddress" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.postal} name="postal" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                     </div>
                 </div>
                 <div>

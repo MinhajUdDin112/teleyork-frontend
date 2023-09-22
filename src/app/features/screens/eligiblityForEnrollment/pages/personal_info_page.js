@@ -6,7 +6,7 @@ import Question2 from "../PersonalInfo_com/Question2";
 import Question3 from "../PersonalInfo_com/Question3";
 import { useSelector } from 'react-redux';
 
-export default function PersonalInfoPage({ setActiveIndex ,_id,enrollmentId}) {
+export default function PersonalInfoPage({ setActiveIndex, _id, enrollmentId }) {
 
     const [currentComponent, setCurrentComponent] = useState(1);
 
@@ -18,12 +18,12 @@ export default function PersonalInfoPage({ setActiveIndex ,_id,enrollmentId}) {
                 return prev + 1;
             });
         }
-        else  {
-            setActiveIndex(1); 
+        else {
+            setActiveIndex(1);
         }
     };
 
-   
+
     const handleBack = () => {
         if (currentComponent <= 3) {
             setCurrentComponent((prev) => {
@@ -32,7 +32,7 @@ export default function PersonalInfoPage({ setActiveIndex ,_id,enrollmentId}) {
         } else {
             setActiveIndex(0);
         }
-        
+
     };
     let render;
     switch (currentComponent) {

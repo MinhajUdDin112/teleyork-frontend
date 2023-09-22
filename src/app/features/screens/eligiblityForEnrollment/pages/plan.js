@@ -12,11 +12,8 @@ const Plan = ({ setActiveIndex }) => {
     const [apidata, setapidata] = useState([]);
     const dispatch = useDispatch();
 
-    // const planList = useSelector((state) => {
-    //     return state.planListReducer;
-
     useEffect(() => {
-        // dispatch(fetchPlanListAction());
+        
         const fetchData = async () => {
             await axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=645a85198cd1ff499c8b99cd`).then((resp) => {
                 setapidata(resp.data.data);

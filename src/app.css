@@ -1,15 +1,28 @@
 .custom-icon {
     font-size: 4rem ; /* Adjust the size as needed */
   }
-  .field_label {
+  
+   /* Custom Css */
+
+.field_label {
     display: block !important;
 }
 
 .steric {
     color: red;
 }
+.yesButton{
+    background-color: green;
+}
+.noButton{
+    background-color: green;
+}
+
 
 .sp_small small {
     display: block;
     padding-top: 5px;
+}
+.acp_programs img{
+width: 100%;
 }

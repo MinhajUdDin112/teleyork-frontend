@@ -88,6 +88,12 @@ const Preview = ({setActiveIndex}) => {
                         <p>Electronically Signed by WEECY WIGGINS February 17,2023</p>
                     </label>
                 </div>
+                <div className="mt-5">
+                    <p>Request User For additional Documents</p>
+                    <Button label="Send"
+                    className="p-button-success"
+                     />
+                </div>
             </div>
         );
     };

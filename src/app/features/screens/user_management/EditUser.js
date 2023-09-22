@@ -19,6 +19,8 @@ const EditUser = () => {
     const location = useLocation();
     const { rowData } = location.state || {};
 
+    console.log('rowData', rowData)
+
     const navigate = useNavigate()
 
     const handleUserDataMapping = () => {
