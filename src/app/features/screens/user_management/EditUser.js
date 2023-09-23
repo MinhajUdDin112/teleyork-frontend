@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button';
-import { Password } from 'primereact/password';
 import Axios from 'axios';
 import BASE_URL from '../../../../config';
 import { useEffect } from 'react';
@@ -11,7 +10,7 @@ import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const EditUser = () => {
 
@@ -20,18 +19,9 @@ const EditUser = () => {
     const location = useLocation();
     const { rowData } = location.state || {};
 
-    const history = useHistory()
+    console.log('rowData', rowData)
 
-    const handleUserDataMapping = () => {
-        if (rowData) { // Check if formik and rowData exist
-            Object.keys(rowData).forEach((key) => {
-                if (formik.initialValues.hasOwnProperty(key)) {
-                    formik.setFieldValue(key, rowData[key]);
-                    formik.setFieldValue("role", rowData?.role?._id);
-                }
-            });
-        }
-    }
+    const navigate = useNavigate()
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData")
@@ -87,7 +77,7 @@ const EditUser = () => {
                 .then((response) => {
                     if (response?.status === 200) {
                         toast.warn("User Updated")
-                        history.push('/manage-user')
+                        navigate('/manage-user')
                     }
                 })
                 .catch((error) => {
@@ -102,9 +92,22 @@ const EditUser = () => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
+    const handleUserDataMapping = () => {
+        if (rowData) { // Check if formik and rowData exist
+            Object.keys(rowData).forEach((key) => {
+                console.log('rowData?.contact', rowData?.contact)
+                if (formik.initialValues.hasOwnProperty(key)) {
+                    formik.setFieldValue(key, rowData[key]);
+                    formik.setFieldValue("role", rowData?.role?._id);
+                    formik.setFieldValue("mobile", rowData?.contact);
+                }
+            });
+        }
+    }
+
     const getRoles = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=645a85198cd1ff499c8b99cd`);
+            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
             setAllRoles(res?.data?.data || []);
         } catch (error) {
             console.error("Error fetching module data:", error);
@@ -173,7 +176,7 @@ const EditUser = () => {
                                 id="mobile"
                                 value={formik.values.mobile}
                                 onChange={formik.handleChange}
-                                type='number'
+                                keyfilter={/^[\+\d]+$/}
                             />
                             {getFormErrorMessage("mobile")}
                         </div>

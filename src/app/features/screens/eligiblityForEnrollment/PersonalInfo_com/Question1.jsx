@@ -1,11 +1,20 @@
 import React from "react";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { addQuestion1Action } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import * as Yup from "yup";
-const Question1 = ({ handleNext,id , handleBack}) => {
+const Question1 = ({ handleNext, handleBack}) => {
     const dispatch= useDispatch();
+    
+    const zipCode = useSelector((state) => {
+        return state.zip;
+    });
+
+const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
+    
+    const _id = zipCode?.serviceAvailability?.data?._id;
+
     const validationSchema = Yup.object().shape({
         livesWithAnotherAdult: Yup.string().required("Are you Living with Adult?"),
         hasAffordableConnectivity: Yup.string().required("is they get ACP?"),
@@ -20,14 +29,13 @@ const Question1 = ({ handleNext,id , handleBack}) => {
             isSharesIncomeAndExpense: "",
         },
         onSubmit: (values, actions) => {
-          
-            actions.resetForm();
-            handleNext();
             const csr="645c7bcfe5098ff6251a2255";
-            const userId=id;
+            const userId=_id;
             const dataToSend={csr,userId,...values}
-            console.log(dataToSend);
             dispatch(addQuestion1Action(dataToSend))
+           
+            handleNext();
+            actions.resetForm();
         },
     });
 
@@ -60,11 +68,11 @@ const Question1 = ({ handleNext,id , handleBack}) => {
                         <Button label="Continue" type="submit" />
                     </div>
                     <div>
-                        <h6>Enrollment ID: {id}</h6>
+                        <h6>Enrollment ID: {enrollment_id}</h6>
                     </div>
                 <h3>Do you live with another adult?</h3>
                 <p>Adults are people who are 18 years or older, or who are emancipated minors. This can include a spouse, domestic partner, parent, adult son or daughter, adult in your family, adult roomate etc.</p>
-                <div className="flex flex-row justify-content-between">
+                <div className="flex flex-row ">
                     <Button
                         icon="pi pi-check"
                         label="Yes"
@@ -72,7 +80,7 @@ const Question1 = ({ handleNext,id , handleBack}) => {
                         onClick={(e) => {
                             handleQ1YesButton(e);
                         }}
-                        className="p-button-success "
+                        className="p-button-success mr-4 "
                     />
                     <Button
                         icon="pi pi-times"
@@ -87,16 +95,16 @@ const Question1 = ({ handleNext,id , handleBack}) => {
 
                 <br />
                 <h3>Do they get the Affordable Connectivity Program?</h3>
-                <div className="flex flex-row justify-content-between">
-                    <Button icon="pi pi-check" label="Yes" type='button' className="p-button-success" onClick={(e)=>{handleQ2YesButton(e)}} />
+                <div className="flex flex-row ">
+                    <Button icon="pi pi-check" label="Yes" type='button' className="p-button-success mr-4" onClick={(e)=>{handleQ2YesButton(e)}} />
                     <Button icon="pi pi-times" label="No" type='button' className="p-button-danger" onClick={(e)=>{handleQ2NoButton(e)}} />
                 </div>
 
                 <br />
                 <h3>Do yoy share money (incomeand expenses) with another adult who gets the Affordable Connectivity Program Benifit?</h3>
                  <p>This can be cost of bills, food etc and income. If you are married, you should check yes for this question.</p>
-                <div className="flex flex-row justify-content-between">
-                    <Button icon="pi pi-check" label="Yes" type='button' className="p-button-success" onClick={(e)=>{handleQ3YesButton(e)}} />
+                <div className="flex flex-row ">
+                    <Button icon="pi pi-check" label="Yes" type='button' className="p-button-success mr-4" onClick={(e)=>{handleQ3YesButton(e)}} />
                     <Button icon="pi pi-times" label="No" type='button' className="p-button-danger" onClick={(e)=>{handleQ3NoButton(e)}} />
                 </div>
             </form>
@@ -105,5 +113,4 @@ const Question1 = ({ handleNext,id , handleBack}) => {
 };
 
 export default Question1;
-
 

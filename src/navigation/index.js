@@ -116,10 +116,10 @@ export const menuNavigation = [
         ],
     },
     {
-        items:[
+        items: [
             {
                 label: "Inventory (PC382)",
-                items:[
+                items: [
                     {
                         label: "Manage Inventory",
                         to: "/manageinventory",
@@ -167,25 +167,26 @@ export const menuNavigation = [
             {
                 label: "Notifications",
                 items: [
-                    {
-                        label: "Manage Templates",
-                        to: "/managetemplate",
-                    },
+
                     {
                         label: "Create Template",
                         to: "/createtemplate",
+                    },
+                    {
+                        label: "Manage Templates",
+                        to: "/managetemplate",
                     },
                     {
                         label: "Upload Template",
                         to: "/smsnotification",
                     },
                     {
-                        label: "Sent",
-                        to: "/sent",
-                    },
-                    {
                         label: "Draft",
                         to: "/draft",
+                    },
+                    {
+                        label: "Sent",
+                        to: "/sent",
                     },
                 ],
             },

@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 
 const Address = () => {
     const [tribal, setTribal] = useState(false);
     const [billingaddress, setBillingaddress] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
     const handleBack = () => {
-        history.push("/personalinfo");
+        navigate("/personalinfo");
     };
     const handleNext = () => {
-        history.push("/eligibile");
+        navigate("/eligibile");
     };
     return (
         <>

@@ -29,7 +29,7 @@ export const getAllTemplateAction = createAsyncThunk("notification/sms/template/
 });
 
 //get one template action
-export const getOneTemplateAction = createAsyncThunk("notification/sms/template/${id}", async (id , { rejectWithValue }) => {
+export const getOneTemplateAction = createAsyncThunk("notification/sms/template/${id}", async (id, { rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/template/${id}`);
         return response.data;
@@ -49,7 +49,7 @@ export const getSentAllTemplateAction = createAsyncThunk("notification/sms/templ
 });
 
 //show all sent data action
-export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent", async (id ,{ rejectWithValue }) => {
+export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent", async (id, { rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/sent/${id}`);
         return response.data;
@@ -59,9 +59,9 @@ export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent
 });
 
 //send template action
-export const submitTemplateAction = createAsyncThunk("notification/sms/send", async (body , { rejectWithValue }) => {
+export const submitTemplateAction = createAsyncThunk("notification/sms/send", async (body, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`${BASE_URL}/api/sms/send?sentBy=${body.userId}&templateId=${body.templateId}`);
+        const response = await axios.post(`${BASE_URL}/api/sms/send?sentBy=${body.userId}&templateId=${body.templateId}&compony=${body.company}`);
         return response.data;
     } catch (error) {
         return error;
@@ -69,7 +69,7 @@ export const submitTemplateAction = createAsyncThunk("notification/sms/send", as
 });
 
 //show all draft data action
-export const getDraftByTemplateIdAction = createAsyncThunk("notification/sms/draft", async (id , { rejectWithValue }) => {
+export const getDraftByTemplateIdAction = createAsyncThunk("notification/sms/draft", async (id, { rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/draft/${id}`);
         return response.data;

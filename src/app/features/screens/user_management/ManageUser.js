@@ -4,7 +4,7 @@ import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import BASE_URL from '../../../../config'
 import { Button } from 'primereact/button'
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify'
 
 const ManageUser = () => {
@@ -15,7 +15,7 @@ const ManageUser = () => {
     const loginRes = localStorage.getItem("userData")
     const parseLoginRes = JSON.parse(loginRes)
 
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const actions = (rowData) => {
         return (
@@ -29,8 +29,7 @@ const ManageUser = () => {
     }
 
     const handleUserEdit = (rowData) => {
-        history.push({
-            pathname: "/edit-user",
+        navigate("/edit-user", {
             state: { rowData }
         });
     };
@@ -41,6 +40,7 @@ const ManageUser = () => {
             const res = await Axios.delete(`${BASE_URL}/api/web/user?userId=${rowData?._id}`);
             if (res?.status === 200) {
                 toast.success("User Deleted")
+                getAllUsers()
             }
         } catch (error) {
             console.error("Error fetching module data:", error);
@@ -63,7 +63,7 @@ const ManageUser = () => {
     }, []);
 
     const redirectToCreateUser = () => {
-        history.push("/create-user")
+        navigate("/create-user")
     }
 
     const userTableHeader = () => {
@@ -76,6 +76,9 @@ const ManageUser = () => {
         )
     }
 
+    const permissions = () => {
+
+    }
 
     return (
         <>
@@ -85,6 +88,7 @@ const ManageUser = () => {
                     tableStyle={{ minWidth: '50rem' }}
                     header={userTableHeader}
                 >
+                    <Column field="role.role" header="Role"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="email" header="Email"></Column>
                     <Column field="state" header="State"></Column>
@@ -94,6 +98,7 @@ const ManageUser = () => {
                     <Column field={(item) => item?.active === true ? "Active" : "Inactive"} header="Status"></Column>
                     <Column field="createdDate" header="Created Date"></Column>
                     <Column body={actions} header="Actions"></Column>
+                    <Column body={permissions} header="Permissions"></Column>
                 </DataTable>
             </div>
         </>

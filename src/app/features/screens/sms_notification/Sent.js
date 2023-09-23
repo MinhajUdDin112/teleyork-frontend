@@ -1,16 +1,24 @@
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CustomLoading from "../../components/custom_spinner";
 import { getSentAllTemplateAction } from "../../../store/notification/NotificationAction";
+import Axios from "axios";
+import BASE_URL from "../../../../config";
 
 const Sent = () => {
+    const [allSent, setAllSent] = useState([])
+
+    const loginResponse = useSelector((state) => state.login)
+    const loginData = loginResponse.loginData
+    const companyId = loginData?.compony
+
     const dispatch = useDispatch();
     const { getSentAllTemplate, getSentAllTemplateLoading } = useSelector((state) => state.notification);
-    const history = useHistory();
+    const navigate = useNavigate();
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -21,11 +29,20 @@ const Sent = () => {
 
     const handleView = (rowData) => {
         const { templateId } = rowData;
-        history.push(`/sentall/${templateId}`);
+        navigate(`/sentall/${templateId}`);
     };
 
     useEffect(() => {
         dispatch(getSentAllTemplateAction());
+    }, []);
+
+    const getAllSent = async () => {
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?companyId=${companyId}`);
+        setAllSent(response?.data?.data)
+    }
+
+    useEffect(() => {
+        getAllSent()
     }, []);
 
     const type = (rowData) => {
@@ -43,12 +60,12 @@ const Sent = () => {
                 ) : (
                     <div className="">
                         <DataTable value={getSentAllTemplate?.data} showGridlines>
-                            <Column header="Template Id" field="templateId"></Column>
-                            <Column header="Name" field="name"></Column>
-                            <Column header="Message" field="template"></Column>
-                            <Column header="Type" body={type}></Column>
-                            <Column header="Status" field="status"></Column>
-                            <Column header="" body={renderActions} style={{ width: "50px" }}></Column>
+                            <Column header="Template Id" field="templateId" />
+                            <Column header="Name" field="name" />
+                            <Column header="Message" field="template" />
+                            <Column header="Type" body={type} />
+                            <Column header="Status" field="status" />
+                            <Column header="Actions" body={renderActions} style={{ width: "50px" }} />
                         </DataTable>
                     </div>
                 )}

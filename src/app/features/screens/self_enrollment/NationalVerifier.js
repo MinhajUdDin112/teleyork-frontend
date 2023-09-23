@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Checkbox } from "primereact/checkbox";
 import { Button } from "primereact/button";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 
 const NationalVerifier = () => {
     const [checked, setChecked] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleNext = () => {
         // Navigate to a different route
-        history.push("/resumeapplication");
+        navigate("/resumeapplication");
     };
     const handleBack = () => {
         // Navigate to a different route
-        history.push("/eligibility");
+        navigate("/eligibility");
     };
     return (
         <>

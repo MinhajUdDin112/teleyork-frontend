@@ -1,14 +1,14 @@
 import React from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../../../config";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 
 const VerifyZip = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const formik = useFormik({
@@ -24,7 +24,7 @@ const VerifyZip = () => {
             };
             console.log("first", values);
             const res = axios.post(`${BASE_URL}/api/enrollment/verifyZip`, newData);
-            history.push("/personalinfo");
+            navigate("/personalinfo");
         },
     });
 

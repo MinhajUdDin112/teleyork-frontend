@@ -1,17 +1,24 @@
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CustomLoading from "../../components/custom_spinner";
 import { getAllTemplateAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
+import Axios from "axios";
+import BASE_URL from "../../../../config";
 
 const Draft = () => {
+
+    const [allDraft, setAllDraft] = useState([])
+
     const dispatch = useDispatch();
     const { getAllTemplate, getAllTemplateLoading, submitTemplate } = useSelector((state) => state.notification);
     const { loginData } = useSelector((state) => state.login);
-    const history = useHistory();
+    const companyId = loginData?.compony
+
+    const navigate = useNavigate();
     //actions
     const renderActions = (rowData) => {
         return (
@@ -24,7 +31,7 @@ const Draft = () => {
 
     const handleView = (rowData) => {
         const { templateId } = rowData;
-        history.push(`/draftall/${templateId}`);
+        navigate(`/draftall/${templateId}`);
     };
     const handleSend = (rowData) => {
         const { templateId } = rowData;
@@ -42,6 +49,15 @@ const Draft = () => {
         return <div>{rowData.type === 0 ? "SMS" : rowData.type === 1 ? "Email" : "SMS, Email"}</div>;
     };
 
+    const getAllDraft = async () => {
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/draft?companyId=${companyId}`);
+        setAllDraft(response?.data?.data)
+    }
+
+    useEffect(() => {
+        getAllDraft()
+    }, []);
+
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
@@ -52,7 +68,7 @@ const Draft = () => {
                     <CustomLoading />
                 ) : (
                     <div className="">
-                        <DataTable value={getAllTemplate?.data} showGridlines>
+                        <DataTable value={allDraft} showGridlines>
                             <Column header="Template Id" field="templateId"></Column>
                             <Column header="Name" field="name"></Column>
                             <Column header="Message" field="template"></Column>

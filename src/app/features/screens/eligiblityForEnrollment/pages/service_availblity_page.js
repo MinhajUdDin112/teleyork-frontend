@@ -1,34 +1,25 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useEffect } from "react";
 import { Button } from "primereact/button";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
-import axios from "axios";
-import BASE_URL from "../../../../../config";
-import { UseSelector } from "react-redux/es/hooks/useSelector";
+
 
 export default function ServiceAvailablityPage() {
-    
-    const history = useHistory();
+
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    // const fetchCarrier = async()=>{
-    //      await axios.get(`${BASE_URL}/api/web/assignCarrier/getBySP?serviceProvider=64554fa3048e8c4bbf403742`)
-    //     .then((response) => {
-    //         console.log(response.data);
-           
-    //       })
-       
-    // }
-    // fetchCarrier();
-    // }, [])
+    const validationSchema = Yup.object().shape({
+        zipCode: Yup.string().required("Please enter Zip code"),
+    });
+    
 
     const formik = useFormik({
+        validationSchema:validationSchema,
         initialValues: {
             zipCode: "",
         },
@@ -37,9 +28,8 @@ export default function ServiceAvailablityPage() {
             const csr = "645c7bcfe5098ff6251a2255";
             const carrier = "6455532566d6fad6eac59e34";
             const dataToSend = { serviceProvider, csr, carrier, ...values };
-           // console.log(dataToSend);
             dispatch(fetchZipCode(dataToSend));
-            history.push("/enrollment")
+            navigate("/enrollment")
         },
     });
 
@@ -49,7 +39,12 @@ export default function ServiceAvailablityPage() {
                 <div className="card col-4 ">
                     <form className="my-4" onSubmit={formik.handleSubmit}>
                         <h6>Please enter zip code to check service availablity</h6>
-                        <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} />
+                        <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/ } minLength={5} maxLength={5} />
+                        {formik.touched.zipCode && formik.errors.zipCode ? (
+                            <p className="mt-0" style={{ color: "red" }}>
+                                {formik.errors.zipCode}
+                            </p>
+                        ) : null}
                         <Button label="Submit" type="submit" className="col-12" />
                     </form>
                 </div>
