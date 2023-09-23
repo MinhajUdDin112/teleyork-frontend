@@ -28,6 +28,7 @@ const ShowDraftAll = () => {
         let body = {
             userId: loginData?._id,
             templateId: id,
+            company: loginData?.compony,
         };
         dispatch(submitTemplateAction(body));
     };

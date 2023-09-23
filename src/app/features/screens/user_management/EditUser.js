@@ -23,17 +23,6 @@ const EditUser = () => {
 
     const navigate = useNavigate()
 
-    const handleUserDataMapping = () => {
-        if (rowData) { // Check if formik and rowData exist
-            Object.keys(rowData).forEach((key) => {
-                if (formik.initialValues.hasOwnProperty(key)) {
-                    formik.setFieldValue(key, rowData[key]);
-                    formik.setFieldValue("role", rowData?.role?._id);
-                }
-            });
-        }
-    }
-
     // Get user data from ls
     const loginRes = localStorage.getItem("userData")
     const parseLoginRes = JSON.parse(loginRes)
@@ -103,9 +92,22 @@ const EditUser = () => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
+    const handleUserDataMapping = () => {
+        if (rowData) { // Check if formik and rowData exist
+            Object.keys(rowData).forEach((key) => {
+                console.log('rowData?.contact', rowData?.contact)
+                if (formik.initialValues.hasOwnProperty(key)) {
+                    formik.setFieldValue(key, rowData[key]);
+                    formik.setFieldValue("role", rowData?.role?._id);
+                    formik.setFieldValue("mobile", rowData?.contact);
+                }
+            });
+        }
+    }
+
     const getRoles = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=645a85198cd1ff499c8b99cd`);
+            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
             setAllRoles(res?.data?.data || []);
         } catch (error) {
             console.error("Error fetching module data:", error);
@@ -174,7 +176,7 @@ const EditUser = () => {
                                 id="mobile"
                                 value={formik.values.mobile}
                                 onChange={formik.handleChange}
-                                type='number'
+                                keyfilter={/^[\+\d]+$/}
                             />
                             {getFormErrorMessage("mobile")}
                         </div>

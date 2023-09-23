@@ -57,7 +57,7 @@ const CreateUser = () => {
             // Prepare the data to send to the server
             const data = {
                 compony: parseLoginRes?.compony,
-                createdBy: parseLoginRes?.createdDate,
+                createdBy: parseLoginRes?._id,
                 roleId: formik.values.role,
                 name: values.name,
                 email: values.email,

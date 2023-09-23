@@ -40,6 +40,7 @@ const ManageUser = () => {
             const res = await Axios.delete(`${BASE_URL}/api/web/user?userId=${rowData?._id}`);
             if (res?.status === 200) {
                 toast.success("User Deleted")
+                getAllUsers()
             }
         } catch (error) {
             console.error("Error fetching module data:", error);
@@ -75,6 +76,10 @@ const ManageUser = () => {
         )
     }
 
+    const permissions = () => {
+
+    }
+
     return (
         <>
             <div className="card">
@@ -83,6 +88,7 @@ const ManageUser = () => {
                     tableStyle={{ minWidth: '50rem' }}
                     header={userTableHeader}
                 >
+                    <Column field="role.role" header="Role"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="email" header="Email"></Column>
                     <Column field="state" header="State"></Column>
@@ -92,6 +98,7 @@ const ManageUser = () => {
                     <Column field={(item) => item?.active === true ? "Active" : "Inactive"} header="Status"></Column>
                     <Column field="createdDate" header="Created Date"></Column>
                     <Column body={actions} header="Actions"></Column>
+                    <Column body={permissions} header="Permissions"></Column>
                 </DataTable>
             </div>
         </>
