@@ -8,14 +8,24 @@ import { getSentByTemplateIdAction } from "../../../store/notification/Notificat
 import CustomLoading from "../../components/custom_spinner";
 
 const ShowSentAll = () => {
+
     const { id } = useParams();
     const dispatch = useDispatch();
     const { getSentByTemplateId, getSentByTemplateIdLoading } = useSelector((state) => state.notification);
     const navigate = useNavigate();
 
+    const { loginData } = useSelector((state) => state.login);
+    const companyId = loginData?.compony
+
     useEffect(() => {
-        dispatch(getSentByTemplateIdAction(id));
+        let body = {
+            userId: loginData?._id,
+            templateId: id,
+            company: companyId,
+        };
+        dispatch(getSentByTemplateIdAction(body));
     }, [id]);
+
     const handleBack = () => {
         navigate("/sent");
     };

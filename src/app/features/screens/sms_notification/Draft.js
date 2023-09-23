@@ -38,6 +38,7 @@ const Draft = () => {
         let body = {
             userId: loginData?._id,
             templateId: templateId,
+            company: companyId,
         };
         dispatch(submitTemplateAction(body));
     };
