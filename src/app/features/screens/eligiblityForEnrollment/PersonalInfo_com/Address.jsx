@@ -55,10 +55,10 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
             mailingZip: "",
             mailingCity: "",
             mailingState: "",
-            PoBoxAddress:"",
+            PoBoxAddress: "",
             poBoxZip: "",
             poBoxState: "",
-            poBoxCity:""
+            poBoxCity: ""
         },
         onSubmit: (values, actions) => {
             actions.resetForm();
@@ -106,6 +106,7 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
             formik.values.isTemporaryAddress = false;
         }
     };
+
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
@@ -205,27 +206,27 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
                                 <label className="field_label">
                                     Mailing Address 1 <span className="steric">*</span>
                                 </label>
-                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} />
                                 {getFormErrorMessage("mailingAddress1")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">Mailing Address 2 </label>
-                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange}  keyfilter={/^[a-zA-Z\s]*$/}  />
-                                
+                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} />
+
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">Zip Code <span className="steric">*</span> </label>
-                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")}keyfilter={/^\d{0,5}$/ } maxLength={5} />
+                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
                                 {getFormErrorMessage("mailingZip")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">State <span className="steric">*</span> </label>
-                                <InputText id="mailingState" value={formik.values.mailingState} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingState") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                                <InputText id="mailingState" value={formik.values.mailingState} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingState") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} />
                                 {getFormErrorMessage("mailingState")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">City <span className="steric">*</span> </label>
-                                <InputText id="mailingCity" value={formik.values.mailingCity} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingCity") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
+                                <InputText id="mailingCity" value={formik.values.mailingCity} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingCity") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} />
                                 {getFormErrorMessage("mailingCity")}
                             </div>
                         </div>
@@ -233,31 +234,31 @@ const Address = ({ handleNext, id, handleBack, enrollmentId }) => {
                 )}
                 {isPoBox && (
                     <>
-                    <div className="p-fluid formgrid grid mt-5">
-                        <div className="field col-12 md:col-3">
-                            <label className="field_label">
-                            Mailing Address 1 <span className="steric">*</span>  PO BOX  
-                            </label>
-                            <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
-                            {getFormErrorMessage("PoBoxAddress")}
+                        <div className="p-fluid formgrid grid mt-5">
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    Mailing Address 1 <span className="steric">*</span>  PO BOX
+                                </label>
+                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} />
+                                {getFormErrorMessage("PoBoxAddress")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">Zip Code <span className="steric">*</span> </label>
+                                <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
+                                {getFormErrorMessage("poBoxZip")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">State <span className="steric">*</span> </label>
+                                <InputText id="poBoxState" value={formik.values.poBoxState} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxState") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} />
+                                {getFormErrorMessage("poBoxState")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">City <span className="steric">*</span> </label>
+                                <InputText id="poBoxCity" value={formik.values.poBoxCity} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxCity") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} />
+                                {getFormErrorMessage("poBoxCity")}
+                            </div>
                         </div>
-                        <div className="field col-12 md:col-3">
-                            <label className="field_label">Zip Code <span className="steric">*</span> </label>
-                            <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxZip") }, "input_text")}keyfilter={/^\d{0,5}$/ } maxLength={5} />
-                            {getFormErrorMessage("poBoxZip")}
-                        </div>
-                        <div className="field col-12 md:col-3">
-                            <label className="field_label">State <span className="steric">*</span> </label>
-                            <InputText id="poBoxState" value={formik.values.poBoxState} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxState") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
-                            {getFormErrorMessage("poBoxState")}
-                        </div>
-                        <div className="field col-12 md:col-3">
-                            <label className="field_label">City <span className="steric">*</span> </label>
-                            <InputText id="poBoxCity" value={formik.values.poBoxCity} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("poBoxCity") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/}  />
-                            {getFormErrorMessage("poBoxCity")}
-                        </div>
-                    </div>
-                </>
+                    </>
                 )}
             </form>
         </>

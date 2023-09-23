@@ -1,18 +1,28 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
-
-const Preview = ({setActiveIndex}) => {
+import { useSelector } from "react-redux/es/hooks/useSelector";
+const Preview = ({ setActiveIndex }) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const pages = ["preview"];
 
+    //fetchinh _id from response of zip code
+    const id = useSelector((state) => {
+        return state.zip;
+    })
+    const _id = id?.serviceAvailability?.data?._id;
+
+    //fetchinh enrollment id  from response of zip code
+    const enrollment_Id = id?.serviceAvailability?.data?.enrollmentId;
     const previewDetails = () => {
+
+
         return (
             <div>
                 <div>
-                    <h6>Enrollment ID: ETC175698</h6>
+                    <h6>Enrollment_Id:{enrollment_Id}</h6>
                 </div>
-                
+
                 <br></br>
                 <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                 <br />
@@ -91,23 +101,23 @@ const Preview = ({setActiveIndex}) => {
                 <div className="mt-5">
                     <p>Request User For additional Documents</p>
                     <Button label="Send"
-                    className="p-button-success"
-                     />
+                        className="p-button-success"
+                    />
                 </div>
             </div>
         );
     };
     const builtPages = {
-        preview: previewDetails() 
+        preview: previewDetails()
     };
     return (
         <>
             <div className="card">
                 <div className="flex flex-row justify-content-between">
                     <Button label="Back"
-                    onClick={()=>{
-                        setActiveIndex(2);
-                    }} />
+                        onClick={() => {
+                            setActiveIndex(2);
+                        }} />
                     <Button
                         label="Continue"
                         onClick={() => {
