@@ -172,7 +172,7 @@ const Address = ({ handleNext, id, handleBack }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Zip Code</p>
-                        <InputText value={formik.values.zip} name="zip" className="w-21rem cursor-crosshair"  />
+                        <InputText value={formik.values.zip} name="zip" className="w-21rem cursor-crosshair" disabled  />
                     </div>
 
                     <div className="mr-3 mb-3">

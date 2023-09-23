@@ -12,6 +12,14 @@ const Plan = ({ setActiveIndex }) => {
     const [apidata, setapidata] = useState([]);
     const dispatch = useDispatch();
 
+     const zipCode = useSelector((state) => {
+        return state.zip;
+    });
+
+const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
+    
+    const _id = zipCode?.serviceAvailability?.data?._id;
+
     useEffect(() => {
         
         const fetchData = async () => {

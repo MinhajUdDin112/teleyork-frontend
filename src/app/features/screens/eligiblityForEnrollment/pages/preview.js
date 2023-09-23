@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
-
+import { useSelector } from "react-redux";
 const Preview = ({setActiveIndex}) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const pages = ["preview"];
+
+    
+    const zipCode = useSelector((state) => {
+        return state.zip;
+    });
+     const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId; 
+    const _id = zipCode?.serviceAvailability?.data?._id; 
+
 
     const previewDetails = () => {
         return (
