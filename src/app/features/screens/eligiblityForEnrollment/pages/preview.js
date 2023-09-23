@@ -1,75 +1,129 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
-import { useSelector } from "react-redux";
-const Preview = ({setActiveIndex}) => {
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { useEffect } from "react";
+import Axios from "axios";
+import BASE_URL from "../../../../../config";
+const Preview = ({ setActiveIndex }) => {
     const [selectedPage, setSelectedPage] = useState(0);
+    const [data, setData] = useState([]);
     const pages = ["preview"];
 
-    
-    const zipCode = useSelector((state) => {
+    //fetchinh _id from response of zip code
+    const id = useSelector((state) => {
         return state.zip;
     });
-     const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId; 
-    const _id = zipCode?.serviceAvailability?.data?._id; 
+
+    const loginResponse = useSelector((state) => state.login);
+    const cpmny_id = loginResponse?.loginData?.data?.compony;
+
+    const getData = async () => {
+        const response = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?serviceProvider=${cpmny_id}`);
+        const cmplt_enroll = response?.data;
+        setData(cmplt_enroll);
+        console.log("data is ",cmplt_enroll);
+    };
+    useEffect(() => {
+        getData();
+    }, []);
+
+    
+    //fetchinh enrollment id  from response of zip code
+    const enrollment_Id = id?.serviceAvailability?.data?.enrollmentId;
+   
+    return (
+        <>
+            <div className="card">
+                <div className="flex flex-row justify-content-between">
+                    <Button
+                        label="Back"
+                        onClick={() => {
+                            setActiveIndex(2);
+                        }}
+                    />
+                    <Button
+                        label="Continue"
+                        onClick={() => {
+                            if (selectedPage < 1) {
+                                setSelectedPage((prev) => {
+                                    return prev + 1;
+                                });
+                            }
+                        }}
+                    />
+                </div>
+                <br></br>
 
 
-    const previewDetails = () => {
-        return (
+              
             <div>
                 <div>
-                    <h6>Enrollment ID: ETC175698</h6>
+                    <h6>Enrollment_Id:{enrollment_Id}</h6>
                 </div>
-                
+
                 <br></br>
                 <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                 <br />
-                <div className="flex justify-content-around">
-                    <div className="border-2 w-5 pt-2">
-                        <div className="flex border-bottom-2">
-                            <p className="w-6 ml-4">Name:</p>
-                            <p className="w-6">Hammad</p>
-                        </div>
-                        <div className="flex border-bottom-2 pt-2">
-                            <p className="w-6 ml-4">City:</p>
-                            <p className="w-6">Abbottabad</p>
-                        </div>
-                        <div className="flex border-bottom-2 pt-2">
-                            <p className="w-6 ml-4">Zip Code:</p>
-                            <p className="w-6">22010</p>
-                        </div>
-                        <div className="flex border-bottom-2 pt-2">
-                            <p className="w-6 ml-4">Telephone:</p>
-                            <p className="w-6">03135522652</p>
-                        </div>
-                        <div className="flex pt-2">
-                            <p className="w-6 ml-4">DOB:</p>
-                            <p className="w-6">10-10-1999</p>
-                        </div>
-                    </div>
-                    <div className="border-2 w-5 ">
-                        <div className="flex border-bottom-2 pt-2">
-                            <p className="w-6 ml-4">Service Address:</p>
-                            <p className="w-6">Hammad</p>
-                        </div>
-                        <div className="flex border-bottom-2 pt-2">
-                            <p className="w-6 ml-4">State:</p>
-                            <p className="w-6">Hammad</p>
-                        </div>
-                        <div className="flex border-bottom-2 pt-2">
-                            <p className="w-6 ml-4">Email:</p>
-                            <p className="w-6">Hammad</p>
-                        </div>
-                        <div className="flex border-bottom-2 pt-2">
-                            <p className="w-6 ml-4">SSN:</p>
-                            <p className="w-6">Hammad</p>
-                        </div>
-                        <div className="flex pt-2">
-                            <p className="w-6 ml-4">Plan:</p>
-                            <p className="w-6">Hammad</p>
-                        </div>
-                    </div>
-                </div>
+                
+                {
+                   data && [data].map((item)=>{
+                        return(
+                            <>
+                            <div className="flex justify-content-around">
+                       <div className="border-2 w-5 pt-2">
+                           <div className="flex border-bottom-2">
+                               <p className="w-6 ml-4">Name:</p>
+                               <p className="w-6">{item?.firstName}</p>
+                           </div>
+                           <div className="flex border-bottom-2 pt-2">
+                               <p className="w-6 ml-4">City:</p>
+                               <p className="w-6">{item?.city}</p>
+                           </div>
+                           <div className="flex border-bottom-2 pt-2">
+                               <p className="w-6 ml-4">Zip Code:</p>
+                               <p className="w-6">{item?.zip}</p>
+                           </div>
+                           <div className="flex border-bottom-2 pt-2">
+                               <p className="w-6 ml-4">Telephone:</p>
+                               <p className="w-6">{item?.contact}</p>
+                           </div>
+                           <div className="flex pt-2">
+                               <p className="w-6 ml-4">DOB:</p>
+                               <p className="w-6">{item?.DOB}</p>
+                           </div>
+                       </div>
+                       <div className="border-2 w-5 ">
+                           <div className="flex border-bottom-2 pt-2">
+                               <p className="w-6 ml-4">Service Address:</p>
+                               <p className="w-6">{item?.address1}</p>
+                           </div>
+                           <div className="flex border-bottom-2 pt-2">
+                               <p className="w-6 ml-4">State:</p>
+                               <p className="w-6">{item?.state}</p>
+                           </div>
+                           <div className="flex border-bottom-2 pt-2">
+                               <p className="w-6 ml-4">Email:</p>
+                               <p className="w-6">{item?.email}</p>
+                           </div>
+                           <div className="flex border-bottom-2 pt-2">
+                               <p className="w-6 ml-4">SSN:</p>
+                               <p className="w-6">{item?.SSN}</p>
+                           </div>
+                           <div className="flex pt-2">
+                               <p className="w-6 ml-4">Plan:</p>
+                               <p className="w-6">{item?.plan}</p>
+                           </div>
+                       </div>
+                   </div>
+                           </>
+                        )
+                       
+})
+                }
+               
+
+
                 <br />
                 <br />
                 <div className="flex">
@@ -98,37 +152,22 @@ const Preview = ({setActiveIndex}) => {
                 </div>
                 <div className="mt-5">
                     <p>Request User For additional Documents</p>
-                    <Button label="Send"
-                    className="p-button-success"
-                     />
+                    <Button label="Send" className="p-button-success" />
                 </div>
             </div>
-        );
-    };
-    const builtPages = {
-        preview: previewDetails() 
-    };
-    return (
-        <>
-            <div className="card">
-                <div className="flex flex-row justify-content-between">
-                    <Button label="Back"
-                    onClick={()=>{
-                        setActiveIndex(2);
-                    }} />
-                    <Button
-                        label="Continue"
-                        onClick={() => {
-                            if (selectedPage < 1) {
-                                setSelectedPage((prev) => {
-                                    return prev + 1;
-                                });
-                            }
-                        }}
-                    />
-                </div>
-                <br></br>
-                {builtPages[pages[selectedPage]]}
+       
+
+
+
+
+
+
+
+
+
+
+
+               
             </div>
         </>
     );

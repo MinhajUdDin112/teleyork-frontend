@@ -57,13 +57,13 @@ const Address = ({ handleNext, id, handleBack }) => {
             isPOboxAddress: "",
             mailingAddress1: "",
             mailingAddress2: "",
-            mailingZip: zipcode,
-            mailingCity:zipcode,
-            mailingState:zipcode,
+            mailingZip: "",
+            mailingCity: "",
+            mailingState: "",
             PoBoxAddress: "",
-            poBoxZip: zipcode,
-            poBoxCity:zipcode,
-            poBoxState:zipcode,
+            poBoxZip: "",
+            poBoxState: "",
+            poBoxCity: ""
         },
         onSubmit: (values, actions) => {
             const dataToSend = {
@@ -98,7 +98,7 @@ const Address = ({ handleNext, id, handleBack }) => {
             dispatch(addCustomerAddressAction(dataToSend));
         },
     });
-    console.log("confrim address is", confrimAddress);
+    
 
     
 

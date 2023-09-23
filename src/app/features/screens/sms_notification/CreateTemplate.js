@@ -8,9 +8,15 @@ import { Editor } from "primereact/editor";
 import { Toast } from "primereact/toast";
 import { addTemplateAction } from "../../../store/notification/NotificationAction";
 
+
 const CreateTemplate = () => {
+
     const dispatch = useDispatch();
     const [templateText, setTemplateText] = useState("");
+
+    const loginResponse = useSelector((state) => state.login)
+    const loginData = loginResponse.loginData
+    const companyId = loginData?.compony
 
     const type = [
         { label: "SMS", value: 0 },
@@ -28,6 +34,7 @@ const CreateTemplate = () => {
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
                 ...values,
+                company: companyId,
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
             };

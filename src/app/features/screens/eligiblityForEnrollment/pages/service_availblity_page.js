@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
 
@@ -12,6 +12,9 @@ export default function ServiceAvailablityPage() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+const loginResponse= useSelector((state)=>state.login)
+const cpmny_id= loginResponse?.loginData?.data?.compony;
+
 
     const validationSchema = Yup.object().shape({
         zipCode: Yup.string().required("Please enter Zip code"),
@@ -24,7 +27,7 @@ export default function ServiceAvailablityPage() {
             zipCode: "",
         },
         onSubmit: (values) => {
-            const serviceProvider = "645a85198cd1ff499c8b99cd";
+            const serviceProvider = cpmny_id;
             const csr = "645c7bcfe5098ff6251a2255";
             const carrier = "6455532566d6fad6eac59e34";
             const dataToSend = { serviceProvider, csr, carrier, ...values };
