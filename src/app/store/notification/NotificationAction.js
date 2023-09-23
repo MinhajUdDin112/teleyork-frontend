@@ -49,9 +49,9 @@ export const getSentAllTemplateAction = createAsyncThunk("notification/sms/templ
 });
 
 //show all sent data action
-export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent", async (id, { rejectWithValue }) => {
+export const getSentByTemplateIdAction = createAsyncThunk("notification/sms/sent", async (body, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`${BASE_URL}/api/sms/sent/${id}`);
+        const response = await axios.get(`${BASE_URL}/api/sms/sent?templateId=${body.templateId}&compony=${body.company}`);
         return response.data;
     } catch (error) {
         return error;
