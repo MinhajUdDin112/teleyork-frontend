@@ -181,13 +181,9 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Contact Number <span className="steric">*</span></label>
-                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+999 999-9999" placeholder="+999 999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
+                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+999-999-9999" placeholder="+999 999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
                         {getFormErrorMessage("contact")}
-                        {/* {formik.touched.contact && formik.errors.contact ? (
-                            <p className="mt-0" style={{ color: "red" }}>
-                                {formik.errors.contact}
-                            </p>
-                        ) : null} */}
+                       
                     </div>
                 </div>
 
