@@ -26,3 +26,6 @@
 .acp_programs img{
 width: 100%;
 }
+.cursor-crosshair:hover{
+    cursor:not-allowed
+}
