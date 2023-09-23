@@ -50,12 +50,12 @@ const ShowDraftAll = () => {
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
-                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Template Data</h3>
+                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Draft Records</h3>
             </div>
             <div className="card mx-5 p-0 border-noround">
                 <div className="flex justify-content-between border-bottom-2 bg-orange-200 px-5 py-2">
                     <i className="pi pi-arrow-circle-left flex align-items-center" onClick={() => handleBack()} style={{ cursor: "pointer", fontSize: "2rem" }}></i>
-                    <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft SMS" onClick={handleSubmit} />
+                    <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft" onClick={handleSubmit} />
                 </div>
                 <div className="">
                     <DataTable value={draftByIdRes} showGridlines>
