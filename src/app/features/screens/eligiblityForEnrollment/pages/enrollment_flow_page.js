@@ -17,10 +17,8 @@ export default function EnrollmentFlowPage() {
     })
     const _id = id?.serviceAvailability?.data?._id;
 
-
     //fetchinh enrollment id  from response of zip code
-
-    const enrollment_Id = id?.serviceAvailability?.data?.enrollmentId;
+     const enrollment_Id = id?.serviceAvailability?.data?.enrollmentId;
 
 
     const items = [
@@ -51,10 +49,10 @@ export default function EnrollmentFlowPage() {
     ];
     let pages = [
 
-        PersonalInfoPage({ setActiveIndex: setActiveIndex, _id: _id, enrollmentId: enrollment_Id }),
-        Eligibility({ setActiveIndex: setActiveIndex, _id: _id, enrollmentId: enrollment_Id }),
-        plan({ setActiveIndex: setActiveIndex, _id: _id, enrollmentId: enrollment_Id }),
-        Preview({ setActiveIndex: setActiveIndex, _id: _id, enrollmentId: enrollment_Id })
+        PersonalInfoPage({ setActiveIndex: setActiveIndex }),
+        Eligibility({ setActiveIndex: setActiveIndex}),
+        plan({ setActiveIndex: setActiveIndex }),
+        Preview({ setActiveIndex: setActiveIndex })
     ];
     return (
         <div className="steps-demo">

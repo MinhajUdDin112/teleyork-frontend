@@ -135,3 +135,6 @@ width: 100%;
     text-shadow: 0 0 2px #37c5b6;
     font-size: 1.4rem;
 }
+.cursor-crosshair:hover{
+    cursor:not-allowed
+}

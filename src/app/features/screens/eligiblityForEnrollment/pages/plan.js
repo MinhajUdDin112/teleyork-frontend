@@ -20,6 +20,14 @@ const Plan = ({ setActiveIndex }) => {
     const [apidata, setapidata] = useState([]);
     const [selectedPlanId, setSelectedPlanId] = useState("");
 
+     const zipCode = useSelector((state) => {
+        return state.zip;
+    });
+
+const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
+    
+    const _id = zipCode?.serviceAvailability?.data?._id;
+
     useEffect(() => {
         const fetchData = async () => {
             await axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=645a85198cd1ff499c8b99cd`).then((resp) => {

@@ -16,7 +16,16 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import classNames from "classnames";
 
-const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
+const PersonalInfo = ({ handleNext }) => {
+
+    const zipCode = useSelector((state) => {
+        return state.zip;
+    });
+
+    const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
+
+    const _id = zipCode?.serviceAvailability?.data?._id;
+
 
     const [selectedOption, setSelectedOption] = useState('email');
     const [isSelfReceive, setIsSelfReceive] = useState(true);
@@ -53,7 +62,7 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
         onSubmit: (values, actions) => {
 
             const csr = "64e0b1b135a9428007da3526";
-            const userId = id;
+            const userId = _id;
             const dataToSend = { csr, userId, ...values };
             dispatch(addCustomerInfoAction(dataToSend));
             actions.resetForm();
@@ -120,7 +129,7 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
             <form onSubmit={formik.handleSubmit}>
 
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
-                    <h6 className="font-semibold">Enrollment id: {enrollmentId}</h6>
+                    <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
                     <Button label="Continue" type="submit" />
                 </div>
 
@@ -183,11 +192,7 @@ const PersonalInfo = ({ handleNext, id, enrollmentId }) => {
                         <label className="field_label">Contact Number <span className="steric">*</span></label>
                         <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+999-999-9999" placeholder="+999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
                         {getFormErrorMessage("contact")}
-                        {/* {formik.touched.contact && formik.errors.contact ? (
-                            <p className="mt-0" style={{ color: "red" }}>
-                                {formik.errors.contact}
-                            </p>
-                        ) : null} */}
+
                     </div>
                 </div>
 
