@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import PersonalInfo from '../PersonalInfo_com/PersonalInfo'
 import Address from "../PersonalInfo_com/Address";
 import Question1 from "../PersonalInfo_com/Question1";
-import Question2 from "../PersonalInfo_com/Question2";
-import Question3 from "../PersonalInfo_com/Question3";
-import { useSelector } from 'react-redux';
 
-export default function PersonalInfoPage({ setActiveIndex, _id, enrollmentId }) {
+
+export default function PersonalInfoPage({ setActiveIndex ,enrollment_id,_id }) {
 
     const [currentComponent, setCurrentComponent] = useState(1);
-
+   
 
 
     const handleNext = () => {
@@ -22,7 +20,6 @@ export default function PersonalInfoPage({ setActiveIndex, _id, enrollmentId }) 
             setActiveIndex(1);
         }
     };
-
 
     const handleBack = () => {
         if (currentComponent <= 3) {
@@ -37,19 +34,13 @@ export default function PersonalInfoPage({ setActiveIndex, _id, enrollmentId }) 
     let render;
     switch (currentComponent) {
         case 1:
-            render = <PersonalInfo handleNext={handleNext} handleBack={handleBack} id={_id} enrollmentId={enrollmentId} />;
+            render = <PersonalInfo handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
             break;
         case 2:
-            render = <Address handleNext={handleNext} handleBack={handleBack} id={_id} enrollmentId={enrollmentId} />;
+            render = <Address handleNext={handleNext} handleBack={handleBack}  enrollment_id={enrollment_id} _id={_id}  />;
             break;
         case 3:
-            render = <Question1 handleNext={handleNext} handleBack={handleBack} id={_id} enrollmentId={enrollmentId} />;
-            break;
-        case 4:
-            render = <Question2 handleNext={handleNext} handleBack={handleBack} id={_id} />;
-            break;
-        case 5:
-            render = <Question3 handleNext={handleNext} handleBack={handleBack} id={_id} />;
+            render = <Question1 handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id}  />;
             break;
         default:
             render = null;

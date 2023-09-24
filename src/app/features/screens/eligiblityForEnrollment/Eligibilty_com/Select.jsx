@@ -6,10 +6,8 @@ import * as Yup from "yup";
 import Axios from "axios";
 import BASE_URL from "../../../../../config";
 import placHolderImage from "../../../../../assets/images/placeholder_image.jpg";
-import { async } from "q";
-import { useSelector } from "react-redux";
 
-const Select = ({ handleNext, handleBack }) => {
+const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
 
     const [acpPrograms, setAcpPrograms] = useState([]);
     const [selectedAcpProgramId, setSelectedAcpProgramId] = useState(null);
@@ -19,11 +17,8 @@ const Select = ({ handleNext, handleBack }) => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
 
-    //fetchinh _id from response of zip code
-    const id = useSelector((state) => {
-        return state.zip;
-    })
-    const enrollmentUserId = id?.serviceAvailability?.data?._id;
+    
+    const enrollmentUserId = _id;
 
     const getAcpPrograms = async () => {
         try {
@@ -38,29 +33,38 @@ const Select = ({ handleNext, handleBack }) => {
         getAcpPrograms();
     }, []);
 
-    const validationSchema = Yup.object().shape({
-        selectedAcpProgramId: Yup.string().required("Please select a program to continue"),
-    });
+    // const validationSchema = Yup.object().shape({
+    //     selectedAcpProgramId: Yup.string().required("Please select a program to continue"),
+    // });
 
-    const formik = useFormik({
-        initialValues: {
-            selectedAcpProgramId: "",
-        },
-        validationSchema: validationSchema,
-        onSubmit: async () => {
+    // const formik = useFormik({
+    //     initialValues: {
+    //         selectedAcpProgramId: "",
+    //     },
+    //     validationSchema: validationSchema,
+       
+   // });
 
-            const data = {
-                csr: "645c7bcfe5098ff6251a2255",
-                userId: enrollmentUserId,
-                program: selectedAcpProgramId
-            }
+   const postData = async () => {
 
-            const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
-            if (res?.status === 200 || res?.status === 201) {
-                handleNext();
-            }
-        },
-    });
+    const data = {
+        csr: "645c7bcfe5098ff6251a2255",
+        userId: enrollmentUserId,
+        program: selectedAcpProgramId
+    }
+    handleNext();
+    const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
+
+    // if (res?.status === 200 || res?.status === 201) {
+    //     handleNext();
+    // }
+    // else{
+    //     console.log("status code is not 200")
+    // }
+   
+}
+
+
 
     const handleAcpSelection = (acpId) => {
 
@@ -84,13 +88,13 @@ const Select = ({ handleNext, handleBack }) => {
                         <Button
                             label="Continue"
                             type="submit"
-                            onClick={formik.handleSubmit}
+                            onClick={postData}
                             disabled={btnState}
                         />
                     </div>
                 </div>
                 <div>
-                    <h6>Enrollment ID: ETC175698</h6>
+                    <h6>Enrollment ID:{enrollment_id}</h6>
                 </div>
                 <br />
                 <div>

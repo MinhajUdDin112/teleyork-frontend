@@ -4,29 +4,16 @@ import { Card } from "primereact/card";
 import axios from "axios";
 import BASE_URL from "../../../../../config";
 import { Divider } from "primereact/divider";
-import { useSelector } from "react-redux/es/hooks/useSelector";
+import Axios from "axios";
 
-const Plan = ({ setActiveIndex }) => {
+const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
 
     const [btnState, setBtnState] = useState(true)
 
-    //fetchinh enrollment id  from response of zip code
-    const id = useSelector((state) => {
-        return state.zip;
-    })
-
-    const enrollment_Id = id?.serviceAvailability?.data?.enrollmentId;
 
     const [apidata, setapidata] = useState([]);
     const [selectedPlanId, setSelectedPlanId] = useState("");
 
-     const zipCode = useSelector((state) => {
-        return state.zip;
-    });
-
-const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
-    
-    const _id = zipCode?.serviceAvailability?.data?._id;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -49,6 +36,23 @@ const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
         if (selectedPlanId) { setBtnState(false) } else { setBtnState(true) }
     }, [selectedPlanId]);
 
+    const postData = async () => {
+        const data = {
+            csr: "645c7bcfe5098ff6251a2255",
+            userId: _id,
+            plan: selectedPlanId
+        }
+       
+        setActiveIndex(3);
+        const res = await Axios.post(`${BASE_URL}/api/user/plan`, data);
+        // if (res?.status === 200 || res?.status === 201  ) {
+        //     setActiveIndex(3);
+        // }
+       
+       
+    }
+    
+    
     return (
         <>
             <div className="card">
@@ -59,15 +63,13 @@ const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
                         }} />
                     <Button
                         label="Continue"
-                        onClick={() => {
-                            setActiveIndex(3);
-                        }}
+                        onClick={postData}
                         disabled={btnState}
                     />
                 </div>
                 <br />
                 <div>
-                    <h6>Enrollment_Id:{enrollment_Id}</h6>
+                    <h6>Enrollment_Id:{enrollment_id}</h6>
                 </div>
                 <br />
                 <div>

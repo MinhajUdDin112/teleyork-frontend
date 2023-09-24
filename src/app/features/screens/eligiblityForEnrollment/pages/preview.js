@@ -5,33 +5,24 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { useEffect } from "react";
 import Axios from "axios";
 import BASE_URL from "../../../../../config";
-const Preview = ({ setActiveIndex }) => {
+const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const [data, setData] = useState([]);
-    const pages = ["preview"];
 
-    //fetchinh _id from response of zip code
-    const id = useSelector((state) => {
-        return state.zip;
-    });
+    // const loginResponse = useSelector((state) => state.login);
+    // const cpmny_id = loginResponse?.loginData?.data?.compony;
 
-    const loginResponse = useSelector((state) => state.login);
-    const cpmny_id = loginResponse?.loginData?.data?.compony;
+    const loginRes = localStorage.getItem("zipData");
+    const parseLoginRes = JSON.parse(loginRes);
 
     const getData = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?serviceProvider=${cpmny_id}`);
-        const cmplt_enroll = response?.data;
-        setData(cmplt_enroll);
-        console.log("data is ",cmplt_enroll);
+        const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseLoginRes?._id}`);
+        setData(response?.data?.data);
     };
     useEffect(() => {
         getData();
     }, []);
 
-    
-    //fetchinh enrollment id  from response of zip code
-    const enrollment_Id = id?.serviceAvailability?.data?.enrollmentId;
-   
     return (
         <>
             <div className="card">
@@ -42,7 +33,7 @@ const Preview = ({ setActiveIndex }) => {
                             setActiveIndex(2);
                         }}
                     />
-                    <Button
+                    {/* <Button
                         label="Continue"
                         onClick={() => {
                             if (selectedPage < 1) {
@@ -51,123 +42,103 @@ const Preview = ({ setActiveIndex }) => {
                                 });
                             }
                         }}
-                    />
+                    /> */}
                 </div>
                 <br></br>
 
-
-              
-            <div>
                 <div>
-                    <h6>Enrollment_Id:{enrollment_Id}</h6>
+                    <div>
+                        <h6>Enrollment_Id:{enrollment_id}</h6>
+                    </div>
+
+                    <br></br>
+                    <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
+                    <br />
+
+                    {data &&
+                        [data].map((item) => {
+                            return (
+                                <>
+                                    <div key={item._id} className="flex justify-content-around">
+                                        <div className="border-2 w-5 pt-2">
+                                            <div className="flex border-bottom-2">
+                                                <p className="w-6 ml-4">Name:</p>
+                                                <p className="w-6">{item?.firstName}</p>
+                                            </div>
+                                            <div className="flex border-bottom-2 pt-2">
+                                                <p className="w-6 ml-4">City:</p>
+                                                <p >{item?.city}</p>
+                                            </div>
+                                            <div className="flex border-bottom-2 pt-2">
+                                                <p className="w-6 ml-4">Zip Code:</p>
+                                                <p className="w-6">{item?.zip}</p>
+                                            </div>
+                                            <div className="flex border-bottom-2 pt-2">
+                                                <p className="w-6 ml-4">Telephone:</p>
+                                                <p className="w-6">{item?.contact}</p>
+                                            </div>
+                                            <div className="flex pt-2">
+                                                <p className="w-6 ml-4">DOB:</p>
+                                                <p className="w-6">{item?.DOB}</p>
+                                            </div>
+                                        </div>
+                                        <div className="border-2 w-5 ">
+                                            <div className="flex border-bottom-2 pt-2">
+                                                <p className="w-6 ml-4">Service Address:</p>
+                                                <p className="w-6">{item?.address1}</p>
+                                            </div>
+                                            <div className="flex border-bottom-2 pt-2">
+                                                <p className="w-6 ml-4">State:</p>
+                                                <p className="w-6">{item?.state}</p>
+                                            </div>
+                                            <div className="flex border-bottom-2 pt-2">
+                                                <p className="w-6 ml-4">Email:</p>
+                                                <p className="w-6">{item?.email}</p>
+                                            </div>
+                                            <div className="flex border-bottom-2 pt-2">
+                                                <p className="w-6 ml-4">SSN:</p>
+                                                <p className="w-6">{item?.SSN}</p>
+                                            </div>
+                                            <div className="flex pt-2">
+                                                <p className="w-6 ml-4">Plan:</p>
+                                                <p className="w-6">{item?.plan}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        })}
+                    <br />
+                    <br />
+                    <div className="flex">
+                        <Checkbox inputId="cb1" value="New York"></Checkbox>
+                        <label htmlFor="cb1" className="p-checkbox-label mx-2">
+                            <p>
+                                I authorize Tone Comms or its duly appointed representative to: (1) access any records required to verify my statements herein; (2) to confirm my continued eligibility for Affordable Connectivity Program (ACP) assistance; (3) to update my address to proper mailing
+                                address format. (4) to provide my name, telephone number, and address to the versal Service Administrative Company (USAC), the administrator of the program and/ or its agents for the purpose of verifying that I do not receive more than one ACP benefit
+                            </p>
+                            <br />
+                            <p>
+                                Tone Comms is an Affordable Connectivity Program (ACP) supported service. ACP is a federal benefit and only eligible subscribers may enroll. Customers who witfully make false statements to obtain the benefit can be punished by fine, imprisonment, or can be barred from
+                                the program. ACP is available for only one benefit per household. A household is defined as any individual or group of individuals who live together at the same address and share income and expenses. A household is not permitted to receive ACP benefits from multiple
+                                providers. Violation of the one-per-household rule constitutes a violation of FCC rules and will result in the customers de-enrollment from the Affordable Connectivity Program The ACP benefit is non-transferable, and a customer may not transfer his or her benefit to
+                                another person.
+                            </p>
+                            <br />
+                            <p>
+                                I further consent to receive calls and/ or text messages that may deliver auto dialed or pre-recorded messages from Tone Comms or its duly appointed agent either using my telephone number assigned by Tone Comms or provided by me herein or later. I understand this is
+                                not a condition of purchase.
+                            </p>
+                            <br />
+                            <p className="text-xl font-semibold">By clicking the confirm Signature button, you are electronically signing this form.</p>
+                            <p>Electronically Signed by WEECY WIGGINS February 17,2023</p>
+                        </label>
+                    </div>
+                    <div className="mt-5">
+                        <p>Request User For additional Documents</p>
+                        <Button label="Send" className="p-button-success" />
+                    </div>
                 </div>
-
-                <br></br>
-                <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
-                <br />
-                
-                {
-                   data && [data].map((item)=>{
-                        return(
-                            <>
-                            <div className="flex justify-content-around">
-                       <div className="border-2 w-5 pt-2">
-                           <div className="flex border-bottom-2">
-                               <p className="w-6 ml-4">Name:</p>
-                               <p className="w-6">{item?.firstName}</p>
-                           </div>
-                           <div className="flex border-bottom-2 pt-2">
-                               <p className="w-6 ml-4">City:</p>
-                               <p className="w-6">{item?.city}</p>
-                           </div>
-                           <div className="flex border-bottom-2 pt-2">
-                               <p className="w-6 ml-4">Zip Code:</p>
-                               <p className="w-6">{item?.zip}</p>
-                           </div>
-                           <div className="flex border-bottom-2 pt-2">
-                               <p className="w-6 ml-4">Telephone:</p>
-                               <p className="w-6">{item?.contact}</p>
-                           </div>
-                           <div className="flex pt-2">
-                               <p className="w-6 ml-4">DOB:</p>
-                               <p className="w-6">{item?.DOB}</p>
-                           </div>
-                       </div>
-                       <div className="border-2 w-5 ">
-                           <div className="flex border-bottom-2 pt-2">
-                               <p className="w-6 ml-4">Service Address:</p>
-                               <p className="w-6">{item?.address1}</p>
-                           </div>
-                           <div className="flex border-bottom-2 pt-2">
-                               <p className="w-6 ml-4">State:</p>
-                               <p className="w-6">{item?.state}</p>
-                           </div>
-                           <div className="flex border-bottom-2 pt-2">
-                               <p className="w-6 ml-4">Email:</p>
-                               <p className="w-6">{item?.email}</p>
-                           </div>
-                           <div className="flex border-bottom-2 pt-2">
-                               <p className="w-6 ml-4">SSN:</p>
-                               <p className="w-6">{item?.SSN}</p>
-                           </div>
-                           <div className="flex pt-2">
-                               <p className="w-6 ml-4">Plan:</p>
-                               <p className="w-6">{item?.plan}</p>
-                           </div>
-                       </div>
-                   </div>
-                           </>
-                        )
-                       
-})
-                }
-               
-
-
-                <br />
-                <br />
-                <div className="flex">
-                    <Checkbox inputId="cb1" value="New York"></Checkbox>
-                    <label htmlFor="cb1" className="p-checkbox-label mx-2">
-                        <p>
-                            I authorize Tone Comms or its duly appointed representative to: (1) access any records required to verify my statements herein; (2) to confirm my continued eligibility for Affordable Connectivity Program (ACP) assistance; (3) to update my address to proper mailing address
-                            format. (4) to provide my name, telephone number, and address to the versal Service Administrative Company (USAC), the administrator of the program and/ or its agents for the purpose of verifying that I do not receive more than one ACP benefit
-                        </p>
-                        <br />
-                        <p>
-                            Tone Comms is an Affordable Connectivity Program (ACP) supported service. ACP is a federal benefit and only eligible subscribers may enroll. Customers who witfully make false statements to obtain the benefit can be punished by fine, imprisonment, or can be barred from the
-                            program. ACP is available for only one benefit per household. A household is defined as any individual or group of individuals who live together at the same address and share income and expenses. A household is not permitted to receive ACP benefits from multiple
-                            providers. Violation of the one-per-household rule constitutes a violation of FCC rules and will result in the customers de-enrollment from the Affordable Connectivity Program The ACP benefit is non-transferable, and a customer may not transfer his or her benefit to
-                            another person.
-                        </p>
-                        <br />
-                        <p>
-                            I further consent to receive calls and/ or text messages that may deliver auto dialed or pre-recorded messages from Tone Comms or its duly appointed agent either using my telephone number assigned by Tone Comms or provided by me herein or later. I understand this is not a
-                            condition of purchase.
-                        </p>
-                        <br />
-                        <p className="text-xl font-semibold">By clicking the confirm Signature button, you are electronically signing this form.</p>
-                        <p>Electronically Signed by WEECY WIGGINS February 17,2023</p>
-                    </label>
-                </div>
-                <div className="mt-5">
-                    <p>Request User For additional Documents</p>
-                    <Button label="Send" className="p-button-success" />
-                </div>
-            </div>
-       
-
-
-
-
-
-
-
-
-
-
-
-               
             </div>
         </>
     );

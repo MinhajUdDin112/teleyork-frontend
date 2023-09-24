@@ -7,18 +7,13 @@ import { InputText } from "primereact/inputtext";
 import { RadioButton } from "primereact/radiobutton";
 import { Checkbox } from "primereact/checkbox";
 import { useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import classNames from "classnames";
 
-const Address = ({ handleNext, id, handleBack }) => {
-    const zipCode = useSelector((state) => {
-        return state.zip;
-    });
-
-    const zipcode = zipCode?.serviceAvailability?.data?.zip;
-
-    const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
+const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const dispatch = useDispatch();
 
     const [confrimAddress, setConfrimAddress] = useState("");
@@ -27,29 +22,24 @@ const Address = ({ handleNext, id, handleBack }) => {
     const [isDifferent, setIsDifferent] = useState();
     const [isPoBox, setIsPoBox] = useState();
 
-    
+     const zipResponse = useSelector((state)=>state.zip)
+     const zipCode = zipResponse?.serviceAvailability?.data?.zip;
+     const zipCity =zipResponse?.serviceAvailability?.data?.city;
+     const zipState = zipResponse?.serviceAvailability?.data?.state;
+
+
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
-        city: Yup.string().required("city is required"),
-        state: Yup.string().required("state is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
-        // mailingAddress1: Yup.string().required("Mailing Address1  is required"),
-        // mailingZip: Yup.string().required("Zip code is required"),
-        // mailingCity: Yup.string().required("city is required"),
-        // mailingState: Yup.string().required("state is required"),
-        // PoBoxAddress: Yup.string().required("This is required"),
-        // poBoxZip: Yup.string().required("This is required"),
-        // poBoxState: Yup.string().required("This is required"),
-        // poBoxCity: Yup.string().required("This is required"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
             address1: "",
             address2: "",
-            zip:"",
-            city: "",
-            state: "",
+            zip: zipCode,
+            city: zipCity,
+            state: zipState,
             isTemporaryAddress: tempAdd,
             postal: "",
             isServiceAddress: "",
@@ -57,50 +47,45 @@ const Address = ({ handleNext, id, handleBack }) => {
             isPOboxAddress: "",
             mailingAddress1: "",
             mailingAddress2: "",
-            mailingZip: "",
-            mailingCity: "",
-            mailingState: "",
+            mailingZip: zipCode,
+            mailingCity: zipCity,
+            mailingState: zipState,
             PoBoxAddress: "",
-            poBoxZip: "",
-            poBoxState: "",
-            poBoxCity: ""
+            poBoxZip: zipCode,
+            poBoxState: zipState,
+            poBoxCity: zipCity,
         },
         onSubmit: (values, actions) => {
+            const userId = _id;
             const dataToSend = {
                 address1: formik.values.address1,
                 address2: formik.values.address2,
-                zip:zipCode,
-                city: "",
-                state: "",
+                zip: zipCode,
+                city: zipCity,
+                state: zipState,
                 isTemporaryAddress: tempAdd,
                 postal: formik.values.postal,
-                isServiceAddress: true,
+                isServiceAddress: false,
                 isNotServiceAddress: false,
                 isPOboxAddress: false,
                 mailingAddress1: formik.values.mailingAddress1,
                 mailingAddress2: formik.values.mailingAddress2,
-                mailingZip: zipcode,
-                mailingCity: zipcode,
-                mailingState: zipcode,
+                mailingZip: formik.values.mailingZip,
+                mailingCity: formik.values.mailingCity,
+                mailingState: formik.values.mailingState,
                 PoBoxAddress: formik.values.PoBoxAddress,
-                poBoxZip: zipcode,
-                poBoxState: zipcode,
-                poBoxCity: zipcode,
+                poBoxZip: formik.values.poBoxZip,
+                poBoxState: formik.values.poBoxState,
+                poBoxCity: formik.values.poBoxCity,
                 userId: userId,
                 csr: "645c7bcfe5098ff6251a2255",
             };
-
             console.log("values", values);
             actions.resetForm();
-            handleNext();
-            const userId = id;
-
             dispatch(addCustomerAddressAction(dataToSend));
+            handleNext();
         },
     });
-    
-
-    
 
     const handleSame = () => {
         formik.setFieldValue("isServiceAddress", true);
@@ -112,25 +97,25 @@ const Address = ({ handleNext, id, handleBack }) => {
     };
 
     const handleDifferent = () => {
-        formik.setFieldValue("isServiceAddress", false);
         formik.setFieldValue("isNotServiceAddress", true);
-        formik.setFieldValue("isPoBoxAddress", false);
+        formik.setFieldValue("isServiceAddress", false);
+       formik.setFieldValue("isPoBoxAddress", false);
         setIsSame(false);
         setIsDifferent(true);
         setIsPoBox(false);
     };
 
     const handlePobox = () => {
+        formik.setFieldValue("isPoBoxAddress", true);
         formik.setFieldValue("isServiceAddress", false);
         formik.setFieldValue("isNotServiceAddress", false);
-        formik.setFieldValue("isPoBoxAddress", true);
+       
         setIsSame(false);
         setIsDifferent(false);
         setIsPoBox(true);
     };
 
     const handleAddress = (e) => {
-        console.log(e);
         setTempAdd(e.target.value);
     };
 
@@ -171,17 +156,23 @@ const Address = ({ handleNext, id, handleBack }) => {
                         <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^[a-zA-Z\s]*$/} />
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">Zip Code</p>
-                        <InputText value={formik.values.zip} name="zip" className="w-21rem cursor-crosshair" disabled  />
+                        <p className="m-0">
+                            Zip Code <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                        </p>
+                        <InputText value={formik.values.zip} name="zip" disabled className="w-21rem disable-color" />
                     </div>
 
                     <div className="mr-3 mb-3">
-                        <p className="m-0">State</p>
-                        <InputText type="text" value={formik.values.state} name="state" disabled className="w-21rem" />
+                        <p className="m-0">
+                            State <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                        </p>
+                        <InputText type="text" value={formik.values.state} name="state" disabled className="w-21rem disable-color" />
                     </div>
                     <div className="mr-3 mb-3">
-                        <p className="m-0">City</p>
-                        <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem" />
+                        <p className="m-0">
+                            City <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                        </p>
+                        <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem disable-color" />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Postal Code</p>
@@ -198,6 +189,7 @@ const Address = ({ handleNext, id, handleBack }) => {
                         <div className="flex align-items-center ml-2">
                             <Checkbox id="isTemporaryAddress" value={true} checked={tempAdd === true} onChange={(e) => handleAddress(e)}></Checkbox>
                             <label className="ml-2">Yes</label>
+                            <div />
                         </div>
                     </div>
                 </div>
@@ -237,19 +229,23 @@ const Address = ({ handleNext, id, handleBack }) => {
                                 <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} />
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label className="field_label">Zip Code </label>
+                                <label className="field_label">
+                                    Zip Code <span className="steric">*</span>
+                                </label>
                                 <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
                                 {getFormErrorMessage("mailingZip")}
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label className="field_label">State </label>
-                                <InputText id="mailingState" value={formik.values.mailingState} disabled />
-                                {getFormErrorMessage("mailingState")}
+                                <label className="field_label">
+                                    State <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                </label>
+                                <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label className="field_label">City </label>
-                                <InputText id="mailingCity" value={formik.values.mailingCity} onChange={formik.handleChange} disabled />
-                                {getFormErrorMessage("mailingCity")}
+                                <label className="field_label">
+                                    City <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                </label>
+                                <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color" />
                             </div>
                         </div>
                     </>
@@ -265,18 +261,24 @@ const Address = ({ handleNext, id, handleBack }) => {
                                 {getFormErrorMessage("PoBoxAddress")}
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label className="field_label">Zip Code </label>
+                                <label className="field_label">
+                                    Zip Code <span className="steric">*</span>
+                                </label>
                                 <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} maxLength={5} />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    State
+                                    <p>
+                                        State <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                    </p>
                                 </label>
-                                <InputText id="poBoxState" value={formik.values.poBoxState} onChange={formik.handleChange} disabled />
+                                <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label className="field_label">City </label>
-                                <InputText id="poBoxCity" value={formik.values.poBoxCity} onChange={formik.handleChange} disabled />
+                                <label className="field_label">
+                                    City <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                </label>
+                                <InputText id="poBoxCity" value={formik.values.poBoxCity} className="disable-color" disabled />
                             </div>
                         </div>
                     </>
@@ -287,3 +289,7 @@ const Address = ({ handleNext, id, handleBack }) => {
 };
 
 export default Address;
+
+
+
+

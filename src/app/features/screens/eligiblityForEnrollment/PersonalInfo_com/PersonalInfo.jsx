@@ -16,15 +16,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import classNames from "classnames";
 
-const PersonalInfo = ({ handleNext }) => {
+const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
 
-    const zipCode = useSelector((state) => {
-        return state.zip;
-    });
+// fetchinh enrollment id and _id
 
-const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
-    
-    const _id = zipCode?.serviceAvailability?.data?._id;
+//   const zipCode = useSelector((state)=>state.zip)
+//       const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
+//      const _id = zipCode?.serviceAvailability?.data?._id;
 
 
     const [selectedOption, setSelectedOption] = useState('email');
@@ -178,13 +176,13 @@ const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Driving License <span className="steric">*</span></label>
-                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("drivingLicense") }, "input_text")} />
+                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("drivingLicense") }, "input_text")} keyfilter={/^[a-zA-Z0-9]*$/} />
                         {getFormErrorMessage("drivingLicense")}
                     </div>
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Email <span className="steric">*</span></label>
-                        <InputText id="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("email") }, "input_text")} />
+                        <InputText id="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("email") }, "input_text")} keyfilter={/^[a-zA-Z0-9]*$/} />
                         {getFormErrorMessage("email")}
                     </div>
 

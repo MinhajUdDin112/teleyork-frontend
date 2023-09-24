@@ -9,7 +9,15 @@
 }
 
 .steric {
-    color: red;
+    color: rgb(175, 59, 59);
+}
+
+.icon-size{
+    font-size: 14px;
+}
+.disable-color{
+    color: rgb(13, 5, 5);
+    font-size: 16px;
 }
 .yesButton{
     background-color: green;
