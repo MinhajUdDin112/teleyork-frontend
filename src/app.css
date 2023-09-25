@@ -143,3 +143,44 @@ width: 100%;
     text-shadow: 0 0 2px #37c5b6;
     font-size: 1.4rem;
 }
+
+
+
+
+
+  
+  
+  /* Style for answer buttons (Yes) */
+  .answer-button.green {
+    background-color: green;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for answer buttons (No) */
+  .answer-button.red {
+    background-color: rgba(255, 0, 0, 0.937);
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for answer button text */
+  .answer-button span {
+    font-weight: bold;
+  }
+  .button-design{
+    margin-right: 10px;
+    font-size: bold;
+    padding: 12px 26px;
+    border-radius: 6px;
+    color: white;
+    background-color: rgba(0, 0, 255, 0.724);
+    border: none;
+
+  }

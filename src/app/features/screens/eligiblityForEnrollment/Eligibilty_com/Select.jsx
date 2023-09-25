@@ -52,15 +52,15 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
         userId: enrollmentUserId,
         program: selectedAcpProgramId
     }
-    handleNext();
+   // handleNext();
     const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
 
-    // if (res?.status === 200 || res?.status === 201) {
-    //     handleNext();
-    // }
-    // else{
-    //     console.log("status code is not 200")
-    // }
+    if (res?.status === 200 || res?.status === 201) {
+        handleNext();
+    }
+    else{
+        console.log("status code is not 200")
+    }
    
 }
 

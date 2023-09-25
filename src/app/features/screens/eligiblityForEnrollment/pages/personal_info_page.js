@@ -4,7 +4,7 @@ import Address from "../PersonalInfo_com/Address";
 import Question1 from "../PersonalInfo_com/Question1";
 
 
-export default function PersonalInfoPage({ setActiveIndex ,enrollment_id,_id }) {
+export default function PersonalInfoPage({ setActiveIndex ,enrollment_id ,_id }) {
 
     const [currentComponent, setCurrentComponent] = useState(1);
    

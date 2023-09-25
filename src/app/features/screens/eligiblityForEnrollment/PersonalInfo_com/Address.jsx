@@ -23,9 +23,10 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [isPoBox, setIsPoBox] = useState();
 
      const zipResponse = useSelector((state)=>state.zip)
-     const zipCode = zipResponse?.serviceAvailability?.data?.zip;
-     const zipCity =zipResponse?.serviceAvailability?.data?.city;
-     const zipState = zipResponse?.serviceAvailability?.data?.state;
+     const zipCode = zipResponse?.serviceAvailability?.data?.data?.zip;
+     
+     const zipCity =zipResponse?.serviceAvailability?.data?.data?.city;
+     const zipState = zipResponse?.serviceAvailability?.data?.data?.state;
 
 
     const validationSchema = Yup.object().shape({
@@ -40,11 +41,11 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             zip: zipCode,
             city: zipCity,
             state: zipState,
-            isTemporaryAddress: tempAdd,
             postal: "",
-            isServiceAddress: "",
-            isNotServiceAddress: "",
-            isPOboxAddress: "",
+            isTemporaryAddress: tempAdd,
+            isSameServiceAddress: "",
+            isNotSameServiceAddress: "",
+            isPoBoxAddress: "",
             mailingAddress1: "",
             mailingAddress2: "",
             mailingZip: zipCode,
@@ -65,9 +66,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 state: zipState,
                 isTemporaryAddress: tempAdd,
                 postal: formik.values.postal,
-                isServiceAddress: false,
-                isNotServiceAddress: false,
-                isPOboxAddress: false,
+                isSameServiceAddress:formik.values.isSameServiceAddress,
+                isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
+                isPoBoxAddress: formik.values.isPOboxAddress,
                 mailingAddress1: formik.values.mailingAddress1,
                 mailingAddress2: formik.values.mailingAddress2,
                 mailingZip: formik.values.mailingZip,
@@ -88,8 +89,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     });
 
     const handleSame = () => {
-        formik.setFieldValue("isServiceAddress", true);
-        formik.setFieldValue("isNotServiceAddress", false);
+        formik.setFieldValue("isSameServiceAddress", true);
+        formik.setFieldValue("isNotSameServiceAddress", false);
         formik.setFieldValue("isPoBoxAddress", false);
         setIsSame(true);
         setIsDifferent(false);
@@ -97,8 +98,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     };
 
     const handleDifferent = () => {
-        formik.setFieldValue("isNotServiceAddress", true);
-        formik.setFieldValue("isServiceAddress", false);
+        formik.setFieldValue("isNotSameServiceAddress", true);
+        formik.setFieldValue("isSameServiceAddress", false);
        formik.setFieldValue("isPoBoxAddress", false);
         setIsSame(false);
         setIsDifferent(true);
@@ -107,8 +108,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
 
     const handlePobox = () => {
         formik.setFieldValue("isPoBoxAddress", true);
-        formik.setFieldValue("isServiceAddress", false);
-        formik.setFieldValue("isNotServiceAddress", false);
+        formik.setFieldValue("isSameServiceAddress", false);
+        formik.setFieldValue("isNotSameServiceAddress", false);
        
         setIsSame(false);
         setIsDifferent(false);
@@ -176,7 +177,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Postal Code</p>
-                        <InputText type="text" value={formik.values.postal} name="postal" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\d{0,5}$/} />
+                        <InputText type="text" value={formik.values.postal} name="postal" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\d{0,5}$/}  minLength={5} maxLength={5} />
                     </div>
                 </div>
                 <div>

@@ -10,8 +10,8 @@ export default function EnrollmentFlowPage() {
     const [activeIndex, setActiveIndex] = useState(0);
 
     const zipCode = useSelector((state)=>state.zip)
-    const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
-   const _id = zipCode?.serviceAvailability?.data?._id;
+    const enrollment_id = zipCode?.serviceAvailability?.data?.data?.enrollmentId;
+   const _id = zipCode?.serviceAvailability?.data?.data?._id;
 
     const items = [
         {

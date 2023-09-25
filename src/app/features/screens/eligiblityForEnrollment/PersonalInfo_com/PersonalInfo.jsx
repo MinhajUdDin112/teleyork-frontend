@@ -128,7 +128,7 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
 
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
-                    <Button label="Continue" type="submit" />
+                    <Button  label="Continue" type="submit"  />
                 </div>
 
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>

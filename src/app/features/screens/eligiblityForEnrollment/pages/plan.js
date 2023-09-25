@@ -43,11 +43,10 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
             plan: selectedPlanId
         }
        
-        setActiveIndex(3);
         const res = await Axios.post(`${BASE_URL}/api/user/plan`, data);
-        // if (res?.status === 200 || res?.status === 201  ) {
-        //     setActiveIndex(3);
-        // }
+        if (res?.status === 200 || res?.status === 201  ) {
+            setActiveIndex(3);
+        }
        
        
     }

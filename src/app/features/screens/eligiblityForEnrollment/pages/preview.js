@@ -9,16 +9,16 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const [data, setData] = useState([]);
 
-    // const loginResponse = useSelector((state) => state.login);
-    // const cpmny_id = loginResponse?.loginData?.data?.compony;
+    
+    const zipRes = useSelector((state)=>state.zip);
+    const id = zipRes?.serviceAvailability?.data?.data?._id;
 
-    const loginRes = localStorage.getItem("zipData");
-    const parseLoginRes = JSON.parse(loginRes);
-
+  
     const getData = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseLoginRes?._id}`);
+        const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${id&&id}`);
         setData(response?.data?.data);
     };
+
     useEffect(() => {
         getData();
     }, []);
