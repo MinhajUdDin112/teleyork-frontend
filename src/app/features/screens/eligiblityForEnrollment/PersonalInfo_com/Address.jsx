@@ -101,7 +101,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 userId: userId,
                 csr: "645c7bcfe5098ff6251a2255",
             };
-            console.log("values", values);
             actions.resetForm();
             dispatch(addCustomerAddressAction(dataToSend));
             handleNext();
@@ -227,20 +226,20 @@ useEffect(() => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Zip Code <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                            Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                         </p>
                         <InputText value={formik.values.zip} name="zip" disabled className="w-21rem disable-color" />
                     </div>
 
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            State <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                         </p>
                         <InputText type="text" value={formik.values.state} name="state" disabled className="w-21rem disable-color" />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            City <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                            City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                         </p>
                         <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem disable-color" />
                     </div>
@@ -307,13 +306,13 @@ useEffect(() => {
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    State <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                    State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
                                 <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    City <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                    City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
                                 <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color" />
                             </div>
@@ -339,14 +338,14 @@ useEffect(() => {
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     <p>
-                                        State <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                        State <FontAwesomeIcon className="disable-icon-coloricon-size" icon={faBan} />{" "}
                                     </p>
                                 </label>
                                 <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    City <FontAwesomeIcon className="steric icon-size" icon={faBan} />{" "}
+                                    City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
                                 <InputText id="poBoxCity" value={formik.values.poBoxCity} className="disable-color" disabled />
                             </div>

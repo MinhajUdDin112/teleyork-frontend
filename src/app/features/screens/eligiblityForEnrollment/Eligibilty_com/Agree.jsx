@@ -27,19 +27,7 @@ const dispatch= useDispatch();
     const [permaAdd, setPermaAdd] = useState(false);
 
     const validationSchema = Yup.object().shape({
-        checkbox1: Yup.string().required("check box is required"),
-        checkbox2: Yup.string().required("check box is required"),
-        checkbox3: Yup.string().required("check box is required"),
-        checkbox4: Yup.string().required("check box is required"),
-        checkbox5: Yup.string().required("check box is required"),
-        checkbox6: Yup.string().required("check box is required"),
-        checkbox7: Yup.string().required("check box is required"),
-        checkbox8: Yup.string().required("check box is required"),
-        checkbox9: Yup.string().required("check box is required"),
-        checkbox10: Yup.string().required("check box is required"),
-        checkbox11: Yup.string().required("check box is required"),
-        checkbox12: Yup.string().required("check box is required"),
-        checkbox13: Yup.string().required("check box is required"),
+        checkAll: Yup.string().required("please Select all CheckBox"),
       
     });
     const formik = useFormik({
@@ -260,8 +248,7 @@ const dispatch= useDispatch();
                     <p className="font-semibold" style={{ color: "red" }}>
                         Please read and check all Penalty Of Perjury and accept Terms and Conditions.
                     </p>
-                    <div className="p-3">
-                    <div className="field-checkbox">
+                    <div className="field-checkbox ">
                             <Checkbox
                                 inputId="checkAll"
                                 onChange={(e) => {
@@ -271,6 +258,8 @@ const dispatch= useDispatch();
                             />
                             <label htmlFor="checkAll"> Select All.</label>
                         </div>
+                    <div className="p-3 ml-3">
+                   
                         <div className="field-checkbox">
                             <Checkbox
                                 inputId="checkbox1"
