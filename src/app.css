@@ -190,4 +190,15 @@ width: 100%;
   input:disabled {
     cursor: not-allowed;
   }
-  
+  .final-pre{
+   justify-content: center;
+    width: 900px;
+    align-items: center;
+    margin-left: 170px;
+    margin-top: 60px;
+box-shadow: 2px;
+  }
+.final-btn{
+    margin-top: 20px;
+    margin-left: 780px;
+  }
