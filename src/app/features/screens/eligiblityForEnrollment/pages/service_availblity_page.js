@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
-
+import { ProgressSpinner } from "primereact/progressspinner";
 export default function ServiceAvailabilityPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ export default function ServiceAvailabilityPage() {
         <div className="card col-4 ">
           <form className="my-4" onSubmit={formik.handleSubmit}>
             <h6>Please enter zip code to check service availability</h6>
-            <InputText
+            {loading? (  <InputText
               type="text"
               name="zipCode"
               className="col-12 mb-3"
@@ -63,7 +63,18 @@ export default function ServiceAvailabilityPage() {
               keyfilter={/^\d{0,5}$/}
               minLength={5}
               maxLength={5}
-            />
+              disabled
+            />) : (  <InputText
+              type="text"
+              name="zipCode"
+              className="col-12 mb-3"
+              value={formik.values.zipCode}
+              onChange={formik.handleChange}
+              keyfilter={/^\d{0,5}$/}
+              minLength={5}
+              maxLength={5}
+            />)}
+          
             {formik.touched.zipCode && formik.errors.zipCode ? (
               <p className="mt-0" style={{ color: "red" }}>
                 {formik.errors.zipCode}
@@ -72,11 +83,15 @@ export default function ServiceAvailabilityPage() {
             {errorMessage && (
               <p style={{ color: "red" }}>{errorMessage}</p>
             )}
-            <Button
+            {
+              loading? (<ProgressSpinner style={{width: '40px', height: '40px' , marginLeft:'160px',color:'blue' }} strokeWidth="4" animationDuration=".5s"  />):  <Button
               label={loading ? "Verifying..." : "Submit"}
               type="submit"
               className="col-12"
+              disabled={loading}
             />
+            }
+          
           </form>
         </div>
       </div>
