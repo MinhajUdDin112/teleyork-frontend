@@ -25,7 +25,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
 
     return (
         <>
-            <div className="card">
+            <div className="card ">
                 <div className="flex flex-row justify-content-between">
                     <Button
                         label="Back"
@@ -33,8 +33,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                             setActiveIndex(2);
                         }}
                     />
-                    {/* <Button
+                    <Button
                         label="Continue"
+                        
                         onClick={() => {
                             if (selectedPage < 1) {
                                 setSelectedPage((prev) => {
@@ -42,7 +43,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                                 });
                             }
                         }}
-                    /> */}
+                    />
                 </div>
                 <br></br>
 

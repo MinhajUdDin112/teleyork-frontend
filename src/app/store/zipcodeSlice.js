@@ -32,6 +32,7 @@ export default zipCode.reducer;
 export const fetchZipCode = createAsyncThunk("users/zipcode", async (body) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/user/verifyZip`, body);
+        console.log(response)
         return response;
     } catch (error) {
         throw error;

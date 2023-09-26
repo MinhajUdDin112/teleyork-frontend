@@ -53,7 +53,7 @@ const Question1 = ({handleNext,handleBack , enrollment_id}) => {
                      <h6>Enrollment ID: {enrollment_id}</h6>
                  </div>
                  <h3>Do you live with another adult?</h3>
-                 <p>Adults are people who are 18 years or older, or who are emancipated minors. This can include a spouse, domestic partner, parent, adult son or daughter, adult in your family, adult roomate etc.</p>
+                 <h5>Adults are people who are 18 years or older, or who are emancipated minors. This can include a spouse, domestic partner, parent, adult son or daughter, adult in your family, adult roomate etc.</h5>
                  <div className="flex flex-row ">
                  <button
             className={` button-design answer-button ${

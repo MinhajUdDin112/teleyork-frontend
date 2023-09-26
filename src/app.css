@@ -176,11 +176,16 @@ width: 100%;
   }
   .button-design{
     margin-right: 10px;
+    margin-top: 10px;
     font-size: bold;
     padding: 12px 26px;
     border-radius: 6px;
     color: white;
-    background-color: rgba(0, 0, 255, 0.724);
+    background-color: rgba(0, 0, 255, 0.596);
     border: none;
 
   }
+  input:disabled {
+    cursor: not-allowed;
+  }
+  
