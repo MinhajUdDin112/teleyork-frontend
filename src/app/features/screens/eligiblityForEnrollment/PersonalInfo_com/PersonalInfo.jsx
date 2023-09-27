@@ -64,6 +64,7 @@ const PersonalInfo = ({ handleNext }) => {
             const csr = "64e0b1b135a9428007da3526";
             const userId = _id;
             const dataToSend = { csr, userId, ...values };
+     console.log("data to send of personal info",dataToSend)
             dispatch(addCustomerInfoAction(dataToSend));
             actions.resetForm();
             handleNext();
@@ -130,7 +131,7 @@ const PersonalInfo = ({ handleNext }) => {
 
                 <div className="flex flex-row justify-content-between align-tems-center mb-2">
                     <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
-                    <Button label="Continue" type="submit" />
+                    <Button  label="Continue" type="submit"  />
                 </div>
 
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
@@ -178,13 +179,13 @@ const PersonalInfo = ({ handleNext }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Driving License <span className="steric">*</span></label>
-                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("drivingLicense") }, "input_text")} />
+                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("drivingLicense") }, "input_text")} keyfilter={/^[a-zA-Z0-9]*$/} />
                         {getFormErrorMessage("drivingLicense")}
                     </div>
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Email <span className="steric">*</span></label>
-                        <InputText id="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("email") }, "input_text")} />
+                        <InputText id="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("email") }, "input_text")} keyfilter={/^[a-zA-Z0-9]*$/} />
                         {getFormErrorMessage("email")}
                     </div>
 
