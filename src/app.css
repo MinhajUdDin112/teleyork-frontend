@@ -11,6 +11,16 @@
 .steric {
     color: red;
 }
+.disable-icon-color{
+    color: rgb(175, 59, 59);
+}
+.icon-size{
+    font-size: 14px;
+}
+.disable-color{
+    color: rgb(13, 5, 5);
+    font-size: 16px;
+}
 .yesButton{
     background-color: green;
 }
@@ -135,6 +145,68 @@ width: 100%;
     text-shadow: 0 0 2px #37c5b6;
     font-size: 1.4rem;
 }
+<<<<<<< HEAD
 .cursor-crosshair:hover{
     cursor:not-allowed
 }
+=======
+
+
+
+
+
+  
+  
+  /* Style for answer buttons (Yes) */
+  .answer-button.green {
+    background-color: green;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for answer buttons (No) */
+  .answer-button.red {
+    background-color: rgba(255, 0, 0, 0.789);
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for answer button text */
+  .answer-button span {
+    font-weight: bold;
+  }
+  .button-design{
+    margin-right: 10px;
+    margin-top: 10px;
+    font-size: bold;
+    padding: 12px 26px;
+    border-radius: 6px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.661);
+    border: none;
+
+  }
+  input:disabled {
+    cursor: not-allowed;
+  }
+  .final-pre{
+   justify-content: center;
+    width: 900px;
+    align-items: center;
+    margin-left: 170px;
+    margin-top: 60px;
+box-shadow: 2px;
+  }
+.final-btn{
+    margin-top: 20px;
+    margin-left: 780px;
+  }
+
+ 
+>>>>>>> 4c7af6a3e31e70bc834a07c69af7d0231f06366d

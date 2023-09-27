@@ -5,10 +5,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { addTermsAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
-const Agree = ({ handleNext, handleBack }) => {
+const Agree = ({ handleNext, handleBack , enrollment_id, _id }) => {
 
 const dispatch= useDispatch();
 
+    const [checkAll, setCheckAll] = useState(false);
     const [checkBox1, setCheckBox1] = useState(false);
     const [checkBox2, setCheckBox2] = useState(false);
     const [checkBox3, setCheckBox3] = useState(false);
@@ -26,24 +27,13 @@ const dispatch= useDispatch();
     const [permaAdd, setPermaAdd] = useState(false);
 
     const validationSchema = Yup.object().shape({
-        checkbox1: Yup.string().required("check box is required"),
-        checkbox2: Yup.string().required("check box is required"),
-        checkbox3: Yup.string().required("check box is required"),
-        checkbox4: Yup.string().required("check box is required"),
-        checkbox5: Yup.string().required("check box is required"),
-        checkbox6: Yup.string().required("check box is required"),
-        checkbox7: Yup.string().required("check box is required"),
-        checkbox8: Yup.string().required("check box is required"),
-        checkbox9: Yup.string().required("check box is required"),
-        checkbox10: Yup.string().required("check box is required"),
-        checkbox11: Yup.string().required("check box is required"),
-        checkbox12: Yup.string().required("check box is required"),
-        checkbox13: Yup.string().required("check box is required"),
-       isTemporaryAddress: Yup.string().required("please confirm address"),
+        checkbox4:Yup.string().required("please check all checkboxs")
+      
     });
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
+            checkAll:"",
             checkbox1: "",
             checkbox2: "",
             checkbox3: "",
@@ -57,17 +47,54 @@ const dispatch= useDispatch();
             checkbox11: "",
             checkbox12: "",
             checkbox13: "",
-            isTemporaryAddress: "",
+            isTemporaryAddress: false,
         },
         onSubmit: (values, actions) => {
-            actions.resetForm();
-           const userId="64d7959faa61d0058fb483d1";
+           
+           const userId=_id;
            const csr ="645c7bcfe5098ff6251a2255";
             const dataToSend= {csr, userId};
             dispatch(addTermsAction(dataToSend));
             handleNext();
+            actions.resetForm();
         },
     });
+    const handleAll=()=>{
+        if(checkAll===false){
+            setCheckAll(true)
+            handleCheckBox1();
+        handleCheckBox2();
+        handleCheckBox3();
+        handleCheckBox4();
+        handleCheckBox5();
+        handleCheckBox6();
+        handleCheckBox7();
+        handleCheckBox8();
+        handleCheckBox9();
+        handleCheckBox10();
+        handleCheckBox11();
+        handleCheckBox12();
+        handleCheckBox13();
+        }else if(checkAll===true){
+            setCheckAll(false);
+            handleCheckBox1();
+        handleCheckBox2();
+        handleCheckBox3();
+        handleCheckBox4();
+        handleCheckBox5();
+        handleCheckBox6();
+        handleCheckBox7();
+        handleCheckBox8();
+        handleCheckBox9();
+        handleCheckBox10();
+        handleCheckBox11();
+        handleCheckBox12();
+        handleCheckBox13();
+        }
+        
+        
+    }
+
     const handleCheckBox1 = (e) => {
         if (formik.values.checkbox1 == true) {
             formik.values.checkbox1 = false;
@@ -207,10 +234,15 @@ const dispatch= useDispatch();
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
-                <div className="flex flex-row justify-content-between align-tems-center mb-2">
-                    <Button label="Back" type="submit" onClick={handleBack} />
-                    <Button label="Continue" type="submit" />
+            <div className="flex flex-row justify-content-between align-items-center mb-2">
+                    <Button label="Back" type="button" onClick={handleBack} />
+                    <Button label="Continue" type="submit"  />
                 </div>
+                <div>
+                    <h6>Enrollment ID: {enrollment_id}</h6>
+                </div>
+                <br />
+               
                 <div>
                     <p className="font-normal my-3 text-xl line-height-1">
                         PLEASE CAREFULLY READ AND AGREE BY INITIALING ALL THE BOXES FOR THE FOLLOWING STATEMENTS. BY CLICKING THE BOXES BELOW, YOU AGREE TO E-SIGN STATEMENTS BELOW WITH YOUR INITIALS AND THAT THE STATEMENTS INITIALED ARE ENFORCEABLE.
@@ -218,7 +250,18 @@ const dispatch= useDispatch();
                     <p className="font-semibold" style={{ color: "red" }}>
                         Please read and check all Penalty Of Perjury and accept Terms and Conditions.
                     </p>
-                    <div className="p-3">
+                    <div className="field-checkbox ">
+                            <Checkbox
+                                inputId="checkAll"
+                                onChange={(e) => {
+                                    handleAll(e);
+                                }}
+                                checked={checkAll}
+                            />
+                            <label htmlFor="checkAll"> Select All.</label>
+                        </div>
+                    <div className="p-3 ml-3">
+                   
                         <div className="field-checkbox">
                             <Checkbox
                                 inputId="checkbox1"
