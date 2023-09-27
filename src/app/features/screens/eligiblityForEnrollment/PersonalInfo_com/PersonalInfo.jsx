@@ -18,11 +18,6 @@ import classNames from "classnames";
 
 const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
 
-// fetchinh enrollment id and _id
-
-//   const zipCode = useSelector((state)=>state.zip)
-//       const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
-//      const _id = zipCode?.serviceAvailability?.data?._id;
 
 
     const [selectedOption, setSelectedOption] = useState('email');

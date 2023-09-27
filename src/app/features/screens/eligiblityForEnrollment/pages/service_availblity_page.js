@@ -37,7 +37,6 @@ export default function ServiceAvailabilityPage() {
       const carrier = "6455532566d6fad6eac59e34";
       const dataToSend = { serviceProvider, csr, carrier, ...values };
       await dispatch(fetchZipCode(dataToSend));
-
       if (zipStatus === 200 || zipStatus === 201) {
         navigate("/enrollment");
       } else {

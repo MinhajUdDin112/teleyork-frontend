@@ -9,9 +9,17 @@ export default function EnrollmentFlowPage() {
 
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const zipCode = useSelector((state)=>state.zip)
-    const enrollment_id = zipCode?.serviceAvailability?.data?.data?.enrollmentId;
-   const _id = zipCode?.serviceAvailability?.data?.data?._id;
+//     const zipCode = useSelector((state)=>state.zip)
+//     const enrollment_id = zipCode?.serviceAvailability?.data?.data?.enrollmentId;
+//    const _id = zipCode?.serviceAvailability?.data?.data?._id;
+
+//getting _id and enrollment id from local storage
+
+   const zipRes = localStorage.getItem("zipData");
+   const parseZipRes = JSON.parse(zipRes);
+   const enrollment_id = parseZipRes?.data?.enrollmentId;
+   const _id = parseZipRes?.data?._id
+   
 
     const items = [
         {

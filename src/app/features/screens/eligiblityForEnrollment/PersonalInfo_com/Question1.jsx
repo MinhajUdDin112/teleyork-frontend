@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "primereact/button";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const Question1 = ({ handleNext, handleBack, enrollment_id }) => {
+const Question1 = ({ handleNext, handleBack, enrollment_id,_id }) => {
   // State variables for answers to each question
   const [q1Answer, setQ1Answer] = useState(null);
   const [q2Answer, setQ2Answer] = useState(null);
@@ -16,9 +16,7 @@ const Question1 = ({ handleNext, handleBack, enrollment_id }) => {
 
   const dispatch = useDispatch();
 
-  const zipid = useSelector((state) => state.zip);
-  const zipId = zipid?.serviceAvailability?.data?.data?._id;
-
+ 
   const validationSchema = Yup.object().shape({
     livesWithAnotherAdult: Yup.string().required("Answer is required for Question 1"),
     hasAffordableConnectivity: Yup.string().required("Answer is required for Question 2"),
@@ -35,7 +33,7 @@ const Question1 = ({ handleNext, handleBack, enrollment_id }) => {
 
     onSubmit: (values) => {
       const csr = "645c7bcfe5098ff6251a2255";
-      const userId = zipId;
+      const userId = _id;
       const dataToSend = { csr, userId, ...values };
       dispatch(addQuestion1Action(dataToSend));
       handleNext();

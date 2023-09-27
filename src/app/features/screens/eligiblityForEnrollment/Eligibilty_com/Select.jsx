@@ -33,18 +33,6 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
         getAcpPrograms();
     }, []);
 
-    // const validationSchema = Yup.object().shape({
-    //     selectedAcpProgramId: Yup.string().required("Please select a program to continue"),
-    // });
-
-    // const formik = useFormik({
-    //     initialValues: {
-    //         selectedAcpProgramId: "",
-    //     },
-    //     validationSchema: validationSchema,
-       
-   // });
-
    const postData = async () => {
 
     const data = {

@@ -27,12 +27,13 @@ const dispatch= useDispatch();
     const [permaAdd, setPermaAdd] = useState(false);
 
     const validationSchema = Yup.object().shape({
-        checkAll: Yup.string().required("please Select all CheckBox"),
+        checkbox4:Yup.string().required("please check all checkboxs")
       
     });
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
+            checkAll:"",
             checkbox1: "",
             checkbox2: "",
             checkbox3: "",
@@ -49,12 +50,13 @@ const dispatch= useDispatch();
             isTemporaryAddress: false,
         },
         onSubmit: (values, actions) => {
-            actions.resetForm();
-           const userId="64d7959faa61d0058fb483d1";
+           
+           const userId=_id;
            const csr ="645c7bcfe5098ff6251a2255";
             const dataToSend= {csr, userId};
             dispatch(addTermsAction(dataToSend));
             handleNext();
+            actions.resetForm();
         },
     });
     const handleAll=()=>{

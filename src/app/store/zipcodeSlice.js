@@ -5,7 +5,7 @@ import axios from "axios";
 const zipCode = createSlice({
     name: "zipcode",
     initialState: {
-       // serviceAvailability: JSON.parse(localStorage.getItem("zipdata")) ?? null,
+        serviceAvailability: JSON.parse(localStorage.getItem("zipData")) ?? null,
         serviceAvailability:{},
         isvald: false,
         loading: false,
@@ -17,7 +17,7 @@ const zipCode = createSlice({
         });
         builder.addCase(fetchZipCode.fulfilled, (state, action) => {
             state.serviceAvailability = action.payload;
-            //localStorage.setItem("zipData", JSON.stringify(action.payload.data));
+            localStorage.setItem("zipData", JSON.stringify(action.payload.data));
             state.loading = false;
         });
         builder.addCase(fetchZipCode.rejected, (state, action) => {

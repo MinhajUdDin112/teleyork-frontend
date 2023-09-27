@@ -19,7 +19,7 @@ import Axios from "axios";
 const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const dispatch = useDispatch();
 
-    const [confrimAddress, setConfrimAddress] = useState("");
+    const [confrimAddress, setConfrimAddress] = useState("same");
     const [tempAdd, setTempAdd] = useState(true);
     const [isSame, setIsSame] = useState();
     const [isDifferent, setIsDifferent] = useState();
@@ -35,7 +35,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
-        //isSameServiceAddress: Yup.boolean(),
+       
         // isNotSameServiceAddress: Yup.boolean(),
         // isPoBoxAddress: Yup.boolean(),
         // mailingAddress1: Yup.string().when("isNotSameServiceAddress", {
@@ -63,9 +63,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             state: "",
             postal: "",
             isTemporaryAddress: tempAdd,
-            isSameServiceAddress: "",
-            isNotSameServiceAddress: "",
-            isPoBoxAddress: "",
+            isSameServiceAddress: true,
+            isNotSameServiceAddress: false,
+            isPoBoxAddress: false,
             mailingAddress1: "",
             mailingAddress2: "",
             mailingZip: "",
@@ -163,8 +163,6 @@ useEffect(() => {
         setIsPoBox(false);
     };
 
-    console.log("length of zip is",formik.values.mailingZip.length)
-
     const handleDifferent = () => {
         formik.setFieldValue("isNotSameServiceAddress", true);
         formik.setFieldValue("isSameServiceAddress", false);
@@ -195,10 +193,15 @@ useEffect(() => {
 
     return (
         <>
+     
             <form onSubmit={formik.handleSubmit}>
-                <div className="flex flex-row justify-content-between align-items-center mb-2">
+                <div className="flex flex-row justify-content-between align-items-center mb-2 ">
+                    <div>
                     <Button label="Back" type="button" onClick={handleBack} />
+                    </div>
+                   <div className="fixed-button-container">
                     <Button label="Continue" type="submit" />
+                    </div>
                 </div>
                 <div>
                     <h6>Enrollment ID: {enrollment_id}</h6>
@@ -353,7 +356,7 @@ useEffect(() => {
                     </>
                 )}
             </form>
-        </>
+           </>
     );
 };
 

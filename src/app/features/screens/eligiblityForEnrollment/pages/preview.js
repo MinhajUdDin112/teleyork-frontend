@@ -11,12 +11,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
     const [data, setData] = useState([]);
 
     
-    const zipRes = useSelector((state)=>state.zip);
-    const id = zipRes?.serviceAvailability?.data?.data?._id;
+    
 
   
     const getData = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${id&&id}`);
+        const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id&&_id}`);
         setData(response?.data?.data);
     };
 
