@@ -8,12 +8,9 @@ import BASE_URL from "../../../../../config";
 import Preview_Final_component from "./Preview_Final_component";
 const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     const [data, setData] = useState([]);
 
-    
-    
-
-  
     const getData = async () => {
         const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id&&_id}`);
         setData(response?.data?.data);
@@ -38,10 +35,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                         setActiveIndex(2);
                     }}
                 />
-                <Button
-                    label="Continue" 
-                    onClick={nextPage}
-                />
+               <Button
+    label="Continue"
+    onClick={nextPage}
+    disabled={!isChecked}
+/>
             </div>
             <br></br>
 
@@ -110,7 +108,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                 <br />
                 <br />
                 <div className="flex">
-                    <Checkbox inputId="cb1" value="New York"></Checkbox>
+                <Checkbox inputId="cb1" value="New York" checked={isChecked} onChange={(e) => setIsChecked(e.checked)}></Checkbox>
                     <label htmlFor="cb1" className="p-checkbox-label mx-2">
                         <p>
                             I authorize Tone Comms or its duly appointed representative to: (1) access any records required to verify my statements herein; (2) to confirm my continued eligibility for Affordable Connectivity Program (ACP) assistance; (3) to update my address to proper mailing

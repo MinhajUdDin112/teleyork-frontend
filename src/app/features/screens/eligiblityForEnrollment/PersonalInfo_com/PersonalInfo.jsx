@@ -57,6 +57,7 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
             const csr = "64e0b1b135a9428007da3526";
             const userId = _id;
             const dataToSend = { csr, userId, ...values };
+     console.log("data to send of personal info",dataToSend)
             dispatch(addCustomerInfoAction(dataToSend));
             actions.resetForm();
             handleNext();

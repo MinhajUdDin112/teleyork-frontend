@@ -5,7 +5,7 @@ const Preview_Final_component = ({ enrollment_id }) => {
     const navigate = useNavigate();
 
     const movePage = () => {
-        navigate("/");
+        navigate("/newenrolment");
     };
 
     return (
