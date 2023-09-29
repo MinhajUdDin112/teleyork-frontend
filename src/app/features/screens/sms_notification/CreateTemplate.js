@@ -40,7 +40,7 @@ const CreateTemplate = () => {
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
             };
-            console.log("data to send",dataToSend)
+            console.log("data to send", dataToSend)
             dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
             setTemplateText("");
@@ -65,7 +65,7 @@ const CreateTemplate = () => {
                     <div className="flex flex-wrap">
                         <div className="mr-3">
                             <p className="m-0">Template Name:</p>
-                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Enter Template Name" />
+                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Enter Template Name" keyfilter={/^[A-Za-z\s]+$/} />
                         </div>
                         <div>
                             <p className="m-0">Template Type:</p>
@@ -84,11 +84,11 @@ const CreateTemplate = () => {
                         <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
                     </div>
                     {
-                        addTemplateLoading ? (<ProgressSpinner style={{width: '40px', height: '40px' , marginLeft:'1050px', marginTop:'10px',color:'blue' }} strokeWidth="4" animationDuration=".5s"  />) : <div className="flex justify-content-end m-3">
-                        <Button label="Add Template" type="submit" />
-                    </div>
+                        addTemplateLoading ? (<ProgressSpinner style={{ width: '40px', height: '40px', marginLeft: '1050px', marginTop: '10px', color: 'blue' }} strokeWidth="4" animationDuration=".5s" />) : <div className="flex justify-content-end m-3">
+                            <Button label="Add Template" type="submit" />
+                        </div>
                     }
-                   
+
                 </div>
             </form>
         </div>
