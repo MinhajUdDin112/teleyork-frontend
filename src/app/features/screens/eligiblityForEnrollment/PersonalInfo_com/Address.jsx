@@ -101,10 +101,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 userId: userId,
                 csr: "645c7bcfe5098ff6251a2255",
             };
-            console.log("data to send for address",dataToSend);
-           
-            dispatch(addCustomerAddressAction(dataToSend));
+                       dispatch(addCustomerAddressAction(dataToSend));
             actions.resetForm();
+            
             handleNext();
         },
     });

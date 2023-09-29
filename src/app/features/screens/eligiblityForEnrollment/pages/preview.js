@@ -11,12 +11,15 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
     const [isChecked, setIsChecked] = useState(false);
     const [data, setData] = useState([]);
 
-    const getData = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id&&_id}`);
-        setData(response?.data?.data);
-    };
+   
 
     useEffect(() => {
+        const getData = async () => {
+            console.log("before preview data is")
+            const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id&&_id}`);
+            console.log("after calling preview data is",response?.data?.data)
+            setData(response?.data?.data);
+        };
         getData();
     }, []);
  const nextPage =()=>{
