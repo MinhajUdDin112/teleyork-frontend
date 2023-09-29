@@ -323,7 +323,7 @@ const CreateRole = () => {
                         ))
                     }
                 </div>
-
+                {/* 
                 <div>
                     <table className="w_100 text-left">
                         <thead>
@@ -376,7 +376,7 @@ const CreateRole = () => {
                             ))}
                         </tbody>
                     </table>
-                </div>
+                </div> */}
 
                 {/* <div>
                     <br />
