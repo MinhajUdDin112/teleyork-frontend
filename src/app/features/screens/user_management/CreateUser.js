@@ -33,7 +33,7 @@ const CreateUser = () => {
         password: Yup.string()
             .matches(
                 /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                'Password must have at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
+                'Password must have at least 1 uppercase, 1 lowercase, 1 number, 1 special character and minimum 8 characters.'
             )
             .required('This field is required.'),
         city: Yup.string().required('This field is required.'),

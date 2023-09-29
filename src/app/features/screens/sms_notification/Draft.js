@@ -12,7 +12,7 @@ import BASE_URL from "../../../../config";
 const Draft = () => {
     const [allDraft, setAllDraft] = useState([]);
     const dispatch = useDispatch();
-    const { getAllTemplate, getAllTemplateLoading,submitTemplate, submitTemplateLoading } = useSelector((state) => state.notification);
+    const { getAllTemplate, getAllTemplateLoading, submitTemplate, submitTemplateLoading } = useSelector((state) => state.notification);
     const { loginData } = useSelector((state) => state.login);
     const companyId = loginData?.compony;
     const navigate = useNavigate();
@@ -25,16 +25,6 @@ const Draft = () => {
         const { templateId } = rowData;
         navigate(`/draftall/${templateId}`);
     };
-<<<<<<< HEAD
-    const handleSend = (rowData) => {
-        const { templateId } = rowData;
-        let body = {
-            userId: loginData?._id,
-            templateId: templateId,
-            company: companyId,
-        };
-        dispatch(submitTemplateAction(body));
-=======
 
     // Actions
     const renderActions = (rowData) => {
@@ -59,7 +49,6 @@ const Draft = () => {
                 )}
             </div>
         );
->>>>>>> 4c7af6a3e31e70bc834a07c69af7d0231f06366d
     };
 
     // Function to handle sending the template

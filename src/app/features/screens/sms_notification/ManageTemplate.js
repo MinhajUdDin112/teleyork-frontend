@@ -26,7 +26,7 @@ const ManageTemplate = () => {
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Button label="Download" onClick={() => handleDownload(rowData)} />
+                <Button label="Download Template" onClick={() => handleDownload(rowData)} className="p-button-sm" />
             </div>
         );
     };
