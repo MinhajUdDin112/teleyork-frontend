@@ -9,17 +9,17 @@ export default function EnrollmentFlowPage() {
 
     const [activeIndex, setActiveIndex] = useState(0);
 
-//     const zipCode = useSelector((state)=>state.zip)
-//     const enrollment_id = zipCode?.serviceAvailability?.data?.data?.enrollmentId;
-//    const _id = zipCode?.serviceAvailability?.data?.data?._id;
+    //     const zipCode = useSelector((state)=>state.zip)
+    //     const enrollment_id = zipCode?.serviceAvailability?.data?.data?.enrollmentId;
+    //    const _id = zipCode?.serviceAvailability?.data?.data?._id;
 
-//getting _id and enrollment id from local storage
+    //getting _id and enrollment id from local storage
 
-   const zipRes = localStorage.getItem("zipData");
-   const parseZipRes = JSON.parse(zipRes);
-   const enrollment_id = parseZipRes?.data?.enrollmentId;
-   const _id = parseZipRes?.data?._id
-   
+    const zipRes = localStorage.getItem("zipData");
+    const parseZipRes = JSON.parse(zipRes);
+    const enrollment_id = parseZipRes?.data?.enrollmentId;
+    const _id = parseZipRes?.data?._id
+
 
     const items = [
         {
@@ -33,34 +33,41 @@ export default function EnrollmentFlowPage() {
             command: (event) => {
                 setActiveIndex(1);
             },
+            setActiveIndex(1);
         },
-        {
-            label: "Plan",
-            command: (event) => {
-                setActiveIndex(2);
-            },
         },
-        {
-            label: "Preview",
-            command: (event) => {
-                setActiveIndex(3);
-            },
+{
+    label: "Plan",
+        command: (event) => {
+            setActiveIndex(2);
+        },
+            setActiveIndex(2);
+},
+        },
+{
+    label: "Preview",
+        command: (event) => {
+            setActiveIndex(3);
+        },
+            setActiveIndex(3);
+},
         },
     ];
-    let pages = [
+let pages = [
 
-        PersonalInfoPage({ setActiveIndex: setActiveIndex,enrollment_id:enrollment_id,_id:_id }),
-        Eligibility({ setActiveIndex: setActiveIndex,enrollment_id:enrollment_id,_id:_id}),
-        plan({ setActiveIndex: setActiveIndex ,enrollment_id:enrollment_id,_id:_id}),
-        Preview({ setActiveIndex: setActiveIndex,enrollment_id:enrollment_id,_id:_id })
-    ];
-    return (
-        <div className="steps-demo">
-            <div className="card">
-                <Steps model={items} activeIndex={activeIndex} />
-            </div>
-
-            <div>{pages[activeIndex]}</div>
+    PersonalInfoPage({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id }),
+    Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id }),
+    plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id }),
+    Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id })
+];
+return (
+    <div className="steps-demo">
+        <div className="card">
+            <Steps model={items} activeIndex={activeIndex} />
         </div>
-    );
+
+
+        <div>{pages[activeIndex]}</div>
+    </div>
+);
 }
