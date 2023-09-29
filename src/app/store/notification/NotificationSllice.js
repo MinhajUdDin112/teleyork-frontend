@@ -55,7 +55,7 @@ const notificationSlice = createSlice({
         });
         builder.addCase(addTemplateAction.rejected, (state, action) => {
             state.addTemplateLoading = false;
-            state.addTemplateError = action.error.message;
+            state.addTemplateError = action.payload;
         });
 
         ///get all templates reducer function
@@ -68,7 +68,7 @@ const notificationSlice = createSlice({
         });
         builder.addCase(getAllTemplateAction.rejected, (state, action) => {
             state.getAllTemplateLoading = false;
-            state.getAllTemplateError = action.error.message;
+            state.getAllTemplateError = action.payload;
         });
 
         //get one template reducer function
@@ -81,7 +81,7 @@ const notificationSlice = createSlice({
         });
         builder.addCase(getOneTemplateAction.rejected, (state, action) => {
             state.getOneTemplateLoading = false;
-            state.getOneTemplateError = action.error.message;
+            state.getOneTemplateError = action.payload;
         });
 
         //get all sent templates reducer function
@@ -94,7 +94,7 @@ const notificationSlice = createSlice({
         });
         builder.addCase(getSentAllTemplateAction.rejected, (state, action) => {
             state.getSentAllTemplateLoading = false;
-            state.getSentAllTemplateError = action.error.message;
+            state.getSentAllTemplateError = action.payload;
         });
 
         //get all sent by template Id reducer function
@@ -107,7 +107,7 @@ const notificationSlice = createSlice({
         });
         builder.addCase(getSentByTemplateIdAction.rejected, (state, action) => {
             state.getSentByTemplateIdLoading = false;
-            state.getSentByTemplateIdError = action.error.message;
+            state.getSentByTemplateIdError = action.payload;
         });
 
         //submit draft template reducer function
@@ -120,7 +120,7 @@ const notificationSlice = createSlice({
         });
         builder.addCase(submitTemplateAction.rejected, (state, action) => {
             state.submitTemplateLoading = false;
-            state.submitTemplateError = action.error.message;
+            state.submitTemplateError = action.payload;
         });
 
         //get all draft by template id reducer function
@@ -133,7 +133,7 @@ const notificationSlice = createSlice({
         });
         builder.addCase(getDraftByTemplateIdAction.rejected, (state, action) => {
             state.getDraftByTemplateIdLoading = false;
-            state.getDraftByTemplateIdError = action.error.message;
+            state.getDraftByTemplateIdError = action.payload;
         });
     },
 });

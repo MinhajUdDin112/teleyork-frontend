@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 
-const Preview = () => {
+const Preview = ({setActiveIndex}) => {
     const [selectedPage, setSelectedPage] = useState(0);
     const pages = ["preview"];
 
@@ -12,6 +12,7 @@ const Preview = () => {
                 <div>
                     <h6>Enrollment ID: ETC175698</h6>
                 </div>
+                
                 <br></br>
                 <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                 <br />
@@ -97,7 +98,10 @@ const Preview = () => {
         <>
             <div className="card">
                 <div className="flex flex-row justify-content-between">
-                    <Button label="Back" />
+                    <Button label="Back"
+                    onClick={()=>{
+                        setActiveIndex(2);
+                    }} />
                     <Button
                         label="Continue"
                         onClick={() => {

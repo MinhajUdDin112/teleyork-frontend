@@ -4,19 +4,14 @@ import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { Calendar } from "primereact/calendar";
 import { useFormik } from "formik";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate, useParams } from "react-router-dom";
 import BASE_URL from "../../../../config";
 import axios from "axios";
 
 const PersonalInfo = () => {
-    // const [date, setDate] = useState(null);
-    const [isChecked, setIsChecked] = useState(false);
+    const navigate = useNavigate()
+    const {id} = useParams()
 
-    // const [date3, setDate3] = useState(null);
-    const history = useHistory();
-    const handleDate = (e) => {
-        console.log(e);
-    };
     const formik = useFormik({
         initialValues: {
             firstName: "",
@@ -26,7 +21,7 @@ const PersonalInfo = () => {
             suffix: "",
             contact: "",
             DOB: "",
-            isDifferentPerson: "",
+            isDifferentPerson: false,
             BenifitFirstName: "",
             BenifitMiddleName: "",
             BenifitLastName: "",
@@ -34,22 +29,14 @@ const PersonalInfo = () => {
             BenifitDOB: "",
         },
         onSubmit: (values) => {
-            // const dob = values.DOB.toLocaleDateString();
-            // values.DOB = dob;
-            values[isDifferentPerson] = formik.values.isDifferentPerson ? true : false;
             const newData = {
-                userId: "648dcb5aa3f7af983cd118e2",
+                userId: id,
                 ...values,
             };
-            console.log("values", newData);
-            // const res = axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
-            // history.push("/address");
+            const res = axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
+            navigate(`/address/${id}`)
         },
     });
-
-    console.log("formik.values.DOB", new Date(formik.values.DOB));
-    console.log("formik.values.DOB", new Date());
-
     return (
         <>
             <div
@@ -57,13 +44,13 @@ const PersonalInfo = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    height: "90vh", // Adjust the height to your preference
+                    minHeight: "100vh", // Changed height to minHeight
                 }}
             >
                 <div className="col-7">
-                    <div className="col-12">
+                    {/* <div className="col-12">
                         <p className="text-4xl font-semibold">IJ Wireless</p>
-                    </div>
+                    </div> */}
                     <form onSubmit={formik.handleSubmit}>
                         <div className="card flex p-8">
                             <div className="col-6">
@@ -81,19 +68,19 @@ const PersonalInfo = () => {
                                     <Calendar className="mb-3" id="DOB" value={new Date(formik.values.DOB)} onChange={formik.handleChange} showIcon />
                                     <InputText className="mb-3" placeholder="Contact Phone" name="contact" value={formik.values.contact} onChange={formik.handleChange} />
                                     <div className="mb-3 flex justify-content-center">
-                                        <Checkbox inputId="binary" checked={formik.values.isDifferentPerson} onChange={formik.handleChange} />
+                                        <Checkbox inputId="binary" name="isDifferentPerson" checked={formik.values.isDifferentPerson} onChange={formik.handleChange} />
                                         <label htmlFor="binary" className="text-xl flex align-items-center ml-2">
                                             Is the Benefit Qualifying Person different?
                                         </label>
                                     </div>
                                     <div>
-                                        {isChecked && (
+                                        {formik.values.isDifferentPerson && (
                                             <div className="flex flex-column">
-                                                <InputText className="mb-3" placeholder="First Name" name="firstName" value={formik.values.firstName} onChange={formik.handleChange} />
-                                                <InputText className="mb-3" placeholder="Middle Name" name="middleName" value={formik.values.middleName} onChange={formik.handleChange} />
-                                                <InputText className="mb-3" placeholder="Last Name" name="lastName" value={formik.values.lastName} onChange={formik.handleChange} />
-                                                <InputText className="mb-3" placeholder="Last 4 SSN or Tribal ID" name="SSN" value={formik.values.SSN} onChange={formik.handleChange} />
-                                                <InputText className="mb-3" placeholder="Date of Birth" name="DOB" value={formik.values.DOB} onChange={formik.handleChange} />
+                                                <InputText className="mb-3" placeholder="First Name" name="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} />
+                                                <InputText className="mb-3" placeholder="Middle Name" name="BenifitMiddleName" value={formik.values.BenifitMiddleName} onChange={formik.handleChange} />
+                                                <InputText className="mb-3" placeholder="Last Name" name="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} />
+                                                <InputText className="mb-3" placeholder="Last 4 SSN or Tribal ID" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} />
+                                                <Calendar className="mb-3" placeholder="Date of Birth" name="BenifitDOB" value={new Date(formik.values.BenifitDOB)} onChange={formik.handleChange} />
                                             </div>
                                         )}
                                     </div>

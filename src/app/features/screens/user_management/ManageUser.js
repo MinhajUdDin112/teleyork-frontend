@@ -4,7 +4,7 @@ import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import BASE_URL from '../../../../config'
 import { Button } from 'primereact/button'
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify'
 
 const ManageUser = () => {
@@ -15,7 +15,7 @@ const ManageUser = () => {
     const loginRes = localStorage.getItem("userData")
     const parseLoginRes = JSON.parse(loginRes)
 
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const actions = (rowData) => {
         return (
@@ -29,8 +29,7 @@ const ManageUser = () => {
     }
 
     const handleUserEdit = (rowData) => {
-        history.push({
-            pathname: "/edit-user",
+        navigate("/edit-user", {
             state: { rowData }
         });
     };
@@ -63,7 +62,7 @@ const ManageUser = () => {
     }, []);
 
     const redirectToCreateUser = () => {
-        history.push("/create-user")
+        navigate("/create-user")
     }
 
     const userTableHeader = () => {

@@ -2,18 +2,18 @@ import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 import { logout } from "./app/store/auth/AuthSlice";
 
 export const AppTopbar = (props) => {
     const [visible, setVisible] = useState(false);
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         dispatch(logout());
-        history.push("/login");
+        navigate("/login");
     };
     return (
         <div className="layout-topbar">

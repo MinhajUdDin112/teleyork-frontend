@@ -7,7 +7,9 @@ import BASE_URL from "../../../config";
 export const addCustomerInfoAction = createAsyncThunk("customer/info", async (body) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/user/initialInformation`, body);
+        console.log("response of api", response);
         return response;
+        
     } catch (error) {
         console.log(error);
         throw error;
@@ -19,7 +21,6 @@ export const addCustomerInfoAction = createAsyncThunk("customer/info", async (bo
 export const addCustomerAddressAction = createAsyncThunk("customer/info", async (body) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/user/homeAddress`, body);
-         console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -28,11 +29,10 @@ export const addCustomerAddressAction = createAsyncThunk("customer/info", async 
 });
 
 
-//adding Q1 during customer enrollment 
+//adding Question during customer enrollment 
 export const addQuestion1Action = createAsyncThunk("customer/info", async (body) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/user/question`, body);
-         console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -47,10 +47,22 @@ export const addQuestion1Action = createAsyncThunk("customer/info", async (body)
 export const fetchPlanListAction = createAsyncThunk('data/fetchData', async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/web/plan/SPPlans?serviceProvider=645a85198cd1ff499c8b99cd`); 
-    //   console.log(response.data);
       return response.data;
+      
       
     } catch (error) {
       throw error;
     }
   });
+
+
+  //post term and condition 
+export const addTermsAction = createAsyncThunk("terms/Condition", async (body) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/api/user/termsAndConditions`, body);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+});

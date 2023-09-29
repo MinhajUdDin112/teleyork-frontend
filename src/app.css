@@ -1,3 +1,15 @@
 .custom-icon {
     font-size: 4rem ; /* Adjust the size as needed */
   }
+  .field_label {
+    display: block !important;
+}
+
+.steric {
+    color: red;
+}
+
+.sp_small small {
+    display: block;
+    padding-top: 5px;
+}

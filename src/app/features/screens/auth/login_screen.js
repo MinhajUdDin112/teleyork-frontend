@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button } from "primereact/button";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -48,7 +48,7 @@ export default function LoginScreen() {
                             <Button type="submit" className="w-20rem mt-3" label="Login" />
                             <div>
                                 <NavLink className="font-semibold mt-3 justify-content-center flex " to={{ pathname: "/sendotp", state: { email: formik.values.email } }}>
-                                    Forget Password?
+                                    Forgot Password?
                                 </NavLink>
                             </div>
                         </form>
