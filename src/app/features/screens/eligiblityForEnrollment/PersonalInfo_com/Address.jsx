@@ -26,10 +26,15 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [isPoBox, setIsPoBox] = useState();
 
      const zipResponse = useSelector((state)=>state.zip)
-     const zipCode = zipResponse?.serviceAvailability?.data?.data?.zip;
-     
-     const zipCity =zipResponse?.serviceAvailability?.data?.data?.city;
-     const zipState = zipResponse?.serviceAvailability?.data?.data?.state;
+    //  const zipCode = zipResponse?.serviceAvailability?.data?.data?.zip;
+     const zipDataLs = localStorage.getItem("zipData");
+     const zipDataParsed = JSON.parse(zipDataLs)    
+     const zipCode = zipDataParsed?.data?.zip
+     const zipCity = zipDataParsed?.data?.city
+     const zipState = zipDataParsed?.data?.state
+
+    //  const zipCity =zipResponse?.serviceAvailability?.data?.data?.city;
+    //  const zipState = zipResponse?.serviceAvailability?.data?.data?.state;
 
 
     const validationSchema = Yup.object().shape({
@@ -101,10 +106,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 userId: userId,
                 csr: "645c7bcfe5098ff6251a2255",
             };
-            console.log("data to send for address",dataToSend);
-           
-            dispatch(addCustomerAddressAction(dataToSend));
+                       dispatch(addCustomerAddressAction(dataToSend));
             actions.resetForm();
+            
             handleNext();
         },
     });

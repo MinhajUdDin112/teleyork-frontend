@@ -25,6 +25,10 @@ export default function ServiceAvailabilityPage() {
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
 
+
+
+
+
   const validationSchema = Yup.object().shape({
     zipCode: Yup.string().required("Please enter Zip code"),
   });
@@ -43,6 +47,7 @@ export default function ServiceAvailabilityPage() {
       try {
         const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);
         if (response?.status === 200) {
+          localStorage.setItem("zipData", JSON.stringify(response.data));
           navigate("/enrollment")
         }
       } catch (error) {

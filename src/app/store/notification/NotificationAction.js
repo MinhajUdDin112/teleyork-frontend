@@ -7,10 +7,12 @@ import Toasts from "../../components/react-toast";
 export const addTemplateAction = createAsyncThunk("notification/api/sms/addTemplate", async (body, { rejectWithValue }) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/sms/addTemplate`, body);
-        if (response.status === 200) {
-            Toasts({ success: `Template ${response.data.msg}` });
-            return response.data;
-        }
+        // if (response.status === 200) {
+        //     Toasts({ success: `Template ${response.data.msg}` });
+        //      return response.data;
+        // }
+        return response;
+
     } catch (error) {
         if (error.response && error.data.response.message) {
             return rejectWithValue(error.data.response.message)

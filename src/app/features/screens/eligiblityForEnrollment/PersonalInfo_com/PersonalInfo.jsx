@@ -16,18 +16,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import classNames from "classnames";
 
-const PersonalInfo = ({ handleNext }) => {
+const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
 
     const zipCode = useSelector((state) => {
         return state.zip;
     });
 
-    const enrollment_id = zipCode?.serviceAvailability?.data?.enrollmentId;
-
-    const _id = zipCode?.serviceAvailability?.data?._id;
-
-
-    const [selectedOption, setSelectedOption] = useState('email');
+    const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
     const [acp, setAcp] = useState(false);
 
@@ -55,20 +50,28 @@ const PersonalInfo = ({ handleNext }) => {
             contact: "",
             drivingLicense: "",
             email: "",
-            bestWayToReach: selectedOption,
-            isSelfReceive: isSelfReceive,
+            bestWayToReach: "",
+            isSelfReceive: "",
             isACP: acp,
         },
         onSubmit: (values, actions) => {
             const csr = "64e0b1b135a9428007da3526";
             const userId = _id;
             const dataToSend = { csr, userId, ...values };
-     console.log("data to send of personal info",dataToSend)
             dispatch(addCustomerInfoAction(dataToSend));
             actions.resetForm();
             handleNext();
         },
     });
+
+   useEffect(() => {
+    formik.setFieldValue("bestWayToReach", selectedOption);
+   }, [selectedOption])
+
+   useEffect(() => {
+    formik.setFieldValue("isSelfReceive", isSelfReceive);
+   }, [isSelfReceive])
+
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
@@ -184,7 +187,7 @@ const PersonalInfo = ({ handleNext }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Email <span className="steric">*</span></label>
-                        <InputText id="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("email") }, "input_text")} keyfilter={/^[a-zA-Z0-9]*$/} />
+                        <InputText id="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("email") }, "input_text")}  />
                         {getFormErrorMessage("email")}
                     </div>
 
@@ -200,7 +203,33 @@ const PersonalInfo = ({ handleNext }) => {
 
             <div className="col-6 mb-3 p-0">
                 <p className="font-semibold">What is the best way to reach you?</p>
-                <div className="flex flex-wrap">
+                <div className="flex flex-wrap mt-4">
+                    <div className="mr-3 flex alignitem-center">
+                        <RadioButton inputId="email" name="email" value="email"  onChange={(e) => setSelectedOption(e.value)} checked={selectedOption === "email"} />
+                        <label htmlFor="email" className="ml-2">
+                            Email
+                        </label>
+                    </div>
+                    <div className="mr-3 flex alignitem-center">
+                        <RadioButton inputId="Phone" name="phone" value="phone"  onChange={(e) => setSelectedOption(e.value)} checked={selectedOption === "phone"} />
+                        <label htmlFor="phone" className="ml-2">
+                           Phone
+                        </label>
+                    </div>
+                    <div className="mr-3 flex alignitem-center">
+                        <RadioButton inputId="message" name="message" value="message"  onChange={(e) => setSelectedOption(e.value)} checked={selectedOption === "message"} />
+                        <label htmlFor="message" className="ml-2">
+                        Text Message
+                        </label>
+                    </div>
+                    <div className="mr-3 flex alignitem-center">
+                        <RadioButton inputId="mail" name="mail" value="mail"  onChange={(e) => setSelectedOption(e.value)} checked={selectedOption === "mail"} />
+                        <label htmlFor="mail" className="ml-2">
+                      Mail
+                        </label>
+                    </div>
+                </div>
+                {/* <div className="flex flex-wrap">
                     <div className="flex align-items-center mr-3">
                         <Checkbox
                             inputId="email"
@@ -245,7 +274,7 @@ const PersonalInfo = ({ handleNext }) => {
                             Mail
                         </label>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className="mt-4">

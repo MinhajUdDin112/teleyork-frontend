@@ -7,6 +7,7 @@ import BASE_URL from "../../../config";
 export const addCustomerInfoAction = createAsyncThunk("customer/info", async (body) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/user/initialInformation`, body);
+       
         return response;  
     } catch (error) {
         console.log(error);
@@ -19,7 +20,7 @@ export const addCustomerInfoAction = createAsyncThunk("customer/info", async (bo
 export const addCustomerAddressAction = createAsyncThunk("customer/address", async (body) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/user/homeAddress`, body);
-        console.log("address response is", response);
+      
         return response.data;
 
     } catch (error) {

@@ -6,7 +6,6 @@ const zipCode = createSlice({
     name: "zipcode",
     initialState: {
         serviceAvailability: JSON.parse(localStorage.getItem("zipData")) ?? null,
-        
         isvald: false,
         loading: false,
         error: null,
