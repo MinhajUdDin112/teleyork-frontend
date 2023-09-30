@@ -3,7 +3,6 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
 import BASE_URL from "../../../../config";
-import { Button } from "primereact/button";
 
 const InCompleteEnrollments = () => {
 
