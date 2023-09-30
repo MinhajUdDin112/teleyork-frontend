@@ -51,7 +51,7 @@ const InCompleteEnrollments = () => {
                         <Column header="Zip" field="zip"></Column>
                         <Column header="DOB" field="DOB"></Column>
                         <Column header="Plan Name" field="Planname"></Column>
-                        <Column header="Enroll Date" field={(item) => item?.createdAt.split('T')[0]}></Column>
+                        <Column header="Enroll Date" field={(item) => item?.createdAt ? item?.createdAt.split('T')[0] : ""}></Column>
                         <Column header="Status" field="status"></Column>
                         {/* <Column header="Actions" body={Actions}></Column> */}
                     </DataTable>
