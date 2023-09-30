@@ -1,32 +1,24 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { useEffect } from "react";
-import Axios from "axios";
-import BASE_URL from "../../../../../config";
 import Preview_Final_component from "./Preview_Final_component";
 const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
-    const [data, setData] = useState([]);
 
-   
 
-    useEffect(() => {
-        const getData = async () => {
-            console.log("before preview data is")
-            const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id&&_id}`);
-            console.log("after calling preview data is",response?.data?.data)
-            setData(response?.data?.data);
-        };
-        getData();
-    }, []);
+//get preview  information from local storage
+const addressRes = localStorage.getItem("planResponse");
+const parseAddressRes = JSON.parse(addressRes);
+const addressInfo =parseAddressRes?.data;
+ 
  const nextPage =()=>{
     setShowFinalComponent(true);
  }
-    
-
+ const formatDate = (date) => {
+    if (!date) return ""; // Handle null or undefined dates
+    return new Date(date).toLocaleDateString("en-US");
+  };
     return (
         <>
         {
@@ -55,59 +47,57 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                 <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                 <br />
 
-                {data &&
-                    [data].map((item) => {
-                        return (
-                            <>
-                                <div key={item._id} className="flex justify-content-around">
+                                <div  className="flex justify-content-around">
                                     <div className="border-2 w-5 pt-2">
                                         <div className="flex border-bottom-2">
                                             <p className="w-6 ml-4">Name:</p>
-                                            <p className="w-6">{item?.firstName}</p>
+                                            <p className="w-6">{addressInfo?.firstName}</p>
                                         </div>
                                         <div className="flex border-bottom-2 pt-2">
                                             <p className="w-6 ml-4">City:</p>
-                                            <p >{item?.city}</p>
+                                            <p>{addressInfo?.city}</p>
                                         </div>
                                         <div className="flex border-bottom-2 pt-2">
                                             <p className="w-6 ml-4">Zip Code:</p>
-                                            <p className="w-6">{item?.zip}</p>
+                                            <p className="w-6">{addressInfo?.zip}</p>
                                         </div>
                                         <div className="flex border-bottom-2 pt-2">
                                             <p className="w-6 ml-4">Telephone:</p>
-                                            <p className="w-6">{item?.contact}</p>
+                                            <p className="w-6">{addressInfo?.contact}</p>
                                         </div>
                                         <div className="flex pt-2">
                                             <p className="w-6 ml-4">DOB:</p>
-                                            <p className="w-6">{item?.DOB}</p>
+                                            <p className="w-6">{formatDate(addressInfo?.DOB)}</p>
                                         </div>
                                     </div>
                                     <div className="border-2 w-5 ">
                                         <div className="flex border-bottom-2 pt-2">
                                             <p className="w-6 ml-4">Service Address:</p>
-                                            <p className="w-6">{item?.address1}</p>
+                                            <p className="w-6">{addressInfo?.address1}</p>
                                         </div>
                                         <div className="flex border-bottom-2 pt-2">
                                             <p className="w-6 ml-4">State:</p>
-                                            <p className="w-6">{item?.state}</p>
+                                            <p className="w-6">{addressInfo?.state}</p>
                                         </div>
                                         <div className="flex border-bottom-2 pt-2">
                                             <p className="w-6 ml-4">Email:</p>
-                                            <p className="w-6">{item?.email}</p>
+                                            <p className="w-6">{addressInfo?.email}</p>
                                         </div>
                                         <div className="flex border-bottom-2 pt-2">
                                             <p className="w-6 ml-4">SSN:</p>
-                                            <p className="w-6">{item?.SSN}</p>
+                                            <p className="w-6">{addressInfo?.SSN}</p>
                                         </div>
                                         <div className="flex pt-2">
                                             <p className="w-6 ml-4">Plan:</p>
-                                            <p className="w-6">{item?.plan}</p>
+                                            <p className="w-6">{addressInfo?.plan}</p>
                                         </div>
                                     </div>
                                 </div>
-                            </>
-                        );
-                    })}
+                           
+                       
+                   
+
+               
                 <br />
                 <br />
                 <div className="flex">

@@ -22,6 +22,10 @@ export default function ServiceAvailabilityPage() {
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
 
+
+
+ 
+
   const validationSchema = Yup.object().shape({
     zipCode: Yup.string().required("Please enter Zip code"),
   });
@@ -41,9 +45,9 @@ export default function ServiceAvailabilityPage() {
         navigate("/enrollment");
       } else {
         console.log("rejected case", "service is not available");
-        setErrorMessage("Sorry, Service is not available in your area.");
-        actions.resetForm();
+        setErrorMessage("Sorry, Service is not available in your area.");  
       }
+      actions.resetForm();
     },
   });
 

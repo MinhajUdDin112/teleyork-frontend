@@ -43,6 +43,7 @@ const CreateTemplate = () => {
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
             };
+            console.log("data to send",dataToSend)
              dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
             setTemplateText("");

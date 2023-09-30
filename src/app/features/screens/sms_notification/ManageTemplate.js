@@ -8,6 +8,7 @@ import { getAllTemplateAction, getOneTemplateAction } from "../../../store/notif
 import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
 import BASE_URL from "../../../../config";
+import { ProgressSpinner } from "primereact/progressspinner";
 import Axios from "axios";
 
 const ManageTemplate = () => {
@@ -16,7 +17,7 @@ const ManageTemplate = () => {
     console.log('allTemps', allTemps)
     const dispatch = useDispatch();
 
-    const { getAllTemplate, getOneTemplate, getAllTemplateLoading } = useSelector((state) => state.notification);
+    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading  } = useSelector((state) => state.notification);
 
     const loginResponse = useSelector((state) => state.login)
     const loginData = loginResponse.loginData
@@ -25,12 +26,16 @@ const ManageTemplate = () => {
 
     const renderActions = (rowData) => {
         return (
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Button label="Download " onClick={() => handleDownload(rowData)} />
-            </div>
+            getOneTemplateLoading ? (
+                <ProgressSpinner style={{ width: '40px', height: '40px', color: 'blue' }} strokeWidth="4" animationDuration=".5s" />
+            ) : (
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Button label="Download " onClick={() => handleDownload(rowData)} />
+                </div>
+            )
         );
     };
-
+    
     const handleDownload = (rowData) => {
         const { templateId } = rowData;
         dispatch(getOneTemplateAction(templateId));

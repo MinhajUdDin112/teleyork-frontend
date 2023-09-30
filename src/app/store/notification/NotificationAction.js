@@ -11,7 +11,6 @@ export const addTemplateAction = createAsyncThunk("notification/api/sms/addTempl
         //     Toasts({ success: `Template ${response.data.msg}` });
         //      return response.data;
         // }
-        console.log("data response is ",response);
         return response;
 
     } catch (error) {

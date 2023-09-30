@@ -4,7 +4,7 @@ import { DataTable } from "primereact/datatable";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import CustomLoading from "../../components/custom_spinner";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { getAllTemplateAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
 import BASE_URL from "../../../../config";
@@ -38,7 +38,7 @@ const Draft = () => {
                 <Button label="View" onClick={() => handleView(rowData)} className="w-6rem" />
                 {/* Conditionally render the loader or the Send button */}
                 {isLoading ? (
-                    <CustomLoading />
+                    <ProgressSpinner style={{width: '40px', height: '40px' ,color:'blue' }} strokeWidth="4" animationDuration=".5s" />
                 ) : (
                     <Button
                         label="Send"
@@ -88,6 +88,7 @@ const Draft = () => {
 
     const getAllDraft = async () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/template/draft?companyId=${companyId}`);
+        // console.log("response is",response?.data?.data)
         setAllDraft(response?.data?.data);
     };
 
@@ -102,7 +103,7 @@ const Draft = () => {
             </div>
             <div className="card mx-5 p-0 border-noround">
                 {getAllTemplateLoading ? (
-                    <CustomLoading />
+                   <ProgressSpinner style={{width: '40px', height: '40px' ,color:'blue' }} strokeWidth="4" animationDuration=".5s"  />
                 ) : (
                     <div className="">
                         <DataTable value={allDraft} showGridlines>
@@ -110,6 +111,7 @@ const Draft = () => {
                             <Column header="Name" field="name"></Column>
                             <Column header="Message" field="template"></Column>
                             <Column header="Type" body={type}></Column>
+                            <Column header="Subject" field="notification_subject"></Column>
                             <Column header="Status" field="status"></Column>
                             <Column header="Draft SMS Count" field="draftSMSCount"></Column>
                             <Column header="Sent SMS Count" field="sentSMSCount"></Column>
