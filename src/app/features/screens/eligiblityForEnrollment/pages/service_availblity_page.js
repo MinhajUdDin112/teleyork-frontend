@@ -8,7 +8,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { InputText } from "primereact/inputtext";
 import { fetchZipCode } from "../../../../store/zipcodeSlice";
 import { ProgressSpinner } from "primereact/progressspinner";
+import BASE_URL from "../../../../../config";
+import Axios from "axios";
+
+
 export default function ServiceAvailabilityPage() {
+  
+  const [isLoading, setIsLoading] = useState(false)
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -16,11 +23,16 @@ export default function ServiceAvailabilityPage() {
 
   const zipResponse = useSelector((state) => state.zip);
   const zipStatus = zipResponse?.serviceAvailability?.status;
+  console.log('zipStatus', zipStatus)
   const [errorMessage, setErrorMessage] = useState("");
 
   // Get user data from localStorage
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
+
+
+
+
 
   const validationSchema = Yup.object().shape({
     zipCode: Yup.string().required("Please enter Zip code"),
@@ -31,19 +43,32 @@ export default function ServiceAvailabilityPage() {
     initialValues: {
       zipCode: "",
     },
-    onSubmit: async (values,actions) => {
+    onSubmit: async (values, actions) => {
       const serviceProvider = parseLoginRes?.compony;
       const csr = "645c7bcfe5098ff6251a2255";
       const carrier = "6455532566d6fad6eac59e34";
       const dataToSend = { serviceProvider, csr, carrier, ...values };
-      await dispatch(fetchZipCode(dataToSend));
-      if (zipStatus === 200 || zipStatus === 201) {
-        navigate("/enrollment");
-      } else {
-        console.log("rejected case", "service is not available");
-        setErrorMessage("Sorry, Service is not available in your area.");
-        actions.resetForm();
+setIsLoading(true)
+      try {
+        const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);
+        if (response?.status === 200) {
+          localStorage.setItem("zipData", JSON.stringify(response.data));
+          navigate("/enrollment")
+        }
+      } catch (error) {
+        console.log(error?.response?.data?.msg)
+        setErrorMessage(error?.response?.data?.msg);
+        setIsLoading(false)
       }
+
+      // await dispatch(fetchZipCode(dataToSend));
+      // if (zipStatus === 200) {
+      //   navigate("/enrollment");
+      // } else {
+      //   console.log("rejected case", "service is not available");
+      //   setErrorMessage("Sorry, Service is not available in your area.");
+      //   actions.resetForm();
+      // }
     },
   });
 
@@ -53,7 +78,7 @@ export default function ServiceAvailabilityPage() {
         <div className="card col-4 ">
           <form className="my-4" onSubmit={formik.handleSubmit}>
             <h6>Please enter zip code to check service availability</h6>
-            {loading? (  <InputText
+            {isLoading ? (<InputText
               type="text"
               name="zipCode"
               className="col-12 mb-3"
@@ -63,7 +88,7 @@ export default function ServiceAvailabilityPage() {
               minLength={5}
               maxLength={5}
               disabled
-            />) : (  <InputText
+            />) : (<InputText
               type="text"
               name="zipCode"
               className="col-12 mb-3"
@@ -73,7 +98,7 @@ export default function ServiceAvailabilityPage() {
               minLength={5}
               maxLength={5}
             />)}
-          
+
             {formik.touched.zipCode && formik.errors.zipCode ? (
               <p className="mt-0" style={{ color: "red" }}>
                 {formik.errors.zipCode}
@@ -82,15 +107,16 @@ export default function ServiceAvailabilityPage() {
             {errorMessage && (
               <p style={{ color: "red" }}>{errorMessage}</p>
             )}
-            {
-              loading? (<ProgressSpinner style={{width: '40px', height: '40px' , marginLeft:'160px',color:'blue' }} strokeWidth="4" animationDuration=".5s"  />):  <Button
-              label={loading ? "Verifying..." : "Submit"}
-              type="submit"
-              className="col-12"
-              disabled={loading}
-            />
-            }
-          
+
+              <Button
+                label={"Submit"}
+                icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}
+                type="submit"
+                className="col-12"
+                disabled={isLoading}
+              />
+            
+
           </form>
         </div>
       </div>

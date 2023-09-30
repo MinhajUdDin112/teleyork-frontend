@@ -5,14 +5,16 @@ import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { Editor } from "primereact/editor";
+import { useEffect } from "react";
 import { Toast } from "primereact/toast";
 import { addTemplateAction } from "../../../store/notification/NotificationAction";
 import { ProgressSpinner } from "primereact/progressspinner";
 const CreateTemplate = () => {
     const dispatch = useDispatch();
     const [templateText, setTemplateText] = useState("");
-
-    const { addTemplateLoading } = useSelector((state) => state.notification);
+        const { addTemplateLoading } = useSelector((state) => state.notification);
+    // const addStatus = useSelector((state)=>state.notification);
+    // const status = addStatus?.addTemplate?.status;
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;
     const companyId = loginData?.compony;
@@ -23,6 +25,7 @@ const CreateTemplate = () => {
         { label: "Both", value: 2 },
     ];
 
+
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -30,7 +33,7 @@ const CreateTemplate = () => {
             notification_subject: "",
         },
 
-        onSubmit: (values, actions) => {
+        onSubmit:  (values, actions) => {
             const name = templateText.match(/(?<=\$)\w+/g) || [];
             const keySequence = ["templateId", ...name];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
@@ -45,6 +48,8 @@ const CreateTemplate = () => {
             actions.resetForm();
             setTemplateText("");
             show();
+           
+           
         },
     });
 

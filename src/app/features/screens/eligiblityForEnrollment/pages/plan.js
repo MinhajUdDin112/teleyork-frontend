@@ -38,18 +38,23 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
 
     const postData = async () => {
         const data = {
-            csr: "645c7bcfe5098ff6251a2255",
-            userId: _id,
-            plan: selectedPlanId
-        }
-       
-        const res = await Axios.post(`${BASE_URL}/api/user/plan`, data);
-        if (res?.status === 200 || res?.status === 201  ) {
+          csr: "645c7bcfe5098ff6251a2255",
+          userId: _id,
+          plan: selectedPlanId,
+        };
+    
+        try {
+          const res = await Axios.post(`${BASE_URL}/api/user/plan`, data);
+          if (res?.status === 200 || res?.status === 201) {
+            localStorage.setItem("planResponse", JSON.stringify(res.data));
+    
             setActiveIndex(3);
+          }
+        } catch (error) {
+          console.error("Error posting data:", error);
         }
-       
-       
-    }
+      };
+    
     
     
     return (

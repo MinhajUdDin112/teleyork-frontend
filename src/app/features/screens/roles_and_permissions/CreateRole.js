@@ -13,14 +13,16 @@ import { useLocation } from "react-router-dom";
 
 const CreateRole = () => {
 
+    const [rolePermissions, setRolePermissions] = useState([])
+
+    console.log('rolePermissions', rolePermissions)
+
     const location = useLocation()
     const { rowData } = location.state || {};
 
     const [moduleData, setModuleData] = useState([]);
     const [selectedModules, setSelectedModules] = useState({});
-    console.log('selectedModules', selectedModules)
     const [selectedSubmodules, setSelectedSubmodules] = useState({});
-    console.log('selectedSubmodules', selectedSubmodules)
     const [selectedActions, setSelectedActions] = useState({});
 
     // Get user data from ls
@@ -79,7 +81,7 @@ const CreateRole = () => {
                 }
             });
 
-            // return
+            return
 
             // Send the data to the server using Axios POST request
             Axios.post(`${BASE_URL}/api/web/role`, data)
@@ -106,6 +108,7 @@ const CreateRole = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/module`);
             setModuleData(res?.data?.data || []);
+            console.log('res?.data?.data', res?.data?.data)
         } catch (error) {
             console.error("Error fetching module data:", error);
         }
@@ -116,7 +119,6 @@ const CreateRole = () => {
     }, []);
 
     const handleModuleCheckboxChange = (moduleId) => {
-        console.log("moduleId", moduleId)
         setSelectedModules((prevSelectedModules) => ({
             ...prevSelectedModules,
             [moduleId]: !prevSelectedModules[moduleId],
@@ -199,16 +201,14 @@ const CreateRole = () => {
     };
 
     const getPermissionsByRoleId = async () => {
-
-        const data = {
-            "roleId": rowData && rowData?._id
-        }
-
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/role/roleDetails?serviceProvider=${parseLoginRes?.compony}`, data);
+            const res = await Axios.get(`${BASE_URL}/api/web/role/roleDetails?roleId=${rowData?.role?._id}`);
+            if (res?.status === 200 || res?.status === 201) {
+                setRolePermissions(res?.data?.data?.permissions)
+            }
             console.log('res', res)
         } catch (error) {
-            console.error("Error fetching module data:", error);
+            console.error("Error fetching module data:", error?.response);
         }
     };
 
@@ -297,7 +297,6 @@ const CreateRole = () => {
                                                             {submodule.name}
                                                         </div>
                                                     </li>
-                                                    {console.log('module.submodule', module.submodule)}
                                                     <ul>
                                                         <li>
                                                             {submodule.actions.map((action) => (
@@ -323,6 +322,7 @@ const CreateRole = () => {
                         ))
                     }
                 </div>
+
                 {/* 
                 <div>
                     <table className="w_100 text-left">

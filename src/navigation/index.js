@@ -19,7 +19,7 @@ export const menuNavigation = [
                 items: [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
                     { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
-                    { label: "All Enrollments", icon: "", to: "/allenrollments" },
+                    { label: "All Enrollments", icon: "", to: "/all-enrollments" },
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
                     { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
@@ -118,7 +118,7 @@ export const menuNavigation = [
     {
         items: [
             {
-                label: "Inventory (PC382)",
+                label: "Inventory ",
                 items: [
                     {
                         label: "Manage Inventory",

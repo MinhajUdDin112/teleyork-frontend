@@ -8,6 +8,7 @@ import { getAllTemplateAction, getOneTemplateAction } from "../../../store/notif
 import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
 import BASE_URL from "../../../../config";
+import { ProgressSpinner } from "primereact/progressspinner";
 import Axios from "axios";
 
 const ManageTemplate = () => {
@@ -16,18 +17,17 @@ const ManageTemplate = () => {
     console.log('allTemps', allTemps)
     const dispatch = useDispatch();
 
-    const { getAllTemplate, getOneTemplate, getAllTemplateLoading } = useSelector((state) => state.notification);
+    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
 
     const loginResponse = useSelector((state) => state.login)
     const loginData = loginResponse.loginData
-    const companyId = loginData?.compony
-    console.log("companyId", companyId)
+    const userId = loginData?._id
 
     const renderActions = (rowData) => {
         return (
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Button label="Download Template" onClick={() => handleDownload(rowData)} className="p-button-sm" />
-            </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Button label="Download " onClick={() => handleDownload(rowData)}  disabled={getOneTemplateLoading}/>
+                </div>
         );
     };
 
@@ -41,7 +41,7 @@ const ManageTemplate = () => {
     }, []);
 
     const getAllTemps = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?companyId=${companyId}`);
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
         setAllTemps(response?.data?.data)
     }
 

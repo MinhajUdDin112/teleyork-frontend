@@ -80,7 +80,7 @@ const ManageUser = () => {
 
     const permissions = (rowData) => {
         return (
-            <Button label="Update" onClick={() => redirectToUpdatePermissions(rowData)} />
+            <Button label="Update" onClick={() => redirectToUpdatePermissions(rowData)} className='p-button-sm' />
         )
     }
 
