@@ -17,12 +17,11 @@ const ManageTemplate = () => {
     console.log('allTemps', allTemps)
     const dispatch = useDispatch();
 
-    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading  } = useSelector((state) => state.notification);
+    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
 
     const loginResponse = useSelector((state) => state.login)
     const loginData = loginResponse.loginData
-    const companyId = loginData?.compony
-    console.log("companyId", companyId)
+    const userId = loginData?._id
 
     const renderActions = (rowData) => {
         return (
@@ -35,7 +34,7 @@ const ManageTemplate = () => {
             )
         );
     };
-    
+
     const handleDownload = (rowData) => {
         const { templateId } = rowData;
         dispatch(getOneTemplateAction(templateId));
@@ -46,7 +45,7 @@ const ManageTemplate = () => {
     }, []);
 
     const getAllTemps = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?companyId=${companyId}`);
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
         setAllTemps(response?.data?.data)
     }
 

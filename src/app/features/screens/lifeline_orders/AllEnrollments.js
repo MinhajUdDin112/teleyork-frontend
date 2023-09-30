@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import BASE_URL from "../../../../config";
+import Axios from "axios";
 
 const AllEnrollments = () => {
+
+    const [allEnrollments, setAllEnrollments] = useState([])
+
+    console.log('allEnrollments', allEnrollments)
+
+    // Get user data from ls
+    const loginRes = localStorage.getItem("userData")
+    const parseLoginRes = JSON.parse(loginRes)
+
     const [dateRange, setDateRange] = useState(null);
     const [search, setSearch] = useState(null);
     const [master, setMaster] = useState(null);
@@ -19,37 +30,24 @@ const AllEnrollments = () => {
     const retailerOptions = [{ name: "Retailer", code: "RT" }];
     const employeeOptions = [{ name: "Employee", code: "EP" }];
 
-    const tableData = [
-        {
-            SNo: "1",
-            Option: "",
-            EnrollmentID: "",
-            Name: "",
-            Address: "",
-            City: "",
-            State: "",
-            Zip: "",
-            Dob: "",
-            Planname: "",
-            planprice: "",
-            Phonecost: "",
-            Amountpaid: "",
-            Postingdate: "",
-            EsnNumber: "",
-            Telephone: "",
-            Activationcall: "",
-            Activationcalldatetime: "",
-            Status: "",
-            Handover: "",
-            Rejectedreason: "",
-            Enrolltype: "",
-            Reviewernote: "",
-        },
-    ];
+    const getAllEnrollments = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/user/all?serviceProvider=${parseLoginRes?.compony}`);
+            if (res?.status === 200 || res?.status === 201) {
+                setAllEnrollments(res?.data?.data)
+            }
+        } catch (error) {
+            console.error("Error fetching module data:", error?.response);
+        }
+    };
+
+    useEffect(() => {
+        getAllEnrollments()
+    }, []);
 
     return (
         <div className="card bg-pink-50">
-            <div className="mx-5">
+            {/* <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">All Enrollments</h3>
             </div>
             <div className="card flex flex-column justify-content-center mx-5 border-noround">
@@ -89,36 +87,36 @@ const AllEnrollments = () => {
             </div>
             <div className="card p-3 mx-5 border-noround bg-green-200 ">
                 <p className="text-sm font-semibold">Search Result: 0</p>
-            </div>
+            </div> */}
             <div className="card mx-5 p-0 border-noround">
-                <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">
+                {/* <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">
                     <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText>
-                </div>
+                </div> */}
                 <div className="">
-                    <DataTable showGridlines resizableColumns columnResizeMode="fit">
-                        <Column header="#" field="SNo" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Option" field="Option" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Enrollment ID" field="EnrollmentID" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Name" field="Name" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Address" field="Address" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="City" field="City" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="State" field="State" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Zip" field="Zip" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="DOB" field="Dob" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Plan Name" field="Planname" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Plan Price" field="Planprice" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Phone Cost" field="Phonecost" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Amount Paid by Customer" field="Amountpaid" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Posting Date" field="Postingdate" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="ESN Number" field="EsnNumber" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Telephone Number" field="Telephone" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Activation Call" field="Activationcall" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Activation Call Date Time" field="Activationcalldatetime" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Status" field="Status" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Handover Equipment" field="Handover" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Rejected Reason" field="Rejectedreason" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Enroll Type" field="Enrolltype" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
-                        <Column header="Reviewer Note" field="Reviewernote" resizeable={false} headerStyle={{ color: "black", fontWeight: "normal", fontSize: "small" }}></Column>
+                    <DataTable value={allEnrollments} showGridlines resizableColumns columnResizeMode="fit">
+                        <Column header="#" field="SNo"></Column>
+                        <Column header="Option" field="Option"></Column>
+                        <Column header="Enrollment ID" field="enrollmentId"></Column>
+                        <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
+                        <Column header="Address" field="address1"></Column>
+                        <Column header="City" field="city"></Column>
+                        <Column header="State" field="state"></Column>
+                        <Column header="Zip" field="zip"></Column>
+                        <Column header="DOB" field="DOB"></Column>
+                        <Column header="Plan Name" field="Planname"></Column>
+                        <Column header="Plan Price" field="Planprice"></Column>
+                        <Column header="Phone Cost" field="Phonecost"></Column>
+                        <Column header="Amount Paid by Customer" field="Amountpaid"></Column>
+                        <Column header="Posting Date" field="Postingdate"></Column>
+                        <Column header="ESN Number" field="EsnNumber"></Column>
+                        <Column header="Telephone Number" field="Telephone"></Column>
+                        <Column header="Activation Call" field="Activationcall"></Column>
+                        <Column header="Activation Call Date Time" field="Activationcalldatetime"></Column>
+                        <Column header="Status" field="Status"></Column>
+                        <Column header="Handover Equipment" field="Handover"></Column>
+                        <Column header="Rejected Reason" field="Rejectedreason"></Column>
+                        <Column header="Enroll Type" field="Enrolltype"></Column>
+                        <Column header="Reviewer Note" field="Reviewernote"></Column>
                     </DataTable>
                 </div>
             </div>
