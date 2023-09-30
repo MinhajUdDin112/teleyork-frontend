@@ -18,7 +18,9 @@ import classNames from "classnames";
 
 const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
 
-
+    const zipCode = useSelector((state) => {
+        return state.zip;
+    });
 
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
@@ -53,7 +55,6 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
             isACP: acp,
         },
         onSubmit: (values, actions) => {
-
             const csr = "64e0b1b135a9428007da3526";
             const userId = _id;
             const dataToSend = { csr, userId, ...values };
@@ -192,9 +193,9 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Contact Number <span className="steric">*</span></label>
-                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+999-999-9999" placeholder="+999 999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
+                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+999-999-9999" placeholder="+999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
                         {getFormErrorMessage("contact")}
-                       
+
                     </div>
                 </div>
 

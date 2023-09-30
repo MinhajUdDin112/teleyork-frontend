@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import PersonalInfo from '../PersonalInfo_com/PersonalInfo'
+import PersonalInfo from "../PersonalInfo_com/PersonalInfo";
 import Address from "../PersonalInfo_com/Address";
 import Question1 from "../PersonalInfo_com/Question1";
 
 
-export default function PersonalInfoPage({ setActiveIndex ,enrollment_id ,_id }) {
+export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id }) {
 
     const [currentComponent, setCurrentComponent] = useState(1);
-   
+
 
 
     const handleNext = () => {
@@ -37,10 +37,10 @@ export default function PersonalInfoPage({ setActiveIndex ,enrollment_id ,_id })
             render = <PersonalInfo handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
             break;
         case 2:
-            render = <Address handleNext={handleNext} handleBack={handleBack}  enrollment_id={enrollment_id} _id={_id}  />;
+            render = <Address handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
             break;
         case 3:
-            render = <Question1 handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id}  />;
+            render = <Question1 handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
             break;
         default:
             render = null;

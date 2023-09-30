@@ -9,12 +9,18 @@ import classNames from "classnames";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Divider } from "primereact/divider";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 
 const CreateRole = () => {
 
+    const location = useLocation()
+    const { rowData } = location.state || {};
+
     const [moduleData, setModuleData] = useState([]);
     const [selectedModules, setSelectedModules] = useState({});
+    console.log('selectedModules', selectedModules)
     const [selectedSubmodules, setSelectedSubmodules] = useState({});
+    console.log('selectedSubmodules', selectedSubmodules)
     const [selectedActions, setSelectedActions] = useState({});
 
     // Get user data from ls
@@ -72,6 +78,8 @@ const CreateRole = () => {
                     console.log('permissions', permissions)
                 }
             });
+
+            // return
 
             // Send the data to the server using Axios POST request
             Axios.post(`${BASE_URL}/api/web/role`, data)
@@ -177,7 +185,6 @@ const CreateRole = () => {
         });
     };
 
-
     // to uncheck permissions for a submodule
     const uncheckPermissionsForSubmodule = (submoduleId) => {
         setSelectedActions((prevSelectedActions) => {
@@ -190,6 +197,26 @@ const CreateRole = () => {
             return updatedActions;
         });
     };
+
+    const getPermissionsByRoleId = async () => {
+
+        const data = {
+            "roleId": rowData && rowData?._id
+        }
+
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/role/roleDetails?serviceProvider=${parseLoginRes?.compony}`, data);
+            console.log('res', res)
+        } catch (error) {
+            console.error("Error fetching module data:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (rowData) {
+            getPermissionsByRoleId()
+        }
+    }, [rowData]);
 
     return (
         <>
@@ -242,8 +269,63 @@ const CreateRole = () => {
 
                 <Divider />
 
+                <div className="grid r_n_r">
+                    {
+                        moduleData.map((module) => (
+                            <div className="col-12 md:col-6 lg:col-3">
+                                <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
+
+                                    <ul>
+                                        <li>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedModules[module._id] || false}
+                                                onChange={() => handleModuleCheckboxChange(module._id)}
+                                            />
+                                            {module.name}
+                                        </li>
+                                        {
+                                            module.submodule.map((submodule) => (
+                                                <ul>
+                                                    <li>
+                                                        <div key={submodule._id}>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedSubmodules[submodule._id] || false}
+                                                                onChange={() => handleSubmoduleCheckboxChange(submodule._id)}
+                                                            />
+                                                            {submodule.name}
+                                                        </div>
+                                                    </li>
+                                                    {console.log('module.submodule', module.submodule)}
+                                                    <ul>
+                                                        <li>
+                                                            {submodule.actions.map((action) => (
+                                                                <div key={`${submodule._id}-${action._id}`}>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={selectedActions[`${submodule._id}-${action._id}`] || false}
+                                                                        onChange={() => togglePermission(submodule._id, action._id)}
+                                                                    />
+                                                                    {action.name}
+                                                                </div>
+                                                            ))}
+                                                        </li>
+                                                    </ul>
+                                                </ul>
+                                            ))
+                                        }
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+                {/* 
                 <div>
-                    <table>
+                    <table className="w_100 text-left">
                         <thead>
                             <tr>
                                 <th>Module</th>
@@ -294,7 +376,7 @@ const CreateRole = () => {
                             ))}
                         </tbody>
                     </table>
-                </div>
+                </div> */}
 
                 {/* <div>
                     <br />

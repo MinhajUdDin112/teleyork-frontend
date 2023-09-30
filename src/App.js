@@ -7,7 +7,7 @@ import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
@@ -20,6 +20,8 @@ import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
+import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
+import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
 import manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
@@ -62,9 +64,7 @@ import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole"
 import CreateUser from "./app/features/screens/user_management/CreateUser";
 import ManageUser from "./app/features/screens/user_management/ManageUser";
 import EditUser from "./app/features/screens/user_management/EditUser";
-import NotFound from "./app/features/screens/not_found/NotFound"
-import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page"
-import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page"
+import NotFound from "./app/features/screens/not_found/NotFound";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -227,7 +227,6 @@ const App = () => {
 
                     <div className="layout-main-container">
                         <div className="layout-main">
-
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
@@ -259,10 +258,10 @@ const App = () => {
                                 <Route path="/draftall/:id" element={<ShowDraftAll />} />
                                 <Route path="/sentall/:id" element={<ShowSentAll />} />
                                 <Route path="/selfenrollment" element={<VerifyZip />} />
-                                <Route path="/personalinfo" element={<PersonalInfo />} />
-                                <Route path="/address" element={<Address />} />
-                                <Route path="/eligibile" element={<Eligibility />} />
-                                <Route path="/nationalverifier" element={<NationalVerifier />} />
+                                <Route path="/personalinfo/:id" element={<PersonalInfo />} />
+                                <Route path="/address/:id" element={<Address />} />
+                                <Route path="/eligibile/:id" element={<Eligibility />} />
+                                <Route path="/nationalverifier/:id" element={<NationalVerifier />} />
                                 <Route path="/resumeapplication" element={<ResumeApplication />} />
                                 <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate" element={<ManageTemplate />} />

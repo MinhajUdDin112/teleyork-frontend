@@ -19,6 +19,7 @@ const Sent = () => {
     const dispatch = useDispatch();
     const { getSentAllTemplate, getSentAllTemplateLoading } = useSelector((state) => state.notification);
     const navigate = useNavigate();
+
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -37,7 +38,7 @@ const Sent = () => {
     }, []);
 
     const getAllSent = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?companyId=${companyId}`);
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/sent?companyId=${companyId}`);
         setAllSent(response?.data?.data)
     }
 
@@ -59,7 +60,7 @@ const Sent = () => {
                     <CustomLoading />
                 ) : (
                     <div className="">
-                        <DataTable value={getSentAllTemplate?.data} showGridlines>
+                        <DataTable value={allSent} showGridlines>
                             <Column header="Template Id" field="templateId" />
                             <Column header="Name" field="name" />
                             <Column header="Message" field="template" />

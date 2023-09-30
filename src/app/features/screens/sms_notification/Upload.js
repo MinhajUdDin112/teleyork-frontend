@@ -64,6 +64,9 @@ const Upload = () => {
 
     }, [data]);
 
+    const chooseOptions = { label: 'Select', className: 'custom-choose-btn p-button-solid' };
+    const uploadOptions = { label: 'Send', className: 'custom-upload-btn p-button-solid' };
+
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
@@ -74,11 +77,13 @@ const Upload = () => {
                     name="file"
                     url={`${BASE_URL}/api/sms/upload/${tempObjId && tempObjId}`}
                     onUpload={onUpload}
-                    multiple
+                    // multiple
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     maxFileSize={1000000}
                     emptyTemplate={<p className="m-0">Drag and drop files here to upload.</p>}
                     onSelect={handleFileUpload}
+                    chooseOptions={chooseOptions}
+                    uploadOptions={uploadOptions}
                 />
             </div>
         </div>

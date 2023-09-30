@@ -47,7 +47,7 @@ const ManageUser = () => {
         }
 
     }
-
+    console.log('parseLoginRes?.compony', parseLoginRes?.compony)
     const getAllUsers = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/user/all?compony=${parseLoginRes?.compony}`);
@@ -58,12 +58,14 @@ const ManageUser = () => {
         }
     };
 
-    useEffect(() => {
-        getAllUsers();
-    }, []);
-
     const redirectToCreateUser = () => {
         navigate("/create-user")
+    }
+
+    const redirectToUpdatePermissions = (rowData) => {
+        navigate("/createrole", {
+            state: { rowData }
+        });
     }
 
     const userTableHeader = () => {
@@ -76,9 +78,15 @@ const ManageUser = () => {
         )
     }
 
-    const permissions = () => {
-
+    const permissions = (rowData) => {
+        return (
+            <Button label="Update" onClick={() => redirectToUpdatePermissions(rowData)} />
+        )
     }
+
+    useEffect(() => {
+        getAllUsers();
+    }, []);
 
     return (
         <>

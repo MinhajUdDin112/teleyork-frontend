@@ -8,14 +8,24 @@ import { getSentByTemplateIdAction } from "../../../store/notification/Notificat
 import CustomLoading from "../../components/custom_spinner";
 
 const ShowSentAll = () => {
+
     const { id } = useParams();
     const dispatch = useDispatch();
     const { getSentByTemplateId, getSentByTemplateIdLoading } = useSelector((state) => state.notification);
     const navigate = useNavigate();
 
+    const { loginData } = useSelector((state) => state.login);
+    const companyId = loginData?.compony
+
     useEffect(() => {
-        dispatch(getSentByTemplateIdAction(id));
+        let body = {
+            userId: loginData?._id,
+            templateId: id,
+            company: companyId,
+        };
+        dispatch(getSentByTemplateIdAction(body));
     }, [id]);
+
     const handleBack = () => {
         navigate("/sent");
     };
@@ -23,7 +33,7 @@ const ShowSentAll = () => {
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
-                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Template Data</h3>
+                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Sent Records</h3>
             </div>
             <div className="card mx-5 p-0 border-noround">
                 {getSentByTemplateIdLoading ? (

@@ -9,10 +9,13 @@ import BASE_URL from '../../../../config';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
+import { useNavigate } from 'react-router-dom';
 
 const CreateUser = () => {
 
     const [allRoles, setAllRoles] = useState([])
+
+    const navigate = useNavigate()
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData")
@@ -30,7 +33,7 @@ const CreateUser = () => {
         password: Yup.string()
             .matches(
                 /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                'Password must have at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
+                'Password must have at least 1 uppercase, 1 lowercase, 1 number, 1 special character and minimum 8 characters.'
             )
             .required('This field is required.'),
         city: Yup.string().required('This field is required.'),
@@ -80,6 +83,7 @@ const CreateUser = () => {
                     // Handle errors here
                     console.error('Error:', error);
                 });
+            navigate("/manage-user")
         },
     });
 
@@ -91,7 +95,7 @@ const CreateUser = () => {
     useEffect(() => {
         const getRoles = async () => {
             try {
-                const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=645a85198cd1ff499c8b99cd`);
+                const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
                 setAllRoles(res?.data?.data || []);
             } catch (error) {
                 console.error("Error fetching module data:", error);
