@@ -10,7 +10,12 @@ import { fetchZipCode } from "../../../../store/zipcodeSlice";
 import { ProgressSpinner } from "primereact/progressspinner";
 import BASE_URL from "../../../../../config";
 import Axios from "axios";
+
+
 export default function ServiceAvailabilityPage() {
+  
+  const [isLoading, setIsLoading] = useState(false)
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -43,7 +48,7 @@ export default function ServiceAvailabilityPage() {
       const csr = "645c7bcfe5098ff6251a2255";
       const carrier = "6455532566d6fad6eac59e34";
       const dataToSend = { serviceProvider, csr, carrier, ...values };
-
+setIsLoading(true)
       try {
         const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);
         if (response?.status === 200) {
@@ -53,6 +58,7 @@ export default function ServiceAvailabilityPage() {
       } catch (error) {
         console.log(error?.response?.data?.msg)
         setErrorMessage(error?.response?.data?.msg);
+        setIsLoading(false)
       }
 
       // await dispatch(fetchZipCode(dataToSend));
@@ -72,7 +78,7 @@ export default function ServiceAvailabilityPage() {
         <div className="card col-4 ">
           <form className="my-4" onSubmit={formik.handleSubmit}>
             <h6>Please enter zip code to check service availability</h6>
-            {loading ? (<InputText
+            {isLoading ? (<InputText
               type="text"
               name="zipCode"
               className="col-12 mb-3"
@@ -101,14 +107,15 @@ export default function ServiceAvailabilityPage() {
             {errorMessage && (
               <p style={{ color: "red" }}>{errorMessage}</p>
             )}
-            {
-              loading ? (<ProgressSpinner style={{ width: '40px', height: '40px', marginLeft: '160px', color: 'blue' }} strokeWidth="4" animationDuration=".5s" />) : <Button
-                label={loading ? "Verifying..." : "Submit"}
+
+              <Button
+                label={"Submit"}
+                icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}
                 type="submit"
                 className="col-12"
-                disabled={loading}
+                disabled={isLoading}
               />
-            }
+            
 
           </form>
         </div>

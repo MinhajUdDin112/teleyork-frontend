@@ -25,13 +25,9 @@ const ManageTemplate = () => {
 
     const renderActions = (rowData) => {
         return (
-            getOneTemplateLoading ? (
-                <ProgressSpinner style={{ width: '40px', height: '40px', color: 'blue' }} strokeWidth="4" animationDuration=".5s" />
-            ) : (
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Button label="Download " onClick={() => handleDownload(rowData)} />
+                    <Button label="Download " onClick={() => handleDownload(rowData)}  disabled={getOneTemplateLoading}/>
                 </div>
-            )
         );
     };
 

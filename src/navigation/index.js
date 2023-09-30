@@ -118,7 +118,7 @@ export const menuNavigation = [
     {
         items: [
             {
-                label: "Inventory (PC382)",
+                label: "Inventory ",
                 items: [
                     {
                         label: "Manage Inventory",
