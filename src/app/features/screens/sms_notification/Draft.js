@@ -88,7 +88,6 @@ const Draft = () => {
 
     const getAllDraft = async () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/template/draft?userId=${userId}`);
-        console.log("response is", response?.data?.data)
         setAllDraft(response?.data?.data);
     };
 

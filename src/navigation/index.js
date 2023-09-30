@@ -84,7 +84,7 @@ export const menuNavigation = [
     {
         items: [
             {
-                label: "Prepaid/Postpaid Oredrs",
+                label: "Prepaid/Postpaid Orders",
                 items: [
                     {
                         label: "New Enrollments",
