@@ -94,7 +94,7 @@ export const submitTemplateAction = createAsyncThunk("notification/sms/send", as
 //show all draft data action
 export const getDraftByTemplateIdAction = createAsyncThunk("notification/sms/draft", async (id, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`${BASE_URL}/api/sms/draft/${id}`);
+        const response = await axios.get(`${BASE_URL}/api/sms/draft?templateId=${id}`);
         return response.data;
     } catch (error) {
         if (error.response && error.data.response.message) {
