@@ -102,9 +102,9 @@ const AllEnrollments = () => {
                         <Column header="City" field="city"></Column>
                         <Column header="State" field="state"></Column>
                         <Column header="Zip" field="zip"></Column>
-                        <Column header="DOB" field="DOB"></Column>
-                        <Column header="Plan Name" field="Planname"></Column>
-                        <Column header="Plan Price" field="Planprice"></Column>
+                        <Column header="DOB" field={(item) => item?.DOB.split('T')[0]}></Column>
+                        <Column header="Plan Name" field="plan.name"></Column>
+                        <Column header="Plan Price" field="plan.price"></Column>
                         <Column header="Phone Cost" field="Phonecost"></Column>
                         <Column header="Amount Paid by Customer" field="Amountpaid"></Column>
                         <Column header="Posting Date" field="Postingdate"></Column>
@@ -112,7 +112,7 @@ const AllEnrollments = () => {
                         <Column header="Telephone Number" field="Telephone"></Column>
                         <Column header="Activation Call" field="Activationcall"></Column>
                         <Column header="Activation Call Date Time" field="Activationcalldatetime"></Column>
-                        <Column header="Status" field="Status"></Column>
+                        <Column header="Status" field="status"></Column>
                         <Column header="Handover Equipment" field="Handover"></Column>
                         <Column header="Rejected Reason" field="Rejectedreason"></Column>
                         <Column header="Enroll Type" field="Enrolltype"></Column>

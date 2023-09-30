@@ -25,9 +25,9 @@ const ManageTemplate = () => {
 
     const renderActions = (rowData) => {
         return (
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Button label="Download " onClick={() => handleDownload(rowData)}  disabled={getOneTemplateLoading}/>
-                </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Button label="Download " onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />
+            </div>
         );
     };
 
@@ -36,9 +36,9 @@ const ManageTemplate = () => {
         dispatch(getOneTemplateAction(templateId));
     };
 
-    useEffect(() => {
-        dispatch(getAllTemplateAction());
-    }, []);
+    // useEffect(() => {
+    //     dispatch(getAllTemplateAction());
+    // }, []);
 
     const getAllTemps = async () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
