@@ -26,11 +26,11 @@ const Address = () => {
                 ...values,
             }
             axios.post(`${BASE_URL}/api/enrollment/homeAddress`, newData)
-            navigate(`/eligibile/${id}`)
+            navigate(`/selfenrollment/eligibile/${id}`)
         },
     });
     const handleBack = () => {
-        navigate("/personalinfo");
+        navigate("/selfenrollment/personalinfo");
     };
     return (
         <>

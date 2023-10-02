@@ -29,7 +29,7 @@ const VerifyZip = () => {
 
     useEffect(()=>{
         if(verifyZip){
-            navigate(`/personalinfo/${verifyZip?.data?._id}`);
+            navigate(`/selfenrollment/personalinfo/${verifyZip?.data?._id}`);
         }
     },[verifyZip])
 

@@ -34,7 +34,7 @@ const PersonalInfo = () => {
                 ...values,
             };
             const res = axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
-            navigate(`/address/${id}`)
+            navigate(`/selfenrollment/address/${id}`)
         },
     });
     return (
