@@ -21,7 +21,7 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
     const zipCode = useSelector((state) => {
         return state.zip;
     });
-
+    const [eSim, seteSim] = useState(false) 
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
     const [acp, setAcp] = useState(false);
@@ -34,8 +34,6 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
         contact: Yup.string().required("This is Required."),
         drivingLicense: Yup.string().required("This is Required."),
         email: Yup.string().email().required("This is Required."),
-        isSelfReceive: Yup.string().required("This is required."),
-        isACP: Yup.string().required("This is required."),
     });
 
     const formik = useFormik({
@@ -50,6 +48,7 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
             contact: "",
             drivingLicense: "",
             email: "",
+            ESim:"",
             bestWayToReach: "",
             isSelfReceive: "",
             isACP: acp,
@@ -64,6 +63,9 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
         },
     });
 
+    useEffect(() => {
+        formik.setFieldValue("ESim", eSim);
+       }, [eSim])
    useEffect(() => {
     formik.setFieldValue("bestWayToReach", selectedOption);
    }, [selectedOption])
@@ -76,6 +78,9 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+    };
+    const handleESim = (e) => {
+        seteSim(e.target.value);
     };
 
     const handleOptionChange = (e) => {
@@ -131,7 +136,7 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
         <>
             <form onSubmit={formik.handleSubmit}>
 
-                <div className="flex flex-row justify-content-between align-tems-center mb-2">
+                <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                     <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
                     <Button  label="Continue" type="submit"  />
                 </div>
@@ -193,14 +198,27 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Contact Number <span className="steric">*</span></label>
-                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="+999-999-9999" placeholder="+999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
+                        <InputMask id="contact" value={formik.values.contact} onChange={formik.handleChange} mask="999-999-9999" placeholder="999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
                         {getFormErrorMessage("contact")}
 
                     </div>
                 </div>
 
             </form>
-
+            <div  className="col-6 mb-3 p-0">
+                    <p className="font-semibold">E-Sim</p>
+                    <div className="flex flex-wrap mt-2">
+                        <div className="mr-3 flex alignitem-center">
+                            <RadioButton id="ESIm" value={false} checked={eSim === false} onChange={(e) => handleESim(e)}></RadioButton>
+                            <label className="ml-2">NO</label>
+                        </div>
+                        <div  className="mr-3 flex alignitem-center">
+                            <RadioButton id="ESIm" value={true} checked={eSim === true} onChange={(e) => handleESim(e)}></RadioButton>
+                            <label className="ml-2">Yes</label>
+                            <div />
+                        </div>
+                    </div>
+                </div>
             <div className="col-6 mb-3 p-0">
                 <p className="font-semibold">What is the best way to reach you?</p>
                 <div className="flex flex-wrap mt-4">
@@ -228,53 +246,13 @@ const PersonalInfo = ({ handleNext,enrollment_id,_id }) => {
                       Mail
                         </label>
                     </div>
-                </div>
-                {/* <div className="flex flex-wrap">
-                    <div className="flex align-items-center mr-3">
-                        <Checkbox
-                            inputId="email"
-                            value="email"
-                            checked={selectedOption === 'email'}
-                            onChange={handleOptionChange}
-                        />
-                        <label className="mx-2">
-                            Email
+                    <div className="mr-3 flex alignitem-center">
+                        <RadioButton inputId="any" name="any" value="any"  onChange={(e) => setSelectedOption(e.value)} checked={selectedOption === "any"} />
+                        <label htmlFor="any" className="ml-2">
+                     Any
                         </label>
                     </div>
-                    <div className="flex align-items-center mr-3">
-                        <Checkbox
-                            inputId="phone"
-                            value="phone"
-                            checked={selectedOption === 'phone'}
-                            onChange={handleOptionChange}
-                        />
-                        <label className="mx-2">
-                            Phone
-                        </label>
-                    </div>
-                    <div className="flex align-items-center mr-3">
-                        <Checkbox
-                            inputId="text"
-                            value="text"
-                            checked={selectedOption === 'text'}
-                            onChange={handleOptionChange}
-                        />
-                        <label className="mx-2">
-                            Text Message
-                        </label>
-                    </div>
-                    <div className="flex align-items-center mr-3">
-                        <Checkbox
-                            inputId="mail"
-                            value="mail"
-                            checked={selectedOption === 'mail'}
-                            onChange={handleOptionChange}
-                        />
-                        <label className="mx-2">
-                            Mail
-                        </label>
-                    </div>
-                </div> */}
+                </div>     
             </div>
 
             <div className="mt-4">

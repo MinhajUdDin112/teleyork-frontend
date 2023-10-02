@@ -60,7 +60,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
     return (
         <>
             <div className="card">
-                <div className="flex flex-row justify-content-between">
+                <div className="flex flex-row justify-content-between sticky-buttons">
                     <Button label="Back"
                         onClick={() => {
                             setActiveIndex(1);

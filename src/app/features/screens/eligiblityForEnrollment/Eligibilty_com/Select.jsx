@@ -70,16 +70,16 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
     return (
         <>
             <div>
-                <div className="flex flex-row justify-content-between align-items-center mb-2">
+                <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="submit" onClick={handleBack} />
-                    <div>
+                   
                         <Button
                             label="Continue"
                             type="submit"
                             onClick={postData}
                             disabled={btnState}
                         />
-                    </div>
+                   
                 </div>
                 <div>
                     <h6>Enrollment ID:{enrollment_id}</h6>
