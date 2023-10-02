@@ -19,7 +19,7 @@ export const menuNavigation = [
                 items: [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
                     { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
-                    { label: "All Enrollments", icon: "", to: "/allenrollments" },
+                    { label: "All Enrollments", icon: "", to: "/all-enrollments" },
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
                     { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
@@ -84,7 +84,7 @@ export const menuNavigation = [
     {
         items: [
             {
-                label: "Prepaid/Postpaid Oredrs",
+                label: "Prepaid/Postpaid Orders",
                 items: [
                     {
                         label: "New Enrollments",
@@ -116,10 +116,10 @@ export const menuNavigation = [
         ],
     },
     {
-        items:[
+        items: [
             {
-                label: "Inventory (PC382)",
-                items:[
+                label: "Inventory ",
+                items: [
                     {
                         label: "Manage Inventory",
                         to: "/manageinventory",
@@ -167,25 +167,26 @@ export const menuNavigation = [
             {
                 label: "Notifications",
                 items: [
-                    {
-                        label: "Manage Templates",
-                        to: "/managetemplate",
-                    },
+
                     {
                         label: "Create Template",
                         to: "/createtemplate",
+                    },
+                    {
+                        label: "Manage Templates",
+                        to: "/managetemplate",
                     },
                     {
                         label: "Upload Template",
                         to: "/smsnotification",
                     },
                     {
-                        label: "Sent",
-                        to: "/sent",
-                    },
-                    {
                         label: "Draft",
                         to: "/draft",
+                    },
+                    {
+                        label: "Sent",
+                        to: "/sent",
                     },
                 ],
             },

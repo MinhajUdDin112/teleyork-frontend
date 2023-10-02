@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { useDispatch } from "react-redux";
-import { fetchPlanListAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import axios from "axios";
 import BASE_URL from "../../../../../config";
-const Plan = ({ setActiveIndex }) => {
-    const [apidata, setapidata] = useState([]);
-    const dispatch = useDispatch();
+import { Divider } from "primereact/divider";
+import Axios from "axios";
 
-    // const planList = useSelector((state) => {
-    //     return state.planListReducer;
+const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
+
+    const [btnState, setBtnState] = useState(true)
+
+
+    const [apidata, setapidata] = useState([]);
+    const [selectedPlanId, setSelectedPlanId] = useState("");
+
 
     useEffect(() => {
-        // dispatch(fetchPlanListAction());
         const fetchData = async () => {
             await axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=645a85198cd1ff499c8b99cd`).then((resp) => {
                 setapidata(resp.data.data);
@@ -25,87 +24,132 @@ const Plan = ({ setActiveIndex }) => {
         fetchData();
     }, []);
 
-     const [selectedPage, setSelectedPage] = useState(0);
+    const handlePlanSelection = (planId) => {
+        if (selectedPlanId === planId) {
+            setSelectedPlanId(null);
+        } else {
+            setSelectedPlanId(planId);
+        }
+    };
 
+    useEffect(() => {
+        if (selectedPlanId) { setBtnState(false) } else { setBtnState(true) }
+    }, [selectedPlanId]);
 
+    const postData = async () => {
+        const data = {
+          csr: "645c7bcfe5098ff6251a2255",
+          userId: _id,
+          plan: selectedPlanId,
+        };
+    
+        try {
+          const res = await Axios.post(`${BASE_URL}/api/user/plan`, data);
+          if (res?.status === 200 || res?.status === 201) {
+            localStorage.setItem("planResponse", JSON.stringify(res.data));
+    
+            setActiveIndex(3);
+          }
+        } catch (error) {
+          console.error("Error posting data:", error);
+        }
+      };
+    
+    
+    
     return (
         <>
             <div className="card">
                 <div className="flex flex-row justify-content-between">
                     <Button label="Back"
-                    onClick={()=>{
-                        setActiveIndex(1);
-                    }} />
+                        onClick={() => {
+                            setActiveIndex(1);
+                        }} />
                     <Button
                         label="Continue"
-                        onClick={() => {
-                            setActiveIndex(3);
-                        }}
+                        onClick={postData}
+                        disabled={btnState}
                     />
                 </div>
                 <br />
                 <div>
-                    <h6>Enrollment ID: ETC175698</h6>
+                    <h6>Enrollment_Id:{enrollment_id}</h6>
                 </div>
                 <br />
                 <div>
                     <h2 className="flex flex-row justify-content-center">Select Your Affordable Connectivity Program</h2>
                 </div>
 
-                <div className="flex justify-content-around flex-wrap">
-                  
+                <div>
+                    <div class="wrapper grid justify-content-center">
+
                         {apidata.map((item) => {
                             return (
-                                <Card key={item._id} className="p-5 border-noround" style={{ width: "23em", marginBottom: "20px", boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)" }}>
-                                <Button label="Free" className="p-button-raised p-button-success w-full border-noround h-2rem text-base font-medium justify-content-center" />
-                                <div >
-                                    <div className="my-5">
-                                        <p className="font-semibold">Name : {item.name}</p>
-                                    </div>
-                                    <div>
-                            
-                                        <div className="flex space-between  " >
-                                        <p style={{marginRight:'1.5rem' , fontWeight:'700'}}>Data</p>
-                                        <p style={{marginRight:'1.5rem', fontWeight:'700'}}>Minutes</p>
-                                        <p style={{marginRight:'1.5rem', fontWeight:'700'}}>Texts</p>
-                                        <p style={{marginRight:'1.5rem', fontWeight:'700'}}>Duration</p>
-                                        </div>
-                                        <div className="flex">
-                                            <p style={{marginRight:'1.5rem'}}>{item.dataAllowance}</p>
-                                            <p style={{marginLeft:'1.5rem'}}>{item.voiceAllowance}</p>
-                                            <p style={{marginLeft:'3rem'}}>{item.textAllowance}</p>
-                                            <p style={{marginLeft:'3rem'}}>{item.duration}</p>
-                                        </div>
-                                        <div className="flex">
-                                            <p style={{marginRight:'1.5rem'}}>{item.dataAllowanceUnit}</p>
-                                            <p style={{marginLeft:'0.8rem'}}>{item.voiceAllowanceUnit}</p>
-                                            <p style={{marginLeft:'2rem'}}>{item.textAllowanceUnit}</p>
-                                            <p style={{marginLeft:'3rem'}}>{item.durationUnit}</p>
-                                        </div>
-                                       
-                                    </div>
-                                    <div className="my-3">
-                            <p className="font-semibold">Free Every Month</p>
-                        </div>
-                        <div className="mb-2">
-                            <ul>
-                                <li>Voice Minutes & Unlimited Texts!</li>
-                                <li>Voicemail/Caller Id/3-way Calling</li>
-                                <li>911 Access</li>
-                                <li>411 Directory Assistance at No Additional Cost</li>
-                                <li>Nationwide Coverge on America's Best Networks</li>
-                            </ul>
-                        </div>
+                                <div className="col-12 lg:col-3 md:col-4 sm:col-6">
+                                    <div class="package brilliant">
 
+                                        <div class="name">{item?.name.charAt(0).toUpperCase() + item?.name.slice(1)}</div>
+                                        <div class="price">
+                                            <h4 className="mb-0">{item?.price}</h4>
+                                        </div>
+                                        <div class="trial">{`${item.duration} ${item.durationUnit}`}</div>
+
+                                        <hr />
+
+                                        <div className="plans_table mt-6">
+                                            <table className="w_100">
+                                                <tr>
+                                                    <th>Data</th>
+                                                    <th>Minutes</th>
+                                                    <th>Texts</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>{item.dataAllowance}</td>
+                                                    <td>{item.voiceAllowance}</td>
+                                                    <td>{item.textAllowance}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{item.dataAllowanceUnit}</td>
+                                                    <td>{item.voiceAllowanceUnit}</td>
+                                                    <td>{item.textAllowanceUnit}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <Divider />
+
+                                        <div className="my-3">
+                                            <p className="font-semibold">Free Every Month</p>
+                                        </div>
+                                        <div className="mb-2">
+                                            <ul>
+                                                <li>Voice Minutes & Unlimited Texts!</li>
+                                                <li>Voicemail/Caller Id/3-way Calling</li>
+                                                <li>911 Access</li>
+                                                <li>411 Directory Assistance at No Additional Cost</li>
+                                                <li>Nationwide Coverge on America's Best Networks</li>
+                                            </ul>
+                                        </div>
+
+                                        <div className="text-right">
+                                            <Button
+                                                label={selectedPlanId === item?._id ? "Deselect" : "Select"}
+                                                iconPos="right"
+                                                onClick={() => handlePlanSelection(item?._id)}
+                                                disabled={selectedPlanId !== null && selectedPlanId !== "" && selectedPlanId !== item?._id}
+                                                className="w_100"
+                                            />
+                                        </div>
+
+                                    </div>
                                 </div>
-                                <div className="flex justify-content-center mb-3">
-                            <Button label="SELECT" className="p-button-raised w-9rem h-2rem text-base font-medium justify-content-center" />
-                        </div>
-                    </Card>
                             );
                         })}
 
+                    </div>
+
                 </div>
+
             </div>
         </>
     );

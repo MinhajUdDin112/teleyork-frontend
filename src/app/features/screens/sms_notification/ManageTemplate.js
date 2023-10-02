@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
@@ -7,15 +7,26 @@ import * as XLSX from "xlsx";
 import { getAllTemplateAction, getOneTemplateAction } from "../../../store/notification/NotificationAction";
 import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
+import BASE_URL from "../../../../config";
+import { ProgressSpinner } from "primereact/progressspinner";
+import Axios from "axios";
 
 const ManageTemplate = () => {
+
+    const [allTemps, setAllTemps] = useState([])
+    console.log('allTemps', allTemps)
     const dispatch = useDispatch();
-    const { getAllTemplate, getOneTemplate, getAllTemplateLoading } = useSelector((state) => state.notification);
+
+    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
+
+    const loginResponse = useSelector((state) => state.login)
+    const loginData = loginResponse.loginData
+    const userId = loginData?._id
 
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Button label="Download" onClick={() => handleDownload(rowData)} />
+                <Button label="Download " onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />
             </div>
         );
     };
@@ -25,9 +36,19 @@ const ManageTemplate = () => {
         dispatch(getOneTemplateAction(templateId));
     };
 
+    // useEffect(() => {
+    //     dispatch(getAllTemplateAction());
+    // }, []);
+
+    const getAllTemps = async () => {
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
+        setAllTemps(response?.data?.data)
+    }
+
     useEffect(() => {
-        dispatch(getAllTemplateAction());
+        getAllTemps()
     }, []);
+
     useEffect(() => {
         if (getOneTemplate?.data) {
             let wb = XLSX.utils.book_new();
@@ -71,7 +92,7 @@ const ManageTemplate = () => {
                     <CustomLoading />
                 ) : (
                     <div className="">
-                        <DataTable value={getAllTemplate?.data} showGridlines>
+                        <DataTable value={allTemps} showGridlines>
                             <Column header="Name" field="name"></Column>
                             <Column header="Template ID" field="templateId"></Column>
                             <Column header="Type" body={templateType}></Column>

@@ -40,13 +40,14 @@ const ManageUser = () => {
             const res = await Axios.delete(`${BASE_URL}/api/web/user?userId=${rowData?._id}`);
             if (res?.status === 200) {
                 toast.success("User Deleted")
+                getAllUsers()
             }
         } catch (error) {
             console.error("Error fetching module data:", error);
         }
 
     }
-
+    console.log('parseLoginRes?.compony', parseLoginRes?.compony)
     const getAllUsers = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/user/all?compony=${parseLoginRes?.compony}`);
@@ -57,12 +58,14 @@ const ManageUser = () => {
         }
     };
 
-    useEffect(() => {
-        getAllUsers();
-    }, []);
-
     const redirectToCreateUser = () => {
         navigate("/create-user")
+    }
+
+    const redirectToUpdatePermissions = (rowData) => {
+        navigate("/createrole", {
+            state: { rowData }
+        });
     }
 
     const userTableHeader = () => {
@@ -75,6 +78,15 @@ const ManageUser = () => {
         )
     }
 
+    // const permissions = (rowData) => {
+    //     return (
+    //         <Button label="Update" onClick={() => redirectToUpdatePermissions(rowData)} className='p-button-sm' />
+    //     )
+    // }
+
+    useEffect(() => {
+        getAllUsers();
+    }, []);
 
     return (
         <>
@@ -84,6 +96,7 @@ const ManageUser = () => {
                     tableStyle={{ minWidth: '50rem' }}
                     header={userTableHeader}
                 >
+                    <Column field="role.role" header="Role"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="email" header="Email"></Column>
                     <Column field="state" header="State"></Column>
@@ -93,6 +106,7 @@ const ManageUser = () => {
                     <Column field={(item) => item?.active === true ? "Active" : "Inactive"} header="Status"></Column>
                     <Column field="createdDate" header="Created Date"></Column>
                     <Column body={actions} header="Actions"></Column>
+                    {/* <Column body={permissions} header="Permissions"></Column> */}
                 </DataTable>
             </div>
         </>
