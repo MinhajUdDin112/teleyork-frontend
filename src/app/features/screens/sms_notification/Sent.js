@@ -65,6 +65,7 @@ const Sent = () => {
                             <Column header="Name" field="name" />
                             <Column header="Message" field="template" />
                             <Column header="Type" body={type} />
+                            <Column header="Subject" field="notification_subject"></Column>
                             <Column header="Status" field="status" />
                             <Column header="Actions" body={renderActions} style={{ width: "50px" }} />
                         </DataTable>
