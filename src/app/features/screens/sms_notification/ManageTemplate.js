@@ -81,6 +81,21 @@ const ManageTemplate = () => {
     const status = (rowData) => {
         return <div>{rowData.active == true ? "Active" : "False"}</div>;
     };
+    const createdAtFormatted = (rowData) => {
+        const createdAtDate = new Date(rowData.createdAt);
+        const options = {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+         
+          hour12: false,
+        };
+        return createdAtDate.toLocaleString('en-US', options);
+      };
+      
+      
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
@@ -100,6 +115,8 @@ const ManageTemplate = () => {
                             <Column header="Template Body" field="template"></Column>
                             <Column header="Status" body={status}></Column>
                             <Column header="Action" body={renderActions} style={{ width: "120px" }} />
+                            <Column header="CreatedAt" body={createdAtFormatted}></Column>
+
                         </DataTable>
                     </div>
                 )}
