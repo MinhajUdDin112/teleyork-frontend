@@ -14,7 +14,8 @@ const Upload = () => {
     const [allTemps, setAllTemps] = useState([])
 
     const { loginData } = useSelector((state) => state.login);
-    const companyId = loginData?.compony
+
+    const userId = loginData?._id
 
     const handleFileUpload = (event) => {
         const file = event.files[0]; // Get the selected file
@@ -46,21 +47,19 @@ const Upload = () => {
     };
 
     const getAllTemps = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?companyId=${companyId}`);
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
         setAllTemps(response?.data?.data)
     }
 
     useEffect(() => {
         getAllTemps()
     }, []);
-    console.log('data', data)
+
     useEffect(() => {
 
         const objectId = allTemps.filter(item => item?.templateId === data[0]?.templateId)
         const idToPass = objectId[0]?._id
         setTempObjId(idToPass)
-
-        console.log('idToPass', idToPass)
 
     }, [data]);
 

@@ -12,7 +12,7 @@ const Eligibility = () => {
     const eligId = "645a85198cd1ff499c8b99cd"
     const navigate = useNavigate();
     const handleBack = () => {
-        navigate("/address");
+        navigate("/selfenrollment/address");
        
     };
     const formik = useFormik({
@@ -25,7 +25,7 @@ const Eligibility = () => {
                 ...values
             }
             const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`,newData);
-            navigate(`/nationalverifier/${id}`);
+            navigate(`/selfenrollment/nationalverifier/${id}`);
         }
     })
 

@@ -201,6 +201,10 @@ const App = () => {
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
     useEffect(() => {
+        const url=window.location.hash
+        console.log(url,url.startsWith('#/selfenrollment'))
+        if(url.startsWith('#/selfenrollment'))
+        {return}
         if (token) {
             if (protectedRoute === false) {
                 navigate("/");
@@ -233,7 +237,7 @@ const App = () => {
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
-                                <Route path="/allenrollments" element={AllEnrollments} />
+                                <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
                                 <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />
@@ -258,11 +262,11 @@ const App = () => {
                                 <Route path="/draftall/:id" element={<ShowDraftAll />} />
                                 <Route path="/sentall/:id" element={<ShowSentAll />} />
                                 <Route path="/selfenrollment" element={<VerifyZip />} />
-                                <Route path="/personalinfo/:id" element={<PersonalInfo />} />
-                                <Route path="/address/:id" element={<Address />} />
-                                <Route path="/eligibile/:id" element={<Eligibility />} />
-                                <Route path="/nationalverifier/:id" element={<NationalVerifier />} />
-                                <Route path="/resumeapplication" element={<ResumeApplication />} />
+                                <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
+                                <Route path="/selfenrollment/address/:id" element={<Address />} />
+                                <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
+                                <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
+                                <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                                 <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate" element={<ManageTemplate />} />
                                 <Route path="/createrole" element={<CreateRole />} />
@@ -285,6 +289,13 @@ const App = () => {
             ) : (
                 <Routes>
                     <Route path="/login" element={<LoginScreen />} />
+                    <Route path="/selfenrollment" element={<VerifyZip />} />
+                                <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
+                                <Route path="/selfenrollment/address/:id" element={<Address />} />
+                                <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
+                                <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
+                                <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
+                                
                 </Routes>
             )}
         </>

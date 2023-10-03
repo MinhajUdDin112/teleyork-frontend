@@ -17,7 +17,7 @@ const NationalVerifier = () => {
         try {
             const res = await axios.post(`${BASE_URL}/api/enrollment/termsAndConditions`, data);
             const responseData = res.data; // Assuming the API response contains the data you need
-            navigate("/resumeapplication", { state: { responseData } });
+            navigate("/selfenrollment/resumeapplication", { state: { responseData } });
         } catch (error) {
             // Handle any errors here
             console.error("Error:", error);
@@ -25,7 +25,7 @@ const NationalVerifier = () => {
     };
     const handleBack = () => {
         // Navigate to a different route
-        navigate("/eligibility");
+        navigate("/selfenrollment/eligibility");
     };
     return (
         <>

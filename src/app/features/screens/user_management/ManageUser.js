@@ -78,11 +78,11 @@ const ManageUser = () => {
         )
     }
 
-    const permissions = (rowData) => {
-        return (
-            <Button label="Update" onClick={() => redirectToUpdatePermissions(rowData)} />
-        )
-    }
+    // const permissions = (rowData) => {
+    //     return (
+    //         <Button label="Update" onClick={() => redirectToUpdatePermissions(rowData)} className='p-button-sm' />
+    //     )
+    // }
 
     useEffect(() => {
         getAllUsers();
@@ -106,7 +106,7 @@ const ManageUser = () => {
                     <Column field={(item) => item?.active === true ? "Active" : "Inactive"} header="Status"></Column>
                     <Column field="createdDate" header="Created Date"></Column>
                     <Column body={actions} header="Actions"></Column>
-                    <Column body={permissions} header="Permissions"></Column>
+                    {/* <Column body={permissions} header="Permissions"></Column> */}
                 </DataTable>
             </div>
         </>

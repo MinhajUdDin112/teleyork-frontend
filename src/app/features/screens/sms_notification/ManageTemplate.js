@@ -17,32 +17,31 @@ const ManageTemplate = () => {
     console.log('allTemps', allTemps)
     const dispatch = useDispatch();
 
-    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading  } = useSelector((state) => state.notification);
+    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
 
     const loginResponse = useSelector((state) => state.login)
     const loginData = loginResponse.loginData
-    const companyId = loginData?.compony
-    console.log("companyId", companyId)
+    const userId = loginData?._id
 
     const renderActions = (rowData) => {
         return (
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Button label="Download " onClick={() => handleDownload(rowData)}  disabled={getOneTemplateLoading}/>
-                </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Button label="Download " onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />
+            </div>
         );
     };
-    
+
     const handleDownload = (rowData) => {
         const { templateId } = rowData;
         dispatch(getOneTemplateAction(templateId));
     };
 
-    useEffect(() => {
-        dispatch(getAllTemplateAction());
-    }, []);
+    // useEffect(() => {
+    //     dispatch(getAllTemplateAction());
+    // }, []);
 
     const getAllTemps = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?companyId=${companyId}`);
+        const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
         setAllTemps(response?.data?.data)
     }
 

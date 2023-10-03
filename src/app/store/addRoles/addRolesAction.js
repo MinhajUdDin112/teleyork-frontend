@@ -4,7 +4,7 @@ import BASE_URL from "../../../config";
 
 export const addRolesAction = createAsyncThunk("addroles", async (body) => {
     try {
-        const response = await axios.post('http://dev-api-ijwireless.teleyork.com/api/web/role', body);
+        const response = await axios.post('http://dev-api.teleyork.com/api/web/role', body);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -13,5 +13,3 @@ export const addRolesAction = createAsyncThunk("addroles", async (body) => {
     }
 });
 
-
-//const BASE_URL = 'http://dev-api-ijwireless.teleyork.com';
