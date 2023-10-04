@@ -26,15 +26,12 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [isPoBox, setIsPoBox] = useState();
 
      const zipResponse = useSelector((state)=>state.zip)
-    //  const zipCode = zipResponse?.serviceAvailability?.data?.data?.zip;
+    
      const zipDataLs = localStorage.getItem("zipData");
      const zipDataParsed = JSON.parse(zipDataLs)    
      const zipCode = zipDataParsed?.data?.zip
      const zipCity = zipDataParsed?.data?.city
      const zipState = zipDataParsed?.data?.state
-
-    //  const zipCity =zipResponse?.serviceAvailability?.data?.data?.city;
-    //  const zipState = zipResponse?.serviceAvailability?.data?.data?.state;
 
 
     const validationSchema = Yup.object().shape({
@@ -201,7 +198,7 @@ useEffect(() => {
         <>
      
             <form onSubmit={formik.handleSubmit}>
-                <div className="flex flex-row justify-content-between align-items-center mb-2 ">
+                <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
                     <div>
                     <Button label="Back" type="button" onClick={handleBack} />
                     </div>
@@ -232,6 +229,10 @@ useEffect(() => {
                     <div className="mr-3 mb-3">
                         <p className="m-0">Address 2</p>
                         <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  />
+                    </div>
+                    <div className="mr-3 mb-3">
+                        <p className="m-0">Google Auto Complete Address</p>
+                        <InputText type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">

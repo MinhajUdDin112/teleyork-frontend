@@ -255,7 +255,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
-                <div className="flex flex-row justify-content-between align-items-center mb-2">
+                <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="button" onClick={handleBack} />
                     <Button label="Continue" type="submit" onClick={handleNext} />
                 </div>

@@ -49,6 +49,18 @@ const Sent = () => {
     const type = (rowData) => {
         return <div>{rowData.type === 0 ? "SMS" : rowData.type === 1 ? "Email" : "SMS, Email"}</div>;
     };
+    const createdAtFormatted = (rowData) => {
+        const createdAtDate = new Date(rowData.createdAt);
+        const options = {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        };
+        return createdAtDate.toLocaleString('en-US', options);
+      };
 
     return (
         <div className="card bg-pink-50">
@@ -65,6 +77,9 @@ const Sent = () => {
                             <Column header="Name" field="name" />
                             <Column header="Message" field="template" />
                             <Column header="Type" body={type} />
+                            <Column header="Subject" field="notification_subject"></Column>
+                            <Column header="CreatedAt" body={createdAtFormatted}></Column>
+                            <Column header="CreatedBy" field="CreatedBy" ></Column>
                             <Column header="Status" field="status" />
                             <Column header="Actions" body={renderActions} style={{ width: "50px" }} />
                         </DataTable>

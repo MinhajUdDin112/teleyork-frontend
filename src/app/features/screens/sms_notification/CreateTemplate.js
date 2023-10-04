@@ -47,9 +47,8 @@ const CreateTemplate = () => {
             dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
             setTemplateText("");
-            show();
-           
-           
+            show();        
+
         },
     });
 
@@ -67,15 +66,20 @@ const CreateTemplate = () => {
             <form onSubmit={formik.handleSubmit}>
                 <Toast ref={toast} />
                 <div className="card mx-5">
+    
                     <div className="flex flex-wrap">
                         <div className="mr-3">
                             <p className="m-0">Template Name:</p>
-                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Enter Template Name" keyfilter={/^[A-Za-z\s]+$/} />
+                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Enter Template Name" keyfilter={/^[a-zA-Z0-9-_]*$/} />
                         </div>
                         <div>
                             <p className="m-0">Template Type:</p>
                             <Dropdown name="type" options={type} value={formik.values.type} onChange={formik.handleChange} className="p-inputtext-sm mb-2 w-25rem p-0" placeholder="Select Template Type" />
                         </div>
+                        <div>
+                        <p className="ml-2">please note Instructions to add variable in notifications: <br/>in the subject and in Email body prefix $$ with the variable name,<br/> for example, $$CustomerFirstName,also don't add space in the <br/> variable name. </p>
+                        </div>
+                        
 
                         {formik.values.type === 1 || formik.values.type === 2 ? (
                             <div className="ml-3">
@@ -85,7 +89,7 @@ const CreateTemplate = () => {
                         ) : null}
                     </div>
                     <div className="mt-2">
-                        <p className="m-0">Template Body:</p>
+                        <p className="m-0">Template Body: </p>
                         <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
                     </div>
                     {
