@@ -112,7 +112,7 @@ const ManageTemplate = () => {
                             <Column header="Type" body={templateType}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
-                            <Column header="CreatedBy" field="CreatedBy" ></Column>
+                            <Column header="CreatedBy" field="CreatedByUser" ></Column>
                             <Column header="Template Body" field="template"></Column>
                             <Column header="Status" body={status}></Column>
                             <Column header="Action" body={renderActions} style={{ width: "120px" }} />

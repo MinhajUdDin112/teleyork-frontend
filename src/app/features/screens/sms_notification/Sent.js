@@ -79,7 +79,7 @@ const Sent = () => {
                             <Column header="Type" body={type} />
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
-                            <Column header="CreatedBy" field="CreatedBy" ></Column>
+                            <Column header="CreatedBy" field="CreatedByUser" ></Column>
                             <Column header="Status" field="status" />
                             <Column header="Actions" body={renderActions} style={{ width: "50px" }} />
                         </DataTable>
