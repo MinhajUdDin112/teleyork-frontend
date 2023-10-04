@@ -125,7 +125,7 @@ const Draft = () => {
                             <Column header="Type" body={type}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
-                            <Column header="CreatedBy" field="CreatedBy" ></Column>
+                            <Column header="CreatedBy" field="CreatedByUser" ></Column>
                             <Column header="Status" field="status"></Column>
                             <Column header="Draft SMS Count" field="draftSMSCount"></Column>
                             <Column header="Sent SMS Count" field="sentSMSCount"></Column>
