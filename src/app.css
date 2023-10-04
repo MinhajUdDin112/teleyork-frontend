@@ -213,4 +213,71 @@ box-shadow: 2px;
     padding: 10px; 
   }
   
- 
+ /* Pagination container */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  /* Pagination item (buttons) */
+  .pagination li {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  /* Active page button */
+  .pagination .active {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  /* Previous and Next buttons */
+  .pagination .previous,
+  .pagination .next {
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+
+  /* TemplateSearchBar.css  */
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .search-button {
+  
+    margin-left: 10px;
+    cursor: pointer;
+    color: #ffffff;
+    background: #6366F1;
+    border: 1px solid #6366F1;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    border-radius: 6px;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .bar-place{
+    justify-content: space-between;
+  }
