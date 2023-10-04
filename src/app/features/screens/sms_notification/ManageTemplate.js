@@ -93,7 +93,7 @@ const ManageTemplate = () => {
         };
         return createdAtDate.toLocaleString('en-US', options);
       };
-      
+     
       
     return (
         <div className="card bg-pink-50">
@@ -109,7 +109,7 @@ const ManageTemplate = () => {
                         <DataTable value={allTemps} showGridlines>
                             <Column header="Name" field="name"></Column>
                             <Column header="Template ID" field="templateId"></Column>
-                            <Column header="Type" body={templateType}></Column>
+                            <Column header="Type" body={templateType}></Column>   
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
                             <Column header="CreatedBy" field="CreatedByUser" ></Column>
