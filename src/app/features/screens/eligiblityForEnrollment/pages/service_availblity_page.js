@@ -4,10 +4,7 @@ import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { InputText } from "primereact/inputtext";
-import { fetchZipCode } from "../../../../store/zipcodeSlice";
-import { ProgressSpinner } from "primereact/progressspinner";
 import BASE_URL from "../../../../../config";
 import Axios from "axios";
 
@@ -15,24 +12,13 @@ import Axios from "axios";
 export default function ServiceAvailabilityPage() {
   
   const [isLoading, setIsLoading] = useState(false)
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { loading } = useSelector((state) => state.zip);
-
-  const zipResponse = useSelector((state) => state.zip);
-  const zipStatus = zipResponse?.serviceAvailability?.status;
-  console.log('zipStatus', zipStatus)
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  
 
   // Get user data from localStorage
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
-
-
-
-
 
   const validationSchema = Yup.object().shape({
     zipCode: Yup.string().required("Please enter Zip code"),
@@ -60,15 +46,6 @@ setIsLoading(true)
         setErrorMessage(error?.response?.data?.msg);
         setIsLoading(false)
       }
-
-      // await dispatch(fetchZipCode(dataToSend));
-      // if (zipStatus === 200) {
-      //   navigate("/enrollment");
-      // } else {
-      //   console.log("rejected case", "service is not available");
-      //   setErrorMessage("Sorry, Service is not available in your area.");
-      //   actions.resetForm();
-      // }
     },
   });
 

@@ -11,6 +11,12 @@ export const AppTopbar = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+      // Get user data from localStorage
+  const loginRes = localStorage.getItem("userData");
+  const parseLoginRes = JSON.parse(loginRes);
+
+
+
     const handleLogout = () => {
         dispatch(logout());
         navigate("/login");
@@ -19,7 +25,7 @@ export const AppTopbar = (props) => {
         <div className="layout-topbar">
             <Link to="/" className="layout-topbar-logo">
                 
-                <span>IJ Wireless</span>
+                <span>{parseLoginRes?.companyName}</span>
             </Link>
 
             <button type="button" className="p-link  layout-menu-button layout-topbar-button" onClick={props.onToggleMenuClick}>

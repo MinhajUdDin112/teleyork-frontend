@@ -95,6 +95,19 @@ const Draft = () => {
         getAllDraft();
     }, []);
 
+    const createdAtFormatted = (rowData) => {
+        const createdAtDate = new Date(rowData.createdAt);
+        const options = {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        };
+        return createdAtDate.toLocaleString('en-US', options);
+      };
+
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
@@ -111,6 +124,8 @@ const Draft = () => {
                             <Column header="Message" field="template"></Column>
                             <Column header="Type" body={type}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
+                            <Column header="CreatedAt" body={createdAtFormatted}></Column>
+                            <Column header="CreatedBy" field="CreatedBy" ></Column>
                             <Column header="Status" field="status"></Column>
                             <Column header="Draft SMS Count" field="draftSMSCount"></Column>
                             <Column header="Sent SMS Count" field="sentSMSCount"></Column>

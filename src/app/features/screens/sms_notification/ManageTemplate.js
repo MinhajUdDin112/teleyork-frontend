@@ -89,7 +89,6 @@ const ManageTemplate = () => {
           day: '2-digit',
           hour: '2-digit',
           minute: '2-digit',
-         
           hour12: false,
         };
         return createdAtDate.toLocaleString('en-US', options);
@@ -112,11 +111,11 @@ const ManageTemplate = () => {
                             <Column header="Template ID" field="templateId"></Column>
                             <Column header="Type" body={templateType}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
+                            <Column header="CreatedAt" body={createdAtFormatted}></Column>
+                            <Column header="CreatedBy" field="CreatedBy" ></Column>
                             <Column header="Template Body" field="template"></Column>
                             <Column header="Status" body={status}></Column>
                             <Column header="Action" body={renderActions} style={{ width: "120px" }} />
-                            <Column header="CreatedAt" body={createdAtFormatted}></Column>
-
                         </DataTable>
                     </div>
                 )}
