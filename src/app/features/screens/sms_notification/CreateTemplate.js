@@ -24,6 +24,10 @@ const CreateTemplate = () => {
         { label: "Both", value: 2 },
     ];
 
+    const loginRes = localStorage.getItem("userData");
+  const parseLoginRes = JSON.parse(loginRes);
+ 
+
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Template Name is required"),
         type: Yup.string().required("Template Type is required"),
@@ -41,8 +45,9 @@ const CreateTemplate = () => {
             const name = templateText.match(/(?<=\$)\w+/g) || [];
             const keySequence = ["templateId", ...name];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
+             const createdBy = parseLoginRes?._id;
             const dataToSend = {
-                ...values,
+                ...values, createdBy,
                 company: companyId,
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],

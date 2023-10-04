@@ -8,8 +8,12 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { getAllTemplateAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
 import BASE_URL from "../../../../config";
+import ReactPaginate from "react-paginate";
+import TemplateSearchBar from "./TemplateSearchBar";
 
 const Draft = () => {
+    const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
+    const [searchResults, setSearchResults] = useState([]);
     const [allDraft, setAllDraft] = useState([]);
     const dispatch = useDispatch();
     const { getAllTemplate, getAllTemplateLoading, submitTemplate, submitTemplateLoading } = useSelector((state) => state.notification);
@@ -38,7 +42,7 @@ const Draft = () => {
                 <Button label="View" onClick={() => handleView(rowData)} className="w-6rem" />
                 {/* Conditionally render the loader or the Send button */}
                 {isLoading ? (
-                    <ProgressSpinner style={{ width: '40px', height: '40px', color: 'blue' }} strokeWidth="4" animationDuration=".5s" />
+                    <ProgressSpinner style={{ width: "40px", height: "40px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
                 ) : (
                     <Button
                         label="Send"
@@ -78,9 +82,7 @@ const Draft = () => {
         }
     };
 
-    // useEffect(() => {
-    //     dispatch(getAllTemplateAction());
-    // }, [submitTemplate]);
+  
 
     const type = (rowData) => {
         return <div>{rowData.type === 0 ? "SMS" : rowData.type === 1 ? "Email" : "SMS, Email"}</div>;
@@ -95,42 +97,74 @@ const Draft = () => {
         getAllDraft();
     }, []);
 
+    // Function to handle the search
+  const handleSearch = (searchTerm) => {
+    // Implement your search logic here
+    const filteredResults = allDraft.filter((template) => {
+      return (
+        template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        template.templateId.toString().includes(searchTerm)
+      );
+    });
+    setSearchResults(filteredResults);
+  };
+
+    // Constants for pagination
+    const itemsPerPage = 10;
+    const pageCount = Math.ceil(allDraft.length / itemsPerPage);
+    const offset = currentPage * itemsPerPage;
+
+    // Function to handle page change
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected);
+    };
+
+    // Render the visible items based on the current page
+    const visibleItems = allDraft.slice(offset, offset + itemsPerPage);
+
     const createdAtFormatted = (rowData) => {
         const createdAtDate = new Date(rowData.createdAt);
         const options = {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
         };
-        return createdAtDate.toLocaleString('en-US', options);
-      };
+        return createdAtDate.toLocaleString("en-US", options);
+    };
 
     return (
         <div className="card bg-pink-50">
+            <div className="flex bar-place">
             <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">Draft</h3>
             </div>
+            <div className=" mb-3">
+        <TemplateSearchBar onSearch={handleSearch} />
+      </div>
+            </div>
+           
             <div className="card mx-5 p-0 border-noround">
                 {getAllTemplateLoading ? (
-                    <ProgressSpinner style={{ width: '40px', height: '40px', color: 'blue' }} strokeWidth="4" animationDuration=".5s" />
+                    <ProgressSpinner style={{ width: "40px", height: "40px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
                 ) : (
                     <div className="">
-                        <DataTable value={allDraft} showGridlines>
+                        <DataTable value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
                             <Column header="Template Id" field="templateId"></Column>
                             <Column header="Name" field="name"></Column>
                             <Column header="Message" field="template"></Column>
                             <Column header="Type" body={type}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
-                            <Column header="CreatedBy" field="CreatedByUser" ></Column>
+                            <Column header="CreatedBy" field="CreatedByUser"></Column>
                             <Column header="Status" field="status"></Column>
                             <Column header="Draft SMS Count" field="draftSMSCount"></Column>
                             <Column header="Sent SMS Count" field="sentSMSCount"></Column>
                             <Column header="" body={renderActions} style={{ width: "220px" }}></Column>
                         </DataTable>
+                        <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
                     </div>
                 )}
             </div>

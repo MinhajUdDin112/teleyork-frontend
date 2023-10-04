@@ -8,13 +8,15 @@ import { getAllTemplateAction, getOneTemplateAction } from "../../../store/notif
 import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
 import BASE_URL from "../../../../config";
-import { ProgressSpinner } from "primereact/progressspinner";
 import Axios from "axios";
+import ReactPaginate from 'react-paginate';
+import TemplateSearchBar from "./TemplateSearchBar";
 
 const ManageTemplate = () => {
-
-    const [allTemps, setAllTemps] = useState([])
-    console.log('allTemps', allTemps)
+    
+    const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
+    const [searchResults, setSearchResults] = useState([]);
+     const [allTemps, setAllTemps] = useState([])
     const dispatch = useDispatch();
 
     const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
@@ -31,14 +33,34 @@ const ManageTemplate = () => {
         );
     };
 
+    // Constants for pagination
+  const itemsPerPage = 10;
+  const pageCount = Math.ceil(allTemps.length / itemsPerPage);
+  const offset = currentPage * itemsPerPage;
+
+  // Function to handle page change
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+ // Function to handle the search
+ const handleSearch = (searchTerm) => {
+    // Implement your search logic here
+    const filteredResults = allTemps.filter((template) => {
+      return (
+        template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        template.templateId.toString().includes(searchTerm)
+      );
+    });
+    setSearchResults(filteredResults);
+  };
+  // Render the visible items based on the current page
+  const visibleItems = allTemps.slice(offset, offset + itemsPerPage);
+
+
     const handleDownload = (rowData) => {
         const { templateId } = rowData;
         dispatch(getOneTemplateAction(templateId));
     };
-
-    // useEffect(() => {
-    //     dispatch(getAllTemplateAction());
-    // }, []);
 
     const getAllTemps = async () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
@@ -97,16 +119,22 @@ const ManageTemplate = () => {
       
     return (
         <div className="card bg-pink-50">
+            <div className="flex bar-place">
             <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">Manage Template</h3>
             </div>
+            <div className=" mb-3">
+        <TemplateSearchBar onSearch={handleSearch} />
+      </div>
+            </div>
+          
 
             <div className="card mx-5 p-0 border-noround">
                 {getAllTemplateLoading ? (
                     <CustomLoading />
                 ) : (
                     <div className="">
-                        <DataTable value={allTemps} showGridlines>
+                        <DataTable value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
                             <Column header="Name" field="name"></Column>
                             <Column header="Template ID" field="templateId"></Column>
                             <Column header="Type" body={templateType}></Column>   
@@ -117,6 +145,15 @@ const ManageTemplate = () => {
                             <Column header="Status" body={status}></Column>
                             <Column header="Action" body={renderActions} style={{ width: "120px" }} />
                         </DataTable>
+                        <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              pageCount={pageCount}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination"}
+              activeClassName={"active"}
+            />
                     </div>
                 )}
             </div>
