@@ -19,7 +19,7 @@ const selfEnrollmentSlice = createSlice({
         });
         builder.addCase(verifyZipAction.rejected, (state, action) => {
             state.verifyZipLoading = false;
-            state.verifyZipError = action.error.message;
+            state.verifyZipError = action.payload.response.data.msg;
         });
     },
 });

@@ -5,13 +5,23 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { verifyZipAction } from "../../../store/selfEnrollment/SelfEnrollmentAction";
+import * as Yup from "yup"
 
 const VerifyZip = () => {
     const { verifyZip, verifyZipLoading, verifyZipError } = useSelector((state) => state.selfEnrollment);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const validationSchema = Yup.object().shape({
+        zipCode: Yup.string()
+          .required("ZIP Code is required")
+          .matches(/^\d{5}$/, "ZIP Code must be a 5-digit number"),
+        email: Yup.string()
+          .required("Email is required")
+          .email("Invalid email address"),
+      });
     const formik = useFormik({
+        validationSchema,
         initialValues: {
             email: "",
             zipCode: "",
@@ -27,11 +37,27 @@ const VerifyZip = () => {
         },
     });
 
+    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+    const getFormErrorMessage = (name) => {
+        return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
+    };
+
+
+    
     useEffect(()=>{
+
         if(verifyZip){
-            navigate(`/selfenrollment/personalinfo/${verifyZip?.data?._id}`);
+            navigate(`/selfenrollment/personalinfo/${verifyZip?.data?._id}`, {state: verifyZip?.data});
         }
     },[verifyZip])
+
+    if(verifyZipError){
+        return(
+            <div>
+                {verifyZipError}
+            </div>
+        )
+    }
 
     return (
         <>
@@ -40,7 +66,7 @@ const VerifyZip = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: "100vh", // Changed height to minHeight
+                    minHeight: "100vh", 
                 }}
             >
                 <div className="col-7">
@@ -55,8 +81,12 @@ const VerifyZip = () => {
                             <div className="col-6">
                                 <p className="text-2xl font-bold">Let's see if you are eligible for this benefit</p>
                                 <div className="flex flex-column">
-                                    <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange} />
-                                    <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange} />
+                                    <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange}  onBlur={formik.handleBlur} />
+                                    {/* {formik.touched.zipCode && formik.errors.zipCode ? <p className="text-sm mt-0" style={{color:"red"}}>{formik.errors.zipCode}</p> : null} */}
+                                    {getFormErrorMessage("zipCode")}
+                                    <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange}  onBlur={formik.handleBlur}/>
+                                    {/* {formik.touched.email && formik.errors.email ? <p className="text-sm mt-0" style={{color:"red"}}>{formik.errors.email}</p> : null} */}
+                                    {getFormErrorMessage("email")}
                                     <Button disabled={verifyZipLoading} label="Next" type="submit" />
                                 </div>
                             </div>
