@@ -13,6 +13,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 const CreateTemplate = () => {
     const dispatch = useDispatch();
     const [templateText, setTemplateText] = useState("");
+    const [subjectText, setSubjectText] = useState("");
     const { addTemplateLoading } = useSelector((state) => state.notification);
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;
@@ -25,14 +26,13 @@ const CreateTemplate = () => {
     ];
 
     const loginRes = localStorage.getItem("userData");
-  const parseLoginRes = JSON.parse(loginRes);
- 
+    const parseLoginRes = JSON.parse(loginRes);
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Template Name is required"),
         type: Yup.string().required("Template Type is required"),
     });
-
+   
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -42,20 +42,24 @@ const CreateTemplate = () => {
         validationSchema,
 
         onSubmit: (values, actions) => {
-            const name = templateText.match(/(?<=\$)\w+/g) || [];
-            const keySequence = ["templateId", ...name];
+            const name = templateText.match(/(?<=[^\$]\$\$)\w+/g) || [];
+            const subject = subjectText.match(/(?<=\$\$)\w+/g) || [];
+            
+            const keySequence = ["templateId", ...name, ...subject];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
-             const createdBy = parseLoginRes?._id;
+            const createdBy = parseLoginRes?._id;
             const dataToSend = {
-                ...values, createdBy,
+                ...values,
+                createdBy,
                 company: companyId,
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
             };
-            console.log("data to send", dataToSend);
+           
             dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
             setTemplateText("");
+            setSubjectText("");
             show();
         },
     });
@@ -86,24 +90,33 @@ const CreateTemplate = () => {
                             {formik.touched.type && formik.errors.type ? <div className="steric">{formik.errors.type}</div> : null}
                         </div>
                         <div>
-                            <p className="ml-2">
-                                please note Instructions to add variable in notifications: <br />
+                            <p className="ml-2 mb-2">
+                               <span className="steric"> please note Instructions to add variable in notifications:</span> <br />
                                 in the subject and in Email body prefix $$ with the variable name,
-                                <br /> for example, $$CustomerFirstName,also don't add space in the <br /> variable name.{" "}
+                                 for example, $$CustomerFirstName,also don't add space in the  variable name.
                             </p>
                         </div>
 
                         {formik.values.type === 1 || formik.values.type === 2 ? (
                             <div className="ml-3">
                                 <p className="m-0">Add Subject:</p>
-                                <InputText type="text" name="notification_subject" value={formik.values.notification_subject} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Add Subject" />
+                                <InputText
+                                    type="text"
+                                    name="notification_subject"
+                                    value={formik.values.notification_subject}
+                                    onChange={(e) => {
+                                        formik.handleChange(e);
+                                        setSubjectText(e.target.value);
+                                    }}
+                                    className="text-sm mb-2 w-25rem"
+                                    placeholder="Add Subject"
+                                />
                             </div>
                         ) : null}
                     </div>
                     <div className="mt-2">
                         <p className="m-0">Template Body: </p>
                         <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
-                       
                     </div>
                     {addTemplateLoading ? (
                         <ProgressSpinner style={{ width: "40px", height: "40px", marginLeft: "1050px", marginTop: "10px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />

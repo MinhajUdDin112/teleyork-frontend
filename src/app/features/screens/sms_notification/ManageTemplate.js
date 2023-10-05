@@ -9,21 +9,20 @@ import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
 import BASE_URL from "../../../../config";
 import Axios from "axios";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import TemplateSearchBar from "./TemplateSearchBar";
 
 const ManageTemplate = () => {
-    
-    const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
+    const [currentPage, setCurrentPage] = useState(0);
     const [searchResults, setSearchResults] = useState([]);
-     const [allTemps, setAllTemps] = useState([])
+    const [allTemps, setAllTemps] = useState([]);
     const dispatch = useDispatch();
 
     const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
 
-    const loginResponse = useSelector((state) => state.login)
-    const loginData = loginResponse.loginData
-    const userId = loginData?._id
+    const loginResponse = useSelector((state) => state.login);
+    const loginData = loginResponse.loginData;
+    const userId = loginData?._id;
 
     const renderActions = (rowData) => {
         return (
@@ -34,28 +33,27 @@ const ManageTemplate = () => {
     };
 
     // Constants for pagination
-  const itemsPerPage = 10;
-  const pageCount = Math.ceil(allTemps.length / itemsPerPage);
-  const offset = currentPage * itemsPerPage;
+    const itemsPerPage = 10;
+    const pageCount = Math.ceil(allTemps.length / itemsPerPage);
+    const offset = currentPage * itemsPerPage;
 
-  // Function to handle page change
-  const handlePageClick = ({ selected }) => {
-    setCurrentPage(selected);
-  };
- // Function to handle the search
- const handleSearch = (searchTerm) => {
-    // Implement your search logic here
-    const filteredResults = allTemps.filter((template) => {
-      return (
-        template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        template.templateId.toString().includes(searchTerm)
-      );
-    });
-    setSearchResults(filteredResults);
-  };
-  // Render the visible items based on the current page
-  const visibleItems = allTemps.slice(offset, offset + itemsPerPage);
+    // Function to handle page change
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected);
+    };
 
+    // Render the visible items based on the current page
+    const visibleItems = allTemps.slice(offset, offset + itemsPerPage);
+
+    // Function to handle the search
+    const handleSearch = (searchTerm) => {
+        // Implement your search logic here
+        const filteredResults = allTemps.filter((template) => {
+            return template.name.toLowerCase().includes(searchTerm.toLowerCase()) || template.templateId.toString().includes(searchTerm);
+        });
+        setSearchResults(filteredResults);
+    };
+    
 
     const handleDownload = (rowData) => {
         const { templateId } = rowData;
@@ -64,11 +62,11 @@ const ManageTemplate = () => {
 
     const getAllTemps = async () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
-        setAllTemps(response?.data?.data)
-    }
+        setAllTemps(response?.data?.data);
+    };
 
     useEffect(() => {
-        getAllTemps()
+        getAllTemps();
     }, []);
 
     useEffect(() => {
@@ -86,6 +84,7 @@ const ManageTemplate = () => {
             const rowNumberToMap = 1; // Replace 1 with the appropriate row number.
 
             // Map the value to the specific row and column (assuming the column is 0 in this example)
+
             if (templateIdHeaderIndex !== -1) {
                 XLSX.utils.sheet_add_aoa(ws, [[valueToMap]], { origin: { r: rowNumberToMap, c: templateIdHeaderIndex } });
             }
@@ -106,28 +105,26 @@ const ManageTemplate = () => {
     const createdAtFormatted = (rowData) => {
         const createdAtDate = new Date(rowData.createdAt);
         const options = {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
         };
-        return createdAtDate.toLocaleString('en-US', options);
-      };
-     
-      
+        return createdAtDate.toLocaleString("en-US", options);
+    };
+
     return (
         <div className="card bg-pink-50">
             <div className="flex bar-place">
-            <div className="mx-5">
-                <h3 className="text-xl font-semibold border-bottom-1 pb-2">Manage Template</h3>
+                <div className="mx-5">
+                    <h3 className="text-xl font-semibold border-bottom-1 pb-2">Manage Template</h3>
+                </div>
+                <div className=" mb-3">
+                    <TemplateSearchBar onSearch={handleSearch}  />
+                </div>
             </div>
-            <div className=" mb-3">
-        <TemplateSearchBar onSearch={handleSearch} />
-      </div>
-            </div>
-          
 
             <div className="card mx-5 p-0 border-noround">
                 {getAllTemplateLoading ? (
@@ -137,23 +134,15 @@ const ManageTemplate = () => {
                         <DataTable value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
                             <Column header="Name" field="name"></Column>
                             <Column header="Template ID" field="templateId"></Column>
-                            <Column header="Type" body={templateType}></Column>   
+                            <Column header="Type" body={templateType}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
-                            <Column header="CreatedBy" field="CreatedByUser" ></Column>
+                            <Column header="CreatedBy" field="createdByUser"></Column>
                             <Column header="Template Body" field="template"></Column>
                             <Column header="Status" body={status}></Column>
                             <Column header="Action" body={renderActions} style={{ width: "120px" }} />
                         </DataTable>
-                        <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
-              pageCount={pageCount}
-              onPageChange={handlePageClick}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
-            />
+                        <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
                     </div>
                 )}
             </div>

@@ -10,6 +10,7 @@ function TemplateSearchBar({ onSearch }) {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     onSearch(searchTerm);
+    
   };
 
   return (

@@ -29,6 +29,8 @@ const Draft = () => {
         const { templateId } = rowData;
         navigate(`/draftall/${templateId}`);
     };
+    
+    
 
     // Actions
     const renderActions = (rowData) => {
