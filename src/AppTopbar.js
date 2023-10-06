@@ -21,11 +21,13 @@ export const AppTopbar = (props) => {
         dispatch(logout());
         navigate("/login");
     };
+   
     return (
         <div className="layout-topbar">
             <Link to="/" className="layout-topbar-logo">
                 
                 <span>{parseLoginRes?.companyName}</span>
+               
             </Link>
 
             <button type="button" className="p-link  layout-menu-button layout-topbar-button" onClick={props.onToggleMenuClick}>

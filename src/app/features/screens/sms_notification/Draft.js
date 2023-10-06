@@ -10,6 +10,8 @@ import Axios from "axios";
 import BASE_URL from "../../../../config";
 import ReactPaginate from "react-paginate";
 import TemplateSearchBar from "./TemplateSearchBar";
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const Draft = () => {
     const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
@@ -75,6 +77,18 @@ const Draft = () => {
 
             // Dispatch the action to submit the template
             await dispatch(submitTemplateAction(body));
+
+            // Show success toast when the action is successful
+            toast.success("Template sent successfully!", {
+                position: "top-right",
+                autoClose: 3000, // Toast auto-closes after 3 seconds
+            });
+        } catch (error) {
+            // Show error toast if there's an error
+            toast.error("Failed to send template. Please try again later.", {
+                position: "top-right",
+                autoClose: 3000,
+            });
         } finally {
             // Set loading state to false after the action is complete
             setLoadingStates((prevState) => ({
@@ -139,6 +153,8 @@ const Draft = () => {
 
     return (
         <div className="card bg-pink-50">
+              <ToastContainer />
+            <div className="flex bar-place"></div>
             <div className="flex bar-place">
             <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">Draft</h3>
@@ -160,7 +176,7 @@ const Draft = () => {
                             <Column header="Type" body={type}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
-                            <Column header="CreatedBy" field="CreatedByUser"></Column>
+                            <Column header="CreatedBy" field="c     reatedByUser"></Column>
                             <Column header="Status" field="status"></Column>
                             <Column header="Draft SMS Count" field="draftSMSCount"></Column>
                             <Column header="Sent SMS Count" field="sentSMSCount"></Column>
