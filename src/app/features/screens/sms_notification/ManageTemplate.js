@@ -10,13 +10,17 @@ import { clearGetOneTemplateData } from "../../../store/notification/Notificatio
 import BASE_URL from "../../../../config";
 import Axios from "axios";
 import ReactPaginate from "react-paginate";
+import { Dropdown } from "primereact/dropdown";
 import TemplateSearchBar from "./TemplateSearchBar";
 
 const ManageTemplate = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [searchResults, setSearchResults] = useState([]);
+    const [searchTerm, setSearchTerm] = useState(""); // Add a state for search term
     const [allTemps, setAllTemps] = useState([]);
     const dispatch = useDispatch();
+    const [filterType, setFilterType] = useState("all");
+    const [filteredByType, setFilteredByType] = useState([]); // New state for filtered data by type
 
     const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
 
@@ -47,6 +51,7 @@ const ManageTemplate = () => {
 
     // Function to handle the search
     const handleSearch = (searchTerm) => {
+        setSearchTerm(searchTerm); // Update search term state
         // Implement your search logic here
         const filteredResults = allTemps.filter((template) => {
             return template.name.toLowerCase().includes(searchTerm.toLowerCase()) || template.templateId.toString().includes(searchTerm);
@@ -54,6 +59,26 @@ const ManageTemplate = () => {
         setSearchResults(filteredResults);
     };
     
+     // Function to handle type filter
+     const handleTypeFilter = (selectedType) => {
+        setFilterType(selectedType);
+
+        // Apply type filter
+        if (selectedType === "all") {
+            setFilteredByType(allTemps); // Show all templates
+        } else {
+            const filteredResults = allTemps.filter((template) => template.type === parseInt(selectedType));
+            setFilteredByType(filteredResults);
+        }
+    };
+
+     // Options for the type filter dropdown
+     const typeFilterOptions = [
+        { label: "All", value: "all" },
+        { label: "SMS", value: "0" },
+        { label: "Email", value: "1" },
+        { label: "Both", value: "2" },
+    ];
 
     const handleDownload = (rowData) => {
         const { templateId } = rowData;
@@ -121,9 +146,17 @@ const ManageTemplate = () => {
                 <div className="mx-5">
                     <h3 className="text-xl font-semibold border-bottom-1 pb-2">Manage Template</h3>
                 </div>
-                <div className=" mb-3">
+                <div className="flex ">
+                <div className="mb-3">
+                    <label>Filter By Type: </label>
+                    <Dropdown value={filterType} options={typeFilterOptions} onChange={(e) => handleTypeFilter(e.value)} placeholder="Select a type" />
+                </div>
+                <div className=" mb-3 ml-5">
                     <TemplateSearchBar onSearch={handleSearch}  />
                 </div>
+               
+                </div>
+               
             </div>
 
             <div className="card mx-5 p-0 border-noround">
@@ -131,7 +164,7 @@ const ManageTemplate = () => {
                     <CustomLoading />
                 ) : (
                     <div className="">
-                        <DataTable value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
+                        <DataTable value={searchTerm === "" ? (filterType === "all" ? visibleItems : filteredByType) : searchResults} showGridlines>
                             <Column header="Name" field="name"></Column>
                             <Column header="Template ID" field="templateId"></Column>
                             <Column header="Type" body={templateType}></Column>

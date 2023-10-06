@@ -49,6 +49,7 @@ const ShowSentAll = () => {
                                 <Column header="Message" field="message"></Column>
                                 <Column header="Status" field="status"></Column>
                                 <Column header="Email" field="email"></Column>
+                                <Column header="contact" field="phone"></Column>
                             </DataTable>
                         </div>
                     </>
