@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
@@ -6,11 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { verifyZipAction } from "../../../store/selfEnrollment/SelfEnrollmentAction";
 import * as Yup from "yup"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const VerifyZip = () => {
     const { verifyZip, verifyZipLoading, verifyZipError } = useSelector((state) => state.selfEnrollment);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    
 
     const validationSchema = Yup.object().shape({
         zipCode: Yup.string()
@@ -49,15 +53,15 @@ const VerifyZip = () => {
         if(verifyZip){
             navigate(`/selfenrollment/personalinfo/${verifyZip?.data?._id}`, {state: verifyZip?.data});
         }
-    },[verifyZip])
+        if(verifyZipError){
+       
+            toast.error(verifyZipError || "An error occurred");
+                
+           
+        }
+    },[verifyZip,verifyZipError])
 
-    if(verifyZipError){
-        return(
-            <div>
-                {verifyZipError}
-            </div>
-        )
-    }
+    
 
     return (
         <>
@@ -82,10 +86,8 @@ const VerifyZip = () => {
                                 <p className="text-2xl font-bold">Let's see if you are eligible for this benefit</p>
                                 <div className="flex flex-column">
                                     <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange}  onBlur={formik.handleBlur} />
-                                    {/* {formik.touched.zipCode && formik.errors.zipCode ? <p className="text-sm mt-0" style={{color:"red"}}>{formik.errors.zipCode}</p> : null} */}
                                     {getFormErrorMessage("zipCode")}
                                     <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange}  onBlur={formik.handleBlur}/>
-                                    {/* {formik.touched.email && formik.errors.email ? <p className="text-sm mt-0" style={{color:"red"}}>{formik.errors.email}</p> : null} */}
                                     {getFormErrorMessage("email")}
                                     <Button disabled={verifyZipLoading} label="Next" type="submit" />
                                 </div>
@@ -94,6 +96,7 @@ const VerifyZip = () => {
                     </form>
                 </div>
             </div>
+            <ToastContainer />
         </>
     );
 };
