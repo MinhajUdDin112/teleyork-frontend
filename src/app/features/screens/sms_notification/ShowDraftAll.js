@@ -63,7 +63,7 @@ const ShowDraftAll = () => {
                         <Column header="Message" field="message"></Column>
                         <Column header="Status" field="status"></Column>
                         <Column header="Email" field="email"></Column>
-                        <Column header="Contact" field="contact"></Column>
+                        <Column header="Contact" field="phone"></Column>
                     </DataTable>
                 </div>
             </div>
