@@ -22,10 +22,16 @@ const Draft = () => {
     const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
     const [searchResults, setSearchResults] = useState([]);
     const [allDraft, setAllDraft] = useState([]);
+    
     const dispatch = useDispatch();
     const { getAllTemplate, getAllTemplateLoading, submitTemplate, submitTemplateLoading } = useSelector((state) => state.notification);
-    const { loginData } = useSelector((state) => state.login);
-    const userId = loginData?._id;
+
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+     const userId = parseLoginRes?._id;
+
+
+    
     const navigate = useNavigate();
 
     // Local state to track loading state for each row
@@ -76,7 +82,7 @@ const Draft = () => {
 
         try {
             const body = {
-                userId: loginData?._id,
+                userId: parseLoginRes?._id,
                 templateId: templateId,
             };
 
@@ -224,7 +230,7 @@ const Draft = () => {
                 <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
             </Dialog>
         </div>
-    );
+    ); 
 };
 
 export default Draft;

@@ -8,6 +8,7 @@ import { RadioButton } from "primereact/radiobutton";
 import { Checkbox } from "primereact/checkbox";
 import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
@@ -24,20 +25,20 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [isSame, setIsSame] = useState();
     const [isDifferent, setIsDifferent] = useState();
     const [isPoBox, setIsPoBox] = useState();
+    const [autoCompleteAddress, setAutoCompleteAddress] = useState(null);
 
-     const zipResponse = useSelector((state)=>state.zip)
-    
-     const zipDataLs = localStorage.getItem("zipData");
-     const zipDataParsed = JSON.parse(zipDataLs)    
-     const zipCode = zipDataParsed?.data?.zip
-     const zipCity = zipDataParsed?.data?.city
-     const zipState = zipDataParsed?.data?.state
+    const zipResponse = useSelector((state) => state.zip);
 
+    const zipDataLs = localStorage.getItem("zipData");
+    const zipDataParsed = JSON.parse(zipDataLs);
+    const zipCode = zipDataParsed?.data?.zip;
+    const zipCity = zipDataParsed?.data?.city;
+    const zipState = zipDataParsed?.data?.state;
 
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
-       
+
         // isNotSameServiceAddress: Yup.boolean(),
         // isPoBoxAddress: Yup.boolean(),
         // mailingAddress1: Yup.string().when("isNotSameServiceAddress", {
@@ -50,11 +51,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
         //   then: Yup.string().required("PO Box Address is required"),
         //   otherwise: Yup.string(),
         // }),
-      
-        
     });
-   
-      
+
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -88,7 +86,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 state: zipState,
                 isTemporaryAddress: tempAdd,
                 postal: formik.values.postal,
-                isSameServiceAddress:formik.values.isSameServiceAddress,
+                isSameServiceAddress: formik.values.isSameServiceAddress,
                 isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
                 isPoBoxAddress: formik.values.isPOboxAddress,
                 mailingAddress1: formik.values.mailingAddress1,
@@ -103,15 +101,15 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 userId: userId,
                 csr: "645c7bcfe5098ff6251a2255",
             };
-                       dispatch(addCustomerAddressAction(dataToSend));
+            dispatch(addCustomerAddressAction(dataToSend));
             actions.resetForm();
-            
+
             handleNext();
         },
     });
 
     useEffect(() => {
-        if(zipCode){
+        if (zipCode) {
             formik.setFieldValue("zip", zipCode);
             formik.setFieldValue("city", zipCity);
             formik.setFieldValue("state", zipState);
@@ -122,40 +120,38 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             formik.setFieldValue("poBoxCity", zipCity);
             formik.setFieldValue("poBoxState", zipState);
         }
-        
-    }, [zipCode])
+    }, [zipCode]);
 
-useEffect(() => {
-if(formik.values.mailingZip && formik.values.mailingZip.length ===5 )
-{
-
-    async function getData(){
-        const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.mailingZip}`)
-        const data = response?.data?.data;
-       formik.setFieldValue("mailingCity", data?.city);
-        formik.setFieldValue("mailingState", data?.state);
-    }   
-    getData();
-}
-
-}, [formik.values.mailingZip])
-
-
-useEffect(() => {
-    if(formik.values.isPoBoxAddress )
-    {
-        if(formik.values.poBoxZip && formik.values.poBoxZip.length ===5)
-        { 
-             async function getData(){      
-            const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`)
-            const data = response?.data?.data; 
-           formik.setFieldValue("poBoxCity", data?.city);
-            formik.setFieldValue("poBoxState", data?.state);}
+    useEffect(() => {
+        if (formik.values.mailingZip && formik.values.mailingZip.length === 5) {
+            async function getData() {
+                const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.mailingZip}`);
+                const data = response?.data?.data;
+                formik.setFieldValue("mailingCity", data?.city);
+                formik.setFieldValue("mailingState", data?.state);
+            }
             getData();
-        }       
-    }   
-    }, [formik.values.isPoBoxAddress,formik.values.poBoxZip])
+        }
+    }, [formik.values.mailingZip]);
 
+    useEffect(() => {
+        if (formik.values.isPoBoxAddress) {
+            if (formik.values.poBoxZip && formik.values.poBoxZip.length === 5) {
+                async function getData() {
+                    const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`);
+                    const data = response?.data?.data;
+                    formik.setFieldValue("poBoxCity", data?.city);
+                    formik.setFieldValue("poBoxState", data?.state);
+                }
+                getData();
+            }
+        }
+    }, [formik.values.isPoBoxAddress, formik.values.poBoxZip]);
+    useEffect(() => {
+        if (autoCompleteAddress) {
+            formik.setFieldValue("address1", autoCompleteAddress?.value?.description);
+        }
+    }, [autoCompleteAddress]);
 
     const handleSame = () => {
         formik.setFieldValue("isSameServiceAddress", true);
@@ -169,7 +165,7 @@ useEffect(() => {
     const handleDifferent = () => {
         formik.setFieldValue("isNotSameServiceAddress", true);
         formik.setFieldValue("isSameServiceAddress", false);
-       formik.setFieldValue("isPoBoxAddress", false);
+        formik.setFieldValue("isPoBoxAddress", false);
         setIsSame(false);
         setIsDifferent(true);
         setIsPoBox(false);
@@ -179,7 +175,7 @@ useEffect(() => {
         formik.setFieldValue("isPoBoxAddress", true);
         formik.setFieldValue("isSameServiceAddress", false);
         formik.setFieldValue("isNotSameServiceAddress", false);
-       
+
         setIsSame(false);
         setIsDifferent(false);
         setIsPoBox(true);
@@ -196,14 +192,13 @@ useEffect(() => {
 
     return (
         <>
-     
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
                     <div>
-                    <Button label="Back" type="button" onClick={handleBack} />
+                        <Button label="Back" type="button" onClick={handleBack} />
                     </div>
-                   <div className="fixed-button-container">
-                    <Button label="Continue" type="submit" />
+                    <div className="fixed-button-container">
+                        <Button label="Continue" type="submit" />
                     </div>
                 </div>
                 <div>
@@ -219,7 +214,7 @@ useEffect(() => {
                         <p className="m-0">
                             Address 1 <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  />
+                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                         {formik.touched.address1 && formik.errors.address1 ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.address1}
@@ -228,11 +223,18 @@ useEffect(() => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Address 2</p>
-                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  />
+                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                     </div>
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">Google Auto Complete Address</p>
-                        <InputText type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  />
+                    <div className=" mr-3 w-21rem  ">
+                    <p className="m-0"><code>Google Auto</code> Complete Address</p>
+                        <GooglePlacesAutocomplete
+                        
+                            apiKey="AIzaSyDa1KFekZkev2CAqrcrU_nYDe_1jC-PHA0"
+                            selectProps={{
+                                autoCompleteAddress,
+                                onChange: setAutoCompleteAddress,
+                            }}
+                        />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
@@ -255,7 +257,7 @@ useEffect(() => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Postal Code</p>
-                        <InputText type="text" value={formik.values.postal} name="postal" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\d{0,5}$/}  minLength={5} maxLength={5} />
+                        <InputText type="text" value={formik.values.postal} name="postal" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
                     </div>
                 </div>
                 <div>
@@ -305,7 +307,7 @@ useEffect(() => {
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">Mailing Address 2 </label>
-                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange}  />
+                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -363,12 +365,8 @@ useEffect(() => {
                     </>
                 )}
             </form>
-           </>
+        </>
     );
 };
 
 export default Address;
-
-
-
-

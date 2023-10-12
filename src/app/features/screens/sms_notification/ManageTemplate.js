@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Column } from "primereact/column";
@@ -24,10 +25,9 @@ const ManageTemplate = () => {
     const [filterType, setFilterType] = useState("all");
     const [filteredByType, setFilteredByType] = useState([]); // New state for filtered data by type
     const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
-    const loginResponse = useSelector((state) => state.login);         
-        console.log(loginResponse)
-    const loginData = loginResponse.loginData;
-    const userId = loginData?._id;
+    const loginRes = localStorage.getItem("userData");
+         const parseLoginRes = JSON.parse(loginRes);
+          const userId = parseLoginRes?._id;
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -215,3 +215,4 @@ const ManageTemplate = () => {
 };
 
 export default ManageTemplate;
+
