@@ -12,72 +12,67 @@ import Axios from "axios";
 import ReactPaginate from "react-paginate";
 import { Dropdown } from "primereact/dropdown";
 import TemplateSearchBar from "./TemplateSearchBar";
-
+import Popup from "./Popup";
 const ManageTemplate = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [searchResults, setSearchResults] = useState([]);
-    const [searchTerm, setSearchTerm] = useState(""); // Add a state for search term
+    const [searchTerm, setSearchTerm] = useState("");
     const [allTemps, setAllTemps] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
+
     const dispatch = useDispatch();
     const [filterType, setFilterType] = useState("all");
-    const [filteredByType, setFilteredByType] = useState([]); // New state for filtered data by type
+    const [filteredByType, setFilteredByType] = useState([]);
 
     const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
 
-    const loginResponse = useSelector((state) => state.login);
-    const loginData = loginResponse.loginData;
-    const userId = loginData?._id;
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+     const userId = parseLoginRes?._id;
 
-    const renderActions = (rowData) => {
-        return (
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Button label="Download " onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />
-            </div>
-        );
+    const togglePopup = (template) => {
+        setShowPopup(!showPopup);
+        setSelectedTemplate(template);
     };
 
-    // Constants for pagination
+    const renderActions = (rowData) => {
+        return <Button label="Download" onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />;
+    };
+
     const itemsPerPage = 10;
     const pageCount = Math.ceil(allTemps.length / itemsPerPage);
     const offset = currentPage * itemsPerPage;
 
-    // Function to handle page change
     const handlePageClick = ({ selected }) => {
         setCurrentPage(selected);
     };
 
-    // Render the visible items based on the current page
     const visibleItems = allTemps.slice(offset, offset + itemsPerPage);
 
-    // Function to handle the search
     const handleSearch = (searchTerm) => {
-        setSearchTerm(searchTerm); // Update search term state
-        // Implement your search logic here
+        setSearchTerm(searchTerm);
         const filteredResults = allTemps.filter((template) => {
             return template.name.toLowerCase().includes(searchTerm.toLowerCase()) || template.templateId.toString().includes(searchTerm);
         });
         setSearchResults(filteredResults);
     };
-    
-     // Function to handle type filter
-     const handleTypeFilter = (selectedType) => {
+
+    const handleTypeFilter = (selectedType) => {
         setFilterType(selectedType);
 
-        // Apply type filter
         if (selectedType === "all") {
-            setFilteredByType(allTemps); // Show all templates
+            setFilteredByType(allTemps);
         } else {
             const filteredResults = allTemps.filter((template) => template.type === parseInt(selectedType));
             setFilteredByType(filteredResults);
         }
     };
 
-     // Options for the type filter dropdown
-     const typeFilterOptions = [
+    const typeFilterOptions = [
         { label: "All", value: "all" },
         { label: "SMS", value: "0" },
         { label: "Email", value: "1" },
-        { label: "Both", value: "2" },
     ];
 
     const handleDownload = (rowData) => {
@@ -99,16 +94,10 @@ const ManageTemplate = () => {
             let wb = XLSX.utils.book_new();
             let ws = XLSX.utils.aoa_to_sheet([getOneTemplate?.data?.keySequence]);
 
-            // Find the index of the header that contains 'templateId'
             let keys = getOneTemplate?.data?.keySequence;
             const templateIdHeaderIndex = keys.findIndex((row) => row.includes("templateId"));
-            // Assuming your value is stored in a variable called 'valueToMap'
             const valueToMap = getOneTemplate?.data?.templateId;
-
-            // Assuming you have a row number where you want to map the value, called 'rowNumberToMap'
-            const rowNumberToMap = 1; // Replace 1 with the appropriate row number.
-
-            // Map the value to the specific row and column (assuming the column is 0 in this example)
+            const rowNumberToMap = 1;
 
             if (templateIdHeaderIndex !== -1) {
                 XLSX.utils.sheet_add_aoa(ws, [[valueToMap]], { origin: { r: rowNumberToMap, c: templateIdHeaderIndex } });
@@ -124,9 +113,11 @@ const ManageTemplate = () => {
     const templateType = (rowData) => {
         return <div>{rowData.type === 0 ? "SMS" : rowData.type === 1 ? "Email" : "Both"}</div>;
     };
+
     const status = (rowData) => {
         return <div>{rowData.active == true ? "Active" : "False"}</div>;
     };
+
     const createdAtFormatted = (rowData) => {
         const createdAtDate = new Date(rowData.createdAt);
         const options = {
@@ -147,16 +138,14 @@ const ManageTemplate = () => {
                     <h3 className="text-xl font-semibold border-bottom-1 pb-2">Manage Template</h3>
                 </div>
                 <div className="flex ">
-                <div className="mb-3">
-                    <label>Filter By Type: </label>
-                    <Dropdown value={filterType} options={typeFilterOptions} onChange={(e) => handleTypeFilter(e.value)} placeholder="Select a type" />
+                    <div className="mb-3">
+                        <label>Filter By Type: </label>
+                        <Dropdown value={filterType} options={typeFilterOptions} onChange={(e) => handleTypeFilter(e.value)} placeholder="Select a type" />
+                    </div>
+                    <div className=" mb-3 ml-5">
+                        <TemplateSearchBar onSearch={handleSearch} />
+                    </div>
                 </div>
-                <div className=" mb-3 ml-5">
-                    <TemplateSearchBar onSearch={handleSearch}  />
-                </div>
-               
-                </div>
-               
             </div>
 
             <div className="card mx-5 p-0 border-noround">
@@ -164,23 +153,57 @@ const ManageTemplate = () => {
                     <CustomLoading />
                 ) : (
                     <div className="">
-                        <DataTable value={searchTerm === "" ? (filterType === "all" ? visibleItems : filteredByType) : searchResults} showGridlines>
+                        <DataTable
+                            value={searchTerm === "" ? (filterType === "all" ? visibleItems : filteredByType) : searchResults}
+                            showGridlines
+                        >
                             <Column header="Name" field="name"></Column>
                             <Column header="Template ID" field="templateId"></Column>
                             <Column header="Type" body={templateType}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
                             <Column header="CreatedBy" field="createdByUser"></Column>
-                            <Column header="Template Body" field="template"></Column>
+                            <Column header="Template Body" field="template">
+                                {/* Modified renderActionsTemplate */}
+                                {(rowData) => {
+                                    const templateBodyLines = rowData.template.split("\n");
+                                    const firstLine = templateBodyLines[0];
+                                    const hasMoreLines = templateBodyLines.length > 1;
+
+                                    return (
+                                        <div>
+                                            {hasMoreLines ? (
+                                                <>
+                                                    <div>{firstLine}</div>
+                                                    <button onClick={() => togglePopup(rowData)}>See More</button>
+                                                </>
+                                            ) : (
+                                                <div>{firstLine}</div>
+                                            )}
+                                        </div>
+                                    );
+                                }}
+                            </Column>
                             <Column header="Status" body={status}></Column>
                             <Column header="Action" body={renderActions} style={{ width: "120px" }} />
                         </DataTable>
-                        <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
+                        <ReactPaginate
+                            previousLabel={"Previous"}
+                            nextLabel={"Next"}
+                            breakLabel={"..."}
+                            pageCount={pageCount}
+                            onPageChange={handlePageClick}
+                            containerClassName={"pagination"}
+                            activeClassName={"active"}
+                        />
                     </div>
                 )}
+                {showPopup && selectedTemplate && <Popup templateBody={selectedTemplate.template} onClose={() => togglePopup(null)} />}
             </div>
         </div>
     );
 };
 
 export default ManageTemplate;
+
+

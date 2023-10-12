@@ -282,3 +282,8 @@ box-shadow: 2px;
     justify-content: space-between;
     
   }
+  .erormsg{
+    margin-left: 900px;
+    color: red;
+    font-size: 20px;
+  }

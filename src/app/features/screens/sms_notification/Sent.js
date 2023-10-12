@@ -13,11 +13,15 @@ import TemplateSearchBar from "./TemplateSearchBar";
 
 const Sent = () => {
     const [allSent, setAllSent] = useState([])
-    const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
+    const [currentPage, setCurrentPage] = useState(0); 
     const [searchResults, setSearchResults] = useState([]);
-    const loginResponse = useSelector((state) => state.login)
-    const loginData = loginResponse.loginData
-    const companyId = loginData?.compony
+
+
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    
+
+    const companyId = parseLoginRes?.compony
 
     const dispatch = useDispatch();
     const { getSentAllTemplate, getSentAllTemplateLoading } = useSelector((state) => state.notification);
