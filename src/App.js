@@ -8,7 +8,6 @@ import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
 
