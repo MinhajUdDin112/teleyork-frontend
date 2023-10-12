@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
+import { DataTable } from "primereact/datatable";  
+import { Dialog } from "primereact/dialog";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +11,8 @@ import BASE_URL from "../../../../config";
 import Axios from "axios";
 
 const ShowDraftAll = () => {
+    const [visible, setVisible] = useState(false);
+    const [templatebody, setTemplatebody] = useState("");
 
     const [draftByIdRes, setDraftByIdRes] = useState([])
 
@@ -23,7 +26,29 @@ const ShowDraftAll = () => {
     useEffect(() => {
         dispatch(getDraftByTemplateIdAction(id, companyId));
     }, [id, submitTemplate]);
-
+    const messageBody=(rowData) => {
+        let template = rowData.message;
+        let shortline = template.substring(0, 10);
+        let fullline = template.substring(15, template.length);
+        console.log("body is rendering");
+        return (
+            <div id="template">
+                <p>
+                    {shortline}
+                    <span
+                        style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                        onClick={(e) => {
+                            setTemplatebody(rowData.template);
+                            setVisible(true);
+                        }}
+                    >
+                        {" "}
+                        See more
+                    </span>
+                </p>
+            </div>
+        );
+    };
     const handleSubmit = () => {
         let body = {
             userId: loginData?._id,
@@ -58,15 +83,25 @@ const ShowDraftAll = () => {
                     <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft" onClick={handleSubmit} />
                 </div>
                 <div className="">
-                    <DataTable value={draftByIdRes} showGridlines>
+                    <DataTable tableStyle={{ minWidth: "90rem" }} value={draftByIdRes} showGridlines>
                         <Column header="Name" field="name"></Column>
-                        <Column header="Message" field="message"></Column>
+                        <Column header="Message" field={{messageBody}}></Column>
                         <Column header="Status" field="status"></Column>
                         <Column header="Email" field="email"></Column>
                         <Column header="Contact" field="phone"></Column>
                     </DataTable>
                 </div>
-            </div>
+            </div>   
+            <Dialog
+                header="Message Body"
+                visible={visible}
+                style={{ width: "50vw" }}
+                onHide={() => {
+                    setVisible(false);
+                }}
+            >
+                <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
+            </Dialog>
         </div>
     );
 };

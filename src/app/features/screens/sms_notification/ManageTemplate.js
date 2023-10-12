@@ -13,26 +13,21 @@ import ReactPaginate from "react-paginate";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import TemplateSearchBar from "./TemplateSearchBar";
-
 const ManageTemplate = () => {
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
-
     const [currentPage, setCurrentPage] = useState(0);
-
     const [searchResults, setSearchResults] = useState([]);
     const [searchTerm, setSearchTerm] = useState(""); // Add a state for search term
     const [allTemps, setAllTemps] = useState([]);
     const dispatch = useDispatch();
     const [filterType, setFilterType] = useState("all");
     const [filteredByType, setFilteredByType] = useState([]); // New state for filtered data by type
-
     const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
-
-    const loginResponse = useSelector((state) => state.login);
+    const loginResponse = useSelector((state) => state.login);         
+        console.log(loginResponse)
     const loginData = loginResponse.loginData;
     const userId = loginData?._id;
-
     const renderActions = (rowData) => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -40,7 +35,6 @@ const ManageTemplate = () => {
             </div>
         );
     };
-
     // Constants for pagination
     const itemsPerPage = 10;
     const pageCount = Math.ceil(allTemps.length / itemsPerPage);
@@ -92,7 +86,7 @@ const ManageTemplate = () => {
 
     const getAllTemps = async () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
-
+         console.log(response)
         setAllTemps(response?.data?.data);
     };
 
