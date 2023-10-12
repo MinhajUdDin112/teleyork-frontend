@@ -85,7 +85,7 @@ const ShowDraftAll = () => {
                 <div className="">
                     <DataTable tableStyle={{ minWidth: "90rem" }} value={draftByIdRes} showGridlines>
                         <Column header="Name" field="name"></Column>
-                        <Column header="Message" field={{messageBody}}></Column>
+                        <Column header="Message" field={messageBody}></Column>
                         <Column header="Status" field="status"></Column>
                         <Column header="Email" field="email"></Column>
                         <Column header="Contact" field="phone"></Column>
