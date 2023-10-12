@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button } from "primereact/button";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -43,12 +43,12 @@ export default function LoginScreen() {
                         <form onSubmit={formik.handleSubmit}>
                             <InputText type="text" name="email" className="p-inputtext-sm block mb-4 w-20rem" placeholder="Enter email" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} />
                             {formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm mt-0">{formik.errors.email}</p> : null}
-                            <InputText type="text" name="password" className="p-inputtext-sm block mb-2 w-20rem" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                            <InputText type="password" name="password" className="p-inputtext-sm block mb-2 w-20rem" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
                             {formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm mt-0">{formik.errors.password}</p> : null}
                             <Button type="submit" className="w-20rem mt-3" label="Login" />
                             <div>
                                 <NavLink className="font-semibold mt-3 justify-content-center flex " to={{ pathname: "/sendotp", state: { email: formik.values.email } }}>
-                                    Forget Password?
+                                    Forgot Password?
                                 </NavLink>
                             </div>
                         </form>

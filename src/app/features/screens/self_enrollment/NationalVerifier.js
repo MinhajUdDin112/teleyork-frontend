@@ -1,34 +1,46 @@
 import React, { useState } from "react";
 import { Checkbox } from "primereact/checkbox";
 import { Button } from "primereact/button";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate,useParams } from "react-router-dom";
+import axios from "axios";
+import BASE_URL from "../../../../config";
 
 const NationalVerifier = () => {
     const [checked, setChecked] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
+    const {id}=useParams()
 
-    const handleNext = () => {
-        // Navigate to a different route
-        history.push("/resumeapplication");
+    const handleNext =async () => {
+        const data ={
+            userId:id
+        }
+        try {
+            const res = await axios.post(`${BASE_URL}/api/enrollment/termsAndConditions`, data);
+            const responseData = res.data; // Assuming the API response contains the data you need
+            navigate("/selfenrollment/resumeapplication", { state: { responseData } });
+        } catch (error) {
+            // Handle any errors here
+            console.error("Error:", error);
+        }
     };
     const handleBack = () => {
         // Navigate to a different route
-        history.push("/eligibility");
+        navigate("/selfenrollment/eligibility");
     };
     return (
         <>
             <div
-                style={{
+                 style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    height: "90vh", // Adjust the height to your preference
+                    minHeight: "100vh", // Changed height to minHeight
                 }}
             >
                 <div className="col-7">
-                    <div className="col-12">
+                    {/* <div className="col-12">
                         <p className="text-4xl font-semibold">IJ Wireless</p>
-                    </div>
+                    </div> */}
                     <div className="card p-8 col-12 mx-0">
                         <p className="text-4xl font-bold flex justify-content-center">National Verifier Disclosure</p>
                         <p className="mt-0 text-xl">
@@ -43,7 +55,7 @@ const NationalVerifier = () => {
                             </label>
                         </div>
                         <div className="flex flex-column mt-4">
-                            <Button label="Next" className="mb-3" onClick={handleNext} />
+                            <Button label="Next" className="mb-3" onClick={()=>handleNext()} />
                             <Button label="Back" onClick={handleBack} />
                         </div>
                     </div>

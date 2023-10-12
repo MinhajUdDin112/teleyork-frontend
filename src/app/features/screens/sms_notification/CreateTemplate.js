@@ -3,37 +3,63 @@ import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { Editor } from "primereact/editor";
+import { useEffect } from "react";
 import { Toast } from "primereact/toast";
 import { addTemplateAction } from "../../../store/notification/NotificationAction";
-
+import { ProgressSpinner } from "primereact/progressspinner";
 const CreateTemplate = () => {
     const dispatch = useDispatch();
     const [templateText, setTemplateText] = useState("");
+    const [subjectText, setSubjectText] = useState("");
+    const { addTemplateLoading } = useSelector((state) => state.notification);
+    const loginResponse = useSelector((state) => state.login);
+    const loginData = loginResponse.loginData;
+    const companyId = loginData?.compony;
 
     const type = [
         { label: "SMS", value: 0 },
         { label: "Email", value: 1 },
         { label: "Both", value: 2 },
     ];
+
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().required("Template Name is required"),
+        type: Yup.string().required("Template Type is required"),
+    });
+   
     const formik = useFormik({
         initialValues: {
             name: "",
             type: "",
+            notification_subject: "",
         },
+        validationSchema,
+
         onSubmit: (values, actions) => {
-            const name = templateText.match(/(?<=\$)\w+/g) || [];
-            const keySequence = ["templateId", ...name];
+            const name = templateText.match(/(?<=[^\$]\$\$)\w+/g) || [];
+            const subject = subjectText.match(/(?<=\$\$)\w+/g) || [];
+            
+            const keySequence = ["templateId", ...name, ...subject];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
+            const createdBy = parseLoginRes?._id;
             const dataToSend = {
                 ...values,
+                createdBy,
+                company: companyId,
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
             };
+           
             dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
             setTemplateText("");
+            setSubjectText("");
             show();
         },
     });
@@ -55,20 +81,50 @@ const CreateTemplate = () => {
                     <div className="flex flex-wrap">
                         <div className="mr-3">
                             <p className="m-0">Template Name:</p>
-                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Enter Template Name" />
+                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Enter Template Name" keyfilter={/^[a-zA-Z0-9-_]*$/} />
+                            {formik.touched.name && formik.errors.name ? <div className="steric">{formik.errors.name}</div> : null}
                         </div>
                         <div>
                             <p className="m-0">Template Type:</p>
                             <Dropdown name="type" options={type} value={formik.values.type} onChange={formik.handleChange} className="p-inputtext-sm mb-2 w-25rem p-0" placeholder="Select Template Type" />
+                            {formik.touched.type && formik.errors.type ? <div className="steric">{formik.errors.type}</div> : null}
                         </div>
+                        <div>
+                            <p className="ml-2 mb-2">
+                               <span className="steric"> please note Instructions to add variable in notifications:</span> <br />
+                                in the subject and in Email body prefix $$ with the variable name,
+                                 for example, $$CustomerFirstName,also don't add space in the  variable name.
+                            </p>
+                        </div>
+
+                        {formik.values.type === 1 || formik.values.type === 2 ? (
+                            <div className="ml-3">
+                                <p className="m-0">Add Subject:</p>
+                                <InputText
+                                    type="text"
+                                    name="notification_subject"
+                                    value={formik.values.notification_subject}
+                                    onChange={(e) => {
+                                        formik.handleChange(e);
+                                        setSubjectText(e.target.value);
+                                    }}
+                                    className="text-sm mb-2 w-25rem"
+                                    placeholder="Add Subject"
+                                />
+                            </div>
+                        ) : null}
                     </div>
                     <div className="mt-2">
-                        <p className="m-0">Template Body:</p>
+                        <p className="m-0">Template Body: </p>
                         <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
                     </div>
-                    <div className="flex justify-content-end m-3">
-                        <Button label="Add Template" type="submit" />
-                    </div>
+                    {addTemplateLoading ? (
+                        <ProgressSpinner style={{ width: "40px", height: "40px", marginLeft: "1050px", marginTop: "10px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
+                    ) : (
+                        <div className="flex justify-content-end m-3">
+                            <Button label="Add Template" type="submit" />
+                        </div>
+                    )}
                 </div>
             </form>
         </div>

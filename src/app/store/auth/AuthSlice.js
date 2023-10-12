@@ -11,9 +11,7 @@ const authSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.loginData = null;
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("userData");
+            localStorage.clear();
         },
     },
     extraReducers: (builder) => {
@@ -27,6 +25,7 @@ const authSlice = createSlice({
             localStorage.setItem("refreshToken", JSON.stringify(action.payload.data.refreshToken));
             state.loginLoading = false;
             state.loginError = null;
+            // console.log(action.payload)
         });
         builder.addCase(loginAction.rejected, (state, action) => {
             state.loginLoading = false;
