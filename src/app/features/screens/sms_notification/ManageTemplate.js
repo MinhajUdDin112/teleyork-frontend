@@ -11,10 +11,15 @@ import BASE_URL from "../../../../config";
 import Axios from "axios";
 import ReactPaginate from "react-paginate";
 import { Dropdown } from "primereact/dropdown";
+import { Dialog } from "primereact/dialog";
 import TemplateSearchBar from "./TemplateSearchBar";
 
 const ManageTemplate = () => {
+    const [visible, setVisible] = useState(false);
+    const [templatebody, setTemplatebody] = useState("");
+
     const [currentPage, setCurrentPage] = useState(0);
+
     const [searchResults, setSearchResults] = useState([]);
     const [searchTerm, setSearchTerm] = useState(""); // Add a state for search term
     const [allTemps, setAllTemps] = useState([]);
@@ -58,9 +63,9 @@ const ManageTemplate = () => {
         });
         setSearchResults(filteredResults);
     };
-    
-     // Function to handle type filter
-     const handleTypeFilter = (selectedType) => {
+
+    // Function to handle type filter
+    const handleTypeFilter = (selectedType) => {
         setFilterType(selectedType);
 
         // Apply type filter
@@ -72,8 +77,8 @@ const ManageTemplate = () => {
         }
     };
 
-     // Options for the type filter dropdown
-     const typeFilterOptions = [
+    // Options for the type filter dropdown
+    const typeFilterOptions = [
         { label: "All", value: "all" },
         { label: "SMS", value: "0" },
         { label: "Email", value: "1" },
@@ -87,6 +92,7 @@ const ManageTemplate = () => {
 
     const getAllTemps = async () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/template/all?userId=${userId}`);
+
         setAllTemps(response?.data?.data);
     };
 
@@ -139,6 +145,29 @@ const ManageTemplate = () => {
         };
         return createdAtDate.toLocaleString("en-US", options);
     };
+    const templateBody = (rowData) => {
+        let template = rowData.template;
+        let shortline = template.substring(0, 10);
+        let fullline = template.substring(15, template.length);
+        console.log("body is rendering");
+        return (
+            <div id="template">
+                <p>
+                    {shortline}
+                    <span
+                        style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                        onClick={(e) => {
+                            setTemplatebody(rowData.template);
+                            setVisible(true);
+                        }}
+                    >
+                        {" "}
+                        See more
+                    </span>
+                </p>
+            </div>
+        );
+    };
 
     return (
         <div className="card bg-pink-50">
@@ -147,31 +176,29 @@ const ManageTemplate = () => {
                     <h3 className="text-xl font-semibold border-bottom-1 pb-2">Manage Template</h3>
                 </div>
                 <div className="flex ">
-                <div className="mb-3">
-                    <label>Filter By Type: </label>
-                    <Dropdown value={filterType} options={typeFilterOptions} onChange={(e) => handleTypeFilter(e.value)} placeholder="Select a type" />
+                    <div className="mb-3">
+                        <label>Filter By Type: </label>
+                        <Dropdown value={filterType} options={typeFilterOptions} onChange={(e) => handleTypeFilter(e.value)} placeholder="Select a type" />
+                    </div>
+                    <div className=" mb-3 ml-5">
+                        <TemplateSearchBar onSearch={handleSearch} />
+                    </div>
                 </div>
-                <div className=" mb-3 ml-5">
-                    <TemplateSearchBar onSearch={handleSearch}  />
-                </div>
-               
-                </div>
-               
             </div>
 
             <div className="card mx-5 p-0 border-noround">
                 {getAllTemplateLoading ? (
                     <CustomLoading />
                 ) : (
-                    <div className="">
-                        <DataTable value={searchTerm === "" ? (filterType === "all" ? visibleItems : filteredByType) : searchResults} showGridlines>
+                    <div>
+                        <DataTable tableStyle={{ minWidth: "90rem" }} value={searchTerm === "" ? (filterType === "all" ? visibleItems : filteredByType) : searchResults} showGridlines>
                             <Column header="Name" field="name"></Column>
                             <Column header="Template ID" field="templateId"></Column>
                             <Column header="Type" body={templateType}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="CreatedAt" body={createdAtFormatted}></Column>
                             <Column header="CreatedBy" field="createdByUser"></Column>
-                            <Column header="Template Body" field="template"></Column>
+                            <Column header="Template Body" body={templateBody}></Column>
                             <Column header="Status" body={status}></Column>
                             <Column header="Action" body={renderActions} style={{ width: "120px" }} />
                         </DataTable>
@@ -179,6 +206,16 @@ const ManageTemplate = () => {
                     </div>
                 )}
             </div>
+            <Dialog
+                header="Template Body"
+                visible={visible}
+                style={{ width: "50vw" }}
+                onHide={() => {
+                    setVisible(false);
+                }}
+            >
+                <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
+            </Dialog>
         </div>
     );
 };

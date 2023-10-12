@@ -11,7 +11,11 @@ import BASE_URL from "../../../../config";
 import ReactPaginate from 'react-paginate';
 import TemplateSearchBar from "./TemplateSearchBar";
 
-const Sent = () => {
+import { Dialog } from "primereact/dialog";
+const Sent = () => {    
+    const [visible, setVisible] = useState(false);
+    const [templatebody, setTemplatebody] = useState("");
+
     const [allSent, setAllSent] = useState([])
     const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
     const [searchResults, setSearchResults] = useState([]);
@@ -61,7 +65,30 @@ const Sent = () => {
   // Function to handle page change
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
-  };
+  };    
+  const messageBody=(rowData) => {
+    let template = rowData.template;
+    let shortline = template.substring(0, 10);
+    let fullline = template.substring(15, template.length);
+    console.log("body is rendering");
+    return (
+        <div id="template">
+            <p>
+                {shortline}
+                <span
+                    style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                    onClick={(e) => {
+                        setTemplatebody(rowData.template);
+                        setVisible(true);
+                    }}
+                >
+                    {" "}
+                    See more
+                </span>
+            </p>
+        </div>
+    );
+};
    // Function to handle the search
    const handleSearch = (searchTerm) => {
     // Implement your search logic here
@@ -106,10 +133,10 @@ const Sent = () => {
                     <CustomLoading />
                 ) : (
                     <div className="">
-                        <DataTable value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
+                        <DataTable tableStyle={{minWidth:"90rem"}}  value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
                             <Column header="Template Id" field="templateId" />
                             <Column header="Name" field="name" />
-                            <Column header="Message" field="template" />
+                            <Column header="Message" field={messageBody} />
                             <Column header="Type" body={type} />
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="SentAt" body={createdAtFormatted}></Column>
@@ -128,7 +155,17 @@ const Sent = () => {
             />
                     </div>
                 )}
-            </div>
+            </div>     
+            <Dialog
+                header="Message Body"
+                visible={visible}
+                style={{ width: "50vw" }}
+                onHide={() => {
+                    setVisible(false);
+                }}
+            >
+                <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
+            </Dialog>
         </div>
     );
 };

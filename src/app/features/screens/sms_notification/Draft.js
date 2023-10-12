@@ -3,7 +3,9 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";  
+
+import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { getAllTemplateAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
@@ -13,7 +15,10 @@ import TemplateSearchBar from "./TemplateSearchBar";
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
-const Draft = () => {
+const Draft = () => {  
+    const [visible, setVisible] = useState(false);
+    const [templatebody, setTemplatebody] = useState("");
+
     const [currentPage, setCurrentPage] = useState(0); // Add currentPage state
     const [searchResults, setSearchResults] = useState([]);
     const [allDraft, setAllDraft] = useState([]);
@@ -137,7 +142,29 @@ const Draft = () => {
 
     // Render the visible items based on the current page
     const visibleItems = allDraft.slice(offset, offset + itemsPerPage);
-
+        const messageBody=(rowData) => {
+            let template = rowData.template;
+            let shortline = template.substring(0, 10);
+            let fullline = template.substring(15, template.length);
+            console.log("body is rendering");
+            return (
+                <div id="template">
+                    <p>
+                        {shortline}
+                        <span
+                            style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                            onClick={(e) => {
+                                setTemplatebody(rowData.template);
+                                setVisible(true);
+                            }}
+                        >
+                            {" "}
+                            See more
+                        </span>
+                    </p>
+                </div>
+            );
+        };
     const createdAtFormatted = (rowData) => {
         const createdAtDate = new Date(rowData.createdAt);
         const options = {
@@ -169,10 +196,10 @@ const Draft = () => {
                     <ProgressSpinner style={{ width: "40px", height: "40px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
                 ) : (
                     <div className="">
-                        <DataTable value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
+                        <DataTable tableStyle={{ minWidth: "90rem" }} value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
                             <Column header="Template Id" field="templateId"></Column>
                             <Column header="Name" field="name"></Column>
-                            <Column header="Message" field="template"></Column>
+                            <Column header="Message" field={messageBody}></Column>
                             <Column header="Type" body={type}></Column>
                             <Column header="Subject" field="notification_subject"></Column>
                             <Column header="UploadAt" body={createdAtFormatted}></Column>
@@ -185,7 +212,17 @@ const Draft = () => {
                         <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
                     </div>
                 )}
-            </div>
+            </div>    
+            <Dialog
+                header="Message Body"
+                visible={visible}
+                style={{ width: "50vw" }}
+                onHide={() => {
+                    setVisible(false);
+                }}
+            >
+                <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
+            </Dialog>
         </div>
     );
 };
