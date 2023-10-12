@@ -20,7 +20,7 @@ export default function LoginScreen() {
             password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
         }),
         onSubmit: (values) => {
-            dispatch(loginAction(values));
+            dispatch(loginAction(values));    
             console.log(formik.values);
         },
     });
