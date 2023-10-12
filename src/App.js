@@ -64,8 +64,7 @@ import CreateUser from "./app/features/screens/user_management/CreateUser";
 import ManageUser from "./app/features/screens/user_management/ManageUser";
 import EditUser from "./app/features/screens/user_management/EditUser";
 import NotFound from "./app/features/screens/not_found/NotFound";
-let data=JSON.parse(window.localStorage.userData)   
-console.log(data)
+
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
