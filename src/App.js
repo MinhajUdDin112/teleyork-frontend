@@ -236,6 +236,7 @@ const App = () => {
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
+                              
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />

@@ -10,12 +10,13 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Divider } from "primereact/divider";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
+import { ToastContainer,  } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const CreateRole = () => {
 
     const [rolePermissions, setRolePermissions] = useState([])
 
-    console.log('rolePermissions', rolePermissions)
 
     const location = useLocation()
     const { rowData } = location.state || {};
@@ -24,6 +25,7 @@ const CreateRole = () => {
     const [selectedModules, setSelectedModules] = useState({});
     const [selectedSubmodules, setSelectedSubmodules] = useState({});
     const [selectedActions, setSelectedActions] = useState({});
+    const [errorMessage, setErrorMessage] = useState()
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData")
@@ -47,6 +49,7 @@ const CreateRole = () => {
             const permissions = [];
 
             // Define the data object
+           
             const data = {
                 serviceProvider: parseLoginRes?.compony,
                 permissions: permissions,
@@ -54,6 +57,7 @@ const CreateRole = () => {
                 description: formik.values.description,
                 isSperPanelRole: false
             };
+           
 
             // Iterate over selectedSubmodules to build permissions array
             Object.keys(selectedSubmodules).forEach((submoduleId) => {
@@ -77,21 +81,32 @@ const CreateRole = () => {
                         subModule: submoduleId,
                         actions: submoduleActions,
                     });
-                    console.log('permissions', permissions)
+                   
                 }
             });
 
-            return
-
+            
+return
             // Send the data to the server using Axios POST request
+
             Axios.post(`${BASE_URL}/api/web/role`, data)
                 .then((response) => {
                     if (response?.status === 200) {
-                        toast.warn("Role Added")
+                        console.log("status is",response?.status)
+                        toast.success("Role Create Successfully", {
+                            position: "top-right",
+                            autoClose: 3000, // Toast auto-closes after 3 seconds
+                        });
                     }
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
+                    setErrorMessage(error?.response?.data?.msg);
+                    console.log("error msg is",)
+                    toast.error(error?.response?.data?.msg, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                    
                 });
 
             formik.resetForm()
@@ -221,7 +236,7 @@ const CreateRole = () => {
     return (
         <>
             <div className="card">
-
+            <ToastContainer />
                 <div>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="p-fluid p-formgrid grid">
@@ -323,61 +338,8 @@ const CreateRole = () => {
                     }
                 </div>
 
-                {/* 
-                <div>
-                    <table className="w_100 text-left">
-                        <thead>
-                            <tr>
-                                <th>Module</th>
-                                <th>Submodule</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {moduleData.map((module) => (
-                                <tr key={module._id}>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedModules[module._id] || false}
-                                            onChange={() => handleModuleCheckboxChange(module._id)}
-                                        />
-                                        {module.name}
-                                    </td>
-                                    <td>
-                                        {module.submodule.map((submodule) => (
-                                            <div key={submodule._id}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedSubmodules[submodule._id] || false}
-                                                    onChange={() => handleSubmoduleCheckboxChange(submodule._id)}
-                                                />
-                                                {submodule.name}
-                                            </div>
-                                        ))}
-                                    </td>
-                                    <td>
-                                        {module.submodule.map((submodule) => (
-                                            <div key={submodule._id}>
-                                                {submodule.actions.map((action) => (
-                                                    <div key={`${submodule._id}-${action._id}`}>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedActions[`${submodule._id}-${action._id}`] || false}
-                                                            onChange={() => togglePermission(submodule._id, action._id)}
-                                                        />
-                                                        {action.name}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ))}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div> */}
-
+                
+                                   
                 {/* <div>
                     <br />
                     <br />
