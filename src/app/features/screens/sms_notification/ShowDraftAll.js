@@ -38,7 +38,7 @@ const ShowDraftAll = () => {
                     <span
                         style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
                         onClick={(e) => {
-                            setTemplatebody(rowData.template);
+                            setTemplatebody(rowData.message);
                             setVisible(true);
                         }}
                     >
@@ -82,7 +82,7 @@ const ShowDraftAll = () => {
                     <i className="pi pi-arrow-circle-left flex align-items-center" onClick={() => handleBack()} style={{ cursor: "pointer", fontSize: "2rem" }}></i>
                     <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft" onClick={handleSubmit} />
                 </div>
-                <div className="">
+                <div>
                     <DataTable tableStyle={{ minWidth: "90rem" }} value={draftByIdRes} showGridlines>
                         <Column header="Name" field="name"></Column>
                         <Column header="Message" field={messageBody}></Column>
@@ -95,7 +95,8 @@ const ShowDraftAll = () => {
             <Dialog
                 header="Message Body"
                 visible={visible}
-                style={{ width: "50vw" }}
+                style={{ width: "50vw" }}   
+                draggable={false}
                 onHide={() => {
                     setVisible(false);
                 }}

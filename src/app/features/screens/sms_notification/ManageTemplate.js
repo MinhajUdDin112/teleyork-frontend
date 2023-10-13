@@ -203,7 +203,8 @@ const ManageTemplate = () => {
             <Dialog
                 header="Template Body"
                 visible={visible}
-                style={{ width: "50vw" }}
+                style={{ width: "50vw" }}  
+                draggable={false}
                 onHide={() => {
                     setVisible(false);
                 }}
