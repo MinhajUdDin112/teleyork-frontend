@@ -6,9 +6,34 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSentByTemplateIdAction } from "../../../store/notification/NotificationAction";
 import CustomLoading from "../../components/custom_spinner";
-
+import { Dialog } from "primereact/dialog";  
+import { useState } from "react";
 const ShowSentAll = () => {
-
+    const [visible, setVisible] = useState(false);
+    const [templatebody, setTemplatebody] = useState("");
+    const messageBody=(rowData) => {
+        let template = rowData.message;
+        let shortline = template.substring(0, 10);
+        let fullline = template.substring(15, template.length);
+        console.log("body is rendering");
+        return (
+            <div id="template">
+                <p>
+                    {shortline}
+                    <span
+                        style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                        onClick={(e) => {
+                            setTemplatebody(rowData.message);
+                            setVisible(true);
+                        }}
+                    >
+                        {" "}
+                        See more
+                    </span>
+                </p>
+            </div>
+        );
+    };
     const { id } = useParams();
     const dispatch = useDispatch();
     const { getSentByTemplateId, getSentByTemplateIdLoading } = useSelector((state) => state.notification);
@@ -43,10 +68,10 @@ const ShowSentAll = () => {
                         <div className="flex justify-content-between border-bottom-2 bg-orange-200 px-5 py-2 my-3">
                             <i className="pi pi-arrow-circle-left flex align-items-center" onClick={() => handleBack()} style={{ cursor: "pointer", fontSize: "2rem" }}></i>
                         </div>
-                        <div className="">
+                        <div>
                             <DataTable value={getSentByTemplateId?.data} showGridlines>
                                 <Column header="Name" field="name"></Column>
-                                <Column header="Message" field="message"></Column>
+                                <Column header="Message" field={messageBody}></Column>
                                 <Column header="Status" field="status"></Column>
                                 <Column header="Email" field="email"></Column>
                                 <Column header="contact" field="phone"></Column>
@@ -54,7 +79,18 @@ const ShowSentAll = () => {
                         </div>
                     </>
                 )}
-            </div>
+            </div>   
+            <Dialog
+                header="Message Body"
+                visible={visible}
+                style={{ width: "50vw" }}   
+                draggable={false}
+                onHide={() => {
+                    setVisible(false);
+                }}
+            >
+                <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
+            </Dialog>
         </div>
     );
 };

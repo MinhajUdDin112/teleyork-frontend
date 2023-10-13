@@ -195,8 +195,8 @@ const Draft = () => {
                 {getAllTemplateLoading ? (
                     <ProgressSpinner style={{ width: "40px", height: "40px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
                 ) : (
-                    <div className="">
-                        <DataTable tableStyle={{ minWidth: "90rem" }} value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
+                    <div>
+                        <DataTable tableStyle={{ minWidth: "120rem" }} value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
                             <Column header="Template Id" field="templateId"></Column>
                             <Column header="Name" field="name"></Column>
                             <Column header="Message" field={messageBody}></Column>
@@ -216,7 +216,8 @@ const Draft = () => {
             <Dialog
                 header="Message Body"
                 visible={visible}
-                style={{ width: "50vw" }}
+                style={{ width: "50vw" }}   
+                draggable={false}
                 onHide={() => {
                     setVisible(false);
                 }}

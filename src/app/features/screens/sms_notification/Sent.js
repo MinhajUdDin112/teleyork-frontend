@@ -132,7 +132,7 @@ const Sent = () => {
                 {getSentAllTemplateLoading ? (
                     <CustomLoading />
                 ) : (
-                    <div className="">
+                    <div>
                         <DataTable tableStyle={{minWidth:"90rem"}}  value={searchResults.length > 0 ? searchResults : visibleItems} showGridlines>
                             <Column header="Template Id" field="templateId" />
                             <Column header="Name" field="name" />
@@ -159,7 +159,8 @@ const Sent = () => {
             <Dialog
                 header="Message Body"
                 visible={visible}
-                style={{ width: "50vw" }}
+                style={{ width: "50vw" }}      
+                draggable={false}
                 onHide={() => {
                     setVisible(false);
                 }}
