@@ -1,15 +1,289 @@
 .custom-icon {
     font-size: 4rem ; /* Adjust the size as needed */
   }
-  .field_label {
+  
+   /* Custom Css */
+
+.field_label {
     display: block !important;
 }
 
 .steric {
     color: red;
 }
+.disable-icon-color{
+    color: rgb(175, 59, 59);
+}
+.icon-size{
+    font-size: 14px;
+}
+.disable-color{
+    color: rgb(13, 5, 5);
+    font-size: 16px;
+}
+.yesButton{
+    background-color: green;
+}
+.noButton{
+    background-color: green;
+}
+
 
 .sp_small small {
     display: block;
     padding-top: 5px;
 }
+.acp_programs img{
+width: 100%;
+}
+.plans_table tr th {
+    padding-right: 20px;
+    padding-bottom: 10px;
+}
+.plans_table tr td {
+    padding-bottom: 10px;
+}
+.w_100 {
+    width: 100%;
+}
+
+/* Enrollment Pricing Cards */
+
+/* .wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -190px 0 0 -468px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    color: #9f9f9f;
+    font-size: 15px;
+} */
+.package {
+    box-sizing: border-box;
+    /* width: 301px; */
+    /* height: 380px; */
+    border: 3px solid #e8e8e8;
+    border-radius: 7px;
+    display: inline-block;
+    padding: 24px;
+    text-align: center;
+    float: left;
+    transition: margin-top 0.5s linear;
+    position: relative;
+    margin-right: 11px;
+}
+.package:hover {
+    margin-top: -10px;
+    transition: margin-top 0.3s linear;
+}
+.package .name {
+    color: #565656;
+    font-weight: 300;
+    font-size: 3rem;
+    margin-top: -5px;
+}
+.package .price {
+    margin-top: 7px;
+    font-weight: bold;
+}
+/* .package .price::after {
+    content: " / month per user";
+    font-weight: normal;
+} */
+.package hr {
+    background-color: #dedede;
+    border: none;
+    height: 1px;
+}
+.package .trial {
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 2px 21px 2px 21px;
+    color: #33c4b6;
+    border: 1px solid #e4e4e4;
+    display: inline-block;
+    border-radius: 15px;
+    background-color: white;
+    position: relative;
+    bottom: -25px;
+}
+.package ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-top: 29px;
+}
+.package li {
+    margin-bottom: 15px;
+}
+.package li:before {
+    font-size: 1.3rem;
+    color: #33c4b6;
+    margin-right: 3px;
+}
+
+.brilliant {
+    border-color: #33c4b6;
+}
+.brilliant::before {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 64px 64px 0 0;
+    border-color: #3bc6b8 transparent transparent transparent;
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: "";
+}
+.brilliant::after {
+    color: white;
+    position: absolute;
+    left: 9px;
+    top: 6px;
+    text-shadow: 0 0 2px #37c5b6;
+    font-size: 1.4rem;
+}
+.cursor-crosshair:hover{
+    cursor:not-allowed
+}
+
+
+
+
+
+  
+  
+  /* Style for answer buttons (Yes) */
+  .answer-button.green {
+    background-color: green;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for answer buttons (No) */
+  .answer-button.red {
+    background-color: rgba(255, 0, 0, 0.789);
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for answer button text */
+  .answer-button span {
+    font-weight: bold;
+  }
+  .button-design{
+    margin-right: 10px;
+    margin-top: 10px;
+    font-size: bold;
+    padding: 12px 26px;
+    border-radius: 6px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.661);
+    border: none;
+
+  }
+  input:disabled {
+    cursor: not-allowed;
+  }
+  .final-pre{
+   justify-content: center;
+    width: 900px;
+    align-items: center;
+    margin-left: 170px;
+    margin-top: 60px;
+box-shadow: 2px;
+  }
+.final-btn{
+    margin-top: 20px;
+    margin-left: 780px;
+  }
+  .sticky-buttons {
+    position: sticky;
+    top: 70px; 
+    background-color: white; 
+    z-index: 1; 
+    padding: 10px; 
+  }
+  
+ /* Pagination container */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  /* Pagination item (buttons) */
+  .pagination li {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  /* Active page button */
+  .pagination .active {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  /* Previous and Next buttons */
+  .pagination .previous,
+  .pagination .next {
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+
+  /* TemplateSearchBar.css  */
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .search-button {
+  
+    margin-left: 10px;
+    cursor: pointer;
+    color: #ffffff;
+    background: #6366F1;
+    border: 1px solid #6366F1;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    border-radius: 6px;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .bar-place{
+    justify-content: space-between;
+    
+  }
+  .erormsg{
+    margin-left: 900px;
+    color: red;
+    font-size: 20px;
+  }

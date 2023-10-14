@@ -8,7 +8,6 @@ import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
 
@@ -19,7 +18,8 @@ import "prismjs/themes/prism-coy.css";
 import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
-import "./App.scss";
+import "./App.scss";  
+import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page"
 import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
@@ -78,9 +78,7 @@ const App = () => {
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();
-
     PrimeReact.ripple = true;
-
     let menuClick = false;
     let mobileTopbarMenuClick = false;
     const { user } = useSelector((state) => state.login);
@@ -233,11 +231,13 @@ const App = () => {
                         <div className="layout-main">
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
-                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/" element={<Dashboard />} />  
+                                <Route path="/companyacpprograms" element={<AcpProgramsFlowPage/>} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
-                                <Route path="/allenrollments" element={AllEnrollments} />
+                              
+                                <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
                                 <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />

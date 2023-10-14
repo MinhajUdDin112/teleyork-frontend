@@ -9,13 +9,23 @@ import classNames from "classnames";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Divider } from "primereact/divider";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+import { ToastContainer,  } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const CreateRole = () => {
+
+    const [rolePermissions, setRolePermissions] = useState([])
+
+
+    const location = useLocation()
+    const { rowData } = location.state || {};
 
     const [moduleData, setModuleData] = useState([]);
     const [selectedModules, setSelectedModules] = useState({});
     const [selectedSubmodules, setSelectedSubmodules] = useState({});
     const [selectedActions, setSelectedActions] = useState({});
+    const [errorMessage, setErrorMessage] = useState()
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData")
@@ -39,6 +49,7 @@ const CreateRole = () => {
             const permissions = [];
 
             // Define the data object
+           
             const data = {
                 serviceProvider: parseLoginRes?.compony,
                 permissions: permissions,
@@ -46,6 +57,7 @@ const CreateRole = () => {
                 description: formik.values.description,
                 isSperPanelRole: false
             };
+           
 
             // Iterate over selectedSubmodules to build permissions array
             Object.keys(selectedSubmodules).forEach((submoduleId) => {
@@ -69,19 +81,32 @@ const CreateRole = () => {
                         subModule: submoduleId,
                         actions: submoduleActions,
                     });
-                    console.log('permissions', permissions)
+                   
                 }
             });
 
+            
+return
             // Send the data to the server using Axios POST request
+
             Axios.post(`${BASE_URL}/api/web/role`, data)
                 .then((response) => {
                     if (response?.status === 200) {
-                        toast.warn("Role Added")
+                        console.log("status is",response?.status)
+                        toast.success("Role Create Successfully", {
+                            position: "top-right",
+                            autoClose: 3000, // Toast auto-closes after 3 seconds
+                        });
                     }
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
+                    setErrorMessage(error?.response?.data?.msg);
+                    console.log("error msg is",)
+                    toast.error(error?.response?.data?.msg, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                    
                 });
 
             formik.resetForm()
@@ -98,6 +123,7 @@ const CreateRole = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/module`);
             setModuleData(res?.data?.data || []);
+            console.log('res?.data?.data', res?.data?.data)
         } catch (error) {
             console.error("Error fetching module data:", error);
         }
@@ -108,7 +134,6 @@ const CreateRole = () => {
     }, []);
 
     const handleModuleCheckboxChange = (moduleId) => {
-        console.log("moduleId", moduleId)
         setSelectedModules((prevSelectedModules) => ({
             ...prevSelectedModules,
             [moduleId]: !prevSelectedModules[moduleId],
@@ -177,7 +202,6 @@ const CreateRole = () => {
         });
     };
 
-
     // to uncheck permissions for a submodule
     const uncheckPermissionsForSubmodule = (submoduleId) => {
         setSelectedActions((prevSelectedActions) => {
@@ -191,10 +215,28 @@ const CreateRole = () => {
         });
     };
 
+    const getPermissionsByRoleId = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/role/roleDetails?roleId=${rowData?.role?._id}`);
+            if (res?.status === 200 || res?.status === 201) {
+                setRolePermissions(res?.data?.data?.permissions)
+            }
+            console.log('res', res)
+        } catch (error) {
+            console.error("Error fetching module data:", error?.response);
+        }
+    };
+
+    useEffect(() => {
+        if (rowData) {
+            getPermissionsByRoleId()
+        }
+    }, [rowData]);
+
     return (
         <>
             <div className="card">
-
+            <ToastContainer />
                 <div>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="p-fluid p-formgrid grid">
@@ -242,60 +284,62 @@ const CreateRole = () => {
 
                 <Divider />
 
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Module</th>
-                                <th>Submodule</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {moduleData.map((module) => (
-                                <tr key={module._id}>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedModules[module._id] || false}
-                                            onChange={() => handleModuleCheckboxChange(module._id)}
-                                        />
-                                        {module.name}
-                                    </td>
-                                    <td>
-                                        {module.submodule.map((submodule) => (
-                                            <div key={submodule._id}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedSubmodules[submodule._id] || false}
-                                                    onChange={() => handleSubmoduleCheckboxChange(submodule._id)}
-                                                />
-                                                {submodule.name}
-                                            </div>
-                                        ))}
-                                    </td>
-                                    <td>
-                                        {module.submodule.map((submodule) => (
-                                            <div key={submodule._id}>
-                                                {submodule.actions.map((action) => (
-                                                    <div key={`${submodule._id}-${action._id}`}>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedActions[`${submodule._id}-${action._id}`] || false}
-                                                            onChange={() => togglePermission(submodule._id, action._id)}
-                                                        />
-                                                        {action.name}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ))}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="grid r_n_r">
+                    {
+                        moduleData.map((module) => (
+                            <div className="col-12 md:col-6 lg:col-3">
+                                <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
+
+                                    <ul>
+                                        <li>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedModules[module._id] || false}
+                                                onChange={() => handleModuleCheckboxChange(module._id)}
+                                            />
+                                            {module.name}
+                                        </li>
+                                        {
+                                            module.submodule.map((submodule) => (
+                                                <ul>
+                                                    <li>
+                                                        <div key={submodule._id}>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedSubmodules[submodule._id] || false}
+                                                                onChange={() => handleSubmoduleCheckboxChange(submodule._id)}
+                                                            />
+                                                            {submodule.name}
+                                                        </div>
+                                                    </li>
+                                                    <ul>
+                                                        <li>
+                                                            {submodule.actions.map((action) => (
+                                                                <div key={`${submodule._id}-${action._id}`}>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={selectedActions[`${submodule._id}-${action._id}`] || false}
+                                                                        onChange={() => togglePermission(submodule._id, action._id)}
+                                                                    />
+                                                                    {action.name}
+                                                                </div>
+                                                            ))}
+                                                        </li>
+                                                    </ul>
+                                                </ul>
+                                            ))
+                                        }
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
 
+                
+                                   
                 {/* <div>
                     <br />
                     <br />

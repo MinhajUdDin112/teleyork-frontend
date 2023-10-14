@@ -11,15 +11,23 @@ export const AppTopbar = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+      // Get user data from localStorage
+  const loginRes = localStorage.getItem("userData");
+  const parseLoginRes = JSON.parse(loginRes);
+
+
+
     const handleLogout = () => {
         dispatch(logout());
         navigate("/login");
     };
+   
     return (
         <div className="layout-topbar">
             <Link to="/" className="layout-topbar-logo">
-                <img src={props.layoutColorMode === "light" ? "assets/layout/images/logo-dark.svg" : "assets/layout/images/logo-white.svg"} alt="logo" />
-                <span>TeleYork</span>
+                
+                <span>{parseLoginRes?.companyName}</span>
+               
             </Link>
 
             <button type="button" className="p-link  layout-menu-button layout-topbar-button" onClick={props.onToggleMenuClick}>

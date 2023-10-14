@@ -10,7 +10,7 @@ export const lifelineOrdersSlice = createSlice({
     initialState: {
 
         //add customer info initial states
-        addCustomerInfo: null,
+        addCustomerInfo: JSON.parse(localStorage.getItem("basicData")) ?? null,
         addCustomerInfoLoading: false,
         addCustomerInfoError: null,
     },
@@ -21,6 +21,7 @@ export const lifelineOrdersSlice = createSlice({
         });
         builder.addCase(addCustomerInfoAction.fulfilled, (state, action) => {
             state.addCustomerInfo = action.payload;
+            localStorage.setItem("basicData", JSON.stringify(action.payload.data));
             state.addCustomerInfoLoading = false;
         });
         builder.addCase(addCustomerInfoAction.rejected, (state, action) => {
@@ -39,7 +40,7 @@ export const lifelineOrdersSlice = createSlice({
     initialState: {
         
         //add customer address initial states
-        addCustomerAddress: null,
+        addCustomerAddress:JSON.parse(localStorage.getItem("addressData")) ?? null,
         addCustomerAddressLoading: false,
         addCustomerAddressError: null,
     },
@@ -50,6 +51,7 @@ export const lifelineOrdersSlice = createSlice({
         });
         builder.addCase(addCustomerAddressAction.fulfilled, (state, action) => {
             state.addCustomerAddress = action.payload;
+            localStorage.setItem("addressData", JSON.stringify(action.payload.data));
             state. addCustomerAddressLoading = false;
         });
         builder.addCase(addCustomerAddressAction.rejected, (state, action) => {
