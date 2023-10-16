@@ -11,6 +11,7 @@ import BASE_URL from "../../../../config";
 import ReactPaginate from 'react-paginate';
 import TemplateSearchBar from "./TemplateSearchBar";
 
+
 import { Dialog } from "primereact/dialog";
 const Sent = () => {    
     const [visible, setVisible] = useState(false);
