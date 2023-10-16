@@ -78,15 +78,15 @@ const CreateTemplate = () => {
             <form onSubmit={formik.handleSubmit}>
                 <Toast ref={toast} />
                 <div className="card mx-5">
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap justify-content-center">
                         <div className="mr-3">
                             <p className="m-0">Template Name:</p>
-                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem" placeholder="Enter Template Name" keyfilter={/^[a-zA-Z0-9-_]*$/} />
+                            <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem"  placeholder="Enter Template Name" keyfilter={/^[a-zA-Z0-9-_]*$/} />
                             {formik.touched.name && formik.errors.name ? <div className="steric">{formik.errors.name}</div> : null}
                         </div>
                         <div>
                             <p className="m-0">Template Type:</p>
-                            <Dropdown name="type" options={type} value={formik.values.type} onChange={formik.handleChange} className="p-inputtext-sm mb-2 w-25rem p-0" placeholder="Select Template Type" />
+                            <Dropdown name="type" options={type} value={formik.values.type} style={{padding:"2px"}} onChange={formik.handleChange} className="p-inputtext-sm mb-2 w-25rem " placeholder="Select Template Type" />
                             {formik.touched.type && formik.errors.type ? <div className="steric">{formik.errors.type}</div> : null}
                         </div>
                         <div>
