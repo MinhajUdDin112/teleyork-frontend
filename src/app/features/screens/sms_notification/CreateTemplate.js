@@ -14,6 +14,7 @@ const CreateTemplate = () => {
     const dispatch = useDispatch();
     const [templateText, setTemplateText] = useState("");
     const [subjectText, setSubjectText] = useState("");
+    
     const { addTemplateLoading } = useSelector((state) => state.notification);
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;
@@ -51,11 +52,11 @@ const CreateTemplate = () => {
             const dataToSend = {
                 ...values,
                 createdBy,
-                company: companyId,
+                company: parseLoginRes?.compony,
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
             };
-           
+           console.log("data to send is",dataToSend)
             dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
             setTemplateText("");
@@ -63,7 +64,6 @@ const CreateTemplate = () => {
             show();
         },
     });
-
     const toast = useRef(null);
 
     const show = () => {

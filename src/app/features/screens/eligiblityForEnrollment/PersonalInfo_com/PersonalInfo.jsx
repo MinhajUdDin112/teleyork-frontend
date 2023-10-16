@@ -18,7 +18,7 @@ import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 import classNames from "classnames";
-const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
+const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
 
     
 
@@ -138,6 +138,11 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
         { label: "V", value: "V" },
     ];
     const disableSuggestion = () => null;
+
+
+    // useEffect(() => {
+    //    console.log("hell, you do it")
+    // }, [isBack])
 
     return (
         <>
