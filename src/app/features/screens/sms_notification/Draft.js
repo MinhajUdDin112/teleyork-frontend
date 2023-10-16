@@ -90,7 +90,7 @@ const Draft = () => {
             await dispatch(submitTemplateAction(body));
 
             // Show success toast when the action is successful
-            toast.success("Template sent successfully!", {
+            toast.success("SMS/Email sent successfully", {
                 position: "top-right",
                 autoClose: 3000, // Toast auto-closes after 3 seconds
             });

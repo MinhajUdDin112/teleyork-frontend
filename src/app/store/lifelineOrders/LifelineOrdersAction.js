@@ -4,42 +4,31 @@ import BASE_URL from "../../../config";
 
 
 //adding customer personal info during customer enrollment 
-export const addCustomerInfoAction = createAsyncThunk("customer/info", async (body) => {
-    try {
-        const response = await axios.post(`${BASE_URL}/api/user/initialInformation`, body);
+// export const addCustomerInfoAction = createAsyncThunk("customer/info", async (body) => {
+//     try {
+//         const response = await axios.post(`${BASE_URL}/api/user/initialInformation`, body);
        
-        return response;  
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-});
+//         return response;  
+//     } catch (error) {
+       
+//         throw error?.response?.data?.msg;
+//     }
+// });
 
 
 //adding customer home address  during customer enrollment 
-export const addCustomerAddressAction = createAsyncThunk("customer/address", async (body) => {
-    try {
-        const response = await axios.post(`${BASE_URL}/api/user/homeAddress`, body);
+// export const addCustomerAddressAction = createAsyncThunk("customer/address", async (body) => {
+//     try {
+//         const response = await axios.post(`${BASE_URL}/api/user/homeAddress`, body);
       
-        return response.data;
+//         return response.data;
 
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-});
+//     } catch (error) {
+//         console.log(error);
+//         throw error;
+//     }
+// });
 
-
-//adding Question during customer enrollment 
-export const addQuestion1Action = createAsyncThunk("customer/info", async (body) => {
-    try {
-        const response = await axios.post(`${BASE_URL}/api/user/question`, body);
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-});
 
 
 
