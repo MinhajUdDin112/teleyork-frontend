@@ -107,7 +107,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
                 if (response?.status === 200 ||response?.status === 201 ) {
-                  localStorage.setItem("basicData", JSON.stringify(response.data));
+                  localStorage.setItem("address", JSON.stringify(response.data));
                   toast.success("Address saved Successfully")
                   handleNext();
                  
