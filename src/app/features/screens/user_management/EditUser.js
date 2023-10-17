@@ -108,7 +108,8 @@ const EditUser = () => {
     const getRoles = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
-            setAllRoles(res?.data?.data || []);
+            console.log(res.data)
+            setAllRoles(res?.data?.data || []);     
         } catch (error) {
             console.error("Error fetching module data:", error);
         }

@@ -83,7 +83,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
                 <div>
                     <div class="wrapper grid justify-content-center">
 
-                        {apidata.map((item) => {
+                        { apidata.map((item) => {
                             return (
                                 <div className="col-12 lg:col-3 md:col-4 sm:col-6">
                                     <div class="package brilliant">

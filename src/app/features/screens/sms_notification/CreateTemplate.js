@@ -55,7 +55,8 @@ const CreateTemplate = () => {
                 company: parseLoginRes?.compony,
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
-            };
+            };  
+        
            console.log("data to send is",dataToSend)
             dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
@@ -78,7 +79,7 @@ const CreateTemplate = () => {
             <form onSubmit={formik.handleSubmit}>
                 <Toast ref={toast} />
                 <div className="card mx-5">
-                    <div className="flex flex-wrap justify-content-center">
+                    <div className="flex flex-wrap justify-content-around">
                         <div className="mr-3">
                             <p className="m-0">Template Name:</p>
                             <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem"  placeholder="Enter Template Name" keyfilter={/^[a-zA-Z0-9-_]*$/} />
