@@ -12,17 +12,22 @@ import { RadioButton } from "primereact/radiobutton";
 import { addCustomerInfoAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import { useDispatch } from "react-redux";
 import { Dropdown } from "primereact/dropdown";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Axios from "axios";
+import BASE_URL from "../../../../../config";
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 import classNames from "classnames";
-const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
-    const zipCode = useSelector((state) => {
-        return state.zip;
-    });
+const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
+
+    
+
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
+    const [isHouseHold, setIsHouseHold] = useState(false);
     const [acp, setAcp] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This is Required"),
@@ -30,10 +35,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
         SSN: Yup.string().required("This is Required."),
         DOB: Yup.string().required("This is Required."),
         contact: Yup.string().required("This is Required."),
-        drivingLicense: Yup.string().required("This is Required."),
         email: Yup.string().email().required("This is Required."),
     });
 
+    
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -49,15 +54,32 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
             ESim: "",
             bestWayToReach: "",
             isSelfReceive: "",
+            BenifitFirstName: "",
+            BenifitLastName: "",
+            BenifitSSN: "",
+            BenifitDOB: "",
             isACP: acp,
         },
-        onSubmit: (values, actions) => {
+        onSubmit: async(values, actions) => {
             const csr = "64e0b1b135a9428007da3526";
             const userId = _id;
             const dataToSend = { csr, userId, ...values };
-            dispatch(addCustomerInfoAction(dataToSend));
-            actions.resetForm();
-            handleNext();
+            setIsLoading(true)
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
+            if (response?.status === 200 ||response?.status === 201 ) {
+              localStorage.setItem("basicData", JSON.stringify(response.data));
+              toast.success("information saved Successfully")
+              handleNext();
+             
+            }
+          } catch (error) {
+                    toast.error(error?.response?.data?.msg)
+                    setIsLoading(false)
+
+          }
+       
+           
         },
     });
 
@@ -86,29 +108,16 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
 
     const handleRadio = (value) => {
         setIsSelfReceive(value === "myself");
+        if(value==='somebody'){
+            setIsHouseHold(true);
+        }
+        else{
+                setIsHouseHold(false);
+        }
     };
 
     const dispatch = useDispatch();
 
-    const apiResponse = useSelector((state) => {
-        return state.lifelineOrdersReducer;
-    });
-    const statusCode = apiResponse?.addCustomerInfo?.status;
-    const errormessage = apiResponse?.addCustomerInfoError;
-
-    //   useEffect(() => {
-    //     const nextScreen =  () => {
-    //         if ( statusCode == "201") {
-    //        console.log("Save Successfully");
-    //        handleNext();
-    //      } else {
-    //       setErrorMesssage(errormessage)
-
-    //      }
-    //  };
-    //  nextScreen();
-
-    //   }, [statusCode])
 
     const handleACP = (e) => {
         if (formik.values.isACP == true) {
@@ -130,12 +139,19 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
     ];
     const disableSuggestion = () => null;
 
+
+    // useEffect(() => {
+    //    console.log("hell, you do it")
+    // }, [isBack])
+
     return (
         <>
+        <ToastContainer/>
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                     <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
-                    <Button label="Continue" type="submit" />
+                    {isLoading?  <Button label="Continue" type="submit" disabled /> :  <Button label="Continue" type="submit" />}
+                   
                 </div>
 
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
@@ -147,7 +163,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
                         <label className="field_label">
                             First Name <span className="steric">*</span>
                         </label>
-                        <InputText id="firstName" value={formik.values.firstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("firstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={10} />
+                        <InputText id="firstName" value={formik.values.firstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("firstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
                         {getFormErrorMessage("firstName")}
                     </div>
 
@@ -160,7 +176,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
                         <label className="field_label">
                             Last Name <span className="steric">*</span>
                         </label>
-                        <InputText id="lastName" value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("lastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={10} />
+                        <InputText id="lastName" value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("lastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
                         {getFormErrorMessage("lastName")}
                     </div>
 
@@ -197,10 +213,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">
-                            Driving License <span className="steric">*</span>
+                            Driving License
                         </label>
-                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("drivingLicense") }, "input_text")} keyfilter={/^[a-zA-Z0-9]*$/} />
-                        {getFormErrorMessage("drivingLicense")}
+                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur}  keyfilter={/^[a-zA-Z0-9]*$/} />
+                        
                     </div>
 
                     <div className="field col-12 md:col-3">
@@ -284,6 +300,50 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
                     </div>
                 </div>
             </div>
+
+            {
+                isHouseHold ? <div>
+                    <div className="mt-4">
+                    <p className="font-semibold">Information of benefit qualifying person</p>
+                    <div className="p-fluid formgrid grid">
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">
+                            First Name <span className="steric">*</span>
+                        </label>
+                        <InputText id="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitFirstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                        {getFormErrorMessage("BenifitFirstName")}
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">
+                            Last Name <span className="steric">*</span>
+                        </label>
+                        <InputText id="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitLastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                        {getFormErrorMessage("BenifitLastName")}
+                    </div>
+                   
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">
+                            DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
+                        </label>
+                        <Calendar id="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid(" BenifitDOB") }, "input_text")} />
+                        {getFormErrorMessage(" BenifitDOB")}
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">
+                            SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
+                        </label>
+                        <InputText id="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("BenifitSSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
+                        {getFormErrorMessage("BenifitSSN")}
+                    </div>
+
+                   
+
+                    </div>
+
+                    </div>
+                </div>
+                :null
+            }
 
             <div className="mt-4">
                 <h3>Affordable Connectivity Program (ACP) Consent</h3>

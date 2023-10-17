@@ -5,9 +5,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { addTermsAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
+import { toast } from "react-toastify";
+import { ToastContainer } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const dispatch = useDispatch();
 
+    const [buttonClicked, setButtonClicked] = useState(false);
     const [checkAll, setCheckAll] = useState(false);
     const [checkBox1, setCheckBox1] = useState(false);
     const [checkBox2, setCheckBox2] = useState(false);
@@ -22,8 +26,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [checkBox11, setCheckBox11] = useState(false);
     const [checkBox12, setCheckBox12] = useState(false);
     const [checkBox13, setCheckBox13] = useState(false);
-    const [tempAdd, setTempAdd] = useState(false);
+    const [tempAdd, setTempAdd] = useState(true);
     const [permaAdd, setPermaAdd] = useState(false);
+    const [ACPtransfer, setACPtransfer] = useState(false)
 
     const validationSchema = Yup.object().shape({
         isTemporaryAddress: Yup.string().required("please confrim address is required"),
@@ -72,19 +77,6 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             setCheckBox11(true)
             setCheckBox12(true)
             setCheckBox13(true)          
-            // handleCheckBox1();
-            // handleCheckBox2();
-            // handleCheckBox3();
-            // handleCheckBox4();
-            // handleCheckBox5();
-            // handleCheckBox6();
-            // handleCheckBox7();
-            // handleCheckBox8();
-            // handleCheckBox9();
-            // handleCheckBox10();
-            // handleCheckBox11();
-            // handleCheckBox12();
-            // handleCheckBox13();
         } else if (checkAll === true) {
             setCheckAll(false);
             setCheckBox1(false)
@@ -100,19 +92,6 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             setCheckBox11(false)
             setCheckBox12(false)
             setCheckBox13(false)     
-            // handleCheckBox1();
-            // handleCheckBox2();
-            // handleCheckBox3();
-            // handleCheckBox4();
-            // handleCheckBox5();
-            // handleCheckBox6();
-            // handleCheckBox7();
-            // handleCheckBox8();
-            // handleCheckBox9();
-            // handleCheckBox10();
-            // handleCheckBox11();
-            // handleCheckBox12();
-            // handleCheckBox13();
         }
     };
 
@@ -235,6 +214,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     };
     const handleAddress = (e) => {
         if (e.value === "temp") {
+            setACPtransfer(false);
             if (e.value == formik.values.isTemporaryAddress) {
                 setTempAdd(false);
             } else {
@@ -243,6 +223,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             setPermaAdd(false);
             formik.values.isTemporaryAddress = true;
         } else if (e.value === "permanent") {
+            setACPtransfer(true);
             if (e.value == formik.values.isTemporaryAddress) {
                 setPermaAdd(false);
             } else {
@@ -252,12 +233,21 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             formik.values.isTemporaryAddress = false;
         }
     };
+    if(ACPtransfer){
+        toast.warn("please Select Yes In ACP Benefit Transfer")
+        
+    }
+    const handleButton = () => {
+        setButtonClicked(true);
+    };
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
+                <ToastContainer/>
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="button" onClick={handleBack} />
-                    <Button label="Continue" type="submit" onClick={handleNext} />
+
+                    <Button label="Continue" type="submit" onClick={handleNext} disabled={ACPtransfer} />
                 </div>
                 <div>
                     <h6>Enrollment ID: {enrollment_id}</h6>
@@ -433,12 +423,12 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 }}
                                 checked={checkBox13}
                             />
-                            <label>By my signing the FCC application, I agree to accept Tone Comms Terms & Conditions.</label>
+                            <label>By my signing the FCC application, I agree to accept IJ Wireless, Inc Terms & Conditions.</label>
                         </div>
                     </div>
                     <div>
                         <h3>ACP Benefit Transfer</h3>
-                        <p>Do you consent to enrollment or transfer into the Tone Comms Affordable Connectivity Program, and do you understand you are not allowed multiple ACP program benefits with the same or different providers? Please answer Yes or No.</p>
+                        <p>Do you consent to enrollment or transfer into the IJ Wireless, Inc Affordable Connectivity Program, and do you understand you are not allowed multiple ACP program benefits with the same or different providers? Please answer Yes or No.</p>
                         <p>Please confirm which of these statements is true for this application by answering yes or no after the following two questions.</p>
                         <div className="field-radiobutton m-4">
                             <div className="flex">
@@ -453,6 +443,17 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                             </div>
                         </div>
                     </div>
+                    <div className="mt-5">
+                            <p>Request User For additional Documents</p>
+                            <div className="flex">
+                                <Button label={buttonClicked ? "Sent" : "Send an Sms"} onClick={handleButton} className="p-button-success" disabled={buttonClicked} />
+                                {buttonClicked ? (
+                                    <div className=" ml-2">
+                                        <Button label="ReSend" type="button" className="p-button-success" />
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
                 </div>
             </form>
         </>

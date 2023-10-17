@@ -12,10 +12,12 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
+//import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import classNames from "classnames";
 import BASE_URL from "../../../../../config";
 import Axios from "axios";
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const dispatch = useDispatch();
@@ -25,6 +27,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [isSame, setIsSame] = useState();
     const [isDifferent, setIsDifferent] = useState();
     const [isPoBox, setIsPoBox] = useState();
+    const [isLoading, setIsLoading] = useState(false)
     const [autoCompleteAddress, setAutoCompleteAddress] = useState(null);
 
     const zipResponse = useSelector((state) => state.zip);
@@ -61,7 +64,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             zip: "",
             city: "",
             state: "",
-            postal: "",
+           
             isTemporaryAddress: tempAdd,
             isSameServiceAddress: true,
             isNotSameServiceAddress: false,
@@ -76,7 +79,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             poBoxState: "",
             poBoxCity: "",
         },
-        onSubmit: (values, actions) => {
+        onSubmit: async (values, actions) => {
             const userId = _id;
             const dataToSend = {
                 address1: formik.values.address1,
@@ -84,8 +87,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 zip: zipCode,
                 city: zipCity,
                 state: zipState,
-                isTemporaryAddress: tempAdd,
-                postal: formik.values.postal,
+                isTemporaryAddress: tempAdd,             
                 isSameServiceAddress: formik.values.isSameServiceAddress,
                 isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
                 isPoBoxAddress: formik.values.isPOboxAddress,
@@ -101,10 +103,20 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 userId: userId,
                 csr: "645c7bcfe5098ff6251a2255",
             };
-            dispatch(addCustomerAddressAction(dataToSend));
-            actions.resetForm();
-
-            handleNext();
+            setIsLoading(true)
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
+                if (response?.status === 200 ||response?.status === 201 ) {
+                  localStorage.setItem("address", JSON.stringify(response.data));
+                  toast.success("Address saved Successfully")
+                  handleNext();
+                 
+                }
+              } catch (error) {
+                        toast.error(error?.response?.data?.msg)
+                        setIsLoading(false)
+    
+              }
         },
     });
 
@@ -185,6 +197,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
         setTempAdd(e.target.value);
     };
 
+   
+
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
@@ -192,13 +206,14 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
 
     return (
         <>
+        <ToastContainer/>
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
                     <div>
                         <Button label="Back" type="button" onClick={handleBack} />
                     </div>
                     <div className="fixed-button-container">
-                        <Button label="Continue" type="submit" />
+                    {isLoading?  <Button label="Continue" type="submit" disabled /> :  <Button label="Continue" type="submit" />}
                     </div>
                 </div>
                 <div>
@@ -214,7 +229,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         <p className="m-0">
                             Address 1 <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  minLength={10}  />
                         {formik.touched.address1 && formik.errors.address1 ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.address1}
@@ -238,11 +253,10 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                         </p>
-                        <InputText value={formik.values.zip} name="zip" disabled className="w-21rem disable-color" />
+                        <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem disable-color" />
                     </div>
-
                     <div className="mr-3 mb-3">
                         <p className="m-0">
                             State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
@@ -251,13 +265,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                         </p>
-                        <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem disable-color" />
-                    </div>
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">Postal Code</p>
-                        <InputText type="text" value={formik.values.postal} name="postal" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
+                        <InputText value={formik.values.zip} name="zip" disabled className="w-21rem disable-color" />
                     </div>
                 </div>
                 <div>
@@ -311,10 +321,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    Zip Code <span className="steric">*</span>
+                                    City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
-                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
-                                {getFormErrorMessage("mailingZip")}
+                                <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color" />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -324,10 +333,13 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                                    Zip Code <span className="steric">*</span>
                                 </label>
-                                <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color" />
+                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
+                                {getFormErrorMessage("mailingZip")}
                             </div>
+                           
+                          
                         </div>
                     </>
                 )}
@@ -338,22 +350,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 <label className="field_label">
                                     Mailing Address 1 <span className="steric">*</span> PO BOX
                                 </label>
-                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} />
+                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")}  keyfilter={/^[0-9]*$/} />
                                 {getFormErrorMessage("PoBoxAddress")}
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Zip Code <span className="steric">*</span>
-                                </label>
-                                <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} maxLength={5} />
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    <p>
-                                        State <FontAwesomeIcon className="disable-icon-coloricon-size" icon={faBan} />{" "}
-                                    </p>
-                                </label>
-                                <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -361,6 +359,22 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 </label>
                                 <InputText id="poBoxCity" value={formik.values.poBoxCity} className="disable-color" disabled />
                             </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    <p>
+                                        State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                                    </p>
+                                </label>
+                                <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    Zip Code <span className="steric">*</span>
+                                </label>
+                                <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} maxLength={5} keyfilter={/^[0-9]*$/} />
+                            </div>
+                           
+                          
                         </div>
                     </>
                 )}

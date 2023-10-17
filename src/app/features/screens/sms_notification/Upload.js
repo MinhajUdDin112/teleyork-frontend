@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FileUpload } from "primereact/fileupload";
 import { toast } from "react-toastify";
+import { ToastContainer,  } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 import * as XLSX from "xlsx"; // Import XLSX library
 import BASE_URL from "../../../../config";
 import { useSelector } from "react-redux";
@@ -10,6 +12,7 @@ const Upload = () => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]); // State to hold the datatable data
     const [tempObjId, setTempObjId] = useState(""); // State to hold the datatable data
+    const [btnClicked, setBtnClicked] = useState(false)
 
     const [allTemps, setAllTemps] = useState([])
 
@@ -37,7 +40,7 @@ const Upload = () => {
     const onUpload = async () => {
         try {
             setLoading(true);
-            toast.success("File uploaded");
+            toast.success("File Successfully Uploaded to Drafts. Please review and approve.");
         } catch (error) {
             console.error("Error uploading file:", error);
             // Handle the error here
@@ -63,11 +66,21 @@ const Upload = () => {
 
     }, [data]);
 
+    const handleUpload=()=>{
+        setBtnClicked(true);
+    }
     const chooseOptions = { label: 'Select', className: 'custom-choose-btn p-button-solid' };
-    const uploadOptions = { label: 'Send', className: 'custom-upload-btn p-button-solid' };
+    const uploadOptions = { 
+        label: 'Send', 
+        className: 'custom-upload-btn p-button-solid', 
+       
+      };
+      
+  
 
     return (
         <div className="card bg-pink-50">
+            <ToastContainer />
             <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">Upload Template</h3>
             </div>
@@ -83,6 +96,7 @@ const Upload = () => {
                     onSelect={handleFileUpload}
                     chooseOptions={chooseOptions}
                     uploadOptions={uploadOptions}
+                   
                 />
             </div>
         </div>

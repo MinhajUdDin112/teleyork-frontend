@@ -9,7 +9,7 @@ export default function AddAcpProgram() {
     const toast = useRef(null);
     const [buttonText, setButtontext] = useState("Choose File");     
     let [imgsrc,setimgsrc]=useState(undefined)
-    const [status,setStatus]=useState()
+    const [status,setStatus]=useState(true)
     let [showError, setShowError] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -18,7 +18,7 @@ export default function AddAcpProgram() {
             name: "",
             description: "",     
             banner:"", 
-         active:false,
+         active:true,
         },
         validate: (values) => {
             // Implement your validation logic here
