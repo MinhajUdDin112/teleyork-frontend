@@ -145,7 +145,8 @@ export const menuNavigation = [
                     {
                         label: "Manage Roles and Rights",
                         to: "/managerolesandrights",
-                    },
+                    },  
+                    
                     {
                         label: "Create Role",
                         to: "/createrole",

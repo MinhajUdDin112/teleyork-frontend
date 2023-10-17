@@ -6,7 +6,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { Editor } from "primereact/editor";
-import { useEffect } from "react";
 import { Toast } from "primereact/toast";
 import { addTemplateAction } from "../../../store/notification/NotificationAction";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -54,8 +53,8 @@ const CreateTemplate = () => {
                 company: companyId,
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
                 keySequence: [...keySequence],
-            };
-           
+            };   
+            console.log("data to send",dataToSend)
             dispatch(addTemplateAction(dataToSend));
             actions.resetForm();
             setTemplateText("");
@@ -96,7 +95,6 @@ const CreateTemplate = () => {
                                  for example, $$CustomerFirstName,also don't add space in the  variable name.
                             </p>
                         </div>
-
                         {formik.values.type === 1 || formik.values.type === 2 ? (
                             <div className="ml-3">
                                 <p className="m-0">Add Subject:</p>

@@ -13,7 +13,7 @@ const notificationSlice = createSlice({
         getAllTemplate: null,
         getAllTemplateLoading: false,
         getAllTemplateError: null,
-
+        
         //get one template initial state
         getOneTemplate: null,
         getOneTemplateLoading: false,
