@@ -8,6 +8,8 @@ import { addTermsAction } from "../../../../store/lifelineOrders/LifelineOrdersA
 import { toast } from "react-toastify";
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+import Axios from "axios";
+import BASE_URL from "../../../../../config";
 const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const dispatch = useDispatch();
 
@@ -52,13 +54,23 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             checkbox13: "",
             isTemporaryAddress: "",
         },
-        onSubmit: (values, actions) => {
+        onSubmit: async (values, actions) => {
             const userId = _id;
             const csr = "645c7bcfe5098ff6251a2255";
             const dataToSend = { csr, userId };
             dispatch(addTermsAction(dataToSend));
-            handleNext();
-            actions.resetForm();
+
+        //    try {
+        //     const res = await Axios.post(`${BASE_URL}/api/user/termsAndConditions`, dataToSend);
+        //     if (res?.status === 200 || res?.status === 201) {
+        //       localStorage.setItem("previewData", JSON.stringify(res.data));
+        //       console.log("data from agree",res.data)
+        //       handleNext();
+        //     }
+        //   } catch (error) {
+        //     console.error("Error posting data:", error);
+        //   }
+           
         },
     });
     const handleAll = () => {

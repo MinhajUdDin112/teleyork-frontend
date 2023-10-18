@@ -7,27 +7,23 @@ import { InputMask } from "primereact/inputmask";
 import { Calendar } from "primereact/calendar";
 import { Checkbox } from "primereact/checkbox";
 import { useState } from "react";
-import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RadioButton } from "primereact/radiobutton";
-import { addCustomerInfoAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import { useDispatch } from "react-redux";
 import { Dropdown } from "primereact/dropdown";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 import BASE_URL from "../../../../../config";
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
-const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
 
-    
-
+const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
     const [isHouseHold, setIsHouseHold] = useState(false);
-    const [acp, setAcp] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+    const [acp, setAcp] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This is Required"),
@@ -38,7 +34,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
         email: Yup.string().email().required("This is Required."),
     });
 
-    
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -60,26 +55,22 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
             BenifitDOB: "",
             isACP: acp,
         },
-        onSubmit: async(values, actions) => {
+        onSubmit: async (values, actions) => {
             const csr = "64e0b1b135a9428007da3526";
             const userId = _id;
             const dataToSend = { csr, userId, ...values };
-            setIsLoading(true)
-        try {
-            const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
-            if (response?.status === 200 ||response?.status === 201 ) {
-              localStorage.setItem("basicData", JSON.stringify(response.data));
-              toast.success("information saved Successfully")
-              handleNext();
-             
+            setIsLoading(true);
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
+                if (response?.status === 200 || response?.status === 201) {
+                    localStorage.setItem("basicData", JSON.stringify(response.data));
+                    toast.success("information saved Successfully");
+                    handleNext();
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
             }
-          } catch (error) {
-                    toast.error(error?.response?.data?.msg)
-                    setIsLoading(false)
-
-          }
-       
-           
         },
     });
 
@@ -102,22 +93,14 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
         seteSim(e.target.value);
     };
 
-    const handleOptionChange = (e) => {
-        setSelectedOption(e.target.value);
-    };
-
     const handleRadio = (value) => {
         setIsSelfReceive(value === "myself");
-        if(value==='somebody'){
+        if (value === "somebody") {
             setIsHouseHold(true);
-        }
-        else{
-                setIsHouseHold(false);
+        } else {
+            setIsHouseHold(false);
         }
     };
-
-    const dispatch = useDispatch();
-
 
     const handleACP = (e) => {
         if (formik.values.isACP == true) {
@@ -139,19 +122,55 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
     ];
     const disableSuggestion = () => null;
 
+    const basicResponse = localStorage.getItem("basicData");
+    const parsebasicResponse = JSON.parse(basicResponse);
 
-    // useEffect(() => {
-    //    console.log("hell, you do it")
-    // }, [isBack])
+    console.log("dob formet is", parsebasicResponse?.data?.DOB);
 
+    useEffect(() => {
+        //change the formet of dob
+        const dobString = parsebasicResponse?.data?.DOB;
+        const benifitdob = parsebasicResponse?.data?.BenifitDOB;
+        if (dobString) {
+            // change formet of DOB
+            // const date = new Date(dobString);
+            // const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}/${date.getFullYear()}`;
+            // formik.setFieldValue("DOB", formattedDate);
+            // change formet of Benifit  DOB
+            // const benifitDate = new Date(benifitdob);
+            // const formattedBenifitDate = `${(benifitDate.getMonth() + 1).toString().padStart(2, "0")}/${benifitDate.getDate().toString().padStart(2, "0")}/${benifitDate.getFullYear()}`;
+            // formik.setFieldValue("BenifitDOB", formattedBenifitDate);
+
+            // set data in feilds from local storage
+            formik.setFieldValue("firstName", parsebasicResponse?.data?.firstName);
+            formik.setFieldValue("middleName", parsebasicResponse?.data?.middleName);
+            formik.setFieldValue("lastName", parsebasicResponse?.data?.lastName);
+            formik.setFieldValue("SSN", parsebasicResponse?.data?.SSN);
+            formik.setFieldValue("email", parsebasicResponse?.data?.email);
+            formik.setFieldValue("suffix", parsebasicResponse?.data?.suffix);
+            formik.setFieldValue("contact", parsebasicResponse?.data?.contact);
+            formik.setFieldValue("drivingLicense", parsebasicResponse?.data?.drivingLicense);
+            formik.setFieldValue("ESim", parsebasicResponse?.data?.ESim);
+            formik.setFieldValue("bestWayToReach", parsebasicResponse?.data?.bestWayToReach);
+            formik.setFieldValue("isSelfReceive", parsebasicResponse?.data?.isSelfReceive);
+            formik.setFieldValue("BenifitFirstName", parsebasicResponse?.data?.BenifitFirstName);
+            formik.setFieldValue("BenifitLastName", parsebasicResponse?.data?.BenifitLastName);
+            formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
+            formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
+            //chnage state
+            seteSim(parsebasicResponse?.data?.ESim);
+            setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
+            setAcp(parsebasicResponse?.data?.isACP);
+            setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive);
+        }
+    }, []);
     return (
         <>
-        <ToastContainer/>
+            <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                     <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
-                    {isLoading?  <Button label="Continue" type="submit" disabled /> :  <Button label="Continue" type="submit" />}
-                   
+                    {isLoading ? <Button label="Continue" type="submit" disabled /> : <Button label="Continue" type="submit" />}
                 </div>
 
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
@@ -212,11 +231,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
                     </div>
 
                     <div className="field col-12 md:col-3">
-                        <label className="field_label">
-                            Driving License
-                        </label>
-                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur}  keyfilter={/^[a-zA-Z0-9]*$/} />
-                        
+                        <label className="field_label">Driving License</label>
+                        <InputText id="drivingLicense" value={formik.values.drivingLicense} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z0-9]*$/} />
                     </div>
 
                     <div className="field col-12 md:col-3">
@@ -301,49 +317,44 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, isBack }) => {
                 </div>
             </div>
 
-            {
-                isHouseHold ? <div>
+            {isHouseHold ? (
+                <div>
                     <div className="mt-4">
-                    <p className="font-semibold">Information of benefit qualifying person</p>
-                    <div className="p-fluid formgrid grid">
-                    <div className="field col-12 md:col-3">
-                        <label className="field_label">
-                            First Name <span className="steric">*</span>
-                        </label>
-                        <InputText id="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitFirstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
-                        {getFormErrorMessage("BenifitFirstName")}
-                    </div>
-                    <div className="field col-12 md:col-3">
-                        <label className="field_label">
-                            Last Name <span className="steric">*</span>
-                        </label>
-                        <InputText id="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitLastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
-                        {getFormErrorMessage("BenifitLastName")}
-                    </div>
-                   
-                    <div className="field col-12 md:col-3">
-                        <label className="field_label">
-                            DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
-                        </label>
-                        <Calendar id="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid(" BenifitDOB") }, "input_text")} />
-                        {getFormErrorMessage(" BenifitDOB")}
-                    </div>
-                    <div className="field col-12 md:col-3">
-                        <label className="field_label">
-                            SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
-                        </label>
-                        <InputText id="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("BenifitSSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
-                        {getFormErrorMessage("BenifitSSN")}
-                    </div>
+                        <p className="font-semibold">Information of benefit qualifying person</p>
+                        <div className="p-fluid formgrid grid">
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    First Name <span className="steric">*</span>
+                                </label>
+                                <InputText id="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitFirstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                                {getFormErrorMessage("BenifitFirstName")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    Last Name <span className="steric">*</span>
+                                </label>
+                                <InputText id="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitLastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                                {getFormErrorMessage("BenifitLastName")}
+                            </div>
 
-                   
-
-                    </div>
-
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
+                                </label>
+                                <Calendar id="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid(" BenifitDOB") }, "input_text")} />
+                                {getFormErrorMessage(" BenifitDOB")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
+                                </label>
+                                <InputText id="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("BenifitSSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
+                                {getFormErrorMessage("BenifitSSN")}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                :null
-            }
+            ) : null}
 
             <div className="mt-4">
                 <h3>Affordable Connectivity Program (ACP) Consent</h3>

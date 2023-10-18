@@ -12,22 +12,19 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-//import { addCustomerAddressAction } from "../../../../store/lifelineOrders/LifelineOrdersAction";
 import classNames from "classnames";
 import BASE_URL from "../../../../../config";
 import Axios from "axios";
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
 const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
-    const dispatch = useDispatch();
-
-    const [confrimAddress, setConfrimAddress] = useState("same");
+    const [confrimAddress, setConfrimAddress] = useState("");
     const [tempAdd, setTempAdd] = useState(true);
     const [isSame, setIsSame] = useState();
     const [isDifferent, setIsDifferent] = useState();
     const [isPoBox, setIsPoBox] = useState();
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const [autoCompleteAddress, setAutoCompleteAddress] = useState(null);
 
     const zipResponse = useSelector((state) => state.zip);
@@ -41,19 +38,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
-
-        // isNotSameServiceAddress: Yup.boolean(),
-        // isPoBoxAddress: Yup.boolean(),
-        // mailingAddress1: Yup.string().when("isNotSameServiceAddress", {
-        //   is: true,
-        //   then: Yup.string().required("Mailing Address 1 is required"),
-        //   otherwise: Yup.string(),
-        // }),
-        // PoBoxAddress: Yup.string().when("isPoBoxAddress", {
-        //   is: true,
-        //   then: Yup.string().required("PO Box Address is required"),
-        //   otherwise: Yup.string(),
-        // }),
     });
 
     const formik = useFormik({
@@ -64,7 +48,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             zip: "",
             city: "",
             state: "",
-           
             isTemporaryAddress: tempAdd,
             isSameServiceAddress: true,
             isNotSameServiceAddress: false,
@@ -87,7 +70,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 zip: zipCode,
                 city: zipCity,
                 state: zipState,
-                isTemporaryAddress: tempAdd,             
+                isTemporaryAddress: tempAdd,
                 isSameServiceAddress: formik.values.isSameServiceAddress,
                 isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
                 isPoBoxAddress: formik.values.isPOboxAddress,
@@ -103,20 +86,18 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 userId: userId,
                 csr: "645c7bcfe5098ff6251a2255",
             };
-            setIsLoading(true)
+            setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
-                if (response?.status === 200 ||response?.status === 201 ) {
-                  localStorage.setItem("address", JSON.stringify(response.data));
-                  toast.success("Address saved Successfully")
-                  handleNext();
-                 
+                if (response?.status === 200 || response?.status === 201) {
+                    localStorage.setItem("address", JSON.stringify(response.data));
+                    toast.success("Address saved Successfully");
+                    handleNext();
                 }
-              } catch (error) {
-                        toast.error(error?.response?.data?.msg)
-                        setIsLoading(false)
-    
-              }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
+            }
         },
     });
 
@@ -159,9 +140,25 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             }
         }
     }, [formik.values.isPoBoxAddress, formik.values.poBoxZip]);
+
+    //GETTING city from autocomplete api response
+
     useEffect(() => {
         if (autoCompleteAddress) {
-            formik.setFieldValue("address1", autoCompleteAddress?.value?.description);
+            const cityFromAutoResponse = autoCompleteAddress?.value?.structured_formatting?.secondary_text;
+            let cityName = "";
+            if (cityFromAutoResponse && cityFromAutoResponse.includes(",")) {
+                const parts = cityFromAutoResponse.split(",");
+                if (parts.length >= 1) {
+                    cityName = parts[0];
+                }
+            }
+
+            if (cityName.includes(formik.values.city)) {
+                formik.setFieldValue("address1", autoCompleteAddress?.value?.structured_formatting?.main_text);
+            } else {
+                toast.error(`please select address against ${formik.values.city} `);
+            }
         }
     }, [autoCompleteAddress]);
 
@@ -197,24 +194,52 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
         setTempAdd(e.target.value);
     };
 
-   
-
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
+    const addressResponse = localStorage.getItem("address");
+    const parseaddressResponse = JSON.parse(addressResponse);
+    useEffect(() => {
+        const address = parseaddressResponse?.data?.address1;
+        if (address) {
+            formik.setFieldValue("address1", address);
+            formik.setFieldValue("address2", parseaddressResponse?.data?.address2);
+            formik.setFieldValue("isTemporaryAddress", parseaddressResponse?.data?.isTemporaryAddress);
+
+            formik.setFieldValue("isSameServiceAddress", parseaddressResponse?.data?.isSameServiceAddress);
+            formik.setFieldValue("isNotSameServiceAddress", parseaddressResponse?.data?.isNotSameServiceAddress);
+            formik.setFieldValue("isPoBoxAddress", parseaddressResponse?.data?.isPoBoxAddress);
+
+            formik.setFieldValue("mailingAddress1", parseaddressResponse?.data?.mailingAddress1);
+            formik.setFieldValue("mailingAddress2", parseaddressResponse?.data?.mailingAddress2);
+            formik.setFieldValue("mailingZip", parseaddressResponse?.data?.mailingZip);
+            formik.setFieldValue("mailingCity", parseaddressResponse?.data?.mailingCity);
+            formik.setFieldValue("mailingState", parseaddressResponse?.data?.mailingState);
+            formik.setFieldValue("PoBoxAddress", parseaddressResponse?.data?.PoBoxAddress);
+            formik.setFieldValue("poBoxZip", parseaddressResponse?.data?.poBoxZip);
+            formik.setFieldValue("poBoxState", parseaddressResponse?.data?.poBoxState);
+            formik.setFieldValue("poBoxCity", parseaddressResponse?.data?.poBoxCity);
+
+            //changing state
+            setTempAdd(parseaddressResponse?.data?.isTemporaryAddress);
+            setIsSame(parseaddressResponse?.data?.isSameServiceAddress);
+            setIsDifferent(parseaddressResponse?.data?.isNotSameServiceAddress);
+            setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);
+        }
+    }, []);
+    console.log("auto complt is", autoCompleteAddress?.value?.structured_formatting);
+
     return (
         <>
-        <ToastContainer/>
+            <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
                     <div>
                         <Button label="Back" type="button" onClick={handleBack} />
                     </div>
-                    <div className="fixed-button-container">
-                    {isLoading?  <Button label="Continue" type="submit" disabled /> :  <Button label="Continue" type="submit" />}
-                    </div>
+                    <div className="fixed-button-container">{isLoading ? <Button label="Continue" type="submit" disabled /> : <Button label="Continue" type="submit" />}</div>
                 </div>
                 <div>
                     <h6>Enrollment ID: {enrollment_id}</h6>
@@ -229,7 +254,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         <p className="m-0">
                             Address 1 <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem"  minLength={10}  />
+                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" minLength={10} />
                         {formik.touched.address1 && formik.errors.address1 ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.address1}
@@ -241,9 +266,10 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
                     </div>
                     <div className=" mr-3 w-21rem  ">
-                    <p className="m-0"><code>Google Auto</code> Complete Address</p>
+                        <p className="m-0">
+                            <code>Google Auto</code> Complete Address
+                        </p>
                         <GooglePlacesAutocomplete
-                        
                             apiKey="AIzaSyDa1KFekZkev2CAqrcrU_nYDe_1jC-PHA0"
                             selectProps={{
                                 autoCompleteAddress,
@@ -251,6 +277,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                             }}
                         />
                     </div>
+
                     <div className="mr-3 mb-3">
                         <p className="m-0">
                             City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
@@ -338,8 +365,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
                                 {getFormErrorMessage("mailingZip")}
                             </div>
-                           
-                          
                         </div>
                     </>
                 )}
@@ -350,7 +375,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 <label className="field_label">
                                     Mailing Address 1 <span className="steric">*</span> PO BOX
                                 </label>
-                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")}  keyfilter={/^[0-9]*$/} />
+                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/} />
                                 {getFormErrorMessage("PoBoxAddress")}
                             </div>
                             <div className="field col-12 md:col-3">
@@ -373,8 +398,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 </label>
                                 <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} maxLength={5} keyfilter={/^[0-9]*$/} />
                             </div>
-                           
-                          
                         </div>
                     </>
                 )}
