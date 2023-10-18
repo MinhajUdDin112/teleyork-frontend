@@ -72,14 +72,12 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
             <div>
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="submit" onClick={handleBack} />
-                   
-                        <Button
+                       <Button
                             label="Continue"
                             type="submit"
                             onClick={postData}
                             disabled={btnState}
-                        />
-                   
+                        />    
                 </div>
                 <div>
                     <h6>Enrollment ID:{enrollment_id}</h6>
@@ -96,11 +94,11 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
             <div>
                 <div className="surface-section acp_programs">
                     <div className="flex flex-wrap">
-                        {acpPrograms &&
+                        { acpPrograms &&
                             acpPrograms.map((item) => {
                                 return (
                                     <div className="w-full lg:w-6 xl:w-3 p-5" key={item?._id}>
-                                        <Image src={placHolderImage} alt="Image" className="w-full" />
+                                        <Image src={item.banner} alt="Image" className="w-full" />
                                         <div className="mt-3 mb-2 font-medium text-900 text-xl">{item?.name}</div>
                                         <span className="text-700 line-height-3">{item?.description}</span>
                                         <a tabIndex="0" className="text-blue-500 font-medium flex align-items-center mt-2">

@@ -8,7 +8,8 @@ export const addTemplateAction = createAsyncThunk("notification/api/sms/addTempl
         const response = await axios.post(`${BASE_URL}/api/sms/addTemplate`, body);
         // if (response.status === 200) {
         //     Toasts({ success: `Template ${response.data.msg}` });
-        //      return response.data;
+        //      return response.data;  
+        
         // }
         return response;
 

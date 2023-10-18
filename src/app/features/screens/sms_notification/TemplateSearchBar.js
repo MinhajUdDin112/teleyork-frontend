@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import { InputText } from 'primereact/inputtext'; 
+import { Button } from 'primereact/button';
 function TemplateSearchBar({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -15,14 +16,15 @@ function TemplateSearchBar({ onSearch }) {
 
   return (
     <form onSubmit={handleSearchSubmit}>
-      <input
+      <InputText
         type="text"
-        placeholder="Search by name or ID"
+        placeholder="Search by name or ID" 
         value={searchTerm}
         onChange={handleSearchChange}
-        className="search-input"
+        className="search-input font-semibold" 
+        style={{fontSize:"14px"}}
       />
-      <button type="submit" className="search-button">Search</button>
+      <Button type="submit" label="Search"  className="search-button font-bold" />
     </form>
   );
 }
