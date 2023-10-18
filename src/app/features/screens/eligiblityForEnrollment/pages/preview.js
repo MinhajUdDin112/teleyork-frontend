@@ -8,10 +8,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
    
 
     //get preview  information from local storage
-    const addressRes = localStorage.getItem("planResponse");
-    const parseAddressRes = JSON.parse(addressRes);
-    const addressInfo = parseAddressRes?.data;
-
+    const previewsRes = localStorage.getItem("address");
+    const parsepreviewsRes = JSON.parse(previewsRes);
+    const previewInfo = parsepreviewsRes?.data;
+console.log("preview info is",previewInfo)
     const nextPage = () => {
         setShowFinalComponent(true);
     };
@@ -28,7 +28,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                         <Button
                             label="Back"
                             onClick={() => {
-                                setActiveIndex(2);
+                                setActiveIndex(1);
                             }}
                         />
                         <Button label="Submit" onClick={nextPage} disabled={!isChecked} />
@@ -47,47 +47,52 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                         <div className="flex justify-content-around">
                             <div className="border-2 w-5 pt-2">
                                 <div className="flex border-bottom-2">
-                                    <p className="w-6 ml-4">Name:</p>
-                                    <p className="w-6">{addressInfo?.firstName}</p>
+                                    <p className="w-6 ml-4">First Name:</p>
+                                    <p className="w-6">{previewInfo?.firstName}</p>
                                 </div>
+                               
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p>{addressInfo?.city}</p>
+                                    <p>{previewInfo?.city}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>
-                                    <p className="w-6">{addressInfo?.zip}</p>
+                                    <p className="w-6">{previewInfo?.zip}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Telephone:</p>
-                                    <p className="w-6">{addressInfo?.contact}</p>
+                                    <p className="w-6">{previewInfo?.contact}</p>
                                 </div>
                                 <div className="flex pt-2">
                                     <p className="w-6 ml-4">DOB:</p>
-                                    <p className="w-6">{formatDate(addressInfo?.DOB)}</p>
+                                    <p className="w-6">{formatDate(previewInfo?.DOB)}</p>
                                 </div>
                             </div>
                             <div className="border-2 w-5 ">
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{addressInfo?.address1}</p>
+                                    <p className="w-6">{previewInfo?.address1}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">State:</p>
-                                    <p className="w-6">{addressInfo?.state}</p>
+                                    <p className="w-6">{previewInfo?.state}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Email:</p>
-                                    <p className="w-6">{addressInfo?.email}</p>
+                                    <p className="w-6">{previewInfo?.email}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">SSN:</p>
-                                    <p className="w-6">{addressInfo?.SSN}</p>
+                                    <p className="w-6">{previewInfo?.SSN}</p>
                                 </div>
                                 <div className="flex pt-2">
+                                    <p className="w-6 ml-4">LastName:</p>
+                                    <p className="w-6">{previewInfo?.lastName}</p>
+                                </div>
+                                {/* <div className="flex pt-2">
                                     <p className="w-6 ml-4">Plan:</p>
                                     <p className="w-6">{addressInfo?.plan}</p>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
@@ -114,7 +119,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
                                 </p>
                                 <br />
                                 <p className="text-xl font-semibold">By clicking the confirm Signature button, you are electronically signing this form.</p>
-                                <p>Electronically Signed by {addressInfo?.firstName} {new Date().toLocaleDateString()}</p>
+                                <p>Electronically Signed by {previewInfo?.firstName} {new Date().toLocaleDateString()}</p>
                             </label>
                         </div>
                       

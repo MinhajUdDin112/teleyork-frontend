@@ -4,14 +4,9 @@ import PersonalInfoPage from "./personal_info_page";
 import Eligibility from "./eligibility";
 import plan from "./plan";
 import Preview from "./preview";
-import { useSelector } from "react-redux";
 export default function EnrollmentFlowPage() {
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const changeValue = (val) => {
-        console.log("hello changevalue");
-        setActiveIndex(val);
-    };
     const toast = useRef(null);
    
 
@@ -20,7 +15,6 @@ export default function EnrollmentFlowPage() {
     const parseZipRes = JSON.parse(zipRes);
     const enrollment_id = parseZipRes?.data?.enrollmentId;
     const _id = parseZipRes?.data?._id
-
 
 
     const items = [
@@ -57,7 +51,7 @@ export default function EnrollmentFlowPage() {
     let pages = [
         PersonalInfoPage({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id }),
         Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id }),
-        plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id }),
+        //plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id }),
         Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id })
     ];
     return (
