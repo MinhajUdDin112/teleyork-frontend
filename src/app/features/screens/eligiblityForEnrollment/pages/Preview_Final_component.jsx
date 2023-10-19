@@ -6,6 +6,8 @@ const Preview_Final_component = ({ enrollment_id }) => {
 
     const movePage = () => {
         navigate("/newenrolment");
+        localStorage.removeItem("basicData");
+        localStorage.removeItem("address");
     };
 
     return (

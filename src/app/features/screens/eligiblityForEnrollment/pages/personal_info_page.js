@@ -8,7 +8,7 @@ export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id })
 
     const [currentComponent, setCurrentComponent] = useState(1);
 
-const [isBack, setIsBack] = useState(0)
+
 
     const handleNext = () => {
         if (currentComponent < 2) {
@@ -25,10 +25,7 @@ const [isBack, setIsBack] = useState(0)
     const handleBack = () => {
         if (currentComponent <= 2) {
             setCurrentComponent((prev) => {
-
-                setIsBack(isBack+1);
-                
-                return prev - 1;
+                                return prev - 1;
 
             });
         } else {
@@ -39,7 +36,7 @@ const [isBack, setIsBack] = useState(0)
     let render;
     switch (currentComponent) {
         case 1:
-            render = <PersonalInfo handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} isBack={isBack}/>;
+            render = <PersonalInfo handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
             break;
         case 2:
             render = <Address handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
