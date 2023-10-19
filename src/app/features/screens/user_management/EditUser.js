@@ -122,6 +122,9 @@ const EditUser = () => {
 
     return (
         <>
+          <div className="card">
+    <h3 className="mt-1 ">Edit User</h3>
+</div>
             <div className='card'>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid mb-3">
