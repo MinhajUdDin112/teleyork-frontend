@@ -5,8 +5,9 @@ import Axios from "axios";
 import BASE_URL from "../../../../config";
 import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
-export default function AddAcpProgram() {
-    const toast = useRef(null);
+export default function AddAcpProgram() { 
+    const toast = useRef(null);    
+    const [imgfile,setimgfile]=useState(null)
     const [buttonText, setButtontext] = useState("Choose File");     
     let [imgsrc,setimgsrc]=useState(undefined)
     const [status,setStatus]=useState(true)
@@ -43,9 +44,15 @@ export default function AddAcpProgram() {
             active:formik.values.active
         };
         if (Object.keys(formik.errors).length === 0) {
-            if (data.name !== "" && data.description !== "") {
-                Axios.post(`${BASE_URL}/api/web/acpPrograms`, data)
-                    .then((response) => {
+            if (data.name !== "" && data.description !== "") {  
+                   if(imgfile !== null){
+                let formData=new FormData()    
+            console.log(imgfile)
+                formData.append("file",imgfile)
+               Axios.post(`${BASE_URL}/bannerUpload`,).then(()=>{  
+                    Axios.post(`${BASE_URL}/api/web/acpPrograms`, formData)
+                    .then((response) => { 
+                        formik.values.banner=`${BASE_URL}/${imgfile.name}`
                         console.log("Data sent successfully:", response.data);
                         toast.current.show({ severity: "success", summary: "Info", detail: "Added Acp Program Successfully" });
                     })
@@ -53,6 +60,22 @@ export default function AddAcpProgram() {
                         console.error("Error sending data:", error);
                         toast.current.show({ severity: "error", summary: "Info", detail: "Added Acp Program Failed" });
                     });
+                }).catch(()=>{
+
+                })  
+            } 
+            else{ 
+                Axios.post(`${BASE_URL}/api/web/acpPrograms`, data)
+                .then((response) => {
+                    console.log("Data sent successfully:", response.data);
+                    toast.current.show({ severity: "success", summary: "Info", detail: "Added Acp Program Successfully" });
+                })
+                .catch((error) => {
+                    console.error("Error sending data:", error);
+                    toast.current.show({ severity: "error", summary: "Info", detail: "Added Acp Program Failed" });
+                });
+            }
+               
             } else {
                 formik.errors.name = "Name is Required";
                 formik.errors.description = "Description is Required";
@@ -118,8 +141,8 @@ export default function AddAcpProgram() {
                             let reader = new FileReader();
                             reader.readAsDataURL(create.files[0]);
                             reader.onloadend = () => {  
-                                 formik.values.banner=reader.result    
-                                  setimgsrc(reader.result)
+                                  setimgsrc(reader.result)  
+                                  setimgfile(create.files[0])
                             };
                         };
                         create.click();

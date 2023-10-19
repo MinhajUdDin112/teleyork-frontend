@@ -68,8 +68,8 @@ const ManageTemplate = () => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Button label="Download " onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />
-                <Button className="pi pi-user-edit" onClick={()=>{handleEditTemplate()}} style={{ cursor: "pointer", marginLeft: "25px", fontSize: "17px", paddingLeft: "27px" }} />
-                <Button style={{marginLeft:"25px",fontWeight:"900"}} onClick={()=>{handleDeleteTemplate()}}>
+                {/* <Button className="pi pi-user-edit" onClick={()=>{handleEditTemplate()}} style={{ cursor: "pointer", marginLeft: "25px", fontSize: "17px", paddingLeft: "27px" }} /> */}
+                <Button style={{marginLeft:"25px",fontWeight:"900",backgroundColor:"red",border:"none"}} onClick={()=>{handleDeleteTemplate()}}>
                  Delete
                 </Button>
             </div>
