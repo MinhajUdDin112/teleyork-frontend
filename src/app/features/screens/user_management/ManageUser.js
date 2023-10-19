@@ -7,11 +7,14 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
 const ManageUser = () => {
     let toastfordelete = useRef(null);
     const [allUsers, setAllUsers] = useState([]);
     const [userId, setUserId] = useState(null);
     const [visibleDeleteUser, setVisibleDelelteUser] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -60,7 +63,16 @@ const ManageUser = () => {
     const userTableHeader = () => {
         return (
             <>
-                <div className="text-right">
+               
+                <div className="flex justify-content-between">
+                    <div className="p-input-icon-left">
+                        <i className="pi pi-search" />
+                        <InputText
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            placeholder="Search by Name or Role"
+                        />
+                    </div>
                     <Button label="Add" onClick={redirectToCreateUser} />
                 </div>
             </>
@@ -91,10 +103,22 @@ const ManageUser = () => {
     function skipDeleteUser() {
         setVisibleDelelteUser(false);
     }
+
+    
+
+    const filteredUsers = allUsers.filter((user) => {
+        return (
+            user.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            user.role.role.toLowerCase().includes(searchText.toLowerCase())
+        );
+    });
     return (
         <>
+          <div className="card">
+            <h3 className="mt-1 ">Manage User</h3>
+        </div>
             <div className="card">
-                <DataTable value={allUsers} tableStyle={{ minWidth: "50rem" }} header={userTableHeader}>
+                <DataTable value={filteredUsers} tableStyle={{ minWidth: "50rem" }} header={userTableHeader}>
                     <Column field="role.role" header="Role"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="email" header="Email"></Column>
