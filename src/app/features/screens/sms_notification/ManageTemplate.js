@@ -145,9 +145,7 @@ const ManageTemplate = () => {
             // Assuming you have a row number where you want to map the value, called 'rowNumberToMap'
             const rowNumberToMap = 1; // Replace 1 with the appropriate row number.
 
-            // Map the value to the specific row and column (assuming the column is 0 in this example)
-
-            if (templateIdHeaderIndex !== -1) {
+ if (templateIdHeaderIndex !== -1) {
                 XLSX.utils.sheet_add_aoa(ws, [[valueToMap]], { origin: { r: rowNumberToMap, c: templateIdHeaderIndex } });
             }
 
@@ -223,7 +221,6 @@ const ManageTemplate = () => {
                     </div>
                 </div>
             </div>
-
             <div className="card mx-5 p-0 border-noround">
                 {getAllTemplateLoading ? (
                     <CustomLoading />
@@ -253,9 +250,8 @@ const ManageTemplate = () => {
                     setVisible(false);
                 }}
             >
-                <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
-            </Dialog>     
-                   
+            <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
+            </Dialog>       
             <Dialog
                     header="Delete Template"
                     visible={visibleDelelteTemplate}

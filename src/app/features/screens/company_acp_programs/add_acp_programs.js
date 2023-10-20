@@ -49,7 +49,7 @@ export default function AddAcpProgram() {
                 let formData=new FormData()    
             console.log(imgfile)
                 formData.append("file",imgfile)
-               Axios.post(`${BASE_URL}/bannerUpload`,).then(()=>{  
+               Axios.post(`${BASE_URL}/api/web/acpPrograms/bannerUpload`,).then(()=>{  
                     Axios.post(`${BASE_URL}/api/web/acpPrograms`, formData)
                     .then((response) => { 
                         formik.values.banner=`${BASE_URL}/${imgfile.name}`
@@ -61,7 +61,8 @@ export default function AddAcpProgram() {
                         toast.current.show({ severity: "error", summary: "Info", detail: "Added Acp Program Failed" });
                     });
                 }).catch(()=>{
-
+                    toast.current.show({ severity: "error", summary: "Info", detail: "Added Acp Program Failed" });
+                
                 })  
             } 
             else{ 
