@@ -154,7 +154,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 }
             }
 
-            if (cityName.includes(formik.values.city)) {
+            if (cityName.includes(formik.values.city) || formik.values.city.includes(cityName)) {
                 formik.setFieldValue("address1", autoCompleteAddress?.value?.structured_formatting?.main_text);
             } else {
                 toast.error(`please select address against ${formik.values.city} `);
@@ -229,8 +229,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);
         }
     }, []);
-    console.log("auto complt is", autoCompleteAddress?.value?.structured_formatting);
-
+   
     return (
         <>
             <ToastContainer />

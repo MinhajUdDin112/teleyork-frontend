@@ -63,6 +63,9 @@ import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole"
 import CreateUser from "./app/features/screens/user_management/CreateUser";
 import ManageUser from "./app/features/screens/user_management/ManageUser";
 import EditUser from "./app/features/screens/user_management/EditUser";
+import Manage_Department from "./app/features/screens/user_management/Manage_Department";
+import CreateDepartment from "./app/features/screens/user_management/CreateDepartment";
+import EditDepartment from "./app/features/screens/user_management/EditDepartment";
 import NotFound from "./app/features/screens/not_found/NotFound";
 
 const App = () => {
@@ -272,6 +275,9 @@ const App = () => {
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />
+                                <Route path="/manage-department" element={<Manage_Department />} />
+                                <Route path="/edit-department" element={<EditDepartment />} />
+                                <Route path="/create-department" element={<CreateDepartment />} />
                             </Routes>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
