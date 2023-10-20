@@ -27,6 +27,5 @@ function TemplateSearchBar({ onSearch }) {
       <Button type="submit" label="Search"  className="search-button font-bold" />
     </form>
   );
-}
-
+  }
 export default TemplateSearchBar;
