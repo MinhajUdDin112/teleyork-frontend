@@ -4,10 +4,13 @@ import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { useLocation } from "react-router-dom";
 import { useFormik } from "formik";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ResumeApplication = () => {
     const location = useLocation();
     const responseData = location.state && location.state.responseData;
+const navigate = useNavigate()
+
 console.log("first",responseData.data)
     const formik = useFormik({
         initialValues:{
@@ -19,6 +22,9 @@ console.log("first",responseData.data)
             zip:"",
             SSN:""
 
+        },
+        onSubmit(){
+            navigate("/login")
         }
     })
  const setValues = ()=>{
@@ -30,6 +36,7 @@ console.log("first",responseData.data)
     formik.setFieldValue("zip",responseData.data.zip)
     formik.setFieldValue("SSN",responseData.data.SSN)
  }
+
  useEffect(()=>{
     setValues()
  },[])
@@ -50,9 +57,9 @@ console.log("first",responseData.data)
                     </div> */}
                     <div className="card flex p-8">
                         <div className="col-6">
-                            <p className="text-2xl font-bold">Resume Application</p>
+                            <p className="text-2xl font-bold">Self Enrollment Completed</p>
                             <p className="mt-0 text-xl">We have matching information on file</p>
-                            <p className="text-lg">Please verify your identity to resume application process.</p>
+                            {/* <p className="text-lg">Please verify your identity to resume application process.</p> */}
                         </div>
                         <div className="col-6">
                             <form onSubmit={formik.handleSubmit}>
@@ -65,7 +72,7 @@ console.log("first",responseData.data)
                                 <InputText id="state" value={formik.values.state} disabled onChange={formik.handleChange} className="mb-3" placeholder="State" />
                                 {/* <Calendar value={formik.values} disabled onChange={formik.handleChange} className="mb-3" id="icon" value={date} disabled onChange={(e) => setDate(e.value)} showIcon /> */}
                                 <InputText id="SSN" value={formik.values.SSN} disabled onChange={formik.handleChange} className="mb-3" placeholder="Last 4 SSN or Tribal ID" />
-                                <Button label="Submit" type="submit" />
+                                <Button label="Close" type="submit"  />
                             </div>
                             </form>
                         </div>
