@@ -21,7 +21,8 @@ import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp
 import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
-import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
+import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";  
+import ManageRolesAndRights from "./app/features/screens/roles_and_permissions/ManageRolesAndRights";
 import manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
 import InCompletedEnrollments from "./app/features/screens/lifeline_orders/InCompleteEnrollments";
@@ -236,10 +237,9 @@ const App = () => {
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />  
                                 <Route path="/companyacpprograms" element={<AcpProgramsFlowPage/>} />
-
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
-
+                                  <Route path="/managerolesandrights" element={<ManageRolesAndRights/>} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
