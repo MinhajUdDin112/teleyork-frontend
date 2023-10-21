@@ -8,6 +8,7 @@ const Preview_Final_component = ({ enrollment_id }) => {
         navigate("/newenrolment");
         localStorage.removeItem("basicData");
         localStorage.removeItem("address");
+        localStorage.removeItem("zipData")
     };
 
     return (

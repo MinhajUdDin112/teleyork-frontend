@@ -8,7 +8,7 @@ export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id })
 
     const [currentComponent, setCurrentComponent] = useState(1);
 
-
+    
 
     const handleNext = () => {
         if (currentComponent < 2) {

@@ -9,7 +9,8 @@ import { loginAction } from "../../../store/auth/AuthAction";
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
-    const { error } = useSelector((state) => state.login);
+    const error = useSelector((state) => state.login);
+    const errormsg = error?.loginError;
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -21,7 +22,7 @@ export default function LoginScreen() {
         }),
         onSubmit: (values) => {
             dispatch(loginAction(values));    
-            console.log(formik.values);
+            //console.log(formik.values);
         },
     });
 
@@ -32,7 +33,7 @@ export default function LoginScreen() {
                     <div className="flex justify-content-center">
                         <p className="text-xl font-semibold mb-3 pt-3">Login</p>
                     </div>
-                    {error ? (
+                    {errormsg ? (
                         <div className="flex justify-content-center mb-2">
                             <p style={{ color: "red" }} className="font-semibold text-xl">
                                 Invalid Credentials
