@@ -7,10 +7,13 @@ import { RadioButton } from 'primereact/radiobutton';
 import Axios from 'axios';
 import BASE_URL from '../../../../config';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import { ToastContainer,  } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateDepartment = () => {
-  const navigate = useNavigate();
-  let toast = useRef(null);
+  const navigate = useNavigate(); 
+  //let toast = useRef(null);
 
   const loginRes = localStorage.getItem('userData');
   const parseLoginRes = JSON.parse(loginRes);
@@ -26,7 +29,7 @@ const CreateDepartment = () => {
       department: '',
       status: true, // Set the initial value to false (inactive)
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values) => {  
       try {
         const response = await Axios.post(`${BASE_URL}/api/deparments/addDeparment`, {
           department: values.department,
@@ -50,6 +53,7 @@ const CreateDepartment = () => {
 
   return (
     <>
+    <ToastContainer/>
       <div className="card">
         <h3 className="mt-1">Create Department <span className="steric">*</span></h3>
       </div>

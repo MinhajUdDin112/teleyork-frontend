@@ -36,6 +36,7 @@ import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_order
 import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
 import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
 import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
+
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
 import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
 import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
@@ -67,6 +68,7 @@ import Manage_Department from "./app/features/screens/user_management/Manage_Dep
 import CreateDepartment from "./app/features/screens/user_management/CreateDepartment";
 import EditDepartment from "./app/features/screens/user_management/EditDepartment";
 import NotFound from "./app/features/screens/not_found/NotFound";
+
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -252,6 +254,8 @@ const App = () => {
                                 <Route path="/completeenrollments" element={<CompleteEnrollments />} />
                                 <Route path="/bulkportin" element={<BulkPortin />} />
                                 <Route path="/allenrollmentorders" element={<Allenrollments />} />
+                               
+                                
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
