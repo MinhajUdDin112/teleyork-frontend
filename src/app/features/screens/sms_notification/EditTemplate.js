@@ -15,7 +15,7 @@ const EditTemplate = (probs) => {
     let navigate=useNavigate()  
     const [stop,setstop]=useState(false)
     const [templateText, setTemplateText] = useState(probs.templatetoedit.template);
-    const [subjectText, setSubjectText] = useState("");
+    const [subjectText, setSubjectText] = useState(probs.templatetoedit.notification_subject);
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;
   const type = [
@@ -45,10 +45,10 @@ const EditTemplate = (probs) => {
             const dataToSend = {
                 ...values,     
                 template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
-                keySequence: [...keySequence],
+                keySequence: [...keySequence],    
             };
           
-              
+                         
              Axios.patch(`${BASE_URL}/api/sms/updateTemplate`, dataToSend).then(()=>{    
                 toast.current.show({ severity: "success", summary: "Info", detail: "Template Updated Successfully" });
                  setTimeout(()=>{     
