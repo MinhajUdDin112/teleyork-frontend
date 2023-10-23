@@ -15,7 +15,6 @@ const CompletedEnrollments = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [allCompletedEnrollments, setAllCompletedEnrollments] = useState([]);
-
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm); // Update search term state
         // Implement your search logic here
@@ -45,7 +44,6 @@ const CompletedEnrollments = () => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
     const getAllCompletedEnrollments = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?serviceProvider=${parseLoginRes?.compony}`);
@@ -96,7 +94,7 @@ const CompletedEnrollments = () => {
                 </div>
             </div>
             <br />
-        </div>
+        </div> 
     );
 };
 
