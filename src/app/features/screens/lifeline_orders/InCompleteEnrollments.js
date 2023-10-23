@@ -9,12 +9,12 @@ const InCompleteEnrollments = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [allInCompletedEnrollments, setAllInCompletedEnrollments] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0); 
+    const [currentPage, setCurrentPage] = useState(0);
     console.log(allInCompletedEnrollments)
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm); // Update search term state
         // Implement your search logic here
-        const filteredResults = allInCompletedEnrollments.filter((enrollment) => {  
+        const filteredResults = allInCompletedEnrollments.filter((enrollment) => {
             if (enrollment.firstName !== undefined) {
                 let tomatch = enrollment.firstName + " " + enrollment.lastName;
                 if (enrollment.firstName.length === 0) {

@@ -1,12 +1,15 @@
 export const menuNavigation = [
     {
-        label: "Home",
         items: [
             {
                 label: "Dashboard",
                 icon: "pi pi-fw pi-home",
                 to: "/",
-            },  
+            }
+        ],
+    },
+    {
+        items: [
             {
                 label: "Acp Programs",
                 icon: "pi pi-fw pi-dollar",
@@ -15,8 +18,6 @@ export const menuNavigation = [
         ],
     },
     {
-        label: "",
-        icon: "pi pi-fw pi-search",
         items: [
             {
                 label: "Lifeline Orders",
@@ -149,9 +150,9 @@ export const menuNavigation = [
                     {
                         label: "Manage Roles and Rights",
                         to: "/managerolesandrights",
-                    },  
-                    
-                  
+                    },
+
+
                     {
                         label: "Manage Department",
                         to: "/manage-department",

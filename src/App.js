@@ -16,12 +16,12 @@ import "prismjs/themes/prism-coy.css";
 import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
-import "./App.scss";  
-import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page" 
+import "./App.scss";
+import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page"
 import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
-import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";  
+import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
 import ManageRolesAndRights from "./app/features/screens/roles_and_permissions/ManageRolesAndRights";
 import manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
@@ -203,10 +203,9 @@ const App = () => {
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
     useEffect(() => {
-        const url=window.location.hash
-        console.log(url,url.startsWith('#/selfenrollment'))
-        if(url.startsWith('#/selfenrollment'))
-        {return}
+        const url = window.location.hash
+        console.log(url, url.startsWith('#/selfenrollment'))
+        if (url.startsWith('#/selfenrollment')) { return }
         if (token) {
             if (protectedRoute === false) {
                 navigate("/");
@@ -218,6 +217,59 @@ const App = () => {
             navigate("/login");
         }
     }, [token]);
+
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
+
+    console.log('parsedLoginPerms', parsedLoginPerms)
+
+    const [dynamicMenu, setDynamicMenu] = useState([{
+
+        // Initial state
+        items: [
+            {
+                label: "Dashboard",
+                icon: "pi pi-fw pi-home",
+                to: "/",
+            }
+        ],
+
+    }])
+
+    const getPermissions = () => {
+        console.log("here ine")
+        if (localStorage.getItem('permissions') === null) {
+            return;
+        }
+        else {
+            console.log("here")
+            let modules = parsedLoginPerms.map((node) => {
+                console.log('node', node)
+                return {
+                    label: node?.module,
+                    icon: "",
+                    items: node.subModule.map((child) => {
+                        return {
+                            label: child?.name,
+                            icon: child?.icon,
+                            to: child?.route
+                        }
+                    })
+                }
+            })
+            console.log('modules', modules)
+            setDynamicMenu((prev) => {
+                console.log('prev', prev)
+                return [...prev, {
+                    items: modules
+                }]
+            });
+        }
+    }
+
+    useEffect(() => {
+        getPermissions()
+    }, []);
 
     return (
         <>
@@ -235,11 +287,11 @@ const App = () => {
                         <div className="layout-main">
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
-                                <Route path="/" element={<Dashboard />} />  
-                                <Route path="/companyacpprograms" element={<AcpProgramsFlowPage/>} />
+                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/companyacpprograms" element={<AcpProgramsFlowPage />} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
-                                  <Route path="/managerolesandrights" element={<ManageRolesAndRights/>} />
+                                <Route path="/managerolesandrights" element={<ManageRolesAndRights />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
@@ -254,8 +306,8 @@ const App = () => {
                                 <Route path="/completeenrollments" element={<CompleteEnrollments />} />
                                 <Route path="/bulkportin" element={<BulkPortin />} />
                                 <Route path="/allenrollmentorders" element={<Allenrollments />} />
-                               
-                                
+
+
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
@@ -273,7 +325,7 @@ const App = () => {
                                 <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
                                 <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
                                 <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
-                                <Route path="/createtemplate" element={<CreateTemplate />} />  
+                                <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate/*" element={<ManageTemplate />} />
                                 <Route path="/createrole" element={<CreateRole />} />
                                 <Route path="/manage-user" element={<ManageUser />} />
@@ -299,14 +351,15 @@ const App = () => {
                 <Routes>
                     <Route path="/login" element={<LoginScreen />} />
                     <Route path="/selfenrollment" element={<VerifyZip />} />
-                                <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
-                                <Route path="/selfenrollment/address/:id" element={<Address />} />
-                                <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
-                                <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
-                                <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
-                                
+                    <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
+                    <Route path="/selfenrollment/address/:id" element={<Address />} />
+                    <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
+                    <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
+                    <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
+
                 </Routes>
-            )}
+            )
+            }
         </>
     );
 };
