@@ -19,7 +19,9 @@ export default function ServiceAvailabilityPage() {
   // Get user data from localStorage
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
-  console.log("login data is",parseLoginRes)
+ useEffect(() => {
+  localStorage.removeItem("zipData");
+ }, [])
 
   const validationSchema = Yup.object().shape({
     zipCode: Yup.string().required("Please enter Zip code"),

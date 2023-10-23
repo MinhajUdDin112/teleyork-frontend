@@ -13,5 +13,7 @@ export const verifyZipAction = createAsyncThunk("selfEnrollmentapi/enrollment/ve
     } catch (error) {
         // Toasts({ error: `Template ${error}` });s
         return rejectWithValue(error);
+
+
     }
 });

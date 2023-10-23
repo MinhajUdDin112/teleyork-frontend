@@ -57,6 +57,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
         },
         onSubmit: async (values, actions) => {
             const csr = "64e0b1b135a9428007da3526";
+            {}
             const userId = _id;
             const dataToSend = { csr, userId, ...values };
             setIsLoading(true);
@@ -125,6 +126,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
     const basicResponse = localStorage.getItem("basicData");
     const parsebasicResponse = JSON.parse(basicResponse);
 
+
     console.log("dob formet is", parsebasicResponse?.data?.DOB);
 
     useEffect(() => {
@@ -132,20 +134,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
         const dobString = parsebasicResponse?.data?.DOB;
         const benifitdob = parsebasicResponse?.data?.BenifitDOB;
         if (dobString) {
-            // change formet of DOB
-            // const date = new Date(dobString);
-            // const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}/${date.getFullYear()}`;
-            // formik.setFieldValue("DOB", formattedDate);
-            // change formet of Benifit  DOB
-            // const benifitDate = new Date(benifitdob);
-            // const formattedBenifitDate = `${(benifitDate.getMonth() + 1).toString().padStart(2, "0")}/${benifitDate.getDate().toString().padStart(2, "0")}/${benifitDate.getFullYear()}`;
-            // formik.setFieldValue("BenifitDOB", formattedBenifitDate);
-
+           
             // set data in feilds from local storage
             formik.setFieldValue("firstName", parsebasicResponse?.data?.firstName);
             formik.setFieldValue("middleName", parsebasicResponse?.data?.middleName);
             formik.setFieldValue("lastName", parsebasicResponse?.data?.lastName);
             formik.setFieldValue("SSN", parsebasicResponse?.data?.SSN);
+            formik.setFieldValue("DOB", new Date(parsebasicResponse?.data?.DOB));
             formik.setFieldValue("email", parsebasicResponse?.data?.email);
             formik.setFieldValue("suffix", parsebasicResponse?.data?.suffix);
             formik.setFieldValue("contact", parsebasicResponse?.data?.contact);
@@ -155,6 +150,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
             formik.setFieldValue("isSelfReceive", parsebasicResponse?.data?.isSelfReceive);
             formik.setFieldValue("BenifitFirstName", parsebasicResponse?.data?.BenifitFirstName);
             formik.setFieldValue("BenifitLastName", parsebasicResponse?.data?.BenifitLastName);
+            formik.setFieldValue("BenifitDOB", new Date(parsebasicResponse?.data?.BenifitDOB));
             formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
             formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
             //chnage state

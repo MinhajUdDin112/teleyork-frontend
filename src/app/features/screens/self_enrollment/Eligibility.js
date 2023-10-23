@@ -19,6 +19,13 @@ const Eligibility = () => {
         initialValues:{
             program:"",
         },
+        validate:(data)=>{
+            let errors={}
+            if(data?.program.length===0){
+                errors.program="Select Program"
+            }
+            return errors;
+        },
         onSubmit:async(values)=>{
             const newData={
                 userId:id,
@@ -38,6 +45,10 @@ const Eligibility = () => {
         getAcpPrograms()
     },[])
 
+    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+    const getFormErrorMessage = (name) => {
+        return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
+    };
     return (
         <>
             <div
@@ -64,18 +75,8 @@ const Eligibility = () => {
                             <p className="text-xl font-bold">Are you participating in one of these government programs?</p>
                             <div className="flex flex-column">
                                 <div className="mt-3">
-                                    {/* <p className="m-0">Other</p> */}
                                     <Dropdown id="program" value={formik.values.program} options={acpProgram} onChange={formik.handleChange} optionLabel="name" optionValue="_id"  placeholder="Select ACP Program" className="w-full" />
-                                    {/* <Dropdown 
-                                    id="program" 
-                                    name="program" 
-                                    options={acpProgram} 
-                                    optionValue="_id" 
-                                    optionLabel="name" 
-                                    onChange={formik.handleChange} 
-                                    value={formik.values.program} 
-                                    placeholder="Select from other eligibility programs" 
-                                    className="w-12 mb-2" /> */}
+                                    {getFormErrorMessage("program")}
                                 </div>
                                 
                                 <Button label="Next" type="submit" className="mt-5" />
