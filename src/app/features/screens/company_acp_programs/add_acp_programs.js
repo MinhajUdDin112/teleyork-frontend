@@ -45,9 +45,10 @@ export default function AddAcpProgram() {
             if (!values.description) {
                 errors.description = "Description is required";
             }  
-            if(!values.code){ 
+            if(!values.code.length > 2){ 
                 errors.code="Code is required"
-            }
+            }   
+        
             return errors;
         },
     });
