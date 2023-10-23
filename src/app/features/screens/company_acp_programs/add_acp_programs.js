@@ -45,7 +45,9 @@ export default function AddAcpProgram() {
             if (!values.description) {
                 errors.description = "Description is required";
             }  
-          
+            if(!values.code){ 
+                errors.code="Code is required"
+            }
             return errors;
         },
     });
