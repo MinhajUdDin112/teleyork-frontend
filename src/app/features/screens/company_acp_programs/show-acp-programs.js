@@ -60,7 +60,7 @@ const ShowPrograms = ({ setEditAcp }) => {
                                 <Column field="edit" style={{textAlign:"center"}} header="Edit">   
                                 </Column>   
                                 
-                            </DataTable>
+                            </DataTable>   
                         </>
                     ) : (
                         <ProgressSpinner className="flex justify-content-center" />

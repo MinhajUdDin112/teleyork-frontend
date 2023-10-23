@@ -13,12 +13,27 @@ export default function AddAcpProgram() {
     const [status,setStatus]=useState(true)
     let [showError, setShowError] = useState(false);
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
+    const parseLoginRes = JSON.parse(loginRes);    
+    const [inputValue, setInputValue] = useState('');
+
+    const handleInputChange = (event) => {
+      const value = event.target.value;    
+         console.log(value)
+      // Regular expression to match the pattern: [A-Z][0-9]
+      const regex =  /^[A-Z]\d$/;
+  
+      if (regex.test(value)) {
+        setInputValue(value);
+      } else{ 
+        console.log("not match")
+      }
+    };
     const formik = useFormik({
         initialValues: {
             name: "",
             description: "",     
-            banner:"", 
+            banner:"",   
+            code:"",
          active:true,
         },
         validate: (values) => {
@@ -29,7 +44,11 @@ export default function AddAcpProgram() {
             }
             if (!values.description) {
                 errors.description = "Description is required";
-            }
+            }  
+            if(!values.code.length > 2){ 
+                errors.code="Code is required"
+            }   
+        
             return errors;
         },
     });
@@ -40,7 +59,8 @@ export default function AddAcpProgram() {
             description: formik.values.description,
             serviceProvider: parseLoginRes?.compony, //Both Service Provider and CreatedBY will be same according to APi
             createdBy: parseLoginRes?._id, 
-            banner:formik.values.banner,  
+            banner:formik.values.banner,   
+            
             active:formik.values.active
         };
         if (Object.keys(formik.errors).length === 0) {
@@ -121,7 +141,16 @@ export default function AddAcpProgram() {
                         }}/>
                     <label style={{marginLeft:"-24px"}} htmlFor="active" className="ml-2">Status</label>
                            
-                     </div>    
+                     </div>       
+                     <div className="mr-3 mb-3" style={{ marginTop: "15px", width: "23em" }}>
+                    <p className="m-0">Code:</p>
+                    <InputText type="text" value={inputValue} onChange={handleInputChange} name="code" />
+                    {showError ? (
+                        <div className="error" style={{ marginTop: "22px", color: "red" }}>
+                            {formik.errors.code}
+                        </div>
+                    ) : undefined}
+                </div>   
             </div>     
             <div style={{marginLeft: "50%", transform: "translate(-50%)", marginTop: "45px", display: "flex", justifyContent: "center"}}> 
              <p  style={{position:"absolute",fontSize:"14px",marginTop:"-25px",width:"100px",marginLeft:"-51px"}} >Banner :</p>
