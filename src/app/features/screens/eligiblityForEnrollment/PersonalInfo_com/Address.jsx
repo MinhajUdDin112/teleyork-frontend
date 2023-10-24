@@ -18,7 +18,7 @@ import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
-const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
+const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const [confrimAddress, setConfrimAddress] = useState("");
     const [tempAdd, setTempAdd] = useState(true);
     const [isSame, setIsSame] = useState();
@@ -27,9 +27,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [autoCompleteAddress, setAutoCompleteAddress] = useState(null);
 
-    const zipResponse = useSelector((state) => state.zip);
+    
 
-    const zipDataLs = localStorage.getItem("zipData");
+    const zipDataLs = localStorage.getItem("basicData");
     const zipDataParsed = JSON.parse(zipDataLs);
     const zipCode = zipDataParsed?.data?.zip;
     const zipCity = zipDataParsed?.data?.city;
@@ -84,7 +84,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 poBoxState: formik.values.poBoxState,
                 poBoxCity: formik.values.poBoxCity,
                 userId: userId,
-                csr: "645c7bcfe5098ff6251a2255",
+                csr: csr,
             };
             setIsLoading(true);
             try {
@@ -206,6 +206,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
         if (address) {
             formik.setFieldValue("address1", address);
             formik.setFieldValue("address2", parseaddressResponse?.data?.address2);
+            formik.setFieldValue("zip", parseaddressResponse?.data?.zip);
+            formik.setFieldValue("city", parseaddressResponse?.data?.city);
+            formik.setFieldValue("state", parseaddressResponse?.data?.state);
             formik.setFieldValue("isTemporaryAddress", parseaddressResponse?.data?.isTemporaryAddress);
 
             formik.setFieldValue("isSameServiceAddress", parseaddressResponse?.data?.isSameServiceAddress);
@@ -333,17 +336,26 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
 
                 {isDifferent && (
                     <>
-                        <div className="p-fluid formgrid grid mt-5">
+<div className="mt-3">Mailing Address</div>
+                        <div className="p-fluid formgrid grid mt-3">
+                            
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    Mailing Address 1 <span className="steric">*</span>
+                                     Address 1 <span className="steric">*</span>
                                 </label>
                                 <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} />
                                 {getFormErrorMessage("mailingAddress1")}
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label className="field_label">Mailing Address 2 </label>
+                                <label className="field_label"> Address 2 </label>
                                 <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} />
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    Zip Code <span className="steric">*</span>
+                                </label>
+                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
+                                {getFormErrorMessage("mailingZip")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -357,13 +369,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 </label>
                                 <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
                             </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Zip Code <span className="steric">*</span>
-                                </label>
-                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
-                                {getFormErrorMessage("mailingZip")}
-                            </div>
+                           
                         </div>
                     </>
                 )}
@@ -379,6 +385,12 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
+                                    Zip Code <span className="steric">*</span>
+                                </label>
+                                <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} maxLength={5} keyfilter={/^[0-9]*$/} />
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
                                     City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
                                 <InputText id="poBoxCity" value={formik.values.poBoxCity} className="disable-color" disabled />
@@ -391,12 +403,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 </label>
                                 <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
                             </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Zip Code <span className="steric">*</span>
-                                </label>
-                                <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} maxLength={5} keyfilter={/^[0-9]*$/} />
-                            </div>
+                          
                         </div>
                     </>
                 )}

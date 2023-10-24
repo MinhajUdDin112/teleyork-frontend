@@ -23,7 +23,7 @@ import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/p
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";  
 import ManageRolesAndRights from "./app/features/screens/roles_and_permissions/ManageRolesAndRights";
-import manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
+import Manage_inventory from "./app/features/screens/inventory_management/manage-inventory/Manage_inventory";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
 import InCompletedEnrollments from "./app/features/screens/lifeline_orders/InCompleteEnrollments";
 import RejectedEnrollments from "./app/features/screens/lifeline_orders/RejectedEnrolments";
@@ -254,14 +254,12 @@ const App = () => {
                                 <Route path="/completeenrollments" element={<CompleteEnrollments />} />
                                 <Route path="/bulkportin" element={<BulkPortin />} />
                                 <Route path="/allenrollmentorders" element={<Allenrollments />} />
-                               
-                                
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
                                 <Route path="/eligibilityproofupload" element={<EligibilityProofUpload />} />
                                 <Route path="/dealerwallet" element={<DealerWallet />} />
-                                <Route path="/manageinventory" element={<manage_inventory />} />
+                                <Route path="/manageinventory" element={<Manage_inventory />} />
                                 <Route path="/smsnotification" element={<Upload />} />
                                 <Route path="/sent" element={<Sent />} />
                                 <Route path="/draft" element={<Draft />} />

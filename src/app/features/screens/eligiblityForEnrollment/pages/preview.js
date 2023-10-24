@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import Preview_Final_component from "./Preview_Final_component";
-const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
+import Axios from "axios";
+import BASE_URL from "../../../../../config";
+import { ToastContainer, toast } from "react-toastify";
+import { useEffect } from "react";
+const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
    
@@ -11,17 +15,41 @@ const Preview = ({ setActiveIndex, enrollment_id, _id }) => {
     const previewsRes = localStorage.getItem("address");
     const parsepreviewsRes = JSON.parse(previewsRes);
     const previewInfo = parsepreviewsRes?.data;
-console.log("preview info is",previewInfo)
-    const nextPage = () => {
-        setShowFinalComponent(true);
-    };
+
+    const zipRes = localStorage.getItem("zipData");
+    
+
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
     };
+
+    const postData = async () => {
+
+        const dataToSend = {
+          csr: csr,
+          userId: _id,
+         
+        };
+        try {
+          const response = await Axios.post(`${BASE_URL}/api/user/handOverEnrollment`, dataToSend);
+         
+        } catch (error) {
+         toast.error(error?.response?.data?.msg)
+        }
+        setShowFinalComponent(true);
+
+      };
+      useEffect(() => {
+       if(!zipRes){
+        setIsChecked(true )
+       }
+      }, [])
+
    
     return (
         <>
+        <ToastContainer/>
             {!showFinalComponent ? (
                 <div className="card ">
                     <div className="flex flex-row justify-content-between sticky-buttons">
@@ -31,7 +59,7 @@ console.log("preview info is",previewInfo)
                                 setActiveIndex(1);
                             }}
                         />
-                        <Button label="Submit" onClick={nextPage} disabled={!isChecked} />
+                        <Button label="Submit" onClick={postData} disabled={!isChecked} />
                     </div>
                     <br></br>
 
@@ -98,7 +126,8 @@ console.log("preview info is",previewInfo)
 
                         <br />
                         <br />
-                        <div className="flex">
+                        {
+                            zipRes? <div className="flex">
                             <Checkbox inputId="cb1" value="New York" checked={isChecked} onChange={(e) => setIsChecked(e.checked)}></Checkbox>
                             <label htmlFor="cb1" className="p-checkbox-label mx-2">
                                 <p>
@@ -122,6 +151,9 @@ console.log("preview info is",previewInfo)
                                 <p>Electronically Signed by {previewInfo?.firstName} {new Date().toLocaleDateString()}</p>
                             </label>
                         </div>
+                        :null
+                        }
+                       
                       
                     </div>
                 </div>

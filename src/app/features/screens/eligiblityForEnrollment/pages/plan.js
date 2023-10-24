@@ -6,7 +6,7 @@ import BASE_URL from "../../../../../config";
 import { Divider } from "primereact/divider";
 import Axios from "axios";
 
-const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
+const Plan = ({ setActiveIndex, enrollment_id, _id,csr  }) => {
 
     const [btnState, setBtnState] = useState(true)
 
@@ -38,7 +38,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
 
     const postData = async () => {
         const data = {
-          csr: "645c7bcfe5098ff6251a2255",
+          csr: csr,
           userId: _id,
           plan: selectedPlanId,
         };

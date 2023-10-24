@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify'; // Import ToastContainer and to
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 import Axios from "axios";
 import BASE_URL from "../../../../../config";
-const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
+const Agree = ({ handleNext, handleBack, enrollment_id, _id , csr }) => {
     const dispatch = useDispatch();
 
     const [buttonClicked, setButtonClicked] = useState(false);
@@ -56,7 +56,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
         },
         onSubmit: async (values, actions) => {
             const userId = _id;
-            const csr = "645c7bcfe5098ff6251a2255";
+            csr = csr;
             const dataToSend = { csr, userId };
             dispatch(addTermsAction(dataToSend));
 
