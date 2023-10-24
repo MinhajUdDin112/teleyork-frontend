@@ -9,33 +9,38 @@ import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
-import { useFormik } from "formik";
-import * as Yup from "yup";
+
 import { useNavigate } from "react-router-dom";
-import Modal from "react-modal";
+import { Dialog } from 'primereact/dialog';
+import DialogForReject from "./DialogForReject";
 
 const AllEnrollments = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
+    const [isEnrolmentId, setIsEnrolmentId] = useState()
+    const [CsrId, setCsrId] = useState()
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
 
 
-    const handleOpenModal = () => {
+    const handleOpenDialog = (rowData) => {
         setIsModalOpen(true);
+        setIsEnrolmentId (rowData?._id)
+        setCsrId(rowData?.csr)
+    
     };
- 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
+
     const navigate= useNavigate()
 
      // Get user data from ls
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
-     //const roleName= parseLoginRes?.role?.role;
-     const roleName = "Teamlead";
+     const roleName= parseLoginRes?.role?.role;
+     //const roleName = "tl";
+    
+     
 
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm); // Update search term state
@@ -64,47 +69,8 @@ const AllEnrollments = () => {
         setCurrentPage(selected);
     };
     const visibleItems = allEnrollments.slice(offset, offset + itemsPerPage);
-    // Get user data from ls
-   
     
-    const [allRoles, setAllRoles] = useState([]);
-    const [allDepartment, setAllDepartment] = useState([]);
-
-   
-
-    const validationSchema = Yup.object().shape({
-        reason: Yup.string().required("Please enter Reason"),
-        // reportingTo: Yup.string().required("This field is required."),
-        // department: Yup.string().required("This field is required."),
-    });
-
-    const formik = useFormik({
-        validationSchema: validationSchema,
-        initialValues: {
-            reason: "",
-            reportingTo: "",
-            department: "",
-        },
-        onSubmit: async (values, actions, rowData) => {
-            const data = {
-                reportingTo: formik.values.reportingTo,
-                department: formik.values.department,
-            };
-            const approvedBy = parseLoginRes?._id;
-            const enrolmentId = rowData?._id;
-            const approved = false;
-
-            const dataToSend = { approvedBy, enrolmentId, approved, data, ...values };
-            try {
-                const response = await Axios.patch(`${BASE_URL}/api/user/rejected`, dataToSend);
-                if (response?.status === 201 || response?.status === 200) {
-                    toast.success("Rejected");
-                }
-            } catch (error) {
-                toast.error(error?.response?.data?.msg);
-            }
-        },
-    });
+    
 
     const getAllEnrollments = async () => {
         try {
@@ -115,7 +81,7 @@ const AllEnrollments = () => {
         } catch (error) {
             console.error("Error fetching module data:", error?.response);
         }
-    };
+    }; 
 
     useEffect(() => {
         getAllEnrollments();
@@ -128,11 +94,13 @@ const AllEnrollments = () => {
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
             if (response?.status === 201 || response?.status === 200) {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
+                localStorage.setItem("address", JSON.stringify(response.data));
                 navigate("/enrollment");
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
+      
     };
 
     const approveRow = async (rowData) => {
@@ -151,97 +119,28 @@ const AllEnrollments = () => {
         }
     };
 
-    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
-    const getFormErrorMessage = (name) => {
-        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-    };
-
     const actionTemplate = (rowData) => {
         return (
             <div>
                 <Button label="View" onClick={() => viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" />
                 <Button label="Approve" onClick={() => approveRow(rowData)} className="p-button-text p-button-success p-mr-2" />
-                <Button label="Reject" onClick={() => handleOpenModal()} className="p-button-text p-button-danger" />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className="p-button-text p-button-danger" />
             </div>
         );
     };
-    useEffect(() => {
-        const getRoles = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
-                setAllRoles(res?.data?.data || []);
-            } catch (error) {
-                console.error("Error fetching module data:", error);
-            }
-        };
-        getRoles();
-    }, []);
-
-    useEffect(() => {
-        const getDepartment = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.compony}`);
-                setAllDepartment(res?.data?.data || []);
-            } catch (error) {
-                console.error("Error fetching module data:", error);
-            }
-        };
-        getDepartment();
-    }, []);
-    const customStyles = {
-        content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-            width: "800px", // Adjust the width as needed
-            height: "500px", // Adjust the height as needed
-        },
-    };
+   
+    
 
     return (
         <div className="card bg-pink-50">
             <ToastContainer />
-            <form onSubmit={formik.handleSubmit}>
-                <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal} style={customStyles} contentLabel="Example Modal">
-                    <div className="p-fluid p-formgrid grid ">
-                        <div className="p-field col-12 md:col-4 mt-3">
-                            <Button label="Assign back to CSR" />
-                        </div>
-                        <div className="p-fluid p-formgrid grid m-2 mt-3">
-                            <h4>Or</h4>
-                        </div>
+            <form >
+                <Dialog visible={isModalOpen} style={{ width: '50vw' }} onHide={() => setIsModalOpen(false)}>
+                         <DialogForReject enrollmentId={isEnrolmentId} CSRid={CsrId}/>
+                         
+                </Dialog>
 
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Assign to department </label>
-                            <Dropdown
-                                id="department"
-                                options={allDepartment}
-                                value={formik.values.department}
-                                onChange={(e) => formik.setFieldValue("department", e.value)}
-                                optionLabel="department"
-                                optionValue="_id"
-                                filter
-                                showClear
-                                filterBy="department" // Set the property to be used for filtering
-                            />
-                            {getFormErrorMessage("department")}
-                        </div>
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Select User </label>
-                            <Dropdown id="reportingTo" options={allRoles} value={formik.values.reportingTo} onChange={(e) => formik.setFieldValue("reportingTo", e.value)} optionLabel="role" optionValue="_id" showClear filter filterBy="role" />
-                            {getFormErrorMessage("reportingTo")}
-                        </div>
-                    </div>
-                    <h4>Reject Reason <span className="steric"> *</span></h4>
-                   
-                    <textarea id="reason" value={formik.values.reason} onChange={formik.handleChange}/>
-                    {getFormErrorMessage("reason")}
-                    <br />
-                    <Button label="Submit" onClick={handleCloseModal} className="mt-3" />
-                </Modal>
+                
             </form>
 
             <div className="card mx-5 p-0 border-noround">

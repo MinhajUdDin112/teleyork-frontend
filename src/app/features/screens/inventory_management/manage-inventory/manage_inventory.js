@@ -19,7 +19,7 @@ const Manage_inventory = () => {
                 <AddUnits />
             ) : activeComponent === "UpdateInventory" ? (
                 <UpdateInventory />
-            ) : (
+            ) : (  
                 <>
                 <div className="card" style={{fontSize:'2rem',color:'black'}}>Manage Inventory</div>
                 <div className="flex justify-content-around flex-wrap pt-3">

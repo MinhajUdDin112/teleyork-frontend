@@ -4,11 +4,11 @@ import Address from "../PersonalInfo_com/Address";
 
 
 
-export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id }) {
+export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id, csr }) {
 
     const [currentComponent, setCurrentComponent] = useState(1);
 
-    
+
 
     const handleNext = () => {
         if (currentComponent < 2) {
@@ -36,10 +36,10 @@ export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id })
     let render;
     switch (currentComponent) {
         case 1:
-            render = <PersonalInfo handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
+            render = <PersonalInfo handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} csr={csr} />;
             break;
         case 2:
-            render = <Address handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} />;
+            render = <Address handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} csr={csr} />;
             break;
        
         default:

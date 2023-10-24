@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import Axios from "axios";
 import BASE_URL from "../../../../../config";
-import placHolderImage from "../../../../../assets/images/placeholder_image.jpg";
+import { ToastContainer, toast } from "react-toastify";
 
-const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
+const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
 
     const [acpPrograms, setAcpPrograms] = useState([]);
     const [selectedAcpProgramId, setSelectedAcpProgramId] = useState(null);
@@ -36,39 +34,57 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
    const postData = async () => {
 
     const data = {
-        csr: "645c7bcfe5098ff6251a2255",
+        csr: csr,
         userId: enrollmentUserId,
         program: selectedAcpProgramId
     }
-   // handleNext();
-    const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
-
-    if (res?.status === 200 || res?.status === 201) {
-        handleNext();
+    try{
+        const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
+        if (res?.status === 200 || res?.status === 201) {
+            localStorage.setItem("programmeId",JSON.stringify(res?.data))
+            console.log("acp id is ",res?.data)
+            handleNext();
+        }
     }
-    else{
-        console.log("status code is not 200")
+    catch(error){
+       toast.error(error?.response?.data?.msg)
     }
-   
 }
 
+//get programme data from local storage 
+const programedata= localStorage.getItem("programmeId");
+const parseprogramedata = JSON.parse(programedata);
 
+ //get ZipData data from local storage 
+ const zipdata= localStorage.getItem("zipData");
+ const parseZipData = JSON.parse(zipdata);
 
     const handleAcpSelection = (acpId) => {
-
-        if (selectedAcpProgramId === acpId) {
-            setSelectedAcpProgramId(null);
-        } else {
-            setSelectedAcpProgramId(acpId);
-        }
+       
+        
+            if (selectedAcpProgramId === acpId) {
+                setSelectedAcpProgramId(null);
+            } else {
+                setSelectedAcpProgramId(acpId);
+            }
     };
 
+
     useEffect(() => {
-        if (selectedAcpProgramId) { setBtnState(false) } else { setBtnState(true) }
+        if (selectedAcpProgramId) 
+        {     setBtnState(false) } else { setBtnState(true)        
+        }
     }, [selectedAcpProgramId]);
 
+
+// useEffect(() => {
+//     if(!zipdata){
+//         setSelectedAcpProgramId(parseprogramedata?.acpProgram)
+//     }
+// }, [])
     return (
         <>
+        <ToastContainer/>
             <div>
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="submit" onClick={handleBack} />
