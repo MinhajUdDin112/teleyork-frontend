@@ -182,7 +182,7 @@ const ManageTemplate = () => {
         console.log("body is rendering");
         return (
             <div id="template">
-                <p>
+                {template.length > 10 ?<p>
                     {shortline}
                     <span
                         style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
@@ -194,7 +194,8 @@ const ManageTemplate = () => {
                         {" "}
                         See more
                     </span>
-                </p>
+                </p>  :<p>template</p>
+                }
             </div>
         );
     };
