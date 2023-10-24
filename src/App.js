@@ -239,7 +239,7 @@ const App = () => {
                                 <Route path="/companyacpprograms" element={<AcpProgramsFlowPage/>} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
-                                  <Route path="/managerolesandrights/*" element={<ManageRolesAndRights/>} />
+                                <Route path="/managerolesandrights/*" element={<ManageRolesAndRights/>} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
@@ -254,8 +254,6 @@ const App = () => {
                                 <Route path="/completeenrollments" element={<CompleteEnrollments />} />
                                 <Route path="/bulkportin" element={<BulkPortin />} />
                                 <Route path="/allenrollmentorders" element={<Allenrollments />} />
-                               
-                                
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />

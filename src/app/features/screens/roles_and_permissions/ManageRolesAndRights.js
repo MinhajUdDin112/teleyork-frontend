@@ -1,18 +1,23 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useRef} from 'react';  
 import { DataTable } from 'primereact/datatable';
 import Axios from 'axios';
 import { Column } from 'primereact/column';  
 import ReactPaginate from "react-paginate";
 import BASE_URL from '../../../../config'; 
 import { Button } from 'primereact/button';  
-import { Route,Routes,useNavigate } from 'react-router-dom';
+import { Route,Routes,useNavigate } from 'react-router-dom';  
+import { Toast } from 'primereact/toast';
 import { Dialog } from "primereact/dialog";   
 import ManagePermissions from './ManagePermissions';
 export default function BasicDemo() {      
-    console.log("in Permissions")
+    console.log("in Permissions")      
+    const [refresh,setRefresh]=useState(false)
+    const [deleteRoleLoading,setDeleteRoleLoading]=useState(false)  
+    let toastref=useRef(null)
     let [allRoles,setAllRoles]=useState([])    
-    const [roleData,setRoleData]=useState(null) 
+    const [roleData,setRoleData]=useState(null)   
+    const [permissionObject,setPermissionObject]=useState([])
     let navigate=useNavigate()
         const [currentPage, setCurrentPage] = useState(0);     
     const [visible, setVisible] = useState(false);   
@@ -32,58 +37,51 @@ export default function BasicDemo() {
       return ( 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         
-         <Button label="Permissions"  style={{ cursor: "pointer", marginLeft: "25px", fontSize: "14px", paddingLeft: "27px" }} onClick={()=>{ 
-       setRoleData(rowData)
-      navigate("/managerolesandrights/Permission")  
-      setNavigateToPermissions(true)
+         <Button label="Permissions"  style={{ cursor: "pointer", marginLeft: "25px" ,fontWeight:"900",border:"none"}} onClick={()=>{ 
+       setRoleData(rowData)      
+       console.log(allRoles)
+        navigate("/managerolesandrights/Permission")  
+      let object={}
+      for(let i=0;i<rowData.permissions.length;i++){     
+            if(rowData.permissions[i].subModule !== null){
+          let subModuleID=rowData.permissions[i].subModule._id    
+        
+          let arr=[] 
+         for(let k=0;k<rowData.permissions[i].actions.length;k++){ 
+            
+            arr.push(rowData.permissions[i].actions[k]._id) 
+
+         }   
+         object[subModuleID]=arr
+        }
+            
+      }  
+      console.log(object)   
+       
+      setPermissionObject(object)
+      setNavigateToPermissions(true)   
          }} /> 
-        <Button style={{marginLeft:"25px",fontWeight:"900",backgroundColor:"red",border:"none"}} >
+        <Button style={{marginLeft:"25px",fontWeight:"900",backgroundColor:"red",border:"none"}} onClick={()=>{ 
+             console.log(rowData)
+           if(!deleteRoleLoading ){  
+                setDeleteRoleLoading(prev=>!prev)
+             Axios.delete(`${BASE_URL}/api/web/role?roleId=${rowData._id}`,{roleId:rowData._id}).then(()=>{ 
+                toastref.current.show({ severity: 'success', summary: 'Info', detail: 'Role Deleted Successfully' });
+                setDeleteRoleLoading(prev=>!prev)    
+           
+            }).catch(()=>{ 
+                toastref.current.show({ severity: 'error', summary: 'Info', detail: 'Role Deleted Failed' });
+                  setDeleteRoleLoading(prev=>!prev)    
+            })    
+                }  
+            
+                
+        }}>
          Delete
         </Button>
     </div>
       )
-    }    
-    /*
-    function  RenderPermissions(rowData){      
-       
-            const item=rowData.permissions[0];   
-             if(item !== undefined){       
-                let match=item.subModule.name;
-               console.log(Objforcheck.match)
-             }
-            
-        
-        useEffect(()=>{ 
-            console.log("useeffect is calling") 
-       
-        },[])
-        return (  <div >
-                
-                          { item !== undefined ?
-                          item.actions.length !== 0  ? <>     
-                          <h5 style={{display: "flex", justifyContent: "center", alignItems: "center"}}>  
-                           {Objforcheck[item.subModule.name]}
-                           </h5>
-                      <h6 style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{item.subModule.name}</h6>   
-                         <ul >   {   
-                              
-                               item.actions.map(item=>( 
-                                <li style={{display: "flex", justifyContent:"center",padding:"2px"}}> 
-                                    {item.name}
-                                </li>
-                               ))
-                          }    
-                            </ul>   
-                            </> :undefined:undefined 
-
-    }
-                         </div>   
-                       
-                    
-                 
-    
-        )
-    }   */
+    }   
     const roleDescription = (rowData) => {
         let description = rowData.description;
         let shortline = description.substring(0, 10);
@@ -109,7 +107,7 @@ export default function BasicDemo() {
             </div>
         );
     };   
-    const getAllCompletedEnrollments = async () => {
+    const getAllRoles = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
             if (res?.status === 200 || res?.status === 201) {  
@@ -121,12 +119,12 @@ export default function BasicDemo() {
         }
     };
     useEffect( () => {        
-          getAllCompletedEnrollments()
-    }, []);
+          getAllRoles()
+    }, [refresh]);
     return (  
         <div className="card bg-pink-50">     
         <Routes> 
-            <Route path="/Permission" element={<ManagePermissions setNavigateToPermissions={setNavigateToPermissions} roleData={roleData}/>} />
+            <Route path="/Permission" element={<ManagePermissions setNavigateToPermissions={setNavigateToPermissions} permissions={permissionObject} roleData={roleData} setRefresh={setRefresh}/>} />
         </Routes>   {!navigateToPermissions ? 
        <> <div   className="card mx-5 p-0 border-noround">
             <DataTable value={visibleItems} tableStyle={{ minWidth: "50rem" }}  showGridlines>
@@ -149,8 +147,10 @@ export default function BasicDemo() {
             >
              <p>{description}</p>
             </Dialog>     
-        </>:undefined
-}
+        </>:undefined      
+
+}    
+   <Toast ref={toastref}/>
         </div>
     );
 }
