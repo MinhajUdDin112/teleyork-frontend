@@ -20,9 +20,9 @@ import EditTemplate from "./EditTemplate";
 const ManageTemplate = () => { 
     let navigate=useNavigate()
     const [visible, setVisible] = useState(false);   
+    const [templatebody, setTemplatebody] = useState("");      
      let toast=useRef(null)             
      const [navigateToEdit,setNavigateToEdit]=useState(false)
-    const [templatebody, setTemplatebody] = useState("");          
     const [visibleDelelteTemplate,setVisibleDelelteTemplate]=useState(false)  
     const [deleteTemplateId,setDeleteTemplateMessage]=useState("")
     const [currentPage, setCurrentPage] = useState(0);       
@@ -68,7 +68,7 @@ const ManageTemplate = () => {
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Button label="Download " onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />
-                {/* <Button className="pi pi-user-edit" onClick={()=>{handleEditTemplate()}} style={{ cursor: "pointer", marginLeft: "25px", fontSize: "17px", paddingLeft: "27px" }} /> */}
+                 <Button className="pi pi-user-edit" onClick={()=>{handleEditTemplate()}} style={{ cursor: "pointer", marginLeft: "25px", fontSize: "17px", paddingLeft: "27px" }} /> 
                 <Button style={{marginLeft:"25px",fontWeight:"900",backgroundColor:"red",border:"none"}} onClick={()=>{handleDeleteTemplate()}}>
                  Delete
                 </Button>
@@ -182,7 +182,7 @@ const ManageTemplate = () => {
         console.log("body is rendering");
         return (
             <div id="template">
-                <p>
+                {template.length > 10 ?<p>
                     {shortline}
                     <span
                         style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
@@ -194,7 +194,8 @@ const ManageTemplate = () => {
                         {" "}
                         See more
                     </span>
-                </p>
+                </p>  :<p>template</p>
+                }
             </div>
         );
     };

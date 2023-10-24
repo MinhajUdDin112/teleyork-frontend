@@ -36,11 +36,9 @@ const ShowDraftAll = () => {
     const messageBody=(rowData) => {
         let template = rowData.message;
         let shortline = template.substring(0, 10);
-        let fullline = template.substring(15, template.length);
-        console.log("body is rendering");
         return (
             <div id="template">
-                <p>
+               {template.length > 10 ? <p>
                     {shortline}
                     <span
                         style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
@@ -52,7 +50,8 @@ const ShowDraftAll = () => {
                         {" "}
                         See more
                     </span>
-                </p>
+                </p>:  <p>template</p>
+                }
             </div>
         );
     };

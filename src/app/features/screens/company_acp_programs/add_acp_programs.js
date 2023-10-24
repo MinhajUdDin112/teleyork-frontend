@@ -13,12 +13,39 @@ export default function AddAcpProgram() {
     const [status,setStatus]=useState(true)
     let [showError, setShowError] = useState(false);
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
+    const parseLoginRes = JSON.parse(loginRes);    
+    const [inputValue, setInputValue] = useState('');
+  const [codeFIeldError,setCodeFieldError]=useState(false)
+    const handleInputChange = (event) => {
+          if(event.target.value.length > 2 ){ 
+            setCodeFieldError(true)
+          } 
+          else{ 
+              
+            if(event.target.value.length === 2){ 
+                const regex = /^[A-Z][0-9]$/;
+                if (!regex.test(event.target.value)) {   
+                   setCodeFieldError(true)
+                }
+                else{ 
+                     setCodeFieldError(false)
+                } 
+                setInputValue(event.target.value)
+            
+            } 
+            else{ 
+
+            setInputValue(event.target.value)     
+            }
+            
+          }
+    };
     const formik = useFormik({
         initialValues: {
             name: "",
             description: "",     
-            banner:"", 
+            banner:"",   
+            code:"",
          active:true,
         },
         validate: (values) => {
@@ -29,7 +56,9 @@ export default function AddAcpProgram() {
             }
             if (!values.description) {
                 errors.description = "Description is required";
-            }
+            }  
+        
+        
             return errors;
         },
     });
@@ -40,10 +69,11 @@ export default function AddAcpProgram() {
             description: formik.values.description,
             serviceProvider: parseLoginRes?.compony, //Both Service Provider and CreatedBY will be same according to APi
             createdBy: parseLoginRes?._id, 
-            banner:formik.values.banner,  
+            banner:formik.values.banner,   
+            code:inputValue,
             active:formik.values.active
         };
-        if (Object.keys(formik.errors).length === 0) {
+        if (Object.keys(formik.errors).length === 0 && codeFIeldError === false) {
             if (data.name !== "" && data.description !== "") {  
                    if(imgfile !== null){
                 let formData=new FormData()    
@@ -121,7 +151,16 @@ export default function AddAcpProgram() {
                         }}/>
                     <label style={{marginLeft:"-24px"}} htmlFor="active" className="ml-2">Status</label>
                            
-                     </div>    
+                     </div>       
+                     <div className="mr-3 mb-3" style={{ marginTop: "15px", width: "23em" }}>
+                    <p className="m-0">Code:</p>
+                    <InputText type="text" value={inputValue} onChange={handleInputChange} name="code" />
+                    {codeFIeldError ? (
+                        <div className="error" style={{ marginTop: "22px", color: "red" }}>
+                            "Code Must be in Format A1,E1"
+                        </div>
+                    ) : undefined}
+                </div>   
             </div>     
             <div style={{marginLeft: "50%", transform: "translate(-50%)", marginTop: "45px", display: "flex", justifyContent: "center"}}> 
              <p  style={{position:"absolute",fontSize:"14px",marginTop:"-25px",width:"100px",marginLeft:"-51px"}} >Banner :</p>
