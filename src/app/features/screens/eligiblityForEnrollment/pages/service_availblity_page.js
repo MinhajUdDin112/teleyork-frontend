@@ -19,6 +19,7 @@ export default function ServiceAvailabilityPage() {
   // Get user data from localStorage
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
+  console.log("login response is ",parseLoginRes)
 
  useEffect(() => {
   localStorage.removeItem("zipData");
@@ -35,10 +36,10 @@ export default function ServiceAvailabilityPage() {
     },
     onSubmit: async (values, actions) => {
       const serviceProvider = parseLoginRes?.compony;
-      const departmentId = parseLoginRes?.departmentId;
+      const department = parseLoginRes?.department;
       const csr = parseLoginRes?._id;
       const carrier = "6455532566d6fad6eac59e34";
-      const dataToSend = { serviceProvider, csr, departmentId, carrier, ...values };
+      const dataToSend = { serviceProvider, csr, department, carrier, ...values };
               setIsLoading(true)
       try {
         const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);

@@ -32,6 +32,11 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id , csr }) => {
     const [permaAdd, setPermaAdd] = useState(false);
     const [ACPtransfer, setACPtransfer] = useState(false)
 
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const companyName=parseLoginRes?.companyName;
+    
+
     const validationSchema = Yup.object().shape({
         isTemporaryAddress: Yup.string().required("please confrim address is required"),
     });
@@ -250,7 +255,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id , csr }) => {
         
     }
     const handleButton = () => {
-        setButtonClicked(true);
+        // setButtonClicked(true);
     };
     return (
         <>
@@ -312,7 +317,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id , csr }) => {
                                 }}
                                 checked={checkBox3}
                             />
-                            <label htmlFor="binary">I give IJ Wireless, Inc. permission to enroll me for the first time and, if necessary, transfer my existing records rather than classifying me as a new subscriber.</label>
+                            <label htmlFor="binary">I give {companyName} permission to enroll me for the first time and, if necessary, transfer my existing records rather than classifying me as a new subscriber.</label>
                         </div>
                         <div className="field-checkbox">
                             <Checkbox
@@ -435,12 +440,12 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id , csr }) => {
                                 }}
                                 checked={checkBox13}
                             />
-                            <label>By my signing the FCC application, I agree to accept IJ Wireless, Inc Terms & Conditions.</label>
+                            <label>By my signing the FCC application, I agree to accept {companyName} Terms & Conditions.</label>
                         </div>
                     </div>
                     <div>
                         <h3>ACP Benefit Transfer</h3>
-                        <p>Do you consent to enrollment or transfer into the IJ Wireless, Inc Affordable Connectivity Program, and do you understand you are not allowed multiple ACP program benefits with the same or different providers? Please answer Yes or No.</p>
+                        <p>Do you consent to enrollment or transfer into the{companyName} Affordable Connectivity Program, and do you understand you are not allowed multiple ACP program benefits with the same or different providers? Please answer Yes or No.</p>
                         <p>Please confirm which of these statements is true for this application by answering yes or no after the following two questions.</p>
                         <div className="field-radiobutton m-4">
                             <div className="flex">
@@ -457,13 +462,14 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id , csr }) => {
                     </div>
                     <div className="mt-5">
                             <p>Request User For additional Documents</p>
-                            <div className="flex">
-                                <Button label={buttonClicked ? "Sent" : "Send an Sms"} onClick={handleButton} className="p-button-success" disabled={buttonClicked} />
-                                {buttonClicked ? (
+                            <div className="flex ">
+                                <Button label={buttonClicked ? "Sent" : "Send an Sms"} onClick={handleButton} className="p-button-success mr-2" disabled={buttonClicked} />
+                                <Button label={buttonClicked ? "Sent" : "Send an Email"} onClick={handleButton} className="p-button-success" disabled={buttonClicked} />
+                                {/* {buttonClicked ? (
                                     <div className=" ml-2">
                                         <Button label="ReSend" type="button" className="p-button-success" />
                                     </div>
-                                ) : null}
+                                ) : null} */}
                             </div>
                         </div>
                 </div>

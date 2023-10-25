@@ -18,16 +18,14 @@ import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
-const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
-    const [confrimAddress, setConfrimAddress] = useState("");
+const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
+    const [confrimAddress, setConfrimAddress] = useState("same");
     const [tempAdd, setTempAdd] = useState(true);
     const [isSame, setIsSame] = useState();
     const [isDifferent, setIsDifferent] = useState();
     const [isPoBox, setIsPoBox] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [autoCompleteAddress, setAutoCompleteAddress] = useState(null);
-
-    
 
     const zipDataLs = localStorage.getItem("basicData");
     const zipDataParsed = JSON.parse(zipDataLs);
@@ -39,6 +37,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         address1: Yup.string().required("Address is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
     });
+    console.log("cnfrm addres is",confrimAddress)
 
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -73,7 +72,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 isTemporaryAddress: tempAdd,
                 isSameServiceAddress: formik.values.isSameServiceAddress,
                 isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
-                isPoBoxAddress: formik.values.isPOboxAddress,
+                isPoBoxAddress: formik.values.isPoBoxAddress,
                 mailingAddress1: formik.values.mailingAddress1,
                 mailingAddress2: formik.values.mailingAddress2,
                 mailingZip: formik.values.mailingZip,
@@ -86,6 +85,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 userId: userId,
                 csr: csr,
             };
+           
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
@@ -128,7 +128,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     }, [formik.values.mailingZip]);
 
     useEffect(() => {
-        if (formik.values.isPoBoxAddress) {
+       // if (formik.values.isPoBoxAddress) {
             if (formik.values.poBoxZip && formik.values.poBoxZip.length === 5) {
                 async function getData() {
                     const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`);
@@ -138,7 +138,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 }
                 getData();
             }
-        }
+       // }
     }, [formik.values.isPoBoxAddress, formik.values.poBoxZip]);
 
     //GETTING city from autocomplete api response
@@ -201,6 +201,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
 
     const addressResponse = localStorage.getItem("address");
     const parseaddressResponse = JSON.parse(addressResponse);
+
     useEffect(() => {
         const address = parseaddressResponse?.data?.address1;
         if (address) {
@@ -220,6 +221,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             formik.setFieldValue("mailingZip", parseaddressResponse?.data?.mailingZip);
             formik.setFieldValue("mailingCity", parseaddressResponse?.data?.mailingCity);
             formik.setFieldValue("mailingState", parseaddressResponse?.data?.mailingState);
+
             formik.setFieldValue("PoBoxAddress", parseaddressResponse?.data?.PoBoxAddress);
             formik.setFieldValue("poBoxZip", parseaddressResponse?.data?.poBoxZip);
             formik.setFieldValue("poBoxState", parseaddressResponse?.data?.poBoxState);
@@ -229,10 +231,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             setTempAdd(parseaddressResponse?.data?.isTemporaryAddress);
             setIsSame(parseaddressResponse?.data?.isSameServiceAddress);
             setIsDifferent(parseaddressResponse?.data?.isNotSameServiceAddress);
-            setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);
+            console.log("is not same is ",parseaddressResponse?.data?.isNotSameServiceAddress)
+            setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);  
         }
     }, []);
-   
+    useEffect(() => {
+        if (isDifferent) {
+            setConfrimAddress("different");
+        } else if (isPoBox) {
+            setConfrimAddress("pobox");
+        }
+    }, [isDifferent, isPoBox]);
+    
+
     return (
         <>
             <ToastContainer />
@@ -315,19 +326,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 </div>
                 <div className="flex flex-wrap mt-4">
                     <div className="mr-3 flex alignitem-center">
-                        <RadioButton inputId="sameAdress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
+                        <RadioButton inputId="confrimAddress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
                         <label htmlFor="sameAdress" className="ml-2">
                             Same As service Address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
-                        <RadioButton inputId="differentAddress" name="address" value="different" onClick={handleDifferent} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "different"} />
+                        <RadioButton inputId="confrimAddress" name="address" value="different" onClick={handleDifferent} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "different"} />
                         <label htmlFor="differentAddress" className="ml-2">
                             Different from Service address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
-                        <RadioButton inputId="poboxAddress" name="address" value="pobox" onClick={handlePobox} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "pobox"} />
+                        <RadioButton inputId="confrimAddress" name="address" value="pobox" onClick={handlePobox} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "pobox"} />
                         <label htmlFor="poboxAddress" className="ml-2">
                             My mailing address is a PO BOX
                         </label>
@@ -336,12 +347,11 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
 
                 {isDifferent && (
                     <>
-<div className="mt-3">Mailing Address</div>
+                        <div className="mt-3">Mailing Address</div>
                         <div className="p-fluid formgrid grid mt-3">
-                            
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                     Address 1 <span className="steric">*</span>
+                                    Address 1 <span className="steric">*</span>
                                 </label>
                                 <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} />
                                 {getFormErrorMessage("mailingAddress1")}
@@ -369,7 +379,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                                 </label>
                                 <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
                             </div>
-                           
                         </div>
                     </>
                 )}
@@ -403,7 +412,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                                 </label>
                                 <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
                             </div>
-                          
                         </div>
                     </>
                 )}

@@ -51,6 +51,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             bestWayToReach: "",
             isSelfReceive: "",
             BenifitFirstName: "",
+            //BenifitMiddleName:"",
             BenifitLastName: "",
             BenifitSSN: "",
             BenifitDOB: "",
@@ -126,15 +127,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
     const basicResponse = localStorage.getItem("basicData");
     const parsebasicResponse = JSON.parse(basicResponse);
 
-
-    console.log("dob formet is", parsebasicResponse?.data?.DOB);
-
     useEffect(() => {
-        //change the formet of dob
-        const dobString = parsebasicResponse?.data?.DOB;
+         const dobString = parsebasicResponse?.data?.DOB;
        
-        if (dobString) {
-           
+        if (dobString) {         
             // set data in feilds from local storage
             formik.setFieldValue("firstName", parsebasicResponse?.data?.firstName);
             formik.setFieldValue("middleName", parsebasicResponse?.data?.middleName);
@@ -149,6 +145,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             formik.setFieldValue("bestWayToReach", parsebasicResponse?.data?.bestWayToReach);
             formik.setFieldValue("isSelfReceive", parsebasicResponse?.data?.isSelfReceive);
             formik.setFieldValue("BenifitFirstName", parsebasicResponse?.data?.BenifitFirstName);
+            formik.setFieldValue("BenifitMiddleName", parsebasicResponse?.data?.BenifitMiddleName);
             formik.setFieldValue("BenifitLastName", parsebasicResponse?.data?.BenifitLastName);
             formik.setFieldValue("BenifitDOB", new Date(parsebasicResponse?.data?.BenifitDOB));
             formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
@@ -158,8 +155,15 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
             setAcp(parsebasicResponse?.data?.isACP);
             setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive);
+            
+            console.log("self recieve  after is",parsebasicResponse?.data?.isSelfReceive)
         }
     }, []);
+useEffect(() => {
+   if(!isSelfReceive){
+    setIsHouseHold(true)
+   }
+}, [isSelfReceive])
     return (
         <>
             <ToastContainer />
@@ -313,7 +317,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
                 </div>
             </div>
 
-            {isHouseHold ? (
+            {isHouseHold  &&  (
                 <div>
                     <div className="mt-4">
                         <p className="font-semibold">Information of benefit qualifying person</p>
@@ -324,6 +328,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
                                 </label>
                                 <InputText id="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitFirstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
                                 {getFormErrorMessage("BenifitFirstName")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                Middle Name 
+                                </label>
+                                <InputText id="BenifitMiddleName" value={formik.values.BenifitMiddleName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitMiddleName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                               
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -350,7 +361,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
                         </div>
                     </div>
                 </div>
-            ) : null}
+            ) }
 
             <div className="mt-4">
                 <h3>Affordable Connectivity Program (ACP) Consent</h3>

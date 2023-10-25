@@ -9,7 +9,7 @@ const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
 
     const handleNext = () => {
-        if(zipRes){
+        
             if (currentComponent < 2) {
                 setCurrentComponent((prev) => {
                     return prev + 1;
@@ -17,10 +17,8 @@ const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             } else {
                 setActiveIndex(2);
             }
-        }
-        else{
-                setActiveIndex(2);
-        }
+        
+       
       
     };
 

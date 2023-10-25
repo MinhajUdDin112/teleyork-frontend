@@ -65,6 +65,7 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
                 setAllRoles(res?.data?.data || []);
+                console.log("all role is",res?.data?.data)
             } catch (error) {
                 console.error("Error fetching module data:", error);
             }
@@ -79,6 +80,7 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.compony}`);
                 setAllDepartment(res?.data?.data || []);
+                console.log("all department is",res?.data?.data)
             } catch (error) {
                 console.error("Error fetching module data:", error);
             }
@@ -114,11 +116,11 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
                                 showClear
                                 filterBy="department" // Set the property to be used for filtering
                             />
-                            
+           
                         </div>
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Select User </label>
-                            <Dropdown id="assignee" options={allRoles} value={formik.values.assignee} onChange={(e) => formik.setFieldValue("assignee", e.value)} optionLabel="role" optionValue="_id" showClear filter filterBy="role" />
+                            <Dropdown id="assignee" options={allRoles} value={formik.values.assignee} onChange={(e) => formik.setFieldValue("assignee", e.value)} optionLabel="name" optionValue="_id" showClear filter filterBy="name" />
                            
                         </div>
                     </div>
