@@ -7,27 +7,33 @@ import { InputText } from "primereact/inputtext";
 import { Divider } from "primereact/divider";
 import BASE_URL from "../../../../config";
 import Axios from "axios";
-import { Toast } from "primereact/toast";
-import ManagepermissionModule from "./ManagePermissionModule";
-
-export default function ManagePermissions({ setNavigateToPermissions, permissions, roleData ,setRefresh}) {
-    let reffortoast = useRef(null);
+import { Toast } from "primereact/toast";  
+import { useLocation } from "react-router-dom";
+import ManagepermissionModule from "./ManagePermissionModule"; 
+//{ setNavigateToPermissions, permissions, roleData ,setRefresh}
+export default function ManagePermissions({setRefresh}) {  
+let pathname=useLocation().pathname 
+const pathSegments = pathname.split('/').filter(segment => segment !== ''); // Split the pathname into segments
+    const [roleId,setRoleId]=useState(pathSegments[pathSegments.length -1]) 
+    console.log("roleid",roleId)
+     let reffortoast = useRef(null);     
     let [showError, setShowError] = useState(false);
-    const [roleUpdateLoading, setRoleUpdateLoading] = useState(false);
+    const [roleUpdateLoading, setRoleUpdateLoading] = useState(false);         
+    const [roleData,setRoleData]=useState({role:"",description:""})
+    let [allRoles,setAllRoles]=useState([])       
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes); 
     const [moduledData, setModuleData] = useState(null);
-    const [permissionObject, setPermissionObject] = useState(permissions);
+    const [permissionObject, setPermissionObject] = useState(null);
     const [disabledMode, setDisableMode] = useState(true);
-    console.log(roleData);
-      function updatePermissions(){ 
+     function updatePermissions(){ 
         console.log(permissionObject)  
         let obj={roleId:roleData._id,permissions:[]}   
           Object.keys(permissionObject).forEach(item=>{ 
             let obj2={}
             obj2.subModule=item; 
             obj2.actions=permissionObject[item]   
-          
             obj.permissions.push(obj2) 
-    
           })   
           console.log(obj)   
           Axios.patch(`${BASE_URL}/api/web/role/permissions`,obj).then(()=>{ 
@@ -61,8 +67,8 @@ export default function ManagePermissions({ setNavigateToPermissions, permission
     }
     const formik = useFormik({
         initialValues: {
-            role: roleData.role,
-            description: roleData.description,
+            role: roleData.role ,
+            description: roleData.description ,
         },
         validate: (values) => {
             // Implement your validation logic here
@@ -75,29 +81,68 @@ export default function ManagePermissions({ setNavigateToPermissions, permission
             }
             return errors;
         },
-    });
+    });   
     let navigate = useNavigate();
-
     const getModules = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/module`);
+            const res = await Axios.get(`${BASE_URL}/api/web/module`);   
+
             setModuleData(res?.data?.data || []);
             console.log("res?.data?.data", res?.data?.data);
         } catch (error) {
             console.error("Error fetching module data:", error);
         }
+    };  
+    const getAllRoles = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);   
+            console.log("all roles" ,res.data.data)
+            if (res?.status === 200 || res?.status === 201) {    
+                let rolesdata=res.data.data;  
+                for(let k=0;k<rolesdata.length;k++){     
+                        if(rolesdata[k]._id === roleId){  
+                            let rowData=rolesdata[k]    
+                            formik.values.role=rowData.role; 
+                            formik.values.description=rowData.description
+                            setRoleData(rowData)
+                            let object={}
+                            for(let i=0;i<rowData.permissions.length;i++){     
+                                  if(rowData.permissions[i].subModule !== null){
+                                let subModuleID=rowData.permissions[i].subModule._id    
+                              
+                                let arr=[] 
+                               for(let k=0;k<rowData.permissions[i].actions.length;k++){ 
+                                  
+                                  arr.push(rowData.permissions[i].actions[k]._id) 
+                      
+                               }   
+                               object[subModuleID]=arr
+                              }
+                                  
+                            }  
+                            console.log(object)   
+                            setPermissionObject(object)          
+                        }
+                }      
+                    setAllRoles(res?.data?.data);     
+                     }     
+
+        } catch (error) {
+            console.error("Error fetching module data:", error?.response);
+        }
     };
     useEffect(() => {
-        getModules();
+        getModules(); 
+        getAllRoles()
         return () => { 
-            
-            setNavigateToPermissions(false); 
+         
             setRefresh(prev=>!prev)
         };
     }, []);
 
     return (
-        <div className="card">
+        <div className="card">    
+       
             <Button
                 label="Back"
                 style={{ cursor: "pointer", marginLeft: "25px", fontSize: "14px", paddingLeft: "27px" }}
@@ -111,7 +156,7 @@ export default function ManagePermissions({ setNavigateToPermissions, permission
                 onClick={() => {
                     setDisableMode(false);
                 }}
-            />
+            />   
             <form style={{ marginTop: "45px" }} onSubmit={handleAddRole}>
                 <div className="grid p-fluid " style={{ justifyContent: "space-around" }}>
                     <div className="mr-3 mb-3" style={{ marginTop: "15px", width: "25em" }}>
@@ -143,9 +188,9 @@ export default function ManagePermissions({ setNavigateToPermissions, permission
             }} />   :undefined
         }
             <div className="grid r_n_r" style={{ background: "white",marginTop:`${disabledMode ? "0px":"90px"}` }}>
-                {moduledData !== null ? moduledData.map((module) => <ManagepermissionModule module={module} permissionObject={permissionObject} disabledMode={disabledMode} setPermissionObject={setPermissionObject} />) : undefined}
+                {moduledData !== null && permissionObject !== null ? moduledData.map((module) => <ManagepermissionModule module={module} permissionObject={permissionObject} disabledMode={disabledMode} setPermissionObject={setPermissionObject} />) : undefined}
             </div>
-            <Toast ref={reffortoast} />
+            <Toast ref={reffortoast} />     
         </div>
     );
 }

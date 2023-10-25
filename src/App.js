@@ -23,7 +23,7 @@ import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/p
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
 import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";  
 import ManageRolesAndRights from "./app/features/screens/roles_and_permissions/ManageRolesAndRights";
-import Manage_inventory from "./app/features/screens/inventory_management/manage-inventory/Manage_inventory";
+import Manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
 import InCompletedEnrollments from "./app/features/screens/lifeline_orders/InCompleteEnrollments";
 import RejectedEnrollments from "./app/features/screens/lifeline_orders/RejectedEnrolments";
