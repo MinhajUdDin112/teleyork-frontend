@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 const CreateUser = () => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
+   
 
     const navigate = useNavigate();
 
@@ -96,17 +97,23 @@ const CreateUser = () => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
+
     useEffect(() => {
+        if(formik.values.department){
+            const departId= formik.values.department;
         const getRoles = async () => {
             try {
-                const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
+                const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
                 setAllRoles(res?.data?.data || []);
             } catch (error) {
                 console.error("Error fetching module data:", error);
             }
         };
         getRoles();
-    }, []);
+    }
+   
+    }, [formik.values.department])
+       
 
     useEffect(() => {
         const getDepartment = async () => {

@@ -17,7 +17,8 @@ import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
 
-const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
+const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
+
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
@@ -56,10 +57,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
             isACP: acp,
         },
         onSubmit: async (values, actions) => {
-            const csr = "64e0b1b135a9428007da3526";
-            {}
+           
             const userId = _id;
-            const dataToSend = { csr, userId, ...values };
+            const dataToSend = { csr:csr, userId, ...values };
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
@@ -132,7 +132,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
     useEffect(() => {
         //change the formet of dob
         const dobString = parsebasicResponse?.data?.DOB;
-        const benifitdob = parsebasicResponse?.data?.BenifitDOB;
+       
         if (dobString) {
            
             // set data in feilds from local storage
@@ -250,7 +250,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id }) => {
                 </div>
             </form>
             <div className="col-6 mb-3 p-0">
-                <p className="font-semibold">E-Sim</p>
+                <p className="font-semibold"> Required E-Sim?</p>
                 <div className="flex flex-wrap mt-2">
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton id="ESIm" value={false} checked={eSim === false} onChange={(e) => handleESim(e)}></RadioButton>
