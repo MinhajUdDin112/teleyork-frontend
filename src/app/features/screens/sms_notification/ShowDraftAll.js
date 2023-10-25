@@ -5,14 +5,14 @@ import { DataTable } from "primereact/datatable";
 import { Dialog } from "primereact/dialog";
 import { useParams } from "react-router-dom";  
 import { Toast } from "primereact/toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";  
 import { useDispatch, useSelector } from "react-redux";
 import { getDraftByTemplateIdAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import BASE_URL from "../../../../config";
 import Axios from "axios";
 
-const ShowDraftAll = () => {  
-    let toast=useRef(null)
+const ShowDraftAll = () => {    
+    let toast=useRef(null) 
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
 

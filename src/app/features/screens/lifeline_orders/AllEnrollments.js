@@ -34,9 +34,8 @@ const AllEnrollments = () => {
      // Get user data from ls
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
-     //const roleName= parseLoginRes?.role?.role;
-     const roleName = "Teamlead";
-
+     const roleName= parseLoginRes?.role?.role;
+    // const roleName = "Teamlead";
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm); // Update search term state
         // Implement your search logic here
@@ -45,12 +44,12 @@ const AllEnrollments = () => {
                 let tomatch = enrollment.firstName + " " + enrollment.lastName;
                 console.log(tomatch)
                 if (enrollment.firstName.length === 0) {
-                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().includes(searchTerm);
+                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
                 } else if (enrollment.firstName.length > 0) {
-                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().includes(searchTerm);
+                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
                 }
             } else {
-                return enrollment.enrollmentId.toString().includes(searchTerm);
+                return enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
             }
         });
         setSearchResults(filteredResults);
