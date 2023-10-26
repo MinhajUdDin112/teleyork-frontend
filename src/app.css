@@ -207,7 +207,7 @@ box-shadow: 2px;
   }
   .sticky-buttons {
     position: sticky;
-    top: 70px; 
+    top: 65px; 
     background-color: white; 
     z-index: 1; 
     padding: 10px; 

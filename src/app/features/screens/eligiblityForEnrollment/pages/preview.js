@@ -68,7 +68,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                             <h6>Enrollment_Id:{enrollment_id}</h6>
                         </div>
 
-                        <br></br>
                         <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                         <br />
 
