@@ -40,17 +40,17 @@ export default function BasicDemo() {
         
          <Button label="Permissions"  style={{ cursor: "pointer", marginLeft: "25px" ,fontWeight:"900",border:"none"}} onClick={()=>{ 
       
-        navigate(`/managerolesandrights/${rowData._id}`)  
+        navigate(`/managerolesandrights/Permissions?roleId=${rowData._id}`)  
      
          }} /> 
         <Button style={{marginLeft:"25px",fontWeight:"900",backgroundColor:"red",border:"none"}} onClick={()=>{ 
              console.log(rowData)
            if(!deleteRoleLoading ){  
                 setDeleteRoleLoading(prev=>!prev)
-             Axios.delete(`${BASE_URL}/api/web/role?roleId=${rowData._id}`,{roleId:rowData._id}).then(()=>{ 
+             Axios.delete(`${BASE_URL}/api/web/role?roleId=${rowData._id}`).then(()=>{ 
                 toastref.current.show({ severity: 'success', summary: 'Info', detail: 'Role Deleted Successfully' });
                 setDeleteRoleLoading(prev=>!prev)    
-           
+                  setRefresh(prev=>!prev)
             }).catch(()=>{ 
                 toastref.current.show({ severity: 'error', summary: 'Info', detail: 'Role Deleted Failed' });
                   setDeleteRoleLoading(prev=>!prev)    
@@ -109,7 +109,7 @@ export default function BasicDemo() {
              }
     }, [refresh]);
     return (  
-        <div className="card bg-pink-50">     
+        <div className="card" >     
         <Routes> 
             <Route path=":id" element={<ManagePermissions setRefresh={setRefresh}  />} />
         </Routes>   {Location.pathname === "/managerolesandrights" ? 

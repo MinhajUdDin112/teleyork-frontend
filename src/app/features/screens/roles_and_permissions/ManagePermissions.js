@@ -8,18 +8,17 @@ import { Divider } from "primereact/divider";
 import BASE_URL from "../../../../config";
 import Axios from "axios";
 import { Toast } from "primereact/toast";  
-import { useLocation } from "react-router-dom";
-import ManagepermissionModule from "./ManagePermissionModule"; 
-//{ setNavigateToPermissions, permissions, roleData ,setRefresh}
+import { useLocation } from "react-router-dom"; 
+import ManagepermissionModule from "./ManagePermissionModule";  
+import { ProgressSpinner } from 'primereact/progressspinner';
 export default function ManagePermissions({setRefresh}) {  
-let pathname=useLocation().pathname 
-const pathSegments = pathname.split('/').filter(segment => segment !== ''); // Split the pathname into segments
-    const [roleId,setRoleId]=useState(pathSegments[pathSegments.length -1]) 
+const searchParams = new URLSearchParams(useLocation().search);
+  const [roleId,setRoleId]=useState(searchParams.get("roleId")) 
     console.log("roleid",roleId)
      let reffortoast = useRef(null);     
     let [showError, setShowError] = useState(false);
     const [roleUpdateLoading, setRoleUpdateLoading] = useState(false);         
-    const [roleData,setRoleData]=useState({role:"",description:""})
+    const [roleData,setRoleData]=useState({role:"",description:""})    
     let [allRoles,setAllRoles]=useState([])       
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes); 
@@ -139,10 +138,13 @@ const pathSegments = pathname.split('/').filter(segment => segment !== ''); // S
             setRefresh(prev=>!prev)
         };
     }, []);
-
-    return (
+ 
+    return (  
+        <>
+        { 
+            moduledData !== null && permissionObject !== null ?
         <div className="card">    
-       
+  
             <Button
                 label="Back"
                 style={{ cursor: "pointer", marginLeft: "25px", fontSize: "14px", paddingLeft: "27px" }}
@@ -183,14 +185,19 @@ const pathSegments = pathname.split('/').filter(segment => segment !== ''); // S
             </form>
             <Divider />     
             {  !disabledMode ?
-            <Button label="Update Permissions"  style={{position:"absolute",right:"90px",zIndex:"1111111"}} onClick={()=>{
+            <Button label="Update Permissions"  style={{marginLeft:"0px",position:"absolute",right:"90px"}} onClick={()=>{
                 updatePermissions()
             }} />   :undefined
         }
-            <div className="grid r_n_r" style={{ background: "white",marginTop:`${disabledMode ? "0px":"90px"}` }}>
+            <div className="grid r_n_r" style={{height:"65vh",overflowX:"hidden",overflowY:"auto",marginTop:`${disabledMode ? "0px":"90px"}` }}>
                 {moduledData !== null && permissionObject !== null ? moduledData.map((module) => <ManagepermissionModule module={module} permissionObject={permissionObject} disabledMode={disabledMode} setPermissionObject={setPermissionObject} />) : undefined}
             </div>
-            <Toast ref={reffortoast} />     
-        </div>
+            <Toast ref={reffortoast} />       
+        
+        </div>   
+        : 
+         <div className="bg-pink-50 ">
+         <ProgressSpinner style={{position:"relative",marginTop:"30%",marginLeft:"50%",transform:"translate(-50%,-50%)"}}/>
+      </div>  }   </>
     );
 }
