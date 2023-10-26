@@ -5,7 +5,7 @@ import { InputText } from "primereact/inputtext";
 import { FileUpload } from 'primereact/fileupload';
 import {Button} from "primereact/button"
 import {useFormik} from "formik"
-export default function ChangeESNSIMStatus(){      
+export default function ChangeESNSIMStatus({setActiveComponent}){      
     function handleESN_SIM_submit(){ 
         console.log("form will submit here")
     }
@@ -19,10 +19,11 @@ export default function ChangeESNSIMStatus(){
             distributor:""
         },
     });
-    return (   
+    return (     <>
+        <Button label="Back" style={{position:"absolute",marginLeft:"25px",fontSize:"21px" ,marginTop:"25px"}} onClick={()=>{setActiveComponent("")}}/>
     
-    <div className="flex justify-content-around flex-wrap">   
-    <h4 style={{width:"100em"}}>Change ESN Status & Agent Name</h4>
+    <div className="card flex justify-content-around flex-wrap">          
+   <h4 className="card" style={{width:"100%",marginTop:"90px"}}>Change ESN Status & Agent Name</h4>
     <Card className="p-5 border-round" style={{ width: "28em", marginBottom: "20px", boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",marginTop:"33px" }}>
          <h6>  Type - 1 </h6>      
          <h6>Status</h6>   
@@ -100,6 +101,7 @@ export default function ChangeESNSIMStatus(){
                  <h6 style={{marginTop:"33px"}}><strong>Header :</strong> ESN/SIM, Agent ID , Status (Download Sample File)</h6>
             </div>
        </Card>   
-    </div>  
+    </div>    
+    </>
     )
 }

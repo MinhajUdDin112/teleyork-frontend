@@ -5,10 +5,10 @@ import { InputText } from "primereact/inputtext";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
-import Header from "./Header";
+import Header from "./Header.jsx";
 import { FileUpload } from "primereact/fileupload";
 import { useRef } from "react";
-const AddUnits = () => {
+const AddUnits = ({ setActiveComponent }) => {
     const validationSchema = Yup.object().shape({
         unitType: Yup.string().required("please select"),
         uploadType: Yup.string().required("please select type "),
@@ -138,8 +138,17 @@ const AddUnits = () => {
             return (
                 <>
                     <div>
-                        <Header />
-                        <div className="flex flex-wrap mb-3  ">
+                        <Button
+                            label="Back"
+                            style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                            onClick={() => {
+                                setActiveComponent("");
+                            }}
+                        />
+                        <div style={{ marginTop: "90px" }}>
+                            <Header />
+                        </div>
+                        <div className="flex flex-wrap mb-3  justify-content-around ">
                             <div className="mr-3 mb-3 mt-3">
                                 <p className="m-0">
                                     Unit Type <span style={{ color: "red" }}>*</span>
@@ -194,22 +203,23 @@ const AddUnits = () => {
                                 multiple
                                 accept="image/*,application/pdf"
                                 maxFileSize={1000000} // Set the maximum file size (1MB in this example)
-                                onUpload={onUpload}
+                                onUpload={onUpload}    
+                                style={{width:"50%",marginLeft:"50%",textAlign:"center",transform:"translate(-50%)"}}
                             />
                             <div className="mt-3">
-                                <p>Note: Please Select Carrier To Download the Sample File</p>
+                                <p style={{width:"50%",marginLeft:"50%",textAlign:"center",transform:"translate(-50%)"}}>Note: Please Select Carrier To Download the Sample File</p>
                             </div>
                         </div>
                     </div>
                     <div>
                         <Card
                             style={{
-                                width: "70em",
-                                height: "17em",
+                                width: "50%",
                                 backgroundColor: "#aae5e9",
                                 marginBottom: "20px",
-                                marginLeft: "80px",
-                                marginTop: "50px",
+                                marginLeft: "50%",
+                                marginTop: "50px",  
+                                transform:"translate(-50%)",
                                 boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",
                             }}
                         >
@@ -227,8 +237,18 @@ const AddUnits = () => {
             return (
                 <>
                     <div>
-                        <Header />
-                        <div className="flex flex-wrap mb-3 ">
+                        <Button
+                            label="Back"
+                            style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                            onClick={() => {
+                                setActiveComponent("");
+                            }}
+                        />
+
+                        <div style={{ marginTop: "90px" }}>
+                            <Header />
+                        </div>
+                        <div className="flex flex-wrap mb-3 justify-content-around">
                             <div className="mr-3 mb-3 mt-3">
                                 <p className="m-0">
                                     Unit Type <span style={{ color: "red" }}>*</span>
@@ -318,20 +338,23 @@ const AddUnits = () => {
                                 <InputText type="text" value={formik.values.setIMEI} name="setIMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
                             </div>
                         </div>
-                        <div style={{ marginLeft: "700px", marginTop: "20px" }}>
-                            <Button label="Submit" type="submit" />
+                        <div style={{ marginTop: "20px" }}>
+                            <Button style={{ marginLeft: "50%",transform:"translate(-50%)",width:"100px"}} label="Submit" type="submit" />
                         </div>
                     </div>
                     <div>
                         <Card
                             style={{
-                                width: "70em",
+                                width: "50%",
                                 height: "17em",
                                 backgroundColor: "#aae5e9",
                                 marginBottom: "20px",
-                                marginLeft: "80px",
-                                marginTop: "50px",
-                                boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",
+                                
+                                marginTop: "50px",    
+                                marginLeft:"50%", 
+                                transform:"translate(-50%)",
+                                boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)", 
+                                
                             }}
                         >
                             <div className="ml-3">
@@ -351,8 +374,18 @@ const AddUnits = () => {
         return (
             <>
                 <div>
-                    <Header />
-                    <div className="flex flex-wrap mb-3 ">
+                    <Button
+                        label="Back"
+                        style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                        onClick={() => {
+                            setActiveComponent("");
+                        }}
+                    />
+
+                    <div style={{ marginTop: "90px" }}>
+                        <Header />
+                    </div>
+                    <div className="flex flex-wrap mb-3 justify-content-around ">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Unit Type <span style={{ color: "red" }}>*</span>
@@ -459,8 +492,18 @@ const AddUnits = () => {
         return (
             <>
                 <div>
-                    <Header />
-                    <div className="flex flex-wrap mb-3  ">
+                    <Button
+                        label="Back"
+                        style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                        onClick={() => {
+                            setActiveComponent("");
+                        }}
+                    />
+
+                    <div style={{ marginTop: "90px" }}>
+                        <Header />
+                    </div>
+                    <div className="flex flex-wrap mb-3  justify-content-around">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Unit Type <span style={{ color: "red" }}>*</span>
@@ -528,8 +571,18 @@ const AddUnits = () => {
         return (
             <>
                 <div>
-                    <Header />
-                    <div className="flex flex-wrap mb-3  ">
+                    <Button
+                        label="Back"
+                        style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                        onClick={() => {
+                            setActiveComponent("");
+                        }}
+                    />
+
+                    <div style={{ marginTop: "90px" }}>
+                        <Header />
+                    </div>
+                    <div className="flex flex-wrap mb-3 justify-content-around ">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Unit Type <span style={{ color: "red" }}>*</span>
@@ -597,8 +650,17 @@ const AddUnits = () => {
         return (
             <>
                 <div>
-                    <Header />
-                    <div className="flex flex-wrap mb-3  ">
+                    <Button
+                        label="Back"
+                        style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                        onClick={() => {
+                            setActiveComponent("");
+                        }}
+                    />
+                    <div style={{ marginTop: "90px" }}>
+                        <Header />
+                    </div>
+                    <div className="flex flex-wrap mb-3  justify-content-around">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Unit Type <span style={{ color: "red" }}>*</span>
@@ -682,8 +744,17 @@ const AddUnits = () => {
         return (
             <>
                 <div>
-                    <Header />
-                    <div className="flex flex-wrap mb-3  ">
+                    <Button
+                        label="Back"
+                        style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                        onClick={() => {
+                            setActiveComponent("");
+                        }}
+                    />
+                    <div style={{ marginTop: "90px" }}>
+                        <Header />
+                    </div>
+                    <div className="flex flex-wrap mb-3 justify-content-around ">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Unit Type <span style={{ color: "red" }}>*</span>
@@ -767,8 +838,18 @@ const AddUnits = () => {
         return (
             <>
                 <div>
-                    <Header />
-                    <div className="flex flex-wrap mb-3  ">
+                    <Button
+                        label="Back"
+                        style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                        onClick={() => {
+                            setActiveComponent("");
+                        }}
+                    />
+
+                    <div style={{ marginTop: "90px" }}>
+                        <Header />
+                    </div>
+                    <div className="flex flex-wrap mb-3 justify-content-around ">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Unit Type <span style={{ color: "red" }}>*</span>
@@ -847,9 +928,18 @@ const AddUnits = () => {
         return (
             <>
                 <div>
-                    <Header />
+                    <Button
+                        label="Back"
+                        style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "-85px" }}
+                        onClick={() => {
+                            setActiveComponent("");
+                        }}
+                    />
+                    <div style={{ marginTop: "90px" }}>
+                        <Header />
+                    </div>
 
-                    <div className="flex flex-wrap mb-3  ">
+                    <div className="flex flex-wrap mb-3 justify-content-around ">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Unit Type <span style={{ color: "red" }}>*</span>
@@ -940,9 +1030,18 @@ const AddUnits = () => {
 
     return (
         <>
-            <Header />
+            <Button 
+                label="Back"
+                style={{ position: "absolute",marginLeft: "25px", fontSize: "21px", marginTop: "25px" }}
+                onClick={() => {
+                    setActiveComponent("");
+                }}
+            />
+            <div style={{ marginTop: "90px" }}>
+                <Header />
+            </div>
             <div>
-                <div className="flex flex-wrap mb-3  ">
+                <div className="flex flex-wrap mb-3  justify-content-around">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Unit Type <span style={{ color: "red" }}>*</span>
