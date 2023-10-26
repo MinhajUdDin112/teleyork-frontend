@@ -34,8 +34,8 @@ const AllEnrollments = () => {
      // Get user data from ls
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
-     //const roleName= parseLoginRes?.role?.role;
-    const roleName= "tl";
+     const roleName= parseLoginRes?.role?.role;
+   
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm); // Update search term state
         // Implement your search logic here
