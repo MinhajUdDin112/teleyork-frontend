@@ -8,7 +8,6 @@ import { RadioButton } from "primereact/radiobutton";
 import { Checkbox } from "primereact/checkbox";
 import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
@@ -18,7 +17,8 @@ import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
-const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const [confrimAddress, setConfrimAddress] = useState("same");
     const [tempAdd, setTempAdd] = useState(true);
     const [isSame, setIsSame] = useState();

@@ -16,15 +16,12 @@ import DialogForReject from "./DialogForReject";
 
 const AllEnrollments = () => {
     const [searchResults, setSearchResults] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");   
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState()
     const [CsrId, setCsrId] = useState()
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
-
-
     const handleOpenDialog = (rowData) => {
         setIsModalOpen(true);
         setIsEnrolmentId (rowData?._id)
@@ -44,18 +41,19 @@ const AllEnrollments = () => {
         // Implement your search logic here
         const filteredResults = allEnrollments.filter((enrollment) => {
             if (enrollment.firstName !== undefined) {
-                let tomatch = enrollment.firstName + " " + enrollment.lastName;
+                let tomatch = enrollment.firstName + " " + enrollment.lastName;     
                 console.log(tomatch)
                 if (enrollment.firstName.length === 0) {
-                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().includes(searchTerm);
+                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
                 } else if (enrollment.firstName.length > 0) {
-                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().includes(searchTerm);
+                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
                 }
             } else {
-                return enrollment.enrollmentId.toString().includes(searchTerm);
+                return enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
             }
         });
-        setSearchResults(filteredResults);
+        setSearchResults(filteredResults);   
+    
     };
     const [allEnrollments, setAllEnrollments] = useState([]);
     const itemsPerPage = 10;

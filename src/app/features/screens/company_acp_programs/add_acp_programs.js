@@ -6,7 +6,8 @@ import BASE_URL from "../../../../config";
 import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
 export default function AddAcpProgram() { 
-    const toast = useRef(null);    
+    const toast = useRef(null);        
+    const refForCode=useRef(null)
     const [imgfile,setimgfile]=useState(null)
     const [buttonText, setButtontext] = useState("Choose File");     
     let [imgsrc,setimgsrc]=useState(undefined)
@@ -72,9 +73,16 @@ export default function AddAcpProgram() {
             banner:formik.values.banner,   
             code:inputValue,
             active:formik.values.active
-        };
-        if (Object.keys(formik.errors).length === 0 && codeFIeldError === false) {
-            if (data.name !== "" && data.description !== "") {  
+        };     
+        const regex = /^[A-Z][0-9]$/;
+        if(regex.test(refForCode.value)){ 
+            setCodeFieldError(false)
+        }
+        else{ 
+            setCodeFieldError(true)
+        }
+        if (Object.keys(formik.errors).length === 0 && codeFIeldError === false) {   
+              if (data.name !== "" && data.description !== "") {  
                    if(imgfile !== null){
                 let formData=new FormData()    
             console.log(imgfile)
@@ -154,7 +162,7 @@ export default function AddAcpProgram() {
                      </div>       
                      <div className="mr-3 mb-3" style={{ marginTop: "15px", width: "23em" }}>
                     <p className="m-0">Code:</p>
-                    <InputText type="text" value={inputValue} onChange={handleInputChange} name="code" />
+                    <InputText ref={refForCode} type="text" value={inputValue} onChange={handleInputChange} name="code" />
                     {codeFIeldError ? (
                         <div className="error" style={{ marginTop: "22px", color: "red" }}>
                             "Code Must be in Format A1,E1"

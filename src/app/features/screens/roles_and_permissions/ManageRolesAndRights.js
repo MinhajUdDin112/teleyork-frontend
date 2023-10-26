@@ -8,21 +8,22 @@ import BASE_URL from '../../../../config';
 import { Button } from 'primereact/button';  
 import { Route,Routes,useNavigate } from 'react-router-dom';  
 import { Toast } from 'primereact/toast';
-import { Dialog } from "primereact/dialog";   
+import { Dialog } from "primereact/dialog";      
+import { useLocation } from 'react-router-dom';
+
 import ManagePermissions from './ManagePermissions';
-export default function BasicDemo() {      
+export default function BasicDemo() {     
+    console.log(useLocation().pathname)   
+    let Location=useLocation() 
     console.log("in Permissions")      
     const [refresh,setRefresh]=useState(false)
     const [deleteRoleLoading,setDeleteRoleLoading]=useState(false)  
     let toastref=useRef(null)
     let [allRoles,setAllRoles]=useState([])    
-    const [roleData,setRoleData]=useState(null)   
-    const [permissionObject,setPermissionObject]=useState([])
     let navigate=useNavigate()
         const [currentPage, setCurrentPage] = useState(0);     
     const [visible, setVisible] = useState(false);   
     const [description, setDescription] = useState("");     
-    const [navigateToPermissions,setNavigateToPermissions]=useState(false)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);      
     const itemsPerPage = 10;
@@ -38,37 +39,18 @@ export default function BasicDemo() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         
          <Button label="Permissions"  style={{ cursor: "pointer", marginLeft: "25px" ,fontWeight:"900",border:"none"}} onClick={()=>{ 
-       setRoleData(rowData)      
-       console.log(allRoles)
-        navigate("/managerolesandrights/Permission")  
-      let object={}
-      for(let i=0;i<rowData.permissions.length;i++){     
-            if(rowData.permissions[i].subModule !== null){
-          let subModuleID=rowData.permissions[i].subModule._id    
-        
-          let arr=[] 
-         for(let k=0;k<rowData.permissions[i].actions.length;k++){ 
-            
-            arr.push(rowData.permissions[i].actions[k]._id) 
-
-         }   
-         object[subModuleID]=arr
-        }
-            
-      }  
-      console.log(object)   
-       
-      setPermissionObject(object)
-      setNavigateToPermissions(true)   
+      
+        navigate(`/managerolesandrights/Permissions?roleId=${rowData._id}`)  
+     
          }} /> 
         <Button style={{marginLeft:"25px",fontWeight:"900",backgroundColor:"red",border:"none"}} onClick={()=>{ 
              console.log(rowData)
            if(!deleteRoleLoading ){  
                 setDeleteRoleLoading(prev=>!prev)
-             Axios.delete(`${BASE_URL}/api/web/role?roleId=${rowData._id}`,{roleId:rowData._id}).then(()=>{ 
+             Axios.delete(`${BASE_URL}/api/web/role?roleId=${rowData._id}`).then(()=>{ 
                 toastref.current.show({ severity: 'success', summary: 'Info', detail: 'Role Deleted Successfully' });
                 setDeleteRoleLoading(prev=>!prev)    
-           
+                  setRefresh(prev=>!prev)
             }).catch(()=>{ 
                 toastref.current.show({ severity: 'error', summary: 'Info', detail: 'Role Deleted Failed' });
                   setDeleteRoleLoading(prev=>!prev)    
@@ -109,23 +91,28 @@ export default function BasicDemo() {
     };   
     const getAllRoles = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
-            if (res?.status === 200 || res?.status === 201) {  
-                    setAllRoles(res?.data?.data);     
+            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);   
+            console.log("all roles" ,res.data.data)
+            if (res?.status === 200 || res?.status === 201) {     
+                
+                    setAllRoles(res?.data?.data);         
+
                      }     
 
         } catch (error) {
             console.error("Error fetching module data:", error?.response);
         }
     };
-    useEffect( () => {        
-          getAllRoles()
+    useEffect( () => {         
+             if(Location.pathname === "/managerolesandrights"){
+          getAllRoles() 
+             }
     }, [refresh]);
     return (  
-        <div className="card bg-pink-50">     
+        <div className="card" >     
         <Routes> 
-            <Route path="/Permission" element={<ManagePermissions setNavigateToPermissions={setNavigateToPermissions} permissions={permissionObject} roleData={roleData} setRefresh={setRefresh}/>} />
-        </Routes>   {!navigateToPermissions ? 
+            <Route path=":id" element={<ManagePermissions setRefresh={setRefresh}  />} />
+        </Routes>   {Location.pathname === "/managerolesandrights" ? 
        <> <div   className="card mx-5 p-0 border-noround">
             <DataTable value={visibleItems} tableStyle={{ minWidth: "50rem" }}  showGridlines>
                 <Column field="role" header="Role"></Column>
