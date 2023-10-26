@@ -202,7 +202,8 @@ const App = () => {
     let token = JSON.parse(localStorage.getItem("accessToken"));
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
-    useEffect(() => {
+    useEffect(() => {    
+        console.log(window.localStorage)
         const url=window.location.hash
         console.log(url,url.startsWith('#/selfenrollment'))
         if(url.startsWith('#/selfenrollment'))

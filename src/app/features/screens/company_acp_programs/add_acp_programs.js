@@ -75,11 +75,11 @@ export default function AddAcpProgram() {
             active:formik.values.active
         };     
         const regex = /^[A-Z][0-9]$/;
-        if(!regex.test(refForCode.value)){ 
-            setCodeFieldError(true)
+        if(regex.test(refForCode.value)){ 
+            setCodeFieldError(false)
         }
         else{ 
-            setCodeFieldError(false)
+            setCodeFieldError(true)
         }
         if (Object.keys(formik.errors).length === 0 && codeFIeldError === false) {   
               if (data.name !== "" && data.description !== "") {  

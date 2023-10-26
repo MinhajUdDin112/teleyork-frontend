@@ -138,7 +138,7 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
     }, [permissionObject]);
 
     return (
-        <div className="col-12 md:col-6 lg:col-6 ">
+        <div className="col-12 md:col-6 lg:col-6 xl:col-4 ">
             <div className="surface-0 shadow-1 p-3 border-1 border-50 border-round">
                 <ul style={{ paddingLeft: "24%" }}>
                     <li style={{ marginTop: "10px" }}>
