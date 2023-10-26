@@ -10,6 +10,7 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
     const [acpPrograms, setAcpPrograms] = useState([]);
     const [selectedAcpProgramId, setSelectedAcpProgramId] = useState(null);
     const [btnState, setBtnState] = useState(true);
+    const [isBack, setIsBack] = useState(0)
 
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
@@ -42,7 +43,8 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
         const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
         if (res?.status === 200 || res?.status === 201) {
             localStorage.setItem("programmeId",JSON.stringify(res?.data))
-            console.log("acp id is ",res?.data)
+            console.log("acp response is  ",res?.data)
+            setIsBack(isBack+1);
             handleNext();
         }
     }
@@ -59,9 +61,7 @@ const parseprogramedata = JSON.parse(programedata);
  const zipdata= localStorage.getItem("zipData");
  const parseZipData = JSON.parse(zipdata);
 
-    const handleAcpSelection = (acpId) => {
-       
-        
+    const handleAcpSelection = (acpId) => {      
             if (selectedAcpProgramId === acpId) {
                 setSelectedAcpProgramId(null);
             } else {
@@ -77,11 +77,19 @@ const parseprogramedata = JSON.parse(programedata);
     }, [selectedAcpProgramId]);
 
 
-// useEffect(() => {
-//     if(!zipdata){
-//         setSelectedAcpProgramId(parseprogramedata?.acpProgram)
-//     }
-// }, [])
+useEffect(() => {
+    
+    if(parseprogramedata){
+        if(zipdata){
+            setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram); 
+        }
+        else{
+            setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram?._id);    
+        }
+       
+    }
+}, [])
+
     return (
         <>
         <ToastContainer/>

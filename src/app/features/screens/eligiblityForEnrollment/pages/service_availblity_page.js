@@ -48,6 +48,8 @@ export default function ServiceAvailabilityPage() {
           localStorage.setItem("zipData", JSON.stringify(response.data));
           localStorage.removeItem("basicData");
           localStorage.removeItem("address");
+          localStorage.removeItem("agreeData");
+          localStorage.removeItem("programmeId");
           navigate("/enrollment")
         }
       } catch (error) {

@@ -51,7 +51,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             bestWayToReach: "",
             isSelfReceive: "",
             BenifitFirstName: "",
-            //BenifitMiddleName:"",
+            BenifitMiddleName:"",
             BenifitLastName: "",
             BenifitSSN: "",
             BenifitDOB: "",
