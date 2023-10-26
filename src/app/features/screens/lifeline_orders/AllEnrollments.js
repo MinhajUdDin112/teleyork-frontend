@@ -34,10 +34,9 @@ const AllEnrollments = () => {
      // Get user data from ls
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
-     const roleName= parseLoginRes?.role?.role;
-    // const roleName = "Teamlead";
-    const handleSearch = (searchTerm) => {   
-        console.log("search called")
+     //const roleName= parseLoginRes?.role?.role;
+    const roleName= "tl";
+    const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm); // Update search term state
         // Implement your search logic here
         const filteredResults = allEnrollments.filter((enrollment) => {
@@ -67,12 +66,15 @@ const AllEnrollments = () => {
     const visibleItems = allEnrollments.slice(offset, offset + itemsPerPage);
     
     
-
+  console.log("visible item is",visibleItems)
     const getAllEnrollments = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
                 setAllEnrollments(res?.data?.data);
+                localStorage.removeItem("basicData");
+                localStorage.removeItem("address");
+                localStorage.removeItem("zipData")
             }
         } catch (error) {
             console.error("Error fetching module data:", error?.response);
@@ -91,6 +93,8 @@ const AllEnrollments = () => {
             if (response?.status === 201 || response?.status === 200) {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
+                localStorage.setItem("programmeId",JSON.stringify(response?.data))
+                localStorage.setItem("planResponse", JSON.stringify(response.data));
                 navigate("/enrollment");
             }
         } catch (error) {
@@ -156,8 +160,8 @@ const AllEnrollments = () => {
                         <Column header="State" field="state"></Column>
                         <Column header="Zip" field="zip"></Column>
                         <Column header="DOB" field={(item) => (item?.DOB ? item?.DOB.split("T")[0] : "")}></Column>
-                        <Column header="Plan Name" field="plan.name"></Column>
-                        <Column header="Plan Price" field="plan.price"></Column>
+                        <Column header="Plan Name" field="plan?.name"></Column>
+                        <Column header="Plan Price" field="plan?.price"></Column>
                         <Column header="Phone Cost" field="Phonecost"></Column>
                         <Column header="Amount Paid by Customer" field="Amountpaid"></Column>
                         <Column header="Posting Date" field="Postingdate"></Column>

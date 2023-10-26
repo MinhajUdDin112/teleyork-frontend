@@ -9,20 +9,21 @@ const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
 
     const handleNext = () => {
-        if(zipRes){
-            if (currentComponent < 2) {
-                setCurrentComponent((prev) => {
-                    return prev + 1;
-                });
-            } else {
-                setActiveIndex(2);
-            }
-        }
-        else{
-                setActiveIndex(2);
-        }
+      if(zipRes){
+          if (currentComponent < 2) {
+              setCurrentComponent((prev) => {
+                  return prev + 1;
+              });
+          } else {
+              setActiveIndex(2);
+          }
+      }else{
+              setActiveIndex(2);
+      }
+     
+  };
+        
       
-    };
 
     const handleBack = () => {
         if(zipRes){
