@@ -6,12 +6,12 @@ import Toasts from "../../components/react-toast";
 //login action
 export const loginAction = createAsyncThunk("auth/web/user/login", async (body, { rejectWithValue }) => {
     try {  
-        var hostnameAndPort = window.location.hostname
-        console.log("hostname is",hostnameAndPort);  
+       
         let HostUrl=BASE_URL;
-        if(!window.location.hostname === "localhost"){  
+        if(window.location.hostname !== "localhost"){  
             HostUrl='http://api.teleyork.com'
-        }
+        } 
+       
         const response = await axios.post(`${HostUrl}/api/web/user/login`, body);  
         
         // Toasts({ success: response.data.msg });    
