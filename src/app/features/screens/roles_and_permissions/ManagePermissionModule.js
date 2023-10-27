@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-
 export default function ManagepermissionModule({ module, disabledMode, permissionObject, setPermissionObject }) {
     const [checkMain, setCheckMain] = useState(false);
     console.log(permissionObject);
@@ -138,15 +137,15 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
     }, [permissionObject]);
 
     return (
-        <div className="col-12 md:col-6 lg:col-6 xl:col-4 ">
+        <div style={{marginTop:"45px"}} >
             <div className="surface-0 shadow-1 p-3 border-1 border-50 border-round">
                 <ul style={{ paddingLeft: "24%" }}>
-                    <li style={{ marginTop: "10px" }}>
+                    <li style={{ marginTop: "10px",listStyleType:"none"}}>
                         <input
-                            style={{ cursor: "pointer" }}
+                            style={{ cursor: "pointer"}}
                             type="checkbox"
                             disabled={disabledMode}
-                            checked={checkMain === true ? true : false}
+                            checked={checkMain}
                             onChange={() => {
                                 toggleMainModulePermission(module);
                             }}
@@ -155,7 +154,7 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
                     </li>
                     {module.submodule.map((submodule) => (
                         <ul>
-                            <li style={{ marginTop: "5px" }}>
+                            <li style={{ marginTop: "5px" ,listStyleType:"none"}}>
                                 <div key={submodule._id} style={{ width: "245px" }}>
                                     <input
                                         style={{ cursor: "pointer" }}
@@ -170,7 +169,7 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
                                 </div>
                             </li>
                             <ul>
-                                <li style={{ marginTop: "5px" }}>
+                                <li style={{ marginTop: "5px",listStyleType:"none" }}>
                                     {submodule.actions.map((action) => (
                                         <div key={`${submodule._id}-${action._id}`} style={{ marginTop: "5px" }}>
                                             <input style={{ cursor: "pointer" }} type="checkbox" disabled={disabledMode} checked={permissionObject[submodule._id] !== undefined ? permissionObject[submodule._id].includes(action._id) === true ? true : false:false} onChange={() => {togglePermission(submodule._id, action._id)}} />

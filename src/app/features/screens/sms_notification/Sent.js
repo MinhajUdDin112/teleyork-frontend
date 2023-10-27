@@ -76,20 +76,21 @@ const Sent = () => {
     console.log("body is rendering");
     return (
         <div id="template">
-            <p>
-                {shortline}
-                <span
-                    style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
-                    onClick={(e) => {
-                        setTemplatebody(rowData.template);
-                        setVisible(true);
-                    }}
-                >
-                    {" "}
-                    See more
-                </span>
-            </p>
-        </div>
+        {template.length > 10 ?<p>
+            {shortline}
+            <span
+                style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                onClick={(e) => {
+                    setTemplatebody(rowData.message);
+                    setVisible(true);
+                }}
+            >
+                {" "}
+                See more
+            </span>
+        </p>:<p>{template}</p> 
+}
+    </div>
     );
 };
    // Function to handle the search
