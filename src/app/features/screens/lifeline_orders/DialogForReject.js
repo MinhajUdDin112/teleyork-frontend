@@ -29,11 +29,10 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
             
             reason: "",  
             assignee: "",
-            departmentId:"",
+            department:"",
         },
         onSubmit: async (values,actions) => {
-
-            
+      
             const approvedBy = parseLoginRes?._id;
             const approved = false;
             const data = {
@@ -59,8 +58,8 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
     }
 
     useEffect(() => {
-        if(formik.values.departmentId){
-            const departId= formik.values.departmentId;
+        if(formik.values.department){
+            const departId= formik.values.department;
         const getRoles = async () => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
@@ -73,7 +72,7 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
         getRoles();
     }
    
-    }, [formik.values.departmentId])
+    }, [formik.values.department])
 
     useEffect(() => {
         const getDepartment = async () => {
@@ -106,10 +105,10 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Assign to department </label>
                             <Dropdown
-                                id="departmentId"
+                                id="department"
                                 options={allDepartment}
-                                value={formik.values.departmentId}
-                                onChange={(e) => formik.setFieldValue("departmentId", e.value)}
+                                value={formik.values.department}
+                                onChange={(e) => formik.setFieldValue("department", e.value)}
                                 optionLabel="department"
                                 optionValue="_id"
                                 filter
