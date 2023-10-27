@@ -9,7 +9,7 @@ export const loginAction = createAsyncThunk("auth/web/user/login", async (body, 
        
         let HostUrl=BASE_URL;
         if(window.location.hostname !== "localhost"){  
-            HostUrl='http://api.teleyork.com'
+            HostUrl=BASE_URL
         } 
        
         const response = await axios.post(`${HostUrl}/api/web/user/login`, body);  
