@@ -55,12 +55,13 @@ const CreateTemplate = () => {
                 ...values,
                 createdBy,
                 company: parseLoginRes?.compony,
-                template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
-                    if (group1) {
-                      return '&nbsp';
-                    } else {
-                      return match;
-                    }}),
+                template: templateText,
+                // template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                //     if (group1) {
+                //       return '&nbsp';
+                //     } else {
+                //       return match;
+                //     }}),
                 keySequence: [...keySequence],
             };  
             
