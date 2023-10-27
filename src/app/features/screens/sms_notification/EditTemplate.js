@@ -45,11 +45,16 @@ const EditTemplate = (probs) => {
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
                 ...values,     
-                template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
+                template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                    if (group1) {
+                      return '&nbsp';
+                    } else {
+                      return match;
+                    }}),
                 keySequence: [...keySequence],    
             };
           
-                         
+                   //.replace(/<p>/g, "").replace(/<\/p>/g, "").replace(/ /g, '&nbsp;'),.      
              Axios.patch(`${BASE_URL}/api/sms/updateTemplate`, dataToSend).then(()=>{    
                 toast.current.show({ severity: "success", summary: "Info", detail: "Template Updated Successfully" });
                  setTimeout(()=>{     
