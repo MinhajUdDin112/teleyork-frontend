@@ -1,13 +1,25 @@
 import React, { useState } from "react";
 import AddUnits from "./add units component/AddUnits";
-import { Card } from "primereact/card";
+import { Card } from "primereact/card";  
+import CreateAssignBox from "../create_assign_box/create_assign_box";
 import UpdateInventory from "./UpdateInventory";
 import ChangeESNSIMStatus from "./change_ESN/esn_sim_status";
-import AdjustmentFlowPage from "./adjustment/adjustment_flow_page";
+import AdjustmentFlowPage from "./adjustment/adjustment_flow_page";  
+import DropshipOrdersFlowPage from "../dropship_orders/dropship_orders_flow_page";
 let InventoryManagment = [
     {
         component: "AddUnits",
         title: "Add Units",
+        imgsrc: "/images/Inventory Module.png",
+    },    
+    {
+        component: "CreateAssignBox",
+        title: "Create/Assign BOX",
+        imgsrc: "/images/Inventory Module.png",
+    },  
+    {
+        component: "DropshipOrdersFlowPage",
+        title: "Dropship Orders",
         imgsrc: "/images/Inventory Module.png",
     },
     {
@@ -39,6 +51,10 @@ const Manage_inventory = () => {
                 <AddUnits setActiveComponent={setActiveComponent} />
             ) : activeComponent === "UpdateInventory" ? (
                 <UpdateInventory setActiveComponent={setActiveComponent} />
+            ) :activeComponent === "CreateAssignBox" ? (
+                <CreateAssignBox setActiveComponent={setActiveComponent} />
+            ) :activeComponent === "DropshipOrdersFlowPage" ? (
+                <DropshipOrdersFlowPage setActiveComponent={setActiveComponent} />
             ) : activeComponent === "ChangeESN_SIM" ? (
                 <ChangeESNSIMStatus setActiveComponent={setActiveComponent} />
             ) : activeComponent === "Adjustment" ? (
