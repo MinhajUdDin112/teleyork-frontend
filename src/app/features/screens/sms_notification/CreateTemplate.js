@@ -55,7 +55,9 @@ const CreateTemplate = () => {
                 ...values,
                 createdBy,
                 company: parseLoginRes?.compony,
-                template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, "").replace(/ /g, '&nbsp;'),
+                template: templateText.replace(/(?<!<[^>]+)( )+(?![^<]*>)/g, (match, group1) => {
+                    return group1 + '&nbsp'; // Replace each space after the first space with a hyphen (-)
+                  }),
                 keySequence: [...keySequence],
             };  
             
@@ -146,7 +148,9 @@ const CreateTemplate = () => {
                     </div>
                     <div className="mt-2">
                         <p className="m-0">Template Body: </p>
-                        <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
+                        <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => {
+                          
+                            setTemplateText(e.htmlValue)}} />
                     </div>
                     {addTemplateLoading ? (
                         <ProgressSpinner style={{ width: "40px", height: "40px", marginLeft: "1050px", marginTop: "10px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
