@@ -55,9 +55,12 @@ const CreateTemplate = () => {
                 ...values,
                 createdBy,
                 company: parseLoginRes?.compony,
-                template: templateText.replace(/(?<!<[^>]+)( )+(?![^<]*>)/g, (match, group1) => {
-                    return group1 + '&nbsp'; // Replace each space after the first space with a hyphen (-)
-                  }),
+                template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                    if (group1) {
+                      return '&nbsp';
+                    } else {
+                      return match;
+                    }}),
                 keySequence: [...keySequence],
             };  
             

@@ -45,9 +45,12 @@ const EditTemplate = (probs) => {
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
                 ...values,     
-                template: templateText.replace(/(?<!<[^>]+)( )+(?![^<]*>)/g, (match, group1) => {
-                    return group1 + '&nbsp'; // Replace each space after the first space with a hyphen (-)
-                  }),
+                template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                    if (group1) {
+                      return '&nbsp';
+                    } else {
+                      return match;
+                    }}),
                 keySequence: [...keySequence],    
             };
           
