@@ -29,7 +29,7 @@ const ShowSentAll = () => {
                         {" "}
                         See more
                     </span>
-                </p>:<p>template</p> 
+                </p>:<p>{template}</p> 
     }
             </div>
         );

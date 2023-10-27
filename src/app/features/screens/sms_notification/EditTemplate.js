@@ -11,10 +11,11 @@ import { Editor } from "primereact/editor";
 import { useEffect } from "react";  
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
-const EditTemplate = (probs) => {     
+const EditTemplate = (probs) => {         
     let navigate=useNavigate()  
     const [stop,setstop]=useState(false)
-    const [templateText, setTemplateText] = useState(probs.templatetoedit.template);
+    const [templateText, setTemplateText] = useState(probs.templatetoedit.template);  
+       console.log("sampleText is ",templateText)
     const [subjectText, setSubjectText] = useState(probs.templatetoedit.notification_subject);
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;

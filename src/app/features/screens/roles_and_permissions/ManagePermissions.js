@@ -189,7 +189,7 @@ const searchParams = new URLSearchParams(useLocation().search);
                 updatePermissions()
             }} />   :undefined
         }
-            <div className="grid r_n_r" style={{height:"65vh",overflowX:"hidden",overflowY:"auto",marginTop:`${disabledMode ? "0px":"90px"}` }}>
+            <div className="flex flex-wrap justify-content-around" style={{height:"65vh",overflowX:"hidden",overflowY:"auto",marginTop:`${disabledMode ? "0px":"90px"}` }}>
                 {moduledData !== null && permissionObject !== null ? moduledData.map((module) => <ManagepermissionModule module={module} permissionObject={permissionObject} disabledMode={disabledMode} setPermissionObject={setPermissionObject} />) : undefined}
             </div>
             <Toast ref={reffortoast} />       
