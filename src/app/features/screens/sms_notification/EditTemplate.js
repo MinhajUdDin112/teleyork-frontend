@@ -44,13 +44,14 @@ const EditTemplate = (probs) => {
             const keySequence = ["templateId", ...name, ...subject];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
-                ...values,     
-                template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
-                    if (group1) {
-                      return '&nbsp';
-                    } else {
-                      return match;
-                    }}),
+                ...values,   
+                template: templateText,
+                // template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                //     if (group1) {
+                //       return '&nbsp';
+                //     } else {
+                //       return match;
+                //     }}),
                 keySequence: [...keySequence],    
             };
           
