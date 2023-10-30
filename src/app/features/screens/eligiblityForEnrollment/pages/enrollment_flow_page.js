@@ -15,8 +15,6 @@ export default function EnrollmentFlowPage() {
  // Get role name  from login response     
       const roleName= parseLoginRes?.role?.role;
    
-
-   
     //     getting _id and enrollment id from local storage
     const zipRes = localStorage.getItem("zipData");
     const parseZipRes = JSON.parse(zipRes);
@@ -28,7 +26,6 @@ export default function EnrollmentFlowPage() {
     const enrollmentid = parsebasicRes?.data?.enrollmentId;
     const id = parsebasicRes?.data?._id
 let items;
-    if(zipRes){
          items = [
             {
                 label: "Personal Info",
@@ -54,60 +51,9 @@ let items;
             
            
         ];
-    }
-    else if(!zipRes && roleName==="Provision Manager" || roleName==="PROVISION MANAGER" ){
-         items = [
-            {
-                label: "Personal Info",
-                command: (event) => {
-                    toast.current.show({ severity: "info", summary: "First Step", detail: event.item.label });
-                    setActiveIndex(0);
-                },
-            },
-            {
-                label: "Eligiblity",
-                command: (event) => {
-                    toast.current.show({ severity: "info", summary: "Seat Selection", detail: event.item.label });
-                    setActiveIndex(1);
-                },
-            },
-            {
-                label: "Plan",
-                command: (event) => {
-                    toast.current.show({ severity: "info", summary: "Pay with CC", detail: event.item.label });
-                    setActiveIndex(2);
-                },
-            },
-           
-        ];
-    }
-    else if(!zipRes && roleName!=="provision Manager" || roleName!=="PROVISION MANAGER"){
-        items = [
-            {
-                label: "Personal Info",
-                command: (event) => {
-                    toast.current.show({ severity: "info", summary: "First Step", detail: event.item.label });
-                    setActiveIndex(0);
-                },
-            },
-            {
-                label: "Eligiblity",
-                command: (event) => {
-                    toast.current.show({ severity: "info", summary: "Seat Selection", detail: event.item.label });
-                    setActiveIndex(1);
-                },
-            },
-            {
-                label: "Preview",
-                command: (event) => {
-                    toast.current.show({ severity: "info", summary: "Last Step", detail: event.item.label });
-                    setActiveIndex(2);
-                },
-            },
-            
-           
-        ];
-    }
+    
+   
+  
    
 
     let pages;
@@ -118,20 +64,13 @@ let items;
             //plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
             Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
         ];
-    } else if(!zipRes && roleName==="Provision Manager" || roleName==="PROVISION MANAGER"  ) {    
+    }
+    else if(basicRes){
         pages = [
             PersonalInfoPage({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
             Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
-            plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id ,csr:csr}),
-            // Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id ,csr: csr}),
-        ];
-    }
-    else if(!zipRes && roleName!=="provision Manager" || roleName!=="PROVISION MANAGER"){
-        pages = [
-            PersonalInfoPage({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
-            Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
             //plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
-            Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
+            Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
         ];
     }
     
