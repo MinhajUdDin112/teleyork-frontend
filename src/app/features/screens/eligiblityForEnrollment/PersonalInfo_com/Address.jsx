@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+
 const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const [confrimAddress, setConfrimAddress] = useState("same");
     const [tempAdd, setTempAdd] = useState(true);
@@ -162,6 +163,11 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         }
     }, [autoCompleteAddress]);
 
+    const handleAutoCompleteClick = () => {
+        setAutoCompleteAddress('');
+      };
+    
+
     const handleSame = () => {
         formik.setFieldValue("isSameServiceAddress", true);
         formik.setFieldValue("isNotSameServiceAddress", false);
@@ -287,6 +293,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                             selectProps={{
                                 autoCompleteAddress,
                                 onChange: setAutoCompleteAddress,
+                                onClick: handleAutoCompleteClick, 
                             }}
                         />
                     </div>

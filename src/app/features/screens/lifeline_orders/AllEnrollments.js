@@ -35,8 +35,8 @@ const AllEnrollments = () => {
      // Get role name  from login response
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
-    //  const roleName= parseLoginRes?.role?.role;
-    const roleName= "Provision Manager"
+      const roleName= parseLoginRes?.role?.role;
+   
 
     
      
