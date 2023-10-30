@@ -297,7 +297,9 @@ const AllEnrollments = () => {
                         <Column header="Rejected Reason" field="Rejectedreason"></Column>
                         <Column header="Enroll Type" field="Enrolltype"></Column>
                         <Column header="Reviewer Note" field="Reviewernote"></Column>
-                        {roleName === "CSR" || roleName === "csr" ? "" : roleName==="PROVISION MANAGER" || roleName==="Provision Manager" ? <Column header="Actions" body={actionTemplateForPR}></Column> : <Column header="Actions" body={actionTemplate}></Column>}
+                        {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ?   "" : roleName=="PROVISION MANAGER" || roleName=="Provision Manager" || roleName=="provision manager" ? <Column header="Actions" body={actionTemplateForPR}>
+                            
+                        </Column> : <Column header="Actions" body={actionTemplate}></Column>}
                     </DataTable>
                     <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
                     {isLoading ? <ProgressSpinner style={{ marginLeft:'550px'}}/> :null}
