@@ -164,7 +164,7 @@ const AllEnrollments = () => {
         setisButtonLoading(true)
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/verifyEligibility?enrollmentId=${rowData?._id}`)
-            if(response?.status==='200' || response?.status==='200'){
+            if(response?.status==200 || response?.status==201){
                 toast.success("Successfully Verify")
                 setisButtonLoading(false)
             }
@@ -189,7 +189,7 @@ const AllEnrollments = () => {
         setisButtonLoading(true)
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?enrollmentId=${rowData?._id}`)
-            if(response?.status==='200' || response?.status==='200'){
+            if(response?.status=='200' || response?.status=='201'){
                 toast.success("Successfully Verify")
                 setisButtonLoading(false)
             }
@@ -206,7 +206,7 @@ const AllEnrollments = () => {
         setisButtonLoading(true)
         try {
             const response = await Axios.put(`${BASE_URL}/api/user/updateVerifiedUser?enrollmentId=${rowData?._id}`)
-            if(response?.status==='200' || response?.status==='200'){
+            if(response?.status=='200' || response?.status=='201'){
                 toast.success("Successfully Verify")
                 setisButtonLoading(false)
             }
@@ -298,7 +298,7 @@ const AllEnrollments = () => {
                         <Column header="Enroll Type" field="Enrolltype"></Column>
                         <Column header="Reviewer Note" field="Reviewernote"></Column>
                         {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ?   "" : roleName=="PROVISION MANAGER" || roleName=="Provision Manager" || roleName=="provision manager" ? <Column header="Actions" body={actionTemplateForPR}>
-                            
+
                         </Column> : <Column header="Actions" body={actionTemplate}></Column>}
                     </DataTable>
                     <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
