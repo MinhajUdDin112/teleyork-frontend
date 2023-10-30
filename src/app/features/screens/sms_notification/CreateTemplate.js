@@ -55,7 +55,13 @@ const CreateTemplate = () => {
                 ...values,
                 createdBy,
                 company: parseLoginRes?.compony,
-                template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, "").replace(/ /g, '&nbsp;'),
+                template: templateText,
+                // template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                //     if (group1) {
+                //       return '&nbsp';
+                //     } else {
+                //       return match;
+                //     }}),
                 keySequence: [...keySequence],
             };  
             
@@ -146,7 +152,9 @@ const CreateTemplate = () => {
                     </div>
                     <div className="mt-2">
                         <p className="m-0">Template Body: </p>
-                        <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
+                        <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => {
+                          
+                            setTemplateText(e.htmlValue)}} />
                     </div>
                     {addTemplateLoading ? (
                         <ProgressSpinner style={{ width: "40px", height: "40px", marginLeft: "1050px", marginTop: "10px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
