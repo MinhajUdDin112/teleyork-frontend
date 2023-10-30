@@ -11,10 +11,13 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
 
 const CreateUser = () => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
+    const [allUser, setAllUser] = useState([]);
    
 
     const navigate = useNavigate();
@@ -22,7 +25,7 @@ const CreateUser = () => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    console.log("parseLoginRes", parseLoginRes);
+    
 
     // Validation Schema
     const validationSchema = Yup.object().shape({
@@ -81,12 +84,10 @@ const CreateUser = () => {
             // Send the data to the server using Axios POST request
             Axios.post(`${BASE_URL}/api/web/user`, data)
                 .then((response) => {
-                    // Handle a successful response here
-                    console.log("Response Data:", response.data);
+                   toast.success("successfully Added. Please Check Your Email For Password")
                 })
-                .catch((error) => {
-                    // Handle errors here
-                    console.error("Error:", error);
+                .catch((error) => {     
+                   toast.error("Error:", error?.response?.data?.msg);
                 });
             navigate("/manage-user");
         },
@@ -96,39 +97,55 @@ const CreateUser = () => {
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-
-
-    useEffect(() => {
-        if(formik.values.department){
-            const departId= formik.values.department;
-        const getRoles = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
-                setAllRoles(res?.data?.data || []);
-            } catch (error) {
-                console.error("Error fetching module data:", error);
-            }
-        };
-        getRoles();
-    }
-   
-    }, [formik.values.department])
-       
-
     useEffect(() => {
         const getDepartment = async () => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.compony}`);
                 setAllDepartment(res?.data?.data || []);
             } catch (error) {
-                console.error("Error fetching module data:", error);
+                toast.error("Error fetching department:", error);
             }
         };
         getDepartment();
     }, []);
 
+    useEffect(() => {
+        if(formik.values.department){
+           
+        const getRoles = async () => {
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);     
+                setAllRoles(res?.data?.data || []);
+            } catch (error) {
+                toast.error("Error fetching roles:", error);
+            }
+        };
+        getRoles();
+    }
+   
+    }, [formik.values.department])
+   
+       
+    useEffect(() => {
+        if(formik.values.department){
+            const departId= formik.values.department;
+        const getRoles = async () => {
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
+           
+              setAllUser(res?.data?.data || []);
+            } catch (error) {
+                toast.error("Error fetching user :", error?.response?.data?.msg);
+            }
+        };
+        getRoles();
+    }
+   
+    }, [formik.values.department])
+    
     return (
         <>
+        <ToastContainer/>
             <div className="card">
                 <h3 className="mt-1 ">Add User</h3>
             </div>
@@ -140,12 +157,6 @@ const CreateUser = () => {
                             <InputText id="name" value={formik.values.name} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
                             {getFormErrorMessage("name")}
                         </div>
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Role <span className="steric">*</span></label>
-                            <Dropdown id="role" options={allRoles} value={formik.values.role} onChange={formik.handleChange} optionLabel="role" optionValue="_id" keyfilter={/^[A-Za-z\s]+$/} />
-                            {getFormErrorMessage("role")}
-                        </div>
-
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Department <span className="steric">*</span></label>
                             <Dropdown
@@ -161,10 +172,32 @@ const CreateUser = () => {
                             />
                             {getFormErrorMessage("department")}
                         </div>
+                        <div className="p-field col-12 md:col-3">
+                            <label className="Label__Text">Role <span className="steric">*</span></label>
+                            <Dropdown id="role" 
+                            options={allRoles} 
+                            value={formik.values.role} 
+                            onChange={formik.handleChange} 
+                            optionLabel="role" 
+                            optionValue="_id" 
+                            showClear
+                            filter 
+                            filterBy="role" />
+                            
+                            {getFormErrorMessage("role")}
+                        </div>
 
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Reporting To <span className="steric">*</span></label>
-                            <Dropdown id="reportingTo" options={allRoles} value={formik.values.reportingTo} onChange={(e) => formik.setFieldValue("reportingTo", e.value)} optionLabel="role" optionValue="_id"  showClear filter filterBy="role" />
+                            <Dropdown id="reportingTo" 
+                            options={allUser} 
+                            value={formik.values.reportingTo} 
+                            onChange={(e) => formik.setFieldValue("reportingTo", e.value)} 
+                            optionLabel="name" 
+                            optionValue="_id"  
+                            showClear
+                             filter 
+                             filterBy="name" />
                             {getFormErrorMessage("reportingTo")}
                         </div>
                         <div className="p-field col-12 md:col-3">

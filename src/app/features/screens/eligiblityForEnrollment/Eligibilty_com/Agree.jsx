@@ -194,8 +194,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     <div className="mt-5">
                         <p>Request User For additional Documents</p>
                         <div className="flex ">
-                            <Button label={buttonClicked ? "Sent" : "Send an Sms"}  className="p-button-success mr-2" disabled={buttonClicked} />
-                            <Button label={buttonClicked ? "Sent" : "Send an Email"}  className="p-button-success" disabled={buttonClicked} />
+                            <Button label={buttonClicked ? "Sent" : "Send an Sms"}  className="p-button-success mr-2" type="button" disabled={buttonClicked} />
+                            <Button label={buttonClicked ? "Sent" : "Send an Email"}  className="p-button-success" type="button" disabled={buttonClicked} />
                             {/* {buttonClicked ? (
                                 <div className=" ml-2">
                                     <Button label="ReSend" type="button" className="p-button-success" />

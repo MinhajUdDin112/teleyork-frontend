@@ -7,8 +7,9 @@ import { Column } from "primereact/column";
 import BASE_URL from "../../../../config";
 import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import Axios from "axios";
-import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
-import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useNavigate } from "react-router-dom";
 import { Dialog } from 'primereact/dialog';
@@ -34,7 +35,9 @@ const AllEnrollments = () => {
      // Get role name  from login response
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
-     const roleName= parseLoginRes?.role?.role;
+    //  const roleName= parseLoginRes?.role?.role;
+    const roleName= "Provision Manager"
+
     
      
     
@@ -45,7 +48,7 @@ const AllEnrollments = () => {
         const filteredResults = allEnrollments.filter((enrollment) => {
             if (enrollment.firstName !== undefined) {
                 let tomatch = enrollment.firstName + " " + enrollment.lastName;     
-                console.log(tomatch)
+              
                 if (enrollment.firstName.length === 0) {
                     return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
                 } else if (enrollment.firstName.length > 0) {
@@ -78,7 +81,9 @@ const AllEnrollments = () => {
                 setIsLoading(false)
             }
         } catch (error) {
-            toast.error("Error fetching All Enrollment:", error?.response?.data?.msg);
+            console.log("Erroe is ",error?.response?.data?.msg)
+            toast.error("Error fetching All Enrollment: " + error?.response?.data?.msg);
+
             setIsLoading(false)
         }
     }; 
@@ -144,16 +149,18 @@ const AllEnrollments = () => {
                 toast.success("Successfully Verify")
                 setisButtonLoading(false)
             }
-        } catch (error) {
-            const errorData = error?.response?.data?.data?.body[0]; // Extract the error data as an array
-            const errorMessage = errorData ? errorData.toString() : 'Failed to verify'; // Convert the array to a string
-            toast.error("error is",errorMessage)
-            console.log("error is",errorMessage)
-            setisButtonLoading(false)
-        }
+        }catch (error) {
+            const body = error?.response?.data?.data?.body;
+            const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === 'object' ? JSON.stringify(body) : body;
+            toast.error("Error is " + errorMessage
+              ); 
+          
+            setisButtonLoading(false);
+          }
+          
     }
 
-    const runNV= async(rowData)=>{
+    const runNV= async(rowData)=>{  
         setisButtonLoading(true)
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/verifyEligibility?enrollmentId=${rowData?._id}`)
@@ -161,8 +168,20 @@ const AllEnrollments = () => {
                 toast.success("Successfully Verify")
                 setisButtonLoading(false)
             }
+             
         } catch (error) {
-            toast.error(error?.response?.data)
+            const status = error?.response?.status;
+            console.log("status is ",status)
+            if(status===500){
+                toast.error(error?.response?.data?.data?.message)
+            }
+            else{
+                const body = error?.response?.data?.data?.body;
+            const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === 'object' ? JSON.stringify(body) : body;
+            toast.error("Error is " + errorMessage
+              ); 
+            }
+            
             setisButtonLoading(false)
         }
     }
@@ -175,7 +194,11 @@ const AllEnrollments = () => {
                 setisButtonLoading(false)
             }
         } catch (error) {
-            toast.error(error?.response?.data)
+            const body = error?.response?.data?.data?.body;
+            console.log("error is",body)
+            const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === 'object' ? JSON.stringify(body) : body;
+            toast.error("Error is " + errorMessage
+              ); 
             setisButtonLoading(false)
         }
     }
@@ -224,10 +247,10 @@ const AllEnrollments = () => {
 
     return (
         <>
-        
+          <ToastContainer autoClose={10000}/>
             
         <div className="card bg-pink-50">
-            <ToastContainer />
+          
            
             <form >
                 <Dialog visible={isModalOpen} style={{ width: '50vw' }} onHide={() => setIsModalOpen(false)}>
