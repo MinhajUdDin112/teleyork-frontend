@@ -28,7 +28,7 @@ const AllEnrollments = () => {
     const [openDialogeForActivate, setOpenDialogeForActivate] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isButtonLoading, setisButtonLoading] = useState(false)
-
+     const[link,setLink]=useState();
 
     const navigate= useNavigate()
 
@@ -165,7 +165,9 @@ const AllEnrollments = () => {
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/verifyEligibility?enrollmentId=${rowData?._id}`)
             if(response?.status==200 || response?.status==201){
-                toast.success("Successfully Verify")
+                toast.warning(response?.data?.data?.status)
+                setLink(response?.data?.data?._links?.certification);
+                console.log("link is",link);
                 setisButtonLoading(false)
             }
              
