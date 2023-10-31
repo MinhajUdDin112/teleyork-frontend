@@ -37,6 +37,7 @@ export default function ServiceAvailabilityPage() {
     onSubmit: async (values, actions) => {
       const serviceProvider = parseLoginRes?.compony;
       const department = parseLoginRes?.department;
+      console.log("departmentis", parseLoginRes?.department)
       const csr = parseLoginRes?._id;
       const carrier = "6455532566d6fad6eac59e34";
       const dataToSend = { serviceProvider, csr, department, carrier, ...values };

@@ -248,7 +248,8 @@ useEffect(() => {
                             Contact Number <span className="steric">*</span>
                         </label>
 
-                        <InputMask completeMethod={disableSuggestion} onChange={formik.handleChange} id="contact" value={formik.values.contact} mask="999-999-9999" placeholder="999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} />
+                        {/* <InputMask completeMethod={disableSuggestion} onChange={formik.handleChange} id="contact" value={formik.values.contact} mask="999-999-9999" placeholder="999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} /> */}
+                        <InputText  onChange={formik.handleChange} id="contact" value={formik.values.contact} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_text")} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}/>
                         {getFormErrorMessage("contact")}
                     </div>
                 </div>
