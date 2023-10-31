@@ -170,7 +170,7 @@ useEffect(() => {
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                     <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
-                    {isLoading ? <Button label="Continue" type="submit" disabled /> : <Button label="Continue" type="submit" />}
+                     <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
                 </div>
 
                 <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
@@ -182,20 +182,22 @@ useEffect(() => {
                         <label className="field_label">
                             First Name <span className="steric">*</span>
                         </label>
-                        <InputText id="firstName" value={formik.values.firstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("firstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                        <InputText id="firstName" value={formik.values.firstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("firstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} autoComplete="new-password"
+ 
+   />
                         {getFormErrorMessage("firstName")}
                     </div>
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Middle Name</label>
-                        <InputText id="middleName" value={formik.values.middleName} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={10} />
+                        <InputText id="middleName" value={formik.values.middleName} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={10} autoComplete="off" />
                     </div>
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">
                             Last Name <span className="steric">*</span>
                         </label>
-                        <InputText id="lastName" value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("lastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                        <InputText id="lastName" value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("lastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} autoComplete="off" />
                         {getFormErrorMessage("lastName")}
                     </div>
 
@@ -248,7 +250,7 @@ useEffect(() => {
                             Contact Number <span className="steric">*</span>
                         </label>
 
-                        {/* <InputMask completeMethod={disableSuggestion} onChange={formik.handleChange} id="contact" value={formik.values.contact} mask="999-999-9999" placeholder="999-999-9999" className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_mask")} /> */}
+                       
                         <InputText  onChange={formik.handleChange} id="contact" value={formik.values.contact} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_text")} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}/>
                         {getFormErrorMessage("contact")}
                     </div>

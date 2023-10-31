@@ -34,6 +34,11 @@ const RejectedEnrollments = () => {
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+     // Get role name  from login response
+    const roleName= parseLoginRes?.role?.role;
+
+   
+   
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
@@ -107,11 +112,17 @@ const RejectedEnrollments = () => {
         return (
             <div>
                 <Button label="View" onClick={() => viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" />
-            
                 <Button label="Approve" onClick={() => approveRow(rowData)} className="p-button-text p-button-success p-mr-2" />
             </div>
         );
     };
+
+    const actionTemplateForCsr=(rowData)=>{
+        return(
+            <Button label="View" onClick={() =>  viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" />
+        )
+       
+    }
     
     const actionTemplateForPlus = (rowData) => {
         return (
@@ -159,7 +170,11 @@ const RejectedEnrollments = () => {
                             <Column header="State" field="state"></Column>
                             <Column header="Zip" field="zip" />
                             <Column header="Actions" body={actionTemplateForPlus}></Column>
-                            <Column header="Actions" body={actionTemplate}></Column>
+                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
+                                 <Column header="Actions" body={actionTemplateForCsr}></Column>
+                            )  : (
+                                <Column header="Actions" body={actionTemplate}></Column>
+                            )}
                          
                         </DataTable>
                 </div>

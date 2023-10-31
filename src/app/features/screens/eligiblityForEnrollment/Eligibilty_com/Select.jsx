@@ -11,6 +11,7 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
     const [selectedAcpProgramId, setSelectedAcpProgramId] = useState(null);
     const [btnState, setBtnState] = useState(true);
     const [isBack, setIsBack] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
@@ -24,7 +25,7 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
             const res = await Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`);
             setAcpPrograms(res?.data?.data || []);
         } catch (error) {
-            console.error("Error fetching module data:", error);
+            toast.error(`Error fetching module data : + ${error?.response?.data?.msg}`);
         }
     };
 
@@ -33,6 +34,7 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
     }, []);
 
    const postData = async () => {
+    setIsLoading(true);
 
     const data = {
         csr: csr,
@@ -46,10 +48,12 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
             console.log("acp response is  ",res?.data)
             setIsBack(isBack+1);
             handleNext();
+            setIsLoading(false);
         }
     }
     catch(error){
        toast.error(error?.response?.data?.msg)
+       setIsLoading(false);
     }
 }
 
@@ -101,6 +105,7 @@ useEffect(() => {
                             type="submit"
                             onClick={postData}
                             disabled={btnState}
+                            icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} 
                         />    
                 </div>
                 <div>
