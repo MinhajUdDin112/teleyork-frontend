@@ -1,128 +1,305 @@
 import React, { useEffect, useState } from "react";
-import { Calendar } from "primereact/calendar";
-import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
+import ReactPaginate from "react-paginate";
 import { Column } from "primereact/column";
 import BASE_URL from "../../../../config";
+import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import Axios from "axios";
+import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { useNavigate } from "react-router-dom";
+import { Dialog } from "primereact/dialog";
+import DialogForReject from "./DialogForReject";
+import DialogForActivateSim from "./DialogForActivateSim";
+import DialogForShowData from "./DialogForShowData";
 
 const AllEnrollments = () => {
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(0);
+    const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
+    const [isEnrolmentId, setIsEnrolmentId] = useState();
+    const [CsrId, setCsrId] = useState();
+    const [zipCode, setZipCode] = useState();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [openDialogeForActivate, setOpenDialogeForActivate] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isButtonLoading, setisButtonLoading] = useState(false);
+    const [link, setLink] = useState();
+    const [isShow, setIsShow] = useState(false);
+    const [allData, setAllData] = useState([]);
 
-    const [allEnrollments, setAllEnrollments] = useState([])
+    const navigate = useNavigate();
 
-    console.log('allEnrollments', allEnrollments)
+    // Get role name  from login response
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const roleName= parseLoginRes?.role?.role;
+    
+    const handleSearch = (searchTerm) => {
+        setSearchTerm(searchTerm);
 
-    // Get user data from ls
-    const loginRes = localStorage.getItem("userData")
-    const parseLoginRes = JSON.parse(loginRes)
+        const filteredResults = allEnrollments.filter((enrollment) => {
+            if (enrollment.firstName !== undefined) {
+                let tomatch = enrollment.firstName + " " + enrollment.lastName;
 
-    const [dateRange, setDateRange] = useState(null);
-    const [search, setSearch] = useState(null);
-    const [master, setMaster] = useState(null);
-    const [distributor, setDistributor] = useState(null);
-    const [retailer, setRetailer] = useState(null);
-    const [employee, setEmloyee] = useState(null);
+                if (enrollment.firstName.length === 0) {
+                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
+                } else if (enrollment.firstName.length > 0) {
+                    return tomatch.toLowerCase().includes(searchTerm.toLowerCase()) || enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
+                }
+            } else {
+                return enrollment.enrollmentId.toString().toLowerCase().includes(searchTerm.toLowerCase());
+            }
+        });
+        setSearchResults(filteredResults);
+    };
+    const [allEnrollments, setAllEnrollments] = useState([]);
+    const itemsPerPage = 10;
+    const pageCount = Math.ceil(allEnrollments.length / itemsPerPage);
+    const offset = currentPage * itemsPerPage;
 
-    const masterOptions = [{ name: "Corporate Master", code: "CM" }];
-    const distributorOptions = [{ name: "Distributor", code: "DB" }];
-    const retailerOptions = [{ name: "Retailer", code: "RT" }];
-    const employeeOptions = [{ name: "Employee", code: "EP" }];
+    // Function to handle page change
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected);
+    };
+    const visibleItems = allEnrollments.slice(offset, offset + itemsPerPage);
 
     const getAllEnrollments = async () => {
+        setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/all?serviceProvider=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                setAllEnrollments(res?.data?.data)
+                setAllEnrollments(res?.data?.data);
+                setIsLoading(false);
             }
         } catch (error) {
-            console.error("Error fetching module data:", error?.response);
+            toast.error("Error fetching All Enrollment: " + error?.response?.data?.msg);
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        getAllEnrollments()
+        getAllEnrollments();
     }, []);
 
+    const viewRow = async (rowData) => {
+        setisButtonLoading(true);
+        const _id = rowData._id;
+        setSelectedEnrollmentId(_id);
+        try {
+            const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
+            if (response?.status === 201 || response?.status === 200) {
+                localStorage.setItem("basicData", JSON.stringify(response.data));
+                localStorage.setItem("address", JSON.stringify(response.data));
+                localStorage.setItem("programmeId", JSON.stringify(response.data));
+                navigate("/enrollment");
+                setisButtonLoading(false);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+            setisButtonLoading(false);
+        }
+        setisButtonLoading(false);
+    };
+
+    const approveRow = async (rowData) => {
+        setisButtonLoading(true);
+        const approvedBy = parseLoginRes?._id;
+        const enrolmentId = rowData?._id;
+        const approved = true;
+        const dataToSend = { approvedBy, enrolmentId, approved };
+        try {
+            const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+            if (response?.status === 201 || response?.status === 200) {
+                toast.success("approved");
+                setisButtonLoading(false);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+            setisButtonLoading(false);
+        }
+    };
+
+    const handleOpenDialog = (rowData) => {
+        setisButtonLoading(true);
+        setIsModalOpen(true);
+        setIsEnrolmentId(rowData?._id);
+        setCsrId(rowData?.csr);
+        setisButtonLoading(false);
+    };
+
+    const handleDialogeForActivate = (rowData) => {
+        setOpenDialogeForActivate(true);
+        setIsEnrolmentId(rowData?._id);
+        setZipCode(rowData?.zip);
+    };
+
+    const runNLAD = async (rowData) => {
+        setisButtonLoading(true);
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/user/verifyEnroll?enrollmentId=${rowData?._id}`);
+            if (response?.status === "200" || response?.status === "200") {
+                toast.success("Successfully Verify");
+                setisButtonLoading(false);
+            }
+        } catch (error) {
+            const body = error?.response?.data?.data?.body;
+            const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
+            toast.error("Error is " + errorMessage);
+
+            setisButtonLoading(false);
+        }
+    };
+
+    const runNV = async (rowData) => {
+        setisButtonLoading(true);
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/user/verifyEligibility?enrollmentId=${rowData?._id}`);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.warning(response?.data?.data?.status);
+                setLink(response?.data?.data?._links?.certification);
+                console.log("link is", link);
+                setisButtonLoading(false);
+            }
+        } catch (error) {
+            const status = error?.response?.status;
+            console.log("status is ", status);
+            if (status === 500) {
+                toast.error(error?.response?.data?.data?.message);
+            } else {
+                const body = error?.response?.data?.data?.body;
+                const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
+                toast.error("Error is " + errorMessage);
+            }
+
+            setisButtonLoading(false);
+        }
+    };
+    const enrollUser = async (rowData) => {
+        setisButtonLoading(true);
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?enrollmentId=${rowData?._id}`);
+            if (response?.status == "200" || response?.status == "201") {
+                toast.success("Successfully Verify");
+                setisButtonLoading(false);
+            }
+        } catch (error) {
+            const body = error?.response?.data?.data?.body;
+            console.log("error is", body);
+            const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
+            toast.error("Error is " + errorMessage);
+            setisButtonLoading(false);
+        }
+    };
+    const updateUser = async (rowData) => {
+        setisButtonLoading(true);
+        try {
+            const response = await Axios.put(`${BASE_URL}/api/user/updateVerifiedUser?enrollmentId=${rowData?._id}`);
+            if (response?.status == "200" || response?.status == "201") {
+                toast.success("Successfully Verify");
+                setisButtonLoading(false);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data);
+            setisButtonLoading(false);
+        }
+    };
+
+    const viewRemainData = (rowData) => {
+            setIsShow(true);
+            setAllData(rowData);
+    };
+
+    const actionTemplate = (rowData) => {
+        return (
+            <div>
+                <Button label="View" onClick={() => viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className="p-button-text p-button-success p-mr-2" />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className="p-button-text p-button-danger" />
+            </div>
+        );
+    };
+
+    const actionTemplateForPR = (rowData) => {
+        return (
+            <div>
+                <Button label="View" onClick={() => viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" disabled={isButtonLoading} />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className="p-button-text p-button-success p-mr-2" disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className="p-button-text p-button-danger" disabled={isButtonLoading} />
+                <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
+                <Button label="Run NV" onClick={() => runNV(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
+                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
+                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
+                <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
+            </div>
+        );
+    };
+    const actionTemplateForPlus = (rowData) => {
+        return (
+            <div>
+                <Button label="" icon="pi pi-plus" onClick={() => viewRemainData(rowData)} className="p-button-text p-button-warning p-mr-2" />
+            </div>
+        );
+    };
+
     return (
-        <div className="card bg-pink-50">
-            {/* <div className="mx-5">
-                <h3 className="text-xl font-semibold border-bottom-1 pb-2">All Enrollments</h3>
+        <>
+            <ToastContainer autoClose={10000} />
+
+            <div className="card bg-pink-50">
+                <form>
+                    <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
+                        <DialogForReject enrollmentId={isEnrolmentId} CSRid={CsrId} />
+                    </Dialog>
+
+                    <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
+                        <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
+                    </Dialog>
+
+                    <Dialog  visible={isShow} style={{ width: "85vw" }} onHide={() => setIsShow(false)}>
+                        <DialogForShowData allData={allData} />
+                    </Dialog>
+                </form>
+
+                <div className="card mx-5 p-0 border-noround">
+                    <div className="flex " style={{ padding: "25px" }}>
+                        <div className=" mb-3" style={{ position: "absolute", right: "120px" }}>
+                            <AllEnrollmentSearchbar onSearch={handleSearch} />
+                        </div>
+                    </div>
+                    <div className="" style={{ marginTop: "30px", padding: "15px" }}>
+                        {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
+                        <DataTable value={searchTerm === "" ? visibleItems : searchResults} showGridlines resizableColumns columnResizeMode="fit">
+                            <Column header="#" field="SNo"></Column>
+
+                            <Column header="Enrollment ID" field="enrollmentId"></Column>
+                            <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
+                            <Column header="Address" field="address1"></Column>
+                            <Column header="City" field="city"></Column>
+                            <Column header="State" field="state"></Column>
+                            <Column header="Zip" field="zip" />
+                            <Column header="Actions" body={actionTemplateForPlus}></Column>
+
+                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
+                                ""
+                            ) : roleName == "PROVISION MANAGER" || roleName == "Provision Manager" || roleName == "provision manager" ? (
+                                <Column header="Actions" body={actionTemplateForPR}></Column>
+                            ) : (
+                                <Column header="Actions" body={actionTemplate}></Column>
+                            )}
+                        </DataTable>
+                        <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
+                        {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
+                    </div>
+                </div>
+                <br />
             </div>
-            <div className="card flex flex-column justify-content-center mx-5 border-noround">
-                <div className=" flex p-0 mx-3">
-                    <div className="mr-5">
-                        <p className="m-0 text-sm font-semibold">Date Range</p>
-                        <Calendar id="range" value={dateRange} onChange={(e) => setDateRange(e.value)} showIcon selectionMode="range" readOnlyInput className="w-25rem" style={{ width: "5px" }} />
-                    </div>
-                    <div>
-                        <p className="m-0 text-sm font-semibold ">Search</p>
-                        <InputText value={search} onChange={(e) => setSearch(e.value)} placeholder="Search by Customer F Name, L Name" className="w-25rem text-base" />
-                    </div>
-                </div>
-                <div className=" flex p-0 mx-3">
-                    <div className="mr-5">
-                        <p className="m-0 text-sm font-semibold ">Master</p>
-                        <Dropdown placeholder="Select Master" value={master} options={masterOptions} onChange={(e) => setMaster(e.value)} optionLabel="name" className="w-25rem flex align-items-center" />
-                    </div>
-                    <div>
-                        <p className="m-0 text-sm font-semibold ">Distributor</p>
-                        <Dropdown placeholder="Select Distributor" value={distributor} options={distributorOptions} onChange={(e) => setDistributor(e.value)} optionLabel="name" className="w-25rem flex align-items-center" />
-                    </div>
-                </div>
-                <div className=" flex p-0 mx-3">
-                    <div className="mr-5">
-                        <p className="m-0 text-sm font-semibold ">Retailer</p>
-                        <Dropdown placeholder="Select Retailer" value={retailer} options={retailerOptions} onChange={(e) => setRetailer(e.value)} optionLabel="name" className="w-25rem flex align-items-center" />
-                    </div>
-                    <div>
-                        <p className="m-0 text-sm font-semibold ">Employee</p>
-                        <Dropdown placeholder="Select Employee" value={employee} options={employeeOptions} onChange={(e) => setEmloyee(e.value)} optionLabel="name" className="w-25rem flex align-items-center text-sm" />
-                    </div>
-                </div>
-                <div className="flex justify-content-end pt-1">
-                    <Button label="Submit" className=" w-15rem bg-green-200 border-none" />
-                </div>
-            </div>
-            <div className="card p-3 mx-5 border-noround bg-green-200 ">
-                <p className="text-sm font-semibold">Search Result: 0</p>
-            </div> */}
-            <div className="card mx-5 p-0 border-noround">
-                {/* <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">
-                    <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText>
-                </div> */}
-                <div className="">
-                    <DataTable value={allEnrollments} showGridlines resizableColumns columnResizeMode="fit">
-                        <Column header="#" field="SNo"></Column>
-                        <Column header="Option" field="Option"></Column>
-                        <Column header="Enrollment ID" field="enrollmentId"></Column>
-                        <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
-                        <Column header="Address" field="address1"></Column>
-                        <Column header="City" field="city"></Column>
-                        <Column header="State" field="state"></Column>
-                        <Column header="Zip" field="zip"></Column>
-                        <Column header="DOB" field={(item) => item?.DOB ? item?.DOB.split('T')[0] : ""}></Column>
-                        <Column header="Plan Name" field="plan.name"></Column>
-                        <Column header="Plan Price" field="plan.price"></Column>
-                        <Column header="Phone Cost" field="Phonecost"></Column>
-                        <Column header="Amount Paid by Customer" field="Amountpaid"></Column>
-                        <Column header="Posting Date" field="Postingdate"></Column>
-                        <Column header="ESN Number" field="EsnNumber"></Column>
-                        <Column header="Telephone Number" field="Telephone"></Column>
-                        <Column header="Activation Call" field="Activationcall"></Column>
-                        <Column header="Activation Call Date Time" field="Activationcalldatetime"></Column>
-                        <Column header="Status" field="status"></Column>
-                        <Column header="Handover Equipment" field="Handover"></Column>
-                        <Column header="Rejected Reason" field="Rejectedreason"></Column>
-                        <Column header="Enroll Type" field="Enrolltype"></Column>
-                        <Column header="Reviewer Note" field="Reviewernote"></Column>
-                    </DataTable>
-                </div>
-            </div>
-            <br />
-        </div>
+        </>
     );
 };
-
 export default AllEnrollments;

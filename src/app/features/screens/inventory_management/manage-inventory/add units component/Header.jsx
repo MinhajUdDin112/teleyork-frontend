@@ -10,19 +10,21 @@ const Header = () => {
             <div>
                 <Card
                     style={{
-                        width: "70em",
-                        height: "17em",
+                        width: "70%",
+                      
                         backgroundColor: "#aae5e9",
                         marginBottom: "20px",
-                        marginLeft: "80px",
+                        marginLeft: "50%",   
+                          transform:"translate(-50%)",
                         boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",
+                        boxSizing:"border-box"
                     }}
                 >
                     <div className="flex">
                         <div>
                             <i className="pi pi-info-circle custom-icon"></i>
                         </div>
-                        <div className="ml-3 ">
+                        <div className="ml-3 " style={{width:"70%",textAlign:"justify"}}>
                             <p>1. if you are adding only sim card to the inventory select "sim" as the unit type when uploading SIMs.</p>
                             <p>2.if you are adding only IMEIs/Phone/Devices/Tables to the inventory select "GSM Device" as the unit type.</p>
                             <p>3. if you are adding sim card that are tagged with devices/tables to the inventory select "SIM "as the unit type when uploading SIMs with tagged Devices.</p>

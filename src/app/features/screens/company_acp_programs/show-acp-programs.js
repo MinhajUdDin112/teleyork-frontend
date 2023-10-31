@@ -13,13 +13,24 @@ const ShowPrograms = ({ setEditAcp }) => {
             setSelectedProgram(objectForEdit[e.target.parentElement.parentElement.children[0].textContent]);
             setShowEdit(true);
         }
+    }   
+    function setActive(rowData){ 
+         return ( 
+            <p> {rowData.active === true ? "Active" :"InActive"}</p>
+         )
+    } 
+    function renderBanner(rowData){ 
+    return ( 
+        <img onError={(e)=>{ 
+           e.target.style.display="none"
+        }} style={{width:"45px",height:"auto",marginLeft:"50%",transform:"translate(-50%)"}} src={rowData.banner}/>
+    )
     }
     let [showAcps, setShowAcps] = useState(null);
     let [showEdit, setShowEdit] = useState(false);
     let [selectedProgram, setSelectedProgram] = useState(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
     if (showAcps === null) {
         Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`) //using dummy service provider
             .then((res) => {
@@ -35,7 +46,6 @@ const ShowPrograms = ({ setEditAcp }) => {
             })
             .catch((err) => {});
     }
-
     return (
         <div>
             {!showEdit ? (
@@ -44,12 +54,13 @@ const ShowPrograms = ({ setEditAcp }) => {
                         <>
                             <DataTable tableStyle={{ minWidth: "50rem" }} value={showAcps} showGridlines>
                                 <Column field="name" header="Name"></Column>
-                                <Column field="description" header="Description"></Column>
-                                <Column field="active" header="Active"></Column>
-                                <Column field="edit" style={{textAlign:"center"}} header="Edit">
-                                    {" "}
-                                </Column>
-                            </DataTable>
+                                <Column field="description" header="Description"></Column> 
+                                <Column field={renderBanner} header="Banner"></Column>
+                                <Column field={setActive} header="Active"></Column>    
+                                <Column field="edit" style={{textAlign:"center"}} header="Edit">   
+                                </Column>   
+                                
+                            </DataTable>   
                         </>
                     ) : (
                         <ProgressSpinner className="flex justify-content-center" />

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import Axios from "axios";
 import BASE_URL from "../../../../../config";
-import placHolderImage from "../../../../../assets/images/placeholder_image.jpg";
+import { ToastContainer, toast } from "react-toastify";
 
-const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
+const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
 
     const [acpPrograms, setAcpPrograms] = useState([]);
     const [selectedAcpProgramId, setSelectedAcpProgramId] = useState(null);
     const [btnState, setBtnState] = useState(true);
+    const [isBack, setIsBack] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
@@ -25,7 +25,7 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
             const res = await Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`);
             setAcpPrograms(res?.data?.data || []);
         } catch (error) {
-            console.error("Error fetching module data:", error);
+            toast.error(`Error fetching module data : + ${error?.response?.data?.msg}`);
         }
     };
 
@@ -34,52 +34,79 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
     }, []);
 
    const postData = async () => {
+    setIsLoading(true);
 
     const data = {
-        csr: "645c7bcfe5098ff6251a2255",
+        csr: csr,
         userId: enrollmentUserId,
         program: selectedAcpProgramId
     }
-   // handleNext();
-    const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
-
-    if (res?.status === 200 || res?.status === 201) {
-        handleNext();
+    try{
+        const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
+        if (res?.status === 200 || res?.status === 201) {
+            localStorage.setItem("programmeId",JSON.stringify(res?.data))
+            console.log("acp response is  ",res?.data)
+            setIsBack(isBack+1);
+            handleNext();
+            setIsLoading(false);
+        }
     }
-    else{
-        console.log("status code is not 200")
+    catch(error){
+       toast.error(error?.response?.data?.msg)
+       setIsLoading(false);
     }
-   
 }
 
+//get programme data from local storage 
+const programedata= localStorage.getItem("programmeId");
+const parseprogramedata = JSON.parse(programedata);
 
+ //get ZipData data from local storage 
+ const zipdata= localStorage.getItem("zipData");
+ const parseZipData = JSON.parse(zipdata);
 
-    const handleAcpSelection = (acpId) => {
-
-        if (selectedAcpProgramId === acpId) {
-            setSelectedAcpProgramId(null);
-        } else {
-            setSelectedAcpProgramId(acpId);
-        }
+    const handleAcpSelection = (acpId) => {      
+            if (selectedAcpProgramId === acpId) {
+                setSelectedAcpProgramId(null);
+            } else {
+                setSelectedAcpProgramId(acpId);
+            }
     };
 
+
     useEffect(() => {
-        if (selectedAcpProgramId) { setBtnState(false) } else { setBtnState(true) }
+        if (selectedAcpProgramId) 
+        {     setBtnState(false) } else { setBtnState(true)        
+        }
     }, [selectedAcpProgramId]);
+
+
+useEffect(() => {
+    
+    if(parseprogramedata){
+        if(zipdata){
+            setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram); 
+        }
+        else{
+            setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram?._id);    
+        }
+       
+    }
+}, [])
 
     return (
         <>
+        <ToastContainer/>
             <div>
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="submit" onClick={handleBack} />
-                   
-                        <Button
+                       <Button
                             label="Continue"
                             type="submit"
                             onClick={postData}
                             disabled={btnState}
-                        />
-                   
+                            icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} 
+                        />    
                 </div>
                 <div>
                     <h6>Enrollment ID:{enrollment_id}</h6>
@@ -96,11 +123,11 @@ const Select = ({ handleNext, handleBack,enrollment_id,_id }) => {
             <div>
                 <div className="surface-section acp_programs">
                     <div className="flex flex-wrap">
-                        {acpPrograms &&
+                        { acpPrograms &&
                             acpPrograms.map((item) => {
                                 return (
                                     <div className="w-full lg:w-6 xl:w-3 p-5" key={item?._id}>
-                                        <Image src={placHolderImage} alt="Image" className="w-full" />
+                                        <Image src={item.banner} alt="Image" className="w-full" />
                                         <div className="mt-3 mb-2 font-medium text-900 text-xl">{item?.name}</div>
                                         <span className="text-700 line-height-3">{item?.description}</span>
                                         <a tabIndex="0" className="text-blue-500 font-medium flex align-items-center mt-2">

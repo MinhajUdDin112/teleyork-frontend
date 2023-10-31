@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";  
 import { Dialog } from "primereact/dialog";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";  
+import { Toast } from "primereact/toast";
+import { useNavigate } from "react-router-dom";  
 import { useDispatch, useSelector } from "react-redux";
 import { getDraftByTemplateIdAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import BASE_URL from "../../../../config";
 import Axios from "axios";
 
-const ShowDraftAll = () => {
+const ShowDraftAll = () => {    
+    let toast=useRef(null) 
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
 
@@ -19,21 +21,24 @@ const ShowDraftAll = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { getDraftByTemplateId, submitTemplate } = useSelector((state) => state.notification);
+    const { getDraftByTemplateId, submitTemplate } = useSelector((state) => state.notification);     
+     let loadingSend=useSelector(state=>state.notification.submitTemplateLoading)     
+     let submitTemplateError=useSelector(state=>state.notification.submitTemplateError)       
+     console.log(loadingSend)
+     console.log("submit template",submitTemplate)
     const { loginData } = useSelector((state) => state.login);
     const companyId = loginData?.compony
-
+        
+       
     useEffect(() => {
         dispatch(getDraftByTemplateIdAction(id, companyId));
     }, [id, submitTemplate]);
     const messageBody=(rowData) => {
         let template = rowData.message;
         let shortline = template.substring(0, 10);
-        let fullline = template.substring(15, template.length);
-        console.log("body is rendering");
         return (
             <div id="template">
-                <p>
+               {template.length > 10 ? <p>
                     {shortline}
                     <span
                         style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
@@ -45,7 +50,8 @@ const ShowDraftAll = () => {
                         {" "}
                         See more
                     </span>
-                </p>
+                </p>:  <p>{template}</p>
+                }
             </div>
         );
     };
@@ -70,7 +76,15 @@ const ShowDraftAll = () => {
 
     useEffect(() => {
         getDraftById()
-    }, []);
+    }, []);  
+    useEffect(()=>{   
+        console.log(toast)
+        if(loadingSend){    
+        
+            toast.current.show({ severity: "success", summary: "Info", detail: "Send Template Successfully" });
+                   
+       } 
+    })
 
     return (
         <div className="card bg-pink-50">
@@ -102,7 +116,8 @@ const ShowDraftAll = () => {
                 }}
             >
                 <div dangerouslySetInnerHTML={{ __html: `<p>${templatebody}</p>` }} />
-            </Dialog>
+            </Dialog>  
+            <Toast ref={toast} />
         </div>
     );
 };

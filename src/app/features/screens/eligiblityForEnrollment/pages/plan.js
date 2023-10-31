@@ -5,15 +5,15 @@ import axios from "axios";
 import BASE_URL from "../../../../../config";
 import { Divider } from "primereact/divider";
 import Axios from "axios";
-
-const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+const Plan = ({ setActiveIndex, enrollment_id, _id,csr  }) => {
 
     const [btnState, setBtnState] = useState(true)
-
-
     const [apidata, setapidata] = useState([]);
     const [selectedPlanId, setSelectedPlanId] = useState("");
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,7 +38,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
 
     const postData = async () => {
         const data = {
-          csr: "645c7bcfe5098ff6251a2255",
+          csr: csr,
           userId: _id,
           plan: selectedPlanId,
         };
@@ -47,11 +47,10 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
           const res = await Axios.post(`${BASE_URL}/api/user/plan`, data);
           if (res?.status === 200 || res?.status === 201) {
             localStorage.setItem("planResponse", JSON.stringify(res.data));
-    
-            setActiveIndex(3);
+            navigate("/all-enrollments")         
           }
         } catch (error) {
-          console.error("Error posting data:", error);
+          toast.error("Error posting data:", error);
         }
       };
     
@@ -59,6 +58,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
     
     return (
         <>
+        <ToastContainer/>
             <div className="card">
                 <div className="flex flex-row justify-content-between sticky-buttons">
                     <Button label="Back"
@@ -66,7 +66,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
                             setActiveIndex(1);
                         }} />
                     <Button
-                        label="Continue"
+                        label="Submit"
                         onClick={postData}
                         disabled={btnState}
                     />
@@ -83,7 +83,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id  }) => {
                 <div>
                     <div class="wrapper grid justify-content-center">
 
-                        {apidata.map((item) => {
+                        { apidata.map((item) => {
                             return (
                                 <div className="col-12 lg:col-3 md:col-4 sm:col-6">
                                     <div class="package brilliant">

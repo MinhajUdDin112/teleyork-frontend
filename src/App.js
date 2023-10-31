@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-
 import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
@@ -10,7 +9,6 @@ import { AppConfig } from "./AppConfig";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
-
 import "primereact/resources/primereact.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
@@ -19,12 +17,13 @@ import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";  
-import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page"
+import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page" 
 import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
-import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
-import manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
+import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";  
+import ManageRolesAndRights from "./app/features/screens/roles_and_permissions/ManageRolesAndRights";
+import Manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
 import InCompletedEnrollments from "./app/features/screens/lifeline_orders/InCompleteEnrollments";
 import RejectedEnrollments from "./app/features/screens/lifeline_orders/RejectedEnrolments";
@@ -37,6 +36,7 @@ import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_order
 import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
 import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
 import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
+
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
 import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
 import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
@@ -64,7 +64,11 @@ import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole"
 import CreateUser from "./app/features/screens/user_management/CreateUser";
 import ManageUser from "./app/features/screens/user_management/ManageUser";
 import EditUser from "./app/features/screens/user_management/EditUser";
+import Manage_Department from "./app/features/screens/user_management/Manage_Department";
+import CreateDepartment from "./app/features/screens/user_management/CreateDepartment";
+import EditDepartment from "./app/features/screens/user_management/EditDepartment";
 import NotFound from "./app/features/screens/not_found/NotFound";
+
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -198,7 +202,8 @@ const App = () => {
     let token = JSON.parse(localStorage.getItem("accessToken"));
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
-    useEffect(() => {
+    useEffect(() => {    
+        console.log(window.localStorage)
         const url=window.location.hash
         console.log(url,url.startsWith('#/selfenrollment'))
         if(url.startsWith('#/selfenrollment'))
@@ -235,8 +240,8 @@ const App = () => {
                                 <Route path="/companyacpprograms" element={<AcpProgramsFlowPage/>} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
+                                <Route path="/managerolesandrights/*" element={<ManageRolesAndRights/>} />
                                 <Route path="/invoice" element={<InvoicePage />} />
-                              
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
@@ -255,7 +260,7 @@ const App = () => {
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
                                 <Route path="/eligibilityproofupload" element={<EligibilityProofUpload />} />
                                 <Route path="/dealerwallet" element={<DealerWallet />} />
-                                <Route path="/manageinventory" element={<manage_inventory />} />
+                                <Route path="/manageinventory" element={<Manage_inventory />} />
                                 <Route path="/smsnotification" element={<Upload />} />
                                 <Route path="/sent" element={<Sent />} />
                                 <Route path="/draft" element={<Draft />} />
@@ -267,12 +272,15 @@ const App = () => {
                                 <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
                                 <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
                                 <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
-                                <Route path="/createtemplate" element={<CreateTemplate />} />
-                                <Route path="/managetemplate" element={<ManageTemplate />} />
+                                <Route path="/createtemplate" element={<CreateTemplate />} />  
+                                <Route path="/managetemplate/*" element={<ManageTemplate />} />
                                 <Route path="/createrole" element={<CreateRole />} />
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />
+                                <Route path="/manage-department" element={<Manage_Department />} />
+                                <Route path="/edit-department" element={<EditDepartment />} />
+                                <Route path="/create-department" element={<CreateDepartment />} />
                             </Routes>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>

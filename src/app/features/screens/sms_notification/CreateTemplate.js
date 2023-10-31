@@ -11,10 +11,13 @@ import { Toast } from "primereact/toast";
 import { addTemplateAction } from "../../../store/notification/NotificationAction";
 import { ProgressSpinner } from "primereact/progressspinner";
 const CreateTemplate = () => {
-    const dispatch = useDispatch();
-    const [templateText, setTemplateText] = useState("");
+    const dispatch = useDispatch();    
+    const [firstTimeLoading,setFirstTimeLoading]=useState(true)  
+    const [templateText, setTemplateText] = useState("");  
+    console.log("templatetext is",templateText)
     const [subjectText, setSubjectText] = useState("");
-    const { addTemplateLoading } = useSelector((state) => state.notification);
+    
+    const { addTemplateLoading,addTemplate,addTemplateError } = useSelector((state) => state.notification);
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;
     const companyId = loginData?.compony;
@@ -51,25 +54,58 @@ const CreateTemplate = () => {
             const dataToSend = {
                 ...values,
                 createdBy,
-                company: companyId,
-                template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
+                company: parseLoginRes?.compony,
+                template: templateText,
+                // template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                //     if (group1) {
+                //       return '&nbsp';
+                //     } else {
+                //       return match;
+                //     }}),
                 keySequence: [...keySequence],
-            };
-           
-            dispatch(addTemplateAction(dataToSend));
+            };  
+            
+           console.log("data to send is",dataToSend)
+            dispatch(addTemplateAction(dataToSend));     
+            setFirstTimeLoading(prev=>!prev)
             actions.resetForm();
             setTemplateText("");
             setSubjectText("");
-            show();
         },
     });
-
     const toast = useRef(null);
-
-    const show = () => {
+       
+    const showSuccesss = () => {
         toast.current.show({ severity: "success", summary: "Info", detail: "Template Added" });
-    };
-
+    };  
+    const showError=()=>{ 
+        toast.current.show({ severity: "error", summary: "Info", detail: "Template Added" });
+    
+    }
+    useEffect(()=>{    
+          if(!firstTimeLoading){   
+        if(addTemplateError === null){ 
+           
+        } 
+        else{ 
+            showError()
+        }  
+    }
+    },[addTemplateError]) 
+    useEffect(()=>{   
+        if(!firstTimeLoading){
+        if(addTemplate === null){ 
+           
+        } 
+        else{ 
+            showSuccesss()   
+            
+        }    
+    }  
+    
+        
+    },[addTemplate])
+   
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
@@ -78,7 +114,7 @@ const CreateTemplate = () => {
             <form onSubmit={formik.handleSubmit}>
                 <Toast ref={toast} />
                 <div className="card mx-5">
-                    <div className="flex flex-wrap justify-content-center">
+                    <div className="flex flex-wrap justify-content-around">
                         <div className="mr-3">
                             <p className="m-0">Template Name:</p>
                             <InputText type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="text-sm mb-2 w-25rem"  placeholder="Enter Template Name" keyfilter={/^[a-zA-Z0-9-_]*$/} />
@@ -116,7 +152,9 @@ const CreateTemplate = () => {
                     </div>
                     <div className="mt-2">
                         <p className="m-0">Template Body: </p>
-                        <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => setTemplateText(e.htmlValue)} />
+                        <Editor style={{ height: "320px" }} value={templateText} onTextChange={(e) => {
+                          
+                            setTemplateText(e.htmlValue)}} />
                     </div>
                     {addTemplateLoading ? (
                         <ProgressSpinner style={{ width: "40px", height: "40px", marginLeft: "1050px", marginTop: "10px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
