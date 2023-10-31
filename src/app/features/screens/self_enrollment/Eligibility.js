@@ -5,9 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
 import BASE_URL from "../../../../config";
+import { toast } from "react-toastify";
 
 const Eligibility = () => {
     const [acpProgram,setAcpProgram] = useState([])
+    console.log("first",acpProgram)
     const {id}=useParams()
     const eligId = "645a85198cd1ff499c8b99cd"
     const navigate = useNavigate();
@@ -26,14 +28,43 @@ const Eligibility = () => {
             }
             return errors;
         },
-        onSubmit:async(values)=>{
-            const newData={
-                userId:id,
-                ...values
+        // onSubmit:async(values)=>{
+        //     const newData={
+        //         userId:id,
+        //         ...values
+        //     }
+        //     try{
+        //     const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`,newData);
+        //     navigate(`/selfenrollment/nationalverifier/${id}`);
+        //     }catch(error){
+        //         return toast.warn("Something went wrong")
+        //     }
+        // },
+        onSubmit: async (values) => {
+            const newData = {
+                userId: id,
+                ...values,
+            };
+        
+            try {
+                const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`,newData);
+                
+                // Check if the POST request was successful
+                if (res.status === 201) {
+                    // Save the response data in local storage
+                    localStorage.setItem('selectProgram', JSON.stringify(res.data));
+                    console.log("selectProgram",res.data)
+                    
+                    // Navigate to the next page
+                    navigate(`/selfenrollment/nationalverifier/${id}`);
+                } else {
+                    return toast.warn("Something went wrong");
+                }
+            } catch (error) {
+                return toast.warn("Something went wrong");
             }
-            const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`,newData);
-            navigate(`/selfenrollment/nationalverifier/${id}`);
         }
+        
     })
 
     //get all ACP programs

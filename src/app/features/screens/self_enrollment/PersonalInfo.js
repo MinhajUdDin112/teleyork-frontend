@@ -9,7 +9,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import BASE_URL from "../../../../config";
 import axios from "axios";
 import * as Yup from "yup";
-import moment from "moment/moment";
+import { toast } from "react-toastify";
 
 const PersonalInfo = () => {
     const navigate = useNavigate()
@@ -19,20 +19,46 @@ const PersonalInfo = () => {
 
 
     const validationSchema = Yup.object().shape({
-        firstName:Yup.string().required("First name is required"),
-        middleName: Yup.string().required("Middle name is required"),
-        lastName: Yup.string().required("Last name is required"),
-        SSN: Yup.string().required("SSN is required"),
-        suffix: Yup.string().required("suffix is required"),
-        contact: Yup.string().required("Contact is required"),
-        DOB: Yup.string().required("DOB is required"),
-        // BenifitFirstName: Yup.string().when("isDifferentPerson",{
-        //     is:true,
-        //     then:Yup.string().required("Name is required"),
-        //     otherwise:Yup.string().notRequired()
-        // })
-
-    })
+        firstName: Yup.string().required("This field is required"),
+        middleName: Yup.string().required("This field is required"),
+        lastName: Yup.string().required("This field is required"),
+        SSN: Yup.string().required("This field is required"),
+        suffix: Yup.string().required("This field is required"),
+        contact: Yup.string().required("This field is required"),
+        DOB: Yup.date()
+            .nullable()
+            .required("DOB is required")
+            .max(new Date(), "DOB cannot be in the future"),
+        BenifitFirstName: Yup.string().when("isDifferentPerson", {
+            is: true,
+            then: ()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        BenifitMiddleName: Yup.string().when("isDifferentPerson", {
+            is: true,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        BenifitLastName: Yup.string().when("isDifferentPerson", {
+            is: true,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        BenifitSSN: Yup.string().when("isDifferentPerson", {
+            is: true,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        BenifitDOB: Yup.date().when("isDifferentPerson", {
+            is: true,
+            then:()=> Yup.date()
+                .nullable()
+                .required("This field is required")
+                .max(new Date(), "DOB cannot be in the future"),
+                otherwise:()=> Yup.string().notRequired()
+        }),
+    });
+    
 
     const formik = useFormik({
         validationSchema,
@@ -51,14 +77,31 @@ const PersonalInfo = () => {
             BenifitSSN: "",
             BenifitDOB: "",
         },
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             const newData = {
                 userId: id,
                 ...values,
             };
-            const res = axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
-            navigate(`/selfenrollment/address/${id}`,{state:stateData})
-        },
+        
+            try {
+                const res = await axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
+                
+                // Check if the POST request was successful
+                if (res.status === 201) {
+                    // Save the response data in local storage
+                    localStorage.setItem('initialInformation', JSON.stringify(res.data));
+                    console.log("initialInformation",res.data)
+                    
+                    // Navigate to the next page
+                    navigate(`/selfenrollment/address/${id}`, { state: stateData });
+                } else {
+                    return toast.warn("Something went wrong");
+                }
+            } catch (error) {
+                return toast.warn("Something went wrong");
+            }
+        }
+        
     });
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
@@ -66,10 +109,9 @@ const PersonalInfo = () => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
     }
 
-    const handleCalender = (e) => {
-        let dob = moment(e.value).format("YYYY-MM-DD")
-        formik.values.DOB = dob
-    }
+   
+
+   
 
     return (
         <>
@@ -78,7 +120,7 @@ const PersonalInfo = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: "100vh", // Changed height to minHeight
+                    minHeight: "100vh", 
                 }}
             >
                 <div className="col-7">
@@ -101,12 +143,12 @@ const PersonalInfo = () => {
                                     {getFormErrorMessage("suffix")}
                                     <InputText className="mb-3" placeholder="Last 4 SSN or Tribal ID" name="SSN" value={formik.values.SSN} onChange={formik.handleChange} />
                                     {getFormErrorMessage("SSN")}
-                                    <Calendar className="mb-3" id="DOB" placeholder="Enter DOB" value={formik.values.DOB} onChange={(e) => handleCalender(e)} showIcon />
+                                    <Calendar className="mb-3" name="DOB" placeholder="Enter DOB" value={formik.values.DOB} onChange={formik.handleChange} showIcon />
                                     {getFormErrorMessage("DOB")}
                                     <InputMask className="mb-3" name="contact" value={formik.values.contact} mask="999-999-9999" placeholder="+999-999-9999"  onChange={formik.handleChange} />
                                     {getFormErrorMessage("contact")}
                                     <div className="mb-3 flex justify-content-center">
-                                        <Checkbox inputId="binary" name="isDifferentPerson" checked={formik.values.isDifferentPerson} onChange={formik.handleChange} />
+                                        <Checkbox inputId="binary"  id="isDifferentPerson" name="isDifferentPerson" checked={formik.values.isDifferentPerson} onChange={formik.handleChange} />
                                         <label htmlFor="binary" className="text-xl flex align-items-center ml-2">
                                             Is the Benefit Qualifying Person different?
                                         </label>
@@ -117,9 +159,14 @@ const PersonalInfo = () => {
                                                 <InputText className="mb-3" placeholder="First Name" name="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} />
                                                 {getFormErrorMessage("BenifitFirstName")}
                                                 <InputText className="mb-3" placeholder="Middle Name" name="BenifitMiddleName" value={formik.values.BenifitMiddleName} onChange={formik.handleChange} />
+                                                {getFormErrorMessage("BenifitMiddleName")}
                                                 <InputText className="mb-3" placeholder="Last Name" name="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} />
+                                                {getFormErrorMessage("BenifitLastName")}
                                                 <InputText className="mb-3" placeholder="Last 4 SSN or Tribal ID" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} />
-                                                <Calendar className="mb-3" placeholder="Date of Birth" name="BenifitDOB" value={new Date(formik.values.BenifitDOB)} onChange={formik.handleChange} />
+                                                {getFormErrorMessage("BenifitSSN")}
+                                                
+                                            <Calendar className="mb-3" placeholder="Date of Birth" name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} />
+                                            {getFormErrorMessage("BenifitDOB")}
                                             </div>
                                         )}
                                     </div>
