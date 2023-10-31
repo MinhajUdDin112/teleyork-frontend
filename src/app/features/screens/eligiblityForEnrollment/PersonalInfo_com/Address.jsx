@@ -258,7 +258,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     <div>
                         <Button label="Back" type="button" onClick={handleBack} />
                     </div>
-                    <div className="fixed-button-container">{isLoading ? <Button label="Continue" type="submit" disabled /> : <Button label="Continue" type="submit" />}</div>
+                    <div className="fixed-button-container"> <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} /></div>
                 </div>
                 <div>
                     <h6>Enrollment ID: {enrollment_id}</h6>
@@ -273,7 +273,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                         <p className="m-0">
                             Address 1 <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" minLength={10} />
+                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" minLength={10} autoComplete="new-password" />
                         {formik.touched.address1 && formik.errors.address1 ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.address1}
@@ -282,7 +282,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Address 2</p>
-                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" autoComplete="new-password" />
                     </div>
                     <div className=" mr-3 w-21rem  ">
                         <p className="m-0">
@@ -360,12 +360,12 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                                 <label className="field_label">
                                     Address 1 <span className="steric">*</span>
                                 </label>
-                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} />
+                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} autoComplete="new-password" />
                                 {getFormErrorMessage("mailingAddress1")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label"> Address 2 </label>
-                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} />
+                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} autoComplete="new-password" />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -396,7 +396,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                                 <label className="field_label">
                                     Mailing Address 1 <span className="steric">*</span> PO BOX
                                 </label>
-                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/} />
+                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/}  autoComplete="new-password"/>
                                 {getFormErrorMessage("PoBoxAddress")}
                             </div>
                             <div className="field col-12 md:col-3">
