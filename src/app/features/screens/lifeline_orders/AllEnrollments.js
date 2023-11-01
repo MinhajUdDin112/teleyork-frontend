@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import DialogForReject from "./DialogForReject";
 import DialogForActivateSim from "./DialogForActivateSim";
-import DialogForShowData from "./DialogForShowData";
 
 const AllEnrollments = () => {
     const [searchResults, setSearchResults] = useState([]);
@@ -30,16 +29,43 @@ const AllEnrollments = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [link, setLink] = useState();
-    const [isShow, setIsShow] = useState(false);
-    const [allData, setAllData] = useState([]);
+    const [allEnrollments, setAllEnrollments] = useState([]);
+    const [expandedRows, setExpandedRows] = useState([]);
+
+    const rowExpansionTemplate = (data) => {
+        return (
+            <div>
+              
+      <DataTable value={[data]} stripedRows >
+                    <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                    <Column field="plan.name" header="Plan Name" />
+                    <Column field="plan.price" header="Plan Price" />
+                    <Column field="Phonecost" header="Phone Cost" />
+                    <Column field="Amountpaid" header="Amount Paid by Customer" />
+                    <Column field="Postingdate" header="Posting Date" />
+                    <Column field="EsnNumber" header="ESN Number" />
+                    <Column field="Telephone" header="Telephone Number" />
+                    <Column field="Activationcall" header="Activation Call" />
+                    <Column field="Activationcalldatetime" header="Activation Call Date Time" />
+                    <Column field="status" header="Status" />
+                    <Column field="Handover" header="Handover Equipment" />
+                    <Column field="Rejectedreason" header="Rejected Reason" />
+                    <Column field="Enrolltype" header="Enroll Type" />
+                    <Column field="Reviewernote" header="Reviewer Note" />
+                </DataTable>
+            </div>
+        );
+    };
 
     const navigate = useNavigate();
 
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const roleName= parseLoginRes?.role?.role;
-    
+     const roleName = parseLoginRes?.role?.role;
+    // const roleName = "provision manager"
+
+
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm);
 
@@ -58,7 +84,7 @@ const AllEnrollments = () => {
         });
         setSearchResults(filteredResults);
     };
-    const [allEnrollments, setAllEnrollments] = useState([]);
+    
     const itemsPerPage = 10;
     const pageCount = Math.ceil(allEnrollments.length / itemsPerPage);
     const offset = currentPage * itemsPerPage;
@@ -78,7 +104,7 @@ const AllEnrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error("Error fetching All Enrollment: " + error?.response?.data?.msg);
+            toast.error(`Error fetching All Enrollment:+ ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
     };
@@ -150,7 +176,14 @@ const AllEnrollments = () => {
         } catch (error) {
             const body = error?.response?.data?.data?.body;
             const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
-            toast.error("Error is " + errorMessage);
+            const msgerror=error?.response?.data?.msg;
+            if(msgerror){
+                toast.error(error?.response?.data?.msg)
+            }    
+           else  if(body){
+                toast.error("Error is " + errorMessage);
+            }
+          
 
             setisButtonLoading(false);
         }
@@ -210,11 +243,6 @@ const AllEnrollments = () => {
         }
     };
 
-    const viewRemainData = (rowData) => {
-            setIsShow(true);
-            setAllData(rowData);
-    };
-
     const actionTemplate = (rowData) => {
         return (
             <div>
@@ -239,13 +267,6 @@ const AllEnrollments = () => {
             </div>
         );
     };
-    const actionTemplateForPlus = (rowData) => {
-        return (
-            <div>
-                <Button label="" icon="pi pi-plus" onClick={() => viewRemainData(rowData)} className="p-button-text p-button-warning p-mr-2" />
-            </div>
-        );
-    };
 
     return (
         <>
@@ -260,10 +281,6 @@ const AllEnrollments = () => {
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
                         <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
                     </Dialog>
-
-                    <Dialog  visible={isShow} style={{ width: "85vw" }} onHide={() => setIsShow(false)}>
-                        <DialogForShowData allData={allData} />
-                    </Dialog>
                 </form>
 
                 <div className="card mx-5 p-0 border-noround">
@@ -274,8 +291,10 @@ const AllEnrollments = () => {
                     </div>
                     <div className="" style={{ marginTop: "30px", padding: "15px" }}>
                         {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
-                        <DataTable value={searchTerm === "" ? visibleItems : searchResults} showGridlines resizableColumns columnResizeMode="fit">
-                            <Column header="#" field="SNo"></Column>
+
+                        <DataTable value={searchTerm === "" ? visibleItems : searchResults} stripedRows resizableColumns  expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate}>
+                            <Column expander style={{ width: "3em" }} />
+                            {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
 
                             <Column header="Enrollment ID" field="enrollmentId"></Column>
                             <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
@@ -283,7 +302,6 @@ const AllEnrollments = () => {
                             <Column header="City" field="city"></Column>
                             <Column header="State" field="state"></Column>
                             <Column header="Zip" field="zip" />
-                            <Column header="Actions" body={actionTemplateForPlus}></Column>
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                 ""

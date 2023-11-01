@@ -9,12 +9,14 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 
 const EditUser = () => {
 
     const [allRoles, setAllRoles] = useState([])
+    const [allDepartment, setAllDepartment] = useState([]);
+    const [allUser, setAllUser] = useState([]);
 
     const location = useLocation();
     const { rowData } = location.state || {};
@@ -39,6 +41,8 @@ const EditUser = () => {
         state: Yup.string().required('This field is required.'),
         address: Yup.string().required('This field is required.'),
         zip: Yup.string().required('This field is required.'),
+        reportingTo: Yup.string().required("This field is required."),
+        department: Yup.string().required("This field is required."),
     });
 
     const formik = useFormik({
@@ -52,6 +56,8 @@ const EditUser = () => {
             state: '',
             address: '',
             zip: '',
+            reportingTo: "",
+            department: "",
         },
         onSubmit: async (values) => {
 
@@ -60,6 +66,8 @@ const EditUser = () => {
                 compony: parseLoginRes?.compony,
                 createdBy: parseLoginRes?.createdDate,
                 roleId: formik.values.role,
+                reportingTo: formik.values.reportingTo,
+                department: formik.values.department,
                 userId: parseLoginRes?._id,
                 name: values.name,
                 email: values.email,
@@ -114,6 +122,34 @@ const EditUser = () => {
             console.error("Error fetching module data:", error);
         }
     };
+    useEffect(() => {
+        const getDepartment = async () => {
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.compony}`);
+                setAllDepartment(res?.data?.data || []);
+            } catch (error) {
+                
+            }
+        };
+        getDepartment();
+    }, []);
+
+       
+    useEffect(() => {
+        if(formik.values.department){
+            const departId= formik.values.department;
+        const getRoles = async () => {
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
+           
+              setAllUser(res?.data?.data || []);
+            } catch (error) {
+                
+            }
+        };
+        getRoles();
+    }
+}, [formik.values.department])
 
     useEffect(() => {
         handleUserDataMapping()
@@ -122,6 +158,7 @@ const EditUser = () => {
 
     return (
         <>
+          <ToastContainer/>
           <div className="card">
     <h3 className="mt-1 ">Edit User</h3>
 </div>
@@ -143,6 +180,34 @@ const EditUser = () => {
                                 keyfilter={/^[A-Za-z\s]+$/}
                             />
                             {getFormErrorMessage("role")}
+                        </div>
+                        <div className="p-field col-12 md:col-3">
+                            <label className="Label__Text">Department <span className="steric">*</span></label>
+                            <Dropdown
+                                id="department"
+                                options={allDepartment}
+                                value={formik.values.department}
+                                onChange={(e) => formik.setFieldValue("department", e.value)}
+                                optionLabel="department"
+                                optionValue="_id"
+                                filter
+                                showClear
+                                filterBy="department" // Set the property to be used for filtering
+                            />
+                            {getFormErrorMessage("department")}
+                        </div>
+                        <div className="p-field col-12 md:col-3">
+                            <label className="Label__Text">Reporting To <span className="steric">*</span></label>
+                            <Dropdown id="reportingTo" 
+                            options={allUser} 
+                            value={formik.values.reportingTo} 
+                            onChange={(e) => formik.setFieldValue("reportingTo", e.value)} 
+                            optionLabel="name" 
+                            optionValue="_id"  
+                            showClear
+                             filter 
+                             filterBy="name" />
+                            {getFormErrorMessage("reportingTo")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
