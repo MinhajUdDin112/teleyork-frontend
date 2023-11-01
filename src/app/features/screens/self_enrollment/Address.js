@@ -72,9 +72,19 @@ const Address = () => {
         }
         
     });
-
+    useEffect(()=>{
+        const homeAddress  = JSON.parse(localStorage.getItem('homeAddress'))
+        if(homeAddress){
+            formik.setFieldValue('address1',homeAddress?.data?.address1)
+            formik.setFieldValue('address2',homeAddress?.data?.address2)
+            formik.setFieldValue('SSN',homeAddress?.data?.SSN)
+            formik.setFieldValue('isTerribleTerritory',homeAddress?.data?.isTerribleTerritory)
+            formik.setFieldValue('isBillAddress',homeAddress?.data?.isBillAddress)
+           
+        }
+    },[])
     const handleBack = () => {
-        navigate("/selfenrollment/personalinfo");
+        navigate(-1);
     };
     useEffect(()=>{
         formik.setFieldValue("city",stateData?.city)

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
@@ -104,15 +104,31 @@ const PersonalInfo = () => {
         
     });
 
+    
+
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
     }
-
    
-
-   
-
+    useEffect(()=>{
+        const initialInformation  = JSON.parse(localStorage.getItem('initialInformation'))
+        if(initialInformation){
+            formik.setFieldValue('firstName',initialInformation?.data?.firstName)
+            formik.setFieldValue('middleName',initialInformation?.data?.middleName)
+            formik.setFieldValue('lastName',initialInformation?.data?.lastName)
+            formik.setFieldValue('SSN',initialInformation?.data?.SSN)
+            formik.setFieldValue('suffix',initialInformation?.data?.suffix)
+            formik.setFieldValue('contact',initialInformation?.data?.contact)
+            formik.setFieldValue('DOB',initialInformation?.data?.DOB)
+            formik.setFieldValue('isDifferentPerson',initialInformation?.data?.isDifferentPerson)
+            formik.setFieldValue('BenifitFirstName',initialInformation?.data?.BenifitFirstName)
+            formik.setFieldValue('BenifitMiddleName',initialInformation?.data?.BenifitMiddleName)
+            formik.setFieldValue('BenifitLastName',initialInformation?.data?.BenifitLastName)
+            formik.setFieldValue('BenifitSSN',initialInformation?.data?.BenifitSSN)
+            // formik.setFieldValue('BenifitDOB',initialInformation?.data?.BenifitDOB)
+        }
+    },[])
     return (
         <>
             <div
