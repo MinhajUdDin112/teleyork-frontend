@@ -6,7 +6,8 @@ import BASE_URL from "../../../../config";
 import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
 export default function AddAcpProgram() { 
-    const toast = useRef(null);    
+    const toast = useRef(null);        
+    const refForCode=useRef(null)
     const [imgfile,setimgfile]=useState(null)
     const [buttonText, setButtontext] = useState("Choose File");     
     let [imgsrc,setimgsrc]=useState(undefined)
@@ -15,18 +16,30 @@ export default function AddAcpProgram() {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);    
     const [inputValue, setInputValue] = useState('');
-
+  const [codeFIeldError,setCodeFieldError]=useState(false)
     const handleInputChange = (event) => {
-      const value = event.target.value;    
-         console.log(value)
-      // Regular expression to match the pattern: [A-Z][0-9]
-      const regex =  /^[A-Z]\d$/;
-  
-      if (regex.test(value)) {
-        setInputValue(value);
-      } else{ 
-        console.log("not match")
-      }
+          if(event.target.value.length > 2 ){ 
+            setCodeFieldError(true)
+          } 
+          else{ 
+              
+            if(event.target.value.length === 2){ 
+                const regex = /^[A-Z][0-9]$/;
+                if (!regex.test(event.target.value)) {   
+                   setCodeFieldError(true)
+                }
+                else{ 
+                     setCodeFieldError(false)
+                } 
+                setInputValue(event.target.value)
+            
+            } 
+            else{ 
+
+            setInputValue(event.target.value)     
+            }
+            
+          }
     };
     const formik = useFormik({
         initialValues: {
@@ -45,9 +58,7 @@ export default function AddAcpProgram() {
             if (!values.description) {
                 errors.description = "Description is required";
             }  
-            if(!values.code.length > 2){ 
-                errors.code="Code is required"
-            }   
+        
         
             return errors;
         },
@@ -60,11 +71,18 @@ export default function AddAcpProgram() {
             serviceProvider: parseLoginRes?.compony, //Both Service Provider and CreatedBY will be same according to APi
             createdBy: parseLoginRes?._id, 
             banner:formik.values.banner,   
-            
+            code:inputValue,
             active:formik.values.active
-        };
-        if (Object.keys(formik.errors).length === 0) {
-            if (data.name !== "" && data.description !== "") {  
+        };     
+        const regex = /^[A-Z][0-9]$/;
+        if(regex.test(refForCode.value)){ 
+            setCodeFieldError(false)
+        }
+        else{ 
+            setCodeFieldError(true)
+        }
+        if (Object.keys(formik.errors).length === 0 && codeFIeldError === false) {   
+              if (data.name !== "" && data.description !== "") {  
                    if(imgfile !== null){
                 let formData=new FormData()    
             console.log(imgfile)
@@ -144,10 +162,10 @@ export default function AddAcpProgram() {
                      </div>       
                      <div className="mr-3 mb-3" style={{ marginTop: "15px", width: "23em" }}>
                     <p className="m-0">Code:</p>
-                    <InputText type="text" value={inputValue} onChange={handleInputChange} name="code" />
-                    {showError ? (
+                    <InputText ref={refForCode} type="text" value={inputValue} onChange={handleInputChange} name="code" />
+                    {codeFIeldError ? (
                         <div className="error" style={{ marginTop: "22px", color: "red" }}>
-                            {formik.errors.code}
+                            "Code Must be in Format A1,E1"
                         </div>
                     ) : undefined}
                 </div>   

@@ -8,7 +8,6 @@ import { RadioButton } from "primereact/radiobutton";
 import { Checkbox } from "primereact/checkbox";
 import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
@@ -18,8 +17,10 @@ import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
-const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
-    const [confrimAddress, setConfrimAddress] = useState("");
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+
+const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
+    const [confrimAddress, setConfrimAddress] = useState("same");
     const [tempAdd, setTempAdd] = useState(true);
     const [isSame, setIsSame] = useState();
     const [isDifferent, setIsDifferent] = useState();
@@ -27,9 +28,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [autoCompleteAddress, setAutoCompleteAddress] = useState(null);
 
-    const zipResponse = useSelector((state) => state.zip);
-
-    const zipDataLs = localStorage.getItem("zipData");
+    const zipDataLs = localStorage.getItem("basicData");
     const zipDataParsed = JSON.parse(zipDataLs);
     const zipCode = zipDataParsed?.data?.zip;
     const zipCity = zipDataParsed?.data?.city;
@@ -39,6 +38,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
         address1: Yup.string().required("Address is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
     });
+    console.log("cnfrm addres is",confrimAddress)
 
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -73,7 +73,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 isTemporaryAddress: tempAdd,
                 isSameServiceAddress: formik.values.isSameServiceAddress,
                 isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
-                isPoBoxAddress: formik.values.isPOboxAddress,
+                isPoBoxAddress: formik.values.isPoBoxAddress,
                 mailingAddress1: formik.values.mailingAddress1,
                 mailingAddress2: formik.values.mailingAddress2,
                 mailingZip: formik.values.mailingZip,
@@ -84,8 +84,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 poBoxState: formik.values.poBoxState,
                 poBoxCity: formik.values.poBoxCity,
                 userId: userId,
-                csr: "645c7bcfe5098ff6251a2255",
+                csr: csr,
             };
+           
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
@@ -128,7 +129,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
     }, [formik.values.mailingZip]);
 
     useEffect(() => {
-        if (formik.values.isPoBoxAddress) {
+       // if (formik.values.isPoBoxAddress) {
             if (formik.values.poBoxZip && formik.values.poBoxZip.length === 5) {
                 async function getData() {
                     const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`);
@@ -138,7 +139,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 }
                 getData();
             }
-        }
+       // }
     }, [formik.values.isPoBoxAddress, formik.values.poBoxZip]);
 
     //GETTING city from autocomplete api response
@@ -161,6 +162,11 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             }
         }
     }, [autoCompleteAddress]);
+
+    const handleAutoCompleteClick = () => {
+        setAutoCompleteAddress('');
+      };
+    
 
     const handleSame = () => {
         formik.setFieldValue("isSameServiceAddress", true);
@@ -201,11 +207,15 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
 
     const addressResponse = localStorage.getItem("address");
     const parseaddressResponse = JSON.parse(addressResponse);
+
     useEffect(() => {
         const address = parseaddressResponse?.data?.address1;
         if (address) {
             formik.setFieldValue("address1", address);
             formik.setFieldValue("address2", parseaddressResponse?.data?.address2);
+            formik.setFieldValue("zip", parseaddressResponse?.data?.zip);
+            formik.setFieldValue("city", parseaddressResponse?.data?.city);
+            formik.setFieldValue("state", parseaddressResponse?.data?.state);
             formik.setFieldValue("isTemporaryAddress", parseaddressResponse?.data?.isTemporaryAddress);
 
             formik.setFieldValue("isSameServiceAddress", parseaddressResponse?.data?.isSameServiceAddress);
@@ -217,6 +227,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             formik.setFieldValue("mailingZip", parseaddressResponse?.data?.mailingZip);
             formik.setFieldValue("mailingCity", parseaddressResponse?.data?.mailingCity);
             formik.setFieldValue("mailingState", parseaddressResponse?.data?.mailingState);
+
             formik.setFieldValue("PoBoxAddress", parseaddressResponse?.data?.PoBoxAddress);
             formik.setFieldValue("poBoxZip", parseaddressResponse?.data?.poBoxZip);
             formik.setFieldValue("poBoxState", parseaddressResponse?.data?.poBoxState);
@@ -226,10 +237,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
             setTempAdd(parseaddressResponse?.data?.isTemporaryAddress);
             setIsSame(parseaddressResponse?.data?.isSameServiceAddress);
             setIsDifferent(parseaddressResponse?.data?.isNotSameServiceAddress);
-            setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);
+            console.log("is not same is ",parseaddressResponse?.data?.isNotSameServiceAddress)
+            setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);  
         }
     }, []);
-   
+    useEffect(() => {
+        if (isDifferent) {
+            setConfrimAddress("different");
+        } else if (isPoBox) {
+            setConfrimAddress("pobox");
+        }
+    }, [isDifferent, isPoBox]);
+    
+
     return (
         <>
             <ToastContainer />
@@ -238,7 +258,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                     <div>
                         <Button label="Back" type="button" onClick={handleBack} />
                     </div>
-                    <div className="fixed-button-container">{isLoading ? <Button label="Continue" type="submit" disabled /> : <Button label="Continue" type="submit" />}</div>
+                    <div className="fixed-button-container"> <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} /></div>
                 </div>
                 <div>
                     <h6>Enrollment ID: {enrollment_id}</h6>
@@ -253,7 +273,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         <p className="m-0">
                             Address 1 <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" minLength={10} />
+                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" minLength={10} autoComplete="new-password" />
                         {formik.touched.address1 && formik.errors.address1 ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.address1}
@@ -262,7 +282,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">Address 2</p>
-                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" />
+                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" autoComplete="new-password" />
                     </div>
                     <div className=" mr-3 w-21rem  ">
                         <p className="m-0">
@@ -273,6 +293,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                             selectProps={{
                                 autoCompleteAddress,
                                 onChange: setAutoCompleteAddress,
+                                onClick: handleAutoCompleteClick, 
                             }}
                         />
                     </div>
@@ -312,19 +333,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 </div>
                 <div className="flex flex-wrap mt-4">
                     <div className="mr-3 flex alignitem-center">
-                        <RadioButton inputId="sameAdress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
+                        <RadioButton inputId="confrimAddress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
                         <label htmlFor="sameAdress" className="ml-2">
                             Same As service Address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
-                        <RadioButton inputId="differentAddress" name="address" value="different" onClick={handleDifferent} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "different"} />
+                        <RadioButton inputId="confrimAddress" name="address" value="different" onClick={handleDifferent} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "different"} />
                         <label htmlFor="differentAddress" className="ml-2">
                             Different from Service address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
-                        <RadioButton inputId="poboxAddress" name="address" value="pobox" onClick={handlePobox} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "pobox"} />
+                        <RadioButton inputId="confrimAddress" name="address" value="pobox" onClick={handlePobox} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "pobox"} />
                         <label htmlFor="poboxAddress" className="ml-2">
                             My mailing address is a PO BOX
                         </label>
@@ -333,17 +354,25 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
 
                 {isDifferent && (
                     <>
-                        <div className="p-fluid formgrid grid mt-5">
+                        <div className="mt-3">Mailing Address</div>
+                        <div className="p-fluid formgrid grid mt-3">
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                    Mailing Address 1 <span className="steric">*</span>
+                                    Address 1 <span className="steric">*</span>
                                 </label>
-                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} />
+                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} autoComplete="new-password" />
                                 {getFormErrorMessage("mailingAddress1")}
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label className="field_label">Mailing Address 2 </label>
-                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} />
+                                <label className="field_label"> Address 2 </label>
+                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} autoComplete="new-password" />
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    Zip Code <span className="steric">*</span>
+                                </label>
+                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
+                                {getFormErrorMessage("mailingZip")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -357,13 +386,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 </label>
                                 <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
                             </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Zip Code <span className="steric">*</span>
-                                </label>
-                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
-                                {getFormErrorMessage("mailingZip")}
-                            </div>
                         </div>
                     </>
                 )}
@@ -374,8 +396,14 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 <label className="field_label">
                                     Mailing Address 1 <span className="steric">*</span> PO BOX
                                 </label>
-                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/} />
+                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/}  autoComplete="new-password"/>
                                 {getFormErrorMessage("PoBoxAddress")}
+                            </div>
+                            <div className="field col-12 md:col-3">
+                                <label className="field_label">
+                                    Zip Code <span className="steric">*</span>
+                                </label>
+                                <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} maxLength={5} keyfilter={/^[0-9]*$/} />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
@@ -390,12 +418,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                     </p>
                                 </label>
                                 <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Zip Code <span className="steric">*</span>
-                                </label>
-                                <InputText id="poBoxZip" value={formik.values.poBoxZip} onChange={formik.handleChange} maxLength={5} keyfilter={/^[0-9]*$/} />
                             </div>
                         </div>
                     </>

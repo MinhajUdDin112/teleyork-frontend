@@ -222,26 +222,29 @@ const CreateRole = () => {
                         </div>
                     </form>
                 </div>
-                <Divider />
-                <div className="grid r_n_r">
-                    {moduleData.map((module) => (
-                        <div className="col-12 md:col-6 lg:col-6 ">
+                <Divider /> 
+           
+                <div  className="flex flex-wrap justify-content-around" style={{height:"65vh",overflowY:"scroll",overflowX:"hidden"}}>
+                    {moduleData.map((module) => (  
+                     
+                        <div >  
+                       
                             <div className="surface-0 shadow-1 p-3 border-1 border-50 border-round">
                                 <ul style={{paddingLeft:"24%"}}>
-                                    <li style={{marginTop:"10px"}}>
+                                    <li style={{marginTop:"10px",listStyleType:"none"}}>
                                         <input style={{cursor:"pointer"}} type="checkbox" checked={selectedModules[module._id] || false} onChange={() => handleModuleCheckboxChange(module._id)} />
                                         {module.name}
                                     </li>
                                     {module.submodule.map((submodule) => (
                                         <ul>
-                                            <li style={{marginTop:"5px"}}>
+                                            <li style={{marginTop:"5px",listStyleType:"none"}}>
                                                 <div key={submodule._id} style={{width:"245px"}}>
                                                     <input style={{cursor:"pointer"}} type="checkbox" checked={selectedSubmodules[submodule._id] || false} onChange={() => handleSubmoduleCheckboxChange(submodule._id)} />
                                                     {submodule.name}
                                                 </div>
                                             </li>
                                             <ul>
-                                                <li style={{marginTop:"5px"}}>
+                                                <li style={{marginTop:"5px",listStyleType:"none"}}>
                                                     {submodule.actions.map((action) => (
                                                         <div key={`${submodule._id}-${action._id}`} style={{marginTop:"5px"}}>
                                                             <input style={{cursor:"pointer"}} type="checkbox" checked={selectedActions[`${submodule._id}-${action._id}`] || false} onChange={() => togglePermission(submodule._id, action._id)} />

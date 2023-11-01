@@ -139,7 +139,7 @@ export const menuNavigation = [
             {
                 label: "User Management",
                 items: [
-                    {
+                    { 
                         label: "Create Role",
                         to: "/createrole",
                     },

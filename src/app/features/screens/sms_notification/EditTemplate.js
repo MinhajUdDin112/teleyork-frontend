@@ -11,10 +11,11 @@ import { Editor } from "primereact/editor";
 import { useEffect } from "react";  
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
-const EditTemplate = (probs) => {     
+const EditTemplate = (probs) => {         
     let navigate=useNavigate()  
     const [stop,setstop]=useState(false)
-    const [templateText, setTemplateText] = useState(probs.templatetoedit.template);
+    const [templateText, setTemplateText] = useState(probs.templatetoedit.template);  
+       console.log("sampleText is ",templateText)
     const [subjectText, setSubjectText] = useState(probs.templatetoedit.notification_subject);
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;
@@ -43,12 +44,18 @@ const EditTemplate = (probs) => {
             const keySequence = ["templateId", ...name, ...subject];
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
-                ...values,     
-                template: templateText.replace(/<p>/g, "").replace(/<\/p>/g, ""),
+                ...values,   
+                template: templateText,
+                // template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
+                //     if (group1) {
+                //       return '&nbsp';
+                //     } else {
+                //       return match;
+                //     }}),
                 keySequence: [...keySequence],    
             };
           
-                         
+                   //.replace(/<p>/g, "").replace(/<\/p>/g, "").replace(/ /g, '&nbsp;'),.      
              Axios.patch(`${BASE_URL}/api/sms/updateTemplate`, dataToSend).then(()=>{    
                 toast.current.show({ severity: "success", summary: "Info", detail: "Template Updated Successfully" });
                  setTimeout(()=>{     
