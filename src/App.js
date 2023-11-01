@@ -36,7 +36,7 @@ import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_order
 import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
 import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
 import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
-
+import DropshipOrdersFlowPage from "./app/features/screens/inventory_management/dropship_orders/dropship_orders_flow_page";
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
 import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
 import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
@@ -173,6 +173,8 @@ const App = () => {
             setOverlayMenuActive(false);
             setMobileMenuActive(false);
         }
+        console.log("menu item clicked") 
+        console.log(event)
     };
     const isDesktop = () => {
         return window.innerWidth >= 992;
@@ -274,7 +276,8 @@ const App = () => {
                                 <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                                 <Route path="/createtemplate" element={<CreateTemplate />} />  
                                 <Route path="/managetemplate/*" element={<ManageTemplate />} />
-                                <Route path="/createrole" element={<CreateRole />} />
+                                <Route path="/createrole" element={<CreateRole />} />  
+                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage/>}/>
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />

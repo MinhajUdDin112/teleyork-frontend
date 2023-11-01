@@ -127,7 +127,12 @@ export const menuNavigation = [
                 items: [
                     {
                         label: "Manage Inventory",
+                        icon: "pi pi-fw pi-circle",
                         to: "/manageinventory",
+                    },{ 
+                        label: "Drop Ship Orders",
+                        icon: "pi pi-fw pi-circle",
+                        to: "/dropshiporders",
                     }
                 ]
             }

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Card } from 'primereact/card'
-
 const Header = () => {
   return (
     <>
@@ -11,7 +10,7 @@ const Header = () => {
                 <Card
                     style={{
                         width: "70%",
-                      
+        
                         backgroundColor: "#aae5e9",
                         marginBottom: "20px",
                         marginLeft: "50%",   

@@ -40,8 +40,20 @@ const EditTemplate = (probs) => {
         onSubmit: (values, actions) => { 
             console.log("inside template")
             const name = templateText.match(/(?<=[^\$]\$\$)\w+/g) || [];
-            const subject = subjectText.match(/(?<=\$\$)\w+/g) || [];
-            const keySequence = ["templateId", ...name, ...subject];
+            const subject = subjectText.match(/(?<=\$\$)\w+/g) || [];   
+            let keySequence;   
+            console.log(values.type)
+            if(values.type === 0){ 
+               keySequence=["templateId", ...name,];   
+               console.log("it is 0")
+            }  
+            else if(values.type === 1){ 
+               keySequence = ["templateId", ...name, ...subject];
+            } 
+            else{ 
+                keySequence= ["templateId", ...name, ...subject];
+            }
+          
             values.type === 0 ? keySequence.push("phone") : values.type === 1 ? keySequence.push("email") : keySequence.push("phone", "email");
             const dataToSend = {
                 ...values,   
