@@ -12,11 +12,10 @@ import BASE_URL from "../../../../config";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
-import DialogForShowData from "./DialogForShowData";
+
 
 const RejectedEnrollments = () => {
     const [dateRange, setDateRange] = useState(null);
-    const [search, setSearch] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [allEnrollments, setAllEnrollments] = useState([]);
     const [CsrId, setCsrId] = useState();
@@ -24,11 +23,33 @@ const RejectedEnrollments = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [openDialogeForActivate, setOpenDialogeForActivate] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
-    const [link, setLink] = useState();
-    const [isShow, setIsShow] = useState(false);
-    const [allData, setAllData] = useState([]);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
+    const [expandedRows, setExpandedRows] = useState([]);
+
+    const rowExpansionTemplate = (data) => {
+        return (
+            <div>
+                <DataTable value={[data]}>
+                    <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                    <Column field="plan.name" header="Plan Name" />
+                    <Column field="plan.price" header="Plan Price" />
+                    <Column field="Phonecost" header="Phone Cost" />
+                    <Column field="Amountpaid" header="Amount Paid by Customer" />
+                    <Column field="Postingdate" header="Posting Date" />
+                    <Column field="EsnNumber" header="ESN Number" />
+                    <Column field="Telephone" header="Telephone Number" />
+                    <Column field="Activationcall" header="Activation Call" />
+                    <Column field="Activationcalldatetime" header="Activation Call Date Time" />
+                    <Column field="status" header="Status" />
+                    <Column field="Handover" header="Handover Equipment" />
+                    <Column field="Rejectedreason" header="Rejected Reason" />
+                    <Column field="Enrolltype" header="Enroll Type" />
+                    <Column field="Reviewernote" header="Reviewer Note" />
+                </DataTable>
+            </div>
+        );
+    };
 
     const navigate = useNavigate();
 
@@ -59,18 +80,7 @@ const RejectedEnrollments = () => {
         getAllEnrollments();
     }, []);
 
-    const handleOpenDialog = (rowData) => {
-        setisButtonLoading(true);
-        setIsModalOpen(true);
-        setIsEnrolmentId(rowData?._id);
-        setCsrId(rowData?.csr);
-        setisButtonLoading(false);
-    };
 
-    const viewRemainData = (rowData) => {
-        setIsShow(true);
-        setAllData(rowData);
-};
     const viewRow = async (rowData) => {
         setisButtonLoading(true);
         const _id = rowData._id;
@@ -124,13 +134,6 @@ const RejectedEnrollments = () => {
        
     }
     
-    const actionTemplateForPlus = (rowData) => {
-        return (
-            <div>
-                <Button label="" icon="pi pi-plus" onClick={() => viewRemainData(rowData)} className="p-button-text p-button-warning p-mr-2" />
-            </div>
-        );
-    };
 
     return (
         <div className="card bg-pink-50">
@@ -138,10 +141,6 @@ const RejectedEnrollments = () => {
             <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">List of Rejected Enrollments</h3>
             </div>
-            
-                    <Dialog  visible={isShow} style={{ width: "85vw" }} onHide={() => setIsShow(false)}>
-                        <DialogForShowData allData={allData} />
-                    </Dialog>
             {/* <div className="card flex flex-column justify-content-center mx-5 border-noround">
                 <div className="flex flex-wrap mx-3 my-3">
                     <div className="mb-3 mr-3">
@@ -161,15 +160,16 @@ const RejectedEnrollments = () => {
             <div className="mx-5">
                 <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">{/* <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText> */}</div>
                 <div className="">
-                <DataTable value={allEnrollments} showGridlines resizableColumns columnResizeMode="fit">
-                            <Column header="#" field="SNo"></Column>
+                <DataTable value={ allEnrollments} showGridlines resizableColumns columnResizeMode="fit" expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate}>
+                            <Column expander style={{ width: "3em" }} />
+                           
                             <Column header="Enrollment ID" field="enrollmentId"></Column>
                             <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
                             <Column header="Address" field="address1"></Column>
                             <Column header="City" field="city"></Column>
                             <Column header="State" field="state"></Column>
                             <Column header="Zip" field="zip" />
-                            <Column header="Actions" body={actionTemplateForPlus}></Column>
+    
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                  <Column header="Actions" body={actionTemplateForCsr}></Column>
                             )  : (
