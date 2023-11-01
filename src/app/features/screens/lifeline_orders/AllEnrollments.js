@@ -63,8 +63,7 @@ const AllEnrollments = () => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
      const roleName = parseLoginRes?.role?.role;
-    // const roleName = "provision manager"
-
+    
 
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm);
@@ -85,15 +84,13 @@ const AllEnrollments = () => {
         setSearchResults(filteredResults);
     };
     
-    const itemsPerPage = 10;
-    const pageCount = Math.ceil(allEnrollments.length / itemsPerPage);
-    const offset = currentPage * itemsPerPage;
+   
 
     // Function to handle page change
     const handlePageClick = ({ selected }) => {
         setCurrentPage(selected);
     };
-    const visibleItems = allEnrollments.slice(offset, offset + itemsPerPage);
+    
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
@@ -104,7 +101,8 @@ const AllEnrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching All Enrollment:+ ${error?.response?.data?.msg}`);
+            console.log("error is",error?.response?.data?.msg)
+            toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
     };
@@ -149,6 +147,7 @@ const AllEnrollments = () => {
             toast.error(error?.response?.data?.msg);
             setisButtonLoading(false);
         }
+        getAllEnrollments();
     };
 
     const handleOpenDialog = (rowData) => {
@@ -177,14 +176,12 @@ const AllEnrollments = () => {
             const body = error?.response?.data?.data?.body;
             const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
             const msgerror=error?.response?.data?.msg;
-            if(msgerror){
-                toast.error(error?.response?.data?.msg)
-            }    
-           else  if(body){
+            if(body){
                 toast.error("Error is " + errorMessage);
             }
-          
-
+           else if(msgerror){
+                toast.error(error?.response?.data?.msg)
+            }  
             setisButtonLoading(false);
         }
     };
@@ -196,12 +193,12 @@ const AllEnrollments = () => {
             if (response?.status == 200 || response?.status == 201) {
                 toast.warning(response?.data?.data?.status);
                 setLink(response?.data?.data?._links?.certification);
-                console.log("link is", link);
+
                 setisButtonLoading(false);
             }
         } catch (error) {
             const status = error?.response?.status;
-            console.log("status is ", status);
+          
             if (status === 500) {
                 toast.error(error?.response?.data?.data?.message);
             } else {
@@ -223,7 +220,7 @@ const AllEnrollments = () => {
             }
         } catch (error) {
             const body = error?.response?.data?.data?.body;
-            console.log("error is", body);
+         
             const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
             toast.error("Error is " + errorMessage);
             setisButtonLoading(false);
@@ -246,9 +243,9 @@ const AllEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="View" onClick={() => viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className="p-button-text p-button-success p-mr-2" />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className="p-button-text p-button-danger" />
+                 <Button label="View" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2"  text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -256,26 +253,27 @@ const AllEnrollments = () => {
     const actionTemplateForPR = (rowData) => {
         return (
             <div>
-                <Button label="View" onClick={() => viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className="p-button-text p-button-success p-mr-2" disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className="p-button-text p-button-danger" disabled={isButtonLoading} />
-                <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
-                <Button label="Run NV" onClick={() => runNV(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
-                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
-                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
-                <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className="p-button-text p-button-warning" disabled={isButtonLoading} />
+              
+                <Button label="View" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2"  text raised disabled={isButtonLoading} />
+                <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2"  text raised disabled={isButtonLoading} />
+                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2"  text raised disabled={isButtonLoading} />
+                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)}  className=" mr-2 ml-2"  text raised disabled={isButtonLoading} />
+                <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2"  text raised disabled={isButtonLoading} />
             </div>
         );
     };
 
     return (
         <>
-            <ToastContainer autoClose={10000} />
+            <ToastContainer autoClose={8000} />
 
             <div className="card bg-pink-50">
                 <form>
                     <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
-                        <DialogForReject enrollmentId={isEnrolmentId} CSRid={CsrId} />
+                        <DialogForReject enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
                     </Dialog>
 
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
@@ -284,7 +282,8 @@ const AllEnrollments = () => {
                 </form>
 
                 <div className="card mx-5 p-0 border-noround">
-                    <div className="flex " style={{ padding: "25px" }}>
+                    <div className="flex " style={{ padding: "10px" }}>
+                        <div className="mt-2"><h3> <strong>All Enrollments</strong></h3></div>
                         <div className=" mb-3" style={{ position: "absolute", right: "120px" }}>
                             <AllEnrollmentSearchbar onSearch={handleSearch} />
                         </div>
@@ -292,7 +291,7 @@ const AllEnrollments = () => {
                     <div className="" style={{ marginTop: "30px", padding: "15px" }}>
                         {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
 
-                        <DataTable value={searchTerm === "" ? visibleItems : searchResults} stripedRows resizableColumns  expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate}>
+                        <DataTable value={ allEnrollments } stripedRows resizableColumns  expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate} paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             <Column expander style={{ width: "3em" }} />
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
 
@@ -311,7 +310,7 @@ const AllEnrollments = () => {
                                 <Column header="Actions" body={actionTemplate}></Column>
                             )}
                         </DataTable>
-                        <ReactPaginate previousLabel={"Previous"} nextLabel={"Next"} breakLabel={"..."} pageCount={pageCount} onPageChange={handlePageClick} containerClassName={"pagination"} activeClassName={"active"} />
+             
                         {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
                     </div>
                 </div>

@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-const DialogForReject = ({enrollmentId,CSRid}) => {
+const DialogForReject = ({enrollmentId,CSRid,getAllEnrollments}) => {
     
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
@@ -40,7 +40,7 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
                 reason:formik.values.reason
             };   
             const dataToSend = { approvedBy, enrolmentId, approved, data, ...values };
-            console.log("data to send is",dataToSend)
+          
             try {
                 const response = await Axios.patch(`${BASE_URL}/api/user/rejected`, dataToSend);
                 if (response?.status === 201 || response?.status === 200) {
@@ -50,6 +50,7 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
                 toast.error(error?.response?.data?.msg);
             }
             actions.resetForm();
+            getAllEnrollments();
         },
     });
 
@@ -64,9 +65,9 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
                 setAllRoles(res?.data?.data || []);
-                console.log("all role is",res?.data?.data)
+               
             } catch (error) {
-                console.error("Error fetching module data:", error);
+                toast.error(`Error fetching roles: ${error?.response?.data?.error}`);
             }
         };
         getRoles();
@@ -79,9 +80,9 @@ const DialogForReject = ({enrollmentId,CSRid}) => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.compony}`);
                 setAllDepartment(res?.data?.data || []);
-                console.log("all department is",res?.data?.data)
+               
             } catch (error) {
-                console.error("Error fetching module data:", error);
+                toast.error(`Error fetching roles: ${error?.response?.data?.error}`);
             }
         };
         getDepartment();
