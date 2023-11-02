@@ -1,12 +1,17 @@
 //company agent tracking master carrier tin
-    import React, { useRef } from "react";
+    import React, { useRef,useState } from "react";
     import { useFormik } from "formik";
     import { carrier, company, agent,master } from "../../assets";
     import { InputText } from "primereact/inputtext";
-    import { Dropdown } from "primereact/dropdown";
-    import { FileUpload } from "primereact/fileupload";
-    export default function SIMBulkUploadAddAndAssignNonActivateProvision(){  
-    const fileUploadRef=useRef(null) 
+    import { Dropdown } from "primereact/dropdown"; 
+    import { FileUpload } from "primereact/fileupload"; 
+    import AddAgentDetail from "./dialogs/add_agent_detail";  
+    
+import { Dialog } from 'primereact/dialog'
+    export default function SIMBulkUploadAddAndAssignNonActivateProvision(){     
+        const [addAgentDialogVisibility,setAddAgentDialogVisibility]=useState(false)
+    const fileUploadRef=useRef(null)  
+
     function onUpload(){ 
     
     } 
@@ -45,8 +50,18 @@
                             <Dropdown value={formik.values.agent} options={agent} onChange={(e) => formik.setFieldValue("agent", e.value)} placeholder="Select an option" className="w-20rem" />
                         </div>
                         <div className="mr-3 mb-3 mt-3">
-                            <p className="m-0">
-                                {formik.values.agent !== "" ? formik.values.agent.charAt(0).toUpperCase() + formik.values.agent.slice(1): "Master"} <span style={{ color: "red" }}>* <i className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></span>
+                            <p className="m-0">  
+                              
+                                {formik.values.agent !== "" ? formik.values.agent.charAt(0).toUpperCase() + formik.values.agent.slice(1): "Master"} <span onClick={
+                                    ()=>{ 
+                                        if(formik.values.agent === ""){ 
+
+                                        } 
+                                        else{
+                                            setAddAgentDialogVisibility(prev=>!prev)
+                                        }
+                                    }
+                                } style={{ color: "red" }}>* <i className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></span>
                             </p>  {  
                             formik.values.agent === ""?
                             <Dropdown disabled value={formik.values.master} options={master} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
@@ -80,7 +95,9 @@
                         <div className="mt-3 flex justify-content-center align-item-center">
                             <p>Note: Please Select Carrier To Download the Sample File</p>
                         </div>
-                
+                      <Dialog style={{width:"90vw"}} visible={addAgentDialogVisibility} onHide={()=>{setAddAgentDialogVisibility(prev=>!prev)}}> 
+                        <AddAgentDetail AgentName={formik.values.agent}/>
+                      </Dialog>
                 </div>
             </>
         );
