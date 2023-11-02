@@ -1,17 +1,16 @@
 import React from 'react'
 import { Card } from 'primereact/card'
-
 const Header = () => {
   return (
     <>
-     <p className="card font-semibold" style={{ fontSize: "1.5rem", color: "black" }}>
+     <p className="card font-semibold" style={{ fontSize: "16px", color: "black" }}>
                 Add Units
             </p>
             <div>
                 <Card
                     style={{
                         width: "70%",
-                      
+        
                         backgroundColor: "#aae5e9",
                         marginBottom: "20px",
                         marginLeft: "50%",   
