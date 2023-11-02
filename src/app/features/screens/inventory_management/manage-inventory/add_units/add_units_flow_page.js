@@ -6,18 +6,20 @@ import { useFormik } from "formik";
 import Header from "./add_unit-flow_page_header.js";
 import GSMBulkUpload from "./add_units_components/gsm_bulkupload/gsm_bulkupload.js";
 import GSMSingleUpload from "./add_units_components/gsm_singleupload/gsm_singleupload.js";
-import SIMSingleUploadAddProvision from "./add_units_components/sim_singleupload/sim_singleupload_add_stock_provision.js";
-import { provision, unit, type } from "./assets.js";  
-import CDMABulkUploadAddAndAssignNonActivateProvision from "./add_units_components/cdma_bulk_upload/cdma_bulkupload_add_and_assign_non_activate_provision.js"
+import SIMSingleUploadAddProvision from "./add_units_components/sim_singleupload/sim_single_upload_add_stock_provision.js";
+import { provision, unit, type } from "./assets.js";
+import CDMABulkUploadAddAndAssignNonActivateProvision from "./add_units_components/cdma_bulk_upload/cdma_bulkupload_add_and_assign_non_activate_provision.js";
 import SIMBulkUploadAddActivateProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_addactivate_provision.js";
-import SIMBulkUploadReprovision from "./add_units_components/sim_bulk_upload/sim_bulk_upload_reprovision.js";
 import SIMBulkUploadAddPreActivatedProvision from "./add_units_components/sim_bulk_upload/sim_bulk_upload_add_preactivated_provision.js";
-import SIMBulkUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_add_and_assign_non_activate_provision.js"
-import SIMBulkUploadAddProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_add_stock_provision.js"; 
+import SIMBulkUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_add_and_assign_non_activate_provision.js";
+import SIMBulkUploadAddProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_add_stock_provision.js";
 import CDMABulkUploadAddProvision from "./add_units_components/cdma_bulk_upload/cdma_bulkupload_add_provision.js";
 import CDMABulkUploadAddActivateProvision from "./add_units_components/cdma_bulk_upload/cdma_bulkupload_addactivate_provision.js";
 import CDMABulkUploadReprovision from "./add_units_components/cdma_bulk_upload/cdma_bulk_upload_reprovision.js";
 import CDMABulkUploadAddPreActivatedProvision from "./add_units_components/cdma_bulk_upload/cdma_bulk_upload_add_preactivated_provision.js";
+import SIMSingleUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_singleupload/sim_single_upload_add_and_assign_non_activate_provision.js";
+import SIMSingleUploadAddActivateProvision from "./add_units_components/sim_singleupload/sim_single_upload_addactivate_provision.js";
+import SIMSingleUploadAddPreActivatedProvision from "./add_units_components/sim_singleupload/sim_single_upload_add_preactivated_provision.js";
 const AddUnits = ({ setActiveComponent }) => {
     const validationSchema = Yup.object().shape({
         unitType: Yup.string().required("please select"),
@@ -39,7 +41,7 @@ const AddUnits = ({ setActiveComponent }) => {
         <>
             <Button
                 label="Back"
-                style={{ position: "absolute", marginLeft: "25px", fontSize: "21px", marginTop: "25px" }}
+                style={{ position: "absolute", marginLeft: "25px", fontSize: "16px", marginTop: "25px" }}
                 onClick={() => {
                     setActiveComponent("");
                 }}
@@ -55,7 +57,6 @@ const AddUnits = ({ setActiveComponent }) => {
                         </p>
                         <Dropdown value={formik.values.unit} options={unit} onChange={(e) => formik.setFieldValue("unit", e.value)} placeholder="Select an option" className="w-21rem" />
                     </div>
-
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Upload Type <span style={{ color: "red" }}>*</span>
@@ -81,32 +82,34 @@ const AddUnits = ({ setActiveComponent }) => {
             ) : formik.values.unit === "SIM" ? (
                 formik.values.upload === "Single" && formik.values.provision === "add_stock" ? (
                     <SIMSingleUploadAddProvision />
-                )  : formik.values.upload === "Bulk" && formik.values.provision === "add_stock" ?( 
+                )  : formik.values.upload === "Single" && formik.values.provision === "add_and_assign_non_activated" ? (
+                    <SIMSingleUploadAddAndAssignNonActivateProvision />
+                ): formik.values.upload === "Single" && formik.values.provision === "add_pre_activated" ? (
+                    <SIMSingleUploadAddPreActivatedProvision/>
+                ): formik.values.upload === "Bulk" && formik.values.provision === "add_stock" ? (
                     <SIMBulkUploadAddProvision />
-                ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ?( 
+                ) : formik.values.upload === "Single" && formik.values.provision === "add_and_activated" ? (
+                    <SIMSingleUploadAddActivateProvision />
+                ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ? (
                     <SIMBulkUploadAddActivateProvision />
-                ):formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated"?(   
-                    <SIMBulkUploadAddAndAssignNonActivateProvision/>
-                ):formik.values.upload === "Bulk" && formik.values.provision === "reprovision"?(   
-                    <SIMBulkUploadReprovision/>
-                ):formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated"?(   
-                    <SIMBulkUploadAddPreActivatedProvision/>
-                ):undefined
-            ) : formik.values.unit === "CDMA" ? ( 
-                formik.values.upload === "Bulk" && formik.values.provision === "add_stock" ?( 
-                    <CDMABulkUploadAddProvision/>
-                ): formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ?( 
-                    <CDMABulkUploadAddActivateProvision/>
-                ):formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated"?(   
-                    <CDMABulkUploadAddAndAssignNonActivateProvision/>
-                ):formik.values.upload === "Bulk" && formik.values.provision === "reprovision"?(   
-                    <CDMABulkUploadReprovision/>
-                ):formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated"?(   
-                    <CDMABulkUploadAddPreActivatedProvision/>
-                ):undefined
-            ):undefined  
-             
-             }
+                ): formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated" ? (
+                    <SIMBulkUploadAddAndAssignNonActivateProvision />
+                ): formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
+                    <SIMBulkUploadAddPreActivatedProvision />
+                ) : undefined
+            ) : formik.values.unit === "CDMA" ? (
+                formik.values.upload === "Bulk" && formik.values.provision === "add_stock" ? (
+                    <CDMABulkUploadAddProvision />
+                ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ? (
+                    <CDMABulkUploadAddActivateProvision />
+                ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated" ? (
+                    <CDMABulkUploadAddAndAssignNonActivateProvision />
+                ) : formik.values.upload === "Bulk" && formik.values.provision === "reprovision" ? (
+                    <CDMABulkUploadReprovision />
+                ) : formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
+                    <CDMABulkUploadAddPreActivatedProvision />
+                ) : undefined
+            ) : undefined}
         </>
     );
 };

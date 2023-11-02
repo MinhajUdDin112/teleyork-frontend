@@ -49,7 +49,7 @@ export default function SIMBulkUploadAddProvision(){
                         <Dropdown value={formik.values.master} options={master} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
                 </div>
-                <div>
+                <div className="flex flex-wrap justify-content-center align-item-center">
                     <FileUpload
                         ref={fileUploadRef}
                         mode="basic"
@@ -60,11 +60,12 @@ export default function SIMBulkUploadAddProvision(){
                         accept="image/*,application/pdf"
                         maxFileSize={1000000} // Set the maximum file size (1MB in this example)
                         onUpload={onUpload}
-                    />
-                    <div className="mt-3">
+                    /> 
+                    </div>
+                    <div className="mt-3 flex flex-wrap justify-content-center align-item-center">
                         <p>Note: Please Select Carrier To Download the Sample File</p>
                     </div>
-                </div>
+                
             </div>
         </>
     );

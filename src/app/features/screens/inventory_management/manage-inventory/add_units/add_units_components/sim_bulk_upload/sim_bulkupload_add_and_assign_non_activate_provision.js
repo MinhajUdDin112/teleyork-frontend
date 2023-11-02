@@ -46,10 +46,13 @@
                         </div>
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
-                                Master <span style={{ color: "red" }}>*</span>
-                            </p>
-                            <Dropdown value={formik.values.master} options={master} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
-                        </div>
+                                {formik.values.agent !== "" ? formik.values.agent.charAt(0).toUpperCase() + formik.values.agent.slice(1): "Master"} <span style={{ color: "red" }}>* <i className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></span>
+                            </p>  {  
+                            formik.values.agent === ""?
+                            <Dropdown disabled value={formik.values.master} options={master} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
+                            : <Dropdown  value={formik.values.master} options={master} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
+                        }
+                             </div>
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Tracking Number <span style={{ color: "red" }}>*</span>

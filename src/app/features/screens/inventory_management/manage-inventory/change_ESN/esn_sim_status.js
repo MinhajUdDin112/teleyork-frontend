@@ -20,7 +20,7 @@ export default function ChangeESNSIMStatus({setActiveComponent}){
         },
     });
     return (     <>
-        <Button label="Back" style={{position:"absolute",marginLeft:"25px",fontSize:"21px" ,marginTop:"25px"}} onClick={()=>{setActiveComponent("")}}/>
+        <Button label="Back" style={{position:"absolute",marginLeft:"25px",fontSize:"16px" ,marginTop:"25px"}} onClick={()=>{setActiveComponent("")}}/>
     
     <div className="card flex justify-content-around flex-wrap">          
    <h4 className="card" style={{width:"100%",marginTop:"90px"}}>Change ESN Status & Agent Name</h4>
