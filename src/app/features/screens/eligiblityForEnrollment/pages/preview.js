@@ -9,6 +9,7 @@ import { useEffect } from "react";
 const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
    
 
     //get preview  information from local storage
@@ -25,7 +26,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     };
 
     const postData = async () => {
-
+        setIsLoading(true);
         const dataToSend = {
           csr: csr,
           userId: _id,
@@ -33,9 +34,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
         };
         try {
           const response = await Axios.post(`${BASE_URL}/api/user/handOverEnrollment`, dataToSend);
-         
+          setIsLoading(false);
         } catch (error) {
          toast.error(error?.response?.data?.msg)
+         setIsLoading(false);
         }
         setShowFinalComponent(true);
 
@@ -59,7 +61,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                 setActiveIndex(1);
                             }}
                         />
-                        <Button label="Submit" onClick={postData} disabled={!isChecked} />
+                        <Button label="Submit" onClick={postData} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}  />
                     </div>
                     <br></br>
 

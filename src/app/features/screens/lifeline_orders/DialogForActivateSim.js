@@ -60,23 +60,26 @@ useEffect(() => {
      
   const getESN = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department`);
+          const res = await Axios.get(`${BASE_URL}/api/esn/all`);
+         
           setAllESN(res?.data?.data || []);
-          console.log("all ESN is",res?.data?.data)
+          
       } catch (error) {
          toast.error(error?.response?.data?.msg);
       }
-      getESN();
+      
 }
+getESN();
 
 },[] )
+
 
 useEffect(() => {
   const getPlan = async () => {
       try {
           const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=645a85198cd1ff499c8b99cd`);
           setAllPlan(res?.data?.data || []);
-          console.log("all department is",res?.data?.data)
+         
       } catch (error) {
         toast.error(error?.response?.data?.msg);
       }
@@ -94,6 +97,7 @@ const getFormErrorMessage = (name) => {
 
   return (
     <>
+    <ToastContainer/>
     <form onSubmit={formik.handleSubmit}>
     <div className="flex formgrid grid mt-1  ">
     <div className="field col-12 md:col-4">
@@ -104,14 +108,13 @@ const getFormErrorMessage = (name) => {
                                 options={allESN}
                                 value={formik.values.esn}
                                 onChange={(e) => formik.setFieldValue("esn", e.value)}
-                                optionLabel="esn"
-                                optionValue="number"
+                                optionLabel="Esn"
+                                optionValue="Esn"
                                 filter
                                 showClear
-                                filterBy="number" // Set the property to be used for filtering
+                                filterBy="Esn" // Set the property to be used for filtering
                                 className='w-20rem'
-                            />
-                           
+                            />                     
            
                         </div>
                         <div className="field col-12 md:col-4">

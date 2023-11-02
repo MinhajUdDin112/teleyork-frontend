@@ -21,6 +21,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [ACPtransfer, setACPtransfer] = useState(false);
     const [buttonClicked, setButtonClicked] = useState(false);
     const [isBack, setIsBack] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
     const loginRes = JSON.parse(localStorage.getItem("userData"));
     const companyName = loginRes?.companyName;
@@ -53,6 +54,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const parseagreeRes = JSON.parse(agreeRes);
 
     const postdata= async()=>{
+        setIsLoading(true)
         const userId = _id;
         csr = csr;
         const dataToSend = { csr, userId };
@@ -62,9 +64,11 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                localStorage.setItem("agreeData",JSON.stringify(response?.data))
                setIsBack(isBack+1);
                handleNext();
+               setIsLoading(false)
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg)
+            setIsLoading(false)
         }
     }
 
@@ -128,7 +132,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 <ToastContainer />
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="button" onClick={handleBack} />
-                    <Button label="Continue" type="submit"  disabled={ACPtransfer} />
+                    <Button label="Continue" type="submit"  disabled={ACPtransfer} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}  />
                 </div>
                 <div>
                     <h6>Enrollment ID: {enrollment_id}</h6>
@@ -194,8 +198,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     <div className="mt-5">
                         <p>Request User For additional Documents</p>
                         <div className="flex ">
-                            <Button label={buttonClicked ? "Sent" : "Send an Sms"}  className="p-button-success mr-2" disabled={buttonClicked} />
-                            <Button label={buttonClicked ? "Sent" : "Send an Email"}  className="p-button-success" disabled={buttonClicked} />
+                            <Button label={buttonClicked ? "Sent" : "Send an Sms"}  className="p-button-success mr-2" type="button" disabled={buttonClicked} />
+                            <Button label={buttonClicked ? "Sent" : "Send an Email"}  className="p-button-success" type="button" disabled={buttonClicked} />
                             {/* {buttonClicked ? (
                                 <div className=" ml-2">
                                     <Button label="ReSend" type="button" className="p-button-success" />

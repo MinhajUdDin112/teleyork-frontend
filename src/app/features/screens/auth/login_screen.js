@@ -6,11 +6,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../../../store/auth/AuthAction";
+import { useState } from "react";
 
 export default function LoginScreen() {
+    
+
     const dispatch = useDispatch();
+
     const error = useSelector((state) => state.login);
     const errormsg = error?.loginError;
+    const loading = error?.loginLoading;
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -21,8 +26,10 @@ export default function LoginScreen() {
             password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
         }),
         onSubmit: (values) => {
-            dispatch(loginAction(values));    
-            //console.log(formik.values);
+           
+            dispatch(loginAction(values)); 
+              
+            
         },
     });
 
@@ -46,7 +53,7 @@ export default function LoginScreen() {
                             {formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm mt-0">{formik.errors.email}</p> : null}
                             <InputText type="password" name="password" className="p-inputtext-sm block mb-2 w-20rem" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
                             {formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm mt-0">{formik.errors.password}</p> : null}
-                            <Button type="submit" className="w-20rem mt-3" label="Login" />
+                            <Button type="submit" className="w-20rem mt-3" label="Login" disabled={loading}  icon={loading === true ? "pi pi-spin pi-spinner " : ""} />
                             <div>
                                 <NavLink className="font-semibold mt-3 justify-content-center flex " to={{ pathname: "/sendotp", state: { email: formik.values.email } }}>
                                     Forgot Password?
