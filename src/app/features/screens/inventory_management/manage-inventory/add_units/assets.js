@@ -46,5 +46,8 @@ const provision = [
     { label: "Add and  Activated", value: "add_and_activated" },
     { label: "Add and assign non Activated", value: "add_and_assign_non_activated" },
     { label: "Reprovision", value: "reprovision" },
-];
-export {BYOD,plan,portin,model,master,agent,company,carrier,unit,type,provision}
+];    
+const usergrouptype=[  
+]   
+const status=[]
+export {BYOD,status,usergrouptype,plan,portin,model,master,agent,company,carrier,unit,type,provision}

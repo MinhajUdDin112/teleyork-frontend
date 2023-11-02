@@ -6,20 +6,20 @@ import { useFormik } from "formik";
 import Header from "./add_unit-flow_page_header.js";
 import GSMBulkUpload from "./add_units_components/gsm_bulkupload/gsm_bulkupload.js";
 import GSMSingleUpload from "./add_units_components/gsm_singleupload/gsm_singleupload.js";
-import SIMSingleUploadAddProvision from "./add_units_components/sim_singleupload/sim_single_upload_add_stock_provision.js";
+import SIMSingleUploadAddProvision from "./add_units_components/sim_singleupload/add_stock_provision.js";
 import { provision, unit, type } from "./assets.js";
-import CDMABulkUploadAddAndAssignNonActivateProvision from "./add_units_components/cdma_bulk_upload/cdma_bulkupload_add_and_assign_non_activate_provision.js";
-import SIMBulkUploadAddActivateProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_addactivate_provision.js";
-import SIMBulkUploadAddPreActivatedProvision from "./add_units_components/sim_bulk_upload/sim_bulk_upload_add_preactivated_provision.js";
-import SIMBulkUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_add_and_assign_non_activate_provision.js";
-import SIMBulkUploadAddProvision from "./add_units_components/sim_bulk_upload/sim_bulkupload_add_stock_provision.js";
-import CDMABulkUploadAddProvision from "./add_units_components/cdma_bulk_upload/cdma_bulkupload_add_provision.js";
-import CDMABulkUploadAddActivateProvision from "./add_units_components/cdma_bulk_upload/cdma_bulkupload_addactivate_provision.js";
-import CDMABulkUploadReprovision from "./add_units_components/cdma_bulk_upload/cdma_bulk_upload_reprovision.js";
-import CDMABulkUploadAddPreActivatedProvision from "./add_units_components/cdma_bulk_upload/cdma_bulk_upload_add_preactivated_provision.js";
-import SIMSingleUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_singleupload/sim_single_upload_add_and_assign_non_activate_provision.js";
-import SIMSingleUploadAddActivateProvision from "./add_units_components/sim_singleupload/sim_single_upload_addactivate_provision.js";
-import SIMSingleUploadAddPreActivatedProvision from "./add_units_components/sim_singleupload/sim_single_upload_add_preactivated_provision.js";
+import CDMABulkUploadAddAndAssignNonActivateProvision from "./add_units_components/cdma_bulk_upload/add_and_assign_non_activate_provision.js";
+import SIMBulkUploadAddActivateProvision from "./add_units_components/sim_bulk_upload/addactivate_provision.js";
+import SIMBulkUploadAddPreActivatedProvision from "./add_units_components/sim_bulk_upload/add_preactivated_provision.js";
+import SIMBulkUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_bulk_upload/add_and_assign_non_activate_provision.js";
+import SIMBulkUploadAddProvision from "./add_units_components/sim_bulk_upload/add_stock_provision.js";
+import CDMABulkUploadAddProvision from "./add_units_components/cdma_bulk_upload/add_stock_provision.js";
+import CDMABulkUploadAddActivateProvision from "./add_units_components/cdma_bulk_upload/addactivate_provision.js";
+import CDMABulkUploadReprovision from "./add_units_components/cdma_bulk_upload/reprovision.js";
+import CDMABulkUploadAddPreActivatedProvision from "./add_units_components/cdma_bulk_upload/add_preactivated_provision.js";
+import SIMSingleUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_singleupload/add_and_assign_non_activate_provision.js";
+import SIMSingleUploadAddActivateProvision from "./add_units_components/sim_singleupload/addactivate_provision.js";
+import SIMSingleUploadAddPreActivatedProvision from "./add_units_components/sim_singleupload/add_preactivated_provision.js";
 const AddUnits = ({ setActiveComponent }) => {
     const validationSchema = Yup.object().shape({
         unitType: Yup.string().required("please select"),

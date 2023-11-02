@@ -83,6 +83,7 @@ const Manage_inventory = () => {
                                         height: "17em",
                                         backgroundColor: "#fff",
                                         marginBottom: "20px",
+                                        fontWeight:"900",
                                         boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",cursor:"pointer"
                                     }}
                                     onClick={() => {
