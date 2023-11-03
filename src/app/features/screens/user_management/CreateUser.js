@@ -202,7 +202,7 @@ const CreateUser = () => {
                         </div>
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Contact <span className="steric">*</span></label>
-                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} type="number" />
+                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}/>
                             {getFormErrorMessage("mobile")}
                         </div>
                         <div className="p-field col-12 md:col-3">
@@ -210,13 +210,6 @@ const CreateUser = () => {
                             <InputText id="email" value={formik.values.email} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
                             {getFormErrorMessage("email")}
                         </div>
-
-                        {/* <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Password</label>
-                            <Password id="password" value={formik.values.password} onChange={(e) => formik.setFieldValue("password", e.target.value)} toggleMask feedback={false} />
-                            {getFormErrorMessage("password")}
-                        </div> */}
-
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Address1 <span className="steric">*</span></label>
                             <InputText id="address1" value={formik.values.address1} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
@@ -244,7 +237,9 @@ const CreateUser = () => {
                                 id="zip"
                                 value={formik.values.zip}
                                 onChange={formik.handleChange}
-                                // type='number'
+                                keyfilter={/^\d{0,5}$/}
+                                minLength={5}
+                                maxLength={5}
                             />
                             {getFormErrorMessage("zip")}
                         </div>

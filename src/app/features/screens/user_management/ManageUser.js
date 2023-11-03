@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
+import { toast } from "react-toastify";
 const ManageUser = () => {
     let toastfordelete = useRef(null);
     const [allUsers, setAllUsers] = useState([]);
@@ -39,14 +40,14 @@ const ManageUser = () => {
         setUserId(rowData._id);
         setVisibleDelelteUser(true);
     };
-    console.log("parseLoginRes?.compony", parseLoginRes?.compony);
+   
     const getAllUsers = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/user/all?compony=${parseLoginRes?.compony}`);
-            console.log("userData", res?.data?.data);
+           
             setAllUsers(res?.data?.data || []);
         } catch (error) {
-            console.error("Error fetching module data:", error);
+            toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
         }
     };
 
@@ -127,7 +128,7 @@ const ManageUser = () => {
                     <Column field="address" header="Address"></Column>
                     <Column field="zip" header="Zip"></Column>
                     <Column field={(item) => (item?.active === true ? "Active" : "Inactive")} header="Status"></Column>
-                    <Column field="createdDate" header="Created Date"></Column>
+                    <Column field="createdDate" header="Created Date"  body={(rowData) => new Date(rowData.createdDate).toLocaleDateString()}></Column>
                     <Column body={actions} header="Actions"></Column>
                     {/* <Column body={permissions} header="Permissions"></Column> */}
                 </DataTable>
