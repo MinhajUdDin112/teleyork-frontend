@@ -97,7 +97,7 @@ const DialogForReject = ({enrollmentId,CSRid,getAllEnrollments}) => {
    <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid ">
                         <div className="p-field col-12 md:col-4 mt-3">
-                            <Button label="Assign back to CSR" type='button' onClick={assignCSRId}  />
+                            <Button label="Assign to Created User" type='button' onClick={assignCSRId}  />
                         </div>
                         <div className="p-fluid p-formgrid grid m-2 mt-3">
                             <h4>Or</h4>

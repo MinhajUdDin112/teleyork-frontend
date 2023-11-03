@@ -33,6 +33,7 @@ const RejectedEnrollments = () => {
                 <DataTable value={[data]} stripedRows>
                     <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
                     <Column field="plan.name" header="Plan Name" />
+                    <Column field="createdBy?.name" header="Created BY" />
                     <Column field="plan.price" header="Plan Price" />
                     <Column field="Phonecost" header="Phone Cost" />
                     <Column field="Amountpaid" header="Amount Paid by Customer" />
@@ -156,7 +157,7 @@ const RejectedEnrollments = () => {
                     </div>
                 </div>
             </div> */}
-            <div className="card p-3 mx-5 border-noround bg-green-200 ">{/* <p className="text-sm font-semibold">Search Result: 0</p> */}</div>
+            {/* <div className="card p-3 mx-5 border-noround bg-green-200 "><p className="text-sm font-semibold">Search Result: 0</p></div> */}
             <div className="mx-5">
                 <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">{/* <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText> */}</div>
                 <div className="">

@@ -38,6 +38,7 @@ const AllEnrollments = () => {
               
       <DataTable value={[data]} stripedRows >
                     <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                    <Column field="createdBy?.name" header="Created BY" />
                     <Column field="plan.name" header="Plan Name" />
                     <Column field="plan.price" header="Plan Price" />
                     <Column field="Phonecost" header="Phone Cost" />
@@ -62,8 +63,8 @@ const AllEnrollments = () => {
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-     const roleName = parseLoginRes?.role?.role;
-    
+      const roleName = parseLoginRes?.role?.role;
+  
 
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm);
@@ -255,7 +256,6 @@ const AllEnrollments = () => {
             <div>
               
                 <Button label="View" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2"  text raised disabled={isButtonLoading} />
                 <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2"  text raised disabled={isButtonLoading} />
@@ -265,7 +265,7 @@ const AllEnrollments = () => {
             </div>
         );
     };
-
+console.log("all enrollments ",allEnrollments)
     return (
         <>
             <ToastContainer autoClose={8000} />
@@ -283,12 +283,12 @@ const AllEnrollments = () => {
 
                 <div className="card mx-5 p-0 border-noround">
                     <div className="flex " style={{ padding: "10px" }}>
-                        <div className="mt-2"><h3> <strong>All Enrollments</strong></h3></div>
+                        <div className="mt-2 ml-2"><h3> <strong>All Enrollments</strong></h3></div>
                         <div className=" mb-3" style={{ position: "absolute", right: "120px" }}>
                             <AllEnrollmentSearchbar onSearch={handleSearch} />
                         </div>
                     </div>
-                    <div className="" style={{ marginTop: "30px", padding: "15px" }}>
+                    <div className="" style={{  padding: "15px" }}>
                         {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
 
                         <DataTable value={ allEnrollments } stripedRows resizableColumns  expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate} paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
@@ -304,7 +304,7 @@ const AllEnrollments = () => {
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                 ""
-                            ) : roleName == "PROVISION MANAGER" || roleName == "Provision Manager" || roleName == "provision manager" ? (
+                            ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ? (
                                 <Column header="Actions" body={actionTemplateForPR}></Column>
                             ) : (
                                 <Column header="Actions" body={actionTemplate}></Column>

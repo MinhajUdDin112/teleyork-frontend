@@ -44,6 +44,7 @@ const CompletedEnrollments = () => {
               
       <DataTable value={[data]} stripedRows >
                     <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                    <Column field="createdBy?.name" header="Created BY" />
                     <Column field="plan.name" header="Plan Name" />
                     <Column field="plan.price" header="Plan Price" />
                     <Column field="Phonecost" header="Phone Cost" />
@@ -97,7 +98,7 @@ const CompletedEnrollments = () => {
                         </div>
                     </div>
                 </div>
-                <div className="" style={{ marginTop: "30px", padding: "15px" }}>
+                <div className="" style={{  padding: "15px" }}>
                 <DataTable value={ allCompletedEnrollments } stripedRows resizableColumns  expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate} paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             <Column expander style={{ width: "3em" }} />
                         <Column header="#" field="SNo"></Column>

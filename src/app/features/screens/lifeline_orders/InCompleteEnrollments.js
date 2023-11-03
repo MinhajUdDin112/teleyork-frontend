@@ -106,7 +106,7 @@ const InCompleteEnrollments = () => {
                         </div>
                     </div>
                 </div>
-                <div className="" style={{ marginTop: "30px", padding: "15px" }}>
+                <div className="" style={{  padding: "15px" }}>
                     
                     <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns columnResizeMode="fit" paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                         <Column header="#" field="SNo"></Column>
