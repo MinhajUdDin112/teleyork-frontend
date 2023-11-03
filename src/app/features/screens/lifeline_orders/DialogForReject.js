@@ -18,6 +18,8 @@ const DialogForReject = ({enrollmentId,CSRid,getAllEnrollments}) => {
      // Get user data from ls
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
+     // Get role name  from login response
+      const roleName = parseLoginRes?.role?.role;
 
     const validationSchema = Yup.object().shape({
         reason: Yup.string().required("Please enter Reason"),   
@@ -96,9 +98,16 @@ const DialogForReject = ({enrollmentId,CSRid,getAllEnrollments}) => {
    <>
    <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid ">
-                        <div className="p-field col-12 md:col-4 mt-3">
+
+                        {
+                            roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ?  <div className="p-field col-12 md:col-4 mt-3">
+                            <Button label="Send to Retention" type='button'  />
+                        </div>: <div className="p-field col-12 md:col-4 mt-3">
                             <Button label="Assign to Created User" type='button' onClick={assignCSRId}  />
                         </div>
+                        }
+                       
+                       
                         <div className="p-fluid p-formgrid grid m-2 mt-3">
                             <h4>Or</h4>
                         </div>

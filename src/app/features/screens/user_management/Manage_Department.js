@@ -8,6 +8,7 @@ import { Toast } from "primereact/toast";
 import BASE_URL from "../../../../config";
 import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 //import { Toast,ToastContainer } from "react-toastify/dist/components";
 
 
@@ -66,7 +67,7 @@ const ManageDepartment = () => {
       const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${companyId}`);
       setAllDepartments(res?.data?.data || []);
     } catch (error) {
-      console.error("Error fetching department data:", error);
+      toast.error( error?.response?.data?.msg);
     }
   };
 
@@ -124,7 +125,7 @@ const ManageDepartment = () => {
                         <InputText
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
-                            placeholder="Search by Name or Role"
+                            placeholder="Search by Name"
                         />
                     </div>
               <Button label="Add" onClick={() => navigate("/create-department")} />

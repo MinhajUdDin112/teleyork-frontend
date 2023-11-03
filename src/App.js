@@ -173,8 +173,6 @@ const App = () => {
             setOverlayMenuActive(false);
             setMobileMenuActive(false);
         }
-        console.log("menu item clicked") 
-        console.log(event)
     };
     const isDesktop = () => {
         return window.innerWidth >= 992;
