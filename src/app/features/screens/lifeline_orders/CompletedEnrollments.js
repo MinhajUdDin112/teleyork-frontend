@@ -56,7 +56,7 @@ const CompletedEnrollments = () => {
                     <Column field="Activationcalldatetime" header="Activation Call Date Time" />
                     <Column field="status" header="Status" />
                     <Column field="Handover" header="Handover Equipment" />
-                    <Column field="Rejectedreason" header="Rejected Reason" />
+                   
                     <Column field="Enrolltype" header="Enroll Type" />
                     <Column field="Reviewernote" header="Reviewer Note" />
                 </DataTable>

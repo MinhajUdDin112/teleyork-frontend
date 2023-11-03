@@ -244,7 +244,7 @@ const EditUser = () => {
                                 id="mobile"
                                 value={formik.values.mobile}
                                 onChange={formik.handleChange}
-                                keyfilter={/^[\+\d]+$/}
+                                minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}
                             />
                             {getFormErrorMessage("mobile")}
                         </div>

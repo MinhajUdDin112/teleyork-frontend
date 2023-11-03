@@ -19,8 +19,35 @@ const InCompleteEnrollments = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
+    const [expandedRows, setExpandedRows] = useState([]);
 
     const navigate = useNavigate()
+
+    const rowExpansionTemplate = (data) => {
+        return (
+            <div>
+              
+      <DataTable value={[data]} stripedRows >
+                    <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                    <Column field="createdBy?.name" header="Created BY" />
+                    <Column field="plan.name" header="Plan Name" />
+                    <Column field="plan.price" header="Plan Price" />
+                    <Column field="Phonecost" header="Phone Cost" />
+                    <Column field="Amountpaid" header="Amount Paid by Customer" />
+                    <Column field="Postingdate" header="Posting Date" />
+                    <Column field="EsnNumber" header="ESN Number" />
+                    <Column field="Telephone" header="Telephone Number" />
+                    <Column field="Activationcall" header="Activation Call" />
+                    <Column field="Activationcalldatetime" header="Activation Call Date Time" />
+                    <Column field="status" header="Status" />
+                    <Column field="Handover" header="Handover Equipment" />
+                  
+                    <Column field="Enrolltype" header="Enroll Type" />
+                    <Column field="Reviewernote" header="Reviewer Note" />
+                </DataTable>
+            </div>
+        );
+    };
    
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm); // Update search term state
@@ -107,21 +134,16 @@ const InCompleteEnrollments = () => {
                     </div>
                 </div>
                 <div className="" style={{  padding: "15px" }}>
-                    
-                    <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns columnResizeMode="fit" paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
-                        <Column header="#" field="SNo"></Column>
-                        <Column header="Enrollment ID" field="enrollmentId"></Column>
-                        <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
-                        <Column header="Address" field="address1"></Column>
-                        <Column header="City" field="city"></Column>
-                        <Column header="State" field="state"></Column>
-                        <Column header="Zip" field="zip"></Column>
-                        <Column header="DOB" field={(item) => (item?.DOB ? item?.DOB.split("T")[0] : "")}></Column>
-                        <Column header="Plan Name" field="Planname"></Column>
-                        <Column header="Enroll Date" field={(item) => (item?.createdAt ? item?.createdAt.split("T")[0] : "")}></Column>
-                        <Column header="Status" field="status"></Column>
-                        <Column header="Actions" body={actionTemplate}></Column>
-                    </DataTable>
+                <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns  expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate} paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                            <Column expander style={{ width: "3em" }} />
+                            <Column header="Enrollment ID" field="enrollmentId"></Column>
+                            <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
+                            <Column header="Address" field="address1"></Column>
+                            <Column header="City" field="city"></Column>
+                            <Column header="State" field="state"></Column>
+                            <Column header="Zip" field="zip" />
+                             <Column header="Actions" body={actionTemplate}></Column>
+                        </DataTable>
                    
                     {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
                 </div>
