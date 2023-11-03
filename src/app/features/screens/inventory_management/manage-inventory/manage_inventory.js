@@ -3,7 +3,7 @@ import AddUnits from "./add_units/add_units_flow_page.js";
 import { Card } from "primereact/card";  
 import InventoryDashboard from "./inventory_dashboard/inventory_dashboard_flow_page";
 import CreateAssignBox from "./create_assign_box/create_assign_box";
-import UpdateInventory from "./UpdateInventory";
+import UpdateInventory from "./update_inventory/UpdateInventory";
 import ChangeESNSIMStatus from "./change_ESN/esn_sim_status";
 import { useNavigate } from "react-router-dom";
 import AdjustmentFlowPage from "./adjustment/adjustment_flow_page";  
@@ -101,7 +101,7 @@ const Manage_inventory = () => {
                                         }}
                                         // Set the active component when image 1 is clicked
                                     />
-                                    <div className="flex justify-content-center" style={{ fontSize: "14px",fontFamily:"Inter", marginTop: "35px", color: "grey" }}>
+                                    <div className="flex justify-content-center" style={{ fontSize: "14px",fontWeight:"normal",fontFamily:"Inter", marginTop: "35px", color: "grey" }}>
                                         <p>{inventory.title}</p>
                                     </div>
                                 </Card>

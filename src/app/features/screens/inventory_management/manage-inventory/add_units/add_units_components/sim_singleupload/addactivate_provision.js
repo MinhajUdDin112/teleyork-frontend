@@ -1,39 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import { carrier, company, agent,plan,master,model,portin } from "../../assets";     
+import { carrier, company, agent, plan, emptymaster, distributor, employee, retailer, master, model, portin } from "../../assets";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
-export default function SIMSingleUploadAddActivateProvision(){  
-    const formik=useFormik({ 
-        initialValues:{
-            carrier:"", 
-            company:"", 
-            agent:"",  
-            sim:"", 
-            master:"",
-             puk:"", 
-             box:"", 
-             po:"",   
-             planid:"", 
-             zipcode:"",
-             puk2:"", 
-             portinstatus:"", 
-             activationfee:"",
-             trackingnumber:"",
-             model:"",
-            imei:"", 
-            amount:"", 
-            tin:"",
-            costpriceforsim:"", 
-            retailpriceforsim:"", 
-
-        }
-    }) 
+import { Dialog } from "primereact/dialog";
+import AddAgentDetail from "./Dialogs/add_agent_detail";
+import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
+export default function SIMSingleUploadAddActivateProvision() {
+    const [addsim_model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
+    const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
+    
+    const formik = useFormik({
+        initialValues: {
+            carrier: "",
+            company: "",
+            agent: "",
+            sim: "",
+            master: "",
+            puk: "",
+            box: "",
+            po: "",
+            planid: "",
+            zipcode: "",
+            puk2: "",
+            portinstatus: "",
+            activationfee: "",
+            trackingnumber: "",
+            model: "",
+            imei: "",
+            amount: "",
+            tin: "",
+            costpriceforsim: "",
+            retailpriceforsim: "",
+        },
+    });
     return (
         <>
             <div>
-               
                 <div className="flex flex-wrap mb-3 justify-content-around ">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -90,14 +94,53 @@ export default function SIMSingleUploadAddActivateProvision(){
                         <Dropdown value={formik.values.agent} options={agent} onChange={(e) => formik.setFieldValue("agent", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
-                            Master <span style={{ color: "red" }}>*</span>
-                        </p>
-                        <Dropdown value={formik.values.master} options={master} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
+                        {formik.values.agent !== "" ? (
+                            <>
+                                <p className="m-0">
+                                    {formik.values.agent.charAt(0).toUpperCase() + formik.values.agent.slice(1)}{" "}
+                                    <span style={{ color: "red" }}>
+                                        *
+                                        {formik.values.agent !== "employee" ? (
+                                            <i
+                                                onClick={() => {
+                                                    setAddAgentDialogVisbility((prev) => !prev);
+                                                }}
+                                                className="pi pi pi-plus"
+                                                style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                            ></i>
+                                        ) : undefined}
+                                    </span>
+                                </p>
+                                <Dropdown
+                                    value={formik.values.master}
+                                    options={formik.values.agent === "master" ? master : formik.values.agent === "retailer" ? retailer : formik.values.agent === "distributor" ? distributor : employee}
+                                    onChange={(e) => formik.setFieldValue("master", e.value)}
+                                    placeholder="Select an option"
+                                    className="w-20rem"
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <p className="m-0">
+                                    Master <span style={{ color: "red" }}>*</span>
+                                </p>
+                                <Dropdown value={formik.values.master} options={emptymaster} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
+                            </>
+                        )}
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
-                            Model<span style={{fontSize:"12px"}}>(MICRO/NANO/SIM)</span><span style={{ color: "red" }}>*<i className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></span>
+                            Model<span style={{ fontSize: "12px" }}>(MICRO/NANO/SIM)</span>
+                            <span style={{ color: "red" }}>
+                                *
+                                <i
+                                    onClick={() => {
+                                        setAddSimModelDialogVisbility((prev) => !prev);
+                                    }}
+                                    className="pi pi pi-plus"
+                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                ></i>
+                            </span>
                         </p>
                         <Dropdown value={formik.values.model} options={model} onChange={(e) => formik.setFieldValue("model", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
@@ -142,11 +185,26 @@ export default function SIMSingleUploadAddActivateProvision(){
                         <InputText type="text" value={formik.values.setIMEI} name="setIMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
                     </div>
                 </div>
-                 <div className="flex flex-wrap justify-content-center align-item-center">
-                        <Button label="Submit" type="submit" />
-                    </div>
-                    
+                <div className="flex flex-wrap justify-content-center align-item-center">
+                    <Button label="Submit" type="submit" />
+                </div>
             </div>
+            <Dialog
+                visible={addsim_model_dialog_visibility}
+                onHide={() => {
+                    setAddSimModelDialogVisbility((prev) => !prev);
+                }}
+            >
+                <AddSimModelDialog agent={formik.values.agent} />
+            </Dialog>  
+            <Dialog
+                visible={add_agent_detail_dialog_visibility}
+                onHide={() => {
+                    setAddAgentDialogVisbility((prev) => !prev);
+                }}
+            >
+                <AddAgentDetail AgentName={formik.values.agent} />
+            </Dialog>
         </>
     );
 }
