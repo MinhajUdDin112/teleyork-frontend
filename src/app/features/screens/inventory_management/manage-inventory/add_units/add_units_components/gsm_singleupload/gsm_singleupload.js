@@ -1,11 +1,17 @@
-import React from "react"; 
-import { useFormik } from "formik"; 
-import { BYOD,company,agent,model,carrier } from "../../assets";
+import React,{useState} from "react"; 
+import { useFormik } from "formik";  
+import { BYOD,carrier, company, agent, emptymaster, master, model, portin, retailer, distributor, employee } from "../../assets";
 import {InputText} from "primereact/inputtext" 
 import {Dropdown} from "primereact/dropdown" 
 import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import AddAgentDetail from "./Dialogs/add_agent_detail";
+import AddGsmModelDialog from "./Dialogs/add_gsm_model_dialog";
 import { Card } from "primereact/card";
-export default function GSMSingleUpload() {  
+export default function GSMSingleUpload() {      
+    const [addgsm_model_dialog_visibility, setAddGsmModelDialogVisbility] = useState(false);
+    const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
+  
     const formik=useFormik({ 
         initialValues:{
             carrier:"", 
@@ -14,6 +20,7 @@ export default function GSMSingleUpload() {
             model:"", 
              byod:"", 
              po:"", 
+             master:"",
              tinnum:"", 
              box:"", 
              retailpriceforsim:"", 
@@ -47,10 +54,45 @@ export default function GSMSingleUpload() {
                             Agent Type <span style={{ color: "red" }}>*</span>
                         </p>
                         <Dropdown value={formik.values.agent} options={agent} onChange={(e) => formik.setFieldValue("agent", e.value)} placeholder="Select an option" className="w-20rem" />
+                    </div>       
+                    <div className="mr-3 mb-3 mt-3">
+                        {formik.values.agent !== "" ? (
+                            <>
+                                <p className="m-0">
+                                    {formik.values.agent.charAt(0).toUpperCase() + formik.values.agent.slice(1)}{" "}
+                                    <span style={{ color: "red" }}>
+                                        *  { 
+                                        formik.values.agent !== "employee" ?
+                                        <i
+                                            onClick={() => {
+                                                setAddAgentDialogVisbility((prev) => !prev);
+                                            }}
+                                            className="pi pi pi-plus"
+                                            style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                        ></i>  :undefined 
+                                        }
+                                    </span>
+                                </p>
+                                <Dropdown
+                                    value={formik.values.master}
+                                    options={formik.values.agent === "master" ? master : formik.values.agent === "retailer" ? retailer : formik.values.agent === "distributor" ? distributor : employee}
+                                    onChange={(e) => formik.setFieldValue("master", e.value)}
+                                    placeholder="Select an option"
+                                    className="w-20rem"
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <p className="m-0">
+                                    Master <span style={{ color: "red" }}>*</span>
+                                </p>
+                                <Dropdown value={formik.values.master} options={emptymaster} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
+                            </>
+                        )}
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
-                            Model(PC176)<span style={{ color: "red" }}>*<i  className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></span>
+                            Model(PC176)<span style={{ color: "red" }}>*<i onClick={()=>{setAddGsmModelDialogVisbility(prev=>!prev)}} className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></span>
                         </p>
                         <Dropdown value={formik.values.model} options={model} onChange={(e) => formik.setFieldValue("model", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
@@ -129,7 +171,23 @@ export default function GSMSingleUpload() {
                         <p>in this feild enter the amount that will be Reimbursed from USAC for selling the acp device</p>
                     </div>
                 </Card>
-            </div>
+            </div> 
+            <Dialog
+                visible={addgsm_model_dialog_visibility}
+                onHide={() => {
+                    setAddGsmModelDialogVisbility((prev) => !prev);
+                }}
+            >
+                <AddGsmModelDialog agent={formik.values.agent} />
+            </Dialog>
+            <Dialog
+                visible={add_agent_detail_dialog_visibility}
+                onHide={() => {
+                    setAddAgentDialogVisbility((prev) => !prev);
+                }}
+            >
+                <AddAgentDetail AgentName={formik.values.agent} />
+            </Dialog>
         </>
     );
 }

@@ -6,7 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { InputTextarea } from 'primereact/inputtextarea';
 import FileUploadTemplate from "./esn_sim-model_dialog_uploadfiles";
-export default function EsnSimModelAddDialog() {
+export default function Add_AddActive_ProvisionDialog() {
     const [networktype, setNetworkType] = useState(null);  
     const [description,setDescription]=useState(null)
     const [simtype, setSimType] = useState(null);
@@ -339,13 +339,13 @@ export default function EsnSimModelAddDialog() {
                 </div>
                 <div className="mt-8">
                     <label style={{ display: "block" }}>
-                        Programming Instruction Supporting URL <span style={{ color: "red" }}>*</span>
+                        Programming Instruction Supporting URL 
                     </label>
                     <InputText value={formik.pis_url} onChange={formik.handleChange} className="mt-4 w-full md:w-14rem" />
                 </div>
                 <div className="mt-8">
                     <label style={{ display: "block" }}>
-                        Grade<span style={{ color: "red" }}>*</span>
+                        Grade
                     </label>
                     <Dropdown
                         value={grade}
@@ -423,7 +423,7 @@ export default function EsnSimModelAddDialog() {
                 </div>
                 <div className="mt-8">
                     <label style={{ display: "block" }}>
-                        Handover<span style={{ color: "red" }}>*</span>
+                        Handover
                     </label>
                     <Dropdown
                         value={handover}

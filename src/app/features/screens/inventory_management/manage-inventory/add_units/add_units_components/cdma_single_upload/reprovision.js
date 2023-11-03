@@ -1,37 +1,31 @@
-import React, { useRef ,useState} from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import { carrier, company,emptymaster,retailer,distributor,employee, agent,plan,master } from "../../assets";
+import { carrier, company, emptymaster, retailer, distributor, employee, agent, plan, master } from "../../assets";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-import { FileUpload } from "primereact/fileupload";
-export default function CDMABulkUploadReprovision(){   
-    const fileUploadRef=useRef(null)
-    const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
-    function onUpload(){ 
-
-    } 
+import { Button } from "primereact/button";
+export default function CDMASingleUploadReprovision() {
+    const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const formik = useFormik({
         initialValues: {
+            esn: "",
             carrier: "",
             company: "",
             agent: "",
-            master:"", 
-            trackingnumber:"", 
-            tinnumber:"", 
-            planid:"", 
-            box:""
+            zipcode: "",
+            master: "",
+            trackingnumber: "",
+            tinnumber: "",
+            planid: "",
+            box: "",
         },
     });
     return (
         <>
             <div>
-                
-              
-
                 <div className="flex flex-wrap mb-3 justify-content-around ">
-                  
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
@@ -51,21 +45,21 @@ export default function CDMABulkUploadReprovision(){
                         <Dropdown value={formik.values.agent} options={agent} onChange={(e) => formik.setFieldValue("agent", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
-                    {formik.values.agent !== "" ? (
+                        {formik.values.agent !== "" ? (
                             <>
                                 <p className="m-0">
                                     {formik.values.agent.charAt(0).toUpperCase() + formik.values.agent.slice(1)}{" "}
                                     <span style={{ color: "red" }}>
-                                        *  { 
-                                        formik.values.agent !== "employee" ?
-                                        <i
-                                            onClick={() => {
-                                                setAddAgentDialogVisbility((prev) => !prev);
-                                            }}
-                                            className="pi pi pi-plus"
-                                            style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                        ></i>  :undefined 
-                                        }
+                                        *{" "}
+                                        {formik.values.agent !== "employee" ? (
+                                            <i
+                                                onClick={() => {
+                                                    setAddAgentDialogVisbility((prev) => !prev);
+                                                }}
+                                                className="pi pi pi-plus"
+                                                style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                            ></i>
+                                        ) : undefined}
                                     </span>
                                 </p>
                                 <Dropdown
@@ -87,9 +81,21 @@ export default function CDMABulkUploadReprovision(){
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
+                            ESN<span style={{ color: "red" }}>*</span>
+                        </p>
+                        <InputText type="text" value={formik.values.esn} name="esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                    </div>
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">
+                            Zip Code<span style={{ color: "red" }}>*</span>
+                        </p>
+                        <InputText type="text" value={formik.values.zipcode} name="zipcode" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                    </div>
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.setBox} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -109,24 +115,25 @@ export default function CDMABulkUploadReprovision(){
                         <InputText type="text" value={formik.values.tinnumber} name="tinnumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
                     </div>
                 </div>
-                <div className="flex justify-content-center align-items-center">
-                    <FileUpload
-                        ref={fileUploadRef}
-                        mode="basic"
-                        chooseLabel="Add File"
-                        uploadLabel="Upload"
-                        cancelLabel="Cancel"
-                        multiple
-                        accept="image/*,application/pdf"
-                        maxFileSize={1000000} // Set the maximum file size (1MB in this example)
-                        onUpload={onUpload}
-                    />  
-                    </div >
-                    <div  className=" mt-3 flex justify-content-center align-items-center">
-                        <p>Note: Please Select Carrier To Download the Sample File</p>
-                    </div>
-                
-            </div> 
+            </div>
+            <div className="mt-2 flex flex-wrap justify-content-center">
+                <div>
+                    <span>Notes :-</span>
+                    <p className="ml-2">
+                        1. If MDN is found active in inventory it will be disconnected; reassigned and reactivated. If already disconnected it will be directly activated, in both cases with the zip code.
+                        <br />
+                        2. Carrier can only be ; for TMB, once a SIM is used it cannot be re-provisioning.
+                        <br />
+                        3. Box and tracking numbers are auto generated by the system, however they can be edited.
+                        <br />
+                        4. The system assumes that the ESN that will be uploaded will exist in inventory and not be associated with any active customer account. If the ESN is not inventory it can be added from Manage inventory Add units Add stock Please do not sent the same ESN for re-provisioning
+                        in less than 5 minutes.
+                    </p>
+                </div>
+            </div>
+            <div className="mt-2 flex flex-wrap justify-content-center">
+                <Button label="Submit" />
+            </div>
             <Dialog
                 visible={add_agent_detail_dialog_visibility}
                 onHide={() => {
