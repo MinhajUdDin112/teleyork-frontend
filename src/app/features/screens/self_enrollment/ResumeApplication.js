@@ -5,11 +5,26 @@ import { Calendar } from "primereact/calendar";
 import { useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 const ResumeApplication = () => {
     const location = useLocation();
     const responseData = location.state && location.state.responseData;
 const navigate = useNavigate()
+
+
+const confirm1 = () => {
+    confirmDialog({
+        message: 'Your enrollment has been done?',
+        header: 'Congratulations',
+        accept,
+        reject: "nulls"
+    });
+};
+
+const accept = () => {
+    navigate('/')
+}
 
 console.log("first",responseData.data)
     const formik = useFormik({
@@ -24,7 +39,7 @@ console.log("first",responseData.data)
 
         },
         onSubmit(){
-            navigate("/login")
+            confirm1()
         }
     })
  const setValues = ()=>{
@@ -72,13 +87,14 @@ console.log("first",responseData.data)
                                 <InputText id="state" value={formik.values.state} disabled onChange={formik.handleChange} className="mb-3" placeholder="State" />
                                 {/* <Calendar value={formik.values} disabled onChange={formik.handleChange} className="mb-3" id="icon" value={date} disabled onChange={(e) => setDate(e.value)} showIcon /> */}
                                 <InputText id="SSN" value={formik.values.SSN} disabled onChange={formik.handleChange} className="mb-3" placeholder="Last 4 SSN or Tribal ID" />
-                                <Button label="Close" type="submit"  />
+                                <Button label="Submit" type="submit"  />
                             </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <ConfirmDialog rejectClassName='hidden' />
         </>
     );
 };

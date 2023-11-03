@@ -25,7 +25,7 @@ const NationalVerifier = () => {
     };
     const handleBack = () => {
         // Navigate to a different route
-        navigate("/selfenrollment/eligibility");
+        navigate(-1);
     };
     return (
         <>
