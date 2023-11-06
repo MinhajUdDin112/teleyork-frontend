@@ -294,3 +294,7 @@ box-shadow: 2px;
   .no-border{
     border: none;
   }
+
+  .hide-reject-button .p-confirm-dialog-footer .p-button-reject {
+    display: none;
+}

@@ -11,20 +11,30 @@ const ResumeApplication = () => {
     const location = useLocation();
     const responseData = location.state && location.state.responseData;
 const navigate = useNavigate()
-
+const [visible,setVisible]=useState(false)
 
 const confirm1 = () => {
     confirmDialog({
-        message: 'Your enrollment has been done?',
+        message: 'Your enrollment has been done',
         header: 'Congratulations',
-        accept,
-        reject: "nulls"
+        acceptLabel: 'Confirm',
+        rejectLabel:"Reject",
+        className: 'hide-reject-button',
+        accept:()=>{
+            localStorage.removeItem("homeAddress")
+            localStorage.removeItem("selectProgram")
+            localStorage.removeItem("initialInformation")
+            navigate('/')
+        },
+        reject:()=>{
+            setVisible(false)
+        }
     });
 };
 
-const accept = () => {
-    navigate('/')
-}
+// const accept = () => {
+//     navigate('/')
+// }
 
 console.log("first",responseData.data)
     const formik = useFormik({
@@ -94,7 +104,7 @@ console.log("first",responseData.data)
                     </div>
                 </div>
             </div>
-            <ConfirmDialog rejectClassName='hidden' />
+            <ConfirmDialog visible={visible} rejectClassName='hidden' />
         </>
     );
 };
