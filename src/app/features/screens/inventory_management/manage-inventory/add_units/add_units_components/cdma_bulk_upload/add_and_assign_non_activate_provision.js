@@ -111,7 +111,7 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
                      
                 
                 </div>     
-                <InfoForUsers/> 
+                <InfoForUsers ProvisionType={"AddAndAssignNonActivate"}/> 
                 <Dialog
                 visible={add_agent_detail_dialog_visibility}
                 onHide={() => {

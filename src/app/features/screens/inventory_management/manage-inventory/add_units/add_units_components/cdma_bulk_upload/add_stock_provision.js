@@ -4,7 +4,8 @@ import { carrier, retailer, distributor, employee, emptymaster, company, agent, 
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-import { FileUpload } from "primereact/fileupload";
+import { FileUpload } from "primereact/fileupload";  
+import InfoForUsers from "./InfoForUsers/info_for_users";
 export default function CDMABulkUploadAddProvision() {
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const fileUploadRef = useRef(null);
@@ -90,8 +91,10 @@ export default function CDMABulkUploadAddProvision() {
                 </div>
                 <div className="mt-3 flex justify-content-center align-item-center">
                     <p>Note: Please Select Carrier To Download the Sample File</p>
-                </div>
-            </div>
+                </div>   
+                <InfoForUsers ProvisionType={"AddStock"}/>
+            </div>  
+          
             <Dialog
                 visible={add_agent_detail_dialog_visibility}
                 onHide={() => {
