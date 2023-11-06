@@ -14,7 +14,6 @@ const AppSubmenu = (props) => {
             event.preventDefault();
             return true;
         }
-
         //execute command
         if (item.command) {
             item.command({ originalEvent: event, item: item });
@@ -58,7 +57,7 @@ const AppSubmenu = (props) => {
 
         if (item.to) {
             return (
-                <NavLink aria-label={item.label} onKeyDown={onKeyDown} role="menuitem" className="p-ripple" activeclassname="router-link-active router-link-exact-active" to={item.to} onClick={(e) => onMenuItemClick(e, item, i)} target={item.target}>
+                <NavLink aria-label={item.label} onKeyDown={onKeyDown} role="menuitem" className="p-ripple" activeclassname="  router-link-active router-link-exact-active" to={item.to} onClick={(e) => onMenuItemClick(e, item, i)} target={item.target}>
                     {content}
                 </NavLink>
             );
@@ -92,7 +91,7 @@ const AppSubmenu = (props) => {
                 );
             } else {
                 return (
-                    <li className={styleClass} key={i} role="none">
+                    <li className={styleClass} key={i} role="none" >
                         {renderLink(item, i)}
                         <CSSTransition classNames="layout-submenu-wrapper" timeout={{ enter: 1000, exit: 450 }} in={active} unmountOnExit>
                             <AppSubmenu items={item.items} onMenuItemClick={props.onMenuItemClick} />

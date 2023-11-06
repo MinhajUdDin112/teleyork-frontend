@@ -30,9 +30,10 @@ const RejectedEnrollments = () => {
     const rowExpansionTemplate = (data) => {
         return (
             <div>
-                <DataTable value={[data]}>
+                <DataTable value={[data]} stripedRows>
                     <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
                     <Column field="plan.name" header="Plan Name" />
+                    <Column field="createdBy?.name" header="Created BY" />
                     <Column field="plan.price" header="Plan Price" />
                     <Column field="Phonecost" header="Phone Cost" />
                     <Column field="Amountpaid" header="Amount Paid by Customer" />
@@ -43,7 +44,7 @@ const RejectedEnrollments = () => {
                     <Column field="Activationcalldatetime" header="Activation Call Date Time" />
                     <Column field="status" header="Status" />
                     <Column field="Handover" header="Handover Equipment" />
-                    <Column field="Rejectedreason" header="Rejected Reason" />
+                    <Column field="rejectedReason" header="Rejected Reason" />
                     <Column field="Enrolltype" header="Enroll Type" />
                     <Column field="Reviewernote" header="Reviewer Note" />
                 </DataTable>
@@ -66,7 +67,7 @@ const RejectedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                console.log("rejected enrollment is ", res?.data?.data);
+              
                 setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
             }
@@ -121,15 +122,15 @@ const RejectedEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="View" onClick={() => viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className="p-button-text p-button-success p-mr-2" />
+                <Button label="View" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised/>
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised />
             </div>
         );
     };
 
     const actionTemplateForCsr=(rowData)=>{
         return(
-            <Button label="View" onClick={() =>  viewRow(rowData)} className="p-button-text p-button-warning p-mr-2" />
+            <Button label="View" onClick={() =>  viewRow(rowData)} text raised />
         )
        
     }
@@ -156,11 +157,11 @@ const RejectedEnrollments = () => {
                     </div>
                 </div>
             </div> */}
-            <div className="card p-3 mx-5 border-noround bg-green-200 ">{/* <p className="text-sm font-semibold">Search Result: 0</p> */}</div>
+            {/* <div className="card p-3 mx-5 border-noround bg-green-200 "><p className="text-sm font-semibold">Search Result: 0</p></div> */}
             <div className="mx-5">
                 <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">{/* <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText> */}</div>
                 <div className="">
-                <DataTable value={ allEnrollments} showGridlines resizableColumns columnResizeMode="fit" expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate}>
+                <DataTable value={ allEnrollments} stripedRows resizableColumns columnResizeMode="fit" expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate} paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             <Column expander style={{ width: "3em" }} />
                            
                             <Column header="Enrollment ID" field="enrollmentId"></Column>
