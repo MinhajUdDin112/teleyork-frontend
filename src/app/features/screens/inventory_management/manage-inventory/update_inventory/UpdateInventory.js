@@ -16,19 +16,20 @@ const UpdateInventory = ({ setActiveComponent }) => {
     });
 
     return (
-        <div className="card">
+        <div className="card"> 
+        <div >
             <Button
                 label="Back"
-                style={{ position: "absolute", marginLeft: "25px", fontSize: "16px", marginTop: "0px" }}
                 onClick={() => {
                     setActiveComponent("");
                 }}
-            />
-            <p className="card font-semibold " style={{ fontSize: "1.5rem", color: "black", marginTop: "90px" }}>
+            />  
+            </div>
+            <p className="font-semibold mt-6 " style={{ fontSize: "1.5rem", color: "black" }}>
                 Update Inventory
             </p>
 
-            <div className="flex flex-wrap mb-3 justify-content-around  ">
+            <div className=" mt-4 flex flex-wrap mb-3 justify-content-around  ">
                 <div className="mr-3 mb-3">
                     <p className="m-0">
                         Update Feature <span style={{ color: "red" }}>*</span>
@@ -42,14 +43,14 @@ const UpdateInventory = ({ setActiveComponent }) => {
                     <Dropdown value={formik.values.uploadtype} options={type} onChange={(e) => formik.setFieldValue("uploadtype", e.value)} placeholder="Select an option" className="w-21rem" />
                 </div>
             </div>
-            <div>
+            <div >
                 {formik.values.updatefeature === "esnsim" && formik.values.uploadtype === "single" ? (
                     <EsnSimSingleUpload />
                 ) : formik.values.updatefeature === "esnsim" && formik.values.uploadtype === "bulk" ? (
                     <EsnSimBulkUpload />
                 ) : formik.values.updatefeature === "device" && formik.values.uploadtype === "single" ? (
                     <UpdateDeviceSingleUpload />
-                ) : formik.values.uploadfeature === "device" && formik.values.uploadtype === "bulk" ? (
+                ) : formik.values.updatefeature === "device" && formik.values.uploadtype === "bulk" ? (
                     <UpdateDeviceBulkUpload />
                 ) : undefined}
             </div>

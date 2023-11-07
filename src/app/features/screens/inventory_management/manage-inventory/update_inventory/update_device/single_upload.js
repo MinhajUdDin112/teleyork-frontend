@@ -23,7 +23,7 @@ export default function UpdateDeviceSingleUpload() {
         },
     });
     return (
-        <div className="card">
+        <div >
             <div className="flex flex-wrap mb-3 justify-content-around">
                 <div className="mr-3 mb-3 mt-3">
                     <p className="m-0">

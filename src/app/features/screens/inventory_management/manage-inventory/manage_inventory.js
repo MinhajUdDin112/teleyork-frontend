@@ -7,7 +7,9 @@ import UpdateInventory from "./update_inventory/UpdateInventory";
 import ChangeESNSIMStatus from "./change_ESN/esn_sim_status";
 import { useNavigate } from "react-router-dom";
 import AdjustmentFlowPage from "./adjustment/adjustment_flow_page";  
-import DropshipOrdersFlowPage from "../dropship_orders/dropship_orders_flow_page";
+import DropshipOrdersFlowPage from "../dropship_orders/dropship_orders_flow_page"; 
+import Untagged_MEID_DEVICEID from "./untagged_meid_deviceid/untagged_meid_deviceid.js";
+import Equipment_And_Accessories_Request from "./equipment_and_accessories_request/equipment_and_accessories_request.js";
 let InventoryManagment = [
     {
         component: "AddUnits",
@@ -26,7 +28,7 @@ let InventoryManagment = [
     },
     {
         component: "UpdateInventory",
-        title: "Update inventory",
+        title: "Update Inventory",
         imgsrc: "/images/Inventory Module.png",
     },
     {
@@ -43,7 +45,17 @@ let InventoryManagment = [
         component: "InventoryDashboard",
         title: "Inventory Dashboard",
         imgsrc: "/images/Inventory Module.png",
-    },
+    }, 
+    { 
+        component:"Untagged_MEID_DEVICEID", 
+        title:"Untagged MEID/DEVICE ID", 
+        imgsrc:"/images/Inventory Module.png",
+    }, 
+    { 
+        component:"Equipment_And_Accessories_Request", 
+        title:"Equipment & Accessories Request", 
+        imgsrc:"/images/Inventory Module.png",
+    }
 ];
 const Manage_inventory = () => { 
     let navigate=useNavigate()
@@ -69,6 +81,10 @@ const Manage_inventory = () => {
                 <AdjustmentFlowPage setActiveComponent={setActiveComponent} />
             ) : activeComponent === "InventoryDashboard" ? (
                 <InventoryDashboard setActiveComponent={setActiveComponent} />
+            ) :activeComponent === "Untagged_MEID_DEVICEID" ? (
+                <Untagged_MEID_DEVICEID setActiveComponent={setActiveComponent} />
+            ) : activeComponent === "Equipment_And_Accessories_Request" ? (
+                <Equipment_And_Accessories_Request setActiveComponent={setActiveComponent} />
             ) : (
                 <>
                     <div className="card font-semibold" style={{ fontSize: "1.6rem", color: "grey", fontWeight: "bold" }}>

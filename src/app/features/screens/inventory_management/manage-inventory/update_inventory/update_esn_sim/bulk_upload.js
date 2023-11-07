@@ -17,24 +17,22 @@ export default function EsnSimBulkUpload(){
         },
     });
     return (
-        <div className="card">
+        <div >
           
            
-                <div className=" flex flex-row justify-content-between ">
-                
-                    <div>
-                    <Button style={{height:"45px",fontSize:"bold"}} label="ViewReport" type="button" /> 
+                <div>
+                    <Button style={{height:"45px",top:"115px",position:"absolute",right:"75px",fontSize:"bold"}} label="ViewReport" type="button" /> 
                     </div>
-                </div>
+                
 
                 
-                <div className="flex flex-wrap mb-3 justify-content-around ">
+                <div className="flex flex-wrap mb-3 mt-8 justify-content-around ">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Carrier</p>
                         <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">Vendor (pc120)</p>
+                        <p className="m-0">Vendor</p>
                         <Dropdown value={formik.values.vendor} options={vendor} onChange={(e) => formik.setFieldValue("vendor", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
                 </div>
