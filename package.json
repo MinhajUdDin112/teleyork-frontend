@@ -22,6 +22,7 @@
         "chart.js": "3.3.2",
         "classnames": "^2.2.6",
         "file-saver": "^2.0.5",
+        "font-awesome": "^4.7.0",
         "formik": "^2.2.9",
         "moment": "^2.29.4",
         "primeflex": "3.1.0",
@@ -52,7 +53,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-	"start:production": "npm run build && npm run start:prod",
+        "start:production": "npm run build && npm run start:prod",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

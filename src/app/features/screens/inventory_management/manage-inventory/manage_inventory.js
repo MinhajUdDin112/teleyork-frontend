@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import AddUnits from "./add units component/AddUnits";
+import AddUnits from "./add_units/add_units_flow_page.js";
 import { Card } from "primereact/card";  
-import CreateAssignBox from "../create_assign_box/create_assign_box";
-import UpdateInventory from "./UpdateInventory";
+import InventoryDashboard from "./inventory_dashboard/inventory_dashboard_flow_page";
+import CreateAssignBox from "./create_assign_box/create_assign_box";
+import UpdateInventory from "./update_inventory/UpdateInventory";
 import ChangeESNSIMStatus from "./change_ESN/esn_sim_status";
+import { useNavigate } from "react-router-dom";
 import AdjustmentFlowPage from "./adjustment/adjustment_flow_page";  
-import DropshipOrdersFlowPage from "../dropship_orders/dropship_orders_flow_page";
+import DropshipOrdersFlowPage from "../dropship_orders/dropship_orders_flow_page"; 
+import Untagged_MEID_DEVICEID from "./untagged_meid_deviceid/untagged_meid_deviceid.js";
+import Equipment_And_Accessories_Request from "./equipment_and_accessories_request/equipment_and_accessories_request.js";
 let InventoryManagment = [
     {
         component: "AddUnits",
@@ -24,7 +28,7 @@ let InventoryManagment = [
     },
     {
         component: "UpdateInventory",
-        title: "Update inventory",
+        title: "Update Inventory",
         imgsrc: "/images/Inventory Module.png",
     },
     {
@@ -36,9 +40,25 @@ let InventoryManagment = [
         component: "Adjustment",
         title: "Adjustment",
         imgsrc: "/images/Inventory Module.png",
-    },
+    },        
+    {
+        component: "InventoryDashboard",
+        title: "Inventory Dashboard",
+        imgsrc: "/images/Inventory Module.png",
+    }, 
+    { 
+        component:"Untagged_MEID_DEVICEID", 
+        title:"Untagged MEID/DEVICE ID", 
+        imgsrc:"/images/Inventory Module.png",
+    }, 
+    { 
+        component:"Equipment_And_Accessories_Request", 
+        title:"Equipment & Accessories Request", 
+        imgsrc:"/images/Inventory Module.png",
+    }
 ];
-const Manage_inventory = () => {
+const Manage_inventory = () => { 
+    let navigate=useNavigate()
     const [activeComponent, setActiveComponent] = useState(null);
 
     const handleImageClick = (component) => {
@@ -54,11 +74,17 @@ const Manage_inventory = () => {
             ) :activeComponent === "CreateAssignBox" ? (
                 <CreateAssignBox setActiveComponent={setActiveComponent} />
             ) :activeComponent === "DropshipOrdersFlowPage" ? (
-                <DropshipOrdersFlowPage setActiveComponent={setActiveComponent} />
+                <DropshipOrdersFlowPage />
             ) : activeComponent === "ChangeESN_SIM" ? (
                 <ChangeESNSIMStatus setActiveComponent={setActiveComponent} />
             ) : activeComponent === "Adjustment" ? (
                 <AdjustmentFlowPage setActiveComponent={setActiveComponent} />
+            ) : activeComponent === "InventoryDashboard" ? (
+                <InventoryDashboard setActiveComponent={setActiveComponent} />
+            ) :activeComponent === "Untagged_MEID_DEVICEID" ? (
+                <Untagged_MEID_DEVICEID setActiveComponent={setActiveComponent} />
+            ) : activeComponent === "Equipment_And_Accessories_Request" ? (
+                <Equipment_And_Accessories_Request setActiveComponent={setActiveComponent} />
             ) : (
                 <>
                     <div className="card font-semibold" style={{ fontSize: "1.6rem", color: "grey", fontWeight: "bold" }}>
@@ -73,9 +99,12 @@ const Manage_inventory = () => {
                                         height: "17em",
                                         backgroundColor: "#fff",
                                         marginBottom: "20px",
+                                        fontWeight:"900",
                                         boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",cursor:"pointer"
                                     }}
-                                    onClick={() => handleImageClick(inventory.component)}
+                                    onClick={() => {
+                                    inventory.title === "Dropship Orders" ? navigate("/dropshiporders"):handleImageClick(inventory.component) 
+                                    }}
                                 >
                                     <img
                                         src={inventory.imgsrc}
@@ -88,7 +117,7 @@ const Manage_inventory = () => {
                                         }}
                                         // Set the active component when image 1 is clicked
                                     />
-                                    <div className="flex justify-content-center" style={{ fontSize: "14px",fontFamily:"Inter", marginTop: "35px", color: "grey" }}>
+                                    <div className="flex justify-content-center" style={{ fontSize: "14px",fontWeight:"normal",fontFamily:"Inter", marginTop: "35px", color: "grey" }}>
                                         <p>{inventory.title}</p>
                                     </div>
                                 </Card>

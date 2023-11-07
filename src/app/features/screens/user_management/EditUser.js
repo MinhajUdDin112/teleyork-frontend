@@ -21,7 +21,6 @@ const EditUser = () => {
     const location = useLocation();
     const { rowData } = location.state || {};
 
-    console.log('rowData', rowData)
 
     const navigate = useNavigate()
 
@@ -90,7 +89,7 @@ const EditUser = () => {
                 })
                 .catch((error) => {
                     // Handle errors here
-                    console.error('Error:', error);
+                   toast.error(error?.response?.data?.msg)
                 });
         },
     });
@@ -103,7 +102,7 @@ const EditUser = () => {
     const handleUserDataMapping = () => {
         if (rowData) { // Check if formik and rowData exist
             Object.keys(rowData).forEach((key) => {
-                console.log('rowData?.contact', rowData?.contact)
+               
                 if (formik.initialValues.hasOwnProperty(key)) {
                     formik.setFieldValue(key, rowData[key]);
                     formik.setFieldValue("role", rowData?.role?._id);
@@ -116,10 +115,10 @@ const EditUser = () => {
     const getRoles = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
-            console.log(res.data)
+           
             setAllRoles(res?.data?.data || []);     
         } catch (error) {
-            console.error("Error fetching module data:", error);
+           
         }
     };
     useEffect(() => {
@@ -245,7 +244,7 @@ const EditUser = () => {
                                 id="mobile"
                                 value={formik.values.mobile}
                                 onChange={formik.handleChange}
-                                keyfilter={/^[\+\d]+$/}
+                                minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}
                             />
                             {getFormErrorMessage("mobile")}
                         </div>

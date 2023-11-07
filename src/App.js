@@ -36,12 +36,14 @@ import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_order
 import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
 import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
 import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
-
+import DropshipOrdersFlowPage from "./app/features/screens/inventory_management/dropship_orders/dropship_orders_flow_page";
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
 import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
 import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
+import DeactivatEsn from "./app/features/screens/customer_services/DeactivatEsn";
 import EligibilityProofUpload from "./app/features/screens/customer_services/EligibilityProofUpload";
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
+import PurchaseHistory from "./app/features/screens/customer_services/PurchaseHistory";
 import SmsNotification from "./app/features/screens/sms_notification/Upload";
 import Upload from "./app/features/screens/sms_notification/Upload";
 import Sent from "./app/features/screens/sms_notification/Sent";
@@ -68,6 +70,8 @@ import Manage_Department from "./app/features/screens/user_management/Manage_Dep
 import CreateDepartment from "./app/features/screens/user_management/CreateDepartment";
 import EditDepartment from "./app/features/screens/user_management/EditDepartment";
 import NotFound from "./app/features/screens/not_found/NotFound";
+import Tickets from "./app/features/screens/customer_services/Tickets";
+import OrderHistory from "./app/features/screens/customer_services/OrderHistory";
 
 
 const App = () => {
@@ -202,11 +206,20 @@ const App = () => {
     let token = JSON.parse(localStorage.getItem("accessToken"));
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
+<<<<<<< HEAD
     useEffect(() => {
         console.log(window.localStorage)
         const url = window.location.hash
         console.log(url, url.startsWith('#/selfenrollment'))
         if (url.startsWith('#/selfenrollment')) { return }
+=======
+    useEffect(() => {    
+       
+        const url=window.location.hash
+       
+        if(url.startsWith('#/selfenrollment'))
+        {return}
+>>>>>>> af9f15b7e2e0c339438e578a29a0b4c9962ca891
         if (token) {
             if (protectedRoute === false) {
                 navigate("/");
@@ -306,9 +319,13 @@ const App = () => {
                                 <Route path="/allenrollmentorders" element={<Allenrollments />} />
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
+                                <Route path="/purchasehistory" element={<PurchaseHistory />} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
+                                <Route path="/deactivateesn" element={<DeactivatEsn />} />
+                                <Route path="/tickets" element={<Tickets />} />
                                 <Route path="/eligibilityproofupload" element={<EligibilityProofUpload />} />
                                 <Route path="/dealerwallet" element={<DealerWallet />} />
+                                <Route path="/orderhistory" element={<OrderHistory />} />
                                 <Route path="/manageinventory" element={<Manage_inventory />} />
                                 <Route path="/smsnotification" element={<Upload />} />
                                 <Route path="/sent" element={<Sent />} />
@@ -323,7 +340,8 @@ const App = () => {
                                 <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                                 <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate/*" element={<ManageTemplate />} />
-                                <Route path="/createrole" element={<CreateRole />} />
+                                <Route path="/createrole" element={<CreateRole />} />  
+                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage/>}/>
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />

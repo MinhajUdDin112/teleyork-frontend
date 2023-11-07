@@ -1,6 +1,10 @@
 .custom-icon {
     font-size: 4rem ; /* Adjust the size as needed */
   }
+
+  /* .p-button-label{
+    display: none
+  } */
   
    /* Custom Css */
 
@@ -290,3 +294,7 @@ box-shadow: 2px;
   .no-border{
     border: none;
   }
+
+  .hide-reject-button .p-confirm-dialog-footer .p-button-reject {
+    display: none;
+}

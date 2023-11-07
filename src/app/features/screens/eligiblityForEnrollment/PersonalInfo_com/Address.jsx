@@ -38,8 +38,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         address1: Yup.string().required("Address is required"),
         isTemporaryAddress: Yup.string().required("please confrim address"),
     });
-    console.log("cnfrm addres is",confrimAddress)
-
+   
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -122,7 +121,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.mailingZip}`);
                 const data = response?.data?.data;
                 formik.setFieldValue("mailingCity", data?.city);
-                formik.setFieldValue("mailingState", data?.state);
+                formik.setFieldValue("mailingState", data?.abbreviation);
             }
             getData();
         }
@@ -135,38 +134,14 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`);
                     const data = response?.data?.data;
                     formik.setFieldValue("poBoxCity", data?.city);
-                    formik.setFieldValue("poBoxState", data?.state);
+                    formik.setFieldValue("poBoxState", data?.abbreviation);
                 }
                 getData();
             }
        // }
     }, [formik.values.isPoBoxAddress, formik.values.poBoxZip]);
 
-    //GETTING city from autocomplete api response
-
-    useEffect(() => {
-        if (autoCompleteAddress) {
-            const cityFromAutoResponse = autoCompleteAddress?.value?.structured_formatting?.secondary_text;
-            let cityName = "";
-            if (cityFromAutoResponse && cityFromAutoResponse.includes(",")) {
-                const parts = cityFromAutoResponse.split(",");
-                if (parts.length >= 1) {
-                    cityName = parts[0];
-                }
-            }
-
-            if (cityName.includes(formik.values.city) || formik.values.city.includes(cityName)) {
-                formik.setFieldValue("address1", autoCompleteAddress?.value?.structured_formatting?.main_text);
-            } else {
-                toast.error(`please select address against ${formik.values.city} `);
-            }
-        }
-    }, [autoCompleteAddress]);
-
-    const handleAutoCompleteClick = () => {
-        setAutoCompleteAddress('');
-      };
-    
+   
 
     const handleSame = () => {
         formik.setFieldValue("isSameServiceAddress", true);
@@ -237,7 +212,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             setTempAdd(parseaddressResponse?.data?.isTemporaryAddress);
             setIsSame(parseaddressResponse?.data?.isSameServiceAddress);
             setIsDifferent(parseaddressResponse?.data?.isNotSameServiceAddress);
-            console.log("is not same is ",parseaddressResponse?.data?.isNotSameServiceAddress)
+         
             setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);  
         }
     }, []);
@@ -249,6 +224,24 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         }
     }, [isDifferent, isPoBox]);
     
+    const handleAddressChange = (e) => {
+ 
+        const address = e?.value?.structured_formatting?.secondary_text
+        if (address) {
+            let cityName = "";
+            if (address && address.includes(",")) {
+                const parts = address.split(",");
+                if (parts.length >= 1) {
+                    cityName = parts[0];
+                }
+            }
+            if (cityName.includes(formik.values.city) || formik.values.city.includes(cityName)) {
+                formik.setFieldValue("address1", e?.value?.structured_formatting?.main_text);
+            } else {
+                toast.error(`please select address against ${formik.values.city} `);
+            }
+        }
+    }
 
     return (
         <>
@@ -291,9 +284,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                         <GooglePlacesAutocomplete
                             apiKey="AIzaSyDa1KFekZkev2CAqrcrU_nYDe_1jC-PHA0"
                             selectProps={{
-                                autoCompleteAddress,
-                                onChange: setAutoCompleteAddress,
-                                onClick: handleAutoCompleteClick, 
+                                onChange: (e)=> handleAddressChange(e),
+                                
                             }}
                         />
                     </div>

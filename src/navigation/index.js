@@ -24,7 +24,7 @@ export const menuNavigation = [
                 icon: "pi pi-fw pi-bookmark",
                 items: [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
-                    { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
+                   // { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
@@ -56,7 +56,24 @@ export const menuNavigation = [
                     {
                         label: "Order History",
                         icon: "",
-                        to: "",
+                        to: "orderhistory",
+                    },
+                     
+                   
+                    {
+                        label: "Purchase history",
+                        icon: "",
+                        to: "/purchasehistory",
+                    },
+                    {
+                        label: "Tickets",
+                        icon: "",
+                        to: "/tickets",
+                    },
+                    {
+                        label: "Customer history",
+                        icon: "",
+                        to: "/customerhistory",
                     },
                     {
                         label: "Recent Searches",
@@ -67,21 +84,27 @@ export const menuNavigation = [
                         label: "Payment Search Tool",
                         icon: "",
                         to: "/paymentsearchtool",
+                    },    
+                    {
+                        label: "Deactivate ESN",
+                        icon: "",
+                        to: "/deactivateesn",
                     },
+
                     {
                         label: "Agent Store Locator",
                         icon: "",
                         to: "/agentstorelocator",
                     },
                     {
-                        label: "Eligibility Proof Upload",
-                        icon: "",
-                        to: "/eligibilityproofupload",
-                    },
-                    {
                         label: "Dealer Wallet",
                         icon: "",
                         to: "/dealerwallet",
+                    },
+                    {
+                        label: "Eligibility Proof Upload",
+                        icon: "",
+                        to: "/eligibilityproofupload",
                     },
                 ],
             },
@@ -128,7 +151,12 @@ export const menuNavigation = [
                 items: [
                     {
                         label: "Manage Inventory",
+                        icon: "",
                         to: "/manageinventory",
+                    },{ 
+                        label: "Drop Ship Orders",
+                        icon: "",
+                        to: "/dropshiporders",
                     }
                 ]
             }

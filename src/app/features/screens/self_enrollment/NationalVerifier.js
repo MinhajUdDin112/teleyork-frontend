@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { useNavigate,useParams } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../../config";
+import { toast } from "react-toastify";
 
 const NationalVerifier = () => {
     const [checked, setChecked] = useState(false);
@@ -20,12 +21,12 @@ const NationalVerifier = () => {
             navigate("/selfenrollment/resumeapplication", { state: { responseData } });
         } catch (error) {
             // Handle any errors here
-            console.error("Error:", error);
+            toast.error(error?.response?.data?.msg);
         }
     };
     const handleBack = () => {
         // Navigate to a different route
-        navigate("/selfenrollment/eligibility");
+        navigate(-1);
     };
     return (
         <>
@@ -38,9 +39,7 @@ const NationalVerifier = () => {
                 }}
             >
                 <div className="col-7">
-                    {/* <div className="col-12">
-                        <p className="text-4xl font-semibold">IJ Wireless</p>
-                    </div> */}
+                   
                     <div className="card p-8 col-12 mx-0">
                         <p className="text-4xl font-bold flex justify-content-center">National Verifier Disclosure</p>
                         <p className="mt-0 text-xl">

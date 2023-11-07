@@ -5,14 +5,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
 import BASE_URL from "../../../../config";
+import { ToastContainer, toast } from "react-toastify";
 
 const Eligibility = () => {
     const [acpProgram,setAcpProgram] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const {id}=useParams()
-    const eligId = "645a85198cd1ff499c8b99cd"
+    const eligId = "64e0b1ab35a9428007da351c"
     const navigate = useNavigate();
     const handleBack = () => {
-        navigate("/selfenrollment/address");
+        navigate(-1)
        
     };
     const formik = useFormik({
@@ -21,21 +23,43 @@ const Eligibility = () => {
         },
         validate:(data)=>{
             let errors={}
-            if(data?.program.length===0){
+            if(!data?.program){
                 errors.program="Select Program"
             }
             return errors;
         },
-        onSubmit:async(values)=>{
-            const newData={
-                userId:id,
-                ...values
+        onSubmit: async (values) => {
+            const newData = {
+                userId: id,
+                ...values,
+            };
+            setIsLoading(true);
+            try {
+                const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`,newData);
+                
+                // Check if the POST request was successful
+                if (res.status === 200 || res.status === 201) {
+                    // Save the response data in local storage
+                    localStorage.setItem('selectProgram', JSON.stringify(res.data));
+                    
+                    // Navigate to the next page
+                    navigate(`/selfenrollment/nationalverifier/${id}`);
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                 toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
             }
-            const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`,newData);
-            navigate(`/selfenrollment/nationalverifier/${id}`);
         }
+        
     })
-
+    useEffect(()=>{
+        const selectProgram  = JSON.parse(localStorage.getItem('selectProgram'))
+        if(selectProgram){
+            formik.setFieldValue('program',selectProgram?.data?.acpProgram)
+           
+        }
+    },[])
     //get all ACP programs
     const getAcpPrograms =async ()=>{
         const res = await axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${eligId}`);
@@ -49,8 +73,10 @@ const Eligibility = () => {
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
     };
+    
     return (
         <>
+        <ToastContainer/>
             <div
                 style={{
                     display: "flex",
@@ -60,9 +86,6 @@ const Eligibility = () => {
                 }}
             >
                 <div className="col-7">
-                    {/* <div className="col-12">
-                        <p className="text-4xl font-semibold">IJ Wireless</p>
-                    </div> */}
                     <div className="card flex p-8">
                         <div className="col-6">
                             <p className="text-2xl font-bold">Eligibility</p>
