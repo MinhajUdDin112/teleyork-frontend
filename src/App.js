@@ -238,14 +238,12 @@ const App = () => {
     }])
 
     const getPermissions = () => {
-        console.log("here ine")
         if (localStorage.getItem('permissions') === null) {
             return;
         }
         else {
             console.log("here")
             let modules = parsedLoginPerms.map((node) => {
-                console.log('node', node)
                 return {
                     label: node?.module,
                     icon: "",
@@ -258,9 +256,8 @@ const App = () => {
                     })
                 }
             })
-            console.log('modules', modules)
+            modules = modules.filter((item) => item.items.length > 0)
             setDynamicMenu((prev) => {
-                console.log('prev', prev)
                 return [...prev, {
                     items: modules
                 }]
@@ -270,7 +267,7 @@ const App = () => {
 
     useEffect(() => {
         getPermissions()
-    }, []);
+    }, [window.localStorage.permissions]);
 
     return (
         <>
@@ -281,7 +278,7 @@ const App = () => {
                     <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
                     <div className="layout-sidebar" onClick={onSidebarClick}>
-                        <AppMenu model={menuNavigation} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
                     </div>
 
                     <div className="layout-main-container">
