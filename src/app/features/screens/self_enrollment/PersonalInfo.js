@@ -17,7 +17,6 @@ const PersonalInfo = () => {
     const location = useLocation()
     const stateData = location.state;
 
-
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This field is required"),
         middleName: Yup.string().required("This field is required"),
@@ -120,13 +119,13 @@ const PersonalInfo = () => {
             formik.setFieldValue('SSN',initialInformation?.data?.SSN)
             formik.setFieldValue('suffix',initialInformation?.data?.suffix)
             formik.setFieldValue('contact',initialInformation?.data?.contact)
-            formik.setFieldValue('DOB',initialInformation?.data?.DOB)
+            formik.setFieldValue('DOB',new Date(initialInformation?.data?.DOB))
             formik.setFieldValue('isDifferentPerson',initialInformation?.data?.isDifferentPerson)
             formik.setFieldValue('BenifitFirstName',initialInformation?.data?.BenifitFirstName)
             formik.setFieldValue('BenifitMiddleName',initialInformation?.data?.BenifitMiddleName)
             formik.setFieldValue('BenifitLastName',initialInformation?.data?.BenifitLastName)
             formik.setFieldValue('BenifitSSN',initialInformation?.data?.BenifitSSN)
-            // formik.setFieldValue('BenifitDOB',initialInformation?.data?.BenifitDOB)
+            formik.setFieldValue('BenifitDOB',new Date(initialInformation?.data?.BenifitDOB))
         }
     },[])
     return (
@@ -181,7 +180,7 @@ const PersonalInfo = () => {
                                                 <InputText className="mb-3" placeholder="Last 4 SSN or Tribal ID" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} />
                                                 {getFormErrorMessage("BenifitSSN")}
                                                 
-                                            <Calendar className="mb-3" placeholder="Date of Birth" name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} />
+                                            <Calendar className="mb-3" placeholder="Date of Birth" name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />
                                             {getFormErrorMessage("BenifitDOB")}
                                             </div>
                                         )}

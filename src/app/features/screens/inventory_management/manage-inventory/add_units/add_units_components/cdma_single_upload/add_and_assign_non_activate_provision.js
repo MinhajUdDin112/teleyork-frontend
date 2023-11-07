@@ -1,14 +1,14 @@
 //company agent tracking master carrier tin
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import { carrier, company, agent, emptymaster, master, model, portin, retailer, distributor, employee } from "../../assets";
+import { carrier, company, agent, emptymaster, master, model, portin, retailer, distributor, employee, BYOD } from "../../assets";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
-export default function SIMSingleUploadAddAndAssignNonActivateProvision() {
+export default function CDMASingleUploadAddAndAssignNonActivateProvision() {
     const [addsim_model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
   
@@ -17,7 +17,7 @@ export default function SIMSingleUploadAddAndAssignNonActivateProvision() {
             carrier: "",
             company: "",
             agent: "",
-            sim: "",
+            esn: "",
             master: "",
             puk: "",
             box: "",
@@ -27,7 +27,8 @@ export default function SIMSingleUploadAddAndAssignNonActivateProvision() {
             activationfee: "",
             model: "",
             imei: "",
-            amount: "",
+            amount: "", 
+            byod:"",
             tin: "",
             costpriceforsim: "",
             retailpriceforsim: "",
@@ -57,9 +58,9 @@ export default function SIMSingleUploadAddAndAssignNonActivateProvision() {
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
-                            SIM <span style={{ color: "red" }}>*</span>
+                            ESN <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.sim} name="sim" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                        <InputText type="text" value={formik.values.esn} name="esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -153,6 +154,10 @@ export default function SIMSingleUploadAddAndAssignNonActivateProvision() {
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
                         <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                    </div>    
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">BYOD</p>
+                        <Dropdown value={formik.values.byod} options={BYOD} onChange={(e) => formik.setFieldValue("byod", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Portin Reserved Status</p>
