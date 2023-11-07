@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
@@ -7,17 +7,19 @@ import { useFormik } from "formik";
 import BASE_URL from "../../../../config";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import * as Yup from "yup";
 
 const Address = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
     const location = useLocation();
     const stateData = location.state;
+
     const {id}=useParams()
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("This field is required"),
-        address2: Yup.string().required("This field is required"),
+       
         SSN: Yup.string().required("This field is required"),
     })
     const formik = useFormik({
@@ -31,43 +33,26 @@ const Address = () => {
             isTerribleTerritory: false,
             isBillAddress: false,
         },
-        // onSubmit: async (values) => {
-        //     const newData = {
-        //         userId: id,
-        //         ...values,
-        //     }
-        //     try {
-            
-        //       const response = await axios.post(`${BASE_URL}/api/enrollment/homeAddress`, newData)
-        //       console.log(response.status)
-        //         navigate(`/selfenrollment/eligibile/${id}`)
-        //     } catch (error) {
-        //         toast.error('Something went wrong')
-        //     }
-             
-        // },
         onSubmit: async (values) => {
             const newData = {
                 userId: id,
                 ...values,
             };
-        
-            try {
+            setIsLoading(true);
+                   try {
                 const response = await axios.post(`${BASE_URL}/api/enrollment/homeAddress`, newData)
                 
                 // Check if the POST request was successful
                 if (response.status === 201) {
                     // Save the response data in local storage
                     localStorage.setItem('homeAddress', JSON.stringify(response.data));
-                    console.log("homeAddress",response.data)
-                    
                     // Navigate to the next page
                     navigate(`/selfenrollment/eligibile/${id}`)
-                } else {
-                    return toast.warn("Something went wrong");
-                }
+                    setIsLoading(false);
+                } 
             } catch (error) {
-                return toast.warn("Something went wrong");
+                 toast.error(error?.response?.data?.msg);
+                 setIsLoading(false);
             }
         }
         
@@ -98,6 +83,7 @@ const Address = () => {
 
     return (
         <>
+        <ToastContainer/>
             <div
                  style={{
                     display: "flex",
@@ -121,10 +107,10 @@ const Address = () => {
                                     <InputText className="mb-3" placeholder="Enter Address 1" name="address1" value={formik.values.address1} onChange={formik.handleChange} />
                                     {getFormErrorMessage("address1")}
                                     <InputText className="mb-3" placeholder="Enter Address 2" name="address2" value={formik.values.address2} onChange={formik.handleChange} />
-                                    {getFormErrorMessage("address2")}
+                                   
                                     <InputText className="mb-3" placeholder="Enter City" name="city" value={formik.values.city} onChange={formik.handleChange} disabled/>
                                     <InputText className="mb-3" placeholder="Enter State" name="state" value={formik.values.state} onChange={formik.handleChange} disabled />
-                                    <InputText className="mb-3" placeholder="Enter SSN" name="SSN" value={formik.values.SSN} onChange={formik.handleChange} />
+                                    <InputText className="mb-3" placeholder="SSN(Last 4 Digit) " name="SSN" value={formik.values.SSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                     {getFormErrorMessage("SSN")}
 
                                     <div className="mb-2 flex justify-content-center">
@@ -139,7 +125,7 @@ const Address = () => {
                                             Is your billing address different?
                                         </label>
                                     </div>
-                                    <Button label="Next" className="mb-3" type="submit" />
+                                    <Button label="Next" className="mb-3" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
                                     <Button label="Back" onClick={handleBack} />
                                 </div>
                             </div>

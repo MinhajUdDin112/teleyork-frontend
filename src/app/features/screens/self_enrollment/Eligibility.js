@@ -5,11 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
 import BASE_URL from "../../../../config";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const Eligibility = () => {
     const [acpProgram,setAcpProgram] = useState([])
-    console.log("first",acpProgram)
+    const [isLoading, setIsLoading] = useState(false)
     const {id}=useParams()
     const eligId = "64e0b1ab35a9428007da351c"
     const navigate = useNavigate();
@@ -33,22 +33,22 @@ const Eligibility = () => {
                 userId: id,
                 ...values,
             };
-        
+            setIsLoading(true);
             try {
                 const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`,newData);
                 
                 // Check if the POST request was successful
-                if (res.status === 201) {
+                if (res.status === 200 || res.status === 201) {
                     // Save the response data in local storage
                     localStorage.setItem('selectProgram', JSON.stringify(res.data));
                     
                     // Navigate to the next page
                     navigate(`/selfenrollment/nationalverifier/${id}`);
-                } else {
-                    return toast.warn("Something went wrong");
+                    setIsLoading(false);
                 }
             } catch (error) {
-                return toast.warn("Something went wrong");
+                 toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
             }
         }
         
@@ -73,9 +73,10 @@ const Eligibility = () => {
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
     };
-    console.log("vlue",formik.values)
+    
     return (
         <>
+        <ToastContainer/>
             <div
                 style={{
                     display: "flex",

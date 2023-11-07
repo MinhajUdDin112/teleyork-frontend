@@ -4,6 +4,9 @@ import BASE_URL from "../../../config";
 
 //Verify Zip action
 export const verifyZipAction = createAsyncThunk("selfEnrollmentapi/enrollment/verifyZip", async (body, { rejectWithValue }) => {
+    localStorage.clear("initialInformation");
+    localStorage.clear("homeAddress");
+    localStorage.clear("selectProgram");
     try {
         const response = await axios.post(`${BASE_URL}/api/enrollment/verifyZip`, body);
         // if (response.status === 200) {

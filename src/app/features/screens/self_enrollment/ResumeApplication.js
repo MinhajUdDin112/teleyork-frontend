@@ -11,26 +11,31 @@ const ResumeApplication = () => {
     const location = useLocation();
     const responseData = location.state && location.state.responseData;
 const navigate = useNavigate()
-
+const [visible,setVisible]=useState(false)
 
 const confirm1 = () => {
     confirmDialog({
-        message: 'Your enrollment has been done?',
+        message: 'Your enrollment has been done',
         header: 'Congratulations',
-        accept,
-        reject: "nulls"
+        acceptLabel: 'Submit',
+        rejectLabel:"Reject",
+        className: 'hide-reject-button',
+        accept:()=>{
+            localStorage.removeItem("homeAddress")
+            localStorage.removeItem("selectProgram")
+            localStorage.removeItem("initialInformation")
+            navigate('/selfenrollment')
+        },
+        reject:()=>{
+            setVisible(false)
+        }
     });
 };
 
-const accept = () => {
-    navigate('/')
-}
 
-console.log("first",responseData.data)
     const formik = useFormik({
         initialValues:{
             firstName:"",
-            middleName: "",
             lastName: "",
             email:"",
             state:"",
@@ -44,7 +49,6 @@ console.log("first",responseData.data)
     })
  const setValues = ()=>{
     formik.setFieldValue("firstName",responseData.data.firstName)
-    formik.setFieldValue("middleName",responseData.data.middleName)
     formik.setFieldValue("lastName",responseData.data.lastName)
     formik.setFieldValue("email",responseData.data.email)
     formik.setFieldValue("state",responseData.data.state)
@@ -80,7 +84,6 @@ console.log("first",responseData.data)
                             <form onSubmit={formik.handleSubmit}>
                             <div className="flex flex-column">
                                 <InputText id="firstName"  value={formik.values.firstName} disabled onChange={formik.handleChange} className="mb-3" placeholder="First Name" />
-                                <InputText id="middleName" value={formik.values.middleName} disabled onChange={formik.handleChange} className="mb-3" placeholder="Middle Name" />
                                 <InputText id="lastName" value={formik.values.lastName} disabled onChange={formik.handleChange} className="mb-3" placeholder="Last Name" />
                                 <InputText id="email" value={formik.values.email} disabled onChange={formik.handleChange} className="mb-3" placeholder="Email" />
                                 <InputText id="zip" value={formik.values.zip} disabled onChange={formik.handleChange} className="mb-3" placeholder="ZipCode" />
@@ -94,7 +97,7 @@ console.log("first",responseData.data)
                     </div>
                 </div>
             </div>
-            <ConfirmDialog rejectClassName='hidden' />
+            <ConfirmDialog visible={visible} rejectClassName='hidden' />
         </>
     );
 };
