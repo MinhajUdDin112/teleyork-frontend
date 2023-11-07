@@ -17,15 +17,16 @@ import { ToastContainer, toast } from "react-toastify";
 const CreateUser = () => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
+    const [allReporting, setAllReporting] = useState([]);
     const [allUser, setAllUser] = useState([]);
-   
+    const [allState, setAllState] = useState([]);
+    const [allCity, setAllCity] = useState([]);
 
     const navigate = useNavigate();
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
-    
+    const parseLoginRes = JSON.parse(loginRes); 
 
     // Validation Schema
     const validationSchema = Yup.object().shape({
@@ -35,9 +36,6 @@ const CreateUser = () => {
         mobile: Yup.string()
             .matches(/^\d{1,10}$/, "Maxumum 15 digits")
             .required("This field is required."),
-        // password: Yup.string()
-        //     .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Password must have at least 1 uppercase, 1 lowercase, 1 number, 1 special character and minimum 8 characters.")
-        //     .required("This field is required."),
         city: Yup.string().required("This field is required."),
         state: Yup.string().required("This field is required."),
         address1: Yup.string().required("This field is required."),
@@ -103,7 +101,7 @@ const CreateUser = () => {
                 const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.compony}`);
                 setAllDepartment(res?.data?.data || []);
             } catch (error) {
-                toast.error("Error fetching department:", error);
+                toast.error(`Error fetching department: ${error?.response?.data?.msg}`);
             }
         };
         getDepartment();
@@ -117,7 +115,7 @@ const CreateUser = () => {
                 const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);     
                 setAllRoles(res?.data?.data || []);
             } catch (error) {
-                toast.error("Error fetching roles:", error);
+                toast.error(`Error fetching roles : ${error?.response?.data?.msg}`);
             }
         };
         getRoles();
@@ -127,21 +125,51 @@ const CreateUser = () => {
    
        
     useEffect(() => {
-        if(formik.values.department){
-            const departId= formik.values.department;
-        const getRoles = async () => {
+        if(formik.values.role){
+            const roleId= formik.values.role;
+        const getReportingTo = async () => {
             try {
-                const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
-           
-              setAllUser(res?.data?.data || []);
+                const res = await Axios.get(`${BASE_URL}/api/web/user/getReportingTo?roleId=${roleId}`);
+              setAllReporting(res?.data?.result || []);
             } catch (error) {
-                toast.error("Error fetching user :", error?.response?.data?.msg);
+                toast.error(`Error fetching users : ${error?.response?.data?.msg}`);
             }
         };
-        getRoles();
+        getReportingTo();
+    } 
+    }, [formik.values.role])
+
+
+    useEffect(() => {    
+        const getStates = async () => {
+            try {
+               
+                const res = await Axios.get(`${BASE_URL}/api/zipCode/getAllStates`);       
+              setAllState(res?.data?.data || []);
+            } catch (error) {
+               
+                toast.error(`Error fetching States : ${error?.response?.data?.msg}`);
+            }             
+    }  
+    getStates();
+    }, [])
+
+    useEffect(() => {    
+        if(formik.values.state){
+            const selectedState= formik.values.state;
+            const getCities = async () => {
+                try {
+                        const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);       
+                    setAllCity(res?.data?.data || []);
+                } catch (error) {               
+                    toast.error(`Error fetching States : ${error?.response?.data?.msg}`);
+                }             
+        }  
+        getCities();      
     }
-   
-    }, [formik.values.department])
+    }, [formik.values.state])
+
+
     
     return (
         <>
@@ -190,7 +218,7 @@ const CreateUser = () => {
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Reporting To <span className="steric">*</span></label>
                             <Dropdown id="reportingTo" 
-                            options={allUser} 
+                            options={allReporting} 
                             value={formik.values.reportingTo} 
                             onChange={(e) => formik.setFieldValue("reportingTo", e.value)} 
                             optionLabel="name" 
@@ -219,16 +247,32 @@ const CreateUser = () => {
                             <label className="Label__Text">Address2</label>
                             <InputText id="address2" value={formik.values.address2} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                         </div>
+                        
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">City <span className="steric">*</span></label>
-                            <InputText id="city" value={formik.values.city} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
-                            {getFormErrorMessage("city")}
-                        </div>
-
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">State <span className="steric">*</span></label>
-                            <InputText id="state" value={formik.values.state} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
+                            <label className="Label__Text">Select State<span className="steric">*</span></label>
+                            <Dropdown id="state" 
+                            options={allState} 
+                            value={formik.values.state} 
+                            onChange={(e) => formik.setFieldValue("state", e.value)} 
+                            optionLabel="state" 
+                            optionValue="state"  
+                            showClear
+                             filter 
+                             filterBy="state" />
                             {getFormErrorMessage("state")}
+                        </div>
+                        <div className="p-field col-12 md:col-3">
+                            <label className="Label__Text">Select City<span className="steric">*</span></label>
+                            <Dropdown id="city" 
+                            options={allCity} 
+                            value={formik.values.city} 
+                            onChange={(e) => formik.setFieldValue("city", e.value)} 
+                            optionLabel="city" 
+                            optionValue="_id"  
+                            showClear
+                             filter 
+                             filterBy="city" />
+                            {getFormErrorMessage("city")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">

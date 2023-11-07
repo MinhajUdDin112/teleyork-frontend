@@ -121,7 +121,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.mailingZip}`);
                 const data = response?.data?.data;
                 formik.setFieldValue("mailingCity", data?.city);
-                formik.setFieldValue("mailingState", data?.state);
+                formik.setFieldValue("mailingState", data?.abbreviation);
             }
             getData();
         }
@@ -134,7 +134,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`);
                     const data = response?.data?.data;
                     formik.setFieldValue("poBoxCity", data?.city);
-                    formik.setFieldValue("poBoxState", data?.state);
+                    formik.setFieldValue("poBoxState", data?.abbreviation);
                 }
                 getData();
             }
