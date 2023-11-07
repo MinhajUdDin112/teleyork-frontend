@@ -206,20 +206,11 @@ const App = () => {
     let token = JSON.parse(localStorage.getItem("accessToken"));
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
-<<<<<<< HEAD
     useEffect(() => {
-        console.log(window.localStorage)
+
         const url = window.location.hash
-        console.log(url, url.startsWith('#/selfenrollment'))
+
         if (url.startsWith('#/selfenrollment')) { return }
-=======
-    useEffect(() => {    
-       
-        const url=window.location.hash
-       
-        if(url.startsWith('#/selfenrollment'))
-        {return}
->>>>>>> af9f15b7e2e0c339438e578a29a0b4c9962ca891
         if (token) {
             if (protectedRoute === false) {
                 navigate("/");
@@ -340,8 +331,8 @@ const App = () => {
                                 <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                                 <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate/*" element={<ManageTemplate />} />
-                                <Route path="/createrole" element={<CreateRole />} />  
-                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage/>}/>
+                                <Route path="/createrole" element={<CreateRole />} />
+                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage />} />
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />
