@@ -5,6 +5,7 @@ import AddAgentDetail from "./dialogs/add_agent_detail";
 import { carrier, company, agent, emptymaster, retailer, employee, distributor, master } from "../../assets";
 import { Dropdown } from "primereact/dropdown";
 import { FileUpload } from "primereact/fileupload";
+import InfoForUsers from "./InfoForUsers/info_for_users";
 export default function SIMBulkUploadAddProvision() {
     const fileUploadRef = useRef(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -88,9 +89,7 @@ export default function SIMBulkUploadAddProvision() {
                         onUpload={onUpload}
                     />
                 </div>
-                <div className="mt-3 flex flex-wrap justify-content-center align-item-center">
-                    <p>Note: Please Select Carrier To Download the Sample File</p>
-                </div>
+             <InfoForUsers ProvisionType={"AddStock"}/>
             </div>
             <Dialog
                 style={{ width: "90vw" }}

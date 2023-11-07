@@ -6,6 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import { FileUpload } from "primereact/fileupload";
+import InfoForUsers from "./InfoForUsers/info_for_users";
 export default function CDMABulkUploadReprovision(){   
     const fileUploadRef=useRef(null)
     const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
@@ -122,10 +123,9 @@ export default function CDMABulkUploadReprovision(){
                         onUpload={onUpload}
                     />  
                     </div >
-                    <div  className=" mt-3 flex justify-content-center align-items-center">
-                        <p>Note: Please Select Carrier To Download the Sample File</p>
-                    </div>
-                
+                     <div className="mt-8">
+                  <InfoForUsers ProvisionType={"Reprovision"}/>  
+                  </div>
             </div> 
             <Dialog
                 visible={add_agent_detail_dialog_visibility}

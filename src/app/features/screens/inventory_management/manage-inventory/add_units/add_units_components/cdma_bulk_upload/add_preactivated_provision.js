@@ -6,6 +6,7 @@
     import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
     import { FileUpload } from "primereact/fileupload";
+import InfoForUsers from "./InfoForUsers/info_for_users";
     export default function CDMABulkUploadAddPreActivatedProvision(){  
     const fileUploadRef=useRef(null) 
     const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
@@ -115,7 +116,7 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
                         <div className="mt-3 flex justify-content-center align-item-center">
                             <p>Note: Please Select Carrier To Download the Sample File</p>
                         </div>
-                
+                      <InfoForUsers ProvisionType={"AddPreActivated"}/>
                 </div>
                 <Dialog
                 visible={add_agent_detail_dialog_visibility}

@@ -166,9 +166,9 @@ export default function GSMSingleUpload() {
                 >
                     <div className="ml-3">
                         <h2>ACP Co-Pay Amount</h2>
-                        <p>in this feild enter the amount that will be paid by the customer when thy are eligible to get acp supported device</p>
+                        <p>In this field enter the amount that will be paid by the customer when thy are eligible to get acp supported device</p>
                         <h3>ACP Device Reimbursement Amount </h3>
-                        <p>in this feild enter the amount that will be Reimbursed from USAC for selling the acp device</p>
+                        <p>In this field enter the amount that will be Reimbursed from USAC for selling the acp device</p>
                     </div>
                 </Card>
             </div> 
