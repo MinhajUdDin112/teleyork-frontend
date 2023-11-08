@@ -6,6 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { FileUpload } from "primereact/fileupload";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./dialogs/add_agent_detail";
+import InfoForUsers from "./InfoForUsers/info_for_users";
 export default function SIMBulkUploadAddActivateProvision() {
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
     const fileUploadRef = useRef(null);
@@ -108,9 +109,7 @@ export default function SIMBulkUploadAddActivateProvision() {
                         onUpload={onUpload}
                     />
                 </div>
-                <div className="mt-3 flex justify-content-center align-item-center">
-                    <p>Note: Please Select Carrier To Download the Sample File</p>
-                </div>
+                   <InfoForUsers ProvisionType={"AddAndActivate"}/>
             </div>
             <Dialog
                 style={{ width: "90vw" }}

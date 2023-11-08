@@ -1,16 +1,17 @@
-import React, { useRef,useState } from "react";
+import React, { useRef, useState } from "react";
 import { useFormik } from "formik";
-import { carrier,emptymaster,master,retailer,employee,distributor, company, agent } from "../../assets";
+import { carrier, emptymaster, master, retailer, employee, distributor, company, agent } from "../../assets";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { FileUpload } from "primereact/fileupload";
 import { Card } from "primereact/card";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
+import InfoForUsers from "./InfoForUsers/info_for_users";
 export default function GSMBulkUpload() {
     const fileUploadRef = useRef();
-    const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
-  
+    const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
+
     function onUpload() {}
     const formik = useFormik({
         initialValues: {
@@ -20,7 +21,7 @@ export default function GSMBulkUpload() {
             tinnumber: "",
             trackingnumber: "",
             imei: "",
-            master:""
+            master: "",
         },
     });
     return (
@@ -51,16 +52,16 @@ export default function GSMBulkUpload() {
                                 <p className="m-0">
                                     {formik.values.agent.charAt(0).toUpperCase() + formik.values.agent.slice(1)}{" "}
                                     <span style={{ color: "red" }}>
-                                        *  { 
-                                        formik.values.agent !== "employee" ?
-                                        <i
-                                            onClick={() => {
-                                                setAddAgentDialogVisbility((prev) => !prev);
-                                            }}
-                                            className="pi pi pi-plus"
-                                            style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                        ></i>  :undefined 
-                                        }
+                                        *{" "}
+                                        {formik.values.agent !== "employee" ? (
+                                            <i
+                                                onClick={() => {
+                                                    setAddAgentDialogVisbility((prev) => !prev);
+                                                }}
+                                                className="pi pi pi-plus"
+                                                style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                            ></i>
+                                        ) : undefined}
                                     </span>
                                 </p>
                                 <Dropdown
@@ -104,15 +105,12 @@ export default function GSMBulkUpload() {
                         onUpload={onUpload}
                         style={{ width: "50%", marginLeft: "50%", textAlign: "center", transform: "translate(-50%)" }}
                     />
-                    <div className="mt-3">
-                        <p style={{ width: "50%", marginLeft: "50%", textAlign: "center", transform: "translate(-50%)" }}>Note: Please Select Carrier To Download the Sample File</p>
-                    </div>
                 </div>
             </div>
             <div>
                 <Card
                     style={{
-                        width: "50%",
+                        width: "80%",
                         backgroundColor: "#aae5e9",
                         marginBottom: "20px",
                         marginLeft: "50%",
@@ -123,12 +121,13 @@ export default function GSMBulkUpload() {
                 >
                     <div className="ml-3">
                         <h2>ACP Co-Pay Amount</h2>
-                        <p>in this feild enter the amount that will be paid by the customer when thy are eligible to get acp supported device</p>
+                        <p>In this field enter the amount that will be paid by the customer when thy are eligible to get acp supported device</p>
                         <h3>ACP Device Reimbursement Amount </h3>
-                        <p>in this feild enter the amount that will be Reimbursed from USAC for selling the acp device</p>
+                        <p>In this field enter the amount that will be Reimbursed from USAC for selling the acp device</p>
                     </div>
                 </Card>
-            </div>  
+            </div>
+            <InfoForUsers />
             <Dialog
                 visible={add_agent_detail_dialog_visibility}
                 onHide={() => {
