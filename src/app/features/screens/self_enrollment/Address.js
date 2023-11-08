@@ -19,8 +19,6 @@ const Address = () => {
     const {id}=useParams()
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("This field is required"),
-       
-        SSN: Yup.string().required("This field is required"),
     })
     const formik = useFormik({
         validationSchema,
@@ -29,7 +27,7 @@ const Address = () => {
             address2: "",
             city: "",
             state: "",
-            SSN: "",
+            zip: "",
             isTerribleTerritory: false,
             isBillAddress: false,
         },
@@ -57,12 +55,17 @@ const Address = () => {
         }
         
     });
+    const zip = JSON.parse(localStorage.getItem("zip"));
+    useEffect(() => {
+        formik.setFieldValue('zip',zip?.data?.zip)
+    }, [])
+
     useEffect(()=>{
         const homeAddress  = JSON.parse(localStorage.getItem('homeAddress'))
         if(homeAddress){
             formik.setFieldValue('address1',homeAddress?.data?.address1)
             formik.setFieldValue('address2',homeAddress?.data?.address2)
-            formik.setFieldValue('SSN',homeAddress?.data?.SSN)
+            formik.setFieldValue('zip',zip?.data?.zip)
             formik.setFieldValue('isTerribleTerritory',homeAddress?.data?.isTerribleTerritory)
             formik.setFieldValue('isBillAddress',homeAddress?.data?.isBillAddress)
            
@@ -98,20 +101,20 @@ const Address = () => {
                     <div className="card flex p-8">
                         <div className="col-6">
                             <p className="text-2xl font-bold">Address</p>
-                            <p className="mt-0 text-xl">We'll also need some information about your location.</p>
-                            <p className="text-lg">The service address is the address where your ACP service will be located at. The billing address is where you'll recieve your bills.</p>
+                            <p className="mt-0 text-xl">We'll also require some information about your location.</p>
+                            <p className="text-lg">The service address is the location where your ACP service will be provided to you. The billing address is where you will receive your bills.</p>
                         </div>
                             <div className="col-6">
                                 
                                 <div className="flex flex-column">
-                                    <InputText className="mb-3" placeholder="Enter Address 1" name="address1" value={formik.values.address1} onChange={formik.handleChange} />
+                                    <InputText className="mb-3" placeholder="Enter Address 1" name="address1" value={formik.values.address1} onChange={formik.handleChange} style={{textTransform: 'uppercase'}}/>
                                     {getFormErrorMessage("address1")}
-                                    <InputText className="mb-3" placeholder="Enter Address 2" name="address2" value={formik.values.address2} onChange={formik.handleChange} />
+                                    <InputText className="mb-3" placeholder="Enter Address 2" name="address2" value={formik.values.address2} onChange={formik.handleChange} style={{textTransform: 'uppercase'}}/>
                                    
                                     <InputText className="mb-3" placeholder="Enter City" name="city" value={formik.values.city} onChange={formik.handleChange} disabled/>
                                     <InputText className="mb-3" placeholder="Enter State" name="state" value={formik.values.state} onChange={formik.handleChange} disabled />
-                                    <InputText className="mb-3" placeholder="SSN(Last 4 Digit) " name="SSN" value={formik.values.SSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
-                                    {getFormErrorMessage("SSN")}
+                                    <InputText className="mb-3"   name="zip" value={formik.values.zip} onChange={formik.handleChange} disabled  />
+                                   
 
                                     <div className="mb-2 flex justify-content-center">
                                         <Checkbox inputId="isTerribleTerritory" name="isTerribleTerritory" checked={formik.values.isTerribleTerritory} onChange={formik.handleChange} />

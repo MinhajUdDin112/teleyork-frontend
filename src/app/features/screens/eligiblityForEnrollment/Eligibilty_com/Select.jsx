@@ -109,15 +109,15 @@ useEffect(() => {
                         />    
                 </div>
                 <div>
-                    <h6>Enrollment ID:{enrollment_id}</h6>
+                <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                 </div>
                 <br />
                 <div>
                     <h2>Qualify for the Affordable Connectivity Program</h2>
                     <p>
-                        Select the applicable program from below to show that you, your dependent or someone in your household qualifies for Affordable Connectivity Program. You can qualify through some government assistance program or through your income (you don't need to qualify through both){" "}
+                    Choose the relevant program from the options below to show that you, your dependent, or someone in your household qualifies for the Affordable Connectivity Program. You can qualify either through a government assistance program or based on your income; qualifying through both is not necessary. 
                     </p>
-                    <p>Note: You can only select one from the programs listed below</p>
+                    <p><strong>Note: You can only choose one program from the options listed below</strong></p>
                 </div>
             </div>
             <div>
