@@ -66,7 +66,7 @@ export default function ServiceAvailabilityPage() {
       <div className="grid justify-content-center align-content-center my-5">
         <div className="card col-4 ">
           <form className="my-4" onSubmit={formik.handleSubmit}>
-            <h6>Please enter zip code to check service availability</h6>
+          <h5><strong>Please Enter The Zip Code To Check Service Availability</strong></h5>
             {isLoading ? (<InputText
               type="text"
               name="zipCode"
