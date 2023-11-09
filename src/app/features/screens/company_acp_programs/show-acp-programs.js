@@ -7,13 +7,7 @@ import { Column } from "primereact/column";
 import UpdateProgram from "./update_acp_programs";
 const ShowPrograms = ({ setEditAcp }) => {
     let objectForEdit = {};
-    function editAcpProgram(e) {
-        if (objectForEdit[e.target.parentElement.parentElement.children[0].textContent] !== undefined) {
-            setEditAcp(true);
-            setSelectedProgram(objectForEdit[e.target.parentElement.parentElement.children[0].textContent]);
-            setShowEdit(true);
-        }
-    }   
+
     function setActive(rowData){ 
          return ( 
             <p> {rowData.active === true ? "Active" :"InActive"}</p>
@@ -30,11 +24,28 @@ const ShowPrograms = ({ setEditAcp }) => {
     let [showEdit, setShowEdit] = useState(false);
     let [selectedProgram, setSelectedProgram] = useState(null);
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
+    const parseLoginRes = JSON.parse(loginRes); 
+      const [arrayofcode,setArrayOfCodes]=useState([]) 
+      function editAcpProgram(e) {
+        if (objectForEdit[e.target.parentElement.parentElement.children[0].textContent] !== undefined) {
+            setEditAcp(true);
+            setSelectedProgram(objectForEdit[e.target.parentElement.parentElement.children[0].textContent]);
+            setShowEdit(true);
+        }
+    }   
     if (showAcps === null) {
         Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`) //using dummy service provider
             .then((res) => {
-                console.log(res.data.data);
+                console.log(res.data.data);   
+                let arr=[]
+                 for(let i=0;i<Object.keys(res.data.data).length;i++){ 
+                      if(res.data.data[i].code !== undefined){
+                    arr.push(res.data.data[i].code) 
+                      } 
+
+                 }  
+                 setArrayOfCodes(arr)
+                 console.log(arrayofcode)
                 res.data.data.forEach((element) => {
                     objectForEdit[element.name] = element;
                     element.edit = <span className="pi pi-user-edit" style={{ cursor: "pointer" }} onClick={editAcpProgram}></span>;
@@ -55,8 +66,9 @@ const ShowPrograms = ({ setEditAcp }) => {
                             <DataTable tableStyle={{ minWidth: "50rem" }} value={showAcps} showGridlines>
                                 <Column field="name" header="Name"></Column>
                                 <Column field="description" header="Description"></Column> 
-                                <Column field={renderBanner} header="Banner"></Column>
-                                <Column field={setActive} header="Active"></Column>    
+                                <Column field={renderBanner} header="Banner"></Column> 
+                                <Column field="code" header="Code"></Column>
+                                <Column field={setActive} header="Status"></Column>    
                                 <Column field="edit" style={{textAlign:"center"}} header="Edit">   
                                 </Column>   
                                 
@@ -67,7 +79,7 @@ const ShowPrograms = ({ setEditAcp }) => {
                     )}
                 </div>
             ) : (
-                <UpdateProgram setShowAcps={setShowAcps} setShowEdit={setShowEdit} selectedProgram={selectedProgram} setEditAcp={setEditAcp} />
+                <UpdateProgram setShowAcps={setShowAcps} arrayofcodes={arrayofcode} setShowEdit={setShowEdit} selectedProgram={selectedProgram} setEditAcp={setEditAcp} />
             )}
         </div>
     );
