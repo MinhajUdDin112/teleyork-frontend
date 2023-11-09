@@ -6,12 +6,12 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import BASE_URL from "../../../../config";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import * as Yup from "yup";
 
 const Address = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [isBillAddress, setIsBillAddress] = useState(false)
     const navigate = useNavigate();
     const location = useLocation();
     const stateData = location.state;
@@ -19,6 +19,28 @@ const Address = () => {
     const {id}=useParams()
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("This field is required"),
+
+        mallingAddress1: Yup.string().when("isBillAddress", {
+            is: true,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        mallingCity: Yup.string().when("isBillAddress", {
+            is: true,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        mallingState: Yup.string().when("isBillAddress", {
+            is: true,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        mallingZip: Yup.string().when("isBillAddress", {
+            is: true,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+               
     })
     const formik = useFormik({
         validationSchema,
@@ -30,6 +52,11 @@ const Address = () => {
             zip: "",
             isTerribleTerritory: false,
             isBillAddress: false,
+            mallingAddress1:"",
+            mallingAddress2:"",
+            mallingZip:"",
+            mallingCity:"",
+            mallingState:""
         },
         onSubmit: async (values) => {
             const newData = {
@@ -67,8 +94,15 @@ const Address = () => {
             formik.setFieldValue('address2',homeAddress?.data?.address2)
             formik.setFieldValue('zip',zip?.data?.zip)
             formik.setFieldValue('isTerribleTerritory',homeAddress?.data?.isTerribleTerritory)
-            formik.setFieldValue('isBillAddress',homeAddress?.data?.isBillAddress)
-           
+           // formik.setFieldValue('isBillAddress',homeAddress?.data?.isBillAddress)
+            formik.setFieldValue('mallingAddress1',homeAddress?.data?.mailingAddress1)
+            formik.setFieldValue('mallingAddress2',homeAddress?.data?.mailingAddress1)
+            formik.setFieldValue('mallingZip',homeAddress?.data?.mailingZip)
+            formik.setFieldValue('mallingCity',homeAddress?.data?.mailingCity)
+            formik.setFieldValue('mallingState',homeAddress?.data?.mailingState)
+         if(homeAddress?.data?.mailingAddress1){
+setIsBillAddress(true)
+         }
         }
     },[])
     const handleBack = () => {
@@ -82,6 +116,9 @@ const Address = () => {
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
+    }
+    const handleBilling=()=>{
+        setIsBillAddress(true)
     }
 
     return (
@@ -123,11 +160,25 @@ const Address = () => {
                                         </label>
                                     </div>
                                     <div className="mb-2 flex justify-content-center">
-                                        <Checkbox inputId="binary" name="isBillAddress" checked={formik.values.isBillAddress} onChange={formik.handleChange} />
+                                        <Checkbox inputId="binary" name="isBillAddress" checked={isBillAddress} onChange={handleBilling} />
                                         <label htmlFor="binary" className="text-xl flex align-items-center ml-2">
                                             Is your billing address different?
                                         </label>
                                     </div>
+                                    {isBillAddress ? (
+                                        <div className="flex flex-column">
+                                            <InputText className="mb-3" placeholder="Enter Address 1" name="mallingAddress1" value={formik.values.mallingAddress1} onChange={formik.handleChange} style={{textTransform: 'uppercase'}}/>
+                                    {getFormErrorMessage("mallingAddress1")}
+                                    <InputText className="mb-3" placeholder="Enter Address 2" name="mallingAddress2" value={formik.values.mallingAddress2} onChange={formik.handleChange} style={{textTransform: 'uppercase'}}/>
+                                   
+                                    <InputText className="mb-3" placeholder="Enter City" name="mallingCity" value={formik.values.mallingCity} onChange={formik.handleChange} />
+                                    {getFormErrorMessage("mallingCity")}
+                                    <InputText className="mb-3" placeholder="Enter State" name="mallingState" value={formik.values.mallingState} onChange={formik.handleChange}  />
+                                    {getFormErrorMessage("mallingState")}
+                                    <InputText className="mb-3" placeholder="Enter Zip"   name="mallingZip" value={formik.values.mallingZip} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5}  />
+                                    {getFormErrorMessage("mallingZip")}
+                                        </div>
+                                    ):null}
                                     <Button label="Next" className="mb-3" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
                                     <Button label="Back" onClick={handleBack} />
                                 </div>

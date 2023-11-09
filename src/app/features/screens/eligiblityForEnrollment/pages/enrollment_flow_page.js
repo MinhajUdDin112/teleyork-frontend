@@ -6,7 +6,7 @@ import plan from "./plan";
 import Preview from "./preview";
 export default function EnrollmentFlowPage() {
 
-    const [activeIndex, setActiveIndex] = useState(2);
+    const [activeIndex, setActiveIndex] = useState(0);
     const toast = useRef(null);
    
     const loginRes = localStorage.getItem("userData");
