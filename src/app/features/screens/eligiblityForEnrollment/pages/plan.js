@@ -73,7 +73,7 @@ const Plan = ({ setActiveIndex, enrollment_id, _id,csr  }) => {
                 </div>
                 <br />
                 <div>
-                    <h6>Enrollment_Id:{enrollment_id}</h6>
+                <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                 </div>
                 <br />
                 <div>

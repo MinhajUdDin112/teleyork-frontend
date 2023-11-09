@@ -25,6 +25,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
     const loginRes = JSON.parse(localStorage.getItem("userData"));
     const companyName = loginRes?.companyName;
+   
 
     const validationSchema = Yup.object().shape({
         isTemporaryAddress: Yup.boolean().oneOf([true], "Please confirm the address is required"),
@@ -104,7 +105,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     };
 
     if (ACPtransfer) {
-        toast.warn("please Select Yes In ACP Benefit Transfer");
+        toast.warn("Error: A Yes is required on ACP Benefit Transfer");
     }
 
     const handleButton = () => {
@@ -112,18 +113,22 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     };
 
     const checkBoxLabels = [
-        "I (or my dependent or other person in my household) currently get benefits from the government program(s) listed on this form or my annual household income is 200% or less than the Federal Poverty Guidelines.",
-        "I agree that if I move, I will give my internet company my new address within 30 days.",
-        `I give ${companyName} permission to enroll me for the first time and, if necessary, transfer my existing records rather than classifying me as a new subscriber.`,
-        "I (or my dependent or other person in my household) currently get benefits from the government program(s) listed on this form or my annual household income is 200% or less than the Federal Poverty Guidelines.",
-        "I agree that if I move, I will give my internet company my new address within 30 days.",
-        `I give ${companyName} permission to enroll me for the first time and, if necessary, transfer my existing records rather than classifying me as a new subscriber.`,
-        "I (or my dependent or other person in my household) currently get benefits from the government program(s) listed on this form or my annual household income is 200% or less than the Federal Poverty Guidelines.",
-        "I agree that if I move, I will give my internet company my new address within 30 days.",
-        `I give ${companyName} permission to enroll me for the first time and, if necessary, transfer my existing records rather than classifying me as a new subscriber.`,
-        "I (or my dependent or other person in my household) currently get benefits from the government program(s) listed on this form or my annual household income is 200% or less than the Federal Poverty Guidelines.",
-        "I agree that if I move, I will give my internet company my new address within 30 days.",
-        `I give ${companyName} permission to enroll me for the first time and, if necessary, transfer my existing records rather than classifying me as a new subscriber.`,
+        "I'm going to go over the required information to participate in the Affordable Connectivity Program. Answering affirmatively is required in order to enroll in the Affordable Connectivity Program in my state.",
+        "This authorization is only for the purpose of verifying my participation in this program and will not be used for any purpose other than Affordable Connectivity Program(ACP)",
+        `I am authorizing the Company, ${companyName}, Inc., to access any records required to verify my statements on this form and to confirm my eligibility for the Affordable Connectivity Program.`,
+        `For my household, I affirm and understand that the ACP is a temporary federal government subsidy that reduces my broadband internet access service bill and at the conclusion of the program, my household will be subject to the provider's undiscounted general rates, terms, and conditions if my household continues to subscribe to the service.`,
+        <p>
+        My annual household income is 200% or less than the Federal Poverty Guidelines (the amount listed in the Federal Poverty Guidelines on FCC's website (<a href="https://www.usac.org/lifeline/consumer-eligibility/" target="_blank" rel="noopener noreferrer">https://www.usac.org/lifeline/consumer-eligibility/</a>)
+      </p>
+,
+        `I agree that if I move I will provide my new address to my service provider within 30 days.`,
+        "I understand that I have to tell my service provider within 30 days if I do not qualify for ACP benefit anymore, including: I, or the person in my household that qualifies, do not qualify through a government program or income anymore.",
+        "I know that my household can only get one ACP benefit and, to the best of my knowledge, my household is not getting more than one ACP benefit. ",
+        `I understand that I can only receive one connected device (Tablet) through the ACP benefit, even if I switch ACP providers.`,
+        "I agree that all of the information I provided on this form may be collected, used, shared, and retained for the purposes of applying for and/or receiving the ACP benefit. I understand that if this information is not provided to the Program Administrator, I will not be able to get ACP benefits.",
+        "If the laws of my state or Tribal government require it, I agree that the state or Tribal government may share information about my benefits for a qualifying program with the ACP Administrator. The information shared by the state or Tribal government will be used only to help find out if I can get an ACP benefit.",
+        `All the answers and agreements that I provided on this form are true and correct to the best of my knowledge. I know that willingly giving false or fraudulent information to get ACP benefits is punishable by law and can result in fines, jail time, de-enrollment, or being barred from the program.`,
+        <strong>I hereby certify that I have thoroughly read and agree to this disclosure.</strong>
     ];
 
     return (
@@ -135,16 +140,16 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     <Button label="Continue" type="submit"  disabled={ACPtransfer} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}  />
                 </div>
                 <div>
-                    <h6>Enrollment ID: {enrollment_id}</h6>
+                <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                 </div>
                 <br />
 
                 <div>
-                    <p className="font-normal my-3 text-xl line-height-1">
-                        PLEASE CAREFULLY READ AND AGREE BY INITIALING ALL THE BOXES FOR THE FOLLOWING STATEMENTS. BY CLICKING THE BOXES BELOW, YOU AGREE TO E-SIGN STATEMENTS BELOW WITH YOUR INITIALS AND THAT THE STATEMENTS INITIALED ARE ENFORCEABLE.
+                    <p className="font-normal my-3 text-xl ">
+                    Please carefully read and agree by initialing all the boxes for the following statements. By clicking the boxes below, you agree to e-sign the statements with your initials and acknowledge that the initialed statements are enforceable
                     </p>
                     <p className="font-semibold" style={{ color: "red" }}>
-                        Please read and check all Penalty Of Perjury and accept Terms and Conditions.
+                    Please carefully read and mark all the statements and accept the Terms and Conditions
                     </p>
                     <div className="field-checkbox ">
                         <Checkbox inputId="checkAll" onChange={handleAll} checked={checkAll} />
@@ -175,13 +180,13 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                 onChange={() => handleCheckBox(13)}
                                 checked={formik.values.checkbox[13]}
                             />
-                            <label>By my signing the FCC application, I agree to accept {companyName} Terms & Conditions.</label>
+                            <label>By signing the FCC application, I agree to accept the Terms & Conditions.</label>
                         </div>
                     </div>
                     <div>
                         <h3>ACP Benefit Transfer</h3>
-                        <p>Do you consent to enrollment or transfer into the{companyName} Affordable Connectivity Program, and do you understand you are not allowed multiple ACP program benefits with the same or different providers? Please answer Yes or No.</p>
-                        <p>Please confirm which of these statements is true for this application by answering yes or no after the following two questions.</p>
+                        <p>Do you consent to enrollment or transfer into the Affordable Connectivity Program and understand that you cannot receive multiple ACP program benefits from the same or different providers? </p>
+                        <p>Please answer Yes or No.</p>
                         <div className="field-radiobutton m-4">
                             <div className="flex">
                                 <div className="flex align-items-center">
@@ -196,9 +201,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         </div>
                     </div>
                     <div className="mt-5">
-                        <p>Request User For additional Documents</p>
+                        <p>Request the user for additional documents</p>
                         <div className="flex ">
-                            <Button label={buttonClicked ? "Sent" : "Send an Sms"}  className="p-button-success mr-2" type="button" disabled={buttonClicked} />
+                            <Button label={buttonClicked ? "Sent" : "Send an SMS"}  className="p-button-success mr-2" type="button" disabled={buttonClicked} />
                             <Button label={buttonClicked ? "Sent" : "Send an Email"}  className="p-button-success" type="button" disabled={buttonClicked} />
                             {/* {buttonClicked ? (
                                 <div className=" ml-2">

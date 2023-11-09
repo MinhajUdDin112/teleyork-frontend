@@ -66,8 +66,8 @@ const VerifyZip = () => {
                         <div className="card flex p-8">
                             <div className="col-6">
                                 <p className="text-2xl font-bold">ACP Enrollment</p>
-                                <p className="mt-0 text-xl">What is the ACP Benefit?</p>
-                                <p className="text-lg">The FCC's Affordable Connectivity Program (ACP) is a new federal government program committed to bringing connectivity to low-income Americans.</p>
+                                <p className="mt-0 text-xl">What is ACP?</p>
+                                <p className="text-lg">The Affordable Connectivity Program (ACP), administered by the FCC, is a recently established federal initiative dedicated to providing internet access to low-income individuals and families.</p>
                             </div>
 
                             <div className="col-6">
