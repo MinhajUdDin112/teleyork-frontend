@@ -79,25 +79,31 @@ const PersonalInfo = () => {
                 userId: id,
                 ...values,
             };
-            console.log("fun is called out side")
-            console.log("mew data is",newData)
             setIsLoading(true)
-            try {
-                console.log("fun is called inside")
-                const res = await axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
-                if (res.status === 201 || res.status === 200) {
-                    console.log("fun is called in side  try")
-                    // Save the response data in local storage
-                    localStorage.setItem("initialInformation", JSON.stringify(res.data));
-                    // Navigate to the next page
-                    navigate(`/selfenrollment/address/${id}`, { state: stateData });
-                    setIsLoading(false);
+            if (formik.values.SSN === formik.values.BenifitSSN ||
+                (formik.values.firstName === formik.values.BenifitFirstName && formik.values.lastName === formik.values.BenifitLastName)) {
+                toast.error("Information of the applicant and benefit qualifying person cannot be same");
+                setIsLoading(false);
+              }
+              else{
+                try {
+               
+                    const res = await axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
+                    if (res.status === 201 || res.status === 200) {
+                        console.log("fun is called in side  try")
+                        // Save the response data in local storage
+                        localStorage.setItem("initialInformation", JSON.stringify(res.data));
+                        // Navigate to the next page
+                        navigate(`/selfenrollment/address/${id}`, { state: stateData });
+                        setIsLoading(false);
+                    }
+                } catch (error) {
+                    
+                    toast.error(error?.response?.data?.msg);
+                    setIsLoading(false)
                 }
-            } catch (error) {
-                console.log("fun is called in side  catch")
-                toast.error(error?.response?.data?.msg);
-                setIsLoading(false)
             }
+           
         },
     });
 

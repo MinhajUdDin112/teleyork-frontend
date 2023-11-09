@@ -23,7 +23,7 @@ export const menuNavigation = [
                 icon: "pi pi-fw pi-bookmark",
                 items: [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
-                    { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
+                   // { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
