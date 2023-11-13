@@ -226,8 +226,10 @@ const AllEnrollments = () => {
     };
 
     const HnadleAllApprove = async () => {
+       
         setisButtonLoading(true);
-        const enrollmentIds = allEnrollments.map((enrollment) => enrollment._id);
+        if(allEnrollments){
+            const enrollmentIds = allEnrollments.map((enrollment) => enrollment._id);
 
         const dataToSend = {
             approvedBy: parseLoginRes?._id,
@@ -245,6 +247,13 @@ const AllEnrollments = () => {
             toast.error(error?.response?.data?.msg);
             setisButtonLoading(false);
         }
+        setisButtonLoading(false);
+        }
+        else{
+            toast.error("No Enrollment Found")
+            setisButtonLoading(false);
+        }
+        
     };
 
     const actionTemplate = (rowData) => {
