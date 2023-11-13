@@ -4,9 +4,9 @@ import { feature, action } from "./assets";
 import { useFormik } from "formik";
 import { Card } from "primereact/card";
 import React from "react";
-import NewOrderRequest from "./actions/new_order_request";
-import CompletedOrderRequest from "./actions/completed_order_request";
-import CancelOrderRequest from "./actions/cancel_order_request";
+import NewOrderRequest from "./actions/new_order_request/new_order_request";
+import CompletedOrderRequest from "./actions/completed_order_request/completed_order_request";
+import CancelOrderRequest from "./actions/cancel_order_request/cancel_order_request";
 export default function Equipment_And_Accessories_Request({ setActiveComponent }) {
     const formik = useFormik({
         initialValues: {
