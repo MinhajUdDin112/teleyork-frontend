@@ -9,6 +9,8 @@ import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { useEffect } from "react";
 import { useState } from "react";
+import { SelectButton } from "primereact/selectbutton";
+import { Checkbox } from "primereact/checkbox";
 
 const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
     const [allRoles, setAllRoles] = useState([]);
@@ -29,14 +31,14 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
         validationSchema: validationSchema,
         initialValues: {
             reason: "",
-            assignee: "",
+            assignees: [],
             department: "",
         },
         onSubmit: async (values, actions) => {
             const approvedBy = parseLoginRes?._id;
             const approved = false;
             const data = {
-                assignee: formik.values.assignee,
+                assignees: formik.values.assignees,
                 reason: formik.values.reason,
             };
             const dataToSend = { approvedBy, enrolmentId, approved, data, ...values };
@@ -55,7 +57,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
     });
 
     const assignCSRId = () => {
-        formik.setFieldValue("assignee", CSRid);
+        formik.setFieldValue("assignees", CSRid);
     };
 
     useEffect(() => {
@@ -76,8 +78,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
             const getRoles = async () => {
                 try {
                     const res = await Axios.get(`${BASE_URL}/api/web/user/getRejectUser?department=${departId}&roleId=${parseLoginRes?.role?._id}`);
-                    setAllRoles(res?.data?.result)
-                   
+                    setAllRoles(res?.data?.result);
                 } catch (error) {
                     toast.error(`Error fetching roles: ${error?.response?.data?.error}`);
                 }
@@ -85,8 +86,6 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
             getRoles();
         }
     }, [formik.values.department]);
-
-   
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
@@ -124,19 +123,30 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
                             filterBy="label" // Set the property to be used for filtering
                         />
                     </div>
-                    <div className="p-field col-12 md:col-3">
-                        <label className="Label__Text">Select User </label>
-                        <Dropdown id="assignee"  
-                        options={allRoles.map((item) => ({ label: item.name, value: item._id }))} 
-                        value={formik.values.assignee} 
-                        onChange={(e) => formik.setFieldValue("assignee", e.value)} 
-                        optionLabel="label" 
-                        optionValue="value" 
-                        showClear 
-                        filter 
-                        filterBy="label" />
-                    </div>
-                </div>
+{
+    formik.values.department ?  <div className="p-field col-12 md:col-3">
+    <label className="Label__Text ml-3">Select User </label>
+    {allRoles.map((item) => (
+        <div key={item._id} className="p-field-checkbox m-1  ml-3">
+            <Checkbox
+                inputId={item._id}
+                value={item._id}
+                checked={formik.values.assignees.includes(item._id)}
+                onChange={(e) => {
+                    const isChecked = e.checked;
+                    const updatedAssignee = isChecked ? [...formik.values.assignees, item._id] : formik.values.assignees.filter((value) => value !== item._id);
+                    formik.setFieldValue("assignees", updatedAssignee);
+                }}
+            />
+            <label htmlFor={item._id} className="p-checkbox-label ml-1">
+                {item.name}
+            </label>
+        </div>
+    ))}
+</div>
+ :  ""
+}</div>
+                   
                 <div className="mt-4">
                     <h4>
                         Reject Reason <span className="steric"> *</span>

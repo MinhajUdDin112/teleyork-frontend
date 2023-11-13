@@ -387,7 +387,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                                 </label>
                                 <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
                             </div>
-                            <div className="field col-12 md:col-3">
+                            <div className="field col-12 md:col-3 mb-1">
                                 <label className="field_label">
                                     Zip Code <span className="steric">*</span>
                                 </label>
