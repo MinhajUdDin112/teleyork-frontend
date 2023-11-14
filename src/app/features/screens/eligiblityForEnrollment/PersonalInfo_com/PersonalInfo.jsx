@@ -235,7 +235,7 @@ useEffect(() => {
                                 formik.handleChange(e);
                             }}
                             onBlur={formik.handleBlur}
-                            placeholder="Select"
+                           
                         />
                     </div>
 

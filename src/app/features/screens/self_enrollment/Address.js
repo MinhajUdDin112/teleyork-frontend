@@ -63,22 +63,28 @@ const Address = () => {
                 userId: id,
                 ...values,
             };
-            setIsLoading(true);
-                   try {
-                const response = await axios.post(`${BASE_URL}/api/enrollment/homeAddress`, newData)
-                
-                // Check if the POST request was successful
-                if (response.status === 201) {
-                    // Save the response data in local storage
-                    localStorage.setItem('homeAddress', JSON.stringify(response.data));
-                    // Navigate to the next page
-                    navigate(`/selfenrollment/eligibile/${id}`)
-                    setIsLoading(false);
-                } 
-            } catch (error) {
-                 toast.error(error?.response?.data?.msg);
-                 setIsLoading(false);
-            }
+            if(formik.values.address1==formik.values.mallingAddress1){
+                toast.error("Cannot proceed with identical information in both service and billing address fields")
+                            }
+                            else{
+                                setIsLoading(true);
+                                try {
+                             const response = await axios.post(`${BASE_URL}/api/enrollment/homeAddress`, newData)
+                             
+                             // Check if the POST request was successful
+                             if (response.status === 201) {
+                                 // Save the response data in local storage
+                                 localStorage.setItem('homeAddress', JSON.stringify(response.data));
+                                 // Navigate to the next page
+                                 navigate(`/selfenrollment/eligibile/${id}`)
+                                 setIsLoading(false);
+                             } 
+                         } catch (error) {
+                              toast.error(error?.response?.data?.msg);
+                              setIsLoading(false);
+                         }
+                            }
+            
         }
         
     });
@@ -118,7 +124,13 @@ setIsBillAddress(true)
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
     }
     const handleBilling=()=>{
-        setIsBillAddress(true)
+        if(isBillAddress===false){
+            setIsBillAddress(true)
+        }
+        else{
+            setIsBillAddress(false)
+        }
+       
     }
 
     return (
@@ -139,7 +151,8 @@ setIsBillAddress(true)
                         <div className="col-6">
                             <p className="text-2xl font-bold">Address</p>
                             <p className="mt-0 text-xl">We'll also require some information about your location.</p>
-                            <p className="text-lg">The service address is the location where your ACP service will be provided to you. The billing address is where you will receive your bills.</p>
+                            <p className="text-lg">The service address is the location where your ACP service will be provided to you.
+                            <br></br>The billing address is where you will receive your bills.</p>
                         </div>
                             <div className="col-6">
                                 
