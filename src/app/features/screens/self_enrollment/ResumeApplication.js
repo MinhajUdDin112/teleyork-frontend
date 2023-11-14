@@ -38,6 +38,7 @@ const confirm1 = () => {
             firstName:"",
             lastName: "",
             email:"",
+            city:"",
             state:"",
             zip:"",
             SSN:""
@@ -48,12 +49,13 @@ const confirm1 = () => {
         }
     })
  const setValues = ()=>{
-    formik.setFieldValue("firstName",responseData.data.firstName)
-    formik.setFieldValue("lastName",responseData.data.lastName)
-    formik.setFieldValue("email",responseData.data.email)
-    formik.setFieldValue("state",responseData.data.state)
-    formik.setFieldValue("zip",responseData.data.zip)
-    formik.setFieldValue("SSN",responseData.data.SSN)
+    formik.setFieldValue("firstName",responseData?.data?.firstName)
+    formik.setFieldValue("lastName",responseData?.data?.lastName)
+    formik.setFieldValue("email",responseData?.data?.email)
+    formik.setFieldValue("city",responseData?.data?.city)
+    formik.setFieldValue("state",responseData?.data?.state)
+    formik.setFieldValue("zip",responseData?.data?.zip)
+    formik.setFieldValue("SSN",responseData?.data?.SSN)
  }
 
  useEffect(()=>{
@@ -77,7 +79,7 @@ const confirm1 = () => {
                     <div className="card flex p-8">
                         <div className="col-6">
                             <p className="text-2xl font-bold">Self Enrollment Completed</p>
-                            <p className="mt-0 text-xl">We have matching information on file</p>
+                            <p className="mt-0 text-xl">Preview Your Details</p>
                             {/* <p className="text-lg">Please verify your identity to resume application process.</p> */}
                         </div>
                         <div className="col-6">
@@ -86,8 +88,9 @@ const confirm1 = () => {
                                 <InputText id="firstName"  value={formik.values.firstName} disabled onChange={formik.handleChange} className="mb-3" placeholder="First Name" />
                                 <InputText id="lastName" value={formik.values.lastName} disabled onChange={formik.handleChange} className="mb-3" placeholder="Last Name" />
                                 <InputText id="email" value={formik.values.email} disabled onChange={formik.handleChange} className="mb-3" placeholder="Email" />
-                                <InputText id="zip" value={formik.values.zip} disabled onChange={formik.handleChange} className="mb-3" placeholder="ZipCode" />
+                                <InputText id="city" value={formik.values.city} disabled onChange={formik.handleChange} className="mb-3" placeholder="city" />
                                 <InputText id="state" value={formik.values.state} disabled onChange={formik.handleChange} className="mb-3" placeholder="State" />
+                                <InputText id="zip" value={formik.values.zip} disabled onChange={formik.handleChange} className="mb-3" placeholder="ZipCode" />
                                 {/* <Calendar value={formik.values} disabled onChange={formik.handleChange} className="mb-3" id="icon" value={date} disabled onChange={(e) => setDate(e.value)} showIcon /> */}
                                 <InputText id="SSN" value={formik.values.SSN} disabled onChange={formik.handleChange} className="mb-3" placeholder="Last 4 SSN or Tribal ID" />
                                 <Button label="Submit" type="submit"  />

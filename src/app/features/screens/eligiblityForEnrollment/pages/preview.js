@@ -81,42 +81,44 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                     <p className="w-6 ml-4">First Name:</p>
                                     <p className="w-6">{previewInfo?.firstName}</p>
                                 </div>
-
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">LastName:</p>
-                                    <p className="w-6">{previewInfo?.lastName}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
+                                  <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
                                     <p className="w-6">{previewInfo?.address1}</p>
                                 </div>
+                               
                                 <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">City:</p>
-                                    <p>{previewInfo?.city}</p>
-                                </div>
-                                <div className="flex  pt-2">
                                     <p className="w-6 ml-4">State:</p>
                                     <p className="w-6">{previewInfo?.state}</p>
-                                </div>
-                             
-                            </div>
-                            <div className="border-2 w-5 ">
-                            <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Zip Code:</p>
-                                    <p className="w-6">{previewInfo?.zip}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">DOB:</p>
                                     <p className="w-6">{formatDate(previewInfo?.DOB)}</p>
                                 </div>
+                                <div className="flex  pt-2">
+                                    <p className="w-6 ml-4">Telephone:</p>
+                                    <p className="w-6">{previewInfo?.contact}</p>
+                                </div>
+                             
+                            </div>
+                            <div className="border-2 w-5 ">
+                            <div className="flex border-bottom-2 pt-2">
+                                    <p className="w-6 ml-4">LastName:</p>
+                                    <p className="w-6">{previewInfo?.lastName}</p>
+                                </div>
+                                <div className="flex border-bottom-2 pt-2">
+                                    <p className="w-6 ml-4">City:</p>
+                                    <p>{previewInfo?.city}</p>
+                                </div>
+                            <div className="flex border-bottom-2 pt-2">
+                                    <p className="w-6 ml-4">Zip Code:</p>
+                                    <p className="w-6">{previewInfo?.zip}</p>
+                                </div>
+                               
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">SSN:</p>
                                     <p className="w-6">{previewInfo?.SSN}</p>
                                 </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Telephone:</p>
-                                    <p className="w-6">{previewInfo?.contact}</p>
-                                </div>
+                             
                               
                               
                                 <div className="flex pt-2">
@@ -138,7 +140,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                 I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined in this form and any related documents.
                                 </p>
                                 <br />
-                                {checked?  <p><strong>This form is electronically signed by <strong>{previewInfo?.firstName}</strong> on {new Date().toLocaleDateString()}</strong></p>:null}
+                                {checked?  <p><strong>This form is electronically signed by <strong>{(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}</strong> on {new Date().toLocaleDateString()}</strong></p>:null}
                                
                             </label>
                         </div>

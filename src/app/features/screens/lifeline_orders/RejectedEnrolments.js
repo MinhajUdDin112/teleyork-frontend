@@ -9,9 +9,10 @@ import { ToastContainer } from "react-toastify"; // Import ToastContainer and to
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import BASE_URL from "../../../../config";
-import { ProgressSpinner } from "primereact/progressspinner";
+
 import { useNavigate } from "react-router-dom";
-import { Dialog } from "primereact/dialog";
+import { ProgressSpinner } from "primereact/progressspinner";
+
 
 
 const RejectedEnrollments = () => {
@@ -26,31 +27,32 @@ const RejectedEnrollments = () => {
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [expandedRows, setExpandedRows] = useState([]);
+    const [globalFilterValue, setGlobalFilterValue] = useState("");
 
-    const rowExpansionTemplate = (data) => {
-        return (
-            <div>
-                <DataTable value={[data]} stripedRows>
-                    <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
-                    <Column field="plan.name" header="Plan Name" />
-                    <Column field="createdBy?.name" header="Created BY" />
-                    <Column field="plan.price" header="Plan Price" />
-                    <Column field="Phonecost" header="Phone Cost" />
-                    <Column field="Amountpaid" header="Amount Paid by Customer" />
-                    <Column field="Postingdate" header="Posting Date" />
-                    <Column field="EsnNumber" header="ESN Number" />
-                    <Column field="Telephone" header="Telephone Number" />
-                    <Column field="Activationcall" header="Activation Call" />
-                    <Column field="Activationcalldatetime" header="Activation Call Date Time" />
-                    <Column field="status" header="Status" />
-                    <Column field="Handover" header="Handover Equipment" />
-                    <Column field="rejectedReason" header="Rejected Reason" />
-                    <Column field="Enrolltype" header="Enroll Type" />
-                    <Column field="Reviewernote" header="Reviewer Note" />
-                </DataTable>
-            </div>
-        );
-    };
+    // const rowExpansionTemplate = (data) => {
+    //     return (
+    //         <div>
+    //             <DataTable value={[data]} stripedRows>
+    //                 <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+    //                 <Column field="plan.name" header="Plan Name" />
+    //                 <Column field="createdBy?.name" header="Created BY" />
+    //                 <Column field="plan.price" header="Plan Price" />
+    //                 <Column field="Phonecost" header="Phone Cost" />
+    //                 <Column field="Amountpaid" header="Amount Paid by Customer" />
+    //                 <Column field="Postingdate" header="Posting Date" />
+    //                 <Column field="EsnNumber" header="ESN Number" />
+    //                 <Column field="Telephone" header="Telephone Number" />
+    //                 <Column field="Activationcall" header="Activation Call" />
+    //                 <Column field="Activationcalldatetime" header="Activation Call Date Time" />
+    //                 <Column field="status" header="Status" />
+    //                 <Column field="Handover" header="Handover Equipment" />
+    //                 <Column field="rejectedReason" header="Rejected Reason" />
+    //                 <Column field="Enrolltype" header="Enroll Type" />
+    //                 <Column field="Reviewernote" header="Reviewer Note" />
+    //             </DataTable>
+    //         </div>
+    //     );
+    // };
 
     const navigate = useNavigate();
 
@@ -59,7 +61,9 @@ const RejectedEnrollments = () => {
      // Get role name  from login response
     const roleName= parseLoginRes?.role?.role;
 
-   
+    const onGlobalFilterChange = (e) => {
+        setGlobalFilterValue(e.target.value);
+    };
    
 
     const getAllEnrollments = async () => {
@@ -111,8 +115,9 @@ const RejectedEnrollments = () => {
         try {
             const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
             if (response?.status === 201 || response?.status === 200) {
-                toast.success("approved");
+                toast.success("Approved");
                 setisButtonLoading(false);
+                getAllEnrollments();
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
@@ -122,15 +127,15 @@ const RejectedEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="View" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised/>
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised />
+                <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading}/>
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised  disabled={isButtonLoading}/>
             </div>
         );
     };
 
     const actionTemplateForCsr=(rowData)=>{
         return(
-            <Button label="View" onClick={() =>  viewRow(rowData)} text raised />
+            <Button label="Edit" onClick={() =>  viewRow(rowData)} text raised />
         )
        
     }
@@ -139,9 +144,15 @@ const RejectedEnrollments = () => {
     return (
         <div className="card bg-pink-50">
             <ToastContainer/>
+            <div className="flex justify-content-between">
             <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">List of Rejected Enrollments</h3>
             </div>
+            <div className="p-input-icon-left mb-3 ">
+                                <i className="pi pi-search" />
+                                <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
+                                </div>
+                                </div>
             {/* <div className="card flex flex-column justify-content-center mx-5 border-noround">
                 <div className="flex flex-wrap mx-3 my-3">
                     <div className="mb-3 mr-3">
@@ -160,16 +171,21 @@ const RejectedEnrollments = () => {
             {/* <div className="card p-3 mx-5 border-noround bg-green-200 "><p className="text-sm font-semibold">Search Result: 0</p></div> */}
             <div className="mx-5">
                 <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">{/* <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText> */}</div>
+                {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
                 <div className="">
-                <DataTable value={ allEnrollments} stripedRows resizableColumns columnResizeMode="fit" expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate} paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
-                            <Column expander style={{ width: "3em" }} />
+                <DataTable value={ allEnrollments} globalFilter={globalFilterValue} stripedRows resizableColumns columnResizeMode="fit"  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                            {/* <Column expander style={{ width: "3em" }} /> */}
                            
                             <Column header="Enrollment ID" field="enrollmentId"></Column>
-                            <Column header="Name" field={(item) => `${item?.firstName ? item?.firstName : ""} ${item?.lastName ? item?.lastName : ""}`}></Column>
-                            <Column header="Address" field="address1"></Column>
-                            <Column header="City" field="city"></Column>
-                            <Column header="State" field="state"></Column>
-                            <Column header="Zip" field="zip" />
+                            <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
+                        <Column header="Address" field="address1"></Column>
+                        <Column header="City" field="city"></Column>
+                        <Column header="State" field="state"></Column>
+                        <Column header="Zip" field="zip"></Column>
+                        <Column field="contact" header="Telephone Number" />
+                        <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                        <Column field="createdBy?.name" header="Created BY" />
+                        <Column field="status" header="Status" />
     
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                  <Column header="Actions" body={actionTemplateForCsr}></Column>

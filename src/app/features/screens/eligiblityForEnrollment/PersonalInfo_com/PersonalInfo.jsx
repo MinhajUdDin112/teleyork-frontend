@@ -194,7 +194,7 @@ useEffect(() => {
             <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
-                <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
+                <h5 className="font-bold enroll">ENROLLMENT ID: {enrollment_id}</h5>
                      <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
                 </div>
 
@@ -213,7 +213,7 @@ useEffect(() => {
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Middle Name</label>
-                        <InputText id="middleName" value={formik.values.middleName} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={10} autoComplete="off" style={{textTransform: 'uppercase'}}/>
+                        <InputText id="middleName" value={formik.values.middleName} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z\s]*$/}  maxLength={10} autoComplete="off" style={{textTransform: 'uppercase'}}/>
                     </div>
 
                     <div className="field col-12 md:col-3">
@@ -235,7 +235,7 @@ useEffect(() => {
                                 formik.handleChange(e);
                             }}
                             onBlur={formik.handleBlur}
-                            placeholder="Select"
+                           
                         />
                     </div>
 
