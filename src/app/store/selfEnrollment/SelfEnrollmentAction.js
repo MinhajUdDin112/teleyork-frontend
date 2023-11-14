@@ -11,7 +11,8 @@ export const verifyZipAction = createAsyncThunk("selfEnrollmentapi/enrollment/ve
         const response = await axios.post(`${BASE_URL}/api/enrollment/verifyZip`, body);
         // if (response.status === 200) {
             // Toasts({ success: `Template ${response.data.msg}` });
-            return response.data;
+            localStorage.setItem("zip", JSON.stringify(response.data));
+            return response?.data;
         // }
     } catch (error) {
         // Toasts({ error: `Template ${error}` });s

@@ -298,3 +298,11 @@ box-shadow: 2px;
   .hide-reject-button .p-confirm-dialog-footer .p-button-reject {
     display: none;
 }
+.enroll{
+  margin-left: -9px;
+}
+.margn{
+  margin-bottom: 30px;
+  gap: 40px;
+  align-items: center;
+}

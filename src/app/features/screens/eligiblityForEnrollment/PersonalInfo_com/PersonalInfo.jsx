@@ -33,6 +33,31 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
         DOB: Yup.string().required("This is Required."),
         contact: Yup.string().required("This is Required."),
         email: Yup.string().email().required("This is Required."),
+
+        BenifitFirstName: Yup.string().when("isSelfReceive", {
+            is: false,
+            then: ()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+       
+        BenifitLastName: Yup.string().when("isSelfReceive", {
+            is: false,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        BenifitSSN: Yup.string().when("isSelfReceive", {
+            is: false,
+            then:()=> Yup.string().required("This field is required"),
+            otherwise:()=> Yup.string().notRequired()
+        }),
+        BenifitDOB: Yup.date().when("isSelfReceive", {
+            is: false,
+            then:()=> Yup.date()
+                .nullable()
+                .required("This field is required")
+                .max(new Date(), "DOB cannot be in the future"),
+                otherwise:()=> Yup.string().notRequired()
+        }),
     });
 
     const formik = useFormik({
@@ -169,35 +194,33 @@ useEffect(() => {
             <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
-                    <h6 className="font-semibold">Enrollment id: {enrollment_id}</h6>
+                <h5 className="font-bold enroll">ENROLLMENT ID: {enrollment_id}</h5>
                      <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
                 </div>
 
-                <p>To apply for a Affordable Connectivity program, fillout every section of this form, initial every agreement statement, and sign the last page</p>
+                <p>To apply for the Affordable Connectivity program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
                 <p className="text-xl font-semibold">What is your full legal name?</p>
-                <p>The name you use on offical documents like your Social Security Card or State ID, Not a Nick Name.</p>
+                <p>Please provide the name that appears on official documents such as your Social Security Card or State ID, not a nickname.</p>
 
                 <div className="p-fluid formgrid grid">
                     <div className="field col-12 md:col-3">
                         <label className="field_label">
                             First Name <span className="steric">*</span>
                         </label>
-                        <InputText id="firstName" value={formik.values.firstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("firstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} autoComplete="new-password"
- 
-   />
+                        <InputText id="firstName" value={formik.values.firstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("firstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} autoComplete="new-password" style={{textTransform: 'uppercase'}}/>
                         {getFormErrorMessage("firstName")}
                     </div>
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">Middle Name</label>
-                        <InputText id="middleName" value={formik.values.middleName} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={10} autoComplete="off" />
+                        <InputText id="middleName" value={formik.values.middleName} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z\s]*$/}  maxLength={10} autoComplete="off" style={{textTransform: 'uppercase'}}/>
                     </div>
 
                     <div className="field col-12 md:col-3">
                         <label className="field_label">
                             Last Name <span className="steric">*</span>
                         </label>
-                        <InputText id="lastName" value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("lastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} autoComplete="off" />
+                        <InputText id="lastName" value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("lastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} autoComplete="off" style={{textTransform: 'uppercase'}} />
                         {getFormErrorMessage("lastName")}
                     </div>
 
@@ -251,7 +274,7 @@ useEffect(() => {
                         </label>
 
                        
-                        <InputText  onChange={formik.handleChange} id="contact" value={formik.values.contact} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_text")} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}/>
+                        <InputText  onChange={formik.handleChange} id="contact" value={formik.values.contact} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("contact") }, "input_text")} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} pattern="^(?!1|0|800|888|877|866|855|844|833).*$"/>
                         {getFormErrorMessage("contact")}
                     </div>
                 </div>
@@ -307,7 +330,7 @@ useEffect(() => {
             </div>
 
             <div className="mt-4">
-                <p className="font-semibold">Who received government assistance? (SNAP, Medicaid, etc)</p>
+                <p className="font-semibold">Who is receiving government assistance?</p>
                 <div className="flex">
                     <div className="flex align-items-center">
                         <RadioButton inputId="myself" value="myself" name="myself" onChange={() => handleRadio("myself")} checked={isSelfReceive} />
@@ -315,7 +338,7 @@ useEffect(() => {
                     </div>
                     <div className="flex align-items-center ml-2">
                         <RadioButton inputId="somebody" value="somebody" name="somebody" onChange={() => handleRadio("somebody")} checked={!isSelfReceive} />
-                        <label className="ml-2">Somebody else in household</label>
+                        <label className="ml-2">Somebody Else in the Household</label>
                     </div>
                 </div>
             </div>
@@ -329,21 +352,21 @@ useEffect(() => {
                                 <label className="field_label">
                                     First Name <span className="steric">*</span>
                                 </label>
-                                <InputText id="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitFirstName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                                <InputText className="mb-3"  name="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{textTransform: 'uppercase'}}  />
                                 {getFormErrorMessage("BenifitFirstName")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                 Middle Name 
                                 </label>
-                                <InputText id="BenifitMiddleName" value={formik.values.BenifitMiddleName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitMiddleName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                                <InputText id="BenifitMiddleName" value={formik.values.BenifitMiddleName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitMiddleName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20}  style={{textTransform: 'uppercase'}}/>
                                
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     Last Name <span className="steric">*</span>
                                 </label>
-                                <InputText id="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("BenifitLastName") }, "input_text")} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} />
+                                <InputText className="mb-3"  name="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{textTransform: 'uppercase'}} />
                                 {getFormErrorMessage("BenifitLastName")}
                             </div>
 
@@ -351,14 +374,14 @@ useEffect(() => {
                                 <label className="field_label">
                                     DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                                 </label>
-                                <Calendar id="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid(" BenifitDOB") }, "input_text")} />
-                                {getFormErrorMessage(" BenifitDOB")}
+                                <Calendar className="mb-3"  name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />
+                                  {getFormErrorMessage("BenifitDOB")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
                                 </label>
-                                <InputText id="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("BenifitSSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
+                                <InputText className="mb-3"  name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4}/>
                                 {getFormErrorMessage("BenifitSSN")}
                             </div>
                         </div>
@@ -379,9 +402,7 @@ useEffect(() => {
                         className={classNames({ "p-invalid": isFormFieldValid("isACP") }, "input_mask")}
                     />
                     <label className="p-checkbox-label mx-2">
-                        By continuing with your application, you affirm and understand that the Affordable Connectivity Program is an FCC benefit program that reduces your monthly broadband invoice. The program will be in effect for an indefinite amount of time. At the conclusion of the program, you
-                        will be given 30 days' notice and may elect to keep your plan at an undiscounted rate. As a participant, you may transfer your ACP benefit to another provider. The Affordable Connectivity Program is limited to one monthly service discount and one device discount per
-                        household.
+                    By proceeding with your application, you acknowledge and understand that the Affordable Connectivity Program is an FCC benefit initiative that lowers your monthly broadband bill. This program has an indefinite duration, and you will receive a 30-day notice upon its conclusion, after which you can choose to maintain your plan at the undiscounted rate. As a participant, you have the option to transfer your ACP benefit to another service provider. It's important to note that the Affordable Connectivity Program offers a single monthly service discount and one device discount per household
                     </label>
                     {getFormErrorMessage("isACP")}
                 </div>
