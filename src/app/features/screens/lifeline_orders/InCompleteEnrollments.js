@@ -9,13 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button } from "primereact/button";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { ProgressSpinner } from "primereact/progressspinner";
 const InCompleteEnrollments = () => {
     const [searchResults, setSearchResults] = useState([]);
@@ -83,17 +77,13 @@ const InCompleteEnrollments = () => {
 
     const getAllInCompletedEnrollments = async () => {
         setIsLoading(true);
-        setIsLoading(true);
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?serviceProvider=${parseLoginRes?.compony}`);
             if (res?.status === 200 || res?.status === 201) {
                 setAllInCompletedEnrollments(res?.data?.data);
                 setIsLoading(false);
-                setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
-            setIsLoading(false);
             toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
