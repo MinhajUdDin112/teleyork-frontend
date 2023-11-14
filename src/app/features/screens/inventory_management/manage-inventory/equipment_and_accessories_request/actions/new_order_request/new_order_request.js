@@ -5,6 +5,7 @@ import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { paymenttype,equipmenttype,processtype } from "../../assets";
 import { Button } from "primereact/button";
+import RenderOrderData from "./render_order_data";
 export default function NewOrderRequest(){ 
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);   
@@ -109,7 +110,9 @@ export default function NewOrderRequest(){
             </div>
             <div className="mt-4 flex flex-wrap justify-content-center">
                 <Button label="Submit" />
-            </div>
-        </div>
+            </div>    
+            <div className="card mt-4">
+                            <RenderOrderData/>
+        </div></div>
     );
 }

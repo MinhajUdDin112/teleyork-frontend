@@ -10,8 +10,8 @@ import CancelOrderRequest from "./actions/cancel_order_request/cancel_order_requ
 export default function Equipment_And_Accessories_Request({ setActiveComponent }) {
     const formik = useFormik({
         initialValues: {
-            feature: "",
-            action: "",
+            feature: "equipmentandaccessoriesrequest",
+            action: "neworderrequest",
         },
     });
     return (
@@ -25,8 +25,8 @@ export default function Equipment_And_Accessories_Request({ setActiveComponent }
                 style={{ padding: "10px", paddingLeft: "15px", background: "royalblue", paddingRight: "15px" }}
             />
             <div className="card mt-4 flex flex-wrap justify-content-around">
-                <Dropdown value={formik.values.feature} options={feature} onChange={(e) => formik.setFieldValue("feature", e.value)} placeholder="Select an option" className="w-20rem" />
-                <Dropdown value={formik.values.action} options={action} onChange={(e) => formik.setFieldValue("action", e.value)} placeholder="Select an option" className="w-20rem" />
+                <Dropdown defaultValue="equipmentandaccessoriesrequest" value={formik.values.feature} options={feature} onChange={(e) => formik.setFieldValue("feature", e.value)} placeholder="Select an option" className="w-20rem" />
+                <Dropdown defaultValue="neworderrequest" value={formik.values.action} options={action} onChange={(e) => formik.setFieldValue("action", e.value)} placeholder="Select an option" className="w-20rem" />
             </div>
             {formik.values.feature === "equipmentandaccessoriesrequest" && formik.values.action === "neworderrequest" ? (
                 <NewOrderRequest />

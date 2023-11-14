@@ -22,20 +22,17 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
 
     const [imgfile, setimgfile] = useState(null);
     function handleInputChange(event) {
-        if (event.target.value.length > 2) {
-        } else {
-            if (event.target.value.length === 2) {
-                const regex = /^[A-Z][0-9]$/;
+      
+          
+                const regex = /^E\d+$/;
                 if (!regex.test(event.target.value)) {
                     setCodeFieldError(true);
                 } else {
                     setCodeFieldError(false);
                 }
                 setInputValue(event.target.value);
-            } else {
-                setInputValue(event.target.value);
-            }
-        }
+          
+    
     }
     const [inputValue, setInputValue] = useState(selectedProgram.code);
     const [codeFIeldError, setCodeFieldError] = useState(false);
@@ -64,13 +61,9 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
             active: formik.values.active,
             code: inputValue,
         };
-        const regex = /^[A-Z][0-9]$/;
+        const regex = /^E\d+$/;
+           
         if (regex.test(inputValue)) {
-            setCodeFieldError(false);
-        } else {
-            setCodeFieldError(true);
-        }
-        if (!codeFIeldError) {
             if (arrayofupdatecode.includes(inputValue)) {
                 toast.current.show({ severity: "error", summary: "Info", detail: "Code Already Taken" });
             } else {
@@ -121,6 +114,9 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                         });
                 }
             }
+        } 
+        else{ 
+            setCodeFieldError(true)
         }
     }
     return (
@@ -172,7 +168,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                         <InputText ref={refForCode} type="text" value={inputValue} onChange={handleInputChange} name="code" />
                         {codeFIeldError ? (
                             <div className="error" style={{ marginTop: "22px", color: "red" }}>
-                                "Code Must be in Format A1,E1"
+                                "Code Must be in Format E1-E2222"
                             </div>
                         ) : undefined}
                     </div>
