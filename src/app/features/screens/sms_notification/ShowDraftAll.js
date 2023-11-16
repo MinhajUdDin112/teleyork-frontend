@@ -24,8 +24,8 @@ const ShowDraftAll = () => {
     const { getDraftByTemplateId, submitTemplate } = useSelector((state) => state.notification);     
      let loadingSend=useSelector(state=>state.notification.submitTemplateLoading)     
      let submitTemplateError=useSelector(state=>state.notification.submitTemplateError)       
-     console.log(loadingSend)
-     console.log("submit template",submitTemplate)
+    
+  
     const { loginData } = useSelector((state) => state.login);
     const companyId = loginData?.compony
         
@@ -71,14 +71,14 @@ const ShowDraftAll = () => {
         const response = await Axios.get(`${BASE_URL}/api/sms/draft?templateId=${id}&compony=${companyId}`);
         setDraftByIdRes(response?.data?.data)
 
-        console.log('response', response)
+        
     }
 
     useEffect(() => {
         getDraftById()
     }, []);  
     useEffect(()=>{   
-        console.log(toast)
+      
         if(loadingSend){    
         
             toast.current.show({ severity: "success", summary: "Info", detail: "Send Template Successfully" });

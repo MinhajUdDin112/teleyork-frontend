@@ -27,7 +27,7 @@ const [isLoading, setIsLoading] = useState(false)
         ticketNum:"",
      },
      onSubmit: async (values, actions) => {
-        console.log("function is calling outside")    
+      
         const dataToSend = { ...values };
         setIsLoading(true);
         try {

@@ -181,7 +181,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             setAcp(parsebasicResponse?.data?.isACP);
             setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive);
             
-            console.log("self recieve  after is",parsebasicResponse?.data?.isSelfReceive)
+          
         }
     }, []);
 useEffect(() => {

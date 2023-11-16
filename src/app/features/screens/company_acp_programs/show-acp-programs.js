@@ -36,7 +36,7 @@ const ShowPrograms = ({ setEditAcp }) => {
     if (showAcps === null) {
         Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`) //using dummy service provider
             .then((res) => {
-                console.log(res.data.data);   
+                
                 let arr=[]
                  for(let i=0;i<Object.keys(res.data.data).length;i++){ 
                       if(res.data.data[i].code !== undefined){
@@ -45,12 +45,12 @@ const ShowPrograms = ({ setEditAcp }) => {
 
                  }  
                  setArrayOfCodes(arr)
-                 console.log(arrayofcode)
+               
                 res.data.data.forEach((element) => {
                     objectForEdit[element.name] = element;
                     element.edit = <span className="pi pi-user-edit" style={{ cursor: "pointer" }} onClick={editAcpProgram}></span>;
                 });
-                console.log(objectForEdit);
+               
                 if (!showEdit) {
                     setShowAcps(res.data.data);
                 }

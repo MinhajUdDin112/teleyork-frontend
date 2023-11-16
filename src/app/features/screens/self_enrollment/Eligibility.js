@@ -6,10 +6,12 @@ import { useFormik } from "formik";
 import axios from "axios";
 import BASE_URL from "../../../../config";
 import { ToastContainer, toast } from "react-toastify";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const Eligibility = () => {
     const [acpProgram,setAcpProgram] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isButtonLoading, setIsButtonLoading] = useState(false)
     const {id}=useParams()
     const eligId = "64e0b1ab35a9428007da351c"
     const navigate = useNavigate();
@@ -101,7 +103,7 @@ const Eligibility = () => {
                                     {getFormErrorMessage("program")}
                                 </div>
                                 
-                                <Button label="Next" type="submit" className="mt-5" />
+                                <Button label="Next" icon={isLoading ? <ProgressSpinner strokeWidth="6" style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} /> : null} type='submit' className='mt-5'  disabled={isLoading}/>
                                 <Button label="Back" className="mt-3" onClick={handleBack} />
                             </div>
                             </form>

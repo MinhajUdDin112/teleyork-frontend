@@ -80,7 +80,7 @@ const PersonalInfo = () => {
                 try {
                     const res = await axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
                     if (res.status === 201 || res.status === 200) {
-                        console.log("fun is called in side  try");
+                      
                         // Save the response data in local storage
                         localStorage.setItem("initialInformation", JSON.stringify(res.data));
                         // Navigate to the next page

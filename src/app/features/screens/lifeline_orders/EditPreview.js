@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import axios from "axios";
 const EditPreview = ({  data, handleUpdate  }) => {
     const [editedData, setEditedData] = useState({ ...data });
-    console.log("edit data is",editedData)
+    
   const navigate = useNavigate();
 
   const handleChange = (e, field) => {
@@ -20,7 +20,7 @@ const EditPreview = ({  data, handleUpdate  }) => {
       .put("api/web/update", editedData)
       .then((response) => {
         // Handle response
-        console.log(response.data);
+       
         // Redirect to the original page
         handleUpdate(editedData);
         navigate('/original-page');
@@ -28,7 +28,7 @@ const EditPreview = ({  data, handleUpdate  }) => {
       })
       .catch((error) => {
         // Handle error
-        console.error("Error:", error);
+      
       });
   };
   

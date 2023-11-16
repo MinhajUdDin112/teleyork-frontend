@@ -15,7 +15,7 @@ export default function AddAcpProgram() {
     if (acpprograms === null) {
         Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`) //using dummy service provider
             .then((res) => {
-                console.log(res.data.data);
+               
                 let arr = [];
                 for (let i = 0; i < Object.keys(res.data.data).length; i++) {
                     if (res.data.data[i].code !== undefined) {
@@ -23,7 +23,7 @@ export default function AddAcpProgram() {
                     }
                 }
                 setArrayOfCodes(arr);
-                console.log("arrayofcode is ", arrayofcode);
+               
 
                 setacpprograms(res.data.data);
             })
@@ -97,13 +97,13 @@ export default function AddAcpProgram() {
         }
         if (Object.keys(formik.errors).length === 0 && codeFIeldError === false) {
             if (data.name !== "" && data.description !== "") {
-                console.log(arrayofcode);
+                
                 if (arrayofcode.includes(inputValue)) {
                     toast.current.show({ severity: "error", summary: "Info", detail: "Code Already Taken" });
                 } else {
                     if (imgfile !== null) {
                         let formData = new FormData();
-                        console.log(imgfile);
+                       
                         formData.append("banner", imgfile);
                         setDisplayProgress(true);
                         Axios.post(`${BASE_URL}/api/web/acpPrograms/bannerUpload`, formData, {
@@ -111,7 +111,7 @@ export default function AddAcpProgram() {
                                 // Calculate the upload percentage
                                 const percentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                                 setImgUploadProgress(percentage);
-                                console.log(`Upload Progress: ${percentage}%`);
+                              
 
                                 // You can use this percentage to update a progress bar or display the progress
                             },
@@ -123,11 +123,11 @@ export default function AddAcpProgram() {
                                 Axios.post(`${BASE_URL}/api/web/acpPrograms`, data)
                                     .then((response) => {
                                         formik.values.banner = `${BASE_URL}/${imgfile.name}`;
-                                        console.log("Data sent successfully:", response.data);
+                                       
                                         toast.current.show({ severity: "success", summary: "Info", detail: "Added Acp Program Successfully" });
                                     })
                                     .catch((error) => {
-                                        console.error("Error sending data:", error);
+                                      
                                         toast.current.show({ severity: "error", summary: "Info", detail: "Added Acp Program Failed" });
                                     });
                             })
@@ -139,11 +139,11 @@ export default function AddAcpProgram() {
                     } else {
                         Axios.post(`${BASE_URL}/api/web/acpPrograms`, data)
                             .then((response) => {
-                                console.log("Data sent successfully:", response.data);
+                              
                                 toast.current.show({ severity: "success", summary: "Info", detail: "Added Acp Program Successfully" });
                             })
                             .catch((error) => {
-                                console.error("Error sending data:", error);
+                              
                                 toast.current.show({ severity: "error", summary: "Info", detail: "Added Acp Program Failed" });
                             });
                     }
@@ -216,9 +216,9 @@ export default function AddAcpProgram() {
                 <Button
                     label={buttonText}
                     onClick={(e) => {
-                        console.log(e);
+                       
                         e.preventDefault();
-                        console.log("button clicked");
+                       
                         let create = document.createElement("input");
                         create.type = "file";
                         create.accept = "image/*";

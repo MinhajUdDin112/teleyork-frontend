@@ -34,7 +34,7 @@ const Upload = () => {
         };
 
         reader.readAsArrayBuffer(file); // Read the file as an array buffer
-        console.log("now here");
+       
     };
 
     const onUpload = async () => {
@@ -42,7 +42,7 @@ const Upload = () => {
             setLoading(true);
             toast.success("File Successfully Uploaded to Drafts. Please review and approve.");
         } catch (error) {
-            console.error("Error uploading file:", error);
+         
             // Handle the error here
         } finally {
             setLoading(false);

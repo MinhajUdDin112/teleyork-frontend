@@ -45,7 +45,7 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
         const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
         if (res?.status === 200 || res?.status === 201) {
             localStorage.setItem("programmeId",JSON.stringify(res?.data))
-            console.log("acp response is  ",res?.data)
+           
             setIsBack(isBack+1);
             handleNext();
             setIsLoading(false);

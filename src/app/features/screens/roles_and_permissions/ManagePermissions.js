@@ -14,7 +14,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 export default function ManagePermissions({setRefresh}) {  
 const searchParams = new URLSearchParams(useLocation().search);
   const [roleId,setRoleId]=useState(searchParams.get("roleId")) 
-    console.log("roleid",roleId)
+    
      let reffortoast = useRef(null);     
     let [showError, setShowError] = useState(false);
     const [roleUpdateLoading, setRoleUpdateLoading] = useState(false);         
@@ -26,7 +26,7 @@ const searchParams = new URLSearchParams(useLocation().search);
     const [permissionObject, setPermissionObject] = useState(null);
     const [disabledMode, setDisableMode] = useState(true);
      function updatePermissions(){ 
-        console.log(permissionObject)  
+       
         let obj={roleId:roleData._id,permissions:[]}   
           Object.keys(permissionObject).forEach(item=>{ 
             let obj2={}
@@ -34,13 +34,12 @@ const searchParams = new URLSearchParams(useLocation().search);
             obj2.actions=permissionObject[item]   
             obj.permissions.push(obj2) 
           })   
-          console.log(obj)   
+           
           Axios.patch(`${BASE_URL}/api/web/role/permissions`,obj).then(()=>{ 
-            console.log("updated successfully")   
-            console.log("Update Successfully");
+           
                         reffortoast.current.show({ severity: "success", summary: "Info", detail: "Updated Permissions Successfully" });
         }).catch(err=>{ 
-            console.log(err) 
+           
             reffortoast.current.show({ severity: "error", summary: "Info", detail: "Updated Permissions Failed" });
         })
       }
@@ -51,7 +50,7 @@ const searchParams = new URLSearchParams(useLocation().search);
                 setRoleUpdateLoading((prev) => !prev);
                 Axios.patch(`${BASE_URL}/api/web/role`, { roleId: roleData._id, role: formik.values.role, description: formik.values.description })
                     .then(() => {
-                        console.log("Update Successfully");
+                       
                         reffortoast.current.show({ severity: "success", summary: "Info", detail: "Updated Role Successfully" });
                         setRoleUpdateLoading((prev) => !prev);
                     })
@@ -87,15 +86,15 @@ const searchParams = new URLSearchParams(useLocation().search);
             const res = await Axios.get(`${BASE_URL}/api/web/module`);   
 
             setModuleData(res?.data?.data || []);
-            console.log("res?.data?.data", res?.data?.data);
+           
         } catch (error) {
-            console.error("Error fetching module data:", error);
+          
         }
     };  
     const getAllRoles = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);   
-            console.log("all roles" ,res.data.data)
+          
             if (res?.status === 200 || res?.status === 201) {    
                 let rolesdata=res.data.data;  
                 for(let k=0;k<rolesdata.length;k++){     
@@ -119,7 +118,7 @@ const searchParams = new URLSearchParams(useLocation().search);
                               }
                                   
                             }  
-                            console.log(object)   
+                             
                             setPermissionObject(object)          
                         }
                 }      
@@ -127,7 +126,7 @@ const searchParams = new URLSearchParams(useLocation().search);
                      }     
 
         } catch (error) {
-            console.error("Error fetching module data:", error?.response);
+           
         }
     };
     useEffect(() => {

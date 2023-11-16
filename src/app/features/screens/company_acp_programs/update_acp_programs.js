@@ -53,7 +53,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
         },
     });
     function handleUpdateAcp() {
-        console.log(formik.values);
+      
         let data = {
             serviceProvider: parseLoginRes?.compony,
             updatedBy: parseLoginRes?._id,
@@ -79,7 +79,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                         .then((res) => {   
                            
                             
-                            console.log("submit successfully", res.data);
+                           
                             toast.current.show({ severity: "success", summary: "Info", detail: "Updated Acp Program Successfully" });
                         })
                         .catch((err) => {
@@ -94,7 +94,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                             // Calculate the upload percentage
                             const percentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                             setImgUploadProgress(percentage);
-                            console.log(`Upload Progress: ${percentage}%`);
+                         
 
                             // You can use this percentage to update a progress bar or display the progress
                         },
@@ -107,7 +107,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                             data.banner = `http://dev-api.teleyork.com/banners/${imgfile.name}`;
                             Axios.patch(`${BASE_URL}/api/web/acpPrograms`, data)
                                 .then((res) => {
-                                    console.log("submit successfully", res.data);
+                                  
                                     toast.current.show({ severity: "success", summary: "Info", detail: "Updated Acp Program Successfully" });
                                 })
                                 .catch((err) => {
@@ -186,9 +186,9 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                 <Button
                     label={buttonText}
                     onClick={(e) => {
-                        console.log(e);
+                      
                         e.preventDefault();
-                        console.log("button clicked");
+                      
                         let create = document.createElement("input");
                         create.type = "file";
                         create.accept = "image/*";
@@ -200,7 +200,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                             reader.onloadend = () => {
                                 formik.values.banner = reader.result;
                                 setimgsrc((previmgsrc) => reader.result);
-                                console.log(formik.values);
+                               
                             };
                         };
                         create.click();

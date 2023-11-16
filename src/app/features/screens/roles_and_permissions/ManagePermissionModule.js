@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 export default function ManagepermissionModule({ module, disabledMode, permissionObject, setPermissionObject }) {
     const [checkMain, setCheckMain] = useState(false);
-    console.log(permissionObject);
+   
     const togglePermission = (submoduleId, actionId) => {  
         if(permissionObject[submoduleId] !== undefined){
         if (permissionObject[submoduleId].includes(actionId)) {
@@ -30,12 +30,10 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
 
     };
     function toggleMainModulePermission(mainmodule) {
-        console.log("main module is") 
-        console.log(mainmodule)
-        console.log("Mainmodule change is call");
+      
         let cond = true;
         for (let i = 0; i < mainmodule.submodule.length; i++) { 
-                console.log(mainmodule.submodule[i])   
+               
                 if(permissionObject[mainmodule.submodule[i]._id] !== undefined){
             if (permissionObject[mainmodule.submodule[i]._id].length !== 3 ) {
                 cond = false;
@@ -53,9 +51,9 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
     
         if (cond === true) {
             let objofsubmoduleid = {};
-            console.log("cond is true")
+           
             for (let i = 0; i < mainmodule.submodule.length; i++) {    
-                console.log("submodule is ",mainmodule.submodule[i])
+              
                 objofsubmoduleid[mainmodule.submodule[i]._id] = [];
             }
             // setCheckMain(prev=>!prev)
@@ -90,7 +88,7 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
     function toggleSubModulePermissions(submodule) { 
         if(permissionObject[submodule._id] !== undefined){
         if (permissionObject[submodule._id].length === 3) {  
-            console.log("all check")
+           
             setPermissionObject((prevstate) => ({
                 ...prevstate,
                 [submodule._id]: [],
