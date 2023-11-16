@@ -5,9 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../../config";
 import { toast } from "react-toastify";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const NationalVerifier = () => {
     const [checked, setChecked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -15,6 +17,7 @@ const NationalVerifier = () => {
     const companyName = loginRes?.companyName;
     
     const handleNext = async () => {
+        setIsLoading(true)
         const data = {
             userId: id,
         };
@@ -22,10 +25,13 @@ const NationalVerifier = () => {
             const res = await axios.post(`${BASE_URL}/api/enrollment/termsAndConditions`, data);
             const responseData = res.data; // Assuming the API response contains the data you need
             navigate("/selfenrollment/resumeapplication", { state: { responseData } });
+            setIsLoading(false)
         } catch (error) {
             // Handle any errors here
             toast.error(error?.response?.data?.msg);
+            setIsLoading(false)
         }
+        setIsLoading(false)
     };
     const handleBack = () => {
         // Navigate to a different route
@@ -68,7 +74,8 @@ const NationalVerifier = () => {
                             </label>
                         </div>
                         <div className="flex flex-column mt-4">
-                            <Button label="Next" className="mb-3" onClick={() => handleNext()} disabled={!checked} />
+                       
+                            <Button label="Next" icon={isLoading ? <ProgressSpinner strokeWidth="6" style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} /> : null} className="mb-3" onClick={() => handleNext()} disabled={!checked || isLoading} />
                             <Button label="Back" onClick={handleBack} />
                         </div>
                     </div>

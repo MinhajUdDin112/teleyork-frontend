@@ -76,13 +76,13 @@ const CreateRole = () => {
             Axios.post(`${BASE_URL}/api/web/role`, data)
                 .then((response) => {
                     if (response?.status === 200) {
-                        console.log("status is", response?.status);
+                       
                         toast.current.show({ severity: "success", summary: "Info", detail: "Role Added Successfully" });
                     }
                 })
                 .catch((error) => {
                     setErrorMessage(error?.response?.data?.msg);
-                    console.log("error msg is");
+                  
                     toast.current.show({ severity: "error", summary: "Info", detail: "Role Added Failed" });
                 });
 
@@ -99,9 +99,9 @@ const CreateRole = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/module`);
             setModuleData(res?.data?.data || []);
-            console.log("res?.data?.data", res?.data?.data);
+          
         } catch (error) {
-            console.error("Error fetching module data:", error);
+           
         }
     };
     useEffect(() => {
@@ -129,7 +129,7 @@ const CreateRole = () => {
         }
     };
     const togglePermission = (submoduleId, actionId) => {
-        console.log("actionId", actionId);
+     
         setSelectedActions((prevSelectedActions) => {
             const key = `${submoduleId}-${actionId}`;
             return {
@@ -185,9 +185,9 @@ const CreateRole = () => {
             if (res?.status === 200 || res?.status === 201) {
                 setRolePermissions(res?.data?.data?.permissions);
             }
-            console.log("res", res);
+         
         } catch (error) {
-            console.error("Error fetching module data:", error?.response);
+           
         }
     };
     useEffect(() => {

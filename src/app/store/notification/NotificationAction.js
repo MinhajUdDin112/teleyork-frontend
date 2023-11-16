@@ -24,7 +24,7 @@ export const addTemplateAction = createAsyncThunk("notification/api/sms/addTempl
 
 //get list of all templates action
 export const getAllTemplateAction = createAsyncThunk("notification/sms/template/draft", async (arg, { rejectWithValue }) => {
-    console.log('arg', arg)
+   
     try {
         const response = await axios.get(`${BASE_URL}/api/sms/template/all?userId=645a85198cd1ff499c8b99cd`);
         return response.data;

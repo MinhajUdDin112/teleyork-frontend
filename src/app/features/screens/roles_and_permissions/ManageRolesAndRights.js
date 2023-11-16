@@ -13,9 +13,9 @@ import { useLocation } from 'react-router-dom';
 
 import ManagePermissions from './ManagePermissions';
 export default function BasicDemo() {     
-    console.log(useLocation().pathname)   
+   
     let Location=useLocation() 
-    console.log("in Permissions")      
+      
     const [refresh,setRefresh]=useState(false)
     const [deleteRoleLoading,setDeleteRoleLoading]=useState(false)  
     let toastref=useRef(null)
@@ -44,7 +44,7 @@ export default function BasicDemo() {
      
          }} /> 
         <Button style={{marginLeft:"25px",fontWeight:"900",backgroundColor:"red",border:"none"}} onClick={()=>{ 
-             console.log(rowData)
+            
            if(!deleteRoleLoading ){  
                 setDeleteRoleLoading(prev=>!prev)
              Axios.delete(`${BASE_URL}/api/web/role?roleId=${rowData._id}`).then(()=>{ 
@@ -68,7 +68,7 @@ export default function BasicDemo() {
         let description = rowData.description;
         let shortline = description.substring(0, 10);
         let fullline = description.substring(15, description.length);
-        console.log("body is rendering");
+      
         return (
             <div id="Description">
               { description.length > 10? <p>  
@@ -92,7 +92,7 @@ export default function BasicDemo() {
     const getAllRoles = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);   
-            console.log("all roles" ,res.data.data)
+         
             if (res?.status === 200 || res?.status === 201) {     
                 
                     setAllRoles(res?.data?.data);         
@@ -100,7 +100,7 @@ export default function BasicDemo() {
                      }     
 
         } catch (error) {
-            console.error("Error fetching module data:", error?.response);
+           
         }
     };
     useEffect( () => {         

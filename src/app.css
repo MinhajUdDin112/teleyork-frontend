@@ -306,3 +306,12 @@ box-shadow: 2px;
   gap: 40px;
   align-items: center;
 }
+.custom-toast-container {
+  position: fixed;
+  top: 40px; /* Your custom top value */
+  right: 40px; /* Your custom right value */
+ width: 400px;
+}
+.dialoge-style{
+  padding-top: 30px;
+}

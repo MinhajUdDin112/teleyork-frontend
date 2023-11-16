@@ -36,6 +36,7 @@ const AllEnrollments = () => {
     const [globalFilterValue, setGlobalFilterValue] = useState("");
     const [dates, setDates] = useState(null);
     const [filteredDates, setFilteredDates] = useState(null);
+    const [selectedRow, setSelectedRow] = useState(null);
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -79,16 +80,16 @@ const AllEnrollments = () => {
     const filterByDate = (selectedDates) => {
         const filteredData = allEnrollments.filter((rowData) => {
             const enrollmentDate = rowData.DOB ? new Date(rowData.DOB.split("T")[0]) : null;
-    
+
             if (selectedDates && selectedDates.length === 2 && enrollmentDate) {
                 const startDate = new Date(selectedDates[0]);
                 const endDate = new Date(selectedDates[1]);
                 return enrollmentDate >= startDate && enrollmentDate <= endDate;
             }
-    
+
             return true;
         });
-    
+
         setFilteredDates(filteredData);
     };
 
@@ -101,7 +102,6 @@ const AllEnrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            console.log("error is", error?.response?.data?.msg);
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
@@ -176,10 +176,10 @@ const AllEnrollments = () => {
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/verifyEligibility?enrollmentId=${rowData?._id}`);
             if (response?.status == 200 || response?.status == 201) {
-                console.log("link is", response?.data?.data);
                 setLink(response?.data?.data?._links?.resolution?.href);
                 toast.warning(response?.data?.data?.status);
                 setisButtonLoading(false);
+                setSelectedRow(rowData);
             }
         } catch (error) {
             const status = error?.response?.status;
@@ -191,7 +191,6 @@ const AllEnrollments = () => {
                 const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
                 toast.error("Error is " + errorMessage);
             }
-
             setisButtonLoading(false);
         }
     };
@@ -226,34 +225,31 @@ const AllEnrollments = () => {
     };
 
     const HnadleAllApprove = async () => {
-       
         setisButtonLoading(true);
-        if(allEnrollments){
+        if (allEnrollments) {
             const enrollmentIds = allEnrollments.map((enrollment) => enrollment._id);
 
-        const dataToSend = {
-            approvedBy: parseLoginRes?._id,
-            enrolmentIds: enrollmentIds,
-            approved: true,
-        };
-        try {
-            const response = await Axios.patch(`${BASE_URL}/api/user/batchApproval`, dataToSend);
-            if (response?.status == "200" || response?.status == "201") {
-                toast.success("Approved");
+            const dataToSend = {
+                approvedBy: parseLoginRes?._id,
+                enrolmentIds: enrollmentIds,
+                approved: true,
+            };
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/batchApproval`, dataToSend);
+                if (response?.status == "200" || response?.status == "201") {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                    getAllEnrollments();
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
                 setisButtonLoading(false);
-                getAllEnrollments();
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
+            setisButtonLoading(false);
+        } else {
+            toast.error("No Enrollment Found");
             setisButtonLoading(false);
         }
-        setisButtonLoading(false);
-        }
-        else{
-            toast.error("No Enrollment Found")
-            setisButtonLoading(false);
-        }
-        
     };
 
     const actionTemplate = (rowData) => {
@@ -283,20 +279,18 @@ const AllEnrollments = () => {
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
-                {link ? (
+                {selectedRow === rowData && link ? (
                     <Button
                         label="Go To Link"
                         onClick={() => {
                             window.open(link, "_blank");
                         }}
-                        className=" mr-2 ml-2"
+                        className=" mr-2 ml-2 p-button-warning"
                         text
                         raised
                         disabled={isButtonLoading}
                     />
-                ) : (
-                    ""
-                )}
+                ) : null}
                 <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
@@ -322,7 +316,7 @@ const AllEnrollments = () => {
 
     return (
         <>
-            <ToastContainer />
+            <ToastContainer className="custom-toast-container" />
 
             <div className="card bg-pink-50">
                 <form>
@@ -341,7 +335,10 @@ const AllEnrollments = () => {
                 <div className="card mx-5 p-0 border-noround">
                     <div className="flex " style={{ padding: "10px" }}>
                         <div className="mt-2 ml-2">
-                            <h3> <strong>All Enrollments</strong>   </h3>   
+                            <h3>
+                                {" "}
+                                <strong>All Enrollments</strong>{" "}
+                            </h3>
                         </div>
 
                         <div className=" ml-auto flex">
@@ -358,16 +355,11 @@ const AllEnrollments = () => {
                             </div>
                             <div className="  flex flex-column">
                                 <div className="p-input-icon-left mb-3">
-                                <i className="pi pi-search" />
-                                <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
+                                    <i className="pi pi-search" />
+                                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
                                 </div>
-                               {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
-                                ""
-                            ) :<Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />}
-                                
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />}
                             </div>
-
-                          
                         </div>
                     </div>
                     <div>
@@ -378,6 +370,8 @@ const AllEnrollments = () => {
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
 
                             <Column header="Enrollment ID" field="enrollmentId"></Column>
+                            <Column header="Enrollment Type" body={(rowData) => (rowData.isSelfEnrollment ? "Self Enrollment" : "Enrollment")}></Column>
+
                             <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
                             <Column header="Address" field="address1"></Column>
                             <Column header="City" field="city"></Column>

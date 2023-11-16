@@ -15,7 +15,7 @@ const EditTemplate = (probs) => {
     let navigate=useNavigate()  
     const [stop,setstop]=useState(false)
     const [templateText, setTemplateText] = useState(probs.templatetoedit.template);  
-       console.log("sampleText is ",templateText)
+    
     const [subjectText, setSubjectText] = useState(probs.templatetoedit.notification_subject);
     const loginResponse = useSelector((state) => state.login);
     const loginData = loginResponse.loginData;
@@ -38,14 +38,14 @@ const EditTemplate = (probs) => {
         },
         validationSchema,
         onSubmit: (values, actions) => { 
-            console.log("inside template")
+           
             const name = templateText.match(/(?<=[^\$]\$\$)\w+/g) || [];
             const subject = subjectText.match(/(?<=\$\$)\w+/g) || [];   
             let keySequence;   
-            console.log(values.type)
+          
             if(values.type === 0){ 
                keySequence=["templateId", ...name,];   
-               console.log("it is 0")
+              
             }  
             else if(values.type === 1){ 
                keySequence = ["templateId", ...name, ...subject];
@@ -74,7 +74,7 @@ const EditTemplate = (probs) => {
 
                     navigate("/managetemplate")  
                  },1500)
-                console.log("updated successfully")
+              
              }).catch(err=>{ 
                 toast.current.show({ severity: "error", summary: "Info", detail: "Template Updated Failed" });
                  
@@ -90,7 +90,7 @@ const EditTemplate = (probs) => {
     };   
     useEffect(()=>{ 
          return ()=>{ 
-            console.log("return is calling")      
+             
             probs.setRefresh(prev=>prev+1)
             probs.setNavigateToEdit(false)
          }

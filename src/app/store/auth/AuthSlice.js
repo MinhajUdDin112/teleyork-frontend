@@ -25,7 +25,7 @@ const authSlice = createSlice({
             localStorage.setItem("refreshToken", JSON.stringify(action.payload.data.refreshToken));
             state.loginLoading = false;
             state.loginError = null;
-            // console.log(action.payload)
+          
         });
         builder.addCase(loginAction.rejected, (state, action) => {
             state.loginLoading = false;
