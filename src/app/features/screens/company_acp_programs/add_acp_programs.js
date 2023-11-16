@@ -42,20 +42,13 @@ export default function AddAcpProgram() {
     const [inputValue, setInputValue] = useState("");
     const [codeFIeldError, setCodeFieldError] = useState(false);
     const handleInputChange = (event) => {
-        if (event.target.value.length > 2) {
+        const regex = /^E\d+$/;
+        if (!regex.test(event.target.value)) {
+            setCodeFieldError(true);
         } else {
-            if (event.target.value.length === 2) {
-                const regex = /^[A-Z][0-9]$/;
-                if (!regex.test(event.target.value)) {
-                    setCodeFieldError(true);
-                } else {
-                    setCodeFieldError(false);
-                }
-                setInputValue(event.target.value);
-            } else {
-                setInputValue(event.target.value);
-            }
+            setCodeFieldError(false);
         }
+        setInputValue(event.target.value);
     };
     const formik = useFormik({
         initialValues: {
@@ -89,13 +82,8 @@ export default function AddAcpProgram() {
             code: inputValue,
             active: formik.values.active,
         };
-        const regex = /^[A-Z][0-9]$/;
-        if (regex.test(inputValue)) {
-            setCodeFieldError(false);
-        } else {
-            setCodeFieldError(true);
-        }
-        if (Object.keys(formik.errors).length === 0 && codeFIeldError === false) {
+        const regex = /^E\d+$/;
+        if (Object.keys(formik.errors).length === 0 && regex.test(inputValue)) {
             if (data.name !== "" && data.description !== "") {
                 
                 if (arrayofcode.includes(inputValue)) {
@@ -153,7 +141,13 @@ export default function AddAcpProgram() {
                 formik.errors.description = "Description is Required";
                 setShowError(true);
             }
-        } else {
+        } else {    
+            const regex = /^E\d+$/;
+             if(regex.test(inputValue)){ 
+                setCodeFieldError(false)  
+             }else{
+                setCodeFieldError(true)
+             }
             setShowError(true);
         }
     }

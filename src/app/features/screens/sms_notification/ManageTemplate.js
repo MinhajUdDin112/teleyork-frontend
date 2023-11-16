@@ -73,7 +73,8 @@ const ManageTemplate = () => {
                         handleEditTemplate();
                     }}
                     style={{ cursor: "pointer", marginLeft: "25px", fontSize: "17px", paddingLeft: "27px" }}
-                /> */}
+                />  
+                */}
                 <Button
                     style={{ marginLeft: "25px", fontWeight: "900", backgroundColor: "red", border: "none" }}
                     onClick={() => {

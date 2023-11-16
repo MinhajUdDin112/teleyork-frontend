@@ -112,9 +112,9 @@ export default function CancelOrderRequest() {
             <div className="mt-4 flex flex-wrap justify-content-center">
                 <Button label="Submit" />
             </div>     
-            <Card className="mt-8">
+            <div className=" card mt-4">
             <RenderOrderData/>   
-            </Card>
+            </div>
         </div>
     );
 }
