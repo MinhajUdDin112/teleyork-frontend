@@ -229,6 +229,22 @@ const AllEnrollments = () => {
             setisButtonLoading(false);
         }
     };
+    const transferUser = async (rowData) => {
+        setisButtonLoading(true);
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/user/transferUserNlad?enrollmentId=${rowData?._id}`);
+            if (response?.status == "200" || response?.status == "201") {
+                toast.success("Successfully Verify");
+                setisButtonLoading(false);
+            }
+        } catch (error) {
+            const body = error?.response?.data?.data?.body;
+
+            const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
+            toast.error("Error is " + errorMessage);
+            setisButtonLoading(false);
+        }
+    };
     const updateUser = async (rowData) => {
         setisButtonLoading(true);
         try {
@@ -314,6 +330,7 @@ const AllEnrollments = () => {
                 <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
     };
