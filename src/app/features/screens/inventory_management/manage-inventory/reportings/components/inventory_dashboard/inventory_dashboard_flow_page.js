@@ -8,7 +8,7 @@ import CDMAProvisionedStockReport from "./provisioned_stock/cdma_report";
 import SIMProvisionedStockReport from "./provisioned_stock/sim_report";
 export default function InventoryDashboard(){ 
     return ( 
-        <Card>
+        <Card className="pt-7">
         
              <h5 className="w-full card">Complete Stock Report </h5>   
               <div className="flex justify-content-around flex-wrap">    
