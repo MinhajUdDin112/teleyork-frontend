@@ -69,7 +69,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             lastName: "",
             suffix: "",
             SSN: "",
-            DOB: new Date(),
+            DOB: "",
             contact: "",
             drivingLicense: "",
             email: "",
@@ -254,10 +254,9 @@ useEffect(() => {
                             DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                         </label>
                         <Calendar
-    // ... other props
+     id="DOB"
+     
     onChange={(e) => {
-
-       
             const selectedDate = e.value;
             console.log('Selected Date:', selectedDate);
             const formattedDate = selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : '';
@@ -265,6 +264,8 @@ useEffect(() => {
             formik.setFieldValue("DOB", formattedDate);
 
     }}
+    onBlur={formik.handleBlur}
+    showIcon
 />
 
 
