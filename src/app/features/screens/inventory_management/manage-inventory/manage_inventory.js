@@ -85,7 +85,7 @@ const Manage_inventory = () => {
     };
 
     return (
-        <>
+        <Card>
             {activeComponent === "AddUnits" ? (
                 <AddUnits setActiveComponent={setActiveComponent} />
             ) : activeComponent === "UpdateInventory" ? (
@@ -112,7 +112,7 @@ const Manage_inventory = () => {
                 <Equipment_And_Accessories_Request setActiveComponent={setActiveComponent} />
             ) : (
                 <>
-                    <div className="card font-semibold" style={{ fontSize: "1.6rem", color: "grey", fontWeight: "bold" }}>
+                    <div className="card " style={{ fontSize: "17px", color: "grey",  }}>
                         Manage Inventory
                     </div>
                     <div className="flex justify-content-around flex-wrap pt-3">
@@ -151,7 +151,7 @@ const Manage_inventory = () => {
                     </div>
                 </>
             )}
-        </>
+        </Card>
     );
 };
 
