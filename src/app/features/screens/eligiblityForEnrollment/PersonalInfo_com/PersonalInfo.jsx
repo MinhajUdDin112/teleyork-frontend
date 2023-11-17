@@ -16,6 +16,7 @@ import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
+import moment from 'moment';
 
 const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
 
@@ -68,7 +69,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             lastName: "",
             suffix: "",
             SSN: "",
-            DOB: "",
+            DOB: new Date(),
             contact: "",
             drivingLicense: "",
             email: "",
@@ -252,7 +253,22 @@ useEffect(() => {
                         <label className="field_label">
                             DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                         </label>
-                        <Calendar id="DOB" value={formik.values.DOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid("DOB") }, "input_text")} />
+                        <Calendar
+    // ... other props
+    onChange={(e) => {
+
+       
+            const selectedDate = e.value;
+            console.log('Selected Date:', selectedDate);
+            const formattedDate = selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : '';
+            console.log("ios formet is",formattedDate)
+            formik.setFieldValue("DOB", formattedDate);
+
+    }}
+/>
+
+
+
                         {getFormErrorMessage("DOB")}
                     </div>
 

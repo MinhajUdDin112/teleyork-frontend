@@ -185,6 +185,7 @@ const RejectedEnrollments = () => {
                         <Column field="contact" header="Telephone Number" />
                         <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
                         <Column field="createdBy?.name" header="Created BY" />
+                        <Column field="reajectedReason" header="Rejected Reason" />
                         <Column field="status" header="Status" />
     
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
