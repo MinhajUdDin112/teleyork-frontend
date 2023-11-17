@@ -24,7 +24,7 @@ import BASE_URL from "../../../config";
 //         return response.data;
 
 //     } catch (error) {
-//         console.log(error);
+//      
 //         throw error;
 //     }
 // });
@@ -52,7 +52,7 @@ export const addTermsAction = createAsyncThunk("terms/Condition", async (body) =
         const response = await axios.post(`${BASE_URL}/api/user/termsAndConditions`, body);
         return response.data;
     } catch (error) {
-        console.log(error);
+        
         throw error;
     }
 });

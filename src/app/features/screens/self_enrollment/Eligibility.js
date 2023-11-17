@@ -6,10 +6,12 @@ import { useFormik } from "formik";
 import axios from "axios";
 import BASE_URL from "../../../../config";
 import { ToastContainer, toast } from "react-toastify";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const Eligibility = () => {
     const [acpProgram,setAcpProgram] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isButtonLoading, setIsButtonLoading] = useState(false)
     const {id}=useParams()
     const eligId = "64e0b1ab35a9428007da351c"
     const navigate = useNavigate();
@@ -89,9 +91,8 @@ const Eligibility = () => {
                     <div className="card flex p-8">
                         <div className="col-6">
                             <p className="text-2xl font-bold">Eligibility</p>
-                            <p className="mt-0 text-xl">Eligibility can be determined by your participation in a government program or by your income.</p>
-                            <p className="text-lg">If you are eligibile for a government program, you may be eligibile for a discount on your ACP service. If you are not eligibile for a government program you may still be eligibile for a discount based on your income.</p>
-                            <p>Additionally, you might qualify for ACP through another person, such as parent or guardian, your ACP service. This person is known as the Benefit Qualifying Person (BQP).</p>
+                            <p className="mt-0 text-xl">Eligibility can be determined by your participation in a government program or your income. If you are eligible for a government program, you may qualify for a discount on your ACP service.<br></br>If you are not eligible for a government program, you may still qualify for a discount based on your income.<br></br>Additionally, you might qualify for ACP through another person, such as a parent or guardian, who is known as the Benefit Qualifying Person (BQP) for your ACP service..</p>
+                           
                         </div>
                         <div className="col-6">
                             <form onSubmit ={formik.handleSubmit}>
@@ -102,7 +103,7 @@ const Eligibility = () => {
                                     {getFormErrorMessage("program")}
                                 </div>
                                 
-                                <Button label="Next" type="submit" className="mt-5" />
+                                <Button label="Next" icon={isLoading ? <ProgressSpinner strokeWidth="6" style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} /> : null} type='submit' className='mt-5'  disabled={isLoading}/>
                                 <Button label="Back" className="mt-3" onClick={handleBack} />
                             </div>
                             </form>

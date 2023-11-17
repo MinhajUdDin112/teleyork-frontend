@@ -7,6 +7,7 @@ import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import ClearDeviceReportFlowPage from "./app/features/screens/inventory_management/bulk_processes/clear_device_report/clear_esn_report_flow_page";
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
 import "primereact/resources/primereact.css";
@@ -72,6 +73,12 @@ import EditDepartment from "./app/features/screens/user_management/EditDepartmen
 import NotFound from "./app/features/screens/not_found/NotFound";
 import Tickets from "./app/features/screens/customer_services/Tickets";
 import OrderHistory from "./app/features/screens/customer_services/OrderHistory";
+import ClearEsnReportFlowPage from "./app/features/screens/inventory_management/bulk_processes/clear_esn_report/clear_esn_report_flow_page";
+import DeactivateMdnFlowPage from "./app/features/screens/inventory_management/bulk_processes/deactivate_mdn_report/clear_mdn_report_flow_page";
+import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/bulk_processes/swap_esn_report/swap_esn_report_flow_page";
+import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
+import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
+import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
 
 
 const App = () => {
@@ -290,6 +297,14 @@ const App = () => {
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
+                                <Route path="/bulkprocesses/bulk-clear-esn" element={<ClearEsnReportFlowPage />} />
+
+                                <Route path="/bulkprocesses/bulk-clear-device" element={<ClearDeviceReportFlowPage />} />
+                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={< DeactivateMdnFlowPage />} />
+                                <Route path="/bulkprocesses/bulk-swap-esn" element={< SwapEsnReportFlowPage />} />
+                                <Route path="/emei-drawer" element={<ImeiDrawer />} />
+                                <Route path="/esn-sim-drawer" element={<EsnSimDrawer />} />
+                                <Route path="/inventory-report" element={<InventoryReport />} />
                                 <Route path="/companyacpprograms" element={<AcpProgramsFlowPage />} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />

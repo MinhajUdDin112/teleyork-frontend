@@ -17,45 +17,38 @@ const PersonalInfo = () => {
     const { id } = useParams();
     const location = useLocation();
     const stateData = location.state;
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
 
-   const validationSchema = Yup.object().shape({
+    const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This field is required"),
-        
+
         lastName: Yup.string().required("This field is required"),
         SSN: Yup.string().required("This field is required"),
-       
+
         contact: Yup.string().required("This field is required"),
-        DOB: Yup.date()
-            .nullable()
-            .required("DOB is required")
-            .max(new Date(), "DOB cannot be in the future"),
+        DOB: Yup.date().nullable().required("DOB is required").max(new Date(), "DOB cannot be in the future"),
         BenifitFirstName: Yup.string().when("isDifferentPerson", {
             is: true,
-            then: ()=> Yup.string().required("This field is required"),
-            otherwise:()=> Yup.string().notRequired()
+            then: () => Yup.string().required("This field is required"),
+            otherwise: () => Yup.string().notRequired(),
         }),
-       
+
         BenifitLastName: Yup.string().when("isDifferentPerson", {
             is: true,
-            then:()=> Yup.string().required("This field is required"),
-            otherwise:()=> Yup.string().notRequired()
+            then: () => Yup.string().required("This field is required"),
+            otherwise: () => Yup.string().notRequired(),
         }),
         BenifitSSN: Yup.string().when("isDifferentPerson", {
             is: true,
-            then:()=> Yup.string().required("This field is required"),
-            otherwise:()=> Yup.string().notRequired()
+            then: () => Yup.string().required("This field is required"),
+            otherwise: () => Yup.string().notRequired(),
         }),
         BenifitDOB: Yup.date().when("isDifferentPerson", {
             is: true,
-            then:()=> Yup.date()
-                .nullable()
-                .required("This field is required")
-                .max(new Date(), "DOB cannot be in the future"),
-                otherwise:()=> Yup.string().notRequired()
+            then: () => Yup.date().nullable().required("This field is required").max(new Date(), "DOB cannot be in the future"),
+            otherwise: () => Yup.string().notRequired(),
         }),
     });
-    
 
     const formik = useFormik({
         validationSchema,
@@ -79,18 +72,15 @@ const PersonalInfo = () => {
                 userId: id,
                 ...values,
             };
-            setIsLoading(true)
-            if (formik.values.SSN === formik.values.BenifitSSN ||
-                (formik.values.firstName === formik.values.BenifitFirstName && formik.values.lastName === formik.values.BenifitLastName)) {
+            setIsLoading(true);
+            if (formik.values.SSN === formik.values.BenifitSSN || (formik.values.firstName === formik.values.BenifitFirstName && formik.values.lastName === formik.values.BenifitLastName)) {
                 toast.error("Information of the applicant and benefit qualifying person cannot be same");
                 setIsLoading(false);
-              }
-              else{
+            } else {
                 try {
-               
                     const res = await axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
                     if (res.status === 201 || res.status === 200) {
-                        console.log("fun is called in side  try")
+                      
                         // Save the response data in local storage
                         localStorage.setItem("initialInformation", JSON.stringify(res.data));
                         // Navigate to the next page
@@ -98,17 +88,15 @@ const PersonalInfo = () => {
                         setIsLoading(false);
                     }
                 } catch (error) {
-                    
                     toast.error(error?.response?.data?.msg);
-                    setIsLoading(false)
+                    setIsLoading(false);
                 }
             }
-           
         },
     });
 
     const options = [
-        { label: "Select", value: "" },
+        { label: "Suffix", value: "" },
         { label: "JR.", value: "JR." },
         { label: "SR.", value: "SR." },
         { label: "II", value: "II" },
@@ -142,7 +130,7 @@ const PersonalInfo = () => {
     }, []);
     return (
         <>
-        <ToastContainer/>
+            <ToastContainer />
             <div
                 style={{
                     display: "flex",
@@ -156,36 +144,38 @@ const PersonalInfo = () => {
                         <div className="card flex p-8">
                             <div className="col-6">
                                 <p className="text-2xl font-bold">Personal Information</p>
-                                <p className="mt-0 text-xl">To proceed, we require some personal information from you. Please provide the details exactly as they appear on your government-issued ID. If you have a middle name, kindly include it. If you do not have a middle name, you may leave that field blank.</p>
-                                
+                                <p className="mt-0 text-xl">
+                                    To proceed, we require some personal information from you. Please provide the details exactly as they appear on your government-issued ID.<br></br> If you have a middle name, kindly include it. If you do not have a middle name, you may leave that field blank.
+                                    <br></br>The Benefit Qualifying Person (BQP) is an individual, such as a parent or guardian, through whom another person qualifies for the program benefits. The BQP is typically the person responsible for meeting the eligibility criteria of the program
+                                </p>
                             </div>
                             <div className="col-6">
                                 <div className="flex flex-column">
-                                    <InputText className="mb-3" placeholder="First Name" name="firstName" value={formik.values.firstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{textTransform: 'uppercase'}} />
+                                    <InputText className="mb-3" placeholder="First Name" name="firstName" value={formik.values.firstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
                                     {getFormErrorMessage("firstName")}
-                                    <InputText className="mb-3" placeholder="Middle Name" name="middleName" value={formik.values.middleName} onChange={formik.handleChange} style={{textTransform: 'uppercase'}} />
+                                    <InputText className="mb-3" placeholder="Middle Name" name="middleName" value={formik.values.middleName} onChange={formik.handleChange} style={{ textTransform: "uppercase" }} />
 
-                                    <InputText className="mb-3" placeholder="Last Name" name="lastName" value={formik.values.lastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{textTransform: 'uppercase'}} />
+                                    <InputText className="mb-3" placeholder="Last Name" name="lastName" value={formik.values.lastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
                                     {getFormErrorMessage("lastName")}
+
                                     <Dropdown
-                                    className="mb-3"
+                                        className="mb-3"
                                         id="suffix"
-                                        options={options}
                                         value={formik.values.suffix}
                                         onChange={(e) => {
                                             formik.setFieldValue("suffix", e.value);
                                             formik.handleChange(e);
                                         }}
-                                        onBlur={formik.handleBlur}
-                                        placeholder="Select"
+                                        options={options}
+                                        placeholder="Suffix"
                                     />
 
                                     <InputText className="mb-3" placeholder="SSN(Last 4 Digit) " name="SSN" value={formik.values.SSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                     {getFormErrorMessage("SSN")}
                                     <Calendar className="mb-3" name="DOB" placeholder="mm/dd/yyyy" value={formik.values.DOB} onChange={formik.handleChange} showIcon />
                                     {getFormErrorMessage("DOB")}
-                                    <InputText className="mb-2" placeholder="Contact" onChange={formik.handleChange} id="contact" value={formik.values.contact} onBlur={formik.handleBlur}  minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} pattern="^(?!1|0|800|888|877|866|855|844|833).*$"/>
-                        {getFormErrorMessage("contact")}
+                                    <InputText className="mb-2" placeholder="Contact Phone" onChange={formik.handleChange} id="contact" value={formik.values.contact} onBlur={formik.handleBlur} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} pattern="^(?!1|0|800|888|877|866|855|844|833).*$" />
+                                    {getFormErrorMessage("contact")}
 
                                     <div className="mb-3 flex justify-content-center">
                                         <Checkbox inputId="binary" id="isDifferentPerson" name="isDifferentPerson" checked={formik.values.isDifferentPerson} onChange={formik.handleChange} />
@@ -196,12 +186,12 @@ const PersonalInfo = () => {
                                     <div>
                                         {formik.values.isDifferentPerson && (
                                             <div className="flex flex-column">
-                                                <InputText className="mb-3" placeholder="First Name" name="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{textTransform: 'uppercase'}} />
+                                                <InputText className="mb-3" placeholder="First Name" name="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
                                                 {getFormErrorMessage("BenifitFirstName")}
-                                                <InputText className="mb-3" placeholder="Middle Name" name="BenifitMiddleName" value={formik.values.BenifitMiddleName} onChange={formik.handleChange} style={{textTransform: 'uppercase'}}/>
-                                                <InputText className="mb-3" placeholder="Last Name" name="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{textTransform: 'uppercase'}} />
+                                                <InputText className="mb-3" placeholder="Middle Name" name="BenifitMiddleName" value={formik.values.BenifitMiddleName} onChange={formik.handleChange} style={{ textTransform: "uppercase" }} />
+                                                <InputText className="mb-3" placeholder="Last Name" name="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
                                                 {getFormErrorMessage("BenifitLastName")}
-                                                <InputText className="mb-3" placeholder="SSN(Last 4 Digit)" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4}/>
+                                                <InputText className="mb-3" placeholder="SSN(Last 4 Digit)" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                                 {getFormErrorMessage("BenifitSSN")}
 
                                                 <Calendar className="mb-3" placeholder="mm/dd/yyyy" name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />

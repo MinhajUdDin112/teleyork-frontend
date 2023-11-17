@@ -136,7 +136,7 @@ export default ViewPreviewData;
 //         setAllData(dataArray);
 //     }, []);
 
-// //console.log("all data is",allData)
+
 //     return (
 //         <div className="card bg-pink-50">
 //             <div className="card mx-5 p-0 border-noround">

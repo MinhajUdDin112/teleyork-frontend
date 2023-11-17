@@ -22,20 +22,17 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
 
     const [imgfile, setimgfile] = useState(null);
     function handleInputChange(event) {
-        if (event.target.value.length > 2) {
-        } else {
-            if (event.target.value.length === 2) {
-                const regex = /^[A-Z][0-9]$/;
+      
+          
+                const regex = /^E\d+$/;
                 if (!regex.test(event.target.value)) {
                     setCodeFieldError(true);
                 } else {
                     setCodeFieldError(false);
                 }
                 setInputValue(event.target.value);
-            } else {
-                setInputValue(event.target.value);
-            }
-        }
+          
+    
     }
     const [inputValue, setInputValue] = useState(selectedProgram.code);
     const [codeFIeldError, setCodeFieldError] = useState(false);
@@ -53,7 +50,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
         },
     });
     function handleUpdateAcp() {
-        console.log(formik.values);
+      
         let data = {
             serviceProvider: parseLoginRes?.compony,
             updatedBy: parseLoginRes?._id,
@@ -64,13 +61,9 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
             active: formik.values.active,
             code: inputValue,
         };
-        const regex = /^[A-Z][0-9]$/;
+        const regex = /^E\d+$/;
+           
         if (regex.test(inputValue)) {
-            setCodeFieldError(false);
-        } else {
-            setCodeFieldError(true);
-        }
-        if (!codeFIeldError) {
             if (arrayofupdatecode.includes(inputValue)) {
                 toast.current.show({ severity: "error", summary: "Info", detail: "Code Already Taken" });
             } else {
@@ -79,7 +72,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                         .then((res) => {   
                            
                             
-                            console.log("submit successfully", res.data);
+                           
                             toast.current.show({ severity: "success", summary: "Info", detail: "Updated Acp Program Successfully" });
                         })
                         .catch((err) => {
@@ -94,7 +87,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                             // Calculate the upload percentage
                             const percentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                             setImgUploadProgress(percentage);
-                            console.log(`Upload Progress: ${percentage}%`);
+                         
 
                             // You can use this percentage to update a progress bar or display the progress
                         },
@@ -107,7 +100,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                             data.banner = `http://dev-api.teleyork.com/banners/${imgfile.name}`;
                             Axios.patch(`${BASE_URL}/api/web/acpPrograms`, data)
                                 .then((res) => {
-                                    console.log("submit successfully", res.data);
+                                  
                                     toast.current.show({ severity: "success", summary: "Info", detail: "Updated Acp Program Successfully" });
                                 })
                                 .catch((err) => {
@@ -121,6 +114,9 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                         });
                 }
             }
+        } 
+        else{ 
+            setCodeFieldError(true)
         }
     }
     return (
@@ -172,7 +168,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                         <InputText ref={refForCode} type="text" value={inputValue} onChange={handleInputChange} name="code" />
                         {codeFIeldError ? (
                             <div className="error" style={{ marginTop: "22px", color: "red" }}>
-                                "Code Must be in Format A1,E1"
+                                "Code Must be in Format E1-E2222"
                             </div>
                         ) : undefined}
                     </div>
@@ -186,9 +182,9 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                 <Button
                     label={buttonText}
                     onClick={(e) => {
-                        console.log(e);
+                      
                         e.preventDefault();
-                        console.log("button clicked");
+                      
                         let create = document.createElement("input");
                         create.type = "file";
                         create.accept = "image/*";
@@ -200,7 +196,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
                             reader.onloadend = () => {
                                 formik.values.banner = reader.result;
                                 setimgsrc((previmgsrc) => reader.result);
-                                console.log(formik.values);
+                               
                             };
                         };
                         create.click();

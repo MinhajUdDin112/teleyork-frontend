@@ -14,14 +14,11 @@ export const loginAction = createAsyncThunk("auth/web/user/login", async (body, 
         const response = await axios.post(`${HostUrl}/api/web/user/login`, body);
 
         // Toasts({ success: response.data.msg });    
-        // console.log(response?.data?.data?.permissions)
-        const allowdPerms = response?.data?.data?.permissions
-        localStorage.setItem("permissions", JSON.stringify(allowdPerms))
-        console.log("login data ", response.data)
+
         return response.data;
     } catch (error) {
         // Toasts({ error: "Email and Password incorrect" });   
-        console.log(error)
+
         return rejectWithValue(error);
     }
 });

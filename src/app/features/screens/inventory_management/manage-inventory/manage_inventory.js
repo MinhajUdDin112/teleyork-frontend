@@ -9,13 +9,32 @@ import { useNavigate } from "react-router-dom";
 import AdjustmentFlowPage from "./adjustment/adjustment_flow_page";  
 import DropshipOrdersFlowPage from "../dropship_orders/dropship_orders_flow_page"; 
 import Untagged_MEID_DEVICEID from "./untagged_meid_deviceid/untagged_meid_deviceid.js";
+import ManagePhoneRequests from "./manage_phone_requests/manage_phone_requests_flow_page.js";  
+import ReturnMerchandise from "./return_merchandise/return_merchandise.js";
 import Equipment_And_Accessories_Request from "./equipment_and_accessories_request/equipment_and_accessories_request.js";
+import ReportingFlowPage from "./reportings/reportings_flow-page.js";
 let InventoryManagment = [
     {
         component: "AddUnits",
         title: "Add Units",
         imgsrc: "/images/Inventory Module.png",
-    },    
+    }, 
+    {
+        component: "Reportings",
+        title: "Reportings",
+        imgsrc: "/images/Inventory Module.png",
+    },     
+    { 
+        component: "ReturnMerchandise",
+        title: "Return Merchandise",
+        imgsrc: "/images/Inventory Module.png",
+          
+    }, 
+    {
+        component: "ManagePhoneRequests",
+        title: "Manage Phone Requests",
+        imgsrc: "/images/Inventory Module.png",
+    },       
     {
         component: "CreateAssignBox",
         title: "Create/Assign BOX",
@@ -66,18 +85,24 @@ const Manage_inventory = () => {
     };
 
     return (
-        <>
+        <Card>
             {activeComponent === "AddUnits" ? (
                 <AddUnits setActiveComponent={setActiveComponent} />
             ) : activeComponent === "UpdateInventory" ? (
                 <UpdateInventory setActiveComponent={setActiveComponent} />
+            ) : activeComponent === "ManagePhoneRequests" ? (
+                <ManagePhoneRequests setActiveComponent={setActiveComponent} />
             ) :activeComponent === "CreateAssignBox" ? (
                 <CreateAssignBox setActiveComponent={setActiveComponent} />
+            ) :activeComponent === "Reportings" ? (
+                <ReportingFlowPage setActiveComponent={setActiveComponent} />
             ) :activeComponent === "DropshipOrdersFlowPage" ? (
                 <DropshipOrdersFlowPage />
             ) : activeComponent === "ChangeESN_SIM" ? (
                 <ChangeESNSIMStatus setActiveComponent={setActiveComponent} />
-            ) : activeComponent === "Adjustment" ? (
+            ) : activeComponent === "ReturnMerchandise" ? (
+                <ReturnMerchandise setActiveComponent={setActiveComponent} />
+            ) :  activeComponent === "Adjustment" ? (
                 <AdjustmentFlowPage setActiveComponent={setActiveComponent} />
             ) : activeComponent === "InventoryDashboard" ? (
                 <InventoryDashboard setActiveComponent={setActiveComponent} />
@@ -87,7 +112,7 @@ const Manage_inventory = () => {
                 <Equipment_And_Accessories_Request setActiveComponent={setActiveComponent} />
             ) : (
                 <>
-                    <div className="card font-semibold" style={{ fontSize: "1.6rem", color: "grey", fontWeight: "bold" }}>
+                    <div className="card " style={{ fontSize: "17px", color: "grey",  }}>
                         Manage Inventory
                     </div>
                     <div className="flex justify-content-around flex-wrap pt-3">
@@ -126,7 +151,7 @@ const Manage_inventory = () => {
                     </div>
                 </>
             )}
-        </>
+        </Card>
     );
 };
 

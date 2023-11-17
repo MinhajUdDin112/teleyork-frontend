@@ -5,11 +5,7 @@ export const menuNavigation = [
                 label: "Dashboard",
                 icon: "pi pi-fw pi-home",
                 to: "/",
-            }
-        ],
-    },
-    {
-        items: [
+            },
             {
                 label: "Acp Programs",
                 icon: "pi pi-fw pi-dollar",
@@ -24,7 +20,7 @@ export const menuNavigation = [
                 icon: "pi pi-fw pi-bookmark",
                 items: [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
-                   // { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
+                    { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
@@ -58,8 +54,7 @@ export const menuNavigation = [
                         icon: "",
                         to: "orderhistory",
                     },
-                     
-                   
+
                     {
                         label: "Purchase history",
                         icon: "",
@@ -84,7 +79,7 @@ export const menuNavigation = [
                         label: "Payment Search Tool",
                         icon: "",
                         to: "/paymentsearchtool",
-                    },    
+                    },
                     {
                         label: "Deactivate ESN",
                         icon: "",
@@ -153,21 +148,63 @@ export const menuNavigation = [
                         label: "Manage Inventory",
                         icon: "",
                         to: "/manageinventory",
-                    },{ 
+                    },
+                    {
                         label: "Drop Ship Orders",
                         icon: "",
                         to: "/dropshiporders",
-                    }
-                ]
-            }
-        ]
+                    },
+                    {
+                        label: "EMEI Drawer",
+                        icon: "",
+                        to: "/emei-drawer",
+                    },
+                    {
+                        label: "ESN/SIM Drawer",
+                        icon: "",
+                        to: "/esn-sim-drawer",
+                    },
+                    {
+                        label: "Inventory Report",
+                        icon: "",
+                        to: "/inventory-report",
+                    },
+
+                    {
+                        label: "Bulk Processess",
+                        items: [
+                            {
+                                label: "Bulk Clear ESN",
+                                icon: "",
+                                to: "/bulkprocesses/bulk-clear-esn",
+                            },
+                            {
+                                label: "Bulk Clear Device",
+                                icon: "",
+                                to: "/bulkprocesses/bulk-clear-device",
+                            },
+                            {
+                                label: "Bulk Deactivate Mdn",
+                                icon: "",
+                                to: "/bulkprocesses/bulk-deactivate-mdn",
+                            },
+                            {
+                                label: "Bulk Swap ESn/SIM",
+                                icon: "",
+                                to: "/bulkprocesses/bulk-swap-esn",
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
     },
     {
         items: [
             {
                 label: "User Management",
                 items: [
-                    { 
+                    {
                         label: "Create Role",
                         to: "/createrole",
                     },
@@ -179,7 +216,6 @@ export const menuNavigation = [
                         label: "Manage Roles and Rights",
                         to: "/managerolesandrights",
                     },
-
 
                     {
                         label: "Manage Department",
@@ -194,7 +230,6 @@ export const menuNavigation = [
             {
                 label: "Notifications",
                 items: [
-
                     {
                         label: "Create Template",
                         to: "/createtemplate",

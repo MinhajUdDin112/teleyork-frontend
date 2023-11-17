@@ -14,7 +14,7 @@ const CreateTemplate = () => {
     const dispatch = useDispatch();    
     const [firstTimeLoading,setFirstTimeLoading]=useState(true)  
     const [templateText, setTemplateText] = useState("");  
-    console.log("templatetext is",templateText)
+   
     const [subjectText, setSubjectText] = useState("");
     
     const { addTemplateLoading,addTemplate,addTemplateError } = useSelector((state) => state.notification);
@@ -65,7 +65,7 @@ const CreateTemplate = () => {
                 keySequence: [...keySequence],
             };  
             
-           console.log("data to send is",dataToSend)
+          
             dispatch(addTemplateAction(dataToSend));     
             setFirstTimeLoading(prev=>!prev)
             actions.resetForm();

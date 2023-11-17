@@ -22,7 +22,7 @@ const [isLoading, setIsLoading] = useState(false)
         ESNSIM:"",
      },
      onSubmit: async (values, actions) => {
-        console.log("function is calling outside")    
+         
         const dataToSend = { ...values };
         setIsLoading(true);
         try {

@@ -73,7 +73,7 @@ const Sent = () => {
     let template = rowData.template;
     let shortline = template.substring(0, 10);
     let fullline = template.substring(15, template.length);
-    console.log("body is rendering");
+   
     return (
         <div id="template">
         {template.length > 10 ?<p>
