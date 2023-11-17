@@ -16,6 +16,7 @@ import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
+import moment from 'moment';
 
 const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
 
@@ -86,6 +87,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
            
             const userId = _id;
             const dataToSend = { csr:csr, userId, ...values };
+            console.log("data to send is",dataToSend)
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
@@ -251,7 +253,23 @@ useEffect(() => {
                         <label className="field_label">
                             DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                         </label>
-                        <Calendar id="DOB" value={formik.values.DOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid("DOB") }, "input_text")} />
+                        <Calendar
+     id="DOB"
+     
+    onChange={(e) => {
+            const selectedDate = e.value;
+            console.log('Selected Date:', selectedDate);
+            const formattedDate = selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : '';
+            console.log("ios formet is",formattedDate)
+            formik.setFieldValue("DOB", formattedDate);
+
+    }}
+    onBlur={formik.handleBlur}
+    showIcon
+/>
+
+
+
                         {getFormErrorMessage("DOB")}
                     </div>
 
