@@ -65,6 +65,10 @@ const parseprogramedata = JSON.parse(programedata);
  const zipdata= localStorage.getItem("zipData");
  const parseZipData = JSON.parse(zipdata);
 
+//get personal info  data from local storage 
+ const basicResponse = localStorage.getItem("basicData");
+ 
+
     const handleAcpSelection = (acpId) => {      
             if (selectedAcpProgramId === acpId) {
                 setSelectedAcpProgramId(null);
@@ -84,11 +88,12 @@ const parseprogramedata = JSON.parse(programedata);
 useEffect(() => {
     
     if(parseprogramedata){
-        if(zipdata){
+        if(zipdata ){
             setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram); 
         }
         else{
             setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram?._id);    
+            
         }
        
     }

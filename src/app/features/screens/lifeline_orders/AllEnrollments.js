@@ -176,8 +176,20 @@ const AllEnrollments = () => {
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/verifyEligibility?enrollmentId=${rowData?._id}`);
             if (response?.status == 200 || response?.status == 201) {
-                setLink(response?.data?.data?._links?.resolution?.href);
-                toast.warning(response?.data?.data?.status);
+                const link1 = response?.data?.data?._links?.certification?.href;
+                const link2 = response?.data?.data?._links?.resolution?.href;
+                if (link1) {
+                    setLink(link1);
+                } else {
+                    setLink(link2);
+                }
+                const respMsg = response?.data?.data?.status;
+
+                if (respMsg.includes("complete") || respMsg.includes("COMPLETE") || respMsg.includes("Complete")) {
+                    toast.success(response?.data?.data?.status);
+                } else {
+                    toast.warning(response?.data?.data?.status);
+                }
                 setisButtonLoading(false);
                 setSelectedRow(rowData);
             }
@@ -187,9 +199,15 @@ const AllEnrollments = () => {
             if (status === 500) {
                 toast.error(error?.response?.data?.data?.message);
             } else {
-                const body = error?.response?.data?.data?.body;
-                const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
-                toast.error("Error is " + errorMessage);
+                const error1 = error?.response?.data?.data?.body;
+                const error2 = error?.response?.data?.data?.errors[0]?.description;
+                const errorMessage1 = Array.isArray(error1) ? error1.toString() : error1 && typeof error1 === "object" ? JSON.stringify(error1) : error1;
+                const errorMessage2 = Array.isArray(error2) ? error2.toString() : error2 && typeof error2 === "object" ? JSON.stringify(error2) : error2;
+                if (errorMessage1) {
+                    toast.error("Error is " + errorMessage1);
+                } else {
+                    toast.error("Error is " + errorMessage2);
+                }
             }
             setisButtonLoading(false);
         }
@@ -219,7 +237,8 @@ const AllEnrollments = () => {
                 setisButtonLoading(false);
             }
         } catch (error) {
-            toast.error(error?.response?.data);
+            toast.error(`error is ${error?.response?.data?.data?.body[0]}`);
+            console.log(error?.response?.data?.data?.body)
             setisButtonLoading(false);
         }
     };
@@ -365,7 +384,7 @@ const AllEnrollments = () => {
                     <div>
                         {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
 
-                        <DataTable value={filteredDates || allEnrollments} stripedRows resizableColumns expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} paginator rows={10} rowsPerPageOptions={[25, 50]} globalFilter={globalFilterValue}>
+                        <DataTable value={filteredDates || allEnrollments}  stripedRows resizableColumns expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} paginator rows={10} rowsPerPageOptions={[25, 50]} globalFilter={globalFilterValue}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
 
@@ -379,8 +398,50 @@ const AllEnrollments = () => {
                             <Column header="Zip" field="zip" />
                             <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
                             <Column field="contact" header="Contact" />
-                            <Column field="createdBy?.name" header="Created BY" />
-                            <Column field="status" header="Status" />
+                            <Column field="createdAt" header="Created At"
+                                body={(rowData) =>
+                                    new Date(rowData.createdAt).toLocaleDateString('en-US', {
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        year: 'numeric',
+                                    }).replace(/\//g, '-')
+                                }
+                            />
+                            <Column field="createdBy.name" header="Created BY" />
+                            <Column
+    field="level"
+    header="Status"
+    body={(rowData) => {
+        if (Array.isArray(rowData.level) && rowData.level.length > 0) {
+            const statusArray = rowData.level.map((level) => {
+                switch (level) {
+                    case 1:
+                        return 'CSR';
+                    case 2:
+                        return 'Team Lead';
+                    case 3:
+                        return 'QA Agent';
+                    case 4:
+                        return 'QA Manager';
+                    case 5:
+                        return 'Provision Manager';
+                    case 6:
+                        return 'Retention';
+                    case 7:
+                        return 'Dispatch Manager';
+                    default:
+                        return '';
+                }
+            });
+
+            return statusArray.join(', '); // Join multiple statuses into a string
+        } else {
+            return ''; // Handle the case when "level" is not an array or is empty
+        }
+    }}
+/>
+
+
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                 ""

@@ -86,6 +86,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
            
             const userId = _id;
             const dataToSend = { csr:csr, userId, ...values };
+            console.log("data to send is",dataToSend)
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
