@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
-import ReactPaginate from "react-paginate";
 import { Column } from "primereact/column";
 import BASE_URL from "../../../../config";
 import Axios from "axios";
@@ -17,7 +15,7 @@ import DialogForActivateSim from "./DialogForActivateSim";
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "./DialogeForRemarks";
-import { Calendar } from "primereact/calendar";
+import DialogeForTransferUser from "./DialogeForTransferUser";
 
 const AllEnrollments = () => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -37,6 +35,7 @@ const AllEnrollments = () => {
     const [dates, setDates] = useState(null);
     const [filteredDates, setFilteredDates] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
+    const [dialogeForTransfer, setDialogeForTransfer] = useState(false)
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -230,20 +229,8 @@ const AllEnrollments = () => {
         }
     };
     const transferUser = async (rowData) => {
-        setisButtonLoading(true);
-        try {
-            const response = await Axios.post(`${BASE_URL}/api/user/transferUserNlad?enrollmentId=${rowData?._id}`);
-            if (response?.status == "200" || response?.status == "201") {
-                toast.success("Successfully Verify");
-                setisButtonLoading(false);
-            }
-        } catch (error) {
-            const body = error?.response?.data?.data?.body;
-
-            const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
-            toast.error("Error is " + errorMessage);
-            setisButtonLoading(false);
-        }
+       
+        setDialogeForTransfer(true);
     };
     const updateUser = async (rowData) => {
         setisButtonLoading(true);
@@ -364,8 +351,13 @@ const AllEnrollments = () => {
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
                         <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
                     </Dialog>
+
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "40vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
                         <DialogeForRemarks />
+                    </Dialog>
+
+                    <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
+                        <DialogeForTransferUser enrollmentId={isEnrolmentId}  />
                     </Dialog>
                 </form>
 
@@ -390,12 +382,12 @@ const AllEnrollments = () => {
                     style={{ width: "23rem" }}
                 /> */}
                             </div>
-                            <div className="  flex flex-column">
-                                <div className="p-input-icon-left mb-3">
+                            <div className="  flex ">
+                                <div className="p-input-icon-left mt-2">
                                     <i className="pi pi-search" />
-                                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
+                                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by Name, Id or Date(MM-DD-YYYY) " className="w-25rem" />
                                 </div>
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />}
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />}
                             </div>
                         </div>
                     </div>
