@@ -13,7 +13,6 @@ import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-
 const CreateUser = () => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
@@ -21,12 +20,13 @@ const CreateUser = () => {
     const [allUser, setAllUser] = useState([]);
     const [allState, setAllState] = useState([]);
     const [allCity, setAllCity] = useState([]);
+    const [checkDeprt, setCheckDeprt] = useState("");
 
     const navigate = useNavigate();
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes); 
+    const parseLoginRes = JSON.parse(loginRes);
 
     // Validation Schema
     const validationSchema = Yup.object().shape({
@@ -42,6 +42,7 @@ const CreateUser = () => {
         zip: Yup.string().required("This field is required."),
         reportingTo: Yup.string().required("This field is required."),
         department: Yup.string().required("This field is required."),
+        // repId: Yup.string().required("This field is required."),
     });
 
     const formik = useFormik({
@@ -59,6 +60,7 @@ const CreateUser = () => {
             zip: "",
             reportingTo: "",
             department: "",
+            repId: "",
         },
         onSubmit: async (values) => {
             // Prepare the data to send to the server
@@ -77,19 +79,22 @@ const CreateUser = () => {
                 address2: values.address2,
                 zip: values.zip,
                 state: values.state,
+                repId: values.repId,
             };
 
             // Send the data to the server using Axios POST request
             Axios.post(`${BASE_URL}/api/web/user`, data)
                 .then((response) => {
-                   toast.success("successfully Added. Please Check Your Email For Password")
+                    toast.success("successfully Added. Please Check Your Email For Password");
                 })
-                .catch((error) => {     
-                   toast.error("Error:", error?.response?.data?.msg);
+                .catch((error) => {
+                    toast.error("Error:", error?.response?.data?.msg);
                 });
             navigate("/manage-user");
         },
     });
+    console.log("department value is", formik.values.department);
+    console.log("state is", checkDeprt);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
@@ -108,72 +113,66 @@ const CreateUser = () => {
     }, []);
 
     useEffect(() => {
-        if(formik.values.department){
-           
-        const getRoles = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);     
-                setAllRoles(res?.data?.data || []);
-            } catch (error) {
-                toast.error(`Error fetching roles : ${error?.response?.data?.msg}`);
-            }
-        };
-        getRoles();
-    }
-   
-    }, [formik.values.department])
-   
-       
+        if (formik.values.department) {
+            const getRoles = async () => {
+                try {
+                    const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
+                    setAllRoles(res?.data?.data || []);
+                } catch (error) {
+                    toast.error(`Error fetching roles : ${error?.response?.data?.msg}`);
+                }
+            };
+            getRoles();
+        }
+    }, [formik.values.department]);
+
     useEffect(() => {
-        if(formik.values.role){
-            const roleId= formik.values.role;
-        const getReportingTo = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/web/user/getReportingTo?roleId=${roleId}`);
-              setAllReporting(res?.data?.result || []);
-            } catch (error) {
-                toast.error(`Error fetching users : ${error?.response?.data?.msg}`);
-            }
-        };
-        getReportingTo();
-    } 
-    }, [formik.values.role])
+        if (formik.values.role) {
+            const roleId = formik.values.role;
+            const getReportingTo = async () => {
+                try {
+                    const res = await Axios.get(`${BASE_URL}/api/web/user/getReportingTo?roleId=${roleId}`);
+                    setAllReporting(res?.data?.result || []);
+                } catch (error) {
+                    toast.error(`Error fetching users : ${error?.response?.data?.msg}`);
+                }
+            };
+            getReportingTo();
+        }
+    }, [formik.values.role]);
 
-
-    useEffect(() => {    
+    useEffect(() => {
         const getStates = async () => {
             try {
-               
-                const res = await Axios.get(`${BASE_URL}/api/zipCode/getAllStates`);       
-              setAllState(res?.data?.data || []);
+                const res = await Axios.get(`${BASE_URL}/api/zipCode/getAllStates`);
+                setAllState(res?.data?.data || []);
             } catch (error) {
-               
                 toast.error(`Error fetching States : ${error?.response?.data?.msg}`);
-            }             
-    }  
-    getStates();
-    }, [])
+            }
+        };
+        getStates();
+    }, []);
 
-    useEffect(() => {    
-        if(formik.values.state){
-            const selectedState= formik.values.state;
+    useEffect(() => {
+        if (formik.values.state) {
+            const selectedState = formik.values.state;
             const getCities = async () => {
                 try {
-                        const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);       
+                    const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);
                     setAllCity(res?.data?.data || []);
-                } catch (error) {               
+                } catch (error) {
                     toast.error(`Error fetching States : ${error?.response?.data?.msg}`);
-                }             
-        }  
-        getCities();      
-    }
-    }, [formik.values.state])
+                }
+            };
+            getCities();
+        }
+    }, [formik.values.state]);
 
+   
 
-    
     return (
         <>
-        <ToastContainer/>
+            <ToastContainer />
             <div className="card">
                 <h3 className="mt-1 ">Add User</h3>
             </div>
@@ -181,65 +180,79 @@ const CreateUser = () => {
                 <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid mb-3">
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Name <span className="steric">*</span></label>
+                            <label className="Label__Text">
+                                Name <span className="steric">*</span>
+                            </label>
                             <InputText id="name" value={formik.values.name} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
                             {getFormErrorMessage("name")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Department <span className="steric">*</span></label>
+                            <label className="Label__Text">
+                                Department <span className="steric">*</span>
+                            </label>
                             <Dropdown
-                                id="department"
-                                options={allDepartment}
-                                value={formik.values.department}
-                                onChange={(e) => formik.setFieldValue("department", e.value)}
-                                optionLabel="department"
-                                optionValue="_id"
-                                filter
-                                showClear
-                                filterBy="department" // Set the property to be used for filtering
-                            />
+    id="department"
+    options={allDepartment}
+    value={formik.values.department}
+    onChange={(e) => {
+        const selectedDepartment = allDepartment.find(dep => dep._id === e.value);
+        formik.setFieldValue("department", e.value);
+        setCheckDeprt(selectedDepartment?.department || ''); // Use optional chaining to handle potential null or undefined
+    }}
+    optionValue="_id"
+    optionLabel="department"
+    filter
+    showClear
+    filterBy="department"
+/>
+
+
                             {getFormErrorMessage("department")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Role <span className="steric">*</span></label>
-                            <Dropdown id="role" 
-                            options={allRoles} 
-                            value={formik.values.role} 
-                            onChange={formik.handleChange} 
-                            optionLabel="role" 
-                            optionValue="_id" 
-                            showClear
-                            filter 
-                            filterBy="role" />
-                            
+                            <label className="Label__Text">
+                                Role <span className="steric">*</span>
+                            </label>
+                            <Dropdown id="role" options={allRoles} value={formik.values.role} onChange={formik.handleChange} optionLabel="role" optionValue="_id" showClear filter filterBy="role" />
                             {getFormErrorMessage("role")}
                         </div>
+                        {checkDeprt == "Provision Manager" || checkDeprt == "PROVISION MANAGER" ? (
+                            <div className="p-field col-12 md:col-3">
+                                <label className="Label__Text">
+                                    Rep Id <span className="steric">*</span>
+                                </label>
+                                <InputText id="repId" value={formik.values.repId} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
+                                {getFormErrorMessage("repId")}
+                            </div>
+                        ) : (
+                            ""
+                        )}
 
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Reporting To <span className="steric">*</span></label>
-                            <Dropdown id="reportingTo" 
-                            options={allReporting} 
-                            value={formik.values.reportingTo} 
-                            onChange={(e) => formik.setFieldValue("reportingTo", e.value)} 
-                            optionLabel="name" 
-                            optionValue="_id"  
-                            showClear
-                             filter 
-                             filterBy="name" />
+                            <label className="Label__Text">
+                                Reporting To <span className="steric">*</span>
+                            </label>
+                            <Dropdown id="reportingTo" options={allReporting} value={formik.values.reportingTo} onChange={(e) => formik.setFieldValue("reportingTo", e.value)} optionLabel="name" optionValue="_id" showClear filter filterBy="name" />
                             {getFormErrorMessage("reportingTo")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Contact <span className="steric">*</span></label>
-                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}/>
+                            <label className="Label__Text">
+                                Contact <span className="steric">*</span>
+                            </label>
+                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} />
                             {getFormErrorMessage("mobile")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Email <span className="steric">*</span></label>
+                            <label className="Label__Text">
+                                Email <span className="steric">*</span>
+                            </label>
                             <InputText id="email" value={formik.values.email} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
                             {getFormErrorMessage("email")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Address1 <span className="steric">*</span></label>
+                            <label className="Label__Text">
+                                Address1 <span className="steric">*</span>
+                            </label>
                             <InputText id="address1" value={formik.values.address1} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                             {getFormErrorMessage("address1")}
                         </div>
@@ -247,44 +260,27 @@ const CreateUser = () => {
                             <label className="Label__Text">Address2</label>
                             <InputText id="address2" value={formik.values.address2} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                         </div>
-                        
+
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Select State<span className="steric">*</span></label>
-                            <Dropdown id="state" 
-                            options={allState} 
-                            value={formik.values.state} 
-                            onChange={(e) => formik.setFieldValue("state", e.value)} 
-                            optionLabel="state" 
-                            optionValue="state"  
-                            showClear
-                             filter 
-                             filterBy="state" />
+                            <label className="Label__Text">
+                                Select State<span className="steric">*</span>
+                            </label>
+                            <Dropdown id="state" options={allState} value={formik.values.state} onChange={(e) => formik.setFieldValue("state", e.value)} optionLabel="state" optionValue="state" showClear filter filterBy="state" />
                             {getFormErrorMessage("state")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Select City<span className="steric">*</span></label>
-                            <Dropdown id="city" 
-                            options={allCity} 
-                            value={formik.values.city} 
-                            onChange={(e) => formik.setFieldValue("city", e.value)} 
-                            optionLabel="city" 
-                            optionValue="_id"  
-                            showClear
-                             filter 
-                             filterBy="city" />
+                            <label className="Label__Text">
+                                Select City<span className="steric">*</span>
+                            </label>
+                            <Dropdown id="city" options={allCity} value={formik.values.city} onChange={(e) => formik.setFieldValue("city", e.value)} optionLabel="city" optionValue="_id" showClear filter filterBy="city" />
                             {getFormErrorMessage("city")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Zip <span className="steric">*</span></label>
-                            <InputText
-                                id="zip"
-                                value={formik.values.zip}
-                                onChange={formik.handleChange}
-                                keyfilter={/^\d{0,5}$/}
-                                minLength={5}
-                                maxLength={5}
-                            />
+                            <label className="Label__Text">
+                                Zip <span className="steric">*</span>
+                            </label>
+                            <InputText id="zip" value={formik.values.zip} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
                             {getFormErrorMessage("zip")}
                         </div>
                     </div>
