@@ -35,7 +35,8 @@ const AllEnrollments = () => {
     const [dates, setDates] = useState(null);
     const [filteredDates, setFilteredDates] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
-    const [dialogeForTransfer, setDialogeForTransfer] = useState(false)
+    const [dialogeForTransfer, setDialogeForTransfer] = useState(false);
+    const [selectedRows, setSelectedRows] = useState([]);
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -200,7 +201,7 @@ const AllEnrollments = () => {
             } else {
                 const error1 = error?.response?.data?.data?.body;
                 const error2 = error?.response?.data?.data?.errors[0]?.description;
-                console.log("error 2 is",error2)
+                console.log("error 2 is", error2);
                 const errorMessage1 = Array.isArray(error1) ? error1.toString() : error1 && typeof error1 === "object" ? JSON.stringify(error1) : error1;
                 const errorMessage2 = Array.isArray(error2) ? error2.toString() : error2 && typeof error2 === "object" ? JSON.stringify(error2) : error2;
                 if (errorMessage1) {
@@ -229,7 +230,6 @@ const AllEnrollments = () => {
         }
     };
     const transferUser = async (rowData) => {
-       
         setDialogeForTransfer(true);
     };
     const updateUser = async (rowData) => {
@@ -242,7 +242,7 @@ const AllEnrollments = () => {
             }
         } catch (error) {
             toast.error(`error is ${error?.response?.data?.data?.body[0]}`);
-            console.log(error?.response?.data?.data?.body)
+            console.log(error?.response?.data?.data?.body);
             setisButtonLoading(false);
         }
     };
@@ -251,6 +251,34 @@ const AllEnrollments = () => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = allEnrollments.map((enrollment) => enrollment._id);
+
+            const dataToSend = {
+                approvedBy: parseLoginRes?._id,
+                enrolmentIds: enrollmentIds,
+                approved: true,
+            };
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/batchApproval`, dataToSend);
+                if (response?.status == "200" || response?.status == "201") {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                    getAllEnrollments();
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setisButtonLoading(false);
+            }
+            setisButtonLoading(false);
+        } else {
+            toast.error("No Enrollment Found");
+            setisButtonLoading(false);
+        }
+    };
+
+    const handleApproveSelected = async () => {
+        setisButtonLoading(true);
+        if (allEnrollments) {
+            const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
 
             const dataToSend = {
                 approvedBy: parseLoginRes?._id,
@@ -352,17 +380,17 @@ const AllEnrollments = () => {
                         <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
                     </Dialog>
 
-                    <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "40vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
+                    <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
                         <DialogeForRemarks />
                     </Dialog>
 
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
-                        <DialogeForTransferUser enrollmentId={isEnrolmentId}  />
+                        <DialogeForTransferUser enrollmentId={isEnrolmentId} />
                     </Dialog>
                 </form>
 
                 <div className="card mx-5 p-0 border-noround">
-                    <div className="flex " style={{ padding: "10px" }}>
+                    <div className="flex mb-4 " style={{ padding: "10px" }}>
                         <div className="mt-2 ml-2">
                             <h3>
                                 {" "}
@@ -388,16 +416,30 @@ const AllEnrollments = () => {
                                     <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by Name, Id or Date(MM-DD-YYYY) " className="w-25rem" />
                                 </div>
                                 {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />}
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />}
                             </div>
                         </div>
                     </div>
                     <div>
                         {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
 
-                        <DataTable value={filteredDates || allEnrollments}  stripedRows resizableColumns expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} paginator rows={10} rowsPerPageOptions={[25, 50]} globalFilter={globalFilterValue}>
+                        <DataTable
+                            value={filteredDates || allEnrollments}
+                            selection={selectedRows}
+                            onSelectionChange={(e) => setSelectedRows(e.value)}
+                            size="small"
+                            stripedRows
+                            resizableColumns
+                            expandedRows={expandedRows}
+                            onRowToggle={(e) => setExpandedRows(e.data)}
+                            paginator
+                            rows={10}
+                            rowsPerPageOptions={[25, 50]}
+                            globalFilter={globalFilterValue}
+                        >
                             {/* <Column expander style={{ width: "3em" }} /> */}
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
-
+                            <Column selectionMode="multiple" style={{ width: "3em" }} />
                             <Column header="Enrollment ID" field="enrollmentId"></Column>
                             <Column header="Enrollment Type" body={(rowData) => (rowData.isSelfEnrollment ? "Self Enrollment" : "Enrollment")}></Column>
 
@@ -408,50 +450,52 @@ const AllEnrollments = () => {
                             <Column header="Zip" field="zip" />
                             <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
                             <Column field="contact" header="Contact" />
-                            <Column field="createdAt" header="Created At"
+                            <Column
+                                field="createdAt"
+                                header="Created At"
                                 body={(rowData) =>
-                                    new Date(rowData.createdAt).toLocaleDateString('en-US', {
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        year: 'numeric',
-                                    }).replace(/\//g, '-')
+                                    new Date(rowData.createdAt)
+                                        .toLocaleDateString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })
+                                        .replace(/\//g, "-")
                                 }
                             />
                             <Column field="createdBy.name" header="Created BY" />
                             <Column
-    field="level"
-    header="Status"
-    body={(rowData) => {
-        if (Array.isArray(rowData.level) && rowData.level.length > 0) {
-            const statusArray = rowData.level.map((level) => {
-                switch (level) {
-                    case 1:
-                        return 'CSR';
-                    case 2:
-                        return 'Team Lead';
-                    case 3:
-                        return 'QA Agent';
-                    case 4:
-                        return 'QA Manager';
-                    case 5:
-                        return 'Provision Manager';
-                    case 6:
-                        return 'Retention';
-                    case 7:
-                        return 'Dispatch Manager';
-                    default:
-                        return '';
-                }
-            });
+                                field="level"
+                                header="Status"
+                                body={(rowData) => {
+                                    if (Array.isArray(rowData.level) && rowData.level.length > 0) {
+                                        const statusArray = rowData.level.map((level) => {
+                                            switch (level) {
+                                                case 1:
+                                                    return "CSR";
+                                                case 2:
+                                                    return "Team Lead";
+                                                case 3:
+                                                    return "QA Agent";
+                                                case 4:
+                                                    return "QA Manager";
+                                                case 5:
+                                                    return "Provision Manager";
+                                                case 6:
+                                                    return "Retention";
+                                                case 7:
+                                                    return "Dispatch Manager";
+                                                default:
+                                                    return "";
+                                            }
+                                        });
 
-            return statusArray.join(', '); // Join multiple statuses into a string
-        } else {
-            return ''; // Handle the case when "level" is not an array or is empty
-        }
-    }}
-/>
-
-
+                                        return statusArray.join(", "); // Join multiple statuses into a string
+                                    } else {
+                                        return ""; // Handle the case when "level" is not an array or is empty
+                                    }
+                                }}
+                            />
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                 ""

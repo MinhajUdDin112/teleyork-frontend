@@ -301,10 +301,13 @@ box-shadow: 2px;
 .enroll{
   margin-left: -9px;
 }
-.margn{
-  margin-bottom: 30px;
-  gap: 40px;
-  align-items: center;
+.mrgn{
+  margin-left: 955px;
+  gap: 30px;
+  
+}
+.gap{
+  gap: 20px;
 }
 .custom-toast-container {
  width: 500px;
