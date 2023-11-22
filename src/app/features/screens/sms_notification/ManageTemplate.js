@@ -39,6 +39,7 @@ const ManageTemplate = () => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const userId = parseLoginRes?._id;
+    
     function confirmDeleteTemplate() {
         Axios.delete(`${BASE_URL}/api/sms/delete?templateId=${deleteTemplateId}`)
             .then(() => {

@@ -27,7 +27,13 @@ const ShowDraftAll = () => {
     
   
     const { loginData } = useSelector((state) => state.login);
-    const companyId = loginData?.compony
+
+    // Get id  from login response
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+
+
+    const companyId = parseLoginRes?.compony
         
        
     useEffect(() => {
@@ -57,9 +63,9 @@ const ShowDraftAll = () => {
     };
     const handleSubmit = () => {
         let body = {
-            userId: loginData?._id,
+            userId: parseLoginRes?._id,
             templateId: id,
-            company: loginData?.compony,
+            company: parseLoginRes?.compony,
         };
         dispatch(submitTemplateAction(body));
     };

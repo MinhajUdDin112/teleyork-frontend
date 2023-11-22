@@ -306,8 +306,24 @@ box-shadow: 2px;
   gap: 30px;
   
 }
+.mrgnn{
+  margin-left: 950px;
+  gap: 30px;
+  
+}
+.mrgnnn{
+  margin-left: 870px;
+  gap: 10px;
+  
+}
 .gap{
   gap: 20px;
+}
+.gapp{
+  gap: 40px;
+}
+.buttn{
+  margin-top: 150px;
 }
 .custom-toast-container {
  width: 500px;
