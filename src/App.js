@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
+import ShippingQueue from "./app/features/screens/inventory_management/shipping_queue/shipping_queue";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
-import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page"
+import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page";
 import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
@@ -45,6 +46,7 @@ import DeactivatEsn from "./app/features/screens/customer_services/DeactivatEsn"
 import EligibilityProofUpload from "./app/features/screens/customer_services/EligibilityProofUpload";
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
 import PurchaseHistory from "./app/features/screens/customer_services/PurchaseHistory";
+import CustomerHistory from "./app/features/screens/customer_services/CustomerHistory";
 import SmsNotification from "./app/features/screens/sms_notification/Upload";
 import Upload from "./app/features/screens/sms_notification/Upload";
 import Sent from "./app/features/screens/sms_notification/Sent";
@@ -80,7 +82,7 @@ import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
 import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
-
+import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -215,10 +217,11 @@ const App = () => {
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
     useEffect(() => {
+        const url = window.location.hash;
 
-        const url = window.location.hash
-
-        if (url.startsWith('#/selfenrollment')) { return }
+        if (url.startsWith("#/selfenrollment")) {
+            return;
+        }
         if (token) {
             if (protectedRoute === false) {
                 navigate("/");
@@ -299,11 +302,13 @@ const App = () => {
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="/bulkprocesses/bulk-clear-esn" element={<ClearEsnReportFlowPage />} />
-
+                                <Route path="/shipping-queues" element={<ShippingQueue />} />
                                 <Route path="/bulkprocesses/bulk-clear-device" element={<ClearDeviceReportFlowPage />} />
-                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={< DeactivateMdnFlowPage />} />
-                                <Route path="/bulkprocesses/bulk-swap-esn" element={< SwapEsnReportFlowPage />} />
+                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={<DeactivateMdnFlowPage />} />
+                                <Route path="/bulkprocesses/bulk-swap-esn" element={<SwapEsnReportFlowPage />} />
                                 <Route path="/emei-drawer" element={<ImeiDrawer />} />
+                                <Route path="/manage-model" element={<ManageModelFlowPage />} />
+
                                 <Route path="/esn-sim-drawer" element={<EsnSimDrawer />} />
                                 <Route path="/inventory-report" element={<InventoryReport />} />
                                 <Route path="/companyacpprograms" element={<AcpProgramsFlowPage />} />
@@ -327,6 +332,7 @@ const App = () => {
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
                                 <Route path="/purchasehistory" element={<PurchaseHistory />} />
+                                <Route path="/customerhistory" element={<CustomerHistory />} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
                                 <Route path="/deactivateesn" element={<DeactivatEsn />} />
                                 <Route path="/tickets" element={<Tickets />} />
@@ -378,7 +384,6 @@ const App = () => {
                     <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
                     <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
                     <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
-
                 </Routes>
             )
             }
