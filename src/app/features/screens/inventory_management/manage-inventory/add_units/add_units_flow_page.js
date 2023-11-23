@@ -17,7 +17,7 @@ import CDMABulkUploadAddProvision from "./add_units_components/cdma_bulk_upload/
 import CDMABulkUploadAddActivateProvision from "./add_units_components/cdma_bulk_upload/addactivate_provision.js";
 import CDMABulkUploadReprovision from "./add_units_components/cdma_bulk_upload/reprovision.js";
 import CDMABulkUploadAddPreActivatedProvision from "./add_units_components/cdma_bulk_upload/add_preactivated_provision.js";
-import SIMSingleUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_singleupload/add_and_assign_non_activate_provision.js";
+import {SIMSingleUploadAddAndAssignNonActivateProvision} from "./add_units_components/sim_singleupload/add_and_assign_non_activate_provision.js";
 import SIMSingleUploadAddActivateProvision from "./add_units_components/sim_singleupload/addactivate_provision.js";
 import SIMSingleUploadAddPreActivatedProvision from "./add_units_components/sim_singleupload/add_preactivated_provision.js";
 import CDMASingleUploadAddProvision from "./add_units_components/cdma_single_upload/add_stock_provision.js";
@@ -25,7 +25,8 @@ import CDMASingleUploadAddActivateProvision from "./add_units_components/cdma_si
 import CDMASingleUploadAddAndAssignNonActivateProvision from "./add_units_components/cdma_single_upload/add_and_assign_non_activate_provision.js";
 import CDMASingleUploadAddPreActivatedProvision from "./add_units_components/cdma_single_upload/add_preactivated_provision.js";
 import CDMASingleUploadReprovision from "./add_units_components/cdma_single_upload/reprovision.js";
-const AddUnits = ({ setActiveComponent }) => {
+const AddUnits = ({ setActiveComponent }) => {           
+    console.log("calling")
     const validationSchema = Yup.object().shape({
         unitType: Yup.string().required("please select"),
         uploadType: Yup.string().required("please select type "),
@@ -39,7 +40,7 @@ const AddUnits = ({ setActiveComponent }) => {
         },
         validationSchema: validationSchema,
         onSubmit: (values, actions) => {
-            actions.resetForm();
+           
         },
     });
     return (
@@ -60,20 +61,20 @@ const AddUnits = ({ setActiveComponent }) => {
                         <p className="m-0">
                             Unit Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.unit} options={unit} onChange={(e) => formik.setFieldValue("unit", e.value)} placeholder="Select an option" className="w-21rem" />
+                        <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Upload Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.upload} options={type} onChange={(e) => formik.setFieldValue("upload", e.value)} placeholder="Select an option" className="w-21rem" />
+                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
                     </div>
                     {formik.values.unit !== "GSM" ? (
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Provision Type <span style={{ color: "red" }}>*</span>
                             </p>
-                            <Dropdown value={formik.values.provision} options={formik.values.unit === "SIM" ?simprovision:provision} onChange={(e) => formik.setFieldValue("provision", e.value)} placeholder="Select an option" className="w-20rem" />
+                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ?simprovision:provision} onChange={formik.handleChange} placeholder="Select an option" className="w-20rem" />
                         </div>
                     ) : undefined}
                 </div>
