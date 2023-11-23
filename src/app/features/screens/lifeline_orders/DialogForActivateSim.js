@@ -63,8 +63,7 @@ useEffect(() => {
      
   const getESN = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/esn/all`);
-         
+          const res = await Axios.get(`${BASE_URL}/api/web/esnInventory/available?serviceProvider=64e0b1ab35a9428007da351c`);   
           setAllESN(res?.data?.data || []);
           
       } catch (error) {
@@ -100,7 +99,7 @@ const getFormErrorMessage = (name) => {
 
   return (
     <>
-    <ToastContainer/>
+   
     <form onSubmit={formik.handleSubmit}>
     <div className="flex formgrid grid mt-1  ">
     <div className="field col-12 md:col-4">

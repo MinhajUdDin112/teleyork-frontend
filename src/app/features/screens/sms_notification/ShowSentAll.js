@@ -40,11 +40,15 @@ const ShowSentAll = () => {
     const navigate = useNavigate();
 
     const { loginData } = useSelector((state) => state.login);
-    const companyId = loginData?.compony
+
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+
+    const companyId = parseLoginRes?.compony
 
     useEffect(() => {
         let body = {
-            userId: loginData?._id,
+            userId: parseLoginRes?._id,
             templateId: id,
             company: companyId,
         };

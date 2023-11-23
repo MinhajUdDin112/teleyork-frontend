@@ -29,7 +29,7 @@ export default function ClearMdn({ setPage }) {
                 </h4>
 
                 <div className="card" style={{ width: "28em", marginBottom: "20px", marginTop: "33px" }}>
-                    <h6> Type - 1 </h6>
+                    <h6> Type - 1 </h6>             
                     <h6>Disconnect Reason</h6>
                     <Dropdown className="w-full" options={disconnectreasons} placeholder="Select An Option" value={formik.values.disconnectreason} onChange={(e)=>{ formik.setFieldValue("disconnectreason",e.value)}}/>  
                     <h6>Vcare Disconnect</h6>

@@ -301,16 +301,32 @@ box-shadow: 2px;
 .enroll{
   margin-left: -9px;
 }
-.margn{
-  margin-bottom: 30px;
+.mrgn{
+  margin-left: 955px;
+  gap: 30px;
+  
+}
+.mrgnn{
+  margin-left: 950px;
+  gap: 30px;
+  
+}
+.mrgnnn{
+  margin-left: 870px;
+  gap: 10px;
+  
+}
+.gap{
+  gap: 20px;
+}
+.gapp{
   gap: 40px;
-  align-items: center;
+}
+.buttn{
+  margin-top: 150px;
 }
 .custom-toast-container {
-  position: fixed;
-  top: 40px; /* Your custom top value */
-  right: 40px; /* Your custom right value */
- width: 400px;
+ width: 500px;
 }
 .dialoge-style{
   padding-top: 30px;

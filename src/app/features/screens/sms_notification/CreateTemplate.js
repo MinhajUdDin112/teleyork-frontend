@@ -19,6 +19,10 @@ const CreateTemplate = () => {
     
     const { addTemplateLoading,addTemplate,addTemplateError } = useSelector((state) => state.notification);
     const loginResponse = useSelector((state) => state.login);
+
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    
     const loginData = loginResponse.loginData;
     const companyId = loginData?.compony;
 
@@ -28,8 +32,7 @@ const CreateTemplate = () => {
         { label: "Both", value: 2 },
     ];
 
-    const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
+    
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Template Name is required"),

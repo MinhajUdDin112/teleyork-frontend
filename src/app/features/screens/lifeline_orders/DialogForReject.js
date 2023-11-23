@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { SelectButton } from "primereact/selectbutton";
 import { Checkbox } from "primereact/checkbox";
+import { ListBox } from 'primereact/listbox';
 
 const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
     const [allRoles, setAllRoles] = useState([]);
@@ -105,7 +106,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
                         </div>
                     )}
 
-                    <div className="p-fluid p-formgrid grid m-2 mt-3">
+                    <div className="p-fluid p-formgrid grid m-2 mt-5">
                         <h4>Or</h4>
                     </div>
 
@@ -124,7 +125,8 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
                         />
                     </div>
 {
-    formik.values.department ?  <div className="p-field col-12 md:col-3">
+    formik.values.department ? 
+     <div className="p-field col-12 md:col-3">
     <label className="Label__Text ml-3">Select User </label>
     {allRoles.map((item) => (
         <div key={item._id} className="p-field-checkbox m-1  ml-3">
@@ -138,11 +140,14 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
                     formik.setFieldValue("assignees", updatedAssignee);
                 }}
             />
+          
             <label htmlFor={item._id} className="p-checkbox-label ml-1">
                 {item.name}
             </label>
         </div>
     ))}
+
+
 </div>
  :  ""
 }</div>
@@ -151,7 +156,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
                     <h4>
                         Reject Reason <span className="steric"> *</span>
                     </h4>
-                    <textarea id="reason" value={formik.values.reason} onChange={formik.handleChange} cols={70} rows={10} className="p-2" />
+                    <textarea id="reason" value={formik.values.reason} onChange={formik.handleChange} cols={60} rows={9} className="p-2" />
                     {getFormErrorMessage("reason")}
                 </div>
 

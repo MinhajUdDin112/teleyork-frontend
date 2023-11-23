@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
-import ReactPaginate from "react-paginate";
 import { Column } from "primereact/column";
 import BASE_URL from "../../../../config";
 import Axios from "axios";
@@ -17,7 +15,7 @@ import DialogForActivateSim from "./DialogForActivateSim";
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "./DialogeForRemarks";
-import { Calendar } from "primereact/calendar";
+import DialogeForTransferUser from "./DialogeForTransferUser";
 
 const AllEnrollments = () => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -37,6 +35,8 @@ const AllEnrollments = () => {
     const [dates, setDates] = useState(null);
     const [filteredDates, setFilteredDates] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
+    const [dialogeForTransfer, setDialogeForTransfer] = useState(false);
+    const [selectedRows, setSelectedRows] = useState([]);
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -176,8 +176,20 @@ const AllEnrollments = () => {
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/verifyEligibility?enrollmentId=${rowData?._id}`);
             if (response?.status == 200 || response?.status == 201) {
-                setLink(response?.data?.data?._links?.resolution?.href);
-                toast.warning(response?.data?.data?.status);
+                const link1 = response?.data?.data?._links?.certification?.href;
+                const link2 = response?.data?.data?._links?.resolution?.href;
+                if (link1) {
+                    setLink(link1);
+                } else {
+                    setLink(link2);
+                }
+                const respMsg = response?.data?.data?.status;
+
+                if (respMsg.includes("complete") || respMsg.includes("COMPLETE") || respMsg.includes("Complete")) {
+                    toast.success(response?.data?.data?.status);
+                } else {
+                    toast.warning(response?.data?.data?.status);
+                }
                 setisButtonLoading(false);
                 setSelectedRow(rowData);
             }
@@ -187,9 +199,16 @@ const AllEnrollments = () => {
             if (status === 500) {
                 toast.error(error?.response?.data?.data?.message);
             } else {
-                const body = error?.response?.data?.data?.body;
-                const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
-                toast.error("Error is " + errorMessage);
+                const error1 = error?.response?.data?.data?.body;
+                const error2 = error?.response?.data?.data?.errors[0]?.description;
+                console.log("error 2 is", error2);
+                const errorMessage1 = Array.isArray(error1) ? error1.toString() : error1 && typeof error1 === "object" ? JSON.stringify(error1) : error1;
+                const errorMessage2 = Array.isArray(error2) ? error2.toString() : error2 && typeof error2 === "object" ? JSON.stringify(error2) : error2;
+                if (errorMessage1) {
+                    toast.error("Error is " + errorMessage1);
+                } else {
+                    toast.error("Error is " + errorMessage2);
+                }
             }
             setisButtonLoading(false);
         }
@@ -210,6 +229,9 @@ const AllEnrollments = () => {
             setisButtonLoading(false);
         }
     };
+    const transferUser = async (rowData) => {
+        setDialogeForTransfer(true);
+    };
     const updateUser = async (rowData) => {
         setisButtonLoading(true);
         try {
@@ -219,7 +241,8 @@ const AllEnrollments = () => {
                 setisButtonLoading(false);
             }
         } catch (error) {
-            toast.error(error?.response?.data);
+            toast.error(`error is ${error?.response?.data?.data?.body[0]}`);
+            console.log(error?.response?.data?.data?.body);
             setisButtonLoading(false);
         }
     };
@@ -228,6 +251,34 @@ const AllEnrollments = () => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = allEnrollments.map((enrollment) => enrollment._id);
+
+            const dataToSend = {
+                approvedBy: parseLoginRes?._id,
+                enrolmentIds: enrollmentIds,
+                approved: true,
+            };
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/batchApproval`, dataToSend);
+                if (response?.status == "200" || response?.status == "201") {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                    getAllEnrollments();
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setisButtonLoading(false);
+            }
+            setisButtonLoading(false);
+        } else {
+            toast.error("No Enrollment Found");
+            setisButtonLoading(false);
+        }
+    };
+
+    const handleApproveSelected = async () => {
+        setisButtonLoading(true);
+        if (allEnrollments) {
+            const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
 
             const dataToSend = {
                 approvedBy: parseLoginRes?._id,
@@ -294,6 +345,7 @@ const AllEnrollments = () => {
                 <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
                 <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -327,13 +379,18 @@ const AllEnrollments = () => {
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
                         <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
                     </Dialog>
-                    <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "40vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
+
+                    <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
                         <DialogeForRemarks />
+                    </Dialog>
+
+                    <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
+                        <DialogeForTransferUser enrollmentId={isEnrolmentId} />
                     </Dialog>
                 </form>
 
                 <div className="card mx-5 p-0 border-noround">
-                    <div className="flex " style={{ padding: "10px" }}>
+                    <div className="flex mb-4 " style={{ padding: "10px" }}>
                         <div className="mt-2 ml-2">
                             <h3>
                                 {" "}
@@ -353,22 +410,36 @@ const AllEnrollments = () => {
                     style={{ width: "23rem" }}
                 /> */}
                             </div>
-                            <div className="  flex flex-column">
-                                <div className="p-input-icon-left mb-3">
+                            <div className="  flex ">
+                                <div className="p-input-icon-left mt-2">
                                     <i className="pi pi-search" />
-                                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
+                                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by Name, Id or Date(MM-DD-YYYY) " className="w-25rem" />
                                 </div>
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />}
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />}
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />}
                             </div>
                         </div>
                     </div>
                     <div>
                         {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
 
-                        <DataTable value={filteredDates || allEnrollments} stripedRows resizableColumns expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} paginator rows={10} rowsPerPageOptions={[25, 50]} globalFilter={globalFilterValue}>
+                        <DataTable
+                            value={filteredDates || allEnrollments}
+                            selection={selectedRows}
+                            onSelectionChange={(e) => setSelectedRows(e.value)}
+                            size="small"
+                            stripedRows
+                            resizableColumns
+                            expandedRows={expandedRows}
+                            onRowToggle={(e) => setExpandedRows(e.data)}
+                            paginator
+                            rows={10}
+                            rowsPerPageOptions={[25, 50]}
+                            globalFilter={globalFilterValue}
+                        >
                             {/* <Column expander style={{ width: "3em" }} /> */}
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
-
+                            <Column selectionMode="multiple" style={{ width: "3em" }} />
                             <Column header="Enrollment ID" field="enrollmentId"></Column>
                             <Column header="Enrollment Type" body={(rowData) => (rowData.isSelfEnrollment ? "Self Enrollment" : "Enrollment")}></Column>
 
@@ -379,8 +450,52 @@ const AllEnrollments = () => {
                             <Column header="Zip" field="zip" />
                             <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
                             <Column field="contact" header="Contact" />
-                            <Column field="createdBy?.name" header="Created BY" />
-                            <Column field="status" header="Status" />
+                            <Column
+                                field="createdAt"
+                                header="Created At"
+                                body={(rowData) =>
+                                    new Date(rowData.createdAt)
+                                        .toLocaleDateString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })
+                                        .replace(/\//g, "-")
+                                }
+                            />
+                            <Column field="createdBy.name" header="Created BY" />
+                            <Column
+                                field="level"
+                                header="Status"
+                                body={(rowData) => {
+                                    if (Array.isArray(rowData.level) && rowData.level.length > 0) {
+                                        const statusArray = rowData.level.map((level) => {
+                                            switch (level) {
+                                                case 1:
+                                                    return "CSR";
+                                                case 2:
+                                                    return "Team Lead";
+                                                case 3:
+                                                    return "QA Agent";
+                                                case 4:
+                                                    return "QA Manager";
+                                                case 5:
+                                                    return "Provision Manager";
+                                                case 6:
+                                                    return "Retention";
+                                                case 7:
+                                                    return "Dispatch Manager";
+                                                default:
+                                                    return "";
+                                            }
+                                        });
+
+                                        return statusArray.join(", "); // Join multiple statuses into a string
+                                    } else {
+                                        return ""; // Handle the case when "level" is not an array or is empty
+                                    }
+                                }}
+                            />
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                 ""

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -16,6 +16,7 @@ import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
+import moment from "moment/moment";
 
 const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
 
@@ -25,6 +26,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
     const [isHouseHold, setIsHouseHold] = useState(false);
     const [acp, setAcp] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmit, setIsSubmit] = useState()
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This is Required"),
@@ -83,9 +85,34 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             isACP: acp,
         },
         onSubmit: async (values, actions) => {
-           
+            const selectedDate = formik.values.DOB;   
+            const formattedDate = selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : '';
             const userId = _id;
-            const dataToSend = { csr:csr, userId, ...values };
+       
+            const dataToSend = { 
+                csr:csr,
+                userId: userId,
+                firstName: formik.values.firstName,
+                middleName:  formik.values.middleName,
+                lastName:  formik.values.lastName,
+                suffix:  formik.values.suffix,
+                SSN:  formik.values.SSN,
+                DOB: formattedDate,
+                contact:  formik.values.contact,
+                drivingLicense:  formik.values.drivingLicense,
+                email:  formik.values.email,
+                ESim:  formik.values.ESim,
+                bestWayToReach:  formik.values.bestWayToReach,
+                isSelfReceive:  formik.values.isSelfReceive,
+                BenifitFirstName:  formik.values.BenifitFirstName,
+                BenifitMiddleName: formik.values.BenifitMiddleName,
+                BenifitLastName:  formik.values.BenifitLastName,
+                BenifitSSN:  formik.values.BenifitSSN,
+                BenifitDOB:  formik.values.BenifitDOB,
+                isACP: acp,
+
+             };
+            console.log("data to send is",dataToSend)
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
@@ -104,6 +131,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
     }, [eSim]);
+
     useEffect(() => {
         formik.setFieldValue("bestWayToReach", selectedOption);
     }, [selectedOption]);
@@ -179,16 +207,17 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
             setAcp(parsebasicResponse?.data?.isACP);
-            setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive);
-            
-          
+            setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive); 
         }
     }, []);
+
 useEffect(() => {
    if(!isSelfReceive){
     setIsHouseHold(true)
    }
 }, [isSelfReceive])
+
+
     return (
         <>
             <ToastContainer />

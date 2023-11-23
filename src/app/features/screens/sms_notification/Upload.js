@@ -16,9 +16,13 @@ const Upload = () => {
 
     const [allTemps, setAllTemps] = useState([])
 
-    const { loginData } = useSelector((state) => state.login);
+    // Get id   from login response
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
 
-    const userId = loginData?._id
+    const userId = parseLoginRes?._id
+   
+   
 
     const handleFileUpload = (event) => {
         const file = event.files[0]; // Get the selected file
