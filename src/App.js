@@ -46,6 +46,7 @@ import DeactivatEsn from "./app/features/screens/customer_services/DeactivatEsn"
 import EligibilityProofUpload from "./app/features/screens/customer_services/EligibilityProofUpload";
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
 import PurchaseHistory from "./app/features/screens/customer_services/PurchaseHistory";
+import CustomerHistory from "./app/features/screens/customer_services/CustomerHistory";
 import SmsNotification from "./app/features/screens/sms_notification/Upload";
 import Upload from "./app/features/screens/sms_notification/Upload";
 import Sent from "./app/features/screens/sms_notification/Sent";
@@ -279,6 +280,7 @@ const App = () => {
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
                                 <Route path="/purchasehistory" element={<PurchaseHistory />} />
+                                <Route path="/customerhistory" element={<CustomerHistory/>} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
                                 <Route path="/deactivateesn" element={<DeactivatEsn />} />
                                 <Route path="/tickets" element={<Tickets />} />
