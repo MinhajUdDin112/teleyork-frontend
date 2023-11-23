@@ -6,7 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { RadioButton } from "primereact/radiobutton";
 import { company, usergrouptype,status} from "../../../assets";
 import { Button } from "primereact/button";
-export default function AddAgentDetail({AgentName}){   
+export default function AddAgentDetail({agent}){   
     const [pictureoptionyes,setPictureOptionYes]=useState(false)  
     const [pictureoptionno,setPictureOptionNo]=useState(true)  
     const [otpoptionyes,setOtpOptionYes]=useState(false)  
@@ -44,7 +44,7 @@ export default function AddAgentDetail({AgentName}){
         return (
             <>
                 <div>
-                       <h5 className="card">Add {AgentName.charAt(0).toUpperCase() + AgentName.slice(1)} Detail</h5>
+                       <h5 className="card">Add {agent.charAt(0).toUpperCase() + agent.slice(1)} Detail</h5>
                     <div className="flex flex-wrap mb-3 justify-content-around ">
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">

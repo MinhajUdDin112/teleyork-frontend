@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
+import ShippingQueue from "./app/features/screens/inventory_management/shipping_queue/shipping_queue";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -17,12 +18,12 @@ import "prismjs/themes/prism-coy.css";
 import "./assets/demo/flags/flags.css";
 import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
-import "./App.scss";  
-import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page" 
+import "./App.scss";
+import AcpProgramsFlowPage from "./app/features/screens/company_acp_programs/acp_programs_flow_page";
 import ServiceAvailablityPage from "./app/features/screens/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./app/features/screens/eligiblityForEnrollment/pages/enrollment_flow_page";
 import InvoicePage from "./app/features/screens/billing_and_invoices/pages/InvoicePage";
-import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";  
+import AllEnrollments from "./app/features/screens/lifeline_orders/AllEnrollments";
 import ManageRolesAndRights from "./app/features/screens/roles_and_permissions/ManageRolesAndRights";
 import Manage_inventory from "./app/features/screens/inventory_management/manage-inventory/manage_inventory";
 import CompletedEnrollments from "./app/features/screens/lifeline_orders/CompletedEnrollments";
@@ -79,8 +80,7 @@ import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/b
 import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
-
-
+import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
@@ -213,12 +213,12 @@ const App = () => {
     let token = JSON.parse(localStorage.getItem("accessToken"));
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
 
-    useEffect(() => {    
-       
-        const url=window.location.hash
-       
-        if(url.startsWith('#/selfenrollment'))
-        {return}
+    useEffect(() => {
+        const url = window.location.hash;
+
+        if (url.startsWith("#/selfenrollment")) {
+            return;
+        }
         if (token) {
             if (protectedRoute === false) {
                 navigate("/");
@@ -247,19 +247,21 @@ const App = () => {
                         <div className="layout-main">
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
-                                <Route path="/" element={<Dashboard />} />  
-                                <Route path="/bulkprocesses/bulk-clear-esn" element={<ClearEsnReportFlowPage />} />    
-                                   
+                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/bulkprocesses/bulk-clear-esn" element={<ClearEsnReportFlowPage />} />
+                                 <Route path="/shipping-queues" element={<ShippingQueue/>}/>
                                 <Route path="/bulkprocesses/bulk-clear-device" element={<ClearDeviceReportFlowPage />} />
-                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={< DeactivateMdnFlowPage/>} />
-                                <Route path="/bulkprocesses/bulk-swap-esn" element={< SwapEsnReportFlowPage/>} />
-                                <Route path="/emei-drawer" element={<ImeiDrawer/>} />  
-                                <Route path="/esn-sim-drawer" element={<EsnSimDrawer/>} />  
-                                <Route path="/inventory-report" element={<InventoryReport/>} />
-                                <Route path="/companyacpprograms" element={<AcpProgramsFlowPage/>} />
+                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={<DeactivateMdnFlowPage />} />
+                                <Route path="/bulkprocesses/bulk-swap-esn" element={<SwapEsnReportFlowPage />} />
+                                <Route path="/emei-drawer" element={<ImeiDrawer />} />
+                                <Route path="/manage-model" element={<ManageModelFlowPage />} />
+
+                                <Route path="/esn-sim-drawer" element={<EsnSimDrawer />} />
+                                <Route path="/inventory-report" element={<InventoryReport />} />
+                                <Route path="/companyacpprograms" element={<AcpProgramsFlowPage />} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
                                 <Route path="/enrollment" element={<EnrollmentFlowPage />} />
-                                <Route path="/managerolesandrights/*" element={<ManageRolesAndRights/>} />
+                                <Route path="/managerolesandrights/*" element={<ManageRolesAndRights />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
@@ -295,10 +297,10 @@ const App = () => {
                                 <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
                                 <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
                                 <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
-                                <Route path="/createtemplate" element={<CreateTemplate />} />  
+                                <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate/*" element={<ManageTemplate />} />
-                                <Route path="/createrole" element={<CreateRole />} />  
-                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage/>}/>
+                                <Route path="/createrole" element={<CreateRole />} />
+                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage />} />
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />
@@ -322,12 +324,11 @@ const App = () => {
                 <Routes>
                     <Route path="/login" element={<LoginScreen />} />
                     <Route path="/selfenrollment" element={<VerifyZip />} />
-                                <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
-                                <Route path="/selfenrollment/address/:id" element={<Address />} />
-                                <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
-                                <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
-                                <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
-                                
+                    <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
+                    <Route path="/selfenrollment/address/:id" element={<Address />} />
+                    <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
+                    <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
+                    <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                 </Routes>
             )}
         </>
