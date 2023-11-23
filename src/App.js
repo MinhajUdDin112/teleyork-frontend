@@ -79,6 +79,7 @@ import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/b
 import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
+import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
 
 
 const App = () => {
@@ -354,6 +355,7 @@ const App = () => {
                                 <Route path="/manage-department" element={<Manage_Department />} />
                                 <Route path="/edit-department" element={<EditDepartment />} />
                                 <Route path="/create-department" element={<CreateDepartment />} />
+                                <Route path="/customer-profile" element={<CustomerProfile />} />
                             </Routes>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>

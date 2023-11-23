@@ -15,7 +15,7 @@ const BillingNavbar = () => {
             icon: "pi pi-fw pi-plus",
         },
         {
-            label: "Discount Credit; $ 0.00",
+            label: "Discount Credit: $ 0.00",
             icon: "pi pi-fw pi-plus",
         },
         {
@@ -29,7 +29,7 @@ const BillingNavbar = () => {
     ];
     return (
         <>
-            <Menubar model={items} className="border-noround text-sm mx-0 bg-white  mx-0 p-2" />
+            <Menubar model={items} className="border-noround text-sm mx-0 bg-white mx-0 p-2" />
         </>
     );
 };
