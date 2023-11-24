@@ -18,7 +18,7 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const repId = parseLoginRes?.repId;
-    console.log("rep id is", parseLoginRes);
+    console.log("enrollment id is",enrollmentId)
 
     // Validation Schema
     const validationSchema = Yup.object().shape({
@@ -38,7 +38,7 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
             };
             setisButtonLoading(true);
             try {
-                const response = await Axios.post(`${BASE_URL}/api/user/transferUserNlad?enrollmentId`, data);
+                const response = await Axios.post(`${BASE_URL}/api/user/transferUserNlad`, data);
                 if (response?.status == "200" || response?.status == "201") {
                     toast.success("Successfully Verify");
                     setisButtonLoading(false);

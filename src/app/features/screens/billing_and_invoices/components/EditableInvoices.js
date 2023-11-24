@@ -11,9 +11,9 @@ const EditabaleInvoices = ({ setPaymentModal }) => {
                     <Button icon="pi pi-fw pi-pencil" label="Detailed Transaction (PC464)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" />
                     <Button icon="pi pi-fw pi-pencil" label="OCS Purchase (PC465)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" />
                     <Button icon="pi pi-fw pi-pencil" label="Wallet Log (PC466)" className=" text-sm border-round  mr-2 mb-2 p-button-outlined p-button-secondary" />
-                    <Button icon="pi pi-fw pi-pencil" label="Echeck Log (PC653)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    {/* <Button icon="pi pi-fw pi-pencil" label="Echeck Log (PC653)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" />
                     <Button icon="pi pi-fw pi-pencil" label="Autopay Log (PC678)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" />
-                    <Button icon="pi pi-fw pi-pencil" label="Discount Credit Log (PC843)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" />
+                    <Button icon="pi pi-fw pi-pencil" label="Discount Credit Log (PC843)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" /> */}
                 </div>
             </div>
         </>

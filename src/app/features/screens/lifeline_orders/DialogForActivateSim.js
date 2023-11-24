@@ -63,7 +63,7 @@ useEffect(() => {
      
   const getESN = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/web/esnInventory/available?serviceProvider=64e0b1ab35a9428007da351c`);   
+          const res = await Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=64e0b1ab35a9428007da351c`);   
           setAllESN(res?.data?.data || []);
           
       } catch (error) {
@@ -110,11 +110,11 @@ const getFormErrorMessage = (name) => {
                                 options={allESN}
                                 value={formik.values.esn}
                                 onChange={(e) => formik.setFieldValue("esn", e.value)}
-                                optionLabel="Esn"
-                                optionValue="Esn"
+                                optionLabel="SimNumber"
+                                optionValue="SimNumber"
                                 filter
                                 showClear
-                                filterBy="Esn" // Set the property to be used for filtering
+                                filterBy="SimNumber" // Set the property to be used for filtering
                                 className='w-20rem'
                             />                     
            
@@ -127,7 +127,7 @@ const getFormErrorMessage = (name) => {
                                 options={allPlan}
                                 value={formik.values.planId}
                                 onChange={(e) => formik.setFieldValue("planId", e.value)}
-                                optionLabel="name"
+                                optionLabel={(option) => `${option.name} - (${option.planId})`}
                                 optionValue="planId"
                                 filter
                                 showClear

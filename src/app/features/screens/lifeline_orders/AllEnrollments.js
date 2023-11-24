@@ -229,9 +229,7 @@ const AllEnrollments = () => {
             setisButtonLoading(false);
         }
     };
-    const transferUser = async (rowData) => {
-        setDialogeForTransfer(true);
-    };
+    
     const updateUser = async (rowData) => {
         setisButtonLoading(true);
         try {
@@ -364,6 +362,11 @@ const AllEnrollments = () => {
     };
     const handleOpenDialogForRemarks = (rowData) => {
         setOpenDialogeForRemarks(true);
+    };
+
+    const transferUser = async (rowData) => {
+        setDialogeForTransfer(true);
+        setIsEnrolmentId(rowData?._id);
     };
 
     return (
