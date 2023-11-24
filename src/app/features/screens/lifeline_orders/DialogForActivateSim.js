@@ -63,7 +63,7 @@ useEffect(() => {
      
   const getESN = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=64e0b1ab35a9428007da351c`);   
+          const res = await Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=${parseLoginRes?.compony}`);   
           setAllESN(res?.data?.data || []);
           
       } catch (error) {
