@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import BillingNavbar from '../../billing_and_invoices/components/BillingNavbar'
 import { Button } from 'primereact/button'
+import { Dropdown } from 'primereact/dropdown'
+import { InputTextarea } from 'primereact/inputtextarea'
 import Axios from 'axios'
 import BASE_URL from '../../../../../config'
 import { toast } from 'react-toastify'
+import { ScrollPanel } from 'primereact/scrollpanel'
 
 const CustomerProfile = () => {
 
     const [cpData, setCpData] = useState([])
+    const [noteLength, setNoteLength] = useState(null)
 
     console.log('cpData', cpData)
 
@@ -304,6 +308,121 @@ const CustomerProfile = () => {
                                     </div>
 
                                 </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className='p-3' >
+                    <div className='grid'>
+
+                        <div className="col-12 lg:col-4">
+                            <div>
+                                <div>
+                                    <h4>Customer Notes</h4>
+                                </div>
+                                <hr className='m-0' />
+                                <div className='flex justify-content-between pt-3 pb-3'>
+                                    <Button label='View Archive Notes' size='small' />
+                                    <Button label='Display Notes' size='small' />
+                                </div>
+                                <hr className='m-0' />
+                                <div>
+                                    <ScrollPanel style={{ width: '100%', height: '200px' }} className="custombar2">
+                                        <ul className='pl-0'>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                        </ul>
+                                    </ScrollPanel>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-12 lg:col-4">
+                            <div>
+                                <div className='flex justify-content-between align-items-center mb-3'>
+                                    <h4 className='m-0'>Add New Note (PC83)</h4>
+                                    <span>
+                                        <i className='pi pi-plus'></i> Add New Note (PC83)
+                                    </span>
+                                </div>
+                                <hr className='m-0 mb-2' />
+                                <Dropdown
+                                    placeholder='Select Note Type'
+                                    filter
+                                    showClear
+                                    filterBy="label"
+                                    className='w-full mb-3'
+                                />
+
+                                <div className='mb-4'>
+                                    <InputTextarea rows={5} cols={66} onChange={(e) => setNoteLength(e.target.value.length)} />
+                                    <span className='counter_span mt-2'>{noteLength === null ? 0 : noteLength}</span>
+                                </div>
+
+                                <Button label='Do you want to create a ticket? (PC402)' icon="pi pi-plus" className='pl-0' link />
+
+                                <hr className='m-0 mb-2' />
+
+                                <div className='text-right'>
+                                    <Button label='Add Note' />
+                                </div>
+
                             </div>
                         </div>
 
