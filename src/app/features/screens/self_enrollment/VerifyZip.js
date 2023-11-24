@@ -29,7 +29,7 @@ const VerifyZip = () => {
         onSubmit(values) {
             const newData = {
                 ...values,
-                serviceProvider: "64e0b1ab35a9428007da351c",
+                serviceProvider: "65142a7ed74a5a9ef93ba53b",
                 carrier: "6455532566d6fad6eac59e34",
             };
             dispatch(verifyZipAction(newData));
