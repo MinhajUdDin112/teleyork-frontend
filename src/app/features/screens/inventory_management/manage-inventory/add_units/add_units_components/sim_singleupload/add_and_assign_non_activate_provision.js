@@ -99,7 +99,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-            SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least 18 characters").max(25, "Sim Number must be at most 25 characters"),
+            SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least  19 characters").max(25, "Sim Number must be at most 25 characters"),
 
             box: Yup.string().required("Box is required"),
 
@@ -181,7 +181,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                         </p>
                         <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
+                  {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Team <span style={{ color: "red" }}>* </span>
                         </p>
@@ -201,7 +201,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                                 {formik.errors.team}
                             </div>
                         )}
-                    </div>
+                    </div>    */}
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
@@ -225,8 +225,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
-                            Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (
+                           Agent Name <span style={{ color: "red" }}>* </span>
+                            {formik.values.agentType!== "" ? (
                                 <i
                                     onClick={() => {
                                         setAddAgentDialogVisbility((prev) => !prev);
