@@ -1,6 +1,5 @@
 export const menuNavigation = [
     {
-        label: "Home",
         items: [
             {
                 label: "Dashboard",
@@ -15,8 +14,6 @@ export const menuNavigation = [
         ],
     },
     {
-        label: "",
-        icon: "pi pi-fw pi-search",
         items: [
             {
                 label: "Lifeline Orders",
@@ -46,7 +43,7 @@ export const menuNavigation = [
                     {
                         label: "Customer Profile",
                         icon: "",
-                        to: "",
+                        to: "/customer-profile",
                     },
                     {
                         label: "Billing and Invoice",
@@ -56,7 +53,7 @@ export const menuNavigation = [
                     {
                         label: "Order History",
                         icon: "",
-                        to: "orderhistory",
+                        to: "/orderhistory",
                     },
 
                     {
@@ -128,7 +125,7 @@ export const menuNavigation = [
                         label: "Bulk Portin Report",
                         icon: "",
                         to: "/bulkportin",
-                    },
+                    },  
                     {
                         label: "Completed Enrollments",
                         icon: "",
@@ -157,7 +154,13 @@ export const menuNavigation = [
                         label: "Drop Ship Orders",
                         icon: "",
                         to: "/dropshiporders",
-                    },
+                    },    
+                    { 
+                       label:"Shipping Queues",  
+                        icon:"", 
+                        to:"/shipping-queues"
+                    }  
+                   ,
                     {
                         label: "EMEI Drawer",
                         icon: "",
@@ -172,6 +175,11 @@ export const menuNavigation = [
                         label: "Inventory Report",
                         icon: "",
                         to: "/inventory-report",
+                    },  
+                    {
+                        label: "Manage Model",
+                        icon: "",
+                        to: "/manage-model",
                     },
 
                     {
@@ -188,12 +196,13 @@ export const menuNavigation = [
                                 to: "/bulkprocesses/bulk-clear-device",
                             },
                             {
-                                label: "Bulk Deactivate Mdn",
+                                label: "Bulk Deactivate MDN",
                                 icon: "",
                                 to: "/bulkprocesses/bulk-deactivate-mdn",
                             },
+                    
                             {
-                                label: "Bulk Swap ESn/SIM",
+                                label: "Bulk Swap ESN/SIM",
                                 icon: "",
                                 to: "/bulkprocesses/bulk-swap-esn",
                             },

@@ -39,7 +39,11 @@ export default function InfoForUsers({ ProvisionType }) {
                         Please select carrier to download the sample file
                     </p>
                 </>
-            ) : (
+            ) :  ProvisionType === "AddAndAssignNonActive" ? (
+                <>
+                   
+                </>
+            ) :(
                 <>
                     <p className="mt-4">
                         <strong>Notes:</strong>
@@ -53,7 +57,7 @@ export default function InfoForUsers({ ProvisionType }) {
                 </>
             )}
             <>
-                {ProvisionType === "AddStock" || ProvisionType === "AddAndAssignNonActivate"
+                {ProvisionType === "AddStock" || ProvisionType === "AddAndAssignNonActive"
                     ? InfoForUsersAddAndAssignNonActivatedProvision.map((infoitem) => (
                           <div className="flex flex-wrap justify-content-around mt-8">
                               <div style={{ width: "20%" }}>
