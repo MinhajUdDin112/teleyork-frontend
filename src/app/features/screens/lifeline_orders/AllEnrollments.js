@@ -190,14 +190,15 @@ const AllEnrollments = () => {
                 } else {
                     toast.warning(response?.data?.data?.status);
                 }
-                setisButtonLoading(false);
+               
                 setSelectedRow(rowData);
             }
         } catch (error) {
             const status = error?.response?.status;
 
-            if (status === 500) {
+            if (status === 500 ||status === 400 ) {
                 toast.error(error?.response?.data?.data?.message);
+               
             } else {
                 const error1 = error?.response?.data?.data?.body;
                 const error2 = error?.response?.data?.data?.errors[0]?.description;
@@ -210,6 +211,9 @@ const AllEnrollments = () => {
                     toast.error("Error is " + errorMessage2);
                 }
             }
+           
+        }
+        finally {
             setisButtonLoading(false);
         }
     };
