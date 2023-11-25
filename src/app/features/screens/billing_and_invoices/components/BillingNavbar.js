@@ -8,9 +8,12 @@ import { useEffect } from "react";
 const BillingNavbar = () => {
     const [cpData, setCpData] = useState([])
 
+    const selectedid = localStorage.getItem("selectedId");
+    const parseselectedid = JSON.parse(selectedid);
+
     const getCustomerProfileData = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=654cf6e905e9f8273013343e`);
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`);
             setCpData(res?.data?.data || []);
         } catch (error) {
             toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
@@ -24,11 +27,11 @@ const BillingNavbar = () => {
 
     const items = [
         {
-            label: `${cpData?.firstName} ${cpData?.lastName}`,
+            label: `${cpData?.firstName} ${cpData?.lastName} (Customer ID-${cpData?.enrollmentId})`,
             icon: "pi pi-fw pi-user surface-800",
         },
         {
-            label: `${cpData?.phoneNumber}`,
+            label: `MDN:${cpData?.phoneNumber}`,
         },
         {
             label: "Wallet Balance: $ 0",
