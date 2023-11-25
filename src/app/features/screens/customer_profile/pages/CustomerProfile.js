@@ -4,19 +4,22 @@ import { Button } from 'primereact/button'
 import Axios from 'axios'
 import BASE_URL from '../../../../../config'
 import { toast } from 'react-toastify'
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CustomerProfile = () => {
 
     const [cpData, setCpData] = useState([])
 
-    console.log('cpData', cpData)
+    const location = useLocation();
+    const selectedId = location.state?.selectedId;
+    console.log("selected id id",selectedId)
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
 
     const getCustomerProfileData = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=654cf6e905e9f8273013343e`);
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             setCpData(res?.data?.data || []);
         } catch (error) {
             toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
@@ -26,6 +29,8 @@ const CustomerProfile = () => {
     useEffect(() => {
         getCustomerProfileData()
     }, []);
+
+    console.log("cp data is",cpData)
 
     return (
         <>
@@ -51,7 +56,12 @@ const CustomerProfile = () => {
                                                     <td>Verify</td>
                                                     <td><Button label='Verify Customer' size="small" /></td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td>ACP Qualify</td>
+                                                    <td>
+                                                        {cpData?.address1}
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <td>Service Address</td>
                                                     <td>
@@ -102,33 +112,31 @@ const CustomerProfile = () => {
                                                     <td>Mailing Zip</td>
                                                     <td>{cpData?.mailingZip}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Address Type</td>
-                                                    <td>--</td>
-                                                </tr>
-                                                <tr>
+                                               
+                                                {/* <tr>
                                                     <td>Tribal (Y/N)</td>
                                                     <td>
                                                         --
                                                     </td>
-                                                </tr>
+                                                </tr> */}
                                                 <tr>
                                                     <td>Customer SSN (PC253)</td>
                                                     <td>{cpData?.SSN}</td>
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Customer DOB (PC253)</td>
-                                                    <td>{cpData?.DOB}</td>
-                                                </tr>
+    <td>Customer DOB (PC253)</td>
+    <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : ''}</td>
+</tr>
+
 
                                                 <tr>
                                                     <td>Company</td>
-                                                    <td>--</td>
+                                                    <td> <td>{cpData?.serviceProvider}</td></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Current Balance</td>
-                                                    <td>--</td>
+                                                    <td>0.00</td>
                                                 </tr>
 
                                                 <tr>
@@ -159,12 +167,15 @@ const CustomerProfile = () => {
                                             <tbody>
                                                 <tr>
                                                     <td>MDN</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.phoneNumber}</td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td>SIM/ESN</td>
+                                                    <td>{cpData?.esn}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>IMEI</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.IMEI}</td>
                                                 </tr>
 
                                                 <tr>
@@ -196,18 +207,30 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Telgoo 5 Plan</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.plan?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Details</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.plan?.description}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Price</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.plan?.price}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Carrier</td>
+                                                    <td>{cpData?.carrier?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Query Usage</td>
+                                                    <td>{cpData?.carrier?.name}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TMB Live Status</td>
+                                                    <td>--</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>OCS Live Status</td>
                                                     <td>--</td>
                                                 </tr>
 
@@ -257,7 +280,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>NLAD Subscriber ID</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.subscriberId}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Approved by</td>
@@ -265,7 +288,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Source</td>
-                                                    <td>--</td>
+                                                    <td> <td>{cpData?.serviceProvider}</td></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Fulfillment Metdod</td>
@@ -273,7 +296,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Tablet Subsidy Qualification</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.deviceEligibilty}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>ACP Device Order Type</td>
