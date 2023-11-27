@@ -1,36 +1,38 @@
-import React, { useRef,useState } from "react";
+import React, { useRef ,useState} from "react";
 import { useFormik } from "formik";
-import { carrier,retailer,distributor,employee,emptymaster, company, agent,plan,master } from "../../assets";
+import { carrier, company,emptymaster,retailer,distributor,employee, agent,plan,master } from "../../assets";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import { FileUpload } from "primereact/fileupload";
 import InfoForUsers from "./InfoForUsers/info_for_users";
-export default function CDMABulkUploadAddActivateProvision(){  
-const fileUploadRef=useRef(null) 
-const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
- 
-function onUpload(){ 
+export default function TabletBulkUploadReprovision(){   
+    const fileUploadRef=useRef(null)
+    const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
+    function onUpload(){ 
 
-} 
-const formik = useFormik({
-    initialValues: {
-        carrier: "",
-        company: "",
-        agent: "",
-        master:"", 
-        trackingnumber:"", 
-        tinnumber:"", 
-        planid:"", 
-
-    },
-});
+    } 
+    const formik = useFormik({
+        initialValues: {
+            carrier: "",
+            company: "",
+            agent: "",
+            master:"", 
+            trackingnumber:"", 
+            tinnumber:"", 
+            planid:"", 
+            box:""
+        },
+    });
     return (
         <>
             <div>
                 
+              
+
                 <div className="flex flex-wrap mb-3 justify-content-around ">
+                  
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
@@ -83,25 +85,32 @@ const formik = useFormik({
                                 <Dropdown value={formik.values.master} options={emptymaster} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
                             </>
                         )}
-                   </div>
+                    </div>
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">
+                            Box#<span style={{ color: "red" }}>*</span>
+                        </p>
+                        <InputText type="text" value={formik.values.setBox} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                    </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Plan ID <span style={{ color: "red" }}>*</span>
                         </p>
                         <Dropdown value={formik.values.planid} options={plan} onChange={(e) => formik.setFieldValue("planid", e.value)} placeholder="Select an option" className="w-20rem" />
                     </div>
+
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Tracking Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.setTrackingNum} name="trackingnumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                        <InputText type="text" value={formik.values.trackingnumber} name="trackingnumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">TIN Number</p>
-                        <InputText type="text" value={formik.values.setTINNum} name="tinnumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
+                        <InputText type="text" value={formik.values.tinnumber} name="tinnumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem" />
                     </div>
                 </div>
-                     <div className="flex justify-content-center align-item-center">
+                <div className="flex justify-content-center align-items-center">
                     <FileUpload
                         ref={fileUploadRef}
                         mode="basic"
@@ -112,10 +121,12 @@ const formik = useFormik({
                         accept="image/*,application/pdf"
                         maxFileSize={1000000} // Set the maximum file size (1MB in this example)
                         onUpload={onUpload}
-                    />    
-                    </div>
-                    <InfoForUsers ProvisionType={"AddAndActivate"}/>
-            </div>
+                    />  
+                    </div >
+                     <div className="mt-8">
+                  <InfoForUsers ProvisionType={"Reprovision"}/>  
+                  </div>
+            </div> 
             <Dialog
                 visible={add_agent_detail_dialog_visibility}
                 onHide={() => {
@@ -126,6 +137,4 @@ const formik = useFormik({
             </Dialog>
         </>
     );
-    
-
 }

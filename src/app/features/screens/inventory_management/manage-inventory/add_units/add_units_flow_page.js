@@ -4,27 +4,27 @@ import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import Header from "./add_unit-flow_page_header.js";
-import GSMBulkUpload from "./add_units_components/gsm_bulkupload/gsm_bulkupload.js";
-import GSMSingleUpload from "./add_units_components/gsm_singleupload/gsm_singleupload.js";
+import CellPhoneBulkUpload from "./add_units_components/cell_phone_bulkupload/cell_phone_bulkupload.js";
+import CellPhoneSingleUpload from "./add_units_components/cell_phone_singleupload/cell_phone_singleupload.js";
 import SIMSingleUploadAddProvision from "./add_units_components/sim_singleupload/add_stock_provision.js";
 import { provision, unit, type,simprovision } from "./assets.js";
-import CDMABulkUploadAddAndAssignNonActivateProvision from "./add_units_components/cdma_bulk_upload/add_and_assign_non_activate_provision.js";
+import TabletBulkUploadAddAndAssignNonActivateProvision from "./add_units_components/tablet_bulk_upload/add_and_assign_non_activate_provision.js";
 import SIMBulkUploadAddActivateProvision from "./add_units_components/sim_bulk_upload/addactivate_provision.js";
 import SIMBulkUploadAddPreActivatedProvision from "./add_units_components/sim_bulk_upload/add_preactivated_provision.js";
 import SIMBulkUploadAddAndAssignNonActivateProvision from "./add_units_components/sim_bulk_upload/add_and_assign_non_activate_provision.js";
 import SIMBulkUploadAddProvision from "./add_units_components/sim_bulk_upload/add_stock_provision.js";
-import CDMABulkUploadAddProvision from "./add_units_components/cdma_bulk_upload/add_stock_provision.js";
-import CDMABulkUploadAddActivateProvision from "./add_units_components/cdma_bulk_upload/addactivate_provision.js";
-import CDMABulkUploadReprovision from "./add_units_components/cdma_bulk_upload/reprovision.js";
-import CDMABulkUploadAddPreActivatedProvision from "./add_units_components/cdma_bulk_upload/add_preactivated_provision.js";
+import TabletBulkUploadAddProvision from "./add_units_components/tablet_bulk_upload/add_stock_provision.js";
+import TabletBulkUploadAddActivateProvision from "./add_units_components/tablet_bulk_upload/addactivate_provision.js";
+import TabletBulkUploadReprovision from "./add_units_components/tablet_bulk_upload/reprovision.js";
+import TabletBulkUploadAddPreActivatedProvision from "./add_units_components/tablet_bulk_upload/add_preactivated_provision.js";
 import {SIMSingleUploadAddAndAssignNonActivateProvision} from "./add_units_components/sim_singleupload/add_and_assign_non_activate_provision.js";
 import SIMSingleUploadAddActivateProvision from "./add_units_components/sim_singleupload/addactivate_provision.js";
 import SIMSingleUploadAddPreActivatedProvision from "./add_units_components/sim_singleupload/add_preactivated_provision.js";
-import CDMASingleUploadAddProvision from "./add_units_components/cdma_single_upload/add_stock_provision.js";
-import CDMASingleUploadAddActivateProvision from "./add_units_components/cdma_single_upload/addactivate_provision.js";
-import CDMASingleUploadAddAndAssignNonActivateProvision from "./add_units_components/cdma_single_upload/add_and_assign_non_activate_provision.js";
-import CDMASingleUploadAddPreActivatedProvision from "./add_units_components/cdma_single_upload/add_preactivated_provision.js";
-import CDMASingleUploadReprovision from "./add_units_components/cdma_single_upload/reprovision.js";
+import TabletSingleUploadAddProvision from "./add_units_components/tablet_single_upload/add_stock_provision.js";
+import TabletSingleUploadAddActivateProvision from "./add_units_components/tablet_single_upload/addactivate_provision.js";
+import TabletSingleUploadAddAndAssignNonActivateProvision from "./add_units_components/tablet_single_upload/add_and_assign_non_activate_provision.js";
+import TabletSingleUploadAddPreActivatedProvision from "./add_units_components/tablet_single_upload/add_preactivated_provision.js";
+import TabletSingleUploadReprovision from "./add_units_components/tablet_single_upload/reprovision.js";
 const AddUnits = ({ setActiveComponent }) => {           
     console.log("calling")
     const validationSchema = Yup.object().shape({
@@ -57,33 +57,33 @@ const AddUnits = ({ setActiveComponent }) => {
             </div>
             <div>
                 <div className="flex flex-wrap mb-3  justify-content-around">
-                    <div className="mr-3 mb-3 mt-3">
+                    <div className="mr-3 mb-3 mt-3 w-20rem">
                         <p className="m-0">
                             Unit Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
+                        <Dropdown className="mt-2" value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
+                    <div className="mr-3 mb-3 mt-3 w-20rem">
                         <p className="m-0">
                             Upload Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
+                        <Dropdown className="mt-2"  value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
                     </div>
                     {formik.values.unit !== "GSM" ? (
-                        <div className="mr-3 mb-3 mt-3">
+                        <div className="mr-3 mb-3 mt-3 w-20rem">
                             <p className="m-0">
                                 Provision Type <span style={{ color: "red" }}>*</span>
                             </p>
-                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ?simprovision:provision} onChange={formik.handleChange} placeholder="Select an option" className="w-20rem" />
+                            <Dropdown className="mt-2"  value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ?simprovision:provision} onChange={formik.handleChange} placeholder="Select an option" className="w-20rem" />
                         </div>
                     ) : undefined}
                 </div>
             </div>
-            {formik.values.unit === "GSM" ? (
+            {formik.values.unit === "Cell Phone" ? (
                 formik.values.upload === "Single" ? (
-                    <GSMSingleUpload />
+                    <CellPhoneSingleUpload />
                 ) : formik.values.upload === "Bulk" ? (
-                    <GSMBulkUpload />
+                    <CellPhoneBulkUpload />
                 ) : undefined
             ) : formik.values.unit === "SIM" ? (
                 formik.values.upload === "Single" && formik.values.provision === "add_stock" ? (
@@ -103,27 +103,27 @@ const AddUnits = ({ setActiveComponent }) => {
                 ): formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
                     <SIMBulkUploadAddPreActivatedProvision />
                 ) : undefined
-            ) : formik.values.unit === "CDMA" ? (
+            ) : formik.values.unit === "Tablet" ? (
                 formik.values.upload === "Bulk" && formik.values.provision === "add_stock" ? (
-                    <CDMABulkUploadAddProvision />
+                    <TabletBulkUploadAddProvision />
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ? (
-                    <CDMABulkUploadAddActivateProvision />
+                    <TabletBulkUploadAddActivateProvision />
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <CDMABulkUploadAddAndAssignNonActivateProvision />
+                    <TabletBulkUploadAddAndAssignNonActivateProvision />
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "reprovision" ? (
-                    <CDMABulkUploadReprovision />
+                    <TabletBulkUploadReprovision />
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
-                    <CDMABulkUploadAddPreActivatedProvision />
+                    <TabletBulkUploadAddPreActivatedProvision />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_stock" ? (
-                    <CDMASingleUploadAddProvision />
+                    <TabletSingleUploadAddProvision />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_and_activated" ? (
-                    <CDMASingleUploadAddActivateProvision />
+                    <TabletSingleUploadAddActivateProvision />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <CDMASingleUploadAddAndAssignNonActivateProvision />
+                    <TabletSingleUploadAddAndAssignNonActivateProvision />
                 ) : formik.values.upload === "Single" && formik.values.provision === "reprovision" ? (
-                    <CDMASingleUploadReprovision />
+                    <TabletSingleUploadReprovision />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_pre_activated" ? (
-                    <CDMASingleUploadAddPreActivatedProvision />
+                    <TabletSingleUploadAddPreActivatedProvision />
                 ) :undefined
             ) : undefined}
         </>

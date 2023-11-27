@@ -1,19 +1,17 @@
-//company agent tracking master carrier tin
     import React, { useRef,useState } from "react";
     import { useFormik } from "formik";
-    import { carrier, company,emptymaster,retailer,distributor,employee, agent,master } from "../../assets";
+    import { carrier, company, employee,retailer,distributor,emptymaster,agent,plan,master } from "../../assets";
     import { InputText } from "primereact/inputtext";
-    import { Dropdown } from "primereact/dropdown";
-    import { FileUpload } from "primereact/fileupload";
+    import { Dropdown } from "primereact/dropdown"; 
     import { Dialog } from "primereact/dialog";
-    import InfoForUsers from "./InfoForUsers/info_for_users";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-    export default function CDMABulkUploadAddAndAssignNonActivateProvision(){  
-        const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
+    import { FileUpload } from "primereact/fileupload";
+import InfoForUsers from "./InfoForUsers/info_for_users";
+    export default function TabletBulkUploadAddPreActivatedProvision(){  
+    const fileUploadRef=useRef(null) 
+    const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
     
-        const fileUploadRef=useRef(null) 
-    function onUpload(){ 
-    
+    function onUpload(){  
     } 
     const formik = useFormik({
         initialValues: {
@@ -23,6 +21,7 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
             master:"", 
             trackingnumber:"", 
             tinnumber:"", 
+            planid:"", 
     
         },
     });
@@ -83,7 +82,13 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
                                 <Dropdown value={formik.values.master} options={emptymaster} onChange={(e) => formik.setFieldValue("master", e.value)} placeholder="Select an option" className="w-20rem" />
                             </>
                         )}
-                           </div>
+                         </div>
+                        <div className="mr-3 mb-3 mt-3">
+                            <p className="m-0">
+                                Plan ID <span style={{ color: "red" }}>*</span>
+                            </p>
+                            <Dropdown value={formik.values.planid} options={plan} onChange={(e) => formik.setFieldValue("planid", e.value)} placeholder="Select an option" className="w-20rem" />
+                        </div>
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Tracking Number <span style={{ color: "red" }}>*</span>
@@ -108,10 +113,11 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
                             onUpload={onUpload}
                         />    
                         </div>
-                     
-                
-                </div>     
-                <InfoForUsers ProvisionType={"AddAndAssignNonActivate"}/> 
+                        <div className="mt-3 flex justify-content-center align-item-center">
+                            <p>Note: Please Select Carrier To Download the Sample File</p>
+                        </div>
+                      <InfoForUsers ProvisionType={"AddPreActivated"}/>
+                </div>
                 <Dialog
                 visible={add_agent_detail_dialog_visibility}
                 onHide={() => {
