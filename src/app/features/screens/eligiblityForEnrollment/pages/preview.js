@@ -107,7 +107,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p>{previewInfo?.city}</p>
+                                    <p style={{marginLeft:"-10px"}}>{previewInfo?.city}</p>
                                 </div>
                             <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>

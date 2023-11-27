@@ -16,6 +16,7 @@ import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "./DialogeForRemarks";
 import DialogeForTransferUser from "./DialogeForTransferUser";
+import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
 
 
 const AllEnrollments = () => {
@@ -27,6 +28,7 @@ const AllEnrollments = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [openDialogeForActivate, setOpenDialogeForActivate] = useState(false);
     const [OpenDialogeForRemarks, setOpenDialogeForRemarks] = useState(false);
+    const [OpenDialogeForRemarksForIJ, setOpenDialogeForRemarksForIJ] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [link, setLink] = useState();
@@ -118,6 +120,7 @@ const AllEnrollments = () => {
     useEffect(() => {
         getAllEnrollments();
     }, []);
+  
 
     const viewRow = async (rowData) => {
         setisButtonLoading(true);
@@ -210,7 +213,7 @@ const AllEnrollments = () => {
             } else {
                 const error1 = error?.response?.data?.data?.body;
                 const error2 = error?.response?.data?.data?.errors[0]?.description;
-                console.log("error 2 is", error2);
+             
                 const errorMessage1 = Array.isArray(error1) ? error1.toString() : error1 && typeof error1 === "object" ? JSON.stringify(error1) : error1;
                 const errorMessage2 = Array.isArray(error2) ? error2.toString() : error2 && typeof error2 === "object" ? JSON.stringify(error2) : error2;
                 if (errorMessage1) {
@@ -252,7 +255,7 @@ const AllEnrollments = () => {
             }
         } catch (error) {
             toast.error(`error is ${error?.response?.data?.data?.body[0]}`);
-            console.log(error?.response?.data?.data?.body);
+          
             setisButtonLoading(false);
         }
     };
@@ -325,7 +328,12 @@ const AllEnrollments = () => {
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
-                <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                 {
+                    parseLoginRes?.companyName.includes("IJ wireless") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    :
+                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                }
+               
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
                 <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
@@ -374,7 +382,13 @@ const AllEnrollments = () => {
     };
     const handleOpenDialogForRemarks = (rowData) => {
         setOpenDialogeForRemarks(true);
+        setIsEnrolmentId(rowData?._id);
     };
+
+    const handleOpenDialogForRemarksForIJ=(rowData)=>{
+        setOpenDialogeForRemarksForIJ(true);
+        setIsEnrolmentId(rowData?._id);
+    }
 
     const transferUser = async (rowData) => {
         setDialogeForTransfer(true);
@@ -396,7 +410,11 @@ const AllEnrollments = () => {
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
-                        <DialogeForRemarks />
+                        <DialogeForRemarks  enrollmentId={isEnrolmentId}/>
+                    </Dialog>
+
+                    <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
+                        <DialogeForRemarksForIJ  enrollmentId={isEnrolmentId}/>
                     </Dialog>
 
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>

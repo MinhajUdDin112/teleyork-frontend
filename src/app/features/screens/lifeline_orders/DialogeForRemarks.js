@@ -7,33 +7,38 @@ import { InputTextarea } from "primereact/inputtextarea";
 import Axios from "axios";
 import BASE_URL from "../../../../config";
 import { toast } from "react-toastify";
-const DialogeForRemarks = () => {
+import { useEffect } from "react";
+const DialogeForRemarks = ({enrollmentId}) => {
     const [isComRemarks, setIsComRemarks] = useState();
     const [isConfidenceRemarks, setIsConfidenceRemarks] = useState();
     const [isVerificationRemarks, setIsVerificationRemarks] = useState();
     const [isInformationRemarks, setIsInformationRemarks] = useState();
     const [isDisclaimerRemarks, setIsDisclaimerRemarks] = useState();
     const [isDOBRemarks, setIsDOBRemarks] = useState();
-    const [isCsrRemarks, setIsCsrRemarks] = useState();
-    const [isCallDropRemarks, setIsCallDropRemarks] = useState();
+    const [isCsrRemarks, setIsCsrRemarks] = useState(false);
+    const [isCallDropRemarks, setIsCallDropRemarks] = useState(false);
     const [isCallQualityRemarks, setIsCallQualityRemarks] = useState();
 
     const formik = useFormik({
         initialValues: {
-            comRemarks: "",
-            confidenceRemarks: "",
-            verificationRemarks: "",
-            informationRemarks: "",
-            disclaimerRemarks: "",
-            DOBRemarks: "",
-            csrRemarks: "",
-            callDropRemarks: "",
-            callQualityRemarks: "",
+            comRemarks:"",
+            confidenceRemarks:"",
+            verificationRemarks:"",
+            informationRemarks:"",
+            disclaimerRemarks:"",
+            DOBRemarks:"",
+            csrRemarks:false,
+            callDropRemarks:false,
+            callQualityRemarks:"",
+            remarksComment:"",
         },
         onSubmit: async (values, actions) => {
-            const dataToSend = {};
+            const dataToSend = {
+                enrollmentId,
+                ...values
+            };
             try {
-                const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
+                const response = await Axios.patch(`${BASE_URL}/api/user/remarks`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
                 }
@@ -41,8 +46,32 @@ const DialogeForRemarks = () => {
                 toast.error(error?.response?.data?.msg);
             }
         },
+        
     });
-
+    useEffect(() => {
+        formik.setValues({
+          comRemarks: isComRemarks,
+          confidenceRemarks: isConfidenceRemarks,
+          verificationRemarks: isVerificationRemarks,
+          informationRemarks: isInformationRemarks,
+          disclaimerRemarks: isDisclaimerRemarks,
+          DOBRemarks: isDOBRemarks,
+          csrRemarks: isCsrRemarks,
+          callDropRemarks: isCallDropRemarks,
+          callQualityRemarks: isCallQualityRemarks,
+          remarksComment: "",
+        });
+      }, [
+        isComRemarks,
+        isConfidenceRemarks,
+        isVerificationRemarks,
+        isInformationRemarks,
+        isDisclaimerRemarks,
+        isDOBRemarks,
+        isCsrRemarks,
+        isCallDropRemarks,
+        isCallQualityRemarks,
+      ]);
     return (
         <>
             <form onSubmit={formik.handleSubmit}>  
@@ -168,10 +197,10 @@ const DialogeForRemarks = () => {
                         </div>
                         <div className="flex flex-wrap justify-content-around mt-3" >
                             <div >
-                                <RadioButton inputId="isCsrRemarks" name="pizza" value="yes" onChange={(e) => setIsCsrRemarks(e.value)} checked={isCsrRemarks === "yes"} />
+                                <RadioButton inputId="isCsrRemarks" name="pizza" value="true" onChange={(e) => setIsCsrRemarks(e.value)} checked={isCsrRemarks === "true"} />
                             </div>
                             <div >
-                                <RadioButton inputId="isCsrRemarks" name="pizza" value="no" onChange={(e) => setIsCsrRemarks(e.value)} checked={isCsrRemarks === "no"} />
+                                <RadioButton inputId="isCsrRemarks" name="pizza" value="false" onChange={(e) => setIsCsrRemarks(e.value)} checked={isCsrRemarks === "false"} />
                             </div>
                         </div>
                     </div>
@@ -183,10 +212,10 @@ const DialogeForRemarks = () => {
                         </div>
                         <div  className="flex flex-wrap justify-content-around mt-3">
                             <div >
-                                <RadioButton inputId="isCallDropRemarks" name="pizza" value="yes" onChange={(e) => setIsCallDropRemarks(e.value)} checked={isCallDropRemarks === "yes"} />
+                                <RadioButton inputId="isCallDropRemarks" name="pizza" value="true" onChange={(e) => setIsCallDropRemarks(e.value)} checked={isCallDropRemarks === "true"} />
                             </div>
                             <div >
-                                <RadioButton inputId="isCallDropRemarks" name="pizza" value="no" onChange={(e) => setIsCallDropRemarks(e.value)} checked={isCallDropRemarks === "no"} />
+                                <RadioButton inputId="isCallDropRemarks" name="pizza" value="false" onChange={(e) => setIsCallDropRemarks(e.value)} checked={isCallDropRemarks === "false"} />
                             </div>
                         </div>
                     </div>
@@ -220,7 +249,7 @@ const DialogeForRemarks = () => {
                     <div className="mt-3 flex flex-wrap justify-content-center" style={{width:"100vw"}}  >
                         <div style={{width:"80%"}}>
                             <h4 >Comments</h4>
-                            <InputTextarea id="reason" style={{width:"100%"}}  value={formik.values.reason} onChange={formik.handleChange}  className="p-2"  />
+                            <InputTextarea id="remarksComment" style={{width:"100%"}}  value={formik.values.remarksComment} onChange={formik.handleChange}  className="p-2"  />
                         </div>
                         <br />
                     </div>
