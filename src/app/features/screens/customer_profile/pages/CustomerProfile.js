@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import BillingNavbar from '../../billing_and_invoices/components/BillingNavbar'
-import { Button } from 'primereact/button'
-import Axios from 'axios'
-import BASE_URL from '../../../../../config'
-import { toast } from 'react-toastify'
+import React, { useEffect, useState } from "react";
+import BillingNavbar from "../../billing_and_invoices/components/BillingNavbar";
+import { Button } from "primereact/button";
+import Axios from "axios";
+import BASE_URL from "../../../../../config";
+import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const CustomerProfile = () => {
-
-    const [cpData, setCpData] = useState([])
+    const [cpData, setCpData] = useState([]);
 
     const location = useLocation();
     const selectedId = location.state?.selectedId;
-    console.log("selected id id",selectedId)
+    console.log("selected id id", selectedId);
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -27,46 +26,42 @@ const CustomerProfile = () => {
     };
 
     useEffect(() => {
-        getCustomerProfileData()
+        getCustomerProfileData();
     }, []);
 
-    console.log("cp data is",cpData)
+    console.log("cp data is", cpData);
 
     return (
         <>
             <div className="card p-0">
-
                 <BillingNavbar />
 
-                <div className='pt-3'>
-                    <div className='grid'>
-
+                <div className="pt-3">
+                    <div className="grid">
                         <div className="col-12 lg:col-4">
                             <div className="p-3 h-full">
                                 <div className="shadow-2 h-full flex flex-column">
                                     <div className="text-900 font-medium text-lg p-3">Customer Information</div>
 
-                                    <hr className='m-0' />
+                                    <hr className="m-0" />
 
                                     {/* Table */}
                                     <div>
-                                        <table className='cp_table w-full text-left'>
+                                        <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
                                                     <td>Verify</td>
-                                                    <td><Button label='Verify Customer' size="small" /></td>
+                                                    <td>
+                                                        <Button label="Verify Customer" size="small" />
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>ACP Qualify</td>
-                                                    <td>
-                                                        {cpData?.address1}
-                                                    </td>
+                                                    <td>{cpData?.address1}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Service Address</td>
-                                                    <td>
-                                                        {cpData?.address1 + " " + cpData?.address1}
-                                                    </td>
+                                                    <td>{cpData?.address1 + " " + cpData?.address1}</td>
                                                 </tr>
 
                                                 <tr>
@@ -112,7 +107,7 @@ const CustomerProfile = () => {
                                                     <td>Mailing Zip</td>
                                                     <td>{cpData?.mailingZip}</td>
                                                 </tr>
-                                               
+
                                                 {/* <tr>
                                                     <td>Tribal (Y/N)</td>
                                                     <td>
@@ -125,14 +120,16 @@ const CustomerProfile = () => {
                                                 </tr>
 
                                                 <tr>
-    <td>Customer DOB (PC253)</td>
-    <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : ''}</td>
-</tr>
-
+                                                    <td>Customer DOB (PC253)</td>
+                                                    <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : ""}</td>
+                                                </tr>
 
                                                 <tr>
                                                     <td>Company</td>
-                                                    <td> <td>{cpData?.serviceProvider}</td></td>
+                                                    <td>
+                                                        {" "}
+                                                        <td>{parseLoginRes?.companyName}</td>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Current Balance</td>
@@ -142,14 +139,12 @@ const CustomerProfile = () => {
                                                 <tr>
                                                     <td>Add more line</td>
                                                     <td>
-                                                        <Button label='Add Line' size="small" />
+                                                        <Button label="Add Line" size="small" />
                                                     </td>
                                                 </tr>
                                             </tbody>
-
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -159,11 +154,11 @@ const CustomerProfile = () => {
                                 <div className="shadow-2 flex flex-column">
                                     <div className="text-900 font-medium text-lg p-3">Line Information</div>
 
-                                    <hr className='m-0' />
+                                    <hr className="m-0" />
 
                                     {/* Table */}
                                     <div>
-                                        <table className='cp_table w-full text-left'>
+                                        <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
                                                     <td>MDN</td>
@@ -233,12 +228,9 @@ const CustomerProfile = () => {
                                                     <td>OCS Live Status</td>
                                                     <td>--</td>
                                                 </tr>
-
                                             </tbody>
-
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -248,7 +240,7 @@ const CustomerProfile = () => {
                                 <div className="shadow-2 flex flex-column">
                                     <div className="text-900 font-medium text-lg p-3">Other Information</div>
 
-                                    <hr className='m-0' />
+                                    <hr className="m-0" />
 
                                     {/* Table */}
                                     <div>
@@ -288,7 +280,10 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Source</td>
-                                                    <td> <td>{cpData?.serviceProvider}</td></td>
+                                                    <td>
+                                                        {" "}
+                                                        <td>{parseLoginRes?.companyName}</td>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Fulfillment Metdod</td>
@@ -325,17 +320,14 @@ const CustomerProfile = () => {
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </>
-    )
-}
+    );
+};
 
-export default CustomerProfile
+export default CustomerProfile;

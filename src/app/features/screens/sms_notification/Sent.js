@@ -81,7 +81,7 @@ const Sent = () => {
             <span
                 style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
                 onClick={(e) => {
-                    setTemplatebody(rowData.message);
+                    setTemplatebody(rowData.template);
                     setVisible(true);
                 }}
             >

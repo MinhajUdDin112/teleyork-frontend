@@ -20,7 +20,6 @@ export default function ServiceAvailabilityPage() {
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
   
-
  useEffect(() => {
   localStorage.removeItem("zipData");
  }, [])
