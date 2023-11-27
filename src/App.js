@@ -237,7 +237,7 @@ const App = () => {
     const loginPerms = localStorage.getItem("permissions")
     const parsedLoginPerms = JSON.parse(loginPerms)
 
-    console.log('parsedLoginPerms', parsedLoginPerms)
+   
 
     const [dynamicMenu, setDynamicMenu] = useState([{
 
@@ -257,7 +257,7 @@ const App = () => {
             return;
         }
         else {
-            console.log("here")
+         
             let modules = parsedLoginPerms.map((node) => {
                 return {
                     label: node?.module,
