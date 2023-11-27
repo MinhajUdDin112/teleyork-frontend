@@ -11,7 +11,7 @@ const CustomerProfile = () => {
 
     const location = useLocation();
     const selectedId = location.state?.selectedId;
-    console.log("selected id id", selectedId);
+   
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -57,7 +57,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>ACP Qualify</td>
-                                                    <td>{cpData?.address1}</td>
+                                                    <td>{cpData?.serviceInitializationDate ? new Date(cpData.serviceInitializationDate).toLocaleDateString() : ""}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Service Address</td>
