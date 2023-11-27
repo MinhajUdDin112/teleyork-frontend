@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify"; // Import ToastContainer and to
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import DialogForReject from "./DialogForReject";
 import DialogForActivateSim from "./DialogForActivateSim";
@@ -16,6 +16,7 @@ import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "./DialogeForRemarks";
 import DialogeForTransferUser from "./DialogeForTransferUser";
+
 
 const AllEnrollments = () => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -62,7 +63,14 @@ const AllEnrollments = () => {
     //     );
     // };
 
+    
     const navigate = useNavigate();
+
+    const handleEnrollmentIdClick = (rowData) => {
+        navigate("/customer-profile", { state: { selectedId: rowData._id } });
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
+       
+    };
 
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
@@ -190,14 +198,15 @@ const AllEnrollments = () => {
                 } else {
                     toast.warning(response?.data?.data?.status);
                 }
-                setisButtonLoading(false);
+               
                 setSelectedRow(rowData);
             }
         } catch (error) {
             const status = error?.response?.status;
 
-            if (status === 500) {
+            if (status === 500 ||status === 400 ) {
                 toast.error(error?.response?.data?.data?.message);
+               
             } else {
                 const error1 = error?.response?.data?.data?.body;
                 const error2 = error?.response?.data?.data?.errors[0]?.description;
@@ -210,6 +219,9 @@ const AllEnrollments = () => {
                     toast.error("Error is " + errorMessage2);
                 }
             }
+           
+        }
+        finally {
             setisButtonLoading(false);
         }
     };
@@ -229,9 +241,7 @@ const AllEnrollments = () => {
             setisButtonLoading(false);
         }
     };
-    const transferUser = async (rowData) => {
-        setDialogeForTransfer(true);
-    };
+    
     const updateUser = async (rowData) => {
         setisButtonLoading(true);
         try {
@@ -366,6 +376,11 @@ const AllEnrollments = () => {
         setOpenDialogeForRemarks(true);
     };
 
+    const transferUser = async (rowData) => {
+        setDialogeForTransfer(true);
+        setIsEnrolmentId(rowData?._id);
+    };
+
     return (
         <>
             <ToastContainer className="custom-toast-container" />
@@ -440,7 +455,15 @@ const AllEnrollments = () => {
                             {/* <Column expander style={{ width: "3em" }} /> */}
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
                             <Column selectionMode="multiple" style={{ width: "3em" }} />
-                            <Column header="Enrollment ID" field="enrollmentId"></Column>
+                            <Column
+                header="Enrollment ID"
+                field="enrollmentId"
+                body={(rowData) => (
+                    <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
+                        {rowData.enrollmentId}
+                    </button>
+                )}
+            ></Column>
                             <Column header="Enrollment Type" body={(rowData) => (rowData.isSelfEnrollment ? "Self Enrollment" : "Enrollment")}></Column>
 
                             <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>

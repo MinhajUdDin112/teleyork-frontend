@@ -81,7 +81,9 @@ import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/b
 import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
+import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
+import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
@@ -232,6 +234,56 @@ const App = () => {
         }
     }, [token]);
 
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
+
+    console.log('parsedLoginPerms', parsedLoginPerms)
+
+    const [dynamicMenu, setDynamicMenu] = useState([{
+
+        // Initial state
+        items: [
+            {
+                label: "Dashboard",
+                icon: "pi pi-fw pi-home",
+                to: "/",
+            }
+        ],
+
+    }])
+
+    const getPermissions = () => {
+        if (localStorage.getItem('permissions') === null) {
+            return;
+        }
+        else {
+            console.log("here")
+            let modules = parsedLoginPerms.map((node) => {
+                return {
+                    label: node?.module,
+                    icon: "",
+                    items: node.subModule.map((child) => {
+                        return {
+                            label: child?.name,
+                            icon: child?.icon,
+                            to: child?.route
+                        }
+                    })
+                }
+            })
+            modules = modules.filter((item) => item.items.length > 0)
+            setDynamicMenu((prev) => {
+                return [...prev, {
+                    items: modules
+                }]
+            });
+        }
+    }
+
+    useEffect(() => {
+        getPermissions()
+    }, [window.localStorage.permissions]);
+
     return (
         <>
             {protectedRoute === true ? (
@@ -241,7 +293,7 @@ const App = () => {
                     <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
                     <div className="layout-sidebar" onClick={onSidebarClick}>
-                        <AppMenu model={menuNavigation} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
                     </div>
 
                     <div className="layout-main-container">
@@ -250,7 +302,7 @@ const App = () => {
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="/bulkprocesses/bulk-clear-esn" element={<ClearEsnReportFlowPage />} />
-                                 <Route path="/shipping-queues" element={<ShippingQueue/>}/>
+                                <Route path="/shipping-queues" element={<ShippingQueue />} />
                                 <Route path="/bulkprocesses/bulk-clear-device" element={<ClearDeviceReportFlowPage />} />
                                 <Route path="/bulkprocesses/bulk-deactivate-mdn" element={<DeactivateMdnFlowPage />} />
                                 <Route path="/bulkprocesses/bulk-swap-esn" element={<SwapEsnReportFlowPage />} />
@@ -265,6 +317,7 @@ const App = () => {
                                 <Route path="/managerolesandrights/*" element={<ManageRolesAndRights />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
+                                <Route path="/bulk-upload" element={<UploadBulk/>} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
                                 <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />
@@ -280,7 +333,7 @@ const App = () => {
                                 <Route path="/recentsearches" element={<RecentSearches />} />
                                 <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
                                 <Route path="/purchasehistory" element={<PurchaseHistory />} />
-                                <Route path="/customerhistory" element={<CustomerHistory/>} />
+                                <Route path="/customerhistory" element={<CustomerHistory />} />
                                 <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
                                 <Route path="/deactivateesn" element={<DeactivatEsn />} />
                                 <Route path="/tickets" element={<Tickets />} />
@@ -309,6 +362,7 @@ const App = () => {
                                 <Route path="/manage-department" element={<Manage_Department />} />
                                 <Route path="/edit-department" element={<EditDepartment />} />
                                 <Route path="/create-department" element={<CreateDepartment />} />
+                                <Route path="/customer-profile" element={<CustomerProfile />} />
                             </Routes>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
@@ -332,7 +386,8 @@ const App = () => {
                     <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
                     <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                 </Routes>
-            )}
+            )
+            }
         </>
     );
 };

@@ -13,7 +13,7 @@ const Eligibility = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isButtonLoading, setIsButtonLoading] = useState(false)
     const {id}=useParams()
-    const eligId = "64e0b1ab35a9428007da351c"
+    const eligId = "65142a7ed74a5a9ef93ba53b"
     const navigate = useNavigate();
     const handleBack = () => {
         navigate(-1)

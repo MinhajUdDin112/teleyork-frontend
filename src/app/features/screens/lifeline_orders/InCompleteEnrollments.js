@@ -13,9 +13,9 @@ import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { InputText } from "primereact/inputtext";
 const InCompleteEnrollments = () => {
-   
+
     const [allInCompletedEnrollments, setAllInCompletedEnrollments] = useState([]);
-   
+
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
@@ -28,7 +28,7 @@ const InCompleteEnrollments = () => {
 
     //     return (
     //         <div>
-              
+
     //   <DataTable value={[data]} stripedRows >
     //                 <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
     //                 <Column field="createdBy?.name" header="Created BY" />
@@ -43,15 +43,15 @@ const InCompleteEnrollments = () => {
     //                 <Column field="Activationcalldatetime" header="Activation Call Date Time" />
     //                 <Column field="status" header="Status" />
     //                 <Column field="Handover" header="Handover Equipment" />
-                  
+
     //                 <Column field="Enrolltype" header="Enroll Type" />
     //                 <Column field="Reviewernote" header="Reviewer Note" />
     //             </DataTable>
     //         </div>
     //     );
     // };
-   
-    
+
+
     const onGlobalFilterChange = (e) => {
         setGlobalFilterValue(e.target.value);
     };
@@ -100,30 +100,30 @@ const InCompleteEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                 <Button label="Continue" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                
+                <Button label="Continue" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
+
             </div>
         );
     };
 
-    
+
 
     return (
         <div className="card bg-pink-50">
             <div className="card mx-5 p-0 border-noround">
-               
+
                 <div className="flex justify-content-between " style={{ padding: "10px" }}>
-                        <div className="mt-2"><h3> <strong>Incomplete Enrollments</strong></h3></div>
-                        <div className="p-input-icon-left mb-3 ">
-                                <i className="pi pi-search" />
-                                <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
-                                </div>
+                    <div className="mt-2"><h3> <strong>Incomplete Enrollments</strong></h3></div>
+                    <div className="p-input-icon-left mb-3 ">
+                        <i className="pi pi-search" />
+                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
                     </div>
-               
-                <div className="" style={{  padding: "15px" }}>
-                <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns  globalFilter={globalFilterValue}  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
-                            {/* <Column expander style={{ width: "3em" }} /> */}
-                            <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
+                </div>
+
+                <div className="" style={{ padding: "15px" }}>
+                    <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns globalFilter={globalFilterValue} paginator rows={10} rowsPerPageOptions={[25, 50]}>
+                        {/* <Column expander style={{ width: "3em" }} /> */}
+                        <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
                         <Column header="Address" field="address1"></Column>
                         <Column header="City" field="city"></Column>
                         <Column header="State" field="state"></Column>
@@ -132,9 +132,9 @@ const InCompleteEnrollments = () => {
                         <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
                         <Column field="createdBy?.name" header="Created BY" />
                         <Column field="status" header="Status" />
-                             <Column header="Actions" body={actionTemplate}></Column>
-                        </DataTable>
-                   
+                        <Column header="Actions" body={actionTemplate}></Column>
+                    </DataTable>
+
                     {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
                 </div>
             </div>

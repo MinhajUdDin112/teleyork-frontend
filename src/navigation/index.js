@@ -1,6 +1,5 @@
 export const menuNavigation = [
     {
-        label: "Home",
         items: [
             {
                 label: "Dashboard",
@@ -15,8 +14,6 @@ export const menuNavigation = [
         ],
     },
     {
-        label: "",
-        icon: "pi pi-fw pi-search",
         items: [
             {
                 label: "Lifeline Orders",
@@ -25,6 +22,7 @@ export const menuNavigation = [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
                     { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
+                    { label: "Bulk Upload", icon: "", to: "/bulk-upload"},
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
                     { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
@@ -45,7 +43,7 @@ export const menuNavigation = [
                     {
                         label: "Customer Profile",
                         icon: "",
-                        to: "",
+                        to: "/customer-profile",
                     },
                     {
                         label: "Billing and Invoice",
@@ -55,7 +53,7 @@ export const menuNavigation = [
                     {
                         label: "Order History",
                         icon: "",
-                        to: "orderhistory",
+                        to: "/orderhistory",
                     },
 
                     {

@@ -3,8 +3,51 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Axios from 'axios';
+import BASE_URL from "../../../../../../config";
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+
 const EbillModal = ({ ebillModal, setEbillModal }) => {
     const [selectedCity1, setSelectedCity1] = useState(null);
+    const [isButtonLoading, setisButtonLoading] = useState(false)
+
+    const validationSchema = Yup.object().shape({
+        eBill: Yup.string().required("Please Select E-Bill"),  
+         
+    });
+    
+    const formik = useFormik({
+        validationSchema: validationSchema,
+        initialValues: { 
+            eBill:"",    
+           
+        },
+        onSubmit: async (values,actions) => {
+          setisButtonLoading(true);
+            const dataToSend = {  ...values };
+        
+            // try {
+            //     const response = await Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend);
+            //     if (response?.status === 201 || response?.status === 200) {
+            //         toast.success("Successfully Run");
+            //         setisButtonLoading(false);
+            //         actions.resetForm();
+            //     }
+            // } catch (error) {
+            //   toast.error(error?.response?.data?.msg);
+            //   setisButtonLoading(false);
+            // }
+        },
+    });
+    
+
+    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+const getFormErrorMessage = (name) => {
+    return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+};
 
     const cities = [
         { name: "Email", code: "NY" },
@@ -12,14 +55,12 @@ const EbillModal = ({ ebillModal, setEbillModal }) => {
         { name: "SMS", code: "LDN" },
         { name: "Both Email and SMS", code: "RM" },
     ];
-    const onCityChange = (e) => {
-        setSelectedCity1(e.value);
-    };
+  
     const renderFooter = () => {
         return (
-            <div className="flex justify-content-between m-3">
-                <Button label="Submit" onClick={() => setEbillModal(false)} />
+            <div className="flex justify-content-between m-3">      
                 <Button label="Close" onClick={() => setEbillModal(false)} />
+                <Button label="Submit" onClick={() => setEbillModal(false)} />
             </div>
         );
     };
@@ -29,24 +70,24 @@ const EbillModal = ({ ebillModal, setEbillModal }) => {
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID</p>
-                        <p className="col-8 m-0 p-1">119350</p>
+                        <p className="col-8 m-0 p-1"><h5>119350</h5></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Name</p>
-                        <p className="col-8 m-0 p-1">Hammad Ullah</p>
+                        <p className="col-8 m-0 p-1"><h5>Customer 1</h5></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Address</p>
-                        <p className="col-8 m-0 p-1">Islamabad Pakistan</p>
+                        <p className="col-8 m-0 p-1"><h6>Islamabad Pakistan</h6></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">MDN</p>
-                        <p className="col-8 m-0 p-1">65376418</p>
+                        <p className="col-8 m-0 p-1"><h5>65376418</h5></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">E-Bill</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center border-700 " />
+                        <Dropdown placeholder="Select" id="eBill" value={formik.values.eBill} options={cities} onChange={formik.handleChange} optionLabel="name" optionValue="" className="h-3rem w-7 align-items-center " filter filterBy="name" />
                         </p>
                     </div>
                 </div>

@@ -1,3 +1,12 @@
 .r_n_r ul li {
 list-style: none;
 }
+.cp_table tr td {
+    padding: 1rem;
+}
+.cp_table tr:nth-child(even){
+    background-color: whitesmoke;
+}
+.cp_table tr td:nth-child(odd){
+    font-weight: 600 !important;
+}
