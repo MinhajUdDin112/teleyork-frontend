@@ -29,6 +29,7 @@ const DialogeForRemarks = () => {
             csrRemarks:"",
             callDropRemarks:"",
             callQualityRemarks:"",
+            comment:"",
         },
         onSubmit: async (values, actions) => {
             const dataToSend={
@@ -206,7 +207,7 @@ const DialogeForRemarks = () => {
             <h4 style={{marginLeft:"110px"}}>
                 Comments 
             </h4>
-            <InputTextarea id="reason" value={formik.values.reason} onChange={formik.handleChange} cols={90} rows={5} className="p-2" style={{marginLeft:'110px'}} />
+            <InputTextarea id="reason" value={formik.values.comment} onChange={formik.handleChange} cols={90} rows={5} className="p-2" style={{marginLeft:'110px'}} />
         </div>
         <br />
     </div>
