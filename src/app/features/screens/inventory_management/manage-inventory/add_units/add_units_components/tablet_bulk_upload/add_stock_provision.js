@@ -6,7 +6,7 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import { FileUpload } from "primereact/fileupload";  
 import InfoForUsers from "./InfoForUsers/info_for_users";
-export default function CDMABulkUploadAddProvision() {
+export default function TabletBulkUploadAddProvision() {
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const fileUploadRef = useRef(null);
     function onUpload() {}

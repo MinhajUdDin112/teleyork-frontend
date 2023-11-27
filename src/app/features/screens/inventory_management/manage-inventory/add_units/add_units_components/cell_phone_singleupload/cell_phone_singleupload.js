@@ -8,7 +8,7 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddGsmModelDialog from "./Dialogs/add_gsm_model_dialog";
 import { Card } from "primereact/card";
-export default function GSMSingleUpload() {      
+export default function CellPhoneSingleUpload() {      
     const [addgsm_model_dialog_visibility, setAddGsmModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
   
