@@ -252,7 +252,8 @@ const App = () => {
 
     }])
 
-    const getPermissions = () => {
+    const getPermissions = () => {  
+        console.log("inside permissions")
         if (localStorage.getItem('permissions') === null) {
             return;
         }
@@ -281,7 +282,8 @@ const App = () => {
     }
 
     useEffect(() => {
-        getPermissions()
+        getPermissions()  
+        console.log("calling")
     }, [window.localStorage.permissions]);
 
     return (

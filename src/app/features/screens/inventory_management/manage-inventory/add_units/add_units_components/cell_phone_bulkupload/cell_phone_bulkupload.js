@@ -11,7 +11,6 @@ import InfoForUsers from "./InfoForUsers/info_for_users";
 export default function CellPhoneBulkUpload() {
     const fileUploadRef = useRef();
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
-
     function onUpload() {}
     const formik = useFormik({
         initialValues: {

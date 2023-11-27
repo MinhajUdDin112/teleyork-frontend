@@ -5,8 +5,8 @@ import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
-import FileUploadTemplate from "./add_sim_model_dialog_uploadfiletemplate";
-export default function AddSimModelDialog({ agent }) {
+import FileUploadTemplate from "./add_tablet_model_dialog_uploadfiletemplate";
+export default function AddTabletModelDialog({ agent }) {
     const [networktype, setNetworkType] = useState(null);
     const [description, setDescription] = useState(null);
     const [simtype, setSimType] = useState(null);
