@@ -18,11 +18,11 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const repId = parseLoginRes?.repId;
-    console.log("enrollment id is",enrollmentId)
+   
 
     // Validation Schema
     const validationSchema = Yup.object().shape({
-        transferException: Yup.string().required("This field is required."),
+        
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -55,10 +55,10 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
 
     const options = [
         { label: "Select", value: "" },
-        { label: "TE1", value: "TE1" },
-        { label: "TE2.", value: "TE2." },
-        { label: "TE3", value: "TE3" },
-        { label: "TE4", value: "TE4" },
+        { label: "Improper Transfer-(TE1)", value: "TE1" },
+        { label: "Operations Ceased-(TE2)", value: "TE2." },
+        { label: "Rule Violation-(TE3)", value: "TE3" },
+        { label: "Moved Outside Service Area-(TE4)", value: "TE4" },
     ];
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
@@ -77,7 +77,7 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
                     </label>
                     <Dropdown className="w-15rem" id="transferException" options={options} value={formik.values.transferException} onChange={formik.handleChange} />
 
-                    {getFormErrorMessage("transferException")}
+                    
                 </div>
 
                 <div className="field ">
