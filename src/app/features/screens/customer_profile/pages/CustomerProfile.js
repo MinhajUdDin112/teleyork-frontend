@@ -27,9 +27,10 @@ const CustomerProfile = () => {
 
     useEffect(() => {
         getCustomerProfileData();
+        
     }, []);
 
-    console.log("cp data is", cpData);
+    console.log("cp data is",cpData)
 
     return (
         <>
@@ -57,11 +58,11 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>ACP Qualify</td>
-                                                    <td>{cpData?.serviceInitializationDate ? new Date(cpData.serviceInitializationDate).toLocaleDateString() : ""}</td>
+                                                    <td>{cpData?.acpQualify  ? new Date(cpData.acpQualify).toLocaleDateString() : ""}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Service Address</td>
-                                                    <td>{cpData?.address1 + " " + cpData?.address1}</td>
+                                                    <td>{cpData?.address1 + " " + cpData?.address2}</td>
                                                 </tr>
 
                                                 <tr>
@@ -93,19 +94,36 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td>
+                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ? 
+                                                     <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td>
+                                                     :
+                                                     <td>{cpData?.address1 + " " + cpData?.address2}</td>
+                                                    }
+                                                   
                                                 </tr>
                                                 <tr>
-                                                    <td>Mailing City</td>
+                                                    <td>Mailing City</td> 
+                                                    {cpData?.mailingCity ?
                                                     <td>{cpData?.mailingCity}</td>
+                                                :
+                                                <td>{cpData?.city}</td>}
+                                                    
                                                 </tr>
                                                 <tr>
-                                                    <td>Mailing State</td>
+                                                    <td>Mailing State</td> 
+                                                    {cpData?.mailingState ?
                                                     <td>{cpData?.mailingState}</td>
+                                                :
+                                                <td>{cpData?.state}</td>}
+                                                    
                                                 </tr>
                                                 <tr>
-                                                    <td>Mailing Zip</td>
+                                                    <td>Mailing Zip</td> 
+                                                    {cpData?.mailingZip?
                                                     <td>{cpData?.mailingZip}</td>
+                                                :
+                                                <td>{cpData?.zip}</td>}
+                                                    
                                                 </tr>
 
                                                 {/* <tr>
@@ -252,7 +270,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Order by</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.createdBy?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Master Agent ID</td>
@@ -260,7 +278,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Agent Name</td>
-                                                    <td>--</td>
+                                                     <td>{cpData?.createdBy?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Enrollment ID</td>
@@ -315,7 +333,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Lifeline Program Participation</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.acpProgram?.name}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
