@@ -1,7 +1,7 @@
-import React, { useState,useRef,useEffect } from "react";
-import { useFormik } from "formik"; 
-import * as Yup from "yup";    
-import Axios  from "axios";    
+import React, { useState, useRef, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Axios from "axios";
 import { Toast } from "primereact/toast";
 import BASE_URL from "../../../../../../../../config";
 import { InputText } from "primereact/inputtext";
@@ -11,7 +11,7 @@ import { Dialog } from "primereact/dialog";
 import AddTabletModelDialog from "./Dialogs/add_tablet_model_dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 export default function TabletSingleUploadReprovision() {
-    let ref=useRef(null)
+    let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     console.log(parseLoginRes);
@@ -78,7 +78,7 @@ export default function TabletSingleUploadReprovision() {
             .catch(() => {
                 console.log("error");
             });
-        Axios.get(`${BASE_URL}/api/TabletType/all`)
+        Axios.get(`${BASE_URL}/api/deviceinventory/getTabletDeviceModel`)
             .then((res) => {
                 let Modelholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
@@ -103,7 +103,7 @@ export default function TabletSingleUploadReprovision() {
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
-              IMEI:Yup.string().required("IMEI is required"),
+            IMEI: Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
             AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
@@ -118,41 +118,38 @@ export default function TabletSingleUploadReprovision() {
             Model: "",
             unitType: "Tablet",
             Uploaded_by: parseLoginRes?._id,
-            provisionType: "Reprovision", 
-            IMEI:""
+            provisionType: "Reprovision",
+            IMEI: "",
         },
 
         onSubmit: (e) => {
-        
-            handlesubmit();  
-        
+            handlesubmit();
         },
     });
     function handlesubmit() {
-        console.log(formik.errors);  
-         let obj=formik.values; 
-         obj.serviceProvider=parseLoginRes.compony 
+        console.log(formik.errors);
+        let obj = formik.values;
+        obj.serviceProvider = parseLoginRes.compony;
         if (Object.keys(formik.errors).length === 0) {
-            //formik.values.serviceProvider = parseLoginRes?.compony;  
-            
-            Axios.post(`${BASE_URL}/api/web/esnInventory/addReprovision`, obj)
+            //formik.values.serviceProvider = parseLoginRes?.compony;
+
+            Axios.post(`${BASE_URL}/api/web/tabletInventory/addReprovision`, obj)
                 .then((res) => {
-                    console.log("Successfully done");  
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
+                    console.log("Successfully done");
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    ref.current.show({ severity: "success", summary: "Info", detail: "Successfully Added" });
                 })
-                .catch((err) => {  
-                    console.log(err)   
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:"Failed to Add"});
-                });  
-                  
-        }           
+                .catch((error) => {
+                    
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    console.log("error occured");
+                    ref.current.show({ severity: "error", summary: "Info", detail: error.response.data.msg });
+                });
+        }
     }
     return (
         <>
-           <div>
+            <div>
                 <div className="flex flex-wrap mb-3 justify-content-around ">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -172,7 +169,7 @@ export default function TabletSingleUploadReprovision() {
                         </p>
                         <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
                         {formik.errors.Esn && formik.touched.Esn && (
-                            <div className="mt-2" style={{ color: "red" }}> 
+                            <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Esn}
                             </div>
                         )}
@@ -183,7 +180,7 @@ export default function TabletSingleUploadReprovision() {
                         </p>
                         <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
                     </div>
-                  {/*  <div className="mr-3 mb-3 mt-3">
+                    {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Team <span style={{ color: "red" }}>* </span>
                         </p>
@@ -272,7 +269,7 @@ export default function TabletSingleUploadReprovision() {
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
@@ -316,8 +313,8 @@ export default function TabletSingleUploadReprovision() {
                 }}
             >
                 <AddAgentDetail agent={"Dummy"} />
-            </Dialog>   
-            <Toast ref={ref}/>
+            </Dialog>
+            <Toast ref={ref} />
         </>
     );
 }

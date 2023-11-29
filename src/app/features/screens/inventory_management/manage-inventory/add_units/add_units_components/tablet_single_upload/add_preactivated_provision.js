@@ -78,7 +78,7 @@ export default function TabletSingleUploadAddPreActivatedProvision() {
             .catch(() => {
                 console.log("error");
             });
-        Axios.get(`${BASE_URL}/api/TabletType/all`)
+        Axios.get(`${BASE_URL}/api/deviceinventory/getTabletDeviceModel`)
             .then((res) => {
                 let Modelholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
@@ -103,7 +103,7 @@ export default function TabletSingleUploadAddPreActivatedProvision() {
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
-              IMEI:Yup.string().required("IMEI is required"),
+              IMEI:Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
             AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
@@ -135,17 +135,17 @@ export default function TabletSingleUploadAddPreActivatedProvision() {
         if (Object.keys(formik.errors).length === 0) {
             //formik.values.serviceProvider = parseLoginRes?.compony;  
             
-            Axios.post(`${BASE_URL}/api/web/esnInventory/AddPreEsnActivated`, obj)
+            Axios.post(`${BASE_URL}/api/web/tabletInventory/AddPreActivated`, obj)
                 .then((res) => {
                     console.log("Successfully done");  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
                 })
-                .catch((err) => {  
-                    console.log(err)   
+                .catch((error) => {  
+                       
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:"Failed to Add"});
+                    ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
                 });  
                   
         }           
@@ -272,7 +272,7 @@ export default function TabletSingleUploadAddPreActivatedProvision() {
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}

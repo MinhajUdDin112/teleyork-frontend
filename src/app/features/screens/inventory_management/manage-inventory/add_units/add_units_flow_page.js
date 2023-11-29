@@ -69,7 +69,7 @@ const AddUnits = ({ setActiveComponent }) => {
                         </p>
                         <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
                     </div>
-                    {formik.values.unit !== "GSM" ? (
+                    {formik.values.unit !== "Cell Phone" ? (
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Provision Type <span style={{ color: "red" }}>*</span>

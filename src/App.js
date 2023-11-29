@@ -84,7 +84,10 @@ import InventoryReport from "./app/features/screens/inventory_management/invento
 import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
-const App = () => {
+const App = () => {     
+    const loginRes = localStorage.getItem("userData");
+  const parseLoginRes = JSON.parse(loginRes);    
+  console.log(parseLoginRes)
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");

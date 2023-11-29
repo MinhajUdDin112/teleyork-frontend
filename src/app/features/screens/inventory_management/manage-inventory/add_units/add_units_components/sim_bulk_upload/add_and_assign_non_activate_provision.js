@@ -131,9 +131,9 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision() {
                     console.log("Successfully done");
                     ref.current.show({ severity: "success", summary: "Info", detail: "Added Successfully" });
                 })
-                .catch(() => {
+                .catch((error) => {
                     console.log("error occured");
-                    ref.current.show({ severity: "error", summary: "Info", detail: "Failed to Add" });
+                    ref.current.show({ severity: "error", summary: "Info", detail: error.response.data.msg });
                 });
             formik.values.serviceProvider = parseLoginRes?.companyName; }  
             else{ 

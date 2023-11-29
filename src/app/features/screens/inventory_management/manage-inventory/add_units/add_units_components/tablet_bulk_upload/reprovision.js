@@ -121,7 +121,7 @@
             if (Object.keys(formik.errors).length === 0 ) {  
                 if(formik.values.file !== ""){
                 formik.values.serviceProvider = parseLoginRes?.compony;
-                Axios.post(`${BASE_URL}/api/web/esnInventory/bulkAddReprovision`, formData, {
+                Axios.post(`${BASE_URL}/api/web/tabletInventory/bulkAddReprovision`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -130,9 +130,11 @@
                         console.log("Successfully done");
                         ref.current.show({ severity: "success", summary: "Info", detail: "Added Successfully" });
                     })
-                    .catch(() => {
-                        console.log("error occured");
-                        ref.current.show({ severity: "error", summary: "Info", detail: "Failed to Add" });
+                    .catch((error) => {
+                        console.log(error.response.data.msg)   
+                       console.log("error occured");  
+                        ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
+                   
                     });
                 formik.values.serviceProvider = parseLoginRes?.companyName; }  
                 else{ 

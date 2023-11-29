@@ -78,17 +78,22 @@ export default function TabletSingleUploadAddProvision() {
             .catch(() => {
                 console.log("error");
             });
-        Axios.get(`${BASE_URL}/api/TabletType/all`)
-            .then((res) => {
+        Axios.get(`${BASE_URL}/api/deviceinventory/getTabletDeviceModel`)
+            .then((res) => {     
+                console.log("Tablet Type is") 
+                console.log(res)
+                
                 let Modelholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
                     const obj = {};
-                    obj.label = res.data.data[i].TabletType;
-                    obj.value = res.data.data[i].TabletType;
+                    obj.label = res.data.data[i].name;
+                    obj.value = res.data.data[i].name;
                     Modelholder.push(obj);
                 }
-
-                setModel(Modelholder);
+ 
+                   console.log(Modelholder)
+                setModel(Modelholder);  
+                
             })
             .catch(() => {
                 console.log("error");
@@ -103,7 +108,7 @@ export default function TabletSingleUploadAddProvision() {
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
-              IMEI:Yup.string().required("IMEI is required"),
+              IMEI:Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
             AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
@@ -135,17 +140,17 @@ export default function TabletSingleUploadAddProvision() {
         if (Object.keys(formik.errors).length === 0) {
             //formik.values.serviceProvider = parseLoginRes?.compony;  
             
-            Axios.post(`${BASE_URL}/api/web/esnInventory/esnAddStock`, obj)
+            Axios.post(`${BASE_URL}/api/web/tabletInventory/tabletAddStock`, obj)
                 .then((res) => {
                     console.log("Successfully done");  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
                 })
-                .catch((err) => {  
-                    console.log(err)   
+                .catch((error) => {  
+                 
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:"Failed to Add"});
+                    ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
                 });  
                   
         }           
@@ -272,7 +277,7 @@ export default function TabletSingleUploadAddProvision() {
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
