@@ -9,9 +9,8 @@ import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { useEffect } from "react";
 import { useState } from "react";
-import { SelectButton } from "primereact/selectbutton";
 import { Checkbox } from "primereact/checkbox";
-import { ListBox } from 'primereact/listbox';
+
 
 const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
     const [allRoles, setAllRoles] = useState([]);
@@ -38,12 +37,15 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
         onSubmit: async (values, actions) => {
             const approvedBy = parseLoginRes?._id;
             const approved = false;
-            const data = {
+
+            const dataToSend = {
                 assignees: formik.values.assignees,
                 reason: formik.values.reason,
+                department: formik.values.department,
+                approvedBy,
+                approved,
+                enrolmentId,
             };
-            const dataToSend = { approvedBy, enrolmentId, approved, data, ...values };
-
             try {
                 const response = await Axios.patch(`${BASE_URL}/api/user/rejected`, dataToSend);
                 if (response?.status === 201 || response?.status === 200) {
@@ -58,7 +60,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
     });
 
     const assignCSRId = () => {
-        formik.setFieldValue("assignees", CSRid);
+        formik.setFieldValue("assignees", [CSRid]);
     };
 
     useEffect(() => {
@@ -124,34 +126,33 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
                             filterBy="label" // Set the property to be used for filtering
                         />
                     </div>
-{
-    formik.values.department ? 
-     <div className="p-field col-12 md:col-3">
-    <label className="Label__Text ml-3">Select User </label>
-    {allRoles.map((item) => (
-        <div key={item._id} className="p-field-checkbox m-1  ml-3">
-            <Checkbox
-                inputId={item._id}
-                value={item._id}
-                checked={formik.values.assignees.includes(item._id)}
-                onChange={(e) => {
-                    const isChecked = e.checked;
-                    const updatedAssignee = isChecked ? [...formik.values.assignees, item._id] : formik.values.assignees.filter((value) => value !== item._id);
-                    formik.setFieldValue("assignees", updatedAssignee);
-                }}
-            />
-          
-            <label htmlFor={item._id} className="p-checkbox-label ml-1">
-                {item.name}
-            </label>
-        </div>
-    ))}
+                    {formik.values.department ? (
+                        <div className="p-field col-12 md:col-3">
+                            <label className="Label__Text ml-3">Select User </label>
+                            {allRoles.map((item) => (
+                                <div key={item._id} className="p-field-checkbox m-1  ml-3">
+                                    <Checkbox
+                                        inputId={item._id}
+                                        value={item._id}
+                                        checked={formik.values.assignees.includes(item._id)}
+                                        onChange={(e) => {
+                                            const isChecked = e.checked;
+                                            const updatedAssignee = isChecked ? [...formik.values.assignees, item._id] : formik.values.assignees.filter((value) => value !== item._id);
+                                            formik.setFieldValue("assignees", updatedAssignee);
+                                        }}
+                                    />
 
+                                    <label htmlFor={item._id} className="p-checkbox-label ml-1">
+                                        {item.name}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        ""
+                    )}
+                </div>
 
-</div>
- :  ""
-}</div>
-                   
                 <div className="mt-4">
                     <h4>
                         Reject Reason <span className="steric"> *</span>

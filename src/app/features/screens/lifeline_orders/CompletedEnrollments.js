@@ -7,6 +7,7 @@ import BASE_URL from "../../../../config";
 import Axios from "axios";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 const CompletedEnrollments = () => {
@@ -21,7 +22,13 @@ const CompletedEnrollments = () => {
     const onGlobalFilterChange = (e) => {
         setGlobalFilterValue(e.target.value);
     };
+ 
+    const navigate = useNavigate();
 
+    const handleEnrollmentIdClick = (rowData) => {
+        navigate("/customer-profile", { state: { selectedId: rowData._id } });
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
+    };
     
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -87,7 +94,11 @@ const CompletedEnrollments = () => {
                 <DataTable value={ allCompletedEnrollments} globalFilter={globalFilterValue} stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
                         {/* <Column header="#" field="SNo"></Column> */}
-                        <Column header="Enrollment ID" field="enrollmentId"></Column>
+                        <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
+                    <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
+                        {rowData.enrollmentId}
+                    </button>
+                )}></Column>
                         <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
                         <Column header="Address" field="address1"></Column>
                         <Column header="City" field="city"></Column>
