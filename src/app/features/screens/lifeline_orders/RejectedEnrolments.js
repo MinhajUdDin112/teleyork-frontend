@@ -53,6 +53,11 @@ const RejectedEnrollments = () => {
     //         </div>
     //     );
     // };
+    
+    const handleEnrollmentIdClick = (rowData) => {
+        navigate("/customer-profile", { state: { selectedId: rowData._id } });
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
+    };
 
     const navigate = useNavigate();
 
@@ -176,7 +181,11 @@ const RejectedEnrollments = () => {
                 <DataTable value={ allEnrollments} globalFilter={globalFilterValue} stripedRows resizableColumns columnResizeMode="fit"  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
                            
-                            <Column header="Enrollment ID" field="enrollmentId"></Column>
+                            <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
+                    <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
+                        {rowData.enrollmentId}
+                    </button>
+                )}></Column>
                             <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
                         <Column header="Address" field="address1"></Column>
                         <Column header="City" field="city"></Column>

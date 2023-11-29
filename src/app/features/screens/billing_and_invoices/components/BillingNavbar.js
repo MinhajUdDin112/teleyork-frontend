@@ -16,7 +16,7 @@ const BillingNavbar = () => {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`);
             setCpData(res?.data?.data || []);
         } catch (error) {
-            toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+            //toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
         }
     };
 

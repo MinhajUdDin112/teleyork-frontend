@@ -19,9 +19,14 @@ const CustomerProfile = () => {
     const getCustomerProfileData = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
-            setCpData(res?.data?.data || []);
+            if(res?.status==200|| res?.status==201){
+                setCpData(res?.data?.data || []);
+            }
+          
         } catch (error) {
-            toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+            //console.log(error?.response?.data?.msg);
+
+           // toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
         }
     };
 

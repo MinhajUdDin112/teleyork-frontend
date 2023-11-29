@@ -70,8 +70,7 @@ const AllEnrollments = () => {
 
     const handleEnrollmentIdClick = (rowData) => {
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
-        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
-       
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
     };
 
     // Get role name  from login response
