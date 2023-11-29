@@ -254,7 +254,7 @@ export default function TabletBulkUploadAddStock() {
                        
                          </p>    
                 </>        
-               <InfoForUsers ProvisionType={"AddAndAssignNonActive"}/>
+               <InfoForUsers ProvisionType={"AddStock"}/>
                 <Dialog
                     style={{ width: "90vw" }}
                     visible={addAgentDialogVisibility}

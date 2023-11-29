@@ -255,7 +255,7 @@ export default function TabletBulkUploadAddActivateProvision() {
                        
                          </p>    
                 </>        
-               <InfoForUsers ProvisionType={"AddAndAssignNonActive"}/>
+               <InfoForUsers ProvisionType={"AddActivate"}/>
                 <Dialog
                     style={{ width: "90vw" }}
                     visible={addAgentDialogVisibility}

@@ -168,9 +168,9 @@ export default function TabletSingleUploadAddProvision() {
 
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
-                            ESN/Tablet Number <span style={{ color: "red" }}>*</span>
+                            ESN <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.Esn} name="TabletNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
                         {formik.errors.Esn && formik.touched.Esn && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Esn}

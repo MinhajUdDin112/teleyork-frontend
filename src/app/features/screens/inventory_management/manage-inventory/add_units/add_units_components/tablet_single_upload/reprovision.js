@@ -172,7 +172,7 @@ export default function TabletSingleUploadReprovision() {
                         </p>
                         <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
                         {formik.errors.Esn && formik.touched.Esn && (
-                            <div className="mt-2" style={{ color: "red" }}>
+                            <div className="mt-2" style={{ color: "red" }}> 
                                 {formik.errors.Esn}
                             </div>
                         )}

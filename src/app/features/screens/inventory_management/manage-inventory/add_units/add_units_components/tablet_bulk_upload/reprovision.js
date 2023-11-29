@@ -254,7 +254,7 @@
                            
                              </p>    
                     </>        
-                   <InfoForUsers ProvisionType={"AddAndAssignNonActive"}/>
+                   <InfoForUsers ProvisionType={"Reprovision"}/>
                     <Dialog
                         style={{ width: "90vw" }}
                         visible={addAgentDialogVisibility}

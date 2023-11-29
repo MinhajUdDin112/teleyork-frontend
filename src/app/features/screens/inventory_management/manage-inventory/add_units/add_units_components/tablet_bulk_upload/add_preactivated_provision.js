@@ -95,7 +95,7 @@
                 /*team:"",*/
                 unitType: "Tablet",
                 Uploaded_by: parseLoginRes?._id,
-                provisionType: "Add Stock",
+                provisionType: "Add Pre Activate",
             },
     
             onSubmit: (e) => {
@@ -121,7 +121,7 @@
             if (Object.keys(formik.errors).length === 0 ) {  
                 if(formik.values.file !== ""){
                 formik.values.serviceProvider = parseLoginRes?.compony;
-                Axios.post(`${BASE_URL}/api/web/esnInventory/bulkAddReprovision`, formData, {
+                Axios.post(`${BASE_URL}/api/web/esnInventory/bulkAddPreActivated`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -254,7 +254,7 @@
                            
                              </p>    
                     </>        
-                   <InfoForUsers ProvisionType={"AddAndAssignNonActive"}/>
+                   <InfoForUsers ProvisionType={"AddPreActivated"}/>
                     <Dialog
                         style={{ width: "90vw" }}
                         visible={addAgentDialogVisibility}
