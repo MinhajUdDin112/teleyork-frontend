@@ -18,7 +18,8 @@ export const AppTopbar = (props) => {
 
 
     const handleLogout = () => {
-        dispatch(logout());
+        dispatch(logout()); 
+        
         navigate("/login");
     };
     return (

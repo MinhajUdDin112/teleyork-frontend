@@ -103,7 +103,7 @@ export default function SIMSingleUploadAddProvision() {
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
-              IMEI:Yup.string().required("IMEI is required"),
+              IMEI:Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
             AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
@@ -139,11 +139,12 @@ export default function SIMSingleUploadAddProvision() {
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
                 })
-                .catch((err) => {  
-                    console.log(err)   
+                .catch((error) => {     
+                      
+                    console.log(error.response.data.msg)   
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:"Failed to Add"});
+                    ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
                 });  
                   
         }           
@@ -270,7 +271,7 @@ export default function SIMSingleUploadAddProvision() {
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text"  keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
