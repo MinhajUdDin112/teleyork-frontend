@@ -25,7 +25,7 @@ export const AppTopbar = (props) => {
     return (
         <div className="layout-topbar">
             <Link to="/" className="layout-topbar-logo">
-                <img className="w-10rem h-5rem" src={process.env.PUBLIC_URL + "/companyLogo.png"} alt="Logo" />
+                <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                 <span>{parseLoginRes?.companyName}</span>
                
             </Link>
