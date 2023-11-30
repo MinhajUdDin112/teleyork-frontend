@@ -26,7 +26,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
     const [isHouseHold, setIsHouseHold] = useState(false);
     const [acp, setAcp] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [isSubmit, setIsSubmit] = useState()
+    const [isDuplicate, setIsDuplicate] = useState(false)
+
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This is Required"),
@@ -112,7 +113,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
                 isACP: acp,
 
              };
-            console.log("data to send is",dataToSend)
+           
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
@@ -180,6 +181,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
     const basicResponse = localStorage.getItem("basicData");
     const parsebasicResponse = JSON.parse(basicResponse);
 
+    //get zipData
+    const zipResponse = localStorage.getItem("zipData");
+    const parsezipResponse= JSON.parse(zipResponse);
+
     useEffect(() => {
          const dobString = parsebasicResponse?.data?.DOB;
        
@@ -218,13 +223,41 @@ useEffect(() => {
 }, [isSelfReceive])
 
 
+//check customer Duplication
+
+useEffect(() => {
+    const fetchData = async () => {
+        if (parsezipResponse && !basicResponse) {
+            if (formik.values.contact.length > 9) {
+                const data = {
+                    contact: formik.values.contact    
+                };
+                console.log("Before Axios request");
+                try {
+                    const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                   
+                    setIsDuplicate(false);
+                }
+                 catch (error) {
+                    toast.error(error?.response?.data?.msg);
+                    setIsDuplicate(true);
+                }
+                console.log("After Axios request");
+            }
+        }
+    };
+
+    fetchData();
+}, [formik.values.contact]);
+
+
     return (
         <>
             <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                 <h5 className="font-bold enroll">ENROLLMENT ID: {enrollment_id}</h5>
-                     <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
+                     <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading || isDuplicate} />
                 </div>
 
                 <p>To apply for the Affordable Connectivity program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
