@@ -109,6 +109,7 @@ const AllEnrollments = () => {
             if (res?.status === 200 || res?.status === 201) {
                 setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
+               
             }
         } catch (error) {
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
@@ -118,6 +119,7 @@ const AllEnrollments = () => {
 
     useEffect(() => {
         getAllEnrollments();
+
     }, []);
   
 
@@ -128,6 +130,7 @@ const AllEnrollments = () => {
         try {
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
             if (response?.status === 201 || response?.status === 200) {
+                localStorage.removeItem("zipData");  // Use removeItem instead of clearItem
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
                 localStorage.setItem("programmeId", JSON.stringify(response.data));
@@ -138,6 +141,7 @@ const AllEnrollments = () => {
             toast.error(error?.response?.data?.msg);
             setisButtonLoading(false);
         }
+        
         setisButtonLoading(false);
     };
 
