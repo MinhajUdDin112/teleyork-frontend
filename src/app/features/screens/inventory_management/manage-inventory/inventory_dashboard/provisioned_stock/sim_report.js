@@ -8,7 +8,7 @@ export default function SIMProvisionedStockReport() {
       };
     return (
         <>
-         <img src={require('../../../../../../../assets/images/sim.jpg')} style={{display:"inline-block",width:"50px",height:"auto"}}/>  
+         <img src='/images/inventory_dashboard/sim.svg' style={{display:"inline-block",width:"50px",height:"auto"}}/>  
              
             <h5 style={{display:"inline-block",position:"absolute",marginTop:"12px"}}>SIM Service</h5>
             {Object.keys(provisionedsimreport).map((item) => (
@@ -16,7 +16,7 @@ export default function SIMProvisionedStockReport() {
                     <div>
                         <span>{item}</span>
                     </div>
-                    <div className="flex justify-content-center align-items-center" style={{ background: `${colors[item]}`, borderRadius: "25px", width: "25px", height: "25px" }}>
+                    <div className="flex justify-content-center align-items-center" style={{ cursor:"pointer",background: `${colors[item]}`, borderRadius: "25px", width: "25px", height: "25px" }}>
                         <span>{provisionedsimreport[item]}</span>
                     </div>
                 </div>
