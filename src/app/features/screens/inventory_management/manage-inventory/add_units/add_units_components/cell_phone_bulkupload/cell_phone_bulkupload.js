@@ -241,18 +241,15 @@ export default function CellPhoneBulkUpload() {
                 </div>
            
                 <>
-                    <p className="mt-4">
-                        <strong>Notes:</strong>
-                        SIM, MDN, Model ID (STANDARD/MICRO/NANO), MSL/PUK,Puk2, PO#,BOX#, Wholesale/Cost Price for SIM, Selling/Retail Price for SIM, UICCID, Zipcode, Activation Fee , MSID,Device ID/IMEI,ACP Co-Pay Amount,ACP Device Reimbursement Amount,Device Retail Price   
-                        {formik.values.carrier === ""? <p className="font-bold" style={{display:"inline-block"}}> &nbsp; (Sample file)</p>
-                        : <a download={true} href="/images/addAndAssignNonActivateSim (1).xlsx" className="font-bold"> &nbsp; (Sample file)</a>
-                        }
+                    <p className="mt-8">
+                   
+        
+                <strong>Header:</strong>
+                IMEI, Model, #BOX , Esn  <a download={true} href="/images/addAndAssignNonActivateSim (1).xlsx" className="font-bold"> &nbsp; (Sample file)</a>
+            
+                    
                     </p>
-                    <p className="mt-4">
-                        <strong>Notes:-</strong>
-                        Please select carrier to download the (Sample File)    
-                       
-                         </p>    
+                  
                 </>        
                <InfoForUsers ProvisionType={"AddStock"}/>
                 <Dialog

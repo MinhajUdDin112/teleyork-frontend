@@ -100,7 +100,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
             SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least  19 characters").max(25, "Sim Number must be at most 25 characters"),
-
+        
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
@@ -120,6 +120,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
             unitType: "sim",
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add And Assign Non Active",
+        
         },
 
         onSubmit: (e) => {
@@ -278,7 +279,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                                 {formik.errors.box}
                             </div>
                         )}
-                    </div>
+                    </div>               
+                  
                 </div>
                 <div className="flex flex-wrap justify-content-center align-item-center">
                     <Button
