@@ -61,6 +61,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             poBoxCity: "",
         },
         onSubmit: async (values, actions) => {
+            checkEligiblity();
             const userId = _id;
             const dataToSend = {
                 address1: formik.values.address1,
@@ -86,6 +87,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
            
             setIsLoading(true);
             try {
+
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     localStorage.setItem("address", JSON.stringify(response.data));
@@ -96,8 +98,22 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
             }
+            
         },
     });
+
+    const checkEligiblity = async()=>{
+        try {
+
+            const response = await Axios.post(`${BASE_URL}/api/user/deviceEligibilty?enrollmentId=${_id}`);
+            if (response?.status === 200 || response?.status === 201) {
+                localStorage.setItem("checkEligiblity", JSON.stringify(response.data));
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+            
+        }
+    }
 
     // useEffect(() => {
     //     console.log("mailing address ", formik.values.mailingAddress1);

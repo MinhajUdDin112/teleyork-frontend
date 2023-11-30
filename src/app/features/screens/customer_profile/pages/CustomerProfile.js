@@ -29,6 +29,7 @@ const CustomerProfile = () => {
            // toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
         }
     };
+    console.log("cp data is",cpData)
 
     useEffect(() => {
         getCustomerProfileData();
@@ -314,6 +315,11 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Tablet Subsidy Qualification</td>
+                                                    {
+                                                        cpData?.deviceEligibilty ==true ?<td>Yes</td> :
+                                                        <td>No</td>
+                                                    }
+
                                                     <td>{cpData?.deviceEligibilty}</td>
                                                 </tr>
                                                 <tr>

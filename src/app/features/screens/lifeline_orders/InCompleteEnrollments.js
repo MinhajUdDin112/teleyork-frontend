@@ -68,6 +68,9 @@ const InCompleteEnrollments = () => {
             if (res?.status === 200 || res?.status === 201) {
                 setAllInCompletedEnrollments(res?.data?.data);
                 setIsLoading(false);
+                localStorage.removeItem("basicData");
+                localStorage.removeItem("address");
+                localStorage.removeItem("programmeId");
             }
         } catch (error) {
             toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
@@ -87,7 +90,8 @@ const InCompleteEnrollments = () => {
             if (response?.status === 201 || response?.status === 200) {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
-                localStorage.setItem("programmeId", JSON.stringify(response.data));
+               // localStorage.setItem("programmeId", JSON.stringify(response.data));
+             
                 navigate("/enrollment");
                 setisButtonLoading(false);
             }
