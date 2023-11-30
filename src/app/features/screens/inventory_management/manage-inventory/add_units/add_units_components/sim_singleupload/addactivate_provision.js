@@ -211,7 +211,8 @@ export default function SIMSingleUploadAddActivateProvision() {
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value);
+                                formik.setFieldValue("agentType", e.value);   
+                                formik.setFieldValue("AgentName","")
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
