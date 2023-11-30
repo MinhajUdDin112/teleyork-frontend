@@ -12,7 +12,7 @@ export default function InfoForUsers({ ProvisionType }) {
                         <strong>Notes:</strong>
                         SIM, MDN, Model ID (STANDARD/MICRO/NANO), MSL/PUK,Puk2, PO#,BOX#, Wholesale/Cost Price for SIM, Selling/Retail Price for SIM, UICCID, Zipcode, Activation Fee , MSID,Device ID/IMEI,ACP Co-Pay Amount,ACP Device Reimbursement Amount,Device Retail Price
                     </p>
-                    <p className="mt-4">
+                    <p className="mt-4 ">
                         <strong>Notes:-</strong>
                         Please select carrier to download the sample file
                     </p>
@@ -39,11 +39,9 @@ export default function InfoForUsers({ ProvisionType }) {
                         Please select carrier to download the sample file
                     </p>
                 </>
-            ) :  ProvisionType === "AddAndAssignNonActive" ? (
-                <>
-                   
-                </>
-            ) :(
+            ) : ProvisionType === "AddAndAssignNonActive" ? (
+                <></>
+            ) : (
                 <>
                     <p className="mt-4">
                         <strong>Notes:</strong>
@@ -59,14 +57,14 @@ export default function InfoForUsers({ ProvisionType }) {
             <>
                 {ProvisionType === "AddStock" || ProvisionType === "AddAndAssignNonActive"
                     ? InfoForUsersAddAndAssignNonActivatedProvision.map((infoitem) => (
-                          <div className="flex flex-wrap justify-content-around mt-8">
+                          <div className="flex flex-wrap justify-content-around mt-8 card">
                               <div style={{ width: "20%" }}>
                                   <span>
                                       {" "}
                                       <strong>{infoitem.label}:</strong>
                                   </span>
                               </div>
-                              <div style={{ width: "60%" }} className="flex">
+                              <div style={{ width: "60%" }} className="flex card p-5">
                                   {" "}
                                   <p>{infoitem.value}</p>
                               </div>
@@ -74,14 +72,14 @@ export default function InfoForUsers({ ProvisionType }) {
                       ))
                     : ProvisionType === "AddPreActivated"
                     ? InfoForUserAddPreActivatedProvision.map((infoitem) => (
-                          <div className="flex flex-wrap justify-content-around mt-8">
+                          <div className="flex flex-wrap justify-content-around mt-8 card">
                               <div style={{ width: "20%" }}>
                                   <span>
                                       {" "}
                                       <strong>{infoitem.label}:</strong>
                                   </span>
                               </div>
-                              <div style={{ width: "60%" }} className="flex">
+                              <div style={{ width: "60%" }} className="flex card p-5">
                                   {" "}
                                   <p>{infoitem.value}</p>
                               </div>
@@ -89,14 +87,14 @@ export default function InfoForUsers({ ProvisionType }) {
                       ))
                     : ProvisionType === "AddAndActivate"
                     ? InfoForUsersAddAndActivate.map((infoitem) => (
-                          <div className="flex flex-wrap justify-content-around mt-8">
+                          <div className="flex flex-wrap justify-content-around mt-8 card">
                               <div style={{ width: "20%" }}>
                                   <span>
                                       {" "}
                                       <strong>{infoitem.label}:</strong>
                                   </span>
                               </div>
-                              <div style={{ width: "60%" }} className="flex">
+                              <div style={{ width: "60%" }} className="flex card p-5">
                                   {" "}
                                   <p>{infoitem.value}</p>
                               </div>
