@@ -79,7 +79,7 @@ getESN();
 useEffect(() => {
   const getPlan = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=645a85198cd1ff499c8b99cd`);
+          const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`);
           setAllPlan(res?.data?.data || []);
          
       } catch (error) {

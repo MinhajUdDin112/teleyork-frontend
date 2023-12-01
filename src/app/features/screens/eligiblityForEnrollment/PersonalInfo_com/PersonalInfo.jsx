@@ -129,6 +129,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
         },
     });
 
+    
+
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
     }, [eSim]);
@@ -232,7 +234,7 @@ useEffect(() => {
                 const data = {
                     contact: formik.values.contact    
                 };
-                console.log("Before Axios request");
+               
                 try {
                     const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
                    
@@ -242,7 +244,7 @@ useEffect(() => {
                     toast.error(error?.response?.data?.msg);
                     setIsDuplicate(true);
                 }
-                console.log("After Axios request");
+              
             }
         }
     };
