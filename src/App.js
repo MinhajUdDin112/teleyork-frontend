@@ -237,48 +237,39 @@ const App = () => {
     const loginPerms = localStorage.getItem("permissions")
     const parsedLoginPerms = JSON.parse(loginPerms)
 
-    console.log('parsedLoginPerms', parsedLoginPerms)
-
-    const [dynamicMenu, setDynamicMenu] = useState([{
-
-        // Initial state
-        items: [
-            {
-                label: "Dashboard",
-                icon: "pi pi-fw pi-home",
-                to: "/",
-            }
-        ],
-
-    }])
+    const [dynamicMenu, setDynamicMenu] = useState([])
 
     const getPermissions = () => {
-        if (localStorage.getItem('permissions') === null) {
+        const storedPermissions = localStorage.getItem('permissions');
+        if (!storedPermissions) {
             return;
         }
-        else {
-            console.log("here")
-            let modules = parsedLoginPerms.map((node) => {
-                return {
-                    label: node?.module,
-                    icon: "",
-                    items: node.subModule.map((child) => {
-                        return {
-                            label: child?.name,
-                            icon: child?.icon,
-                            to: child?.route
-                        }
-                    })
+
+        const modules = parsedLoginPerms
+            .map((node) => {
+                if (node.subModule.some(subNode => subNode?.actions?.some(action => action?.name === "view"))) {
+                    return {
+                        label: node.module,
+                        icon: "",
+                        items: node.subModule
+                            .filter(subNode => subNode?.actions?.some(action => action?.name === "view"))
+                            .map((child) => ({
+                                label: child.name,
+                                icon: child.icon,
+                                to: child.route
+                            })),
+                    };
                 }
+                return null;
             })
-            modules = modules.filter((item) => item.items.length > 0)
-            setDynamicMenu((prev) => {
-                return [...prev, {
-                    items: modules
-                }]
-            });
-        }
-    }
+            .filter((item) => item && item.items.length > 0);
+
+        setDynamicMenu(() => [{
+            items: modules
+        }]);
+    };
+
+
 
     useEffect(() => {
         getPermissions()
