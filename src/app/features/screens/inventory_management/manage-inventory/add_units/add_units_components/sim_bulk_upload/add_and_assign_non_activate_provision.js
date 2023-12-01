@@ -172,8 +172,10 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision() {
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value);
-                                setDepartmentSelected(e.value);
+                                formik.setFieldValue("agentType", e.value);  
+                                 formik.setFieldValue("AgentName","")
+                                setDepartmentSelected(e.value);                       
+                                
                             }}
                             placeholder="Select an option"
                             className="w-20rem mt-2"

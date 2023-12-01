@@ -101,8 +101,7 @@ export default function SIMSingleUploadAddPreActivatedProvision() {
             SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least 19 characters").max(25, "Sim Number must be at most 25 characters"),
             box: Yup.string().required("Box is required"),
             Model: Yup.string().required("Model is required"),
-              IMEI:Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
-            AgentName: Yup.string().required("Agent Name is required"),
+         AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
         initialValues: {
@@ -117,7 +116,7 @@ export default function SIMSingleUploadAddPreActivatedProvision() {
             unitType: "sim",
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add Pre-Activated", 
-            IMEI:""
+   
         },
 
         onSubmit: (e) => {
@@ -211,6 +210,7 @@ export default function SIMSingleUploadAddPreActivatedProvision() {
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
+                                formik.setFieldValue("AgentName","")
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -265,17 +265,7 @@ export default function SIMSingleUploadAddPreActivatedProvision() {
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
-                            IMEI<span style={{ color: "red" }}>*</span>
-                        </p>
-                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
-                        {formik.errors.IMEI && formik.touched.IMEI && (
-                            <div className="mt-2" style={{ color: "red" }}>
-                                {formik.errors.IMEI}
-                            </div>
-                        )}
-                    </div>
+                
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Box#<span style={{ color: "red" }}>*</span>

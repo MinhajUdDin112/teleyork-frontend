@@ -218,6 +218,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
+                                formik.setFieldValue("AgentName","")
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
