@@ -10,3 +10,12 @@ list-style: none;
 .cp_table tr td:nth-child(odd){
     font-weight: 600 !important;
 }
+.hide_text {
+    white-space: nowrap;
+    width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.counter_span {
+    display: inherit;
+}
