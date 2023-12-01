@@ -6,13 +6,12 @@ import { Button } from "primereact/button";
 import { Password } from "primereact/password";
 import card from "primereact";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const CreateUser = () => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);

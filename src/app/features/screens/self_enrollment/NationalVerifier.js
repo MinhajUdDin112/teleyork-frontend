@@ -3,10 +3,9 @@ import { Checkbox } from "primereact/checkbox";
 import { Button } from "primereact/button";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import BASE_URL from "../../../../config";
 import { toast } from "react-toastify";
 import { ProgressSpinner } from "primereact/progressspinner";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const NationalVerifier = () => {
     const [checked, setChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false)

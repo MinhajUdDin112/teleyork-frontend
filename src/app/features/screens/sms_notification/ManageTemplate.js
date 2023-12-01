@@ -9,14 +9,14 @@ import { Route, Routes } from "react-router-dom";
 import { getAllTemplateAction, getOneTemplateAction } from "../../../store/notification/NotificationAction";
 import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
-import BASE_URL from "../../../../config";
 import Axios from "axios";
 import ReactPaginate from "react-paginate";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import TemplateSearchBar from "./TemplateSearchBar";
 import { Toast } from "primereact/toast";
-import EditTemplate from "./EditTemplate";
+import EditTemplate from "./EditTemplate"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const ManageTemplate = () => {
     let navigate = useNavigate();
     const [visible, setVisible] = useState(false);

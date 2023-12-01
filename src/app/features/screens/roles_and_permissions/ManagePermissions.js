@@ -5,12 +5,12 @@ import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import { InputText } from "primereact/inputtext";
 import { Divider } from "primereact/divider";
-import BASE_URL from "../../../../config";
 import Axios from "axios";
 import { Toast } from "primereact/toast";  
 import { useLocation } from "react-router-dom"; 
 import ManagepermissionModule from "./ManagePermissionModule";  
-import { ProgressSpinner } from 'primereact/progressspinner';
+import { ProgressSpinner } from 'primereact/progressspinner';   
+const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function ManagePermissions({setRefresh}) {  
 const searchParams = new URLSearchParams(useLocation().search);
   const [roleId,setRoleId]=useState(searchParams.get("roleId")) 

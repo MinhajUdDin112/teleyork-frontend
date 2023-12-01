@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import BASE_URL from "../../../config";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 //add template action
 export const addTemplateAction = createAsyncThunk("notification/api/sms/addTemplate", async (body, { rejectWithValue }) => {
     try {

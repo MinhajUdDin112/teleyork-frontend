@@ -4,14 +4,14 @@ import { useFormik } from "formik";
 import Axios from "axios";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
-import BASE_URL from "../../../../../../../../config";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { Dropdown } from "primereact/dropdown";
 import AddAgentDetail from "./dialogs/add_agent_detail";
 import { Dialog } from "primereact/dialog";
 import InfoForUsers from "./InfoForUsers/info_for_users";
-export default function SIMBulkUploadAddAndAssignNonActivateProvision() {
+export default function SIMBulkUploadAddAndAssignNonActivateProvision() {   
+    const BASE_URL=process.env.REACT_APP_BASE_URL
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);

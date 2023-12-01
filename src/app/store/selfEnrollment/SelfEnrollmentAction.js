@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import BASE_URL from "../../../config";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 //Verify Zip action
 export const verifyZipAction = createAsyncThunk("selfEnrollmentapi/enrollment/verifyZip", async (body, { rejectWithValue }) => {
     localStorage.clear("initialInformation");

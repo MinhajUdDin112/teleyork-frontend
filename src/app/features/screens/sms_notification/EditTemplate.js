@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { Dropdown } from "primereact/dropdown";   
 import { useSelector } from "react-redux";
 import { InputText } from "primereact/inputtext"; 
-import BASE_URL from "../../../../config";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import * as Yup from "yup";  
@@ -10,7 +9,8 @@ import Axios from "axios";
 import { Editor } from "primereact/editor";
 import { useEffect } from "react";  
 import { useNavigate } from "react-router-dom";
-import { Toast } from "primereact/toast";
+import { Toast } from "primereact/toast";   
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const EditTemplate = (probs) => {         
     let navigate=useNavigate()  
     const [stop,setstop]=useState(false)
