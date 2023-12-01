@@ -108,6 +108,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             const response = await Axios.post(`${BASE_URL}/api/user/deviceEligibilty?enrollmentId=${_id}`);
             if (response?.status === 200 || response?.status === 201) {
                 localStorage.setItem("checkEligiblity", JSON.stringify(response.data));
+             
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
