@@ -1,2 +1,0 @@
-const Base_URL="Backend URL for Frontend" 
-export default Base_URL
