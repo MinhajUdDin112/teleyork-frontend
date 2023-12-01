@@ -12,13 +12,11 @@ import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import classNames from "classnames";
-import BASE_URL from "../../../../../config";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
-
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const [confrimAddress, setConfrimAddress] = useState("same");
     const [isSame, setIsSame] = useState();
@@ -61,6 +59,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             poBoxCity: "",
         },
         onSubmit: async (values, actions) => {
+            checkEligiblity();
             const userId = _id;
             const dataToSend = {
                 address1: formik.values.address1,
@@ -86,6 +85,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
            
             setIsLoading(true);
             try {
+
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     localStorage.setItem("address", JSON.stringify(response.data));
@@ -96,8 +96,35 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
             }
+            
         },
     });
+
+    const checkEligiblity = async()=>{
+        try {
+
+            const response = await Axios.post(`${BASE_URL}/api/user/deviceEligibilty?enrollmentId=${_id}`);
+            if (response?.status === 200 || response?.status === 201) {
+                localStorage.setItem("checkEligiblity", JSON.stringify(response.data));
+             
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+            
+        }
+    }
+
+    // useEffect(() => {
+    //     console.log("mailing address ", formik.values.mailingAddress1);
+    //     if (isDifferent == "false") {
+    //         formik.setFieldValue("mailingAddress1", formik.values.address1);
+    //         formik.setFieldValue("mailingAddress2", formik.values.address2); // Corrected line
+    //         formik.setFieldValue("mailingZip", zipCode);
+    //         formik.setFieldValue("mailingCity", zipCity);
+    //         formik.setFieldValue("mailingState", zipState);
+    //         console.log("mailing address ", formik.values.mailingAddress1);
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (zipCode) {

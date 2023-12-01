@@ -12,30 +12,28 @@ const InvoiceTypes = ({ setNsfModal, setAdHocInvoiceModal, setMisMatchInvoiceMod
                         </Button>
                        
                     </div> */}
-                    <div className="flex align-items-center mb-3">
-                        <Button onClick={() => setEbillModal(true)} id="refundInvoice" className="w-14rem h-2rem text-sm font-medium justify-content-center border-round  border-none">
-                            E-Bill Setting
+                     <div className="flex align-items-center mb-3">
+                        <Button onClick={() => setAdHocInvoiceModal(true)} id="refundInvoice" className="w-14rem h-3rem text-sm font-bold justify-content-center border-round  border-none">
+                            Add Ad hoc-Invoice
                         </Button>
-                      
+                       
                     </div>
+
+                   
                     {/* <div className="flex align-items-center mb-3 justify-content-start">
                         <Button onClick={() => setAdjustWalletModal(true)} id="refundInvoice" className="w-14rem h-2rem text-sm font-medium justify-content-center border-round bg-green-200 border-none">
                             Adjust Wallet
                         </Button>
                        
                     </div> */}
-                    <div className="flex align-items-center mb-3">
-                        <Button onClick={() => setPayInvoiceModal(true)} id="refundInvoice" className="w-14rem h-2rem text-sm font-normal justify-content-center border-round  border-none">
-                            Pay Invoice(s)
+                      <div className="flex align-items-center mb-3">
+                        <Button onClick={() => setAdjustBalanceModal(true)} id="refundInvoice" className="w-14rem h-3rem text-sm font-bold justify-content-center border-round  border-none">
+                            Adjust Balance
                         </Button>
-                       
+                        
                     </div>
-                    <div className="flex align-items-center mb-3">
-                        <Button onClick={() => setAdHocInvoiceModal(true)} id="refundInvoice" className="w-14rem h-2rem text-sm font-medium justify-content-center border-round  border-none">
-                            Add Ad hoc-Invoice
-                        </Button>
-                       
-                    </div>
+                   
+                   
                 </div>
                 {/* <div className="col-4">
                   
@@ -52,6 +50,7 @@ const InvoiceTypes = ({ setNsfModal, setAdHocInvoiceModal, setMisMatchInvoiceMod
                        
                     </div>
                 </div> */}
+                
                 <div className="col-4">
                     {/* <div className="flex align-items-center mb-3">
                         <Button onClick={() => setMisMatchInvoiceModal(true)} id="refundInvoice" className="w-14rem h-2rem text-sm font-normal justify-content-center border-round bg-green-200 border-none">
@@ -59,17 +58,29 @@ const InvoiceTypes = ({ setNsfModal, setAdHocInvoiceModal, setMisMatchInvoiceMod
                         </Button>
                        
                     </div> */}
-                    <div className="flex align-items-center mb-3">
-                        <Button onClick={() => setAdjustBalanceModal(true)} id="refundInvoice" className="w-14rem h-2rem text-sm font-normal justify-content-center border-round  border-none">
-                            Adjust Balance
-                        </Button>
-                        
-                    </div>
-                    <div className="flex align-items-center mb-3">
-                        <Button onClick={() => setAddWalletModal(true)} id="refundInvoice" className="w-14rem h-2rem text-sm font-normal justify-content-center border-round  border-none">
+
+                         < div className="flex align-items-center mb-3">
+                        <Button onClick={() => setAddWalletModal(true)} id="refundInvoice" className="w-14rem h-3rem text-sm font-bold justify-content-center border-round  border-none">
                             Add Wallet
                         </Button>
                        
+                    </div>
+                    <div className="flex align-items-center mb-3">
+                        <Button onClick={() => setPayInvoiceModal(true)} id="refundInvoice" className="w-14rem h-3rem text-sm font-bold justify-content-center border-round  border-none">
+                            Pay Invoice(s)
+                        </Button>
+                       
+                    </div>
+                  
+                   
+                </div>
+
+                <div className="col-4">
+                <div className="flex align-items-center mb-3">
+                        <Button onClick={() => setEbillModal(true)} id="refundInvoice" className="w-14rem h-3rem text-sm font-bold justify-content-center border-round  border-none">
+                            E-Bill Setting
+                        </Button>
+                      
                     </div>
                 </div>
             </div>

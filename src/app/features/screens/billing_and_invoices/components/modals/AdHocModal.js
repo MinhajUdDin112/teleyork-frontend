@@ -3,11 +3,61 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { RadioButton } from "primereact/radiobutton";
+import { InputText } from "primereact/inputtext";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Axios from 'axios';
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
-const AdHocModal = ({ adHocInvoiceModal, setAdHocInvoiceModal }) => {
+const AdHocModal = ({ adHocInvoiceModal, setAdHocInvoiceModal }) => {   
+    const BASE_URL=process.env.REACT_APP_BASE_URL
     const [selectedCity1, setSelectedCity1] = useState(null);
-    const [city, setCity] = useState(null);
+    const [city, setCity] = useState("");
+    const [isButtonLoading, setisButtonLoading] = useState(false)
 
+    const validationSchema = Yup.object().shape({
+        invoiceAmount: Yup.string().required("Please Select Invoice Amount"),  
+        invoiceType: Yup.string().required("Please select Invoice Type"), 
+        amount: Yup.string().required("Please select Amount"),
+        isTax: Yup.string().required("Please select isTax"), 
+        taxAmount: Yup.string().required("Please Enter Tax Amount"), 
+        taxBreakup: Yup.string().required("Please Enter Tax Breakup"), 
+    });
+    
+    const formik = useFormik({
+        validationSchema: validationSchema,
+        initialValues: { 
+            invoiceAmount:"",    
+            invoiceType: "",  
+            isTax: "",
+            invoiceAmount:"",    
+            taxAmount: "",  
+            taxBreakup: "",
+        },
+        onSubmit: async (values,actions) => {
+          setisButtonLoading(true);
+            const dataToSend = {  ...values };
+        
+            // try {
+            //     const response = await Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend);
+            //     if (response?.status === 201 || response?.status === 200) {
+            //         toast.success("Successfully Run");
+            //         setisButtonLoading(false);
+            //         actions.resetForm();
+            //     }
+            // } catch (error) {
+            //   toast.error(error?.response?.data?.msg);
+            //   setisButtonLoading(false);
+            // }
+        },
+    });
+    
+
+    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+const getFormErrorMessage = (name) => {
+    return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+};
     const cities = [
         { name: "ace-cash-express", code: "NY" },
         { name: "ACE-PAYMENT", code: "RM" },
@@ -20,9 +70,9 @@ const AdHocModal = ({ adHocInvoiceModal, setAdHocInvoiceModal }) => {
     };
     const renderFooter = () => {
         return (
-            <div className="flex justify-content-between m-3">
-                <Button label="Submit" onClick={() => setAdHocInvoiceModal(false)} />
+            <div className="flex justify-content-between m-3">    
                 <Button label="Close" onClick={() => setAdHocInvoiceModal(false)} />
+                <Button label="Submit"  onClick={() => setAdHocInvoiceModal(false)} />
             </div>
         );
     };
@@ -32,42 +82,47 @@ const AdHocModal = ({ adHocInvoiceModal, setAdHocInvoiceModal }) => {
                 <div className="m-3">
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">CustomerID:</p>
-                        <p className="col-8 m-0 p-1">119350</p>
+                        <p className="col-8 m-0 p-1"><h5>119350</h5></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Telephone Number:</p>
-                        <p className="col-8 m-0 p-1">0313-55***52</p>
+                        <p className="col-8 m-0 p-1"><h5>0313-55***52</h5></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Customer Name:</p>
-                        <p className="col-8 m-0 p-1">Hammad Ullah</p>
+                        <p className="col-8 m-0 p-1"><h5>Hammad Ullah</h5></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Address:</p>
-                        <p className="col-8 m-0 p-1">Islamabad Pakistan</p>
+                        <p className="col-8 m-0 p-1"><h6>Islamabad Pakistan</h6></p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Invoice Type:</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Select" value={selectedCity1} options={cities} onChange={onCityChange} optionLabel="name" className="h-2rem w-7 align-items-center border-700 " />
+                            <Dropdown placeholder="Select" id="invoiceType" value={formik.values.invoiceType} options={cities} onChange={formik.handleChange} optionLabel="name" optionValue="" className="h-3rem w-7 align-items-center " filter filterBy="name" />
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Amount($):</p>
                         <p className="col-8 m-0 p-1">
-                            <input placeholder="Enter Amount" className="h-2rem w-7 border-round-xs" />
+                            <InputText placeholder="Enter Amount" value={formik.values.amount}  onChange={formik.handleChange} className="h-3rem w-7 border-round-xs" />
                         </p>
                     </div>
-                    <div className="flex">
+                    <div className="flex mt-2 mb-2">
                         <p className="col-4 font-semibold m-0 p-1">Do You want to include tax?:</p>
                         <p className="col-8 m-0 p-1">
                             <div>
-                                <RadioButton inputId="city1" name="city" value="Yes" onChange={(e) => setCity(e.value)} checked={city === "Yes"} />
-                                <label htmlFor="city1" className="mr-2 px-2">
+      
+                            
+                   
+                   
+
+                   <RadioButton inputId="isTax" name="pizza" value="yes" onChange={(e) => setCity(e.value)} checked={city === "yes"} />
+                                <label htmlFor="isTax" className="mr-2 px-2">
                                     Yes
                                 </label>
-                                <RadioButton inputId="city1" name="city" value="No" onChange={(e) => setCity(e.value)} checked={city === "No"} />
-                                <label htmlFor="city1" className="mr-2 px-2">
+                                <RadioButton inputId="ingredient2" name="pizza" value="no" onChange={(e) => setCity(e.value)} checked={city === "no"} />
+                                <label htmlFor="isTax" className="mr-2 px-2">
                                     No
                                 </label>
                             </div>
@@ -76,19 +131,19 @@ const AdHocModal = ({ adHocInvoiceModal, setAdHocInvoiceModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Tax Amount($):</p>
                         <p className="col-8 m-0 p-1">
-                            <input placeholder="Enter Tax Amount" className="h-2rem w-7 border-round-xs" />
+                            <InputText id="taxAmount" placeholder="Enter Tax Amount" value={formik.values.taxAmount} onChange={formik.handleChange} className="h-3rem w-7 border-round-xs" />
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Tax Breakup($):</p>
                         <p className="col-8 m-0 p-1">
-                            <input placeholder="Enter Tax Breakup" className="h-2rem w-7 border-round-xs" />
+                            <InputText id="taxBreakup" placeholder="Enter Tax Breakup" value={formik.values.taxBreakup} onChange={formik.handleChange} className="h-3rem w-7 border-round-xs" />
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Invoice Amount($):</p>
                         <p className="col-8 m-0 p-1">
-                            <input placeholder="Enter Invoice Amount" className="h-2rem w-7 border-round-xs" />
+                            <InputText id="invoiceAmount" placeholder="Enter Invoice Amount" value={formik.values.invoiceAmount} onChange={formik.handleChange} className="h-3rem w-7 border-round-xs" />
                         </p>
                     </div>
                 </div>

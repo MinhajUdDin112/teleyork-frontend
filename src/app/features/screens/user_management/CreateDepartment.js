@@ -5,12 +5,11 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 import Axios from 'axios';
-import BASE_URL from '../../../../config';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { ToastContainer,  } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const CreateDepartment = () => {
   const navigate = useNavigate(); 
   //let toast = useRef(null);

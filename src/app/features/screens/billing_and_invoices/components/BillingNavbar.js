@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menubar } from "primereact/menubar";
+import Axios from "axios";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
-const BillingNavbar = () => {
+const BillingNavbar = () => {  
+    const BASE_URL=process.env.REACT_APP_BASE_URL
+    const [cpData, setCpData] = useState([])
+
+    const selectedid = localStorage.getItem("selectedId");
+    const parseselectedid = JSON.parse(selectedid);
+
+    const getCustomerProfileData = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`);
+            setCpData(res?.data?.data || []);
+        } catch (error) {
+            //toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+        }
+    };
+
+    useEffect(() => {
+        getCustomerProfileData()
+    }, []);
+
+
     const items = [
         {
-            label: "Hammad Ullah ",
+            label: `${cpData?.firstName} ${cpData?.lastName} (Customer ID-${cpData?.enrollmentId})`,
             icon: "pi pi-fw pi-user surface-800",
         },
         {
-            label: "MDN",
+            label: `MDN:${cpData?.phoneNumber}`,
         },
         {
             label: "Wallet Balance: $ 0",

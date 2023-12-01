@@ -13,8 +13,9 @@ package-lock.json
 # production
 /build
 /idea
-/.idea
-
+/.idea 
+# default config file
+/src/config.js
 # misc
 .DS_Store
 .env.local

@@ -3,9 +3,9 @@ import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import Preview_Final_component from "./Preview_Final_component";
 import Axios from "axios";
-import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect } from "react"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
@@ -107,7 +107,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p>{previewInfo?.city}</p>
+                                    <p style={{marginLeft:"-10px"}}>{previewInfo?.city}</p>
                                 </div>
                             <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>

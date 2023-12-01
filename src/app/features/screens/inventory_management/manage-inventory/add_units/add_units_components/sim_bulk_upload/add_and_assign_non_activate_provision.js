@@ -4,14 +4,14 @@ import { useFormik } from "formik";
 import Axios from "axios";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
-import BASE_URL from "../../../../../../../../config";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { Dropdown } from "primereact/dropdown";
 import AddAgentDetail from "./dialogs/add_agent_detail";
 import { Dialog } from "primereact/dialog";
 import InfoForUsers from "./InfoForUsers/info_for_users";
-export default function SIMBulkUploadAddAndAssignNonActivateProvision() {
+export default function SIMBulkUploadAddAndAssignNonActivateProvision() {   
+    const BASE_URL=process.env.REACT_APP_BASE_URL
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -131,9 +131,9 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision() {
                     console.log("Successfully done");
                     ref.current.show({ severity: "success", summary: "Info", detail: "Added Successfully" });
                 })
-                .catch(() => {
+                .catch((error) => {
                     console.log("error occured");
-                    ref.current.show({ severity: "error", summary: "Info", detail: "Failed to Add" });
+                    ref.current.show({ severity: "error", summary: "Info", detail: error.response.data.msg });
                 });
             formik.values.serviceProvider = parseLoginRes?.companyName; }  
             else{ 
@@ -172,8 +172,10 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision() {
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value);
-                                setDepartmentSelected(e.value);
+                                formik.setFieldValue("agentType", e.value);  
+                                 formik.setFieldValue("AgentName","")
+                                setDepartmentSelected(e.value);                       
+                                
                             }}
                             placeholder="Select an option"
                             className="w-20rem mt-2"

@@ -1,6 +1,3 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
@@ -10,8 +7,8 @@ import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import BASE_URL from "../../../../../config";
-import Axios from "axios";
+import Axios from "axios"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const dispatch = useDispatch();
 
@@ -54,6 +51,10 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const agreeRes = localStorage.getItem("agreeData");
     const parseagreeRes = JSON.parse(agreeRes);
 
+     //get ZipData data from local storage 
+ const zipdata= localStorage.getItem("zipData");
+ const parseZipData = JSON.parse(zipdata);
+
     const postdata= async()=>{
         setIsLoading(true)
         const userId = _id;
@@ -84,6 +85,20 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             handleAll();
         }
      }, [isBack]) 
+
+     useEffect(()=>{
+        if(parseZipData){
+      //get checkEligiblity data from local storage 
+     const checkEligiblity= localStorage.getItem("checkEligiblity");
+     const parseCheckEligiblity = JSON.parse(checkEligiblity);
+     
+    if((parseCheckEligiblity?.data?.Message).includes("not")){
+        toast.error(parseCheckEligiblity?.data?.Message)
+    } else{
+        toast.success(parseCheckEligiblity?.data?.Message)
+    }      
+        }
+     },[])
 
     const handleCheckBox = (index) => {
         const newCheckBoxes = [...formik.values.checkbox];

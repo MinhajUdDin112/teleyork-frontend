@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import { ScrollPanel } from 'primereact/scrollpanel'
 
 const CustomerProfile = () => {
+    const [cpData, setCpData] = useState([]);
 
     const [cpData, setCpData] = useState([])
     const [noteLength, setNoteLength] = useState(null)
@@ -20,47 +21,57 @@ const CustomerProfile = () => {
 
     const getCustomerProfileData = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=654e28a205e9f827301372dc`);
-            setCpData(res?.data?.data || []);
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
+            if (res?.status == 200 || res?.status == 201) {
+                setCpData(res?.data?.data || []);
+            }
+
         } catch (error) {
-            toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+            //console.log(error?.response?.data?.msg);
+
+            // toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
         }
     };
+    console.log("cp data is", cpData)
 
     useEffect(() => {
-        getCustomerProfileData()
+        getCustomerProfileData();
+
     }, []);
+
+    console.log("cp data is", cpData)
 
     return (
         <>
             <div className="card p-0">
-
                 <BillingNavbar />
 
-                <div className='pt-3'>
-                    <div className='grid'>
-
+                <div className="pt-3">
+                    <div className="grid">
                         <div className="col-12 lg:col-4">
                             <div className="p-3 h-full">
                                 <div className="shadow-2 h-full flex flex-column">
                                     <div className="text-900 font-medium text-lg p-3">Customer Information</div>
 
-                                    <hr className='m-0' />
+                                    <hr className="m-0" />
 
                                     {/* Table */}
                                     <div>
-                                        <table className='cp_table w-full text-left'>
+                                        <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
                                                     <td>Verify</td>
-                                                    <td><Button label='Verify Customer' size="small" /></td>
+                                                    <td>
+                                                        <Button label="Verify Customer" size="small" />
+                                                    </td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td>ACP Qualify</td>
+                                                    <td>{cpData?.acpQualify ? new Date(cpData.acpQualify).toLocaleDateString() : ""}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Service Address</td>
-                                                    <td>
-                                                        {cpData?.address1 + " " + cpData?.address1}
-                                                    </td>
+                                                    <td>{cpData?.address1 + " " + cpData?.address2}</td>
                                                 </tr>
 
                                                 <tr>
@@ -92,30 +103,44 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td>
+                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ?
+                                                        <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td>
+                                                        :
+                                                        <td>{cpData?.address1 + " " + cpData?.address2}</td>
+                                                    }
+
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
-                                                    <td>{cpData?.mailingCity}</td>
+                                                    {cpData?.mailingCity ?
+                                                        <td>{cpData?.mailingCity}</td>
+                                                        :
+                                                        <td>{cpData?.city}</td>}
+
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing State</td>
-                                                    <td>{cpData?.mailingState}</td>
+                                                    {cpData?.mailingState ?
+                                                        <td>{cpData?.mailingState}</td>
+                                                        :
+                                                        <td>{cpData?.state}</td>}
+
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Zip</td>
-                                                    <td>{cpData?.mailingZip}</td>
+                                                    {cpData?.mailingZip ?
+                                                        <td>{cpData?.mailingZip}</td>
+                                                        :
+                                                        <td>{cpData?.zip}</td>}
+
                                                 </tr>
-                                                <tr>
-                                                    <td>Address Type</td>
-                                                    <td>--</td>
-                                                </tr>
-                                                <tr>
+
+                                                {/* <tr>
                                                     <td>Tribal (Y/N)</td>
                                                     <td>
                                                         --
                                                     </td>
-                                                </tr>
+                                                </tr> */}
                                                 <tr>
                                                     <td>Customer SSN (PC253)</td>
                                                     <td>{cpData?.SSN}</td>
@@ -123,29 +148,30 @@ const CustomerProfile = () => {
 
                                                 <tr>
                                                     <td>Customer DOB (PC253)</td>
-                                                    <td>{cpData?.DOB}</td>
+                                                    <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : ""}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>Company</td>
-                                                    <td>--</td>
+                                                    <td>
+                                                        {" "}
+                                                        <td>{parseLoginRes?.companyName}</td>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Current Balance</td>
-                                                    <td>--</td>
+                                                    <td>0.00</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>Add more line</td>
                                                     <td>
-                                                        <Button label='Add Line' size="small" />
+                                                        <Button label="Add Line" size="small" />
                                                     </td>
                                                 </tr>
                                             </tbody>
-
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -155,20 +181,23 @@ const CustomerProfile = () => {
                                 <div className="shadow-2 flex flex-column">
                                     <div className="text-900 font-medium text-lg p-3">Line Information</div>
 
-                                    <hr className='m-0' />
+                                    <hr className="m-0" />
 
                                     {/* Table */}
                                     <div>
-                                        <table className='cp_table w-full text-left'>
+                                        <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
                                                     <td>MDN</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.phoneNumber}</td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td>SIM/ESN</td>
+                                                    <td>{cpData?.esn}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>IMEI</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.IMEI}</td>
                                                 </tr>
 
                                                 <tr>
@@ -200,26 +229,35 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Telgoo 5 Plan</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.plan?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Details</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.plan?.description}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Price</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.plan?.price}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Carrier</td>
+                                                    <td>{cpData?.carrier?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Query Usage</td>
+                                                    <td>{cpData?.carrier?.name}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TMB Live Status</td>
                                                     <td>--</td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td>OCS Live Status</td>
+                                                    <td>--</td>
+                                                </tr>
                                             </tbody>
-
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -229,7 +267,7 @@ const CustomerProfile = () => {
                                 <div className="shadow-2 flex flex-column">
                                     <div className="text-900 font-medium text-lg p-3">Other Information</div>
 
-                                    <hr className='m-0' />
+                                    <hr className="m-0" />
 
                                     {/* Table */}
                                     <div>
@@ -241,7 +279,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Order by</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.createdBy?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Master Agent ID</td>
@@ -249,7 +287,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Agent Name</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.createdBy?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Enrollment ID</td>
@@ -261,7 +299,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>NLAD Subscriber ID</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.subscriberId}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Approved by</td>
@@ -269,7 +307,10 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Source</td>
-                                                    <td>--</td>
+                                                    <td>
+                                                        {" "}
+                                                        <td>{parseLoginRes?.companyName}</td>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Fulfillment Metdod</td>
@@ -277,7 +318,12 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Tablet Subsidy Qualification</td>
-                                                    <td>--</td>
+                                                    {
+                                                        cpData?.deviceEligibilty == true ? <td>Yes</td> :
+                                                            <td>No</td>
+                                                    }
+
+                                                    <td>{cpData?.deviceEligibilty}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>ACP Device Order Type</td>
@@ -301,16 +347,14 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Lifeline Program Participation</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.acpProgram?.name}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -431,7 +475,7 @@ const CustomerProfile = () => {
 
             </div>
         </>
-    )
-}
+    );
+};
 
-export default CustomerProfile
+export default CustomerProfile;

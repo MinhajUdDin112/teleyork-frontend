@@ -4,16 +4,15 @@ import { Dropdown } from "primereact/dropdown";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
-import BASE_URL from "../../../../config";
 import { ToastContainer, toast } from "react-toastify";
 import { ProgressSpinner } from "primereact/progressspinner";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Eligibility = () => {
     const [acpProgram,setAcpProgram] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isButtonLoading, setIsButtonLoading] = useState(false)
     const {id}=useParams()
-    const eligId = "64e0b1ab35a9428007da351c"
+    const eligId = "65142a7ed74a5a9ef93ba53b"
     const navigate = useNavigate();
     const handleBack = () => {
         navigate(-1)

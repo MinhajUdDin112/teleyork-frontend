@@ -14,7 +14,7 @@ const ShowSentAll = () => {
     const messageBody=(rowData) => {
         let template = rowData.message;
         let shortline = template.substring(0, 10);
-      
+        
         return (
             <div id="template">
                 {template.length > 10 ?<p>

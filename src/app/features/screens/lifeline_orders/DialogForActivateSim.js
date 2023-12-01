@@ -3,7 +3,6 @@ import { Button } from 'primereact/button';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from 'axios';
-import BASE_URL from '../../../../config';
 import { Dropdown } from 'primereact/dropdown';
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
@@ -13,7 +12,7 @@ import { InputText } from 'primereact/inputtext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { ProgressSpinner } from 'primereact/progressspinner';
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogForActivateSim = ({enrollmentId,zipCode}) => {
 
   const [allESN, setAllESN] = useState([])
@@ -63,7 +62,7 @@ useEffect(() => {
      
   const getESN = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/web/esnInventory/available?serviceProvider=64e0b1ab35a9428007da351c`);   
+          const res = await Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=${parseLoginRes?.compony}`);   
           setAllESN(res?.data?.data || []);
           
       } catch (error) {
@@ -79,7 +78,7 @@ getESN();
 useEffect(() => {
   const getPlan = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=645a85198cd1ff499c8b99cd`);
+          const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`);
           setAllPlan(res?.data?.data || []);
          
       } catch (error) {
@@ -110,11 +109,11 @@ const getFormErrorMessage = (name) => {
                                 options={allESN}
                                 value={formik.values.esn}
                                 onChange={(e) => formik.setFieldValue("esn", e.value)}
-                                optionLabel="Esn"
-                                optionValue="Esn"
+                                optionLabel="SimNumber"
+                                optionValue="SimNumber"
                                 filter
                                 showClear
-                                filterBy="Esn" // Set the property to be used for filtering
+                                filterBy="SimNumber" // Set the property to be used for filtering
                                 className='w-20rem'
                             />                     
            
@@ -127,7 +126,7 @@ const getFormErrorMessage = (name) => {
                                 options={allPlan}
                                 value={formik.values.planId}
                                 onChange={(e) => formik.setFieldValue("planId", e.value)}
-                                optionLabel="name"
+                                optionLabel={(option) => `${option.name} - (${option.planId})`}
                                 optionValue="planId"
                                 filter
                                 showClear

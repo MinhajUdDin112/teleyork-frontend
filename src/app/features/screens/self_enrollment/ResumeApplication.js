@@ -6,11 +6,10 @@ import { useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import { ToastContainer, toast } from "react-toastify";
 import { Dialog } from 'primereact/dialog';
 import { ProgressSpinner } from "primereact/progressspinner";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const ResumeApplication = () => {
     const location = useLocation();
     const [successDialogVisible, setSuccessDialogVisible] = useState(false);
@@ -41,6 +40,7 @@ const ResumeApplication = () => {
                 const response = await Axios.post(`${BASE_URL}/api/enrollment/selfEnromentSubmit`, dataToSend);
                 if (response?.status == 200 || response?.status == 201) {
                     setSuccessDialogVisible(true);
+                    localStorage.clear();
                     localStorage.removeItem("homeAddress");
                     localStorage.removeItem("selectProgram");
                     localStorage.removeItem("initialInformation");

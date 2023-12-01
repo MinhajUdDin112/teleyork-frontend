@@ -8,9 +8,8 @@ import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";  
 import { useDispatch, useSelector } from "react-redux";
 import { getDraftByTemplateIdAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
-import BASE_URL from "../../../../config";
 import Axios from "axios";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const ShowDraftAll = () => {    
     let toast=useRef(null) 
     const [visible, setVisible] = useState(false);

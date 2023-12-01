@@ -5,10 +5,8 @@ import { Button } from "primereact/button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
-import BASE_URL from "../../../../../config";
 import Axios from "axios";
-
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function ServiceAvailabilityPage() {
   
   const [isLoading, setIsLoading] = useState(false)
@@ -20,7 +18,6 @@ export default function ServiceAvailabilityPage() {
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
   
-
  useEffect(() => {
   localStorage.removeItem("zipData");
  }, [])

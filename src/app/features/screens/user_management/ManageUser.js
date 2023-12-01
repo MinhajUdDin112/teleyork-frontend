@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import BASE_URL from "../../../../config";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const ManageUser = () => {
     let toastfordelete = useRef(null);
     const [allUsers, setAllUsers] = useState([]);

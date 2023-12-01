@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import BASE_URL from "../../../../config";
 import Axios from "axios";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
@@ -9,7 +8,8 @@ import classNames from "classnames";
 import { Divider } from "primereact/divider";
 import { useLocation } from "react-router-dom";
 import { Toast } from "primereact/toast";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const CreateRole = () => {
     let toast = useRef(null);
     const [rolePermissions, setRolePermissions] = useState([]);

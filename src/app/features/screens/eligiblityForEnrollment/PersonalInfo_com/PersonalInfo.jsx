@@ -12,21 +12,21 @@ import { useDispatch } from "react-redux";
 import { Dropdown } from "primereact/dropdown";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
-import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
 import moment from "moment/moment";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
-
+   
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
     const [isHouseHold, setIsHouseHold] = useState(false);
     const [acp, setAcp] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [isSubmit, setIsSubmit] = useState()
+    const [isDuplicate, setIsDuplicate] = useState(false)
+
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This is Required"),
@@ -112,7 +112,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
                 isACP: acp,
 
              };
-            console.log("data to send is",dataToSend)
+           
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
@@ -127,6 +127,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
             }
         },
     });
+
+    
 
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
@@ -180,6 +182,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
     const basicResponse = localStorage.getItem("basicData");
     const parsebasicResponse = JSON.parse(basicResponse);
 
+    //get zipData
+    const zipResponse = localStorage.getItem("zipData");
+    const parsezipResponse= JSON.parse(zipResponse);
+
     useEffect(() => {
          const dobString = parsebasicResponse?.data?.DOB;
        
@@ -218,13 +224,41 @@ useEffect(() => {
 }, [isSelfReceive])
 
 
+//check customer Duplication
+
+useEffect(() => {
+    const fetchData = async () => {
+        if (parsezipResponse && !basicResponse) {
+            if (formik.values.contact.length > 9) {
+                const data = {
+                    contact: formik.values.contact    
+                };
+               
+                try {
+                    const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                   
+                    setIsDuplicate(false);
+                }
+                 catch (error) {
+                    toast.error(error?.response?.data?.msg);
+                    setIsDuplicate(true);
+                }
+              
+            }
+        }
+    };
+
+    fetchData();
+}, [formik.values.contact]);
+
+
     return (
         <>
             <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                 <h5 className="font-bold enroll">ENROLLMENT ID: {enrollment_id}</h5>
-                     <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
+                     <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading || isDuplicate} />
                 </div>
 
                 <p>To apply for the Affordable Connectivity program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>

@@ -83,8 +83,11 @@ import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_dr
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
 import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
-
+import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 const App = () => {
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    console.log(parseLoginRes);
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -272,7 +275,8 @@ const App = () => {
 
 
     useEffect(() => {
-        getPermissions()
+        getPermissions();
+        console.log("calling");
     }, [window.localStorage.permissions]);
 
     return (
@@ -286,7 +290,6 @@ const App = () => {
                     <div className="layout-sidebar" onClick={onSidebarClick}>
                         <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
                     </div>
-
                     <div className="layout-main-container">
                         <div className="layout-main">
                             <Routes>
@@ -299,8 +302,9 @@ const App = () => {
                                 <Route path="/bulkprocesses/bulk-swap-esn" element={<SwapEsnReportFlowPage />} />
                                 <Route path="/emei-drawer" element={<ImeiDrawer />} />
                                 <Route path="/manage-model" element={<ManageModelFlowPage />} />
-
+                                <Route path="/manageinventory" element={<Manage_inventory />} />
                                 <Route path="/esn-sim-drawer" element={<EsnSimDrawer />} />
+                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage />} />
                                 <Route path="/inventory-report" element={<InventoryReport />} />
                                 <Route path="/companyacpprograms" element={<AcpProgramsFlowPage />} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
@@ -308,6 +312,7 @@ const App = () => {
                                 <Route path="/managerolesandrights/*" element={<ManageRolesAndRights />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
+                                <Route path="/bulk-upload" element={<UploadBulk />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
                                 <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />
@@ -330,7 +335,7 @@ const App = () => {
                                 <Route path="/eligibilityproofupload" element={<EligibilityProofUpload />} />
                                 <Route path="/dealerwallet" element={<DealerWallet />} />
                                 <Route path="/orderhistory" element={<OrderHistory />} />
-                                <Route path="/manageinventory" element={<Manage_inventory />} />
+
                                 <Route path="/smsnotification" element={<Upload />} />
                                 <Route path="/sent" element={<Sent />} />
                                 <Route path="/draft" element={<Draft />} />
@@ -345,7 +350,6 @@ const App = () => {
                                 <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate/*" element={<ManageTemplate />} />
                                 <Route path="/createrole" element={<CreateRole />} />
-                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage />} />
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />
@@ -376,8 +380,7 @@ const App = () => {
                     <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
                     <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                 </Routes>
-            )
-            }
+            )}
         </>
     );
 };

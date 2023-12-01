@@ -4,14 +4,13 @@ import * as Yup from 'yup'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button';
 import Axios from 'axios';
-import BASE_URL from '../../../../config';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const EditUser = () => {
 
     const [allRoles, setAllRoles] = useState([])

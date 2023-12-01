@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import ReactPaginate from "react-paginate";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { InputText } from "primereact/inputtext";
+import { InputText } from "primereact/inputtext"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const InCompleteEnrollments = () => {
 
     const [allInCompletedEnrollments, setAllInCompletedEnrollments] = useState([]);
@@ -68,6 +68,9 @@ const InCompleteEnrollments = () => {
             if (res?.status === 200 || res?.status === 201) {
                 setAllInCompletedEnrollments(res?.data?.data);
                 setIsLoading(false);
+                localStorage.removeItem("basicData");
+                localStorage.removeItem("address");
+                localStorage.removeItem("programmeId");
             }
         } catch (error) {
             toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
@@ -87,7 +90,8 @@ const InCompleteEnrollments = () => {
             if (response?.status === 201 || response?.status === 200) {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
-                localStorage.setItem("programmeId", JSON.stringify(response.data));
+               // localStorage.setItem("programmeId", JSON.stringify(response.data));
+             
                 navigate("/enrollment");
                 setisButtonLoading(false);
             }

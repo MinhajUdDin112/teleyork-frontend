@@ -3,14 +3,14 @@ import React, { useState, useEffect,useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
-import BASE_URL from "../../../../../../../../config";
 import { InputText } from "primereact/inputtext";
 import Axios from "axios";
 import { Toast } from "primereact/toast";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
+import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";  
+const BASE_URL=process.env.REACT_APP_BASE_URL
 function SIMSingleUploadAddAndAssignNonActivateProvision2() {       
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");
@@ -99,8 +99,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-            SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least 18 characters").max(25, "Sim Number must be at most 25 characters"),
-
+            SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least  19 characters").max(25, "Sim Number must be at most 25 characters"),
+        
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
@@ -120,6 +120,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
             unitType: "sim",
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add And Assign Non Active",
+        
         },
 
         onSubmit: (e) => {
@@ -139,11 +140,12 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
                 })
-                .catch((err) => {  
-                    console.log(err)   
+                .catch((error) => {  
+                    console.log(error.response.data.msg)   
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:"Failed to Add"});
+                    ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
+               
                 });  
                   
         }           
@@ -181,7 +183,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                         </p>
                         <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
+                  {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Team <span style={{ color: "red" }}>* </span>
                         </p>
@@ -201,7 +203,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                                 {formik.errors.team}
                             </div>
                         )}
-                    </div>
+                    </div>    */}
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
@@ -211,7 +213,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value);
+                                formik.setFieldValue("agentType", e.value); 
+                                formik.setFieldValue("AgentName","")
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -225,8 +228,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
-                            Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (
+                           Agent Name <span style={{ color: "red" }}>* </span>
+                            {formik.values.agentType!== "" ? (
                                 <i
                                     onClick={() => {
                                         setAddAgentDialogVisbility((prev) => !prev);
@@ -277,7 +280,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2() {
                                 {formik.errors.box}
                             </div>
                         )}
-                    </div>
+                    </div>               
+                  
                 </div>
                 <div className="flex flex-wrap justify-content-center align-item-center">
                     <Button

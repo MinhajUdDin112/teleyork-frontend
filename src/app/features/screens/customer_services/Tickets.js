@@ -5,12 +5,11 @@ import { InputText } from "primereact/inputtext";
 import React, { useState } from "react";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import BASE_URL from "../../../../config";
 import { classNames } from "primereact/utils";
 import { Calendar } from "primereact/calendar";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Tickets = () => {
 const [isLoading, setIsLoading] = useState(false)
     
