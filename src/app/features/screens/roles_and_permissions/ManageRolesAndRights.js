@@ -4,14 +4,13 @@ import { DataTable } from 'primereact/datatable';
 import Axios from 'axios';
 import { Column } from 'primereact/column';
 import ReactPaginate from "react-paginate";
-import BASE_URL from '../../../../config';
 import { Button } from 'primereact/button';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { Dialog } from "primereact/dialog";
 import { useLocation } from 'react-router-dom';
-
 import ManagePermissions from './ManagePermissions';
+const BASE_URL = process.env.REACT_APP_BASE_URL
 export default function BasicDemo() {
 
     let Location = useLocation()

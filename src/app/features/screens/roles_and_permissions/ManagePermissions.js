@@ -34,7 +34,7 @@ export default function ManagePermissions({ setRefresh }) {
             obj.permissions.push(obj2)
         })
 
-        Axios.patch(`${BASE_URL}/api/web/role/permissions`, obj).then(() => {
+        Axios.patch(`${process.env.REACT_APP_BASE_URL}/api/web/role/permissions`, obj).then(() => {
 
             reffortoast.current.show({ severity: "success", summary: "Info", detail: "Updated Permissions Successfully" });
         }).catch(err => {
@@ -47,7 +47,7 @@ export default function ManagePermissions({ setRefresh }) {
         if (!roleUpdateLoading) {
             if (formik.values.role.length > 0 && formik.values.description.length > 0) {
                 setRoleUpdateLoading((prev) => !prev);
-                Axios.patch(`${BASE_URL}/api/web/role`, { roleId: roleData._id, role: formik.values.role, description: formik.values.description })
+                Axios.patch(`${process.env.REACT_APP_BASE_URL}/api/web/role`, { roleId: roleData._id, role: formik.values.role, description: formik.values.description })
                     .then(() => {
 
                         reffortoast.current.show({ severity: "success", summary: "Info", detail: "Updated Role Successfully" });
@@ -82,7 +82,7 @@ export default function ManagePermissions({ setRefresh }) {
     let navigate = useNavigate();
     const getModules = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/module`);
+            const res = await Axios.get(`${process.env.REACT_APP_BASE_URL}/api/web/module`);
 
             setModuleData(res?.data?.data || []);
 
@@ -93,7 +93,7 @@ export default function ManagePermissions({ setRefresh }) {
 
     const getAllRoles = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${process.env.REACT_APP_BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
 
             if (res?.status === 200 || res?.status === 201) {
                 let rolesdata = res.data.data;

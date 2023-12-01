@@ -4,14 +4,11 @@ import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
 import { InputTextarea } from 'primereact/inputtextarea'
 import Axios from 'axios'
-import BASE_URL from '../../../../../config'
 import { toast } from 'react-toastify'
 import { ScrollPanel } from 'primereact/scrollpanel'
-
+const BASE_URL = process.env.REACT_APP_BASE_URL
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
-
-    const [cpData, setCpData] = useState([])
     const [noteLength, setNoteLength] = useState(null)
 
     console.log('cpData', cpData)
@@ -21,15 +18,13 @@ const CustomerProfile = () => {
 
     const getCustomerProfileData = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=64ad9b07fc04dc6ca623b9c3`);
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
 
         } catch (error) {
-            //console.log(error?.response?.data?.msg);
-
-            // toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+            console.log(error?.response?.data?.msg);
         }
     };
     console.log("cp data is", cpData)
