@@ -4,5 +4,5 @@
 // const BASE_URL = 'http://192.168.4.153:2023';
 // const BASE_URL = 'http://localhost:2023';  
 
-const BASE_URL = 'http://dev-api.teleyork.com';  
+const BASE_URL = process.env.BASE_URL;  
 export default BASE_URL;
