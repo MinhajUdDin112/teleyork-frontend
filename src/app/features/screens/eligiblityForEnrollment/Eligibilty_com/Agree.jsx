@@ -10,8 +10,8 @@ import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import BASE_URL from "../../../../../config";
-import Axios from "axios";
+import Axios from "axios"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const dispatch = useDispatch();
 

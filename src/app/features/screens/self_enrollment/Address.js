@@ -4,11 +4,10 @@ import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
-import BASE_URL from "../../../../config";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import * as Yup from "yup";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Address = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isBillAddress, setIsBillAddress] = useState(false)

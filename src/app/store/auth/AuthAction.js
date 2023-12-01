@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import BASE_URL from "../../../config";
 import axios from "axios";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 //login action
 export const loginAction = createAsyncThunk("auth/web/user/login", async (body, { rejectWithValue }) => {
     try {

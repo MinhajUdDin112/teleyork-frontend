@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import Axios from "axios";
-import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from "react-toastify";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
 
     const [acpPrograms, setAcpPrograms] = useState([]);

@@ -3,11 +3,10 @@ import Axios from "axios";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import BASE_URL from "../../../../config";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useRef } from "react";
 import { Checkbox } from "primereact/checkbox";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const EditDepartment = () => {
   const navigate = useNavigate();
   const location = useLocation();

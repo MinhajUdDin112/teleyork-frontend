@@ -7,11 +7,11 @@ import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from 'axios';
-import BASE_URL from "../../../../../../config";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
-const AdHocModal = ({ adHocInvoiceModal, setAdHocInvoiceModal }) => {
+const AdHocModal = ({ adHocInvoiceModal, setAdHocInvoiceModal }) => {   
+    const BASE_URL=process.env.REACT_APP_BASE_URL
     const [selectedCity1, setSelectedCity1] = useState(null);
     const [city, setCity] = useState("");
     const [isButtonLoading, setisButtonLoading] = useState(false)

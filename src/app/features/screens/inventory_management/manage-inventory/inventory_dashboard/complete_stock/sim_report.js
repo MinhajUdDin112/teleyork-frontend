@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import BASE_URL from "../../../../../../../config";
 import Axios from "axios";
 import { Dialog } from "primereact/dialog";
 import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
+import { DataTable } from "primereact/datatable"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function SIMCompleteStockReport() {
     const loginRes = localStorage.getItem("userData");
     const [completereportvisibility, setCompleteReportVisibility] = useState(false);

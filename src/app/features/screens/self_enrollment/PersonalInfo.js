@@ -6,12 +6,11 @@ import { InputMask } from "primereact/inputmask";
 import { Calendar } from "primereact/calendar";
 import { useFormik } from "formik";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import BASE_URL from "../../../../config";
 import axios from "axios";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const PersonalInfo = () => {
     const navigate = useNavigate();
     const { id } = useParams();

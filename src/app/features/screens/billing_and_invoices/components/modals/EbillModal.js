@@ -6,11 +6,11 @@ import { Dropdown } from "primereact/dropdown";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from 'axios';
-import BASE_URL from "../../../../../../config";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 
-const EbillModal = ({ ebillModal, setEbillModal }) => {
+const EbillModal = ({ ebillModal, setEbillModal }) => {  
+    const BASE_URL=process.env.REACT_APP_BASE_URL
     const [selectedCity1, setSelectedCity1] = useState(null);
     const [isButtonLoading, setisButtonLoading] = useState(false)
 

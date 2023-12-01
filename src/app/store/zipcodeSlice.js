@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import BASE_URL from "../../config";
 import axios from "axios";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const zipCode = createSlice({
     name: "zipcode",
     initialState: {

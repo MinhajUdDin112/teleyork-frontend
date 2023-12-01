@@ -3,7 +3,6 @@ import { Button } from 'primereact/button';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from 'axios';
-import BASE_URL from '../../../../config';
 import { Dropdown } from 'primereact/dropdown';
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
@@ -13,7 +12,7 @@ import { InputText } from 'primereact/inputtext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { ProgressSpinner } from 'primereact/progressspinner';
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogForActivateSim = ({enrollmentId,zipCode}) => {
 
   const [allESN, setAllESN] = useState([])

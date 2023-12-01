@@ -5,14 +5,11 @@ import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
-import BASE_URL from "../../../../config";
 import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 //import { Toast,ToastContainer } from "react-toastify/dist/components";
-
-
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const ManageDepartment = () => {
   let toastfordelete = useRef(null);
   const [allDepartments, setAllDepartments] = useState([]);

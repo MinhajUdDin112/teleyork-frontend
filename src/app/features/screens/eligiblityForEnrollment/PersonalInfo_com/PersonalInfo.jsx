@@ -12,14 +12,13 @@ import { useDispatch } from "react-redux";
 import { Dropdown } from "primereact/dropdown";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
-import BASE_URL from "../../../../../config";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
 import moment from "moment/moment";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const PersonalInfo = ({ handleNext, enrollment_id, _id,csr  }) => {
-
+   
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);

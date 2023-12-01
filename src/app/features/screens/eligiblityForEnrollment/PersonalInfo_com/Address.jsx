@@ -12,13 +12,11 @@ import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import classNames from "classnames";
-import BASE_URL from "../../../../../config";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
-
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const [confrimAddress, setConfrimAddress] = useState("same");
     const [isSame, setIsSame] = useState();

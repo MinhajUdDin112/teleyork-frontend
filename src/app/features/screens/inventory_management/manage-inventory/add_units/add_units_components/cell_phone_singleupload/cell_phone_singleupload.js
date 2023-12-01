@@ -3,13 +3,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";    
 import Axios  from "axios";    
 import { Toast } from "primereact/toast";
-import BASE_URL from "../../../../../../../../config";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-import AddCellPhoneModelDialog from "./Dialogs/add_cell_phone_model_dialog"; 
+import AddCellPhoneModelDialog from "./Dialogs/add_cell_phone_model_dialog";  
+const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function CellPhoneSingleUpload  () {
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");

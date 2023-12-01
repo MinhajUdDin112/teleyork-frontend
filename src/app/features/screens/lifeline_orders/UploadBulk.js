@@ -5,8 +5,7 @@ import { toast } from "react-toastify";
 import { ToastContainer,  } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
 import * as XLSX from "xlsx"; // Import XLSX library
-import BASE_URL from "../../../../config";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const UploadBulk = () => {
 
   const onUpload = async () => {

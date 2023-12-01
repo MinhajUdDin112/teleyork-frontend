@@ -3,13 +3,11 @@ import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import BASE_URL from "../../../../config";
 import Axios from "axios";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const CompletedEnrollments = () => {
   
    
