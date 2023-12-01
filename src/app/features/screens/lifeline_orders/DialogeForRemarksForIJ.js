@@ -5,9 +5,9 @@ import { RadioButton } from "primereact/radiobutton";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect } from "react"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogeForRemarksForIJ = ({enrollmentId}) => {
     const [isCallQualityRemarks, setIsCallQualityRemarks] = useState();
 

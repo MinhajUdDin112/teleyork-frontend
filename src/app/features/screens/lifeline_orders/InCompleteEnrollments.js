@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import ReactPaginate from "react-paginate";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { InputText } from "primereact/inputtext";
+import { InputText } from "primereact/inputtext"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const InCompleteEnrollments = () => {
 
     const [allInCompletedEnrollments, setAllInCompletedEnrollments] = useState([]);

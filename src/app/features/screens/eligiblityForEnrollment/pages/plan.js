@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import axios from "axios";
-import BASE_URL from "../../../../../config";
 import { Divider } from "primereact/divider";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Plan = ({ setActiveIndex, enrollment_id, _id,csr  }) => {
 
     const [btnState, setBtnState] = useState(true)

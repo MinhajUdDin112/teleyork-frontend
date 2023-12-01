@@ -3,13 +3,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";    
 import Axios  from "axios";    
 import { Toast } from "primereact/toast";
-import BASE_URL from "../../../../../../../../config";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import AddTabletModelDialog from "./Dialogs/add_tablet_model_dialog";
-import AddAgentDetail from "./Dialogs/add_agent_detail";
+import AddAgentDetail from "./Dialogs/add_agent_detail"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function TabletSingleUploadAddProvision() {
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");

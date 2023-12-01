@@ -9,12 +9,11 @@ import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { getAllTemplateAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import ReactPaginate from "react-paginate";
 import TemplateSearchBar from "./TemplateSearchBar";
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Draft = () => {  
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");

@@ -8,13 +8,9 @@ import Axios from "axios";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import BASE_URL from "../../../../config";
-
 import { useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
-
-
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const RejectedEnrollments = () => {
     const [dateRange, setDateRange] = useState(null);
     const [isLoading, setIsLoading] = useState(false);

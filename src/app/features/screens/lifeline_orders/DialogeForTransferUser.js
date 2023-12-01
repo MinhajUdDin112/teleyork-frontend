@@ -2,14 +2,13 @@ import Axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
-import BASE_URL from "../../../../config";
 import { ToastContainer, toast } from "react-toastify";
 
 import 'react-toastify/dist/ReactToastify.css';
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogeForTransferUser = ({ enrollmentId }) => {
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [allPrograme, setAllPrograme] = useState([]);

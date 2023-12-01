@@ -8,8 +8,8 @@ import * as Yup from "yup";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
-import BASE_URL from "../../../../../../../../config";
-import InfoForUsers from "./InfoForUsers/info_for_users";
+import InfoForUsers from "./InfoForUsers/info_for_users"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function TabletBulkUploadReprovision() {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);

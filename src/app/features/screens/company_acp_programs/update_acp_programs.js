@@ -5,8 +5,8 @@ import { useFormik } from "formik";
 import { Card } from "primereact/card";
 import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
-import BASE_URL from "../../../../config";
-import Axios from "axios";
+import Axios from "axios"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram, setEditAcp }) => {
     let arr = arrayofcodes;
     let indexToRemove = arrayofcodes.indexOf(selectedProgram.code);

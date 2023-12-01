@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import BillingNavbar from "../../billing_and_invoices/components/BillingNavbar";
 import { Button } from "primereact/button";
 import Axios from "axios";
-import BASE_URL from "../../../../../config";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
 
