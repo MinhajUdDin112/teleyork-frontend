@@ -67,22 +67,9 @@ const parseprogramedata = JSON.parse(programedata);
 //get personal info  data from local storage 
  const basicResponse = localStorage.getItem("basicData");
 
- //get checkEligiblity data from local storage 
- const checkEligiblity= localStorage.getItem("checkEligiblity");
- const parseCheckEligiblity = JSON.parse(checkEligiblity);
+ 
 
-
-  //get checkEligiblity data from local storage 
- useEffect(()=>{
-    if(parseZipData){
-        const checkEligiblity= localStorage.getItem("checkEligiblity");
-        const parseCheckEligiblity = JSON.parse(checkEligiblity);
-        console.log(parseCheckEligiblity)
-        toast.success(parseCheckEligiblity?.data?.Message)
-    }
-   
-
- },[])
+ 
 
  
 
