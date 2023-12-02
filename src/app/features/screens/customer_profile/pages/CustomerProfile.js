@@ -1,41 +1,40 @@
-import React, { useEffect, useState } from "react";
-import BillingNavbar from "../../billing_and_invoices/components/BillingNavbar";
-import { Button } from "primereact/button";
-import Axios from "axios";
-import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
-const BASE_URL=process.env.REACT_APP_BASE_URL
+import React, { useEffect, useState } from 'react'
+import BillingNavbar from '../../billing_and_invoices/components/BillingNavbar'
+import { Button } from 'primereact/button'
+import { Dropdown } from 'primereact/dropdown'
+import { InputTextarea } from 'primereact/inputtextarea'
+import Axios from 'axios'
+import { toast } from 'react-toastify'
+import { ScrollPanel } from 'primereact/scrollpanel'
+const BASE_URL = process.env.REACT_APP_BASE_URL
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
+    const [noteLength, setNoteLength] = useState(null)
 
-    const location = useLocation();
-    const selectedId = location.state?.selectedId;
-   
+    console.log('cpData', cpData)
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
 
     const getCustomerProfileData = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
-            if(res?.status==200|| res?.status==201){
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=64ad9b07fc04dc6ca623b9c3`);
+            if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
-          
-        } catch (error) {
-            //console.log(error?.response?.data?.msg);
 
-           // toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+        } catch (error) {
+            console.log(error?.response?.data?.msg);
         }
     };
-    console.log("cp data is",cpData)
+    console.log("cp data is", cpData)
 
     useEffect(() => {
         getCustomerProfileData();
-        
+
     }, []);
 
-    console.log("cp data is",cpData)
+    console.log("cp data is", cpData)
 
     return (
         <>
@@ -63,7 +62,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>ACP Qualify</td>
-                                                    <td>{cpData?.acpQualify  ? new Date(cpData.acpQualify).toLocaleDateString() : ""}</td>
+                                                    <td>{cpData?.acpQualify ? new Date(cpData.acpQualify).toLocaleDateString() : ""}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Service Address</td>
@@ -99,36 +98,36 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ? 
-                                                     <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td>
-                                                     :
-                                                     <td>{cpData?.address1 + " " + cpData?.address2}</td>
+                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ?
+                                                        <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td>
+                                                        :
+                                                        <td>{cpData?.address1 + " " + cpData?.address2}</td>
                                                     }
-                                                   
+
                                                 </tr>
                                                 <tr>
-                                                    <td>Mailing City</td> 
+                                                    <td>Mailing City</td>
                                                     {cpData?.mailingCity ?
-                                                    <td>{cpData?.mailingCity}</td>
-                                                :
-                                                <td>{cpData?.city}</td>}
-                                                    
+                                                        <td>{cpData?.mailingCity}</td>
+                                                        :
+                                                        <td>{cpData?.city}</td>}
+
                                                 </tr>
                                                 <tr>
-                                                    <td>Mailing State</td> 
+                                                    <td>Mailing State</td>
                                                     {cpData?.mailingState ?
-                                                    <td>{cpData?.mailingState}</td>
-                                                :
-                                                <td>{cpData?.state}</td>}
-                                                    
+                                                        <td>{cpData?.mailingState}</td>
+                                                        :
+                                                        <td>{cpData?.state}</td>}
+
                                                 </tr>
                                                 <tr>
-                                                    <td>Mailing Zip</td> 
-                                                    {cpData?.mailingZip?
-                                                    <td>{cpData?.mailingZip}</td>
-                                                :
-                                                <td>{cpData?.zip}</td>}
-                                                    
+                                                    <td>Mailing Zip</td>
+                                                    {cpData?.mailingZip ?
+                                                        <td>{cpData?.mailingZip}</td>
+                                                        :
+                                                        <td>{cpData?.zip}</td>}
+
                                                 </tr>
 
                                                 {/* <tr>
@@ -283,7 +282,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Agent Name</td>
-                                                     <td>{cpData?.createdBy?.name}</td>
+                                                    <td>{cpData?.createdBy?.name}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Enrollment ID</td>
@@ -315,8 +314,8 @@ const CustomerProfile = () => {
                                                 <tr>
                                                     <td>Tablet Subsidy Qualification</td>
                                                     {
-                                                        cpData?.deviceEligibilty ==true ?<td>Yes</td> :
-                                                        <td>No</td>
+                                                        cpData?.deviceEligibilty == true ? <td>Yes</td> :
+                                                            <td>No</td>
                                                     }
 
                                                     <td>{cpData?.deviceEligibilty}</td>
@@ -353,6 +352,122 @@ const CustomerProfile = () => {
                         </div>
                     </div>
                 </div>
+
+                <div className='p-3' >
+                    <div className='grid'>
+
+                        <div className="col-12 lg:col-4">
+                            <div>
+                                <div>
+                                    <h4>Customer Notes</h4>
+                                </div>
+                                <hr className='m-0' />
+                                <div className='flex justify-content-between pt-3 pb-3'>
+                                    <Button label='View Archive Notes' size='small' />
+                                    <Button label='Display Notes' size='small' />
+                                </div>
+                                <hr className='m-0' />
+                                <div>
+                                    <ScrollPanel style={{ width: '100%', height: '200px' }} className="custombar2">
+                                        <ul className='pl-0'>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                            <li className='flex justify-content-between align-items-center mb-3'>
+                                                <div>
+                                                    <h6 className='mb-2'>System</h6>
+                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                                </div>
+                                                <div>10-25-2023</div>
+                                            </li>
+                                        </ul>
+                                    </ScrollPanel>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-12 lg:col-4">
+                            <div>
+                                <div className='flex justify-content-between align-items-center mb-3'>
+                                    <h4 className='m-0'>Add New Note (PC83)</h4>
+                                    <span>
+                                        <i className='pi pi-plus'></i> Add New Note (PC83)
+                                    </span>
+                                </div>
+                                <hr className='m-0 mb-2' />
+                                <Dropdown
+                                    placeholder='Select Note Type'
+                                    filter
+                                    showClear
+                                    filterBy="label"
+                                    className='w-full mb-3'
+                                />
+
+                                <div className='mb-4'>
+                                    <InputTextarea rows={5} cols={66} onChange={(e) => setNoteLength(e.target.value.length)} />
+                                    <span className='counter_span mt-2'>{noteLength === null ? 0 : noteLength}</span>
+                                </div>
+
+                                <Button label='Do you want to create a ticket? (PC402)' icon="pi pi-plus" className='pl-0' link />
+
+                                <hr className='m-0 mb-2' />
+
+                                <div className='text-right'>
+                                    <Button label='Add Note' />
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </>
     );

@@ -14,15 +14,22 @@ const CreateRole = () => {
     let toast = useRef(null);
     const [rolePermissions, setRolePermissions] = useState([]);
     const location = useLocation();
+    const currentPath = location?.pathname
     const { rowData } = location.state || {};
     const [moduleData, setModuleData] = useState([]);
     const [selectedModules, setSelectedModules] = useState({});
     const [selectedSubmodules, setSelectedSubmodules] = useState({});
     const [selectedActions, setSelectedActions] = useState({});
     const [errorMessage, setErrorMessage] = useState();
+    const [isCreate, setIsCreate] = useState(false);
+    const [isManage, setIsManage] = useState(false);
+
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
+
     // Validation Schema
     const validationSchema = Yup.object().shape({
         role: Yup.string().required("This field is required."),
@@ -76,13 +83,13 @@ const CreateRole = () => {
             Axios.post(`${BASE_URL}/api/web/role`, data)
                 .then((response) => {
                     if (response?.status === 200) {
-                       
+
                         toast.current.show({ severity: "success", summary: "Info", detail: "Role Added Successfully" });
                     }
                 })
                 .catch((error) => {
                     setErrorMessage(error?.response?.data?.msg);
-                  
+
                     toast.current.show({ severity: "error", summary: "Info", detail: "Role Added Failed" });
                 });
 
@@ -99,9 +106,9 @@ const CreateRole = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/module`);
             setModuleData(res?.data?.data || []);
-          
+
         } catch (error) {
-           
+
         }
     };
     useEffect(() => {
@@ -129,7 +136,7 @@ const CreateRole = () => {
         }
     };
     const togglePermission = (submoduleId, actionId) => {
-     
+
         setSelectedActions((prevSelectedActions) => {
             const key = `${submoduleId}-${actionId}`;
             return {
@@ -185,69 +192,98 @@ const CreateRole = () => {
             if (res?.status === 200 || res?.status === 201) {
                 setRolePermissions(res?.data?.data?.permissions);
             }
-         
+
         } catch (error) {
-           
+
         }
     };
+
+    const actionBasedChecks = () => {
+        console.log('parsedLoginPerms', parsedLoginPerms);
+
+        const isCreate = parsedLoginPerms.some((node) =>
+            node?.subModule.some((subNode) =>
+                subNode?.route === currentPath && subNode?.actions.some((action) =>
+                    action?.name === "create"
+                )
+            )
+        );
+        setIsCreate(isCreate)
+
+        const isManage = parsedLoginPerms.some((node) =>
+            node?.subModule.some((subNode) =>
+                subNode?.route === currentPath && subNode?.actions.some((action) =>
+                    action?.name === "manage"
+                )
+            )
+        );
+        setIsManage(isManage)
+
+    };
+
     useEffect(() => {
         if (rowData) {
             getPermissionsByRoleId();
         }
     }, [rowData]);
 
+    useEffect(() => {
+        actionBasedChecks()
+    }, []);
+
     return (
         <>
-          <div className="card">
-            <h3 className="mt-1 ">Create Role</h3>
-        </div>
+            <div className="card">
+                <h3 className="mt-1 ">Create Role</h3>
+            </div>
             <div className="card">
                 <Toast ref={toast} />
                 <div>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="p-fluid p-formgrid grid justify-content-around">
-                            <div className="col-12 md:col-4" style={{width:"45%"}}>
+                            <div className="col-12 md:col-4" style={{ width: "45%" }}>
                                 <label className="Label__Text">Role</label>
-                                <InputText style={{marginTop:"15px"}} id="role" placeholder="Enter Role Name" value={formik.values.role} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("role") }, "Input__Round")} keyfilter={/^[A-Za-z\s]+$/} maxLength={30} />
+                                <InputText style={{ marginTop: "15px" }} id="role" placeholder="Enter Role Name" value={formik.values.role} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("role") }, "Input__Round")} keyfilter={/^[A-Za-z\s]+$/} maxLength={30} />
                                 {getFormErrorMessage("role")}
                             </div>
-                            <div className="col-12 md:col-4" style={{width:"45%"}}>
+                            <div className="col-12 md:col-4" style={{ width: "45%" }}>
                                 <label className="Label__Text">Description</label>
-                                <InputText style={{marginTop:"15px"}} id="description" placeholder="Enter Role Description" value={formik.values.description} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("description") }, "Input__Round")} rows={5} cols={30} />
+                                <InputText style={{ marginTop: "15px" }} id="description" placeholder="Enter Role Description" value={formik.values.description} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("description") }, "Input__Round")} rows={5} cols={30} />
                                 {getFormErrorMessage("description")}
                             </div>
                         </div>
                         <div>
-                            <Button style={{marginTop:"34px",marginLeft:"50%",transform:"translate(-50%)"}} label="Submit" type="submit" />
+                            <Button style={{ marginTop: "34px", marginLeft: "50%", transform: "translate(-50%)" }} label="Submit" type="submit" disabled={!(isCreate || isManage)} />
                         </div>
+
                     </form>
                 </div>
-                <Divider /> 
-           
-                <div  className="flex flex-wrap justify-content-around" style={{height:"65vh",overflowY:"scroll",overflowX:"hidden"}}>
-                    {moduleData.map((module) => (  
-                     
-                        <div >  
-                       
+                <Divider />
+
+                <div className="flex flex-wrap justify-content-around" style={{ height: "65vh", overflowY: "scroll", overflowX: "hidden" }}>
+                    {moduleData.map((module) => (
+
+                        <div >
+
                             <div className="surface-0 shadow-1 p-3 border-1 border-50 border-round">
-                                <ul style={{paddingLeft:"24%"}}>
-                                    <li style={{marginTop:"10px",listStyleType:"none"}}>
-                                        <input style={{cursor:"pointer"}} type="checkbox" checked={selectedModules[module._id] || false} onChange={() => handleModuleCheckboxChange(module._id)} />
+                                <ul style={{ paddingLeft: "24%" }}>
+                                    <li style={{ marginTop: "10px", listStyleType: "none" }}>
+                                        <input style={{ cursor: "pointer" }} type="checkbox" checked={selectedModules[module._id] || false} onChange={() => handleModuleCheckboxChange(module._id)} />
                                         {module.name}
                                     </li>
                                     {module.submodule.map((submodule) => (
                                         <ul>
-                                            <li style={{marginTop:"5px",listStyleType:"none"}}>
-                                                <div key={submodule._id} style={{width:"245px"}}>
-                                                    <input style={{cursor:"pointer"}} type="checkbox" checked={selectedSubmodules[submodule._id] || false} onChange={() => handleSubmoduleCheckboxChange(submodule._id)} />
+                                            <li style={{ marginTop: "5px", listStyleType: "none" }}>
+                                                <div key={submodule._id} style={{ width: "245px" }}>
+                                                    <input style={{ cursor: "pointer" }} type="checkbox" checked={selectedSubmodules[submodule._id] || false} onChange={() => handleSubmoduleCheckboxChange(submodule._id)} />
                                                     {submodule.name}
                                                 </div>
                                             </li>
                                             <ul>
-                                                <li style={{marginTop:"5px",listStyleType:"none"}}>
+                                                <li style={{ marginTop: "5px", listStyleType: "none" }}>
                                                     {submodule.actions.map((action) => (
-                                                        <div key={`${submodule._id}-${action._id}`} style={{marginTop:"5px"}}>
-                                                            <input style={{cursor:"pointer"}} type="checkbox" checked={selectedActions[`${submodule._id}-${action._id}`] || false} onChange={() => togglePermission(submodule._id, action._id)} />
+                                                        <div key={`${submodule._id}-${action._id}`} style={{ marginTop: "5px" }}>
+                                                            <input style={{ cursor: "pointer" }} type="checkbox" checked={selectedActions[`${submodule._id}-${action._id}`] || false} onChange={() => togglePermission(submodule._id, action._id)} />
                                                             {action.name}
                                                         </div>
                                                     ))}

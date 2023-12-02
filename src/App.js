@@ -81,7 +81,7 @@ import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/b
 import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
-import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
+import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile"
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 const App = () => {
@@ -237,51 +237,42 @@ const App = () => {
         }
     }, [token]);
 
-    const loginPerms = localStorage.getItem("permissions");
-    const parsedLoginPerms = JSON.parse(loginPerms);
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
 
-    const [dynamicMenu, setDynamicMenu] = useState([
-        {
-            // Initial state
-            items: [
-                {
-                    label: "Dashboard",
-                    icon: "pi pi-fw pi-home",
-                    to: "/",
-                },
-            ],
-        },
-    ]);
+    const [dynamicMenu, setDynamicMenu] = useState([])
 
     const getPermissions = () => {
-        console.log("inside permissions");
-        if (localStorage.getItem("permissions") === null) {
+        const storedPermissions = localStorage.getItem('permissions');
+        if (!storedPermissions) {
             return;
-        } else {
-            let modules = parsedLoginPerms.map((node) => {
-                return {
-                    label: node?.module,
-                    icon: "",
-                    items: node.subModule.map((child) => {
-                        return {
-                            label: child?.name,
-                            icon: child?.icon,
-                            to: child?.route,
-                        };
-                    }),
-                };
-            });
-            modules = modules.filter((item) => item.items.length > 0);
-            setDynamicMenu((prev) => {
-                return [
-                    ...prev,
-                    {
-                        items: modules,
-                    },
-                ];
-            });
         }
+
+        const modules = parsedLoginPerms
+            .map((node) => {
+                if (node.subModule.some(subNode => subNode?.actions?.some(action => action?.name === "view"))) {
+                    return {
+                        label: node.module,
+                        icon: "",
+                        items: node.subModule
+                            .filter(subNode => subNode?.actions?.some(action => action?.name === "view"))
+                            .map((child) => ({
+                                label: child.name,
+                                icon: child.icon,
+                                to: child.route
+                            })),
+                    };
+                }
+                return null;
+            })
+            .filter((item) => item && item.items.length > 0);
+
+        setDynamicMenu(() => [{
+            items: modules
+        }]);
     };
+
+
 
     useEffect(() => {
         getPermissions();
