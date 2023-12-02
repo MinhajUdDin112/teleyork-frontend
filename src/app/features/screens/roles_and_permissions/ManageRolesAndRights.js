@@ -23,6 +23,13 @@ export default function BasicDemo() {
     const [currentPage, setCurrentPage] = useState(0);
     const [visible, setVisible] = useState(false);
     const [description, setDescription] = useState("");
+
+    const [isCreate, setIsCreate] = useState(false);
+    const [isManage, setIsManage] = useState(false);
+
+    const location = useLocation();
+    const currentPath = location?.pathname
+
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const itemsPerPage = 10;
@@ -41,7 +48,7 @@ export default function BasicDemo() {
 
                     navigate(`/managerolesandrights/Permissions?roleId=${rowData._id}`)
 
-                }} />
+                }} disabled={!isManage} />
                 <Button style={{ marginLeft: "25px", fontWeight: "900", backgroundColor: "red", border: "none" }} onClick={() => {
 
                     if (!deleteRoleLoading) {
@@ -57,7 +64,7 @@ export default function BasicDemo() {
                     }
 
 
-                }}>
+                }} disabled={!isManage}>
                     Delete
                 </Button>
             </div>
@@ -102,11 +109,42 @@ export default function BasicDemo() {
 
         }
     };
+
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+
+        const isCreate = parsedLoginPerms.some((node) =>
+            node?.subModule.some((subNode) =>
+                subNode?.route === currentPath && subNode?.actions.some((action) =>
+                    action?.name === "create"
+                )
+            )
+        );
+        setIsCreate(isCreate)
+
+        const isManage = parsedLoginPerms.some((node) =>
+            node?.subModule.some((subNode) =>
+                subNode?.route === currentPath && subNode?.actions.some((action) =>
+                    action?.name === "manage"
+                )
+            )
+        );
+        setIsManage(isManage)
+
+    };
+
+    useEffect(() => {
+        actionBasedChecks();
+    }, []);
+
     useEffect(() => {
         if (Location.pathname === "/managerolesandrights") {
             getAllRoles()
         }
     }, [refresh]);
+
     return (
         <div className="card" >
             <Routes>

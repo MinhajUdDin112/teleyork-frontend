@@ -3,19 +3,24 @@ import Axios from "axios";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
-import { toast } from "react-toastify"; 
-const BASE_URL=process.env.REACT_APP_BASE_URL
+import { toast } from "react-toastify";
+const BASE_URL = process.env.REACT_APP_BASE_URL
 const ManageUser = () => {
     let toastfordelete = useRef(null);
     const [allUsers, setAllUsers] = useState([]);
     const [userId, setUserId] = useState(null);
     const [visibleDeleteUser, setVisibleDelelteUser] = useState(false);
     const [searchText, setSearchText] = useState('');
-    
+    const [isCreate, setIsCreate] = useState(false);
+    const [isManage, setIsManage] = useState(false);
+
+    const location = useLocation();
+    const currentPath = location?.pathname
+
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -24,8 +29,8 @@ const ManageUser = () => {
         return (
             <>
                 <div className="flex align-items-center">
-                    <Button icon="pi pi-user-edit" rounded outlined onClick={() => handleUserEdit(rowData)} className="mr-2" />
-                    <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => handleUserDelete(rowData)} />
+                    <Button icon="pi pi-user-edit" rounded outlined onClick={() => handleUserEdit(rowData)} className="mr-2" disabled={!isManage} />
+                    <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => handleUserDelete(rowData)} disabled={!isManage} />
                 </div>
             </>
         );
@@ -40,11 +45,11 @@ const ManageUser = () => {
         setUserId(rowData._id);
         setVisibleDelelteUser(true);
     };
-   
+
     const getAllUsers = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/user/all?compony=${parseLoginRes?.compony}`);
-           
+
             setAllUsers(res?.data?.data || []);
         } catch (error) {
             toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
@@ -64,7 +69,7 @@ const ManageUser = () => {
     const userTableHeader = () => {
         return (
             <>
-               
+
                 <div className="flex justify-content-between">
                     <div className="p-input-icon-left">
                         <i className="pi pi-search" />
@@ -74,7 +79,7 @@ const ManageUser = () => {
                             placeholder="Search by Name or Role"
                         />
                     </div>
-                    <Button label="Add" onClick={redirectToCreateUser} />
+                    <Button label="Add" onClick={redirectToCreateUser} disabled={!(isCreate || isManage)} />
                 </div>
             </>
         );
@@ -105,7 +110,7 @@ const ManageUser = () => {
         setVisibleDelelteUser(false);
     }
 
-    
+
 
     const filteredUsers = allUsers.filter((user) => {
         return (
@@ -113,11 +118,41 @@ const ManageUser = () => {
             user.role.role.toLowerCase().includes(searchText.toLowerCase())
         );
     });
+
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+
+        const isCreate = parsedLoginPerms.some((node) =>
+            node?.subModule.some((subNode) =>
+                subNode?.route === currentPath && subNode?.actions.some((action) =>
+                    action?.name === "create"
+                )
+            )
+        );
+        setIsCreate(isCreate)
+
+        const isManage = parsedLoginPerms.some((node) =>
+            node?.subModule.some((subNode) =>
+                subNode?.route === currentPath && subNode?.actions.some((action) =>
+                    action?.name === "manage"
+                )
+            )
+        );
+        setIsManage(isManage)
+
+    };
+
+    useEffect(() => {
+        actionBasedChecks();
+    }, []);
+
     return (
         <>
-          <div className="card">
-            <h3 className="mt-1 ">Manage User</h3>
-        </div>
+            <div className="card">
+                <h3 className="mt-1 ">Manage User</h3>
+            </div>
             <div className="card">
                 <DataTable value={filteredUsers} tableStyle={{ minWidth: "50rem" }} header={userTableHeader}>
                     <Column field="role.role" header="Role"></Column>
@@ -128,7 +163,7 @@ const ManageUser = () => {
                     <Column field="address" header="Address"></Column>
                     <Column field="zip" header="Zip"></Column>
                     <Column field={(item) => (item?.active === true ? "Active" : "Inactive")} header="Status"></Column>
-                    <Column field="createdDate" header="Created Date"  body={(rowData) => new Date(rowData.createdDate).toLocaleDateString()}></Column>
+                    <Column field="createdDate" header="Created Date" body={(rowData) => new Date(rowData.createdDate).toLocaleDateString()}></Column>
                     <Column body={actions} header="Actions"></Column>
                     {/* <Column body={permissions} header="Permissions"></Column> */}
                 </DataTable>
