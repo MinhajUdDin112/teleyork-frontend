@@ -6,10 +6,11 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 //import { Toast,ToastContainer } from "react-toastify/dist/components";
-const BASE_URL=process.env.REACT_APP_BASE_URL
+const BASE_URL = process.env.REACT_APP_BASE_URL
+
 const ManageDepartment = () => {
   let toastfordelete = useRef(null);
   const [allDepartments, setAllDepartments] = useState([]);
@@ -17,13 +18,19 @@ const ManageDepartment = () => {
   const [visibleDeleteDepartment, setVisibleDeleteDepartment] = useState(false);
   const [searchText, setSearchText] = useState("");
 
+  const [isCreate, setIsCreate] = useState(false);
+  const [isManage, setIsManage] = useState(false);
+
+  const location = useLocation();
+  const currentPath = location?.pathname
+
   const navigate = useNavigate();
 
   const loginRes = localStorage.getItem('userData');
   const parseLoginRes = JSON.parse(loginRes);
 
   const companyId = parseLoginRes?.compony;
- 
+
 
   const actions = (rowData) => {
     return (
@@ -35,6 +42,7 @@ const ManageDepartment = () => {
             outlined
             onClick={() => handleDepartmentEdit(rowData)}
             className="mr-2"
+            disabled={!isManage}
           />
           <Button
             icon="pi pi-trash"
@@ -42,6 +50,7 @@ const ManageDepartment = () => {
             outlined
             severity="danger"
             onClick={() => handleDepartmentDelete(rowData)}
+            disabled={!isManage}
           />
         </div>
       </>
@@ -64,13 +73,14 @@ const ManageDepartment = () => {
       const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${companyId}`);
       setAllDepartments(res?.data?.data || []);
     } catch (error) {
-      toast.error( error?.response?.data?.msg);
+      toast.error(error?.response?.data?.msg);
     }
   };
 
   useEffect(() => {
     getAllDepartments();
   }, []);
+
   function confirmDeleteDepartment() {
     Axios.delete(`${BASE_URL}/api/deparments/deleteDepartment?departmentId=${departmentId}`)
       .then(() => {
@@ -88,10 +98,10 @@ const ManageDepartment = () => {
           detail: "Deleted Department Failed",
         });
       });
-  
+
     setVisibleDeleteDepartment(false);
   }
-  
+
 
   function skipDeleteDepartment() {
     setVisibleDeleteDepartment(false);
@@ -99,33 +109,62 @@ const ManageDepartment = () => {
 
   const filteredUsers = allDepartments.filter((user) => {
     return (
-        user.department.toLowerCase().includes(searchText.toLowerCase()) 
-        
+      user.department.toLowerCase().includes(searchText.toLowerCase())
+
     );
-});
+  });
+
+  const actionBasedChecks = () => {
+
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
+
+    const isCreate = parsedLoginPerms.some((node) =>
+      node?.subModule.some((subNode) =>
+        subNode?.route === currentPath && subNode?.actions.some((action) =>
+          action?.name === "create"
+        )
+      )
+    );
+    setIsCreate(isCreate)
+
+    const isManage = parsedLoginPerms.some((node) =>
+      node?.subModule.some((subNode) =>
+        subNode?.route === currentPath && subNode?.actions.some((action) =>
+          action?.name === "manage"
+        )
+      )
+    );
+    setIsManage(isManage)
+
+  };
+
+  useEffect(() => {
+    actionBasedChecks();
+  }, []);
 
   return (
     <>
-    <div className="card">
-    <h3 className="mt-1 ">Manage Department</h3>
-    </div>
-     
       <div className="card">
-      
+        <h3 className="mt-1 ">Manage Department</h3>
+      </div>
+
+      <div className="card">
+
         <DataTable
           value={filteredUsers}
           tableStyle={{ minWidth: "50rem" }}
           header={() => (
             <div className="flex justify-content-between">
               <div className="p-input-icon-left">
-                        <i className="pi pi-search" />
-                        <InputText
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                            placeholder="Search by Name"
-                        />
-                    </div>
-              <Button label="Add" onClick={() => navigate("/create-department")} />
+                <i className="pi pi-search" />
+                <InputText
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder="Search by Name"
+                />
+              </div>
+              <Button label="Add" onClick={() => navigate("/create-department")} disabled={!(isCreate || isManage)} />
             </div>
           )}
         >
