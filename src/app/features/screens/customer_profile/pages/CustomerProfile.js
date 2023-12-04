@@ -6,6 +6,7 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import Axios from 'axios'
 import { toast } from 'react-toastify'
 import { ScrollPanel } from 'primereact/scrollpanel'
+import { useLocation } from 'react-router-dom'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -13,12 +14,15 @@ const CustomerProfile = () => {
 
     console.log('cpData', cpData)
 
+    const { state } = useLocation();
+  const selectedId = state?.selectedId;
+
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
 
     const getCustomerProfileData = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=64ad9b07fc04dc6ca623b9c3`);
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
@@ -34,7 +38,7 @@ const CustomerProfile = () => {
 
     }, []);
 
-    console.log("cp data is", cpData)
+   
 
     return (
         <>
