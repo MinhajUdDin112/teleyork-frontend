@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useLocation} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";  
 
 import { Dialog } from "primereact/dialog";
@@ -14,7 +14,39 @@ import TemplateSearchBar from "./TemplateSearchBar";
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const Draft = () => {  
+const Draft = () => {    
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+    
+     useEffect(()=>{ 
+       actionBasedChecks()
+     },[])
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
 
@@ -62,7 +94,7 @@ const Draft = () => {
                         label="Send"
                         onClick={() => handleSend(rowData)}
                         className="w-6rem"
-                        disabled={isLoading} // Disable the button when it's in a loading state
+                        disabled={isLoading ? true:!isManage } // Disable the button when it's in a loading state
                     />
                 )}
             </div>

@@ -5,7 +5,7 @@ import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,useLocation } from "react-router-dom";
 import { getAllTemplateAction, getOneTemplateAction } from "../../../store/notification/NotificationAction";
 import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
@@ -17,7 +17,8 @@ import TemplateSearchBar from "./TemplateSearchBar";
 import { Toast } from "primereact/toast";
 import EditTemplate from "./EditTemplate"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const ManageTemplate = () => {
+const ManageTemplate = () => {    
+   
     let navigate = useNavigate();
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
@@ -35,11 +36,42 @@ const ManageTemplate = () => {
     const [filterType, setFilterType] = useState("all");
     const [filteredByType, setFilteredByType] = useState([]); // New state for filtered data by type
     const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
-
+      
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const userId = parseLoginRes?._id;
+    const userId = parseLoginRes?._id;  
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
     
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+    
+     useEffect(()=>{ 
+       actionBasedChecks()
+     },[])
     function confirmDeleteTemplate() {
         Axios.delete(`${BASE_URL}/api/sms/delete?templateId=${deleteTemplateId}`)
             .then(() => {
@@ -67,7 +99,7 @@ const ManageTemplate = () => {
         }
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Button label="Download " onClick={() => handleDownload(rowData)} disabled={getOneTemplateLoading} />
+                <Button label="Download " onClick={() => handleDownload(rowData)} disabled={!isManage} />
                 {/* <Button
                     className="pi pi-user-edit"
                     onClick={() => {
@@ -80,7 +112,8 @@ const ManageTemplate = () => {
                     style={{ marginLeft: "25px", fontWeight: "900", backgroundColor: "red", border: "none" }}
                     onClick={() => {
                         handleDeleteTemplate();
-                    }}
+                    }}  
+                    disabled={!isManage}
                 >
                     Delete
                 </Button>
