@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 //import { Toast,ToastContainer } from "react-toastify/dist/components";
 const BASE_URL = process.env.REACT_APP_BASE_URL
+
 const ManageDepartment = () => {
   let toastfordelete = useRef(null);
   const [allDepartments, setAllDepartments] = useState([]);
@@ -79,6 +80,7 @@ const ManageDepartment = () => {
   useEffect(() => {
     getAllDepartments();
   }, []);
+
   function confirmDeleteDepartment() {
     Axios.delete(`${BASE_URL}/api/deparments/deleteDepartment?departmentId=${departmentId}`)
       .then(() => {
