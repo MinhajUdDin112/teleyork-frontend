@@ -3,13 +3,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";  
 import Axios  from "axios";    
 import { Toast } from "primereact/toast";
-import BASE_URL from "../../../../../../../../config";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
+import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";  
+const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function SIMSingleUploadAddActivateProvision() {
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");

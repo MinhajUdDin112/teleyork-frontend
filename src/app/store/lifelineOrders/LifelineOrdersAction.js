@@ -1,8 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import BASE_URL from "../../../config";
-
-
+import axios from "axios"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 //adding customer personal info during customer enrollment 
 // export const addCustomerInfoAction = createAsyncThunk("customer/info", async (body) => {
 //     try {

@@ -5,12 +5,12 @@ import * as Yup from "yup";
 
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
-import BASE_URL from "../../../../../../../../config";
   import { InputText } from "primereact/inputtext";
     import { Dropdown } from "primereact/dropdown";  
     import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./dialogs/add_agent_detail";
-import InfoForUsers from "./InfoForUsers/info_for_users";
+import InfoForUsers from "./InfoForUsers/info_for_users";  
+const BASE_URL=process.env.REACT_APP_BASE_URL
     export default function SIMBulkUploadAddPreActivatedProvision(){  
         const ref = useRef(null);
     const [filename, setFilename] = useState(null);

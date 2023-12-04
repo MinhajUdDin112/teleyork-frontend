@@ -81,13 +81,13 @@ import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/b
 import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
-import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
+import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile"
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
-const App = () => {     
+const App = () => {
     const loginRes = localStorage.getItem("userData");
-  const parseLoginRes = JSON.parse(loginRes);    
-  console.log(parseLoginRes)
+    const parseLoginRes = JSON.parse(loginRes);
+    console.log(parseLoginRes);
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -240,53 +240,43 @@ const App = () => {
     const loginPerms = localStorage.getItem("permissions")
     const parsedLoginPerms = JSON.parse(loginPerms)
 
-   
+    const [dynamicMenu, setDynamicMenu] = useState([])
 
-    const [dynamicMenu, setDynamicMenu] = useState([{
-
-        // Initial state
-        items: [
-            {
-                label: "Dashboard",
-                icon: "pi pi-fw pi-home",
-                to: "/",
-            }
-        ],
-
-    }])
-
-    const getPermissions = () => {  
-        console.log("inside permissions")
-        if (localStorage.getItem('permissions') === null) {
+    const getPermissions = () => {
+        const storedPermissions = localStorage.getItem('permissions');
+        if (!storedPermissions) {
             return;
         }
-        else {
-         
-            let modules = parsedLoginPerms.map((node) => {
-                return {
-                    label: node?.module,
-                    icon: "",
-                    items: node.subModule.map((child) => {
-                        return {
-                            label: child?.name,
-                            icon: child?.icon,
-                            to: child?.route
-                        }
-                    })
+
+        const modules = parsedLoginPerms
+            .map((node) => {
+                if (node.subModule.some(subNode => subNode?.actions?.some(action => action?.name === "view"))) {
+                    return {
+                        label: node.module,
+                        icon: "",
+                        items: node.subModule
+                            .filter(subNode => subNode?.actions?.some(action => action?.name === "view"))
+                            .map((child) => ({
+                                label: child.name,
+                                icon: child.icon,
+                                to: child.route
+                            })),
+                    };
                 }
+                return null;
             })
-            modules = modules.filter((item) => item.items.length > 0)
-            setDynamicMenu((prev) => {
-                return [...prev, {
-                    items: modules
-                }]
-            });
-        }
-    }
+            .filter((item) => item && item.items.length > 0);
+
+        setDynamicMenu(() => [{
+            items: modules
+        }]);
+    };
+
+
 
     useEffect(() => {
-        getPermissions()  
-        console.log("calling")
+        getPermissions();
+        console.log("calling");
     }, [window.localStorage.permissions]);
 
     return (
@@ -300,7 +290,6 @@ const App = () => {
                     <div className="layout-sidebar" onClick={onSidebarClick}>
                         <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
                     </div>
-
                     <div className="layout-main-container">
                         <div className="layout-main">
                             <Routes>
@@ -313,8 +302,9 @@ const App = () => {
                                 <Route path="/bulkprocesses/bulk-swap-esn" element={<SwapEsnReportFlowPage />} />
                                 <Route path="/emei-drawer" element={<ImeiDrawer />} />
                                 <Route path="/manage-model" element={<ManageModelFlowPage />} />
-
+                                <Route path="/manageinventory" element={<Manage_inventory />} />
                                 <Route path="/esn-sim-drawer" element={<EsnSimDrawer />} />
+                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage />} />
                                 <Route path="/inventory-report" element={<InventoryReport />} />
                                 <Route path="/companyacpprograms" element={<AcpProgramsFlowPage />} />
                                 <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
@@ -322,7 +312,7 @@ const App = () => {
                                 <Route path="/managerolesandrights/*" element={<ManageRolesAndRights />} />
                                 <Route path="/invoice" element={<InvoicePage />} />
                                 <Route path="/all-enrollments" element={<AllEnrollments />} />
-                                <Route path="/bulk-upload" element={<UploadBulk/>} />
+                                <Route path="/bulk-upload" element={<UploadBulk />} />
                                 <Route path="/completedenrollments" element={<CompletedEnrollments />} />
                                 <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
                                 <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />
@@ -345,7 +335,7 @@ const App = () => {
                                 <Route path="/eligibilityproofupload" element={<EligibilityProofUpload />} />
                                 <Route path="/dealerwallet" element={<DealerWallet />} />
                                 <Route path="/orderhistory" element={<OrderHistory />} />
-                                <Route path="/manageinventory" element={<Manage_inventory />} />
+
                                 <Route path="/smsnotification" element={<Upload />} />
                                 <Route path="/sent" element={<Sent />} />
                                 <Route path="/draft" element={<Draft />} />
@@ -360,7 +350,6 @@ const App = () => {
                                 <Route path="/createtemplate" element={<CreateTemplate />} />
                                 <Route path="/managetemplate/*" element={<ManageTemplate />} />
                                 <Route path="/createrole" element={<CreateRole />} />
-                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage />} />
                                 <Route path="/manage-user" element={<ManageUser />} />
                                 <Route path="/create-user" element={<CreateUser />} />
                                 <Route path="/edit-user" element={<EditUser />} />
@@ -391,8 +380,7 @@ const App = () => {
                     <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
                     <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
                 </Routes>
-            )
-            }
+            )}
         </>
     );
 };

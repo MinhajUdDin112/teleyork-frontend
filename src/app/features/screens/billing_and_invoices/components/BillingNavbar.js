@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Menubar } from "primereact/menubar";
 import Axios from "axios";
-import BASE_URL from "../../../../../config";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-const BillingNavbar = () => {
+const BillingNavbar = () => {  
+    const BASE_URL=process.env.REACT_APP_BASE_URL
     const [cpData, setCpData] = useState([])
 
     const selectedid = localStorage.getItem("selectedId");

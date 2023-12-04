@@ -2,12 +2,12 @@ import React, { useState, useRef } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import { Card } from "primereact/card";
 import { useFormik } from "formik";
 import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
-export default function AddAcpProgram() {
+export default function AddAcpProgram() { 
+    const BASE_URL=process.env.REACT_APP_BASE_URL
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const [acpprograms, setacpprograms] = useState(null);

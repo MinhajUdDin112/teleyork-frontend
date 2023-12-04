@@ -7,10 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomLoading from "../../components/custom_spinner";
 import { getSentAllTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import ReactPaginate from 'react-paginate';
 import TemplateSearchBar from "./TemplateSearchBar";
-import { Dialog } from "primereact/dialog";
+import { Dialog } from "primereact/dialog";  
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const Sent = () => {    
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");

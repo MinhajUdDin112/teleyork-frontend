@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import BASE_URL from "../../../../config";
 import Axios from "axios";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
@@ -17,8 +16,7 @@ import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "./DialogeForRemarks";
 import DialogeForTransferUser from "./DialogeForTransferUser";
 import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
-
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const AllEnrollments = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();

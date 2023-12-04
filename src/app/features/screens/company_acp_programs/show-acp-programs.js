@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import UpdateProgram from "./update_acp_programs";
+import UpdateProgram from "./update_acp_programs"; 
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const ShowPrograms = ({ setEditAcp }) => {
     let objectForEdit = {};
 

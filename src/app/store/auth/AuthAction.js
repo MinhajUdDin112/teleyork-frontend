@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import BASE_URL from "../../../config";
 import axios from "axios";
-
+const BASE_URL = process.env.REACT_APP_BASE_URL
 //login action
 export const loginAction = createAsyncThunk("auth/web/user/login", async (body, { rejectWithValue }) => {
     try {
@@ -15,6 +14,7 @@ export const loginAction = createAsyncThunk("auth/web/user/login", async (body, 
 
         // Toasts({ success: response.data.msg });    
         const allowdPerms = response?.data?.data?.permissions
+        console.log('response?.data?.data', response?.data?.data)
         localStorage.setItem("permissions", JSON.stringify(allowdPerms))
         console.log("login data ", response.data)
         return response.data;

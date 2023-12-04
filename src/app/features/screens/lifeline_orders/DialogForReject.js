@@ -3,15 +3,13 @@ import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from "axios";
-import BASE_URL from "../../../../config";
 import { Dropdown } from "primereact/dropdown";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { useEffect } from "react";
 import { useState } from "react";
 import { Checkbox } from "primereact/checkbox";
-
-
+const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
