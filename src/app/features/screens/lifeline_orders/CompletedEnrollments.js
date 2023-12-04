@@ -62,6 +62,7 @@ const CompletedEnrollments = () => {
             const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?serviceProvider=${parseLoginRes?.compony}`);
             if (res?.status === 200 || res?.status === 201) {
                 setAllCompletedEnrollments(res?.data?.data);
+                console.log("created by",res?.data?.data)
                 setIsLoading(false);
             }
         } catch (error) {
@@ -104,7 +105,7 @@ const CompletedEnrollments = () => {
                         <Column header="Zip" field="zip"></Column>
                         <Column field="contact" header="Telephone Number" />
                         <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
-                        <Column field="createdBy?.name" header="Created BY" />
+                        <Column field="createdBy.name" header="Created BY"/>
                         <Column field="status" header="Status" />
                     </DataTable>
                     {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}

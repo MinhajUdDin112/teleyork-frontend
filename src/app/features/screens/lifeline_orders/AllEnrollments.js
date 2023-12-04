@@ -17,6 +17,7 @@ import DialogeForRemarks from "./DialogeForRemarks";
 import DialogeForTransferUser from "./DialogeForTransferUser";
 import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
 const BASE_URL=process.env.REACT_APP_BASE_URL
+
 const AllEnrollments = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
@@ -77,28 +78,31 @@ const AllEnrollments = () => {
     const roleName = parseLoginRes?.role?.role;
 
     const onGlobalFilterChange = (e) => {
-        setGlobalFilterValue(e.target.value);
+        // Trim spaces from the input value
+        const trimmedValue = e.target.value.trim();
+        setGlobalFilterValue(trimmedValue);
     };
-    const onDateFilterChange = (e) => {
-        setDates(e.value);
-        filterByDate(e.value);
-    };
+    
+    // const onDateFilterChange= (e) => {
+    //     setDates(e.value);
+    //     filterByDate(e.value);
+    // };
 
-    const filterByDate = (selectedDates) => {
-        const filteredData = allEnrollments.filter((rowData) => {
-            const enrollmentDate = rowData.DOB ? new Date(rowData.DOB.split("T")[0]) : null;
+    // const filterByDate = (selectedDates) => {
+    //     const filteredData = allEnrollments.filter((rowData) => {
+    //         const enrollmentDate = rowData.DOB ? new Date(rowData.DOB.split("T")[0]) : null;
 
-            if (selectedDates && selectedDates.length === 2 && enrollmentDate) {
-                const startDate = new Date(selectedDates[0]);
-                const endDate = new Date(selectedDates[1]);
-                return enrollmentDate >= startDate && enrollmentDate <= endDate;
-            }
+    //         if (selectedDates && selectedDates.length === 2 && enrollmentDate) {
+    //             const startDate = new Date(selectedDates[0]);
+    //             const endDate = new Date(selectedDates[1]);
+    //             return enrollmentDate >= startDate && enrollmentDate <= endDate;
+    //         }
 
-            return true;
-        });
+    //         return true;
+    //     });
 
-        setFilteredDates(filteredData);
-    };
+    //     setFilteredDates(filteredData);
+    // };
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
@@ -107,6 +111,7 @@ const AllEnrollments = () => {
             if (res?.status === 200 || res?.status === 201) {
                 setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
+                console.log("all enroll is",res?.data?.data)
                
             }
         } catch (error) {
@@ -330,7 +335,7 @@ const AllEnrollments = () => {
         return (
             <div>
                  {
-                    parseLoginRes?.companyName.includes("IJ wireless") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    parseLoginRes?.companyName.includes("talkdaily") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                     :
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 }
@@ -490,7 +495,19 @@ const AllEnrollments = () => {
                             <Column header="City" field="city"></Column>
                             <Column header="State" field="state"></Column>
                             <Column header="Zip" field="zip" />
-                            <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? new Date(rowData.DOB).toLocaleDateString() : "")} />
+                            <Column
+                                field="DOB"
+                                header="DOB"
+                                body={(rowData) =>
+                                    new Date(rowData.DOB)
+                                        .toLocaleDateString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })
+                                        .replace(/\//g, "-")
+                                }
+                            />
                             <Column field="contact" header="Contact" />
                             <Column
                                 field="createdAt"
@@ -541,7 +558,7 @@ const AllEnrollments = () => {
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                 ""
-                            ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ? (
+                            ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("retention") || roleName.includes("RETENTION") || roleName.includes("Retention") ? (
                                 <Column header="Actions" body={actionTemplateForPR}></Column>
                             ) : roleName.includes("QA") || roleName.includes("qa") || roleName.includes("Qa") ? (
                                 <Column header="Actions" body={actionTemplateForTL}></Column>
