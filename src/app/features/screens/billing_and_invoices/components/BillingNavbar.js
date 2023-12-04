@@ -34,6 +34,9 @@ const BillingNavbar = () => {
             label: `MDN:${cpData?.phoneNumber}`,
         },
         {
+            label: `Status: ${cpData?.status}`,
+        },
+        {
             label: "Wallet Balance: $ 0",
             icon: "pi pi-fw pi-plus",
         },

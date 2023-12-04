@@ -81,13 +81,11 @@ import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/b
 import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
-import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile";
+import CustomerProfile from "./app/features/screens/customer_profile/pages/CustomerProfile"
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 const App = () => {
-    const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
-    console.log(parseLoginRes);
+
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -96,6 +94,7 @@ const App = () => {
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
+    const [permittedRoutes, setPermittedRoutes] = useState([]);
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();
@@ -237,55 +236,58 @@ const App = () => {
         }
     }, [token]);
 
-    const loginPerms = localStorage.getItem("permissions");
-    const parsedLoginPerms = JSON.parse(loginPerms);
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
 
-    const [dynamicMenu, setDynamicMenu] = useState([
-        {
-            // Initial state
-            items: [
-                {
-                    label: "Dashboard",
-                    icon: "pi pi-fw pi-home",
-                    to: "/",
-                },
-            ],
-        },
-    ]);
+    const [dynamicMenu, setDynamicMenu] = useState([])
 
     const getPermissions = () => {
-        console.log("inside permissions");
-        if (localStorage.getItem("permissions") === null) {
+        const storedPermissions = localStorage.getItem('permissions');
+        if (!storedPermissions) {
             return;
-        } else {
-            let modules = parsedLoginPerms.map((node) => {
-                return {
-                    label: node?.module,
-                    icon: "",
-                    items: node.subModule.map((child) => {
-                        return {
-                            label: child?.name,
-                            icon: child?.icon,
-                            to: child?.route,
-                        };
-                    }),
-                };
-            });
-            modules = modules.filter((item) => item.items.length > 0);
-            setDynamicMenu((prev) => {
-                return [
-                    ...prev,
-                    {
-                        items: modules,
-                    },
-                ];
-            });
         }
+
+        const permittedRoutes = [];
+
+        const modules = parsedLoginPerms
+            .map((node) => {
+                if (node.subModule.some(subNode => subNode?.actions?.some(action => action?.name === "view"))) {
+                    const moduleRoutes = node.subModule
+                        .filter(subNode => subNode?.actions?.some(action => action?.name === "view"))
+                        .map((child) => {
+                            permittedRoutes.push(child.route);
+                            return {
+                                label: child.name,
+                                icon: child.icon,
+                                to: child.route,
+                            };
+                        });
+
+                    return {
+                        label: node.module,
+                        icon: "",
+                        items: moduleRoutes,
+                    };
+                }
+                return null;
+            })
+            .filter((item) => item && item.items.length > 0);
+
+        setDynamicMenu(() => [{
+            items: modules
+        }]);
+        setPermittedRoutes(permittedRoutes);
     };
+
+    const isPermitted = (route) => {
+        let permedRoutes = permittedRoutes;
+        return permedRoutes.includes(route);
+    }
+
+    console.log(permittedRoutes)
 
     useEffect(() => {
         getPermissions();
-        console.log("calling");
     }, [window.localStorage.permissions]);
 
     return (
@@ -304,68 +306,68 @@ const App = () => {
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
-                                <Route path="/bulkprocesses/bulk-clear-esn" element={<ClearEsnReportFlowPage />} />
-                                <Route path="/shipping-queues" element={<ShippingQueue />} />
-                                <Route path="/bulkprocesses/bulk-clear-device" element={<ClearDeviceReportFlowPage />} />
-                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={<DeactivateMdnFlowPage />} />
-                                <Route path="/bulkprocesses/bulk-swap-esn" element={<SwapEsnReportFlowPage />} />
-                                <Route path="/emei-drawer" element={<ImeiDrawer />} />
-                                <Route path="/manage-model" element={<ManageModelFlowPage />} />
-                                <Route path="/manageinventory" element={<Manage_inventory />} />
-                                <Route path="/esn-sim-drawer" element={<EsnSimDrawer />} />
-                                <Route path="/dropshiporders" element={<DropshipOrdersFlowPage />} />
-                                <Route path="/inventory-report" element={<InventoryReport />} />
-                                <Route path="/companyacpprograms" element={<AcpProgramsFlowPage />} />
-                                <Route path="/newenrolment" element={<ServiceAvailablityPage />} />
-                                <Route path="/enrollment" element={<EnrollmentFlowPage />} />
-                                <Route path="/managerolesandrights/*" element={<ManageRolesAndRights />} />
-                                <Route path="/invoice" element={<InvoicePage />} />
-                                <Route path="/all-enrollments" element={<AllEnrollments />} />
-                                <Route path="/bulk-upload" element={<UploadBulk />} />
-                                <Route path="/completedenrollments" element={<CompletedEnrollments />} />
-                                <Route path="/incompleteenrollments" element={<InCompletedEnrollments />} />
-                                <Route path="/rejectedenrollments" element={<RejectedEnrollments />} />
-                                <Route path="/nladresolutionstatus" element={<NLADResolutionStatus />} />
-                                <Route path="/handovereventorder" element={<HandoverEventOrder />} />
-                                <Route path="/pendingeventorder" element={<PendingEventOrder />} />
-                                <Route path="/withoutproofenrollments" element={<WithoutProofEnrollments />} />
-                                <Route path="/withproofenrollments" element={<WithProofEnrollments />} />
-                                <Route path="/incomplete" element={<IncompleteEnrollments />} />
-                                <Route path="/completeenrollments" element={<CompleteEnrollments />} />
-                                <Route path="/bulkportin" element={<BulkPortin />} />
-                                <Route path="/allenrollmentorders" element={<Allenrollments />} />
-                                <Route path="/recentsearches" element={<RecentSearches />} />
-                                <Route path="/paymentsearchtool" element={<PaymentSearchTool />} />
-                                <Route path="/purchasehistory" element={<PurchaseHistory />} />
-                                <Route path="/customerhistory" element={<CustomerHistory />} />
-                                <Route path="/agentstorelocator" element={<AgentStoreLocator />} />
-                                <Route path="/deactivateesn" element={<DeactivatEsn />} />
-                                <Route path="/tickets" element={<Tickets />} />
-                                <Route path="/eligibilityproofupload" element={<EligibilityProofUpload />} />
-                                <Route path="/dealerwallet" element={<DealerWallet />} />
-                                <Route path="/orderhistory" element={<OrderHistory />} />
+                                <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
+                                <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
+                                <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
+                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
+                                <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />
+                                <Route path="/emei-drawer" element={isPermitted("/emei-drawer") ? <ImeiDrawer /> : <Dashboard />} />
+                                <Route path="/manage-model" element={isPermitted("/manage-model") ? <ManageModelFlowPage /> : <Dashboard />} />
+                                <Route path="/manageinventory" element={isPermitted("/manageinventory") ? <Manage_inventory /> : <Dashboard />} />
+                                <Route path="/esn-sim-drawer" element={isPermitted("/esn-sim-drawer") ? <EsnSimDrawer /> : <Dashboard />} />
+                                <Route path="/dropshiporders" element={isPermitted("/dropshiporders") ? <DropshipOrdersFlowPage /> : <Dashboard />} />
+                                <Route path="/inventory-report" element={isPermitted("/inventory-report") ? <InventoryReport /> : <Dashboard />} />
+                                <Route path="/companyacpprograms" element={isPermitted("/companyacpprograms") ? <AcpProgramsFlowPage /> : <Dashboard />} />
+                                <Route path="/newenrolment" element={isPermitted("/newenrolment") ? <ServiceAvailablityPage /> : <Dashboard />} />
+                                <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} />
+                                <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
+                                <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
+                                <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <Eligibility /> : <Dashboard />} />
+                                <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
+                                <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
+                                <Route path="/incompleteenrollments" element={isPermitted("/incompleteenrollments") ? <InCompletedEnrollments /> : <Dashboard />} />
+                                <Route path="/rejectedenrollments" element={isPermitted("/rejectedenrollments") ? <RejectedEnrollments /> : <Dashboard />} />
+                                <Route path="/nladresolutionstatus" element={isPermitted("/nladresolutionstatus") ? <NLADResolutionStatus /> : <Dashboard />} />
+                                <Route path="/handovereventorder" element={isPermitted("/handovereventorder") ? <HandoverEventOrder /> : <Dashboard />} />
+                                <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
+                                <Route path="/withoutproofenrollments" element={isPermitted("/withoutproofenrollments") ? <WithoutProofEnrollments /> : <Dashboard />} />
+                                <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
+                                <Route path="/incomplete" element={isPermitted("/incomplete") ? <IncompleteEnrollments /> : <Dashboard />} />
+                                <Route path="/completeenrollments" element={isPermitted("/completeenrollments") ? <CompleteEnrollments /> : <Dashboard />} />
+                                <Route path="/bulkportin" element={isPermitted("/bulkportin") ? <BulkPortin /> : <Dashboard />} />
+                                <Route path="/allenrollmentorders" element={isPermitted("/allenrollmentorders") ? <Allenrollments /> : <Dashboard />} />
+                                <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
+                                <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentSearchTool /> : <Dashboard />} />
+                                <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
+                                <Route path="/customerhistory" element={isPermitted("/customerhistory") ? <CustomerHistory /> : <Dashboard />} />
+                                <Route path="/agentstorelocator" element={isPermitted("/agentstorelocator") ? <AgentStoreLocator /> : <Dashboard />} />
+                                <Route path="/deactivateesn" element={isPermitted("/deactivateesn") ? <DeactivatEsn /> : <Dashboard />} />
+                                <Route path="/tickets" element={isPermitted("/tickets") ? <Tickets /> : <Dashboard />} />
+                                <Route path="/eligibilityproofupload" element={isPermitted("/eligibilityproofupload") ? <EligibilityProofUpload /> : <Dashboard />} />
+                                <Route path="/dealerwallet" element={isPermitted("/dealerwallet") ? <DealerWallet /> : <Dashboard />} />
+                                <Route path="/orderhistory" element={isPermitted("/orderhistory") ? <OrderHistory /> : <Dashboard />} />
 
-                                <Route path="/smsnotification" element={<Upload />} />
-                                <Route path="/sent" element={<Sent />} />
-                                <Route path="/draft" element={<Draft />} />
-                                <Route path="/draftall/:id" element={<ShowDraftAll />} />
-                                <Route path="/sentall/:id" element={<ShowSentAll />} />
-                                <Route path="/selfenrollment" element={<VerifyZip />} />
-                                <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
-                                <Route path="/selfenrollment/address/:id" element={<Address />} />
-                                <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
-                                <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
-                                <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
-                                <Route path="/createtemplate" element={<CreateTemplate />} />
-                                <Route path="/managetemplate/*" element={<ManageTemplate />} />
-                                <Route path="/createrole" element={<CreateRole />} />
-                                <Route path="/manage-user" element={<ManageUser />} />
-                                <Route path="/create-user" element={<CreateUser />} />
-                                <Route path="/edit-user" element={<EditUser />} />
-                                <Route path="/manage-department" element={<Manage_Department />} />
-                                <Route path="/edit-department" element={<EditDepartment />} />
-                                <Route path="/create-department" element={<CreateDepartment />} />
-                                <Route path="/customer-profile" element={<CustomerProfile />} />
+                                <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
+                                <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
+                                <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
+                                <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
+                                <Route path="/sentall/:id" element={isPermitted("/sentall") ? <ShowSentAll /> : <Dashboard />} />
+                                <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
+                                <Route path="/selfenrollment/personalinfo/:id" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
+                                <Route path="/selfenrollment/address/:id" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
+                                <Route path="/selfenrollment/eligibile/:id" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
+                                <Route path="/selfenrollment/nationalverifier/:id" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
+                                <Route path="/selfenrollment/resumeapplication" element={isPermitted("/selfenrollment") ? <CreateDepartment /> : <Dashboard />} />
+                                <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
+                                <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
+                                <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
+                                <Route path="/manage-user" element={isPermitted("/manage-user") ? <ManageUser /> : <Dashboard />} />
+                                <Route path="/create-user" element={isPermitted("/create-user") ? <CreateUser /> : <Dashboard />} />
+                                <Route path="/edit-user" element={isPermitted("/edit-user") ? <EditUser /> : <Dashboard />} />
+                                <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />
+                                <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
+                                <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
+                                <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} />
                             </Routes>
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
