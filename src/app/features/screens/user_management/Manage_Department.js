@@ -110,7 +110,6 @@ const ManageDepartment = () => {
   const filteredUsers = allDepartments.filter((user) => {
     return (
       user.department.toLowerCase().includes(searchText.toLowerCase())
-
     );
   });
 

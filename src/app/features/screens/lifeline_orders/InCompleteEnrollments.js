@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import Axios from "axios";
 import ReactPaginate from "react-paginate";
 import { Button } from "primereact/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,6 +22,11 @@ const InCompleteEnrollments = () => {
     const [expandedRows, setExpandedRows] = useState([]);
     const [globalFilterValue, setGlobalFilterValue] = useState("");
 
+    const [isCreate, setIsCreate] = useState(false);
+  const [isManage, setIsManage] = useState(false);
+
+  const location = useLocation();
+  const currentPath = location?.pathname
     const navigate = useNavigate()
 
     // const rowExpansionTemplate = (data) => {
@@ -59,6 +64,36 @@ const InCompleteEnrollments = () => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+
+    
+  const actionBasedChecks = () => {
+
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
+
+    const isCreate = parsedLoginPerms.some((node) =>
+      node?.subModule.some((subNode) =>
+        subNode?.route === currentPath && subNode?.actions.some((action) =>
+          action?.name === "create"
+        )
+      )
+    );
+    setIsCreate(isCreate)
+
+    const isManage = parsedLoginPerms.some((node) =>
+      node?.subModule.some((subNode) =>
+        subNode?.route === currentPath && subNode?.actions.some((action) =>
+          action?.name === "manage"
+        )
+      )
+    );
+    setIsManage(isManage)
+
+  };
+
+  useEffect(() => {
+    actionBasedChecks();
+  }, []);
 
 
     const getAllInCompletedEnrollments = async () => {

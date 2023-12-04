@@ -27,6 +27,7 @@ const DialogForActivateSim = ({enrollmentId,zipCode}) => {
     planId: Yup.string().required("Please Select Plan"),  
    // esn: Yup.string().required("Please select ESN"), 
 });
+const userId=parseLoginRes?._id;
 
 const formik = useFormik({
     validationSchema: validationSchema,
@@ -37,7 +38,7 @@ const formik = useFormik({
     },
     onSubmit: async (values,actions) => {
       setisButtonLoading(true);
-        const dataToSend = { enrollmentId, ...values };
+        const dataToSend = { enrollmentId,userId, ...values };
       
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend);
