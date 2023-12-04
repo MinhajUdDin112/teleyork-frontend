@@ -492,7 +492,7 @@ const AllEnrollments = () => {
                             <Column header="City" field="city"></Column>
                             <Column header="State" field="state"></Column>
                             <Column header="Zip" field="zip" />
-                            <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                            <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? new Date(rowData.DOB).toLocaleDateString() : "")} />
                             <Column field="contact" header="Contact" />
                             <Column
                                 field="createdAt"
