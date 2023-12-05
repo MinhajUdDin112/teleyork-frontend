@@ -7,11 +7,18 @@ import { InputTextarea } from "primereact/inputtextarea";
 import Axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react"; 
+import classNames from "classnames";
+
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogeForRemarksForIJ = ({enrollmentId}) => {
     const [isCallQualityRemarks, setIsCallQualityRemarks] = useState();
 
+    const validationSchema = Yup.object().shape({
+      remarksNote: Yup.string().required("Remarks  is Required"),
+     
+  });
     const formik = useFormik({
+      validationSchema: validationSchema,
         initialValues: {
             QualityRemarks:"",
             remarksNote:"",
@@ -40,6 +47,11 @@ const DialogeForRemarksForIJ = ({enrollmentId}) => {
       }, [
         isCallQualityRemarks,
       ]);
+
+      const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+    const getFormErrorMessage = (name) => {
+        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+    };
 
   return (
    <>
@@ -96,7 +108,8 @@ const DialogeForRemarksForIJ = ({enrollmentId}) => {
     <div className="mt-3 flex flex-wrap justify-content-center" style={{width:"100vw"}}  >
                         <div style={{width:"100%"}}>
                             <h4 >Notes</h4>
-                            <InputTextarea id="remarksNote" style={{width:"100%"}}  value={formik.values.remarksNote} onChange={formik.handleChange}  className="p-2"  />
+                            <InputTextarea id="remarksNote" style={{width:"100%"}}  value={formik.values.remarksNote} onChange={formik.handleChange}    className={classNames({ "p-invalid": isFormFieldValid("remarksNote") }, "input_text p-2")} />
+                            {getFormErrorMessage("remarksNote")}
                         </div>
                         <br />
                     </div>

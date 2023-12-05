@@ -335,10 +335,11 @@ const AllEnrollments = () => {
         return (
             <div>
                  {
-                    parseLoginRes?.companyName.includes("talkdaily") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                     :
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 }
+               
                
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
                 <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
