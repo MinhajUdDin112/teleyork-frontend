@@ -61,8 +61,8 @@ const CompletedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?serviceProvider=${parseLoginRes?.compony}`);
             if (res?.status === 200 || res?.status === 201) {
-                setAllCompletedEnrollments(res?.data?.data);
-                console.log("created by",res?.data?.data)
+                setAllCompletedEnrollments(res?.data?.data);    
+                console.log("All enrollment data is",res.data.data)
                 setIsLoading(false);
             }
         } catch (error) {

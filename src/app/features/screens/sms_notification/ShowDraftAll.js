@@ -3,14 +3,46 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";  
 import { Dialog } from "primereact/dialog";
-import { useParams } from "react-router-dom";  
+import { useParams,useLocation } from "react-router-dom";  
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";  
 import { useDispatch, useSelector } from "react-redux";
 import { getDraftByTemplateIdAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const ShowDraftAll = () => {    
+const ShowDraftAll = () => {      
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+    
+     useEffect(()=>{ 
+       actionBasedChecks()
+     },[])  
     let toast=useRef(null) 
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
@@ -99,7 +131,7 @@ const ShowDraftAll = () => {
             <div className="card mx-5 p-0 border-noround">
                 <div className="flex justify-content-between border-bottom-2 bg-orange-200 px-5 py-2">
                     <i className="pi pi-arrow-circle-left flex align-items-center" onClick={() => handleBack()} style={{ cursor: "pointer", fontSize: "2rem" }}></i>
-                    <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft" onClick={handleSubmit} />
+                    <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft" disabled={!isManage} onClick={handleSubmit} />
                 </div>
                 <div>
                     <DataTable tableStyle={{ minWidth: "90rem" }} value={draftByIdRes} showGridlines>
