@@ -83,8 +83,8 @@ export default function TabletSingleUploadAddAndAssignNonActivateProvision({perm
                 let Modelholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
                     const obj = {};
-                    obj.label = res.data.data[i].TabletType;
-                    obj.value = res.data.data[i].TabletType;
+                    obj.label = res.data.data[i].name;
+                    obj.value = res.data.data[i].name;
                     Modelholder.push(obj);
                 }
 
