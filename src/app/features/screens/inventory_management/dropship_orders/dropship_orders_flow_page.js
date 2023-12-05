@@ -1,6 +1,7 @@
 import { Card } from "primereact/card";
-import React from "react";
-import { Button } from "primereact/button";
+import React,{useEffect,useState} from "react";
+import { Button } from "primereact/button"; 
+import { useLocation } from "react-router-dom";
 import AcpOrders from "./dropships_components/acp_orders";
 import Company from "./dropships_components/company";
 import FreePhonesWithoutData from "./dropships_components/free_phones_without_data";
@@ -49,6 +50,37 @@ let ComponentData = [
     },
 ];
 export default function DropshipOrdersFlowPage() {
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+     useEffect(()=>{ 
+          actionBasedChecks()  
+     },[]) 
     return (
         <Card>
             <div className="card">
@@ -74,7 +106,7 @@ export default function DropshipOrdersFlowPage() {
                     <Button label="Shipper Batch Report" />
                 </div>
             </div>
-            <ManageShipperInventoryFlowPage />
+            <ManageShipperInventoryFlowPage permissions={{isCreate:isCreate,isManage:isManage}} />
         </Card>
     );
 }

@@ -1,13 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { FileUpload } from "primereact/fileupload";
 import { toast } from "react-toastify";
 import { ToastContainer,  } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
 import * as XLSX from "xlsx"; // Import XLSX library
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"; 
+import { useLocation } from "react-router-dom";
 import Axios from "axios";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const Upload = () => {
+const Upload = () => {    
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+    
+     useEffect(()=>{ 
+       actionBasedChecks()
+     },[])
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]); // State to hold the datatable data
     const [tempObjId, setTempObjId] = useState(""); // State to hold the datatable data
@@ -99,7 +132,7 @@ const Upload = () => {
                     onSelect={handleFileUpload}
                     chooseOptions={chooseOptions}
                     uploadOptions={uploadOptions}
-                   
+                     disabled={!isManage}
                 />
             </div>
         </div>

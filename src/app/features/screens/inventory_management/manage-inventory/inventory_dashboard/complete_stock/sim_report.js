@@ -5,9 +5,10 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function SIMCompleteStockReport() {
-    const loginRes = localStorage.getItem("userData");
-    const [completereportvisibility, setCompleteReportVisibility] = useState(false);
+    const loginRes = localStorage.getItem("userData"); 
     const parseLoginRes = JSON.parse(loginRes);
+    const [completereportvisibility, setCompleteReportVisibility] = useState(false);
+    
     const [completedsimreport, setCompletedSimReport] = useState({ Stock: 0, Used: 0, Free: 0 });
     const [current, setCurrent] = useState([]);
     const colors = {

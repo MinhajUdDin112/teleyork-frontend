@@ -7,10 +7,13 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { Editor } from "primereact/editor";
 import { useEffect } from "react";
-import { Toast } from "primereact/toast";
+import { Toast } from "primereact/toast"; 
+import { useLocation } from "react-router-dom";
 import { addTemplateAction } from "../../../store/notification/NotificationAction";
 import { ProgressSpinner } from "primereact/progressspinner";
-const CreateTemplate = () => {
+const CreateTemplate = () => {   
+    const location = useLocation();
+    const currentPath = location?.pathname        
     const dispatch = useDispatch();    
     const [firstTimeLoading,setFirstTimeLoading]=useState(true)  
     const [templateText, setTemplateText] = useState("");  
@@ -107,8 +110,37 @@ const CreateTemplate = () => {
     }  
     
         
-    },[addTemplate])
-   
+    },[addTemplate])  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+    
+     useEffect(()=>{ 
+       actionBasedChecks()
+     },[])
     return (
         <div className="card bg-pink-50">
             <div className="mx-5">
@@ -163,7 +195,7 @@ const CreateTemplate = () => {
                         <ProgressSpinner style={{ width: "40px", height: "40px", marginLeft: "1050px", marginTop: "10px", color: "blue" }} strokeWidth="4" animationDuration=".5s" />
                     ) : (
                         <div className="flex justify-content-end m-3">
-                            <Button label="Add Template" type="submit" />
+                            <Button label="Add Template" disabled={!isCreate} type="submit" />
                         </div>
                     )}
                 </div>

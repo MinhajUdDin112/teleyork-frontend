@@ -1,5 +1,5 @@
 import { Card } from "primereact/card";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useFormik } from "formik";
 import { InputText } from "primereact/inputtext";
 import AddModel from "./sub_modules/add_model/add_model";
@@ -7,8 +7,40 @@ import { Dropdown } from "primereact/dropdown";
 import { csrequirmentphonetype, status } from "./assets";    
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Button } from "primereact/button";
-export default function ManageModelFlowPage() {
+import { Button } from "primereact/button";   
+import { useLocation } from "react-router-dom";
+export default function ManageModelFlowPage() {      
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+   useEffect(()=>{ 
+    actionBasedChecks() 
+   },[])
     const formik = useFormik({
         initialValues: {
             model: "",
@@ -27,34 +59,42 @@ export default function ManageModelFlowPage() {
                 <div>
                     <h5> Model List</h5>
                 </div>
-                <div>
+                <div>  
+                      <Button style={{border:"none",backgroundColor:"transparent",padding:"0px"}} disabled={!isManage}>  
                     <i
                         className="pi pi pi-download"
                         onClick={() => {
                             downloadList();
                         }}
                         style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                    ></i>
+                    ></i>  
+                    </Button>  
+                    <Button style={{border:"none",backgroundColor:"transparent",padding:"0px"}} disabled={!isManage}>  
+                    
                     <i
                         className="pi pi pi-plus"
                         onClick={() => {
                             setNavigateToAddModel((prev) => !prev);
                         }}
                         style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                    ></i>
+                    ></i> 
+                    </Button>
                 </div>
             </div>
             <Card>
                 <div className="flex justify-content-around flex-wrap">
                     <div className="w-20rem mt-4">
-                        <label style={{ display: "block" }}>Make/Model</label>
+                        <label style={{ display: "block" }}>Make/Model</label>  
+                        <Button style={{border:"none",backgroundColor:"transparent",padding:"0px"}} disabled={!isManage}>  
+                   
                         <i
                             className="pi pi pi-mobile"
                             onClick={() => {
                                 setNavigateToAddModel((prev) => !prev);
                             }}
                             style={{ display: "inline-block", marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "12px", borderRight: "unset", cursor: "pointer", paddingLeft: "10px", borderRadius: "0px", paddingRight: "10px", color: "grey", border: "solid rgb(206, 212, 218) 1px" }}
-                        ></i>
+                        ></i>  
+                        </Button>
                         <InputText    
                          
                         

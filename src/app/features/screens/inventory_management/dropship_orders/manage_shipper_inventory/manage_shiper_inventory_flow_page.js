@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import AcpSingleUpload from "./upload_type/single_upload";
 import AcpBulkUpload from "./upload_type/bulk_upload";
-export default function ManageShipperInventoryFlowPage() {
+export default function ManageShipperInventoryFlowPage({permissions}) {
     const [esnsimType, setEsnsimType] = useState(null);
     const [selectedUpload, setSelectedUpload] = useState(null);
     const uploadoptions = [
@@ -32,9 +32,9 @@ export default function ManageShipperInventoryFlowPage() {
                 </div>
                    { 
                        selectedUpload !== null && esnsimType !==null  
-                       ?selectedUpload === "singleunit"?<AcpSingleUpload/>:<AcpBulkUpload/> :undefined 
+                       ?selectedUpload === "singleunit"?<AcpSingleUpload permissions={permissions}/>:<AcpBulkUpload permissions={permissions}/> :undefined 
                      
-                     }
+                     } 
              </div>
         </div>
     );

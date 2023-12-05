@@ -1,9 +1,41 @@
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { InputTextarea } from "primereact/inputtextarea";
-import React,{useState}  from "react"; 
+import React,{useState,useEffect}  from "react"; 
+import { useLocation } from "react-router-dom";
 export default function ImeiDrawer(){     
     const [multiplemei,setMultipleEmeis]=useState("")
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+     useEffect(()=>{ 
+          actionBasedChecks()  
+     },[])
     return ( 
            <Card> 
                    
@@ -14,9 +46,12 @@ export default function ImeiDrawer(){
                             setMultipleEmeis(e.value)
                         }}/>   
                         <div className="mt-4 flex flex-wrap justify-content-center align-items-center">
-                      <div>  <Button label="Save Open/Close"/>   
-                          <Button className="ml-2" label="Close"/>  
-                           </div>
+                      <div>  
+                     
+                      <Button disabled={!isManage} label="Save Open/Close" />
+                    <Button disabled={ !isManage} className="ml-2" label="Close" />
+              
+                      </div>
                         </div>
            </Card>
     )

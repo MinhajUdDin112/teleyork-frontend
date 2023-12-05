@@ -10,7 +10,7 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function SIMSingleUploadAddPreActivatedProvision() {
+export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -225,14 +225,17 @@ export default function SIMSingleUploadAddPreActivatedProvision() {
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (
+                            {formik.values.AgentName !== "" ? (  
+                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
+                              
                                 <i
                                     onClick={() => {
                                         setAddAgentDialogVisbility((prev) => !prev);
                                     }}
                                     className="pi pi pi-plus"
                                     style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i>
+                                ></i>  
+                                </Button>
                             ) : undefined}
                         </p>
 
@@ -284,7 +287,8 @@ export default function SIMSingleUploadAddPreActivatedProvision() {
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()
-                        }}
+                        }}  
+                        disabled={!(permissions.isCreate)}
                     />
                 </div>
             </div>

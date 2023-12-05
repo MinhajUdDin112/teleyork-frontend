@@ -6,7 +6,7 @@ import {Button} from "primereact/button"
 import { Dialog } from 'primereact/dialog';
 import AddShipperDetailDialog from "../single_upload_type_Dialogs/add_shipper_detail_dialog";
 import EsnSimModelAddDialog from "../single_upload_type_Dialogs/esn_sim_model_device_model_dialog";
-export default function SingleUpload() {
+export default function SingleUpload({permissions}) {
     const [includeOrders, setIncludeOrders] = useState("");    
     const [devicemodeldialog,setDeviceModelDialog]=useState(false)
     const [addshippermodeldialog,setAddShipperModelDialog]=useState(false)
@@ -153,8 +153,14 @@ export default function SingleUpload() {
                 <InputText value={formik.esnsim} onChange={formik.handleChange} className="mt-4 w-full md:w-14rem" />
             </div>
             <div className="mt-8">
-                <label style={{ display: "block" }}>ESN/SIM Model<span style={{color:"red"}}>*</span><i onClick={()=>{setEsnSimModelDialog(true)}} className="pi pi pi-plus" style={{ fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></label>
-
+                <label style={{ display: "block" }}>ESN/SIM Model<span style={{color:"red"}}>*</span>     
+                <Button onClick={()=>{setEsnSimModelDialog(true)}} style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
+                              
+                               
+                <i  className="pi pi pi-plus" style={{ fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i>  
+                </Button>
+                 </label>
+               
                 <Dropdown
                     value={esnsimmodel}
                     options={esnsimmodeloption}
@@ -168,8 +174,12 @@ export default function SingleUpload() {
                 />
             </div>
             <div className="mt-8">
-                <label style={{ display: "block" }}>Shipper ID<span style={{color:"red"}}>*</span><i onClick={()=>{setAddShipperModelDialog(true)}}className="pi pi pi-plus" style={{ fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></label>
-
+                <label style={{ display: "block" }}>Shipper ID<span style={{color:"red"}}>*</span>  
+                <Button onClick={()=>{setAddShipperModelDialog(true)}} style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
+                   
+                <i className="pi pi pi-plus" style={{ fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i>
+                   </Button>  
+                   </label>
                 <Dropdown
                     value={shipperId}
                     options={shipperidoption}
@@ -221,7 +231,13 @@ export default function SingleUpload() {
                 <InputText value={formik.device} onChange={formik.handleChange} className="mt-4 w-full md:w-14rem" />
             </div>
             <div className="mt-8">
-                <label style={{ display: "block" }}><span>Device Model</span><i onClick={()=>{ setDeviceModelDialog(true)}} className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i></label>
+                <label style={{ display: "block" }}><span>Device Model</span>  
+                <Button onClick={()=>{ setDeviceModelDialog(true)}} style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
+                   
+                
+                 <i  className="pi pi pi-plus" style={{marginLeft:"5px", fontSize: '14px',color:"#fff",padding:"5px",cursor:"pointer",paddingLeft:"10px",borderRadius:"5px",paddingRight:"10px",background:"#00c0ef" }}></i> 
+                   </Button>
+                  </label>
 
                 <Dropdown
                     value={deviceModel}
@@ -240,7 +256,7 @@ export default function SingleUpload() {
                 <InputText value={formik.phonetype} onChange={formik.handleChange} className="mt-4 w-full md:w-14rem" />
             </div>  
               <div style={{width:"100vw"}} className="mt-8"> 
-                <Button style={{marginLeft:"50%",transform:"translate(-50%)"}} label="Submit" onClick={handleSubmit} />
+                <Button style={{marginLeft:"50%",transform:"translate(-50%)"}} label="Submit" onClick={handleSubmit} disabled={!(permissions.isManage)}/>
               </div>         
               <Dialog visible={esnsimmodeldialog} onHide={()=>{
                 setEsnSimModelDialog(false)
