@@ -227,7 +227,19 @@ const RejectedEnrollments = () => {
                         <Column header="State" field="state"></Column>
                         <Column header="Zip" field="zip"></Column>
                         <Column field="contact" header="Telephone Number" />
-                        <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
+                        <Column
+                                field="DOB"
+                                header="DOB"
+                                body={(rowData) =>
+                                    new Date(rowData.DOB)
+                                        .toLocaleDateString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })
+                                        .replace(/\//g, "-")
+                                }
+                            />
                         <Column field="createdBy?.name" header="Created BY" />
                         <Column field="reajectedReason" header="Rejected Reason" />
                         <Column field="status" header="Status" />
