@@ -12,6 +12,8 @@ import { InputText } from 'primereact/inputtext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { ProgressSpinner } from 'primereact/progressspinner';
+
+
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogForActivateSim = ({enrollmentId,zipCode}) => {
 
