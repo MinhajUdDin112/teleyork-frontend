@@ -12,8 +12,7 @@ const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
     const [noteLength, setNoteLength] = useState(null)
 
-    console.log('cpData', cpData)
-
+    
     const { state } = useLocation();
   const selectedId = state?.selectedId;
 
@@ -31,8 +30,7 @@ const CustomerProfile = () => {
             console.log(error?.response?.data?.msg);
         }
     };
-    console.log("cp data is", cpData)
-
+    
     useEffect(() => {
         getCustomerProfileData();
 

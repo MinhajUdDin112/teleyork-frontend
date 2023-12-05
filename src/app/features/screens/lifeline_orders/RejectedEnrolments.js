@@ -8,7 +8,7 @@ import Axios from "axios";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const RejectedEnrollments = () => {
@@ -24,6 +24,15 @@ const RejectedEnrollments = () => {
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [expandedRows, setExpandedRows] = useState([]);
     const [globalFilterValue, setGlobalFilterValue] = useState("");
+
+    const [isCreate, setIsCreate] = useState(false);
+  const [isManage, setIsManage] = useState(false);
+
+  const location = useLocation();
+  const currentPath = location?.pathname
+  
+   
+
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -65,6 +74,35 @@ const RejectedEnrollments = () => {
     const onGlobalFilterChange = (e) => {
         setGlobalFilterValue(e.target.value);
     };
+
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      };
+    
+      useEffect(() => {
+        actionBasedChecks();
+      }, []);
    
 
     const getAllEnrollments = async () => {

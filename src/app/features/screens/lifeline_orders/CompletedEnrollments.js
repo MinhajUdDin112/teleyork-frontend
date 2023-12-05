@@ -105,7 +105,7 @@ const CompletedEnrollments = () => {
                         <Column header="Zip" field="zip"></Column>
                         <Column field="contact" header="Telephone Number" />
                         <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
-                        <Column field="createdBy?.name" header="Created BY" />
+                        <Column field="createdBy.name" header="Created BY"/>
                         <Column field="status" header="Status" />
                     </DataTable>
                     {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}

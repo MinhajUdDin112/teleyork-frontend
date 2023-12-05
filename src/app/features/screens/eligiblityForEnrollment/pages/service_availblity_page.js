@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import Axios from "axios";
 const BASE_URL=process.env.REACT_APP_BASE_URL
@@ -12,6 +12,39 @@ export default function ServiceAvailabilityPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const [isCreate, setIsCreate] = useState(false);
+  const [isManage, setIsManage] = useState(false);
+
+  const location = useLocation();
+  const currentPath = location?.pathname
+  const actionBasedChecks = () => {
+
+    const loginPerms = localStorage.getItem("permissions")
+    const parsedLoginPerms = JSON.parse(loginPerms)
+
+    const isCreate = parsedLoginPerms.some((node) =>
+      node?.subModule.some((subNode) =>
+        subNode?.route === currentPath && subNode?.actions.some((action) =>
+          action?.name === "create"
+        )
+      )
+    );
+    setIsCreate(isCreate)
+
+    const isManage = parsedLoginPerms.some((node) =>
+      node?.subModule.some((subNode) =>
+        subNode?.route === currentPath && subNode?.actions.some((action) =>
+          action?.name === "manage"
+        )
+      )
+    );
+    setIsManage(isManage)
+
+  };
+
+  useEffect(() => {
+    actionBasedChecks();
+  }, []);
   
 
   // Get user data from localStorage
@@ -99,7 +132,7 @@ export default function ServiceAvailabilityPage() {
                 icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}
                 type="submit"
                 className="col-12"
-                disabled={isLoading}
+                disabled={isLoading || !isCreate}
               />
             
 

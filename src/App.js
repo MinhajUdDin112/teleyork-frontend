@@ -284,7 +284,7 @@ const App = () => {
         return permedRoutes.includes(route);
     }
 
-    console.log(permittedRoutes)
+    
 
     useEffect(() => {
         getPermissions();
