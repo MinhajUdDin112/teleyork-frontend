@@ -1,23 +1,75 @@
-import React, { useEffect, useState } from 'react'
-import BillingNavbar from '../../billing_and_invoices/components/BillingNavbar'
-import { Button } from 'primereact/button'
-import { Dropdown } from 'primereact/dropdown'
-import { InputTextarea } from 'primereact/inputtextarea'
-import Axios from 'axios'
-import { toast } from 'react-toastify'
-import { ScrollPanel } from 'primereact/scrollpanel'
-import { useLocation } from 'react-router-dom'
-const BASE_URL = process.env.REACT_APP_BASE_URL
+import React, { useEffect, useState } from "react";
+import BillingNavbar from "../../billing_and_invoices/components/BillingNavbar";
+import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+import { InputTextarea } from "primereact/inputtextarea";
+import Axios from "axios";
+import { toast } from "react-toastify";
+import { ScrollPanel } from "primereact/scrollpanel";
+import { Link, useLocation } from "react-router-dom";
+import { DialogeForAddNewType } from "../DialogeForAddNewType";
+import { Dialog } from "primereact/dialog";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import classNames from "classnames";
+import { ProgressSpinner } from "primereact/progressspinner";
+import DialogeForOneNote from "../DialogeForOneNote";
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
-    const [noteLength, setNoteLength] = useState(null)
+    const [noteLength, setNoteLength] = useState(null);
+    const [allNotesTypes, setAllNotesTypes] = useState([]);
+    const [allNotes, setAllNotes] = useState([]);
+    const [addNewType, setAddNewType] = useState(false);
+    const [isButtonLoading, setisButtonLoading] = useState(false);
+    const [isOneNote, setIsOneNote] = useState(false);
 
-    
     const { state } = useLocation();
-  const selectedId = state?.selectedId;
+    const selectedId = state?.selectedId;
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+
+    // Validation Schema
+    const validationSchema = Yup.object().shape({
+        noteType: Yup.string().required("Note Type is Required"),
+        note: Yup.string().required("Please Write Note"),
+        priority: Yup.string().required("Please Select Priority"),
+    });
+    const formik = useFormik({
+        validationSchema: validationSchema,
+        initialValues: {
+            noteType: "",
+            note: "",
+            priority: "",
+        },
+        onSubmit: async (values, actions) => {
+            // Prepare the data to send to the server
+            const data = {
+                serviceProvider: parseLoginRes?.compony,
+                userId: parseLoginRes?._id,
+                customerId: selectedId,
+                ...values,
+            };
+            console.log("data is ", data);
+            setisButtonLoading(true);
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/web/notes/`, data);
+                if (response?.status == "200" || response?.status == "201") {
+                    toast.success("Successfully Added");
+                    setisButtonLoading(false);
+                    actions.resetForm();
+                    getNotes();
+                }
+            } catch (error) {
+                toast.error("Error is " + error?.response?.data?.msg);
+                setisButtonLoading(false);
+            }
+        },
+    });
 
     const getCustomerProfileData = async () => {
         try {
@@ -25,23 +77,69 @@ const CustomerProfile = () => {
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
-
         } catch (error) {
             console.log(error?.response?.data?.msg);
         }
     };
-    
+
+    const getNotesType = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/noteType/all?serviceProvider=${parseLoginRes?.compony}`);
+            setAllNotesTypes(res?.data?.data || []);
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+        }
+    };
+
+    const getNotes = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
+            setAllNotes(res?.data?.data || []);
+            console.log("all notes is", res?.data?.data);
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+        }
+    };
+
     useEffect(() => {
         getCustomerProfileData();
-
+        getNotesType();
+        getNotes();
     }, []);
 
-   
+    const handleDialogeForAddType = () => {
+        setAddNewType(true);
+    };
+
+    const handleDialogeForSeeNote = () => {
+        setIsOneNote(true);
+    };
+    const options = [
+        { label: "Priority ", value: "" },
+        { label: "Highest", value: "highest" },
+        { label: "High ", value: "high" },
+        { label: "Medium", value: "medium" },
+        { label: "Low ", value: "low" },
+        { label: "Lowest ", value: "lowest" },
+    ];
+
+    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+    const getFormErrorMessage = (name) => {
+        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+    };
 
     return (
         <>
+            <ToastContainer />
             <div className="card p-0">
                 <BillingNavbar />
+                <Dialog visible={addNewType} style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
+                    <DialogeForAddNewType />
+                </Dialog>
+
+                <Dialog visible={isOneNote} style={{ width: "50vw" }} onHide={() => setIsOneNote(false)}>
+                    <DialogeForOneNote />
+                </Dialog>
 
                 <div className="pt-3">
                     <div className="grid">
@@ -100,36 +198,19 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ?
-                                                        <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td>
-                                                        :
-                                                        <td>{cpData?.address1 + " " + cpData?.address2}</td>
-                                                    }
-
+                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ? <td>{cpData?.mailingAddress1 + " " + cpData?.mailingAddress2}</td> : <td>{cpData?.address1 + " " + cpData?.address2}</td>}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
-                                                    {cpData?.mailingCity ?
-                                                        <td>{cpData?.mailingCity}</td>
-                                                        :
-                                                        <td>{cpData?.city}</td>}
-
+                                                    {cpData?.mailingCity ? <td>{cpData?.mailingCity}</td> : <td>{cpData?.city}</td>}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing State</td>
-                                                    {cpData?.mailingState ?
-                                                        <td>{cpData?.mailingState}</td>
-                                                        :
-                                                        <td>{cpData?.state}</td>}
-
+                                                    {cpData?.mailingState ? <td>{cpData?.mailingState}</td> : <td>{cpData?.state}</td>}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Zip</td>
-                                                    {cpData?.mailingZip ?
-                                                        <td>{cpData?.mailingZip}</td>
-                                                        :
-                                                        <td>{cpData?.zip}</td>}
-
+                                                    {cpData?.mailingZip ? <td>{cpData?.mailingZip}</td> : <td>{cpData?.zip}</td>}
                                                 </tr>
 
                                                 {/* <tr>
@@ -315,10 +396,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Tablet Subsidy Qualification</td>
-                                                    {
-                                                        cpData?.deviceEligibilty == true ? <td>Yes</td> :
-                                                            <td>No</td>
-                                                    }
+                                                    {cpData?.deviceEligibilty == true ? <td>Yes</td> : <td>No</td>}
 
                                                     <td>{cpData?.deviceEligibilty}</td>
                                                 </tr>
@@ -355,121 +433,102 @@ const CustomerProfile = () => {
                     </div>
                 </div>
 
-                <div className='p-3' >
-                    <div className='grid'>
-
-                        <div className="col-12 lg:col-4">
+                <div className="p-3">
+                    <div className="grid">
+                        <div className="col-12 lg:col-5">
                             <div>
                                 <div>
                                     <h4>Customer Notes</h4>
                                 </div>
-                                <hr className='m-0' />
-                                <div className='flex justify-content-between pt-3 pb-3'>
-                                    <Button label='View Archive Notes' size='small' />
-                                    <Button label='Display Notes' size='small' />
+                                <hr className="m-0" />
+                                <div className="flex justify-content-between pt-3 pb-3">
+                                    <Button label="View Archive Notes" size="small" />
+                                    <Button label="Display Notes" size="small" />
                                 </div>
-                                <hr className='m-0' />
+                                <hr className="m-0" />
                                 <div>
-                                    <ScrollPanel style={{ width: '100%', height: '200px' }} className="custombar2">
-                                        <ul className='pl-0'>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
-                                            <li className='flex justify-content-between align-items-center mb-3'>
-                                                <div>
-                                                    <h6 className='mb-2'>System</h6>
-                                                    <p className='hide_text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                </div>
-                                                <div>10-25-2023</div>
-                                            </li>
+                                    <ScrollPanel style={{ width: "100%", height: "200px" }} className="custombar2">
+                                        <ul className="pl-0">
+                                            {allNotes.map((item) => (
+                                                <li className="flex justify-content-between align-items-center mb-3">
+                                                    <div>
+                                                        <Link >
+                                                        <h6 className="mb-2">{item?.user?.name}</h6>
+                                                        <p className="hide_text">
+                                                           {item?.note}
+                                                        </p>
+                                                        </Link>
+                                                    </div>
+                                                    <div>{item?.createdAt && new Date(item.createdAt).toLocaleDateString()}</div>
+
+                                                </li>
+                                            ))}
                                         </ul>
                                     </ScrollPanel>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="col-12 lg:col-4">
-                            <div>
-                                <div className='flex justify-content-between align-items-center mb-3'>
-                                    <h4 className='m-0'>Add New Note (PC83)</h4>
-                                    <span>
-                                        <i className='pi pi-plus'></i> Add New Note (PC83)
-                                    </span>
+                        <div className="col-12 lg:col-5">
+                            <form onSubmit={formik.handleSubmit}>
+                                <div>
+                                    <div className="flex justify-content-between align-items-center mb-3">
+                                        <h4 className="m-0">Add New Note (PC83)</h4>
+                                        <span></span>
+                                    </div>
+                                    <hr className="m-0 mb-2" />
+                                    <Dropdown
+                                        id="noteType"
+                                        options={allNotesTypes}
+                                        value={formik.values.noteType}
+                                        onChange={(e) => formik.setFieldValue("noteType", e.value)}
+                                        optionLabel="noteType"
+                                        optionValue="noteType"
+                                        filter
+                                        showClear
+                                        filterBy="noteType" // Set the property to be used for filtering
+                                        className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text w-full mb-3")}
+                                    />
+                                    {getFormErrorMessage("noteType")}
+                                    <Button label="Add New Note type" icon="pi pi-plus" className="mb-3" onClick={handleDialogeForAddType} />
+
+                                    <div className="mb-4">
+                                        <InputTextarea
+                                            id="note"
+                                            value={formik.values.note}
+                                            onChange={(e) => {
+                                                formik.handleChange(e);
+                                                setNoteLength(e.target.value.length);
+                                            }}
+                                            className={classNames({ "p-invalid": isFormFieldValid("note") }, "input_text")}
+                                            rows={5}
+                                            cols={64}
+                                            onBlur={formik.handleBlur}
+                                        />
+                                        {getFormErrorMessage("note")}
+                                        <div></div>
+                                        <div className="flex justify-content-between">
+                                            <span className="counter_span mt-2">{noteLength}</span>
+
+                                            <div>
+                                                <Dropdown id="priority" options={options} value={formik.values.priority} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text w-15rem mt-2")} />
+                                                {getFormErrorMessage("priority")}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Button label="Do you want to create a ticket? (PC402)" icon="pi pi-plus" className="pl-0" link />
+
+                                    <hr className="m-0 mb-2" />
+
+                                    <div className="text-right">
+                                        <Button label="Add Note" type="submit" icon={isButtonLoading ? <ProgressSpinner strokeWidth="6" style={{ width: "1.5rem", height: "1.5rem", color: "white" }} /> : null} disabled={isButtonLoading} />
+                                    </div>
                                 </div>
-                                <hr className='m-0 mb-2' />
-                                <Dropdown
-                                    placeholder='Select Note Type'
-                                    filter
-                                    showClear
-                                    filterBy="label"
-                                    className='w-full mb-3'
-                                />
-
-                                <div className='mb-4'>
-                                    <InputTextarea rows={5} cols={66} onChange={(e) => setNoteLength(e.target.value.length)} />
-                                    <span className='counter_span mt-2'>{noteLength === null ? 0 : noteLength}</span>
-                                </div>
-
-                                <Button label='Do you want to create a ticket? (PC402)' icon="pi pi-plus" className='pl-0' link />
-
-                                <hr className='m-0 mb-2' />
-
-                                <div className='text-right'>
-                                    <Button label='Add Note' />
-                                </div>
-
-                            </div>
+                            </form>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </>
     );

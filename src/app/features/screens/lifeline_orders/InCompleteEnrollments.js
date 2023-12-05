@@ -139,7 +139,7 @@ const InCompleteEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="Continue" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
+                <Button label="Continue" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading || !isCreate} />
 
             </div>
         );
