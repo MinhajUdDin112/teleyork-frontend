@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import classNames from "classnames";
 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogeForRemarksForIJ = ({enrollmentId}) => {
+const DialogeForRemarksForIJ = ({enrollmentId,getstateFromRemarks}) => {
     const [isCallQualityRemarks, setIsCallQualityRemarks] = useState();
 
     const validationSchema = Yup.object().shape({
@@ -32,6 +32,7 @@ const DialogeForRemarksForIJ = ({enrollmentId}) => {
                 const response = await Axios.patch(`${BASE_URL}/api/user/qualityRemarks`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
+                    getstateFromRemarks(enrollmentId)
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

@@ -8,7 +8,7 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogeForRemarks = ({enrollmentId}) => {
+const DialogeForRemarks = ({enrollmentId,getstateFromRemarks}) => {
     const [isComRemarks, setIsComRemarks] = useState();
     const [isConfidenceRemarks, setIsConfidenceRemarks] = useState();
     const [isVerificationRemarks, setIsVerificationRemarks] = useState();
@@ -41,6 +41,7 @@ const DialogeForRemarks = ({enrollmentId}) => {
                 const response = await Axios.patch(`${BASE_URL}/api/user/remarks`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
+                    getstateFromRemarks();
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -48,6 +49,7 @@ const DialogeForRemarks = ({enrollmentId}) => {
         },
         
     });
+   
     useEffect(() => {
         formik.setValues({
           comRemarks: isComRemarks,
@@ -75,6 +77,7 @@ const DialogeForRemarks = ({enrollmentId}) => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>  
+           
 
                 <div className="flex flex-wrap justify-content-around card">
                    
