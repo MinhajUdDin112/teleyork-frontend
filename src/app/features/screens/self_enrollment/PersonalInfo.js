@@ -10,6 +10,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
+import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PersonalInfo = () => {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ const PersonalInfo = () => {
     const location = useLocation();
     const stateData = location.state;
     const [isLoading, setIsLoading] = useState(false);
+    const [isDuplicate, setIsDuplicate] = useState(false)
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This field is required"),
@@ -93,6 +95,10 @@ const PersonalInfo = () => {
         },
     });
 
+ //get zipData
+ const infoResponse = localStorage.getItem("initialInformation");
+ const parseinfoResponse= JSON.parse(infoResponse);
+
     const options = [
         { label: "Suffix", value: "" },
         { label: "JR.", value: "JR." },
@@ -131,6 +137,35 @@ const PersonalInfo = () => {
         toast.warning("Pasting is not allowed in this field.");
        
       };
+
+      //check customer Duplication
+      useEffect(() => {
+        if(!parseinfoResponse){
+            const fetchData = async () => {
+                if (formik.values.contact.length > 9) {
+                    const data = {
+                        contact: formik.values.contact    
+                    };
+                   
+                    try {
+                        const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                       
+                        setIsDuplicate(false);
+                    }
+                     catch (error) {
+                        toast.error(error?.response?.data?.msg);
+                        setIsDuplicate(true);
+                    }
+                  
+                }
+            
+        };
+        fetchData();
+        }
+       
+    
+       
+    }, [formik.values.contact]);
     return (
         <>
             <ToastContainer />
@@ -202,7 +237,7 @@ const PersonalInfo = () => {
                                             </div>
                                         )}
                                     </div>
-                                    <Button label="Next" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
+                                    <Button label="Next" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading || isDuplicate} />
                                 </div>
                             </div>
                         </div>

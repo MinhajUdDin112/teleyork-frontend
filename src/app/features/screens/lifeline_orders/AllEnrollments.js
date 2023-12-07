@@ -161,7 +161,7 @@ const AllEnrollments = () => {
                     }  
                     setAllEnrollments(res?.data?.data); 
                 setIsLoading(false);
-                console.log("all enroll is",res?.data?.data)
+              
                
             }
         } catch (error) {
@@ -474,7 +474,7 @@ const AllEnrollments = () => {
 
     const getstateFromRemarks=(e)=>{
        setCheckRemarks(e)
-       console.log("e is",e)
+     
     }
 
     return (

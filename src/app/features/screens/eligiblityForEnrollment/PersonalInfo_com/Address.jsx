@@ -245,20 +245,27 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     }, [isDifferent, isPoBox]);
     
     const handleAddressChange = (e) => {
- 
+ console.log("cpmlt add",e)
         const address = e?.value?.structured_formatting?.secondary_text
         const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
         const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
-
+           console.log("address is",address)
         if (address) {
             let cityName = "";
+            let trimmedCityName ="";
             if (address && address.includes(",")) {
                 const parts = address.split(",");
                 if (parts.length >= 1) {
-                    cityName = parts[0];
+                    cityName = parts[0];   
+                    const words = cityName.split(' ');
+                    if (words.length >= 2) {
+                        trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
+                        console.log("trimmed city name is", trimmedCityName);
+                    }
+                    
                 }
             }
-            if (cityName.includes(formik.values.city) || formik.values.city.includes(cityName)) {
+            if (trimmedCityName.includes(formik.values.city) || formik.values.city.includes(trimmedCityName) || cityName.includes(formik.values.city) || formik.values.city.includes(cityName) ) {
                 const completeAddress= e?.value?.structured_formatting?.main_text;
                 const extractedAddress1 = completeAddress.match(pattern);
                 if(extractedAddress1){

@@ -36,7 +36,7 @@ export default function LoginScreen() {
     //get url 
     window.onload = function() {
         var currentURL = window.location.href;
-        console.log(currentURL);    
+         
     };
     
 
