@@ -10,7 +10,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
-const BASE_URL=process.env.REACT_APP_BASE_URL
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PersonalInfo = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -79,7 +79,6 @@ const PersonalInfo = () => {
                 try {
                     const res = await axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
                     if (res.status === 201 || res.status === 200) {
-                      
                         // Save the response data in local storage
                         localStorage.setItem("initialInformation", JSON.stringify(res.data));
                         // Navigate to the next page
