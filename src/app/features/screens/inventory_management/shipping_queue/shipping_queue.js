@@ -1,5 +1,5 @@
 import { Card } from "primereact/card";
-import React, { useState } from "react";  
+import React, { useState,useEffect } from "react";  
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
@@ -7,12 +7,45 @@ import { paymentcompleted } from "./asset";
 import { DataTable } from 'primereact/datatable';  
 import {Dialog} from "primereact/dialog" 
 import {FileUpload} from "primereact/fileupload"
-import { Column } from 'primereact/column';
+import { Column } from 'primereact/column'; 
+import { useLocation } from "react-router-dom";   
+
 import { useFormik } from "formik"; 
 import { emptydistributor, employee, emptyemployee, emptyretailer, queuename, distributor, retailer, masteragent, status } from "./asset";
 import { NewYorkStates } from "../../../../../Utils/new_york_states";
 import { Button } from "primereact/button";
-export default function ShippingQueue() {
+export default function ShippingQueue() {    
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+        setIsCreate(isCreate)
+    
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setIsManage(isManage)
+    
+      }; 
+      const [isManage,setIsManage]=useState(null)  
+      const [isCreate,setIsCreate]=useState(null) 
+     useEffect(()=>{ 
+          actionBasedChecks()  
+     },[])
     const oneMonthAgo = new Date();  
     function onUpload(){ 
 
@@ -254,11 +287,11 @@ export default function ShippingQueue() {
                           <Button className="mt-4" label="Search"/>
                       </div>    
                       <div className="mt-2 flex flex-wrap justify-content-center"> 
-                          <Button className="mt-2" label="One By One" />  
-                          <Button className="ml-4 mt-2 bg-transparent " onClick={()=>{setVisibleDialog(true)}}  style={{color:"grey"}} label="Bulk FulFillment"/> 
+                          <Button disabled={!isManage} className="mt-2" label="One By One" />  
+                          <Button disabled={!isManage} className="ml-4 mt-2 bg-transparent " onClick={()=>{setVisibleDialog(true)}}  style={{color:"grey"}} label="Bulk FulFillment"/> 
                       </div>  
                       <div > 
-                          <Button  label="Shipper Batch Report"  style={{marginTop:"25px",position:"absolute",right:"80px"}}/>  
+                          <Button disabled={!isManage} label="Shipper Batch Report"  style={{marginTop:"25px",position:"absolute",right:"80px"}}/>  
                       </div>             
                       <div style={{marginTop:"99px"}}>   
                          <h5>Search Result {searchresult.length}</h5>

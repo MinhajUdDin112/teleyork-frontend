@@ -12,6 +12,8 @@ import { InputText } from 'primereact/inputtext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { ProgressSpinner } from 'primereact/progressspinner';
+
+
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const DialogForActivateSim = ({enrollmentId,zipCode}) => {
 
@@ -27,6 +29,7 @@ const DialogForActivateSim = ({enrollmentId,zipCode}) => {
     planId: Yup.string().required("Please Select Plan"),  
    // esn: Yup.string().required("Please select ESN"), 
 });
+const userId=parseLoginRes?._id;
 
 const formik = useFormik({
     validationSchema: validationSchema,
@@ -37,7 +40,7 @@ const formik = useFormik({
     },
     onSubmit: async (values,actions) => {
       setisButtonLoading(true);
-        const dataToSend = { enrollmentId, ...values };
+        const dataToSend = { enrollmentId,userId, ...values };
       
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend);

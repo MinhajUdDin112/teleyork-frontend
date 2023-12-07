@@ -11,7 +11,7 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import InfoForUsers from "./InfoForUsers/info_for_users";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function TabletBulkUploadAddAndAssignNonActivateProvision() {
+export default function TabletBulkUploadAddAndAssignNonActivateProvision({permissions}) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -189,16 +189,19 @@ export default function TabletBulkUploadAddAndAssignNonActivateProvision() {
                         )}
                     </div>
                     <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                        <p className="m-0">      
                             Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (
+                            {formik.values.AgentName !== "" ? (  
+                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
+                              
                                 <i
                                     onClick={() => {
                                         setAddAgentDialogVisibility((prev) => !prev);
                                     }}
                                     className="pi pi pi-plus"
                                     style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i>
+                                ></i>   
+                                </Button>
                             ) : undefined}
                         </p>
 
@@ -239,7 +242,8 @@ export default function TabletBulkUploadAddAndAssignNonActivateProvision() {
                                  setFileError(true)
                              }
                             formik.handleSubmit();
-                        }}
+                        }}  
+                        disabled={!(permissions.isCreate)}
                     >
                         Submit{" "}
                     </Button>

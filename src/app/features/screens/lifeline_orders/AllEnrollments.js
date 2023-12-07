@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify"; // Import ToastContainer and to
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import DialogForReject from "./DialogForReject";
 import DialogForActivateSim from "./DialogForActivateSim";
@@ -15,11 +15,13 @@ import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "./DialogeForRemarks";
 import DialogeForTransferUser from "./DialogeForTransferUser";
-import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
+import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ"; 
+import { FilterMatchMode} from 'primereact/api'
+import { Dropdown } from "primereact/dropdown";
+
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const AllEnrollments = () => {
-    const [currentPage, setCurrentPage] = useState(0);
-    const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
+   const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
     const [zipCode, setZipCode] = useState();
@@ -32,12 +34,22 @@ const AllEnrollments = () => {
     const [link, setLink] = useState();
     const [allEnrollments, setAllEnrollments] = useState([]);
     const [expandedRows, setExpandedRows] = useState([]);
-    const [globalFilterValue, setGlobalFilterValue] = useState("");
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.EQUALS },  
+        enrollmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
+        name:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }, 
+        createdDate:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }
+    });    
+    const [globalFilterValue, setGlobalFilterValue] = useState("");   
+    const [nameFilterValue,setNameFilterValue]=useState("")  
+    const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
+    const [createDateFilterValue,setCreatedDateFilterValue]=useState("")    
     const [dates, setDates] = useState(null);
     const [filteredDates, setFilteredDates] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
     const [dialogeForTransfer, setDialogeForTransfer] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
+    const [checkRemarks, setCheckRemarks] = useState()
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -76,37 +88,80 @@ const AllEnrollments = () => {
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
 
-    const onGlobalFilterChange = (e) => {
-        setGlobalFilterValue(e.target.value);
-    };
-    const onDateFilterChange = (e) => {
-        setDates(e.value);
-        filterByDate(e.value);
-    };
+    const onGlobalFilterValueChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
 
-    const filterByDate = (selectedDates) => {
-        const filteredData = allEnrollments.filter((rowData) => {
-            const enrollmentDate = rowData.DOB ? new Date(rowData.DOB.split("T")[0]) : null;
+        _filters['global'].value = value;
+         
+        setFilters(_filters);  
+        setGlobalFilterValue(value); 
+      
+    }; 
+     const onNameDateEnrollmentIdValueFilter=(e,field)=>{ 
+        const value = e.target.value;
+        let _filters = { ...filters };
+        if(field === "enrollment"){
+        _filters['enrollmentId'].value = value;   
+        setFilters(_filters);  
+        setEnrollmentIdFilterValue(value); 
+        } 
+        
+        else if(field === "name"){ 
+         _filters['name'].value=value  
+         setFilters(_filters);  
+         setNameFilterValue(value); 
+        } 
+        else{ 
+            _filters['createdDate'].value=value  
+            setFilters(_filters);  
+            setCreatedDateFilterValue(value);   
+        }
+        
+     } 
+    
+    // const onDateFilterChange= (e) => {
+    //     setDates(e.value);
+    //     filterByDate(e.value);
+    // };
 
-            if (selectedDates && selectedDates.length === 2 && enrollmentDate) {
-                const startDate = new Date(selectedDates[0]);
-                const endDate = new Date(selectedDates[1]);
-                return enrollmentDate >= startDate && enrollmentDate <= endDate;
-            }
+    // const filterByDate = (selectedDates) => {
+    //     const filteredData = allEnrollments.filter((rowData) => {
+    //         const enrollmentDate = rowData.DOB ? new Date(rowData.DOB.split("T")[0]) : null;
 
-            return true;
-        });
+    //         if (selectedDates && selectedDates.length === 2 && enrollmentDate) {
+    //             const startDate = new Date(selectedDates[0]);
+    //             const endDate = new Date(selectedDates[1]);
+    //             return enrollmentDate >= startDate && enrollmentDate <= endDate;
+    //         }
 
-        setFilteredDates(filteredData);
-    };
+    //         return true;
+    //     });
+
+    //     setFilteredDates(filteredData);
+    // };
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                setAllEnrollments(res?.data?.data);
+                      
+                for(let i=0;i<res.data.data.length;i++){ 
+                     res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
+                        res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
+                        res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
+                        .toLocaleDateString("en-US", {
+                            month: "2-digit",
+                            day: "2-digit",
+                            year: "numeric",
+                        })
+                        .replace(/\//g, "-")
+                  
+                    }  
+                    setAllEnrollments(res?.data?.data); 
                 setIsLoading(false);
+                console.log("all enroll is",res?.data?.data)
                
             }
         } catch (error) {
@@ -330,13 +385,14 @@ const AllEnrollments = () => {
         return (
             <div>
                  {
-                    parseLoginRes?.companyName.includes("IJ wireless") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                     :
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 }
                
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
+               
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading } />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading } />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
@@ -390,11 +446,36 @@ const AllEnrollments = () => {
         setOpenDialogeForRemarksForIJ(true);
         setIsEnrolmentId(rowData?._id);
     }
-
+   const header=()=>{  
+    return(
+    <div className="flex flex-wrap justify-content-center mt-2">
+   
+      
+    <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={onGlobalFilterValueChange} placeholder="Enrollment Type" />
+    <InputText value={nameFilterValue} onChange={(e)=>{ 
+        onNameDateEnrollmentIdValueFilter(e,"name") 
+    } 
+    } className="w-15rem ml-4 mt-2" placeholder="Search By Name" /> 
+     <InputText value={enrollmentIdFilterValue} onChange={(e)=>{ 
+        onNameDateEnrollmentIdValueFilter(e,"enrollment") 
+    } 
+    } className="w-15rem ml-4 mt-2" placeholder="Search By Enrollment ID" /> 
+     <InputText value={createDateFilterValue} onChange={(e)=>{ 
+        onNameDateEnrollmentIdValueFilter(e,"createdAt") 
+    } 
+    } className="w-15rem ml-4 mt-2" placeholder="Search By Created Date" />
+      
+</div>)
+   }
     const transferUser = async (rowData) => {
         setDialogeForTransfer(true);
         setIsEnrolmentId(rowData?._id);
     };
+
+    const getstateFromRemarks=(e)=>{
+       setCheckRemarks(e)
+       console.log("e is",e)
+    }
 
     return (
         <>
@@ -411,11 +492,11 @@ const AllEnrollments = () => {
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
-                        <DialogeForRemarks  enrollmentId={isEnrolmentId}/>
+                        <DialogeForRemarks getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId}/>
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
-                        <DialogeForRemarksForIJ  enrollmentId={isEnrolmentId}/>
+                        <DialogeForRemarksForIJ getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId}/>
                     </Dialog>
 
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
@@ -444,11 +525,9 @@ const AllEnrollments = () => {
                     style={{ width: "23rem" }}
                 /> */}
                             </div>
-                            <div className="  flex ">
-                                <div className="p-input-icon-left mt-2">
-                                    <i className="pi pi-search" />
-                                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by Name, Id or Date(MM-DD-YYYY) " className="w-25rem" />
-                                </div>
+                            <div className="  flex ">    
+                          
+                              
                                 {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />}
                                 {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />}
                             </div>
@@ -468,8 +547,10 @@ const AllEnrollments = () => {
                             onRowToggle={(e) => setExpandedRows(e.data)}
                             paginator
                             rows={10}
-                            rowsPerPageOptions={[25, 50]}
-                            globalFilter={globalFilterValue}
+                            rowsPerPageOptions={[25, 50]} 
+                            filters={filters}
+                            globalFilterFields={['enrollment']} header={header} emptyMessage="No customers found."
+                            
                         >
                             {/* <Column expander style={{ width: "3em" }} /> */}
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
@@ -483,20 +564,18 @@ const AllEnrollments = () => {
                     </button>
                 )}
             ></Column>
-                            <Column header="Enrollment Type" body={(rowData) => (rowData.isSelfEnrollment ? "Self Enrollment" : "Enrollment")}></Column>
+                            <Column header="Enrollment Type" field="enrollment" ></Column>
 
-                            <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
+                            <Column header="Name" field="name"></Column>
                             <Column header="Address" field="address1"></Column>
                             <Column header="City" field="city"></Column>
                             <Column header="State" field="state"></Column>
                             <Column header="Zip" field="zip" />
-                            <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
-                            <Column field="contact" header="Contact" />
                             <Column
-                                field="createdAt"
-                                header="Created At"
+                                field="DOB"
+                                header="DOB"
                                 body={(rowData) =>
-                                    new Date(rowData.createdAt)
+                                    new Date(rowData.DOB)
                                         .toLocaleDateString("en-US", {
                                             month: "2-digit",
                                             day: "2-digit",
@@ -504,6 +583,12 @@ const AllEnrollments = () => {
                                         })
                                         .replace(/\//g, "-")
                                 }
+                            />
+                            <Column field="contact" header="Contact" />
+                            <Column
+                                field="createdDate"
+                                header="Created At"
+                                  
                             />
                             <Column field="createdBy.name" header="Created BY" />
                             <Column
@@ -541,7 +626,7 @@ const AllEnrollments = () => {
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
                                 ""
-                            ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ? (
+                            ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("retention") || roleName.includes("RETENTION") || roleName.includes("Retention") ? (
                                 <Column header="Actions" body={actionTemplateForPR}></Column>
                             ) : roleName.includes("QA") || roleName.includes("qa") || roleName.includes("Qa") ? (
                                 <Column header="Actions" body={actionTemplateForTL}></Column>

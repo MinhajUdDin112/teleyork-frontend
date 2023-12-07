@@ -8,7 +8,6 @@ export default function EnrollmentFlowPage() {
 
     const [activeIndex, setActiveIndex] = useState(0);
     const toast = useRef(null);
-   
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const csr = parseLoginRes?._id;

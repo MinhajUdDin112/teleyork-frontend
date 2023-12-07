@@ -10,7 +10,9 @@ import { Dialog } from "primereact/dialog";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function SIMSingleUploadAddProvision() {
+export default function SIMSingleUploadAddProvision({permissions}) {  
+        
+    console.log("Permissions is here", permissions.isCreate)
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -99,9 +101,7 @@ export default function SIMSingleUploadAddProvision() {
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
             SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least 19 characters").max(25, "Sim Number must be at most 25 characters"),
-
             box: Yup.string().required("Box is required"),
-
             Model: Yup.string().required("Model is required"),
         AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
@@ -250,14 +250,17 @@ export default function SIMSingleUploadAddProvision() {
                         <p className="m-0">
                             Model<span style={{ fontSize: "12px" }}>(MICRO/NANO/SIM)</span>
                             <span style={{ color: "red" }}>
-                                *
+                                *   
+                                <Button style={{padding:"0px",backgroundColor:"transparent",border:"none", cursor: "pointer",}}    disabled={!(permissions.isCreate)} >
                                 <i
                                     onClick={() => {
                                         setAddSimModelDialogVisbility((prev) => !prev);
-                                    }}
+                                    }} 
+                                 
                                     className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i>
+                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                ></i> 
+                                </Button>
                             </span>
                         </p>
                         <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
@@ -285,7 +288,8 @@ export default function SIMSingleUploadAddProvision() {
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()
-                        }}
+                        }}  
+                        disabled={!(permissions.isCreate)}
                     />
                 </div>
             </div>

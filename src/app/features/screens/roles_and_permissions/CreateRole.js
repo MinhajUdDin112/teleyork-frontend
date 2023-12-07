@@ -8,8 +8,8 @@ import classNames from "classnames";
 import { Divider } from "primereact/divider";
 import { useLocation } from "react-router-dom";
 import { Toast } from "primereact/toast";
-import "react-toastify/dist/ReactToastify.css"; 
-const BASE_URL=process.env.REACT_APP_BASE_URL
+import "react-toastify/dist/ReactToastify.css";
+const BASE_URL = process.env.REACT_APP_BASE_URL
 const CreateRole = () => {
     let toast = useRef(null);
     const [rolePermissions, setRolePermissions] = useState([]);
@@ -27,8 +27,6 @@ const CreateRole = () => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const loginPerms = localStorage.getItem("permissions")
-    const parsedLoginPerms = JSON.parse(loginPerms)
 
     // Validation Schema
     const validationSchema = Yup.object().shape({
@@ -199,7 +197,9 @@ const CreateRole = () => {
     };
 
     const actionBasedChecks = () => {
-        console.log('parsedLoginPerms', parsedLoginPerms);
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
 
         const isCreate = parsedLoginPerms.some((node) =>
             node?.subModule.some((subNode) =>
@@ -268,14 +268,14 @@ const CreateRole = () => {
                             <div className="surface-0 shadow-1 p-3 border-1 border-50 border-round">
                                 <ul style={{ paddingLeft: "24%" }}>
                                     <li style={{ marginTop: "10px", listStyleType: "none" }}>
-                                        <input style={{ cursor: "pointer" }} type="checkbox" checked={selectedModules[module._id] || false} onChange={() => handleModuleCheckboxChange(module._id)} />
+                                        <input style={{ cursor: !(isCreate || isManage) ? "not-allowed" : "pointer" }} type="checkbox" checked={selectedModules[module._id] || false} onChange={() => handleModuleCheckboxChange(module._id)} disabled={!(isCreate || isManage)} />
                                         {module.name}
                                     </li>
                                     {module.submodule.map((submodule) => (
                                         <ul>
                                             <li style={{ marginTop: "5px", listStyleType: "none" }}>
                                                 <div key={submodule._id} style={{ width: "245px" }}>
-                                                    <input style={{ cursor: "pointer" }} type="checkbox" checked={selectedSubmodules[submodule._id] || false} onChange={() => handleSubmoduleCheckboxChange(submodule._id)} />
+                                                    <input style={{ cursor: !(isCreate || isManage) ? "not-allowed" : "pointer" }} type="checkbox" checked={selectedSubmodules[submodule._id] || false} onChange={() => handleSubmoduleCheckboxChange(submodule._id)} disabled={!(isCreate || isManage)} />
                                                     {submodule.name}
                                                 </div>
                                             </li>
@@ -283,7 +283,7 @@ const CreateRole = () => {
                                                 <li style={{ marginTop: "5px", listStyleType: "none" }}>
                                                     {submodule.actions.map((action) => (
                                                         <div key={`${submodule._id}-${action._id}`} style={{ marginTop: "5px" }}>
-                                                            <input style={{ cursor: "pointer" }} type="checkbox" checked={selectedActions[`${submodule._id}-${action._id}`] || false} onChange={() => togglePermission(submodule._id, action._id)} />
+                                                            <input style={{ cursor: !(isCreate || isManage) ? "not-allowed" : "pointer" }} type="checkbox" checked={selectedActions[`${submodule._id}-${action._id}`] || false} onChange={() => togglePermission(submodule._id, action._id)} disabled={!(isCreate || isManage)} />
                                                             {action.name}
                                                         </div>
                                                     ))}

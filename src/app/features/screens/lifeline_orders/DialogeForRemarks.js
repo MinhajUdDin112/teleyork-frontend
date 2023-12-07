@@ -8,7 +8,7 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogeForRemarks = ({enrollmentId}) => {
+const DialogeForRemarks = ({enrollmentId,getstateFromRemarks}) => {
     const [isComRemarks, setIsComRemarks] = useState();
     const [isConfidenceRemarks, setIsConfidenceRemarks] = useState();
     const [isVerificationRemarks, setIsVerificationRemarks] = useState();
@@ -41,6 +41,7 @@ const DialogeForRemarks = ({enrollmentId}) => {
                 const response = await Axios.patch(`${BASE_URL}/api/user/remarks`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
+                    getstateFromRemarks();
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -48,6 +49,7 @@ const DialogeForRemarks = ({enrollmentId}) => {
         },
         
     });
+   
     useEffect(() => {
         formik.setValues({
           comRemarks: isComRemarks,
@@ -75,44 +77,46 @@ const DialogeForRemarks = ({enrollmentId}) => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>  
-            <div className="flex flex-wrap justify-content-center card">
-                        <p>0</p>
-                        <p className="ml-4">20</p>
-                    </div>
+           
+
                 <div className="flex flex-wrap justify-content-around card">
                    
-                    <div className="w-20rem mt-3 card">
+                    <div className="w-20rem mt-3 card h-10rem">
                         <div >
                             <label > Listening without Interruption/Two way communication/Helping Tone /Focus/Active Listening/Prolong Call/Probing (20) </label>
                         </div>
-                        <div className="flex flex-wrap justify-content-around mt-3">
-                            <div>
-                                <RadioButton inputId="isComRemarks" name="pizza" value="0" onChange={(e) => setIsComRemarks(e.value)} checked={isComRemarks === "0"} />
+                        <div className="flex flex-wrap justify-content-around mt-3 w-15rem " >
+                            <div style={{position:"relative"}}>
+                                <RadioButton inputId="isComRemarks" name="pizza" value="0" onChange={(e) => setIsComRemarks(e.value)} checked={isComRemarks === "0"} />  
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>0</label>
                             </div>
-                            <div>
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="ingredient2" name="pizza" value="20" onChange={(e) => setIsComRemarks(e.value)} checked={isComRemarks === "20"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>20</label>
                             </div>
                         </div>
                     </div>
 
-                    <div className="w-20rem mt-3 card ">
+                    <div className="w-20rem mt-3 card  h-10rem">
                         <div>
                             <label >
                                 {" "}
                                 Confidence/Accent/Fluency (20){" "}
                             </label>
                         </div>
-                        <div  className="flex flex-wrap justify-content-around mt-3 " >
-                            <div >
+                        <div  className="flex flex-wrap justify-content-around w-15rem"  style={{marginTop:"63px"}} >
+                            <div  style={{position:"relative"}}>
                                 <RadioButton inputId="isConfidenceRemarks" name="pizza" value="0" onChange={(e) => setIsConfidenceRemarks(e.value)} checked={isConfidenceRemarks === "0"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>0</label>
                             </div>
-                            <div>
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isConfidenceRemarks" name="pizza" value="20" onChange={(e) => setIsConfidenceRemarks(e.value)} checked={isConfidenceRemarks === "20"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>20</label>
                             </div>
                         </div>
                     </div>
 
-                    <div className="w-20rem mt-3 card">
+                    <div className="w-20rem mt-3 card h-10rem">
                         <div>
                             <label >
                                 {" "}
@@ -120,36 +124,37 @@ const DialogeForRemarks = ({enrollmentId}) => {
                             </label>
                         </div>
                         <div className="flex flex-wrap justify-content-around mt-3">
-                            <div>
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isInformationRemarks" name="pizza" value="0" onChange={(e) => setIsInformationRemarks(e.value)} checked={isInformationRemarks === "0"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>0</label>
                             </div>
-                            <div >
+                            <div  style={{position:"relative"}}>
                                 <RadioButton inputId="isInformationRemarks" name="pizza" value="20" onChange={(e) => setIsInformationRemarks(e.value)} checked={isInformationRemarks === "20"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>20</label>
                             </div>
                         </div>
                     </div>
-                    <div className="w-20rem mt-3 card">
+                    <div className="w-20rem mt-3 card h-10rem">
                         <div>
                             <label >
                                 {" "}
                                 DOB/SSN/Govt Assit (20){" "}
                             </label>
                         </div>
-                        <div className="flex flex-wrap justify-content-around mt-3">
-                            <div>
+                        <div className="flex flex-wrap justify-content-around w-15rem" style={{marginTop:"63px"}} >
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isDOBRemarks" name="pizza" value="0" onChange={(e) => setIsDOBRemarks(e.value)} checked={isDOBRemarks === "0"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>0</label>
                             </div>
-                            <div >
+                            <div  style={{position:"relative"}}>
                                 <RadioButton inputId="isDOBRemarks" name="pizza" value="20" onChange={(e) => setIsDOBRemarks(e.value)} checked={isDOBRemarks === "20"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>20</label>
                             </div>
                         </div>
                     </div>
-                    <div style={{width:"100vw",display:"flex",justifyContent:"center"}} className="card ">
-                        <p>0</p>
-                        <p className="ml-4">10</p>
-                    </div>
+                   
 
-                    <div className="w-20rem mt-3 card ">
+                    <div className="w-20rem mt-3 card h-10rem ">
                         <div>
                             <label >
                                 {" "}
@@ -157,91 +162,94 @@ const DialogeForRemarks = ({enrollmentId}) => {
                             </label>
                         </div>
                         <div className="flex flex-wrap justify-content-around mt-3">
-                            <div >
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isVerificationRemarks" name="pizza" value="0" onChange={(e) => setIsVerificationRemarks(e.value)} checked={isVerificationRemarks === "0"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>0</label>
                             </div>
-                            <div >
+                            <div style={{position:"relative"}} >
                                 <RadioButton inputId="isVerificationRemarks" name="pizza" value="20" onChange={(e) => setIsVerificationRemarks(e.value)} checked={isVerificationRemarks === "20"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>10</label>
                             </div>
                         </div>
                     </div>
 
-                    <div className="w-20rem mt-3 card  ">
+                    <div className="w-20rem mt-3 card h-10rem  ">
                         <div>
                             <label >
                                 {" "}
                                 Disclaimer/ Yes/TPV (10){" "}
                             </label>
                         </div>
-                        <div className="flex flex-wrap justify-content-around mt-3">
-                            <div>
+                        <div className="flex flex-wrap justify-content-around  w-15rem" style={{marginTop:"63px"}}>
+                            <div style={{position:'relative'}}>
                                 <RadioButton inputId="isDisclaimerRemarks" name="pizza" value="0" onChange={(e) => setIsDisclaimerRemarks(e.value)} checked={isDisclaimerRemarks === "0"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>0</label>
                             </div>
-                            <div>
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isDisclaimerRemarks" name="pizza" value="20" onChange={(e) => setIsDisclaimerRemarks(e.value)} checked={isDisclaimerRemarks === "20"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>10</label>
                             </div>
                         </div>
                     </div>
 
-                   
-                    <div style={{width:"100vw",display:"flex",justifyContent:"center"}} className="card">
-                        <p>Yes</p>
-                        <p className="ml-4">No</p>
-                    </div>
+          
 
-                    <div className="w-20rem card mt-3">
+                    <div className="w-20rem card mt-3 h-10rem">
                         <div>
                             <label >
                                 CSR was rude/ Misbehaves with customer{" "}
                             </label>
                         </div>
-                        <div className="flex flex-wrap justify-content-around mt-3" >
-                            <div >
+                        <div className="flex flex-wrap justify-content-around" style={{marginTop:"50px"}}>
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isCsrRemarks" name="pizza" value="true" onChange={(e) => setIsCsrRemarks(e.value)} checked={isCsrRemarks === "true"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>Yes</label>
                             </div>
-                            <div >
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isCsrRemarks" name="pizza" value="false" onChange={(e) => setIsCsrRemarks(e.value)} checked={isCsrRemarks === "false"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>No</label>
                             </div>
                         </div>
                     </div>
-                    <div className="w-20rem card mt-3">
+                    <div className="w-20rem card mt-3 h-10rem">
                         <div>
                             <label >
                                 Call Drop/Hang Up by CSE{" "}
                             </label>
                         </div>
-                        <div  className="flex flex-wrap justify-content-around mt-3">
-                            <div >
+                        <div  className="flex flex-wrap justify-content-around w-15rem" style={{marginTop:"63px"}}>
+                             
+                            <div     style={{position:"relative"}}>
                                 <RadioButton inputId="isCallDropRemarks" name="pizza" value="true" onChange={(e) => setIsCallDropRemarks(e.value)} checked={isCallDropRemarks === "true"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>Yes</label>
                             </div>
-                            <div >
+                            <div    style={{position:"relative"}} >
                                 <RadioButton inputId="isCallDropRemarks" name="pizza" value="false" onChange={(e) => setIsCallDropRemarks(e.value)} checked={isCallDropRemarks === "false"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>No</label>
                             </div>
                         </div>
                     </div>
 
                
-                    <div style={{width:"100vw",display:"flex",justifyContent:"center"}} className="card">
-                        <p className="mt-2">Standard</p>
-                        <p className="ml-4 mt-2">Below Standard</p>  
-                        <p className="ml-4 mt-2">Fatal</p>
-                    </div>
 
-                    <div className="card w-20rem mt-3">
+                    <div className="card w-20rem mt-3 h-10rem">
                         <div>
                             <label>
                                 Call Quality{" "}
                             </label>
                         </div>
-                        <div className="flex flex-wrap justify-content-around mt-3">
-                            <div >
+                        <div className="flex flex-wrap justify-content-between  w-15rem" style={{marginLeft:"-5px",marginTop:"63px"}}>
+                            <div style={{position:"relative"}} >
                                 <RadioButton inputId="isCallQualityRemarks" name="pizza" value="Standard" onChange={(e) => setIsCallQualityRemarks(e.value)} checked={isCallQualityRemarks === "Standard"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>Standard</label>
                             </div>
-                            <div >
+                            <div style={{position:"relative"}}>
                                 <RadioButton inputId="isCallQualityRemarks" name="pizza" value="Below" onChange={(e) => setIsCallQualityRemarks(e.value)} checked={isCallQualityRemarks === "Below"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>Below</label>
                             </div>
-                            <div >
+                            <div style={{position:"relative"}} >
                                 <RadioButton inputId="isCallQualityRemarks" name="pizza" value="Fatal" onChange={(e) => setIsCallQualityRemarks(e.value)} checked={isCallQualityRemarks === "Fatal"} />
+                                <label style={{position:"absolute",marginTop:"3px",marginLeft:"5px"}}>Fatal</label>
                             </div>
                         </div>
                     </div>       
