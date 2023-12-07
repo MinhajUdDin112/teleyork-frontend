@@ -49,6 +49,7 @@ const AllEnrollments = () => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [dialogeForTransfer, setDialogeForTransfer] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
+    const [checkRemarks, setCheckRemarks] = useState()
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -390,8 +391,8 @@ const AllEnrollments = () => {
                 }
                
                
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading } />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading } />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
@@ -471,6 +472,11 @@ const AllEnrollments = () => {
         setIsEnrolmentId(rowData?._id);
     };
 
+    const getstateFromRemarks=(e)=>{
+       setCheckRemarks(e)
+       console.log("e is",e)
+    }
+
     return (
         <>
             <ToastContainer className="custom-toast-container" />
@@ -486,11 +492,11 @@ const AllEnrollments = () => {
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
-                        <DialogeForRemarks  enrollmentId={isEnrolmentId}/>
+                        <DialogeForRemarks getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId}/>
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
-                        <DialogeForRemarksForIJ  enrollmentId={isEnrolmentId}/>
+                        <DialogeForRemarksForIJ getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId}/>
                     </Dialog>
 
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
