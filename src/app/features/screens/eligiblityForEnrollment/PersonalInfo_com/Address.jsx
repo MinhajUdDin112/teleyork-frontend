@@ -208,7 +208,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         const address = parseaddressResponse?.data?.address1;
         if (address) {
             formik.setFieldValue("address1", address);
-            formik.setFieldValue("address2", parseaddressResponse?.data?.address2 ?  parseaddressResponse?.data?.address2 : '');
+            formik.setFieldValue("address2", parseaddressResponse?.data?.address2 ?  parseaddressResponse?.data?.address2 : ' ');
             formik.setFieldValue("zip", parseaddressResponse?.data?.zip);
             formik.setFieldValue("city", parseaddressResponse?.data?.city);
             formik.setFieldValue("state", parseaddressResponse?.data?.state);
