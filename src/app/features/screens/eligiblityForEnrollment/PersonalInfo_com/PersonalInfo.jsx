@@ -252,6 +252,12 @@ useEffect(() => {
 }, [formik.values.contact]);
 
 
+const handlePaste = (event) => {
+    event.preventDefault();
+    toast.warning("Pasting is not allowed in this field.");
+   
+  };
+
     return (
         <>
             <ToastContainer />
@@ -306,7 +312,7 @@ useEffect(() => {
                         <label className="field_label">
                             SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
                         </label>
-                        <InputText id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
+                        <InputText type="password" id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                         {getFormErrorMessage("SSN")}
                     </div>
 
@@ -314,7 +320,7 @@ useEffect(() => {
                         <label className="field_label">
                             DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                         </label>
-                        <Calendar id="DOB" value={formik.values.DOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid("DOB") }, "input_text")} />
+                        <Calendar  onPaste={handlePaste} id="DOB" value={formik.values.DOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid("DOB") }, "input_text")} />
                         {getFormErrorMessage("DOB")}
                     </div>
 
@@ -437,14 +443,14 @@ useEffect(() => {
                                 <label className="field_label">
                                     DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                                 </label>
-                                <Calendar className="mb-3"  name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />
+                                <Calendar onPaste={handlePaste} className="mb-3"  name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />
                                   {getFormErrorMessage("BenifitDOB")}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
                                 </label>
-                                <InputText className="mb-3"  name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4}/>
+                                <InputText type="password" className="mb-3"  name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4}/>
                                 {getFormErrorMessage("BenifitSSN")}
                             </div>
                         </div>
