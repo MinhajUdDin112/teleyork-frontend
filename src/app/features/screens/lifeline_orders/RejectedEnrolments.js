@@ -7,11 +7,54 @@ import { Column } from "primereact/column";
 import Axios from "axios";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect } from "react";  
+import { FilterMatchMode} from 'primereact/api'  
+import { Dropdown } from "primereact/dropdown";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const RejectedEnrollments = () => {
+const RejectedEnrollments = () => {  
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.EQUALS },  
+        enrollmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
+        name:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }, 
+        createdDate:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }
+    });    
+    const [nameFilterValue,setNameFilterValue]=useState("")  
+    const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
+    const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
+    const [globalFilterValue, setGlobalFilterValue] = useState("");
+    const onGlobalFilterValueChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+
+        _filters['global'].value = value;
+         
+        setFilters(_filters);  
+        setGlobalFilterValue(value); 
+      
+    }; 
+     const onNameDateEnrollmentIdValueFilter=(e,field)=>{ 
+        const value = e.target.value;
+        let _filters = { ...filters };
+        if(field === "enrollment"){
+        _filters['enrollmentId'].value = value;   
+        setFilters(_filters);  
+        setEnrollmentIdFilterValue(value); 
+        } 
+        
+        else if(field === "name"){ 
+         _filters['name'].value=value  
+         setFilters(_filters);  
+         setNameFilterValue(value); 
+        } 
+        else{ 
+            _filters['createdDate'].value=value  
+            setFilters(_filters);  
+            setCreatedDateFilterValue(value);   
+        }
+        
+     } 
     const [dateRange, setDateRange] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [allEnrollments, setAllEnrollments] = useState([]);
@@ -23,8 +66,7 @@ const RejectedEnrollments = () => {
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [expandedRows, setExpandedRows] = useState([]);
-    const [globalFilterValue, setGlobalFilterValue] = useState("");
-
+    
     const [isCreate, setIsCreate] = useState(false);
   const [isManage, setIsManage] = useState(false);
 
@@ -110,7 +152,18 @@ const RejectedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-              
+                for(let i=0;i<res.data.data.length;i++){ 
+                    res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
+                       res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
+                       res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
+                       .toLocaleDateString("en-US", {
+                           month: "2-digit",
+                           day: "2-digit",
+                           year: "numeric",
+                       })
+                       .replace(/\//g, "-")
+                 
+                   } 
                 setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
                 localStorage.removeItem("zipData");
@@ -124,7 +177,7 @@ const RejectedEnrollments = () => {
     useEffect(() => {
         getAllEnrollments();
     }, []);
-
+    
 
     const viewRow = async (rowData) => {
         setisButtonLoading(true);
@@ -179,7 +232,27 @@ const RejectedEnrollments = () => {
         )
        
     }
-    
+    const header=()=>{  
+        return(
+        <div className="flex flex-wrap justify-content-center mt-2">
+       
+          
+        <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={onGlobalFilterValueChange} placeholder="Enrollment Type" />
+        <InputText value={nameFilterValue} onChange={(e)=>{ 
+            onNameDateEnrollmentIdValueFilter(e,"name") 
+        } 
+        } className="w-15rem ml-4 mt-2" placeholder="Search By Name" /> 
+         <InputText value={enrollmentIdFilterValue} onChange={(e)=>{ 
+            onNameDateEnrollmentIdValueFilter(e,"enrollment") 
+        } 
+        } className="w-15rem ml-4 mt-2" placeholder="Search By Enrollment ID" /> 
+         <InputText value={createDateFilterValue} onChange={(e)=>{ 
+            onNameDateEnrollmentIdValueFilter(e,"createdAt") 
+        } 
+        } className="w-15rem ml-4 mt-2" placeholder="Search By Created Date" />
+          
+    </div>)
+       }
 
     return (
         <div className="card bg-pink-50">
@@ -188,10 +261,7 @@ const RejectedEnrollments = () => {
             <div className="mx-5">
                 <h3 className="text-xl font-semibold border-bottom-1 pb-2">List of Rejected Enrollments</h3>
             </div>
-            <div className="p-input-icon-left mb-3 ">
-                                <i className="pi pi-search" />
-                                <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
-                                </div>
+           
                                 </div>
             {/* <div className="card flex flex-column justify-content-center mx-5 border-noround">
                 <div className="flex flex-wrap mx-3 my-3">
@@ -213,7 +283,8 @@ const RejectedEnrollments = () => {
                 <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">{/* <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText> */}</div>
                 {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
                 <div className="">
-                <DataTable value={ allEnrollments} globalFilter={globalFilterValue} stripedRows resizableColumns columnResizeMode="fit"  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                <DataTable value={ allEnrollments} filters={filters}
+                            globalFilterFields={['enrollment']} header={header} emptyMessage="No customers found." stripedRows resizableColumns columnResizeMode="fit"  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
                            
                             <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
@@ -221,7 +292,7 @@ const RejectedEnrollments = () => {
                         {rowData.enrollmentId}
                     </button>
                 )}></Column>
-                            <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
+                            <Column header="Name" field="name"></Column>
                         <Column header="Address" field="address1"></Column>
                         <Column header="City" field="city"></Column>
                         <Column header="State" field="state"></Column>

@@ -7,13 +7,13 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { Dialog } from 'primereact/dialog';
+import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
-const BASE_URL=process.env.REACT_APP_BASE_URL
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ResumeApplication = () => {
     const location = useLocation();
     const [successDialogVisible, setSuccessDialogVisible] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const responseData = location.state && location.state.responseData;
     const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const ResumeApplication = () => {
             const dataToSend = {
                 userId,
             };
-            setIsLoading(true)
+            setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/enrollment/selfEnromentSubmit`, dataToSend);
                 if (response?.status == 200 || response?.status == 201) {
@@ -44,20 +44,20 @@ const ResumeApplication = () => {
                     localStorage.removeItem("homeAddress");
                     localStorage.removeItem("selectProgram");
                     localStorage.removeItem("initialInformation");
-                    setIsLoading(false)         
+                    setIsLoading(false);
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
-                setIsLoading(false)
+                setIsLoading(false);
             }
-            setIsLoading(false)
+            setIsLoading(false);
         },
     });
 
     const hideSuccessDialog = () => {
         setSuccessDialogVisible(false);
-        navigate('/selfenrollment');
-      };
+        navigate("/selfenrollment");
+    };
 
     const setValues = () => {
         formik.setFieldValue("firstName", responseData?.data?.firstName);
@@ -76,19 +76,20 @@ const ResumeApplication = () => {
     return (
         <>
             <ToastContainer />
-            <Dialog className="dialoge-style"
-  visible={successDialogVisible}
-  onHide={hideSuccessDialog}
-  header=""
-  footer={
-    <div>
-      <Button label="OK" onClick={hideSuccessDialog} />
-    </div>
-  }
-  // Set showHeader to false to hide the close icon
->
-  <p>You are Enrolled Successfully</p>
-</Dialog>
+            <Dialog
+                className="dialoge-style"
+                visible={successDialogVisible}
+                onHide={hideSuccessDialog}
+                header=""
+                footer={
+                    <div>
+                        <Button label="OK" onClick={hideSuccessDialog} />
+                    </div>
+                }
+                // Set showHeader to false to hide the close icon
+            >
+                <p>You are Enrolled Successfully</p>
+            </Dialog>
             <div
                 style={{
                     display: "flex",
@@ -118,7 +119,7 @@ const ResumeApplication = () => {
                                     <InputText id="zip" value={formik.values.zip} disabled onChange={formik.handleChange} className="mb-3" placeholder="ZipCode" />
                                     {/* <Calendar value={formik.values} disabled onChange={formik.handleChange} className="mb-3" id="icon" value={date} disabled onChange={(e) => setDate(e.value)} showIcon /> */}
                                     <InputText id="SSN" value={formik.values.SSN} disabled onChange={formik.handleChange} className="mb-3" placeholder="Last 4 SSN or Tribal ID" />
-                                    <Button label="Submit" icon={isLoading ? <ProgressSpinner strokeWidth="6" style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} /> : null}  disabled={ isLoading} />
+                                    <Button label="Submit" icon={isLoading ? <ProgressSpinner strokeWidth="6" style={{ width: "1.5rem", height: "1.5rem", color: "white" }} /> : null} disabled={isLoading} />
                                 </div>
                             </form>
                         </div>

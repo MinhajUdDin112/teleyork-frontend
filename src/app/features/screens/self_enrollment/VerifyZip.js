@@ -47,7 +47,6 @@ const VerifyZip = () => {
         }
         if (verifyZipError) {
             toast.error(verifyZipError || "An error occurred");
-            
         }
     }, [verifyZip, verifyZipError]);
 
@@ -69,13 +68,12 @@ const VerifyZip = () => {
                                 <p className="mt-0 text-xl">What is ACP?</p>
                                 <p className="text-lg">The Affordable Connectivity Program (ACP), administered by the FCC, is a recently established federal initiative dedicated to providing internet access to low-income individuals and families.</p>
                             </div>
-
                             <div className="col-6">
                                 <p className="text-2xl font-bold">Let's see if you are eligible for this benefit</p>
                                 <div className="flex flex-column">
-                                    <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled={verifyZipLoading} />
-                                    {getFormErrorMessage("zipCode")}
-                                    <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={verifyZipLoading} />
+                                <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled={verifyZipLoading} />
+                                {getFormErrorMessage("zipCode")}
+                                <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={verifyZipLoading} />
                                     {getFormErrorMessage("email")}
                                     <Button disabled={verifyZipLoading} label="Next" type="submit" icon={verifyZipLoading === true ? "pi pi-spin pi-spinner " : ""} />
                                 </div>
