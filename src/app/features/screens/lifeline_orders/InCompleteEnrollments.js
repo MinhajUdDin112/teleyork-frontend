@@ -2,26 +2,67 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
-import ReactPaginate from "react-paginate";
+import ReactPaginate from "react-paginate"; 
+import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";  
+import { FilterMatchMode} from 'primereact/api'
 import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { InputText } from "primereact/inputtext"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const InCompleteEnrollments = () => {
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.EQUALS },  
+        enrollmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
+        name:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }, 
+        createdDate:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }
+    });    
+    const [nameFilterValue,setNameFilterValue]=useState("")  
+    const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
+    const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
+    const [globalFilterValue, setGlobalFilterValue] = useState("");
+    const onGlobalFilterValueChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
 
+        _filters['global'].value = value;
+         
+        setFilters(_filters);  
+        setGlobalFilterValue(value); 
+      
+    }; 
+     const onNameDateEnrollmentIdValueFilter=(e,field)=>{ 
+        const value = e.target.value;
+        let _filters = { ...filters };
+        if(field === "enrollment"){
+        _filters['enrollmentId'].value = value;   
+        setFilters(_filters);  
+        setEnrollmentIdFilterValue(value); 
+        } 
+        
+        else if(field === "name"){ 
+         _filters['name'].value=value  
+         setFilters(_filters);  
+         setNameFilterValue(value); 
+        } 
+        else{ 
+            _filters['createdDate'].value=value  
+            setFilters(_filters);  
+            setCreatedDateFilterValue(value);   
+        }
+        
+     } 
+   
     const [allInCompletedEnrollments, setAllInCompletedEnrollments] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
-    const [expandedRows, setExpandedRows] = useState([]);
-    const [globalFilterValue, setGlobalFilterValue] = useState("");
-
+   
     const [isCreate, setIsCreate] = useState(false);
   const [isManage, setIsManage] = useState(false);
 
@@ -101,8 +142,21 @@ const InCompleteEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?serviceProvider=${parseLoginRes?.compony}`);
             if (res?.status === 200 || res?.status === 201) {
+                for(let i=0;i<res.data.data.length;i++){ 
+                    res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
+                       res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
+                       res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
+                       .toLocaleDateString("en-US", {
+                           month: "2-digit",
+                           day: "2-digit",
+                           year: "numeric",
+                       })
+                       .replace(/\//g, "-")
+                 
+                   }  
                 setAllInCompletedEnrollments(res?.data?.data);
-                setIsLoading(false);
+                setIsLoading(false);  
+
                 localStorage.removeItem("basicData");
                 localStorage.removeItem("address");
                 localStorage.removeItem("programmeId");
@@ -135,7 +189,28 @@ const InCompleteEnrollments = () => {
             setisButtonLoading(false);
         }
         setisButtonLoading(false);
-    };
+    };  
+    const header=()=>{  
+        return(
+        <div className="flex flex-wrap justify-content-center mt-2">
+       
+          
+        <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={onGlobalFilterValueChange} placeholder="Enrollment Type" />
+        <InputText value={nameFilterValue} onChange={(e)=>{ 
+            onNameDateEnrollmentIdValueFilter(e,"name") 
+        } 
+        } className="w-15rem ml-4 mt-2" placeholder="Search By Name" /> 
+         <InputText value={enrollmentIdFilterValue} onChange={(e)=>{ 
+            onNameDateEnrollmentIdValueFilter(e,"enrollment") 
+        } 
+        } className="w-15rem ml-4 mt-2" placeholder="Search By Enrollment ID" /> 
+         <InputText value={createDateFilterValue} onChange={(e)=>{ 
+            onNameDateEnrollmentIdValueFilter(e,"createdAt") 
+        } 
+        } className="w-15rem ml-4 mt-2" placeholder="Search By Created Date" />
+          
+    </div>)
+       }
     const actionTemplate = (rowData) => {
         return (
             <div>
@@ -151,18 +226,12 @@ const InCompleteEnrollments = () => {
         <div className="card bg-pink-50">
             <div className="card mx-5 p-0 border-noround">
 
-                <div className="flex justify-content-between " style={{ padding: "10px" }}>
-                    <div className="mt-2"><h3> <strong>Incomplete Enrollments</strong></h3></div>
-                    <div className="p-input-icon-left mb-3 ">
-                        <i className="pi pi-search" />
-                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search Here " />
-                    </div>
-                </div>
 
                 <div className="" style={{ padding: "15px" }}>
-                    <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns globalFilter={globalFilterValue} paginator rows={10} rowsPerPageOptions={[25, 50]}>
+                    <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns  paginator rows={10} filters={filters}
+                            globalFilterFields={['enrollment']} header={header} emptyMessage="No customers found." rowsPerPageOptions={[25, 50]}>
                         {/* <Column expander style={{ width: "3em" }} /> */}
-                        <Column header="Name" field={(item) => `${item?.firstName ? (item?.firstName).toUpperCase() : ""} ${item?.lastName ? (item?.lastName).toUpperCase() : ""}`}></Column>
+                        <Column header="Name" field="name"></Column>
                         <Column header="Address" field="address1"></Column>
                         <Column header="City" field="city"></Column>
                         <Column header="State" field="state"></Column>
@@ -181,7 +250,7 @@ const InCompleteEnrollments = () => {
                                         .replace(/\//g, "-")
                                 }
                             />
-                        <Column field="createdBy?.name" header="Created BY" />
+                        <Column field="createdBy.name" header="Created BY" />
                         <Column field="status" header="Status" />
                         <Column header="Actions" body={actionTemplate}></Column>
                     </DataTable>
