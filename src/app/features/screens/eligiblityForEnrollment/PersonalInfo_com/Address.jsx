@@ -247,6 +247,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const handleAddressChange = (e) => {
  
         const address = e?.value?.structured_formatting?.secondary_text
+        const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
+        const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
+
         if (address) {
             let cityName = "";
             if (address && address.includes(",")) {
@@ -256,7 +259,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 }
             }
             if (cityName.includes(formik.values.city) || formik.values.city.includes(cityName)) {
-                formik.setFieldValue("address1", e?.value?.structured_formatting?.main_text);
+                const completeAddress= e?.value?.structured_formatting?.main_text;
+                const extractedAddress1 = completeAddress.match(pattern);
+                if(extractedAddress1){
+                    const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
+                    formik.setFieldValue("address1",final ); 
+                    console.log("extractedAddress1 is",final)
+                }else{
+                    formik.setFieldValue("address1",completeAddress ); 
+                }
+                const match = completeAddress.match(regex);            
+                const add2 = match ? match[0] : null;
+                formik.setFieldValue("address2", add2);
+               
             } else {
                 toast.error(`Please choose an address associated with ${formik.values.city}, ${formik.values.state} `);
             }
