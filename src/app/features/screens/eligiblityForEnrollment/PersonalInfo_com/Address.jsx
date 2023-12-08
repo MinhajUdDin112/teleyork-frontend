@@ -40,7 +40,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         validationSchema: validationSchema,
         initialValues: {
             address1: "",
-            address2: "",
+            address2: " ",
             zip: "",
             city: "",
             state: "",
@@ -276,7 +276,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     formik.setFieldValue("address1",completeAddress ); 
                 }
                 const match = completeAddress.match(regex);            
-                const add2 = match ? match[0] : null;
+                const add2 = match ? match[0] : '';
                 formik.setFieldValue("address2", add2);
                
             } else {
