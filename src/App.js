@@ -351,8 +351,14 @@ const App = () => {
                                 <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                 <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
                                 <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
-                                <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
-                                <Route path="/sentall/:id" element={isPermitted("/sentall") ? <ShowSentAll /> : <Dashboard />} />
+
+                                {/* <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
+                                <Route path="/sentall/:id" element={isPermitted("/sentall") ? <ShowSentAll /> : <Dashboard />} /> */}
+
+
+                                <Route path="/draftall/:id" element={<ShowDraftAll/>}/>
+                                 <Route path="/sentall/:id" element={<ShowSentAll/>}/>
+
                                 <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
                                 <Route path="/selfenrollment/personalinfo/:id" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
                                 <Route path="/selfenrollment/address/:id" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
@@ -363,7 +369,8 @@ const App = () => {
                                 <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                 <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
                                 <Route path="/manage-user" element={isPermitted("/manage-user") ? <ManageUser /> : <Dashboard />} />
-                                <Route path="/create-user" element={isPermitted("/create-user") ? <CreateUser /> : <Dashboard />} />
+                                {/* <Route path="/create-user" element={isPermitted("/create-user") ? <CreateUser /> : <Dashboard />} /> */}
+                                <Route path="/create-user" element={<CreateUser/>}/>
                                 <Route path="/edit-user" element={isPermitted("/edit-user") ? <EditUser /> : <Dashboard />} />
                                 <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />
                                 <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />

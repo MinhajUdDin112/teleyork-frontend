@@ -24,6 +24,7 @@ const RejectedEnrollments = () => {
     const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
     const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
     const [globalFilterValue, setGlobalFilterValue] = useState("");
+   
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
         let _filters = { ...filters };
@@ -152,24 +153,32 @@ const RejectedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                for(let i=0;i<res.data.data.length;i++){ 
-                    res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
-                       res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
-                       res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
-                       .toLocaleDateString("en-US", {
-                           month: "2-digit",
-                           day: "2-digit",
-                           year: "numeric",
-                       })
-                       .replace(/\//g, "-")
-                 
-                   } 
+                console.log("data is",res?.data?.data)
+                if(!(res?.data?.data)){
+                    toast.error(res?.data?.msg)
+                }   
+               else  if(res?.data?.data){
+                    for(let i=0;i<res.data.data.length;i++){ 
+                        res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
+                           res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
+                           res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
+                           .toLocaleDateString("en-US", {
+                               month: "2-digit",
+                               day: "2-digit",
+                               year: "numeric",
+                           })
+                           .replace(/\//g, "-")
+                     
+                     }    
+                }
+                             
                 setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
                 localStorage.removeItem("zipData");
             }
         } catch (error) {
-            toast.error("Error fetching All  Rejected Enrollment: " + error?.response?.data?.msg);
+           // toast.error("Error fetching All  Rejected Enrollment: " + error?.response);
+            console.log("error is",error)
             setIsLoading(false);
         }
     };
