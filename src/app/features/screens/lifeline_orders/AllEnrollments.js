@@ -34,6 +34,7 @@ const AllEnrollments = () => {
     const [link, setLink] = useState();
     const [allEnrollments, setAllEnrollments] = useState([]);
     const [expandedRows, setExpandedRows] = useState([]);
+    const [checkType, setCheckType] = useState()
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.EQUALS },  
         enrollmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
@@ -174,7 +175,7 @@ const AllEnrollments = () => {
         getAllEnrollments();
 
     }, []);
-  
+
 
     const viewRow = async (rowData) => {
         setisButtonLoading(true);
@@ -187,6 +188,14 @@ const AllEnrollments = () => {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
                 localStorage.setItem("programmeId", JSON.stringify(response.data));
+                let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
+                if (storedData) {
+                    storedData = false; 
+                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                } else {
+                     storedData = false;
+                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                }
                 navigate("/enrollment");
                 setisButtonLoading(false);
             }
@@ -429,6 +438,7 @@ const AllEnrollments = () => {
         setIsModalOpen(true);
         setIsEnrolmentId(rowData?._id);
         setCsrId(rowData?.csr);
+        setCheckType(rowData?.enrollment)
         setisButtonLoading(false);
     };
 
@@ -484,7 +494,7 @@ const AllEnrollments = () => {
             <div className="card bg-pink-50">
                 <form>
                     <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
-                        <DialogForReject enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
+                        <DialogForReject checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
                     </Dialog>
 
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>

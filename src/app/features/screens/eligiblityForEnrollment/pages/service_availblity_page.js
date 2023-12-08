@@ -81,6 +81,7 @@ export default function ServiceAvailabilityPage() {
           localStorage.removeItem("address");
           localStorage.removeItem("agreeData");
           localStorage.removeItem("programmeId");
+          localStorage.removeItem("fromIncomplete")
           navigate("/enrollment")
         }
       } catch (error) {
