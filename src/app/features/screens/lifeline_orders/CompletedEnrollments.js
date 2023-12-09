@@ -95,6 +95,11 @@ const CompletedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?serviceProvider=${parseLoginRes?.compony}`);
             if (res?.status === 200 || res?.status === 201) {   
+                if(!(res?.data?.data)){
+                    toast.error(res?.data?.msg)
+                } 
+               
+                else if(res?.data?.data){
                 for(let i=0;i<res.data.data.length;i++){ 
                     res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
                        res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
@@ -106,7 +111,7 @@ const CompletedEnrollments = () => {
                        })
                        .replace(/\//g, "-")
                  
-                   }  
+                   }  }
                 setAllCompletedEnrollments(res?.data?.data);    
 
                 console.log("All enrollment data is",res.data.data)
