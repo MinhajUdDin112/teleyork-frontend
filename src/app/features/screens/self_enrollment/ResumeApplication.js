@@ -39,12 +39,14 @@ const ResumeApplication = () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/enrollment/selfEnromentSubmit`, dataToSend);
                 if (response?.status == 200 || response?.status == 201) {
+                   
                     setSuccessDialogVisible(true);
                     localStorage.clear();
                     localStorage.removeItem("homeAddress");
                     localStorage.removeItem("selectProgram");
                     localStorage.removeItem("initialInformation");
                     setIsLoading(false);
+                   
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
