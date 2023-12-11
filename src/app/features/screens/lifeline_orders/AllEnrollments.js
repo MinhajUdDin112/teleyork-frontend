@@ -166,9 +166,7 @@ const AllEnrollments = () => {
                        } 
                 } 
                     setAllEnrollments(res?.data?.data); 
-                setIsLoading(false);
-              
-               
+                setIsLoading(false);                          
             }
         } catch (error) {
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
@@ -218,18 +216,33 @@ const AllEnrollments = () => {
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-        try {
-            const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
-            if (response?.status === 201 || response?.status === 200) {
-                toast.success("Approved");
+        if(checkRemarks==enrolmentId){
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                if (response?.status === 201 || response?.status === 200) {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-            setisButtonLoading(false);
+            getAllEnrollments();
         }
-        getAllEnrollments();
+        else{
+            toast.warning("Please Add Remarks First");
+                 setisButtonLoading(false)
+        }
+       
     };
+
+
+    const getstateFromRemarks=(e)=>{
+        setCheckRemarks(e)  
+        console.log("enroll id is",e)
+     }
+
+
 
     const runNLAD = async (rowData) => {
         setisButtonLoading(true);
@@ -403,8 +416,7 @@ const AllEnrollments = () => {
                     :
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 }
-               
-               
+                           
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading } />
                 <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading } />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
@@ -461,11 +473,10 @@ const AllEnrollments = () => {
         setOpenDialogeForRemarksForIJ(true);
         setIsEnrolmentId(rowData?._id);
     }
+
    const header=()=>{  
     return(
-    <div className="flex flex-wrap justify-content-center mt-2">
-   
-      
+    <div className="flex flex-wrap justify-content-center mt-2"> 
     <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={onGlobalFilterValueChange} placeholder="Enrollment Type" />
     <InputText value={nameFilterValue} onChange={(e)=>{ 
         onNameDateEnrollmentIdValueFilter(e,"name") 
@@ -487,10 +498,7 @@ const AllEnrollments = () => {
         setIsEnrolmentId(rowData?._id);
     };
 
-    const getstateFromRemarks=(e)=>{
-       setCheckRemarks(e)
-     
-    }
+   
 
     return (
         <>

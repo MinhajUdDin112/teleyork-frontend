@@ -32,6 +32,7 @@ const DialogeForRemarksForIJ = ({enrollmentId,getstateFromRemarks}) => {
                 const response = await Axios.patch(`${BASE_URL}/api/user/qualityRemarks`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
+                    actions.resetForm();
                     getstateFromRemarks(enrollmentId)
                 }
             } catch (error) {
