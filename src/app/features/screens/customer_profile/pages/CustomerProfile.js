@@ -54,7 +54,7 @@ const CustomerProfile = () => {
                 customerId: selectedId,
                 ...values,
             };
-            console.log("data is ", data);
+           
             setisButtonLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/notes/`, data);
@@ -82,6 +82,7 @@ const CustomerProfile = () => {
         }
     };
 
+   
     const getNotesType = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/noteType/all?serviceProvider=${parseLoginRes?.compony}`);
@@ -95,9 +96,9 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
             setAllNotes(res?.data?.data || []);
-            console.log("all notes is", res?.data?.data);
+           
         } catch (error) {
-            toast.error(error?.response?.data?.msg);
+           // toast.error(error?.response?.data?.msg);
         }
     };
 

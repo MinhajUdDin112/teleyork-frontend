@@ -86,6 +86,17 @@ const UploadBulk = () => {
 
     console.log("link is", isLink);
 
+    const handleButtonClick = () => {
+       
+        const link = document.createElement('a');
+        link.href = '/images/844221-Batch_Test_File_TeleYork_DEC072023.csv';
+        link.download = 'Batch_Test_File_TeleYork_DEC072023.csv';
+        document.body.appendChild(link);
+        link.click();     
+        // Remove the link from the document
+        document.body.removeChild(link);
+      };
+    
     return (
         <>
             <ToastContainer />
@@ -95,10 +106,14 @@ const UploadBulk = () => {
 
             <div className="ml-3 flex flex-column card">
                 <h5>Please Select a file.</h5>
-                <div className="steric">
+                <div className="flex">
+                <div className="steric mt-2">
                     <h5>It's name should be sac-filename like (111111-example.csv) and its extension should be csv only.</h5>
+                </div >               
+                  <Button className="mb-5 ml-2" onClick={handleButtonClick} label="Sample File"/>
+                 
                 </div>
-
+ 
                 <FileUpload
                     name="file"
                     url={`${BASE_URL}/api/user/upload`}

@@ -11,7 +11,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const [isChecked, setIsChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
    const [checked, setChecked] = useState(false)
-
+   const [fromIncomplete, setFromIncomplete] = useState(false);
     //get preview  information from local storage
     const previewsRes = localStorage.getItem("address");
     const parsepreviewsRes = JSON.parse(previewsRes);
@@ -19,6 +19,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
 
     const zipRes = localStorage.getItem("zipData");
     
+     //check that user come from incomplete or not 
+     const fromIncompl = localStorage.getItem("fromIncomplete");
+     const parsefromIncompl = JSON.parse(fromIncompl);
 
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
@@ -40,11 +43,16 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
          setIsLoading(false);
         }
         setShowFinalComponent(true);
+        setFromIncomplete(false)
+        localStorage.setItem("fromIncomplete", JSON.stringify(fromIncomplete))
 
       };
       useEffect(() => {
-       if(!zipRes){
+       if(!zipRes && parsefromIncompl==false){
         setIsChecked(true )
+       }
+       else if(!zipRes && parsefromIncompl==true){
+        setIsChecked(false )
        }
       }, [])
 
@@ -144,7 +152,20 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                
                             </label>
                         </div>
-                        :null
+                        : !zipRes && parsefromIncompl==true ? 
+                        <div className="flex">
+                            <Checkbox inputId="cb1" value="New York" checked={isChecked} onClick={handleSign} onChange={(e) => setIsChecked(e.checked)}></Checkbox>
+                            <label htmlFor="cb1" className="p-checkbox-label mx-2">
+                                <p>I further consent to receive calls, emails and/or text messages that may deliver auto-dialed or pre-recorded messages from IJ Wireless, Inc or its duly appointed agent, either using my telephone number assigned by IJ Wireless, Inc or provided by me herein or later. I understand this is not a condition of purchase.
+                                </p>                               
+                                <p>
+                                I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined in this form and any related documents.
+                                </p>
+                                <br />
+                                {checked?  <p><strong>This form is electronically signed by <strong>{(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}</strong> on {new Date().toLocaleDateString()}</strong></p>:null}
+                               
+                            </label>
+                        </div>: ""
                         }
                        
                       

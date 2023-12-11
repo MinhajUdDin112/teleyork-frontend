@@ -14,9 +14,9 @@ export const loginAction = createAsyncThunk("auth/web/user/login", async (body, 
 
         // Toasts({ success: response.data.msg });    
         const allowdPerms = response?.data?.data?.permissions
-        console.log('response?.data?.data', response?.data?.data)
+      
         localStorage.setItem("permissions", JSON.stringify(allowdPerms))
-        console.log("login data ", response.data)
+       
         return response.data;
     } catch (error) {
         // Toasts({ error: "Email and Password incorrect" });   

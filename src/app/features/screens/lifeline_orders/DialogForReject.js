@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Checkbox } from "primereact/checkbox";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
+const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments,checkType }) => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
     const enrolmentId = enrollmentId;
@@ -98,19 +98,28 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments }) => {
         <>
             <form onSubmit={formik.handleSubmit}>
                 <div className="p-fluid p-formgrid grid ">
-                    {roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ? (
-                        <div className="p-field col-12 md:col-4 mt-3">
-                            <Button label="Send to Retention" type="button" />
-                        </div>
-                    ) : (
+                     {roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ?  (
+                          <>
+                          <div className="p-field col-12 md:col-4 mt-3">
+                              <Button label="Send to Retention" type="button" />
+                          </div>
+                          <div className="p-fluid p-formgrid grid m-2 mt-5">
+                              <h4>Or</h4>
+                          </div>
+                      </>
+                       
+                    ) :  checkType == "Enrollment" ? (
+                        <>
                         <div className="p-field col-12 md:col-4 mt-3">
                             <Button label="Assign to Created User" type="button" onClick={assignCSRId} />
                         </div>
-                    )}
+                        <div className="p-fluid p-formgrid grid m-2 mt-5">
+                            <h4>Or</h4>
+                        </div>
+                    </>
+                    ):""}
 
-                    <div className="p-fluid p-formgrid grid m-2 mt-5">
-                        <h4>Or</h4>
-                    </div>
+                 
 
                     <div className="p-field col-12 md:col-3">
                         <label className="Label__Text">Assign to department </label>

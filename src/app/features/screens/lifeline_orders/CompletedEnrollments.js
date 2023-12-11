@@ -19,7 +19,6 @@ const CompletedEnrollments = () => {
         createdAt:{ value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
         createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
     });    
-    const [nameFilterValue,setNameFilterValue]=useState("")  
     const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
     const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
     const [allCompletedEnrollments, setAllCompletedEnrollments] = useState([]);
@@ -134,7 +133,7 @@ const CompletedEnrollments = () => {
                         { label: "Enrollment", value: "Enrollment" },
                         { label: "All Enrollments", value: null },
                     ]}
-                    value={globalFilterValue}
+                    value={enrollmentIdFilterValue}
                     onChange={(e)=>{
                         onNameDateEnrollmentIdValueFilter(e, "enrollment"); 
                     }}

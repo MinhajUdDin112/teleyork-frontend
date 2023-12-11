@@ -17,11 +17,15 @@ const RejectedEnrollments = () => {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
-        createdAt:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }
-    });    
+        createdAt:{ value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
+        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
+   
+    });  
+    const [createDateToFilterValue,setCreatedDateToFilterValue]  =useState("")
     const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
     const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
     const [globalFilterValue, setGlobalFilterValue] = useState("");
+   
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
         let _filters = { ...filters };
@@ -40,11 +44,16 @@ const RejectedEnrollments = () => {
         setFilters(_filters);  
         setEnrollmentIdFilterValue(value); 
         }  
-        else{  
-       
-            _filters['createdDate'].value=value  
-            setFilters(_filters);  
-            setCreatedDateFilterValue(value);   
+        else if(field === "createdTo"){ 
+            setCreatedDateToFilterValue(e.value) 
+            _filters["createdTo"].value =new Date(e.value).toISOString() 
+            setFilters(_filters);
+        }
+   
+        else{ 
+            setCreatedDateFilterValue(e.value);  
+            _filters["createdAt"].value =new Date(e.value).toISOString() 
+            setFilters(_filters);
         }
         
      } 
@@ -106,9 +115,7 @@ const RejectedEnrollments = () => {
      // Get role name  from login response
     const roleName= parseLoginRes?.role?.role;
 
-    const onGlobalFilterChange = (e) => {
-        setGlobalFilterValue(e.target.value);
-    };
+   
 
     const actionBasedChecks = () => {
 
@@ -145,24 +152,33 @@ const RejectedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                for(let i=0;i<res.data.data.length;i++){ 
-                    res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
-                       res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
-                       res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
-                       .toLocaleDateString("en-US", {
-                           month: "2-digit",
-                           day: "2-digit",
-                           year: "numeric",
-                       })
-                       .replace(/\//g, "-")
+                console.log("data is",res?.data?.data)
+                if(!(res?.data?.data)){
+                    toast.error(res?.data?.msg)
+                }   
+               else  if(res?.data?.data){
+                    for(let i=0;i<res.data.data.length;i++){ 
+                        res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
+                           res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
+                           res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
+                           .toLocaleDateString("en-US", {
+                               month: "2-digit",
+                               day: "2-digit",
+                               year: "numeric",
+                           })
+                           .replace(/\//g, "-")
+                           res.data.data[i].createdTo=res.data.data[i].createdAt
                  
-                   } 
+                     }    
+                }
+                             
                 setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
                 localStorage.removeItem("zipData");
             }
         } catch (error) {
-            toast.error("Error fetching All  Rejected Enrollment: " + error?.response?.data?.msg);
+           // toast.error("Error fetching All  Rejected Enrollment: " + error?.response);
+            console.log("error is",error)
             setIsLoading(false);
         }
     };
@@ -227,30 +243,55 @@ const RejectedEnrollments = () => {
     }
     const header=()=>{  
         return(
-        <div className="flex flex-wrap justify-content-center mt-2">
-           
-        <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={(e)=>{ 
-                  onNameDateEnrollmentIdValueFilter(e, "enrollment"); 
-                    
-        }} placeholder="Enrollment Type" />
-            <InputText
-                    value={globalFilterValue}
-                    onChange={
-                        onGlobalFilterValueChange}
-                    className="w-15rem ml-4 mt-2"
-                    placeholder="Search By Name or Enrollment ID"
-                />
-             <Calendar   
-             className="ml-4 w-15rem mt-2"
-      value={createDateFilterValue}
-      dateFormat="dd/mm/yy" 
-      placeholder="Search By Created Date"
-      onChange={(e) => {
-        onNameDateEnrollmentIdValueFilter(e, "createdAt");
-    }}
-      showIcon
-    />  
-    </div>)
+            <div className="flex flex-wrap justify-content-center mt-2">
+         
+            <Dropdown
+                       className="mt-2 w-15rem ml-4"
+                       options={[
+                           { label: "Self Enrollment", value: "Self Enrollments" },
+                           { label: "Enrollment", value: "Enrollment" },
+                           { label: "All Enrollments", value: null },
+                       ]}
+                       value={enrollmentIdFilterValue}
+                       onChange={(e)=>{
+                           onNameDateEnrollmentIdValueFilter(e, "enrollment"); 
+                       }}
+                       placeholder="Enrollment Type"
+                   />
+                   <InputText
+                       value={globalFilterValue}
+                       onChange={
+                           onGlobalFilterValueChange}
+                       className="w-15rem ml-4 mt-2"
+                       placeholder="Search By Name or Enrollment ID"
+                   />     
+                   <div className="w-25rem ml-4 mt-2" >
+                   <Calendar
+                    className="w-11rem" 
+         value={createDateFilterValue}
+         dateFormat="mm/dd/yy"  
+         placeholder="Search By Created Date"
+         onChange={(e) => {
+           onNameDateEnrollmentIdValueFilter(e, "createdAt");
+       }}  
+   
+         showIcon
+       />     
+       <label className="w-9rem p-2" style={{textAlign:"center",color:"grey"}}>To</label>  
+       <Calendar
+                 className="w-11rem"   
+         value={createDateToFilterValue}
+         dateFormat="mm/dd/yy"  
+         placeholder="Search By Created Date"
+         onChange={(e) => {
+           onNameDateEnrollmentIdValueFilter(e, "createdTo");
+       }}  
+   
+         showIcon
+       />    
+       </div>
+       </div>
+            )
        }
 
     return (

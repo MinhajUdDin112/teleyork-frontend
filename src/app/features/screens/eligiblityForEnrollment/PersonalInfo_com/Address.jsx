@@ -40,7 +40,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         validationSchema: validationSchema,
         initialValues: {
             address1: "",
-            address2: "",
+            address2: " ",
             zip: "",
             city: "",
             state: "",
@@ -245,18 +245,40 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     }, [isDifferent, isPoBox]);
     
     const handleAddressChange = (e) => {
- 
+ console.log("cpmlt add",e)
         const address = e?.value?.structured_formatting?.secondary_text
+        const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
+        const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
+           console.log("address is",address)
         if (address) {
             let cityName = "";
+            let trimmedCityName ="";
             if (address && address.includes(",")) {
                 const parts = address.split(",");
                 if (parts.length >= 1) {
-                    cityName = parts[0];
+                    cityName = parts[0];   
+                    const words = cityName.split(' ');
+                    if (words.length >= 2) {
+                        trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
+                        console.log("trimmed city name is", trimmedCityName);
+                    }
+                    
                 }
             }
-            if (cityName.includes(formik.values.city) || formik.values.city.includes(cityName)) {
-                formik.setFieldValue("address1", e?.value?.structured_formatting?.main_text);
+            if (trimmedCityName.includes(formik.values.city) || formik.values.city.includes(trimmedCityName) || cityName.includes(formik.values.city) || formik.values.city.includes(cityName) ) {
+                const completeAddress= e?.value?.structured_formatting?.main_text;
+                const extractedAddress1 = completeAddress.match(pattern);
+                if(extractedAddress1){
+                    const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
+                    formik.setFieldValue("address1",final ); 
+                    console.log("extractedAddress1 is",final)
+                }else{
+                    formik.setFieldValue("address1",completeAddress ); 
+                }
+                const match = completeAddress.match(regex);            
+                const add2 = match ? match[0] : '';
+                formik.setFieldValue("address2", add2);
+               
             } else {
                 toast.error(`Please choose an address associated with ${formik.values.city}, ${formik.values.state} `);
             }

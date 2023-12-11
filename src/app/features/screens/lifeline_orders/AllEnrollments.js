@@ -35,6 +35,7 @@ const AllEnrollments = () => {
     const [allEnrollments, setAllEnrollments] = useState([]);
     const [expandedRows, setExpandedRows] = useState([]);  
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
+    const [checkType, setCheckType] = useState()
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
          enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -107,7 +108,8 @@ const AllEnrollments = () => {
             setCreatedDateToFilterValue(e.value) 
             _filters["createdTo"].value =new Date(e.value).toISOString() 
             setFilters(_filters);
-        }
+        } 
+
         else {                
            
             setCreatedDateFilterValue(e.value);  
@@ -146,25 +148,34 @@ const AllEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                for (let i = 0; i < res?.data?.data?.length; i++) { 
-                   
-                    res.data.data[i].enrollment = res.data.data[i].isSelfEnrollment ? "Self Enrollments" : "Enrollment";
-                    res.data.data[i].name = `${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`;
-                    res.data.data[i].createdDate = new Date(res.data.data[i].createdAt)
-                        .toLocaleDateString("en-US", {
-                            month: "2-digit",
-                            day: "2-digit",
-                            year: "numeric",
-                        })
-                        .replace(/\//g, "-");     
-                        res.data.data[i].createdTo=res.data.data[i].createdAt
+                if(!(res?.data?.data)){
+                    toast.error(res?.data?.msg)
+                } 
+               
+                else if(res?.data?.data){
+                    for(let i=0;i<res.data.data.length;i++){ 
+                        res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
+                           res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
+                           res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
+                           .toLocaleDateString("en-US", {
+                               month: "2-digit",
+                               day: "2-digit",
+                               year: "numeric",
+                           })
+                           .replace(/\//g, "-")
+                           res.data.data[i].createdTo=res.data.data[i].createdAt
+                       } 
+                } 
+                    setAllEnrollments(res?.data?.data); 
+                setIsLoading(false);
+              
                
                 }  
                setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
                 console.log("all enroll is", res?.data?.data);
             }
-        } catch (error) {
+         catch (error) {
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
@@ -185,6 +196,14 @@ const AllEnrollments = () => {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
                 localStorage.setItem("programmeId", JSON.stringify(response.data));
+                let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
+                if (storedData) {
+                    storedData = false; 
+                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                } else {
+                     storedData = false;
+                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                }
                 navigate("/enrollment");
                 setisButtonLoading(false);
             }
@@ -423,6 +442,7 @@ const AllEnrollments = () => {
         setIsModalOpen(true);
         setIsEnrolmentId(rowData?._id);
         setCsrId(rowData?.csr);
+        setCheckType(rowData?.enrollment)
         setisButtonLoading(false);
     };
 
@@ -451,9 +471,9 @@ const AllEnrollments = () => {
                         { label: "Enrollment", value: "Enrollment" },
                         { label: "All Enrollments", value: null },
                     ]}
-                    value={globalFilterValue}
+                    value={enrollmentIdFilterValue}
                     onChange={(e)=>{
-                        onNameDateEnrollmentIdValueFilter(e, "enrollment"); 
+                        onNameDateEnrollmentIdValueFilter(e,"enrollment"); 
                     }}
                     placeholder="Enrollment Type"
                 />
@@ -497,10 +517,10 @@ const AllEnrollments = () => {
         setIsEnrolmentId(rowData?._id);
     };
 
-    const getstateFromRemarks = (e) => {
-        setCheckRemarks(e);
-        console.log("e is", e);
-    };
+    const getstateFromRemarks=(e)=>{
+       setCheckRemarks(e)
+     
+    }
 
     return (
         <>
@@ -509,7 +529,7 @@ const AllEnrollments = () => {
             <div className="card bg-pink-50">
                 <form>
                     <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
-                        <DialogForReject enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
+                        <DialogForReject checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
                     </Dialog>
 
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
