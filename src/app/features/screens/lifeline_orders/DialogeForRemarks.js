@@ -41,7 +41,7 @@ const DialogeForRemarks = ({enrollmentId,getstateFromRemarks}) => {
                 const response = await Axios.patch(`${BASE_URL}/api/user/remarks`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
-                    getstateFromRemarks();
+                    getstateFromRemarks(enrollmentId);
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

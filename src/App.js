@@ -358,13 +358,14 @@ const App = () => {
 
                                 <Route path="/draftall/:id" element={<ShowDraftAll/>}/>
                                  <Route path="/sentall/:id" element={<ShowSentAll/>}/>
+                                <Route  path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
+                                <Route  path="/personalinfo" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
+                                <Route path="/selfaddress" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
+                                <Route path="/selfeligibile" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
+                                <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
+                                <Route path="/resumeapplication"element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
 
-                                <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
-                                <Route path="/selfenrollment/personalinfo/:id" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
-                                <Route path="/selfenrollment/address/:id" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
-                                <Route path="/selfenrollment/eligibile/:id" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
-                                <Route path="/selfenrollment/nationalverifier/:id" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
-                                <Route path="/selfenrollment/resumeapplication" element={isPermitted("/selfenrollment") ? <CreateDepartment /> : <Dashboard />} />
+
                                 <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
                                 <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                 <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
@@ -393,11 +394,11 @@ const App = () => {
                 <Routes>
                     <Route path="/login" element={<LoginScreen />} />
                     <Route path="/selfenrollment" element={<VerifyZip />} />
-                    <Route path="/selfenrollment/personalinfo/:id" element={<PersonalInfo />} />
-                    <Route path="/selfenrollment/address/:id" element={<Address />} />
-                    <Route path="/selfenrollment/eligibile/:id" element={<Eligibility />} />
-                    <Route path="/selfenrollment/nationalverifier/:id" element={<NationalVerifier />} />
-                    <Route path="/selfenrollment/resumeapplication" element={<ResumeApplication />} />
+                    <Route path="/personalinfo" element={<PersonalInfo />} />
+                    <Route path="/selfaddress" element={<Address />} />
+                    <Route path="/selfeligibile" element={<Eligibility />} />
+                    <Route path="/nationalverifier" element={<NationalVerifier />} />
+                    <Route path="/resumeapplication" element={<ResumeApplication />} />
                 </Routes>
             )}
         </>

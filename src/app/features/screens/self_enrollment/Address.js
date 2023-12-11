@@ -12,10 +12,10 @@ const Address = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isBillAddress, setIsBillAddress] = useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
-    const stateData = location.state;
+   
 
-    const { id } = useParams();
+    let storedData = JSON.parse(localStorage.getItem("zip"))
+    const id=storedData?.data?._id
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("This field is required"),
 
@@ -73,7 +73,7 @@ const Address = () => {
                         // Save the response data in local storage
                         localStorage.setItem("homeAddress", JSON.stringify(response.data));
                         // Navigate to the next page
-                        navigate(`/selfenrollment/eligibile/${id}`);
+                        navigate(`/selfeligibile`);
                         setIsLoading(false);
                     }
                 } catch (error) {
@@ -86,6 +86,8 @@ const Address = () => {
     const zip = JSON.parse(localStorage.getItem("zip"));
     useEffect(() => {
         formik.setFieldValue("zip", zip?.data?.zip);
+        formik.setFieldValue("city", zip?.data?.city);
+        formik.setFieldValue("state",zip?.data?.state);
     }, []);
 
     useEffect(() => {
@@ -107,13 +109,9 @@ const Address = () => {
         }
     }, []);
     const handleBack = () => {
-        navigate(-1);
+        navigate("/personalinfo");
     };
-    useEffect(() => {
-        formik.setFieldValue("city", stateData?.city);
-        formik.setFieldValue("state", stateData?.state);
-    }, []);
-
+   
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;

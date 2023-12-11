@@ -11,11 +11,12 @@ const Eligibility = () => {
     const [acpProgram, setAcpProgram] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
-    const { id } = useParams();
+    let storedData = JSON.parse(localStorage.getItem("zip"))
+    const id=storedData?.data?._id
     const eligId = "65142a7ed74a5a9ef93ba53b";
     const navigate = useNavigate();
     const handleBack = () => {
-        navigate(-1);
+        navigate("/selfaddress");
     };
     const formik = useFormik({
         initialValues: {
@@ -43,7 +44,7 @@ const Eligibility = () => {
                     localStorage.setItem("selectProgram", JSON.stringify(res.data));
 
                     // Navigate to the next page
-                    navigate(`/selfenrollment/nationalverifier/${id}`);
+                    navigate(`/nationalverifier`);
                     setIsLoading(false);
                 }
             } catch (error) {
