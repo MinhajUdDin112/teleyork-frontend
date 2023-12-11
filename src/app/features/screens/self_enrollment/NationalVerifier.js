@@ -10,8 +10,8 @@ const NationalVerifier = () => {
     const [checked, setChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { id } = useParams();
-
+    let storedData = JSON.parse(localStorage.getItem("zip"))
+    const id=storedData?.data?._id
     const loginRes = JSON.parse(localStorage.getItem("userData"));
     const companyName = loginRes?.companyName;
 
@@ -23,7 +23,7 @@ const NationalVerifier = () => {
         try {
             const res = await axios.post(`${BASE_URL}/api/enrollment/termsAndConditions`, data);
             const responseData = res.data; // Assuming the API response contains the data you need
-            navigate("/selfenrollment/resumeapplication", { state: { responseData } });
+            navigate("/resumeapplication", { state: { responseData } });
             setIsLoading(false);
         } catch (error) {
             // Handle any errors here
@@ -33,8 +33,8 @@ const NationalVerifier = () => {
         setIsLoading(false);
     };
     const handleBack = () => {
-        // Navigate to a different route
-        navigate(-1);
+       
+        navigate("/selfeligibile");
     };
     return (
         <>

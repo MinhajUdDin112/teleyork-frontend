@@ -131,7 +131,7 @@ const ShowDraftAll = () => {
             <div className="card mx-5 p-0 border-noround">
                 <div className="flex justify-content-between border-bottom-2 bg-orange-200 px-5 py-2">
                     <i className="pi pi-arrow-circle-left flex align-items-center" onClick={() => handleBack()} style={{ cursor: "pointer", fontSize: "2rem" }}></i>
-                    <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft" disabled={!isManage} onClick={handleSubmit} />
+                    <Button className="w-13rem my-2 text-base h-2.5rem font-light" label="Send Draft"  onClick={handleSubmit} />
                 </div>
                 <div>
                     <DataTable tableStyle={{ minWidth: "90rem" }} value={draftByIdRes} showGridlines>

@@ -19,6 +19,8 @@ import DialogeForTransferUser from "./DialogeForTransferUser";
 import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
 import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
+import DialogeForApprove from "./DialogeForApprove";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AllEnrollments = () => {
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
@@ -49,8 +51,10 @@ const AllEnrollments = () => {
     const [filteredDates, setFilteredDates] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
     const [dialogeForTransfer, setDialogeForTransfer] = useState(false);
+    const [dialogeForApprove, setDialogeForApprove] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
     const [checkRemarks, setCheckRemarks] = useState();
+    const [selectedIdsForApprove, setSelectedIdsForApprove] = useState()
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -87,6 +91,7 @@ const AllEnrollments = () => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
+   
 
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
@@ -122,26 +127,6 @@ const AllEnrollments = () => {
      
     };
 
-    // const onDateFilterChange= (e) => {
-    //     setDates(e.value);
-    //     filterByDate(e.value);
-    // };
-
-    // const filterByDate = (selectedDates) => {
-    //     const filteredData = allEnrollments.filter((rowData) => {
-    //         const enrollmentDate = rowData.DOB ? new Date(rowData.DOB.split("T")[0]) : null;
-
-    //         if (selectedDates && selectedDates.length === 2 && enrollmentDate) {
-    //             const startDate = new Date(selectedDates[0]);
-    //             const endDate = new Date(selectedDates[1]);
-    //             return enrollmentDate >= startDate && enrollmentDate <= endDate;
-    //         }
-
-    //         return true;
-    //     });
-
-    //     setFilteredDates(filteredData);
-    // };
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
@@ -173,7 +158,7 @@ const AllEnrollments = () => {
                 }  
                setAllEnrollments(res?.data?.data);
                 setIsLoading(false);
-                console.log("all enroll is", res?.data?.data);
+             
             }
          catch (error) {
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
@@ -221,18 +206,54 @@ const AllEnrollments = () => {
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-        try {
-            const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
-            if (response?.status === 201 || response?.status === 200) {
-                toast.success("Approved");
+       
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                if (response?.status === 201 || response?.status === 200) {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-            setisButtonLoading(false);
-        }
-        getAllEnrollments();
+            getAllEnrollments();
+       
     };
+
+    const approveRowByTl =async(rowData)=>{
+        setisButtonLoading(true);
+        const approvedBy = parseLoginRes?._id;
+        const enrolmentId = rowData?._id;
+        const approved = true;
+        const dataToSend = { approvedBy, enrolmentId, approved };
+        if(checkRemarks==enrolmentId){
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                if (response?.status === 201 || response?.status === 200) {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setisButtonLoading(false);
+            }
+            getAllEnrollments();
+        }
+        else{
+            toast.warning("Please Add Remarks First");
+                 setisButtonLoading(false)
+        }
+    }
+
+
+    const getstateFromRemarks=(e)=>{
+        setCheckRemarks(e)  
+       
+     }
+    
+
+
 
     const runNLAD = async (rowData) => {
         setisButtonLoading(true);
@@ -362,7 +383,7 @@ const AllEnrollments = () => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
-
+            console.log("selected row is",enrollmentIds)
             const dataToSend = {
                 approvedBy: parseLoginRes?._id,
                 enrolmentIds: enrollmentIds,
@@ -405,7 +426,7 @@ const AllEnrollments = () => {
                 )}
 
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
+                <Button label="Approve" onClick={() => approveRowByTl(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
@@ -460,6 +481,18 @@ const AllEnrollments = () => {
         setOpenDialogeForRemarksForIJ(true);
         setIsEnrolmentId(rowData?._id);
     };
+
+    // const handleApproveSelectedForQa=()=>{
+    //     const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
+    //     console.log("ids is",enrollmentIds)
+    //     setSelectedIdsForApprove(enrollmentIds)
+    //     setDialogeForApprove(true);
+        
+    // }
+    // const HnadleAllApproveForQa=()=>{
+
+    // }
+
     const header = () => {
         return (
             <div className="flex flex-wrap justify-content-center mt-2">    
@@ -517,10 +550,7 @@ const AllEnrollments = () => {
         setIsEnrolmentId(rowData?._id);
     };
 
-    const getstateFromRemarks=(e)=>{
-       setCheckRemarks(e)
-     
-    }
+   
 
     return (
         <>
@@ -547,6 +577,9 @@ const AllEnrollments = () => {
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
                         <DialogeForTransferUser enrollmentId={isEnrolmentId} />
                     </Dialog>
+                    {/* <Dialog header={"Add Remarks"} visible={dialogeForApprove} style={{ width: "30vw" }} onHide={() => setDialogeForApprove(false)}>
+                        <DialogeForApprove enrollmentIds={selectedIdsForApprove} />
+                    </Dialog> */}
                 </form>
 
                 <div className="card mx-5 p-0 border-noround">
@@ -560,19 +593,24 @@ const AllEnrollments = () => {
 
                         <div className=" ml-auto flex">
                             <div className="mr-5">
-                                {/* <Calendar
-                    placeholder="Search By Date"
-                    value={dates}
-                    onChange={onDateFilterChange}
-                    selectionMode="range"
-                    showIcon
-                    readOnlyInput
-                    style={{ width: "23rem" }}
-                /> */}
+                               
                             </div>
                             <div className="  flex ">
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />}
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />}
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" 
+                                : 
+                                //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ? 
+                                //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                // :
+                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                }
+
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? ""
+                                //  :
+                                //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
+                                //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                : 
+                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                }
                             </div>
                         </div>
                     </div>
@@ -684,3 +722,4 @@ const AllEnrollments = () => {
     );
 };
 export default AllEnrollments;
+ 
