@@ -127,9 +127,9 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                     "Content-Type": "multipart/form-data",
                 },
             })
-                .then(() => {
-                    console.log("Successfully done");
-                    ref.current.show({ severity: "success", summary: "Info", detail: "Added Successfully" });
+                .then((res) => {
+                     console.log(res.data)
+                    ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Uploaded" });
                 })
                 .catch((error) => {
                     console.log("error occured");
