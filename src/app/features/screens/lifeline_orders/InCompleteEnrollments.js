@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";  
+import { Calendar } from "primereact/calendar";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
@@ -16,14 +17,15 @@ import { InputText } from "primereact/inputtext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const InCompleteEnrollments = () => {
     const [filters, setFilters] = useState({
-        global: { value: null, matchMode: FilterMatchMode.EQUALS },
-        enrollmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        createdDate: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    });
-    const [nameFilterValue, setNameFilterValue] = useState("");
-    const [enrollmentIdFilterValue, setEnrollmentIdFilterValue] = useState("");
-    const [createDateFilterValue, setCreatedDateFilterValue] = useState("");
+        global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
+        enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
+        createdAt:{ value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
+        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
+    
+      });   
+    const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")    
+    const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
+    const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
     const [globalFilterValue, setGlobalFilterValue] = useState("");
     const [fromIncomplete, setFromIncomplete] = useState(null);
 
@@ -39,18 +41,21 @@ const InCompleteEnrollments = () => {
     const onNameDateEnrollmentIdValueFilter = (e, field) => {
         const value = e.target.value;
         let _filters = { ...filters };
-        if (field === "enrollment") {
-            _filters["enrollmentId"].value = value;
+        if(field === "enrollment"){
+        _filters['enrollment'].value = value;   
+        setFilters(_filters);  
+        setEnrollmentIdFilterValue(value); 
+        }  
+        else if(field === "createdTo"){ 
+            setCreatedDateToFilterValue(e.value) 
+            _filters["createdTo"].value =new Date(e.value).toISOString() 
             setFilters(_filters);
-            setEnrollmentIdFilterValue(value);
-        } else if (field === "name") {
-            _filters["name"].value = value;
+        }
+   
+        else{ 
+            setCreatedDateFilterValue(e.value);  
+            _filters["createdAt"].value =new Date(e.value).toISOString() 
             setFilters(_filters);
-            setNameFilterValue(value);
-        } else {
-            _filters["createdDate"].value = value;
-            setFilters(_filters);
-            setCreatedDateFilterValue(value);
         }
     };
 
@@ -94,10 +99,7 @@ const InCompleteEnrollments = () => {
     //     );
     // };
 
-    const onGlobalFilterChange = (e) => {
-        setGlobalFilterValue(e.target.value);
-    };
-
+   
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -123,7 +125,7 @@ const InCompleteEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?serviceProvider=${parseLoginRes?.compony}`);
             if (res?.status === 200 || res?.status === 201) {
-                for (let i = 0; i < res.data.data.length; i++) {
+                for (let i = 0; i < res?.data?.data?.length; i++) {
                     res.data.data[i].enrollment = res.data.data[i].isSelfEnrollment ? "Self Enrollments" : "Enrollment";
                     res.data.data[i].name = `${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`;
                     res.data.data[i].createdDate = new Date(res.data.data[i].createdAt)
@@ -132,7 +134,9 @@ const InCompleteEnrollments = () => {
                             day: "2-digit",
                             year: "numeric",
                         })
-                        .replace(/\//g, "-");
+                        .replace(/\//g, "-");  
+                        res.data.data[i].createdTo=res.data.data[i].createdAt
+                 
                 }
                 setAllInCompletedEnrollments(res?.data?.data);
                 setIsLoading(false);
@@ -180,48 +184,59 @@ const InCompleteEnrollments = () => {
             setisButtonLoading(false);
         }
         setisButtonLoading(false);
-    };
-    const header = () => {
-        return (
+    };  
+    const header=()=>{  
+        return(
             <div className="flex flex-wrap justify-content-center mt-2">
-                <Dropdown
-                    className="mt-2 w-15rem ml-4"
-                    options={[
-                        { label: "Self Enrollment", value: "Self Enrollments" },
-                        { label: "Enrollment", value: "Enrollment" },
-                        { label: "All Enrollments", value: null },
-                    ]}
-                    value={globalFilterValue}
-                    onChange={onGlobalFilterValueChange}
-                    placeholder="Enrollment Type"
-                />
-                <InputText
-                    value={nameFilterValue}
-                    onChange={(e) => {
-                        onNameDateEnrollmentIdValueFilter(e, "name");
-                    }}
-                    className="w-15rem ml-4 mt-2"
-                    placeholder="Search By Name"
-                />
-                <InputText
-                    value={enrollmentIdFilterValue}
-                    onChange={(e) => {
-                        onNameDateEnrollmentIdValueFilter(e, "enrollment");
-                    }}
-                    className="w-15rem ml-4 mt-2"
-                    placeholder="Search By Enrollment ID"
-                />
-                <InputText
-                    value={createDateFilterValue}
-                    onChange={(e) => {
-                        onNameDateEnrollmentIdValueFilter(e, "createdAt");
-                    }}
-                    className="w-15rem ml-4 mt-2"
-                    placeholder="Search By Created Date"
-                />
-            </div>
-        );
-    };
+         
+            <Dropdown
+                       className="mt-2 w-15rem ml-4"
+                       options={[
+                           { label: "Self Enrollment", value: "Self Enrollments" },
+                           { label: "Enrollment", value: "Enrollment" },
+                           { label: "All Enrollments", value: null },
+                       ]}
+                       value={enrollmentIdFilterValue}
+                       onChange={(e)=>{
+                           onNameDateEnrollmentIdValueFilter(e, "enrollment"); 
+                       }}
+                       placeholder="Enrollment Type"
+                   />
+                   <InputText
+                       value={globalFilterValue}
+                       onChange={
+                           onGlobalFilterValueChange}
+                       className="w-15rem ml-4 mt-2"
+                       placeholder="Search By Name or Enrollment ID"
+                   />     
+                   <div className="w-25rem ml-4 mt-2" >
+                   <Calendar
+                    className="w-11rem" 
+         value={createDateFilterValue}
+         dateFormat="mm/dd/yy"  
+         placeholder="Search By Created Date"
+         onChange={(e) => {
+           onNameDateEnrollmentIdValueFilter(e, "createdAt");
+       }}  
+   
+         showIcon
+       />     
+       <label className="w-9rem p-2" style={{textAlign:"center",color:"grey"}}>To</label>  
+       <Calendar
+                 className="w-11rem"   
+         value={createDateToFilterValue}
+         dateFormat="mm/dd/yy"  
+         placeholder="Search By Created Date"
+         onChange={(e) => {
+           onNameDateEnrollmentIdValueFilter(e, "createdTo");
+       }}  
+   
+         showIcon
+       />    
+       </div>
+       </div>
+            )
+       }
     const actionTemplate = (rowData) => {
         return (
             <div>
@@ -234,7 +249,8 @@ const InCompleteEnrollments = () => {
         <div className="card bg-pink-50">
             <div className="card mx-5 p-0 border-noround">
                 <div className="" style={{ padding: "15px" }}>
-                    <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns paginator rows={10} filters={filters} globalFilterFields={["enrollment"]} header={header} emptyMessage="No customers found." rowsPerPageOptions={[25, 50]}>
+                    <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns  paginator rows={10} filters={filters}
+                            globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found." rowsPerPageOptions={[25, 50]}>
                         {/* <Column expander style={{ width: "3em" }} /> */}
                         <Column header="Name" field="name"></Column>
                         <Column header="Address" field="address1"></Column>

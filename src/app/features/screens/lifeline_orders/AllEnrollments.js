@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "primereact/button";
+import { Button } from "primereact/button"; 
+import { Calendar } from "primereact/calendar";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
@@ -15,13 +16,14 @@ import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "./DialogeForRemarks";
 import DialogeForTransferUser from "./DialogeForTransferUser";
-import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ"; 
-import { FilterMatchMode} from 'primereact/api'
+import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
+import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
+import DialogeForApprove from "./DialogeForApprove";
 
-const BASE_URL=process.env.REACT_APP_BASE_URL
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AllEnrollments = () => {
-   const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
+    const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
     const [zipCode, setZipCode] = useState();
@@ -33,24 +35,26 @@ const AllEnrollments = () => {
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [link, setLink] = useState();
     const [allEnrollments, setAllEnrollments] = useState([]);
-    const [expandedRows, setExpandedRows] = useState([]);
+    const [expandedRows, setExpandedRows] = useState([]);  
+    const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
     const [checkType, setCheckType] = useState()
     const [filters, setFilters] = useState({
-        global: { value: null, matchMode: FilterMatchMode.EQUALS },  
-        enrollmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
-        name:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }, 
-        createdDate:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }
-    });    
-    const [globalFilterValue, setGlobalFilterValue] = useState("");   
-    const [nameFilterValue,setNameFilterValue]=useState("")  
-    const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
-    const [createDateFilterValue,setCreatedDateFilterValue]=useState("")    
+        global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO}, 
+        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
+    });
+    const [globalFilterValue, setGlobalFilterValue] = useState("");
+    const [enrollmentIdFilterValue, setEnrollmentIdFilterValue] = useState("");
+    const [createDateFilterValue, setCreatedDateFilterValue] = useState("");
     const [dates, setDates] = useState(null);
     const [filteredDates, setFilteredDates] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
     const [dialogeForTransfer, setDialogeForTransfer] = useState(false);
+    const [dialogeForApprove, setDialogeForApprove] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
-    const [checkRemarks, setCheckRemarks] = useState()
+    const [checkRemarks, setCheckRemarks] = useState();
+    const [selectedIdsForApprove, setSelectedIdsForApprove] = useState()
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -76,71 +80,53 @@ const AllEnrollments = () => {
     //     );
     // };
 
-    
     const navigate = useNavigate();
 
     const handleEnrollmentIdClick = (rowData) => {
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
-        localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
 
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
+   
 
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
         let _filters = { ...filters };
 
-        _filters['global'].value = value;
-         
-        setFilters(_filters);  
-        setGlobalFilterValue(value); 
-      
-    }; 
-     const onNameDateEnrollmentIdValueFilter=(e,field)=>{ 
+        _filters["global"].value = value;
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+    const onNameDateEnrollmentIdValueFilter = (e, field) => {
         const value = e.target.value;
         let _filters = { ...filters };
-        if(field === "enrollment"){
-        _filters['enrollmentId'].value = value;   
-        setFilters(_filters);  
-        setEnrollmentIdFilterValue(value); 
+        if (field === "enrollment") {
+            _filters["enrollment"].value = value;
+            setFilters(_filters);
+            setEnrollmentIdFilterValue(value);
+        }   
+        else if(field === "createdTo"){ 
+            setCreatedDateToFilterValue(e.value) 
+            _filters["createdTo"].value =new Date(e.value).toISOString() 
+            setFilters(_filters);
         } 
-        
-        else if(field === "name"){ 
-         _filters['name'].value=value  
-         setFilters(_filters);  
-         setNameFilterValue(value); 
-        } 
-        else{ 
-            _filters['createdDate'].value=value  
-            setFilters(_filters);  
-            setCreatedDateFilterValue(value);   
-        }
-        
-     } 
-    
-    // const onDateFilterChange= (e) => {
-    //     setDates(e.value);
-    //     filterByDate(e.value);
-    // };
 
-    // const filterByDate = (selectedDates) => {
-    //     const filteredData = allEnrollments.filter((rowData) => {
-    //         const enrollmentDate = rowData.DOB ? new Date(rowData.DOB.split("T")[0]) : null;
+        else {                
+           
+            setCreatedDateFilterValue(e.value);  
+            _filters["createdAt"].value =new Date(e.value).toISOString() 
+            setFilters(_filters);
+            
+            
+       
+        }    
+     
+    };
 
-    //         if (selectedDates && selectedDates.length === 2 && enrollmentDate) {
-    //             const startDate = new Date(selectedDates[0]);
-    //             const endDate = new Date(selectedDates[1]);
-    //             return enrollmentDate >= startDate && enrollmentDate <= endDate;
-    //         }
-
-    //         return true;
-    //     });
-
-    //     setFilteredDates(filteredData);
-    // };
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
@@ -162,13 +148,19 @@ const AllEnrollments = () => {
                                year: "numeric",
                            })
                            .replace(/\//g, "-")
-                     
+                           res.data.data[i].createdTo=res.data.data[i].createdAt
                        } 
                 } 
                     setAllEnrollments(res?.data?.data); 
-                setIsLoading(false);                          
+                setIsLoading(false);
+              
+               
+                }  
+               setAllEnrollments(res?.data?.data);
+                setIsLoading(false);
+             
             }
-        } catch (error) {
+         catch (error) {
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
@@ -176,9 +168,7 @@ const AllEnrollments = () => {
 
     useEffect(() => {
         getAllEnrollments();
-
     }, []);
-
 
     const viewRow = async (rowData) => {
         setisButtonLoading(true);
@@ -187,7 +177,7 @@ const AllEnrollments = () => {
         try {
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
             if (response?.status === 201 || response?.status === 200) {
-                localStorage.removeItem("zipData");  // Use removeItem instead of clearItem
+                localStorage.removeItem("zipData"); // Use removeItem instead of clearItem
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
                 localStorage.setItem("programmeId", JSON.stringify(response.data));
@@ -206,11 +196,32 @@ const AllEnrollments = () => {
             toast.error(error?.response?.data?.msg);
             setisButtonLoading(false);
         }
-        
+
         setisButtonLoading(false);
     };
 
     const approveRow = async (rowData) => {
+        setisButtonLoading(true);
+        const approvedBy = parseLoginRes?._id;
+        const enrolmentId = rowData?._id;
+        const approved = true;
+        const dataToSend = { approvedBy, enrolmentId, approved };
+       
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                if (response?.status === 201 || response?.status === 200) {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setisButtonLoading(false);
+            }
+            getAllEnrollments();
+       
+    };
+
+    const approveRowByTl =async(rowData)=>{
         setisButtonLoading(true);
         const approvedBy = parseLoginRes?._id;
         const enrolmentId = rowData?._id;
@@ -233,14 +244,14 @@ const AllEnrollments = () => {
             toast.warning("Please Add Remarks First");
                  setisButtonLoading(false)
         }
-       
-    };
+    }
 
 
     const getstateFromRemarks=(e)=>{
         setCheckRemarks(e)  
-        console.log("enroll id is",e)
+       
      }
+    
 
 
 
@@ -284,19 +295,18 @@ const AllEnrollments = () => {
                 } else {
                     toast.warning(response?.data?.data?.status);
                 }
-               
+
                 setSelectedRow(rowData);
             }
         } catch (error) {
             const status = error?.response?.status;
 
-            if (status === 500 ||status === 400 ) {
+            if (status === 500 || status === 400) {
                 toast.error(error?.response?.data?.data?.message);
-               
             } else {
                 const error1 = error?.response?.data?.data?.body;
                 const error2 = error?.response?.data?.data?.errors[0]?.description;
-             
+
                 const errorMessage1 = Array.isArray(error1) ? error1.toString() : error1 && typeof error1 === "object" ? JSON.stringify(error1) : error1;
                 const errorMessage2 = Array.isArray(error2) ? error2.toString() : error2 && typeof error2 === "object" ? JSON.stringify(error2) : error2;
                 if (errorMessage1) {
@@ -305,9 +315,7 @@ const AllEnrollments = () => {
                     toast.error("Error is " + errorMessage2);
                 }
             }
-           
-        }
-        finally {
+        } finally {
             setisButtonLoading(false);
         }
     };
@@ -327,7 +335,7 @@ const AllEnrollments = () => {
             setisButtonLoading(false);
         }
     };
-    
+
     const updateUser = async (rowData) => {
         setisButtonLoading(true);
         try {
@@ -338,7 +346,7 @@ const AllEnrollments = () => {
             }
         } catch (error) {
             toast.error(`error is ${error?.response?.data?.data?.body[0]}`);
-          
+
             setisButtonLoading(false);
         }
     };
@@ -375,7 +383,7 @@ const AllEnrollments = () => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
-
+            console.log("selected row is",enrollmentIds)
             const dataToSend = {
                 approvedBy: parseLoginRes?._id,
                 enrolmentIds: enrollmentIds,
@@ -411,14 +419,14 @@ const AllEnrollments = () => {
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
-                 {
-                    parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ?  <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
-                    :
+                {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ? (
+                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                ) : (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
-                }
-                           
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading } />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading } />
+                )}
+
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
+                <Button label="Approve" onClick={() => approveRowByTl(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
@@ -469,30 +477,74 @@ const AllEnrollments = () => {
         setIsEnrolmentId(rowData?._id);
     };
 
-    const handleOpenDialogForRemarksForIJ=(rowData)=>{
+    const handleOpenDialogForRemarksForIJ = (rowData) => {
         setOpenDialogeForRemarksForIJ(true);
         setIsEnrolmentId(rowData?._id);
-    }
+    };
 
-   const header=()=>{  
-    return(
-    <div className="flex flex-wrap justify-content-center mt-2"> 
-    <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={onGlobalFilterValueChange} placeholder="Enrollment Type" />
-    <InputText value={nameFilterValue} onChange={(e)=>{ 
-        onNameDateEnrollmentIdValueFilter(e,"name") 
-    } 
-    } className="w-15rem ml-4 mt-2" placeholder="Search By Name" /> 
-     <InputText value={enrollmentIdFilterValue} onChange={(e)=>{ 
-        onNameDateEnrollmentIdValueFilter(e,"enrollment") 
-    } 
-    } className="w-15rem ml-4 mt-2" placeholder="Search By Enrollment ID" /> 
-     <InputText value={createDateFilterValue} onChange={(e)=>{ 
-        onNameDateEnrollmentIdValueFilter(e,"createdAt") 
-    } 
-    } className="w-15rem ml-4 mt-2" placeholder="Search By Created Date" />
-      
-</div>)
-   }
+    // const handleApproveSelectedForQa=()=>{
+    //     const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
+    //     console.log("ids is",enrollmentIds)
+    //     setSelectedIdsForApprove(enrollmentIds)
+    //     setDialogeForApprove(true);
+        
+    // }
+    // const HnadleAllApproveForQa=()=>{
+
+    // }
+
+    const header = () => {
+        return (
+            <div className="flex flex-wrap justify-content-center mt-2">    
+          
+                <Dropdown
+                    className="mt-2 w-15rem ml-4"
+                    options={[
+                        { label: "Self Enrollment", value: "Self Enrollments" },
+                        { label: "Enrollment", value: "Enrollment" },
+                        { label: "All Enrollments", value: null },
+                    ]}
+                    value={enrollmentIdFilterValue}
+                    onChange={(e)=>{
+                        onNameDateEnrollmentIdValueFilter(e,"enrollment"); 
+                    }}
+                    placeholder="Enrollment Type"
+                />
+                <InputText
+                    value={globalFilterValue}
+                    onChange={
+                        onGlobalFilterValueChange}
+                    className="w-15rem ml-4 mt-2"
+                    placeholder="Search By Name or Enrollment ID"
+                />     
+                <div className="w-25rem ml-4 mt-2" >
+                <Calendar
+                 className="w-11rem" 
+      value={createDateFilterValue}
+      dateFormat="mm/dd/yy"  
+      placeholder="Search By Created Date"
+      onChange={(e) => {
+        onNameDateEnrollmentIdValueFilter(e, "createdAt");
+    }}  
+
+      showIcon
+    />     
+    <label className="w-9rem p-2" style={{textAlign:"center",color:"grey"}}>To</label>  
+    <Calendar
+              className="w-11rem"   
+      value={createDateToFilterValue}
+      dateFormat="mm/dd/yy"  
+      placeholder="Search By Created Date"
+      onChange={(e) => {
+        onNameDateEnrollmentIdValueFilter(e, "createdTo");
+    }}  
+
+      showIcon
+    />    
+    </div>
+            </div>
+        );
+    };
     const transferUser = async (rowData) => {
         setDialogeForTransfer(true);
         setIsEnrolmentId(rowData?._id);
@@ -515,16 +567,19 @@ const AllEnrollments = () => {
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
-                        <DialogeForRemarks getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId}/>
+                        <DialogeForRemarks getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId} />
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
-                        <DialogeForRemarksForIJ getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId}/>
+                        <DialogeForRemarksForIJ getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId} />
                     </Dialog>
 
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
                         <DialogeForTransferUser enrollmentId={isEnrolmentId} />
                     </Dialog>
+                    {/* <Dialog header={"Add Remarks"} visible={dialogeForApprove} style={{ width: "30vw" }} onHide={() => setDialogeForApprove(false)}>
+                        <DialogeForApprove enrollmentIds={selectedIdsForApprove} />
+                    </Dialog> */}
                 </form>
 
                 <div className="card mx-5 p-0 border-noround">
@@ -538,21 +593,24 @@ const AllEnrollments = () => {
 
                         <div className=" ml-auto flex">
                             <div className="mr-5">
-                                {/* <Calendar
-                    placeholder="Search By Date"
-                    value={dates}
-                    onChange={onDateFilterChange}
-                    selectionMode="range"
-                    showIcon
-                    readOnlyInput
-                    style={{ width: "23rem" }}
-                /> */}
+                               
                             </div>
-                            <div className="  flex ">    
-                          
-                              
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />}
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" : <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />}
+                            <div className="  flex ">
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" 
+                                : 
+                                //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ? 
+                                //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                // :
+                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                }
+
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? ""
+                                //  :
+                                //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
+                                //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                : 
+                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                }
                             </div>
                         </div>
                     </div>
@@ -570,24 +628,25 @@ const AllEnrollments = () => {
                             onRowToggle={(e) => setExpandedRows(e.data)}
                             paginator
                             rows={10}
-                            rowsPerPageOptions={[25, 50]} 
+                            rowsPerPageOptions={[25, 50]}
                             filters={filters}
-                            globalFilterFields={['enrollment']} header={header} emptyMessage="No customers found."
-                            
+                            globalFilterFields={["name","enrollmentId"]}
+                            header={header}
+                            emptyMessage="No customers found."
                         >
                             {/* <Column expander style={{ width: "3em" }} /> */}
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
                             <Column selectionMode="multiple" style={{ width: "3em" }} />
                             <Column
-                header="Enrollment ID"
-                field="enrollmentId"
-                body={(rowData) => (
-                    <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
-                        {rowData.enrollmentId}
-                    </button>
-                )}
-            ></Column>
-                            <Column header="Enrollment Type" field="enrollment" ></Column>
+                                header="Enrollment ID"
+                                field="enrollmentId"
+                                body={(rowData) => (
+                                    <button style={{ border: "none", backgroundColor: "white", cursor: "pointer" }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                        {rowData.enrollmentId}
+                                    </button>
+                                )}
+                            ></Column>
+                            <Column header="Enrollment Type" field="enrollment"></Column>
 
                             <Column header="Name" field="name"></Column>
                             <Column header="Address" field="address1"></Column>
@@ -608,11 +667,7 @@ const AllEnrollments = () => {
                                 }
                             />
                             <Column field="contact" header="Contact" />
-                            <Column
-                                field="createdDate"
-                                header="Created At"
-                                  
-                            />
+                            <Column field="createdDate" header="Created At" />
                             <Column field="createdBy.name" header="Created BY" />
                             <Column
                                 field="level"
@@ -667,3 +722,4 @@ const AllEnrollments = () => {
     );
 };
 export default AllEnrollments;
+ 

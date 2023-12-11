@@ -18,7 +18,7 @@ const ResumeApplication = () => {
     const navigate = useNavigate();
 
     const initialInformation = JSON.parse(localStorage.getItem("initialInformation"));
-
+    const enrollmentId =initialInformation?.data?.enrollmentId
     const formik = useFormik({
         initialValues: {
             firstName: "",
@@ -39,14 +39,9 @@ const ResumeApplication = () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/enrollment/selfEnromentSubmit`, dataToSend);
                 if (response?.status == 200 || response?.status == 201) {
-                   
                     setSuccessDialogVisible(true);
-                    localStorage.clear();
-                    localStorage.removeItem("homeAddress");
-                    localStorage.removeItem("selectProgram");
-                    localStorage.removeItem("initialInformation");
-                    setIsLoading(false);
                    
+                    setIsLoading(false);
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -58,6 +53,7 @@ const ResumeApplication = () => {
 
     const hideSuccessDialog = () => {
         setSuccessDialogVisible(false);
+        localStorage.clear();
         navigate("/selfenrollment");
     };
 
@@ -74,7 +70,7 @@ const ResumeApplication = () => {
     useEffect(() => {
         setValues();
     }, []);
-
+    
     return (
         <>
             <ToastContainer />
@@ -88,27 +84,32 @@ const ResumeApplication = () => {
                         <Button label="OK" onClick={hideSuccessDialog} />
                     </div>
                 }
-                // Set showHeader to false to hide the close icon
             >
-                <p>You are Enrolled Successfully</p>
+                <p>
+                    <strong>Enrollment ID: {enrollmentId}</strong> 
+                </p>
+                <p>
+                    <strong>
+                        We have received your information and this is your enrollment id <span style={{ color: "red" }}>{enrollmentId}</span> We will reach you out soon.
+                    </strong>
+                </p>
             </Dialog>
+
             <div
                 style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: "100vh", // Changed height to minHeight
+                    minHeight: "100vh", 
                 }}
             >
                 <div className="col-7">
-                    {/* <div className="col-12">
-                        <p className="text-4xl font-semibold">IJ Wireless</p>
-                    </div> */}
+                   
                     <div className="card flex p-8">
                         <div className="col-6">
                             <p className="text-2xl font-bold">Self Enrollment Completed</p>
                             <p className="mt-0 text-xl">Preview Your Details</p>
-                            {/* <p className="text-lg">Please verify your identity to resume application process.</p> */}
+                           
                         </div>
                         <div className="col-6">
                             <form onSubmit={formik.handleSubmit}>

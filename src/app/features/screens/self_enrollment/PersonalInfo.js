@@ -14,7 +14,11 @@ import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PersonalInfo = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    
+    let storedData = JSON.parse(localStorage.getItem("zip"))
+    const id=storedData?.data?._id
+    console.log("store data is",storedData)
+
     const location = useLocation();
     const stateData = location.state;
     const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +54,7 @@ const PersonalInfo = () => {
             otherwise: () => Yup.string().notRequired(),
         }),
     });
-
+              console.log("id is",id  )
     const formik = useFormik({
         validationSchema,
         initialValues: {
@@ -84,7 +88,7 @@ const PersonalInfo = () => {
                         // Save the response data in local storage
                         localStorage.setItem("initialInformation", JSON.stringify(res.data));
                         // Navigate to the next page
-                        navigate(`/selfenrollment/address/${id}`, { state: stateData });
+                        navigate(`/selfaddress`, { state: stateData });
                         setIsLoading(false);
                     }
                 } catch (error) {

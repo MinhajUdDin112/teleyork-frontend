@@ -4,15 +4,19 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
-import { verifyZipAction } from "../../../store/selfEnrollment/SelfEnrollmentAction";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Axios from "axios";
+import { useState } from "react";
+const BASE_URL=process.env.REACT_APP_BASE_URL
 
 const VerifyZip = () => {
     const { verifyZip, verifyZipLoading, verifyZipError } = useSelector((state) => state.selfEnrollment);
+    const [isButtonLoading, setIsButtonLoading] = useState(false)
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
 
     const validationSchema = Yup.object().shape({
         zipCode: Yup.string()
@@ -26,13 +30,29 @@ const VerifyZip = () => {
             email: "",
             zipCode: "",
         },
-        onSubmit(values) {
+        onSubmit: async (values)=> {
             const newData = {
                 ...values,
                 serviceProvider: "65142a7ed74a5a9ef93ba53b",
                 carrier: "6455532566d6fad6eac59e34",
             };
-            dispatch(verifyZipAction(newData));
+            setIsButtonLoading(true);
+    try {
+        const response = await Axios.post(`${BASE_URL}/api/enrollment/verifyZip`, newData);
+         if (response?.status === 200 || response?.status===201) {
+            localStorage.setItem("zip", JSON.stringify(response.data));
+            localStorage.removeItem("initialInformation");
+            localStorage.removeItem("homeAddress");
+            localStorage.removeItem("selectProgram");
+            navigate("/personalinfo")
+
+         }
+    } catch (error) {
+      
+toast.error(error?.response?.data?.msg)
+setIsButtonLoading(false);
+    }
+    setIsButtonLoading(false)
         },
     });
 
@@ -43,7 +63,7 @@ const VerifyZip = () => {
 
     useEffect(() => {
         if (verifyZip) {
-            navigate(`/selfenrollment/personalinfo/${verifyZip?.data?._id}`, { state: verifyZip?.data });
+            navigate("/personalinfo");
         }
         if (verifyZipError) {
             toast.error(verifyZipError || "An error occurred");
@@ -75,7 +95,7 @@ const VerifyZip = () => {
                                 {getFormErrorMessage("zipCode")}
                                 <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={verifyZipLoading} />
                                     {getFormErrorMessage("email")}
-                                    <Button disabled={verifyZipLoading} label="Next" type="submit" icon={verifyZipLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                                    <Button disabled={isButtonLoading} label="Next" type="submit" icon={isButtonLoading === true ? "pi pi-spin pi-spinner " : ""} />
                                 </div>
                             </div>
                         </div>
