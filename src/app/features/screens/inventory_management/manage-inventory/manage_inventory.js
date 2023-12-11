@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import AddUnits from "./add_units/add_units_flow_page.js";
 import { Card } from "primereact/card";  
+import { useLocation } from "react-router-dom";  
+import { useEffect } from "react";
 import InventoryDashboard from "./inventory_dashboard/inventory_dashboard_flow_page";
 import CreateAssignBox from "./create_assign_box/create_assign_box";
 import UpdateInventory from "./update_inventory/UpdateInventory";
@@ -76,7 +78,37 @@ let InventoryManagment = [
         imgsrc:"/images/Inventory Module.png",
     }
 ];
-const Manage_inventory = () => { 
+const Manage_inventory = () => {     
+    const location = useLocation();
+    const currentPath = location?.pathname  
+    const actionBasedChecks = () => {
+
+        const loginPerms = localStorage.getItem("permissions")
+        const parsedLoginPerms = JSON.parse(loginPerms)
+    
+        const isCreate = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "create"
+            )
+          )
+        );
+     
+        const isManage = parsedLoginPerms.some((node) =>
+          node?.subModule.some((subNode) =>
+            subNode?.route === currentPath && subNode?.actions.some((action) =>
+              action?.name === "manage"
+            )
+          )
+        );
+        setPermissions({isCreate:isCreate,isManage:isManage})
+    
+      }; 
+       
+     const [permission,setPermissions]=useState({})
+     useEffect(()=>{ 
+       actionBasedChecks()
+     },[])     
     let navigate=useNavigate()
     const [activeComponent, setActiveComponent] = useState(null);
 
@@ -89,7 +121,7 @@ const Manage_inventory = () => {
             {activeComponent === "AddUnits" ? (
                 <AddUnits setActiveComponent={setActiveComponent} />
             ) : activeComponent === "UpdateInventory" ? (
-                <UpdateInventory setActiveComponent={setActiveComponent} />
+                <UpdateInventory setActiveComponent={setActiveComponent} permissions={permission}/>
             ) : activeComponent === "ManagePhoneRequests" ? (
                 <ManagePhoneRequests setActiveComponent={setActiveComponent} />
             ) :activeComponent === "CreateAssignBox" ? (

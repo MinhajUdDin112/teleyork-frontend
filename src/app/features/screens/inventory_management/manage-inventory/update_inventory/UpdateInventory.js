@@ -7,7 +7,7 @@ import EsnSimSingleUpload from "./update_esn_sim/single_upload";
 import EsnSimBulkUpload from "./update_esn_sim/bulk_upload";
 import UpdateDeviceSingleUpload from "./update_device/single_upload";
 import UpdateDeviceBulkUpload from "./update_device/bulk_upload";
-const UpdateInventory = ({ setActiveComponent }) => {
+const UpdateInventory = ({ setActiveComponent,permissions }) => {  
     const formik = useFormik({
         initialValues: {
             updatefeature: "",
@@ -45,13 +45,13 @@ const UpdateInventory = ({ setActiveComponent }) => {
             </div>
             <div >
                 {formik.values.updatefeature === "esnsim" && formik.values.uploadtype === "single" ? (
-                    <EsnSimSingleUpload />
+                    <EsnSimSingleUpload permissions={permissions} />
                 ) : formik.values.updatefeature === "esnsim" && formik.values.uploadtype === "bulk" ? (
-                    <EsnSimBulkUpload />
+                    <EsnSimBulkUpload permissions={permissions} />
                 ) : formik.values.updatefeature === "device" && formik.values.uploadtype === "single" ? (
-                    <UpdateDeviceSingleUpload />
+                    <UpdateDeviceSingleUpload permissions={permissions} />
                 ) : formik.values.updatefeature === "device" && formik.values.uploadtype === "bulk" ? (
-                    <UpdateDeviceBulkUpload />
+                    <UpdateDeviceBulkUpload permissions={permissions} />
                 ) : undefined}
             </div>
         </div>
