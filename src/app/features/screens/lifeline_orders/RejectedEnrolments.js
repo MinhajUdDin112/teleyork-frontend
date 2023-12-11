@@ -15,12 +15,10 @@ import { ProgressSpinner } from "primereact/progressspinner";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const RejectedEnrollments = () => {  
     const [filters, setFilters] = useState({
-        global: { value: null, matchMode: FilterMatchMode.EQUALS },  
-        enrollmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
-        name:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }, 
-        createdDate:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }
+        global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
+        enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
+        createdAt:{ value: null, matchMode: FilterMatchMode.STARTS_WITH }
     });    
-    const [nameFilterValue,setNameFilterValue]=useState("")  
     const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
     const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
     const [globalFilterValue, setGlobalFilterValue] = useState("");
@@ -38,17 +36,12 @@ const RejectedEnrollments = () => {
         const value = e.target.value;
         let _filters = { ...filters };
         if(field === "enrollment"){
-        _filters['enrollmentId'].value = value;   
+        _filters['enrollment'].value = value;   
         setFilters(_filters);  
         setEnrollmentIdFilterValue(value); 
-        } 
-        
-        else if(field === "name"){ 
-         _filters['name'].value=value  
-         setFilters(_filters);  
-         setNameFilterValue(value); 
-        } 
-        else{ 
+        }  
+        else{  
+       
             _filters['createdDate'].value=value  
             setFilters(_filters);  
             setCreatedDateFilterValue(value);   
@@ -235,22 +228,28 @@ const RejectedEnrollments = () => {
     const header=()=>{  
         return(
         <div className="flex flex-wrap justify-content-center mt-2">
-       
-          
-        <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={onGlobalFilterValueChange} placeholder="Enrollment Type" />
-        <InputText value={nameFilterValue} onChange={(e)=>{ 
-            onNameDateEnrollmentIdValueFilter(e,"name") 
-        } 
-        } className="w-15rem ml-4 mt-2" placeholder="Search By Name" /> 
-         <InputText value={enrollmentIdFilterValue} onChange={(e)=>{ 
-            onNameDateEnrollmentIdValueFilter(e,"enrollment") 
-        } 
-        } className="w-15rem ml-4 mt-2" placeholder="Search By Enrollment ID" /> 
-         <InputText value={createDateFilterValue} onChange={(e)=>{ 
-            onNameDateEnrollmentIdValueFilter(e,"createdAt") 
-        } 
-        } className="w-15rem ml-4 mt-2" placeholder="Search By Created Date" />
-          
+           
+        <Dropdown className="mt-2 w-15rem ml-4" options={[{label:'Self Enrollment',value:"Self Enrollments"},{label:"Enrollment",value:"Enrollment"},{label:"All Enrollments",value:null}]} value={globalFilterValue} onChange={(e)=>{ 
+                  onNameDateEnrollmentIdValueFilter(e, "enrollment"); 
+                    
+        }} placeholder="Enrollment Type" />
+            <InputText
+                    value={globalFilterValue}
+                    onChange={
+                        onGlobalFilterValueChange}
+                    className="w-15rem ml-4 mt-2"
+                    placeholder="Search By Name or Enrollment ID"
+                />
+             <Calendar   
+             className="ml-4 w-15rem mt-2"
+      value={createDateFilterValue}
+      dateFormat="dd/mm/yy" 
+      placeholder="Search By Created Date"
+      onChange={(e) => {
+        onNameDateEnrollmentIdValueFilter(e, "createdAt");
+    }}
+      showIcon
+    />  
     </div>)
        }
 
@@ -284,7 +283,7 @@ const RejectedEnrollments = () => {
                 {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
                 <div className="">
                 <DataTable value={ allEnrollments} filters={filters}
-                            globalFilterFields={['enrollment']} header={header} emptyMessage="No customers found." stripedRows resizableColumns columnResizeMode="fit"  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                            globalFilterFields={['enrollmentId','name']} header={header} emptyMessage="No customers found." stripedRows resizableColumns columnResizeMode="fit"  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
                            
                             <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
