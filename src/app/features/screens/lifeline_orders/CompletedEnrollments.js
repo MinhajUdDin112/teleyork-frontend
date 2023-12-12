@@ -43,8 +43,10 @@ const CompletedEnrollments = () => {
         setEnrollmentIdFilterValue(value); 
         }     
         else if(field === "createdTo"){ 
-            setCreatedDateToFilterValue(e.value) 
-            _filters["createdTo"].value =new Date(e.value).toISOString() 
+            setCreatedDateToFilterValue(e.value)   
+            const updatedDate = new Date(e.value);
+            updatedDate.setDate(updatedDate.getDate() + 1);
+                  _filters["createdTo"].value =new Date(updatedDate).toISOString() 
             setFilters(_filters);
         }
         else{ 

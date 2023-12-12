@@ -37,7 +37,7 @@ const AllEnrollments = () => {
     const [allEnrollments, setAllEnrollments] = useState([]);
     const [expandedRows, setExpandedRows] = useState([]);  
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
-    const [checkType, setCheckType] = useState()
+    const [checkType, setCheckType] = useState()  
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
          enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -110,8 +110,10 @@ const AllEnrollments = () => {
             setEnrollmentIdFilterValue(value);
         }   
         else if(field === "createdTo"){ 
-            setCreatedDateToFilterValue(e.value) 
-            _filters["createdTo"].value =new Date(e.value).toISOString() 
+            setCreatedDateToFilterValue(e.value)       
+            const updatedDate = new Date(e.value);
+      updatedDate.setDate(updatedDate.getDate() + 1);
+            _filters["createdTo"].value =new Date(updatedDate).toISOString() 
             setFilters(_filters);
         } 
 
@@ -119,10 +121,7 @@ const AllEnrollments = () => {
            
             setCreatedDateFilterValue(e.value);  
             _filters["createdAt"].value =new Date(e.value).toISOString() 
-            setFilters(_filters);
-            
-            
-       
+            setFilters(_filters);   
         }    
      
     };
