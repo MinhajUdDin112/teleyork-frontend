@@ -12,12 +12,13 @@ import { ToastContainer, toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const PersonalInfo = () => {
     const navigate = useNavigate();
     
     let storedData = JSON.parse(localStorage.getItem("zip"))
     const id=storedData?.data?._id
-    console.log("store data is",storedData)
+   
 
     const location = useLocation();
     const stateData = location.state;
@@ -48,13 +49,9 @@ const PersonalInfo = () => {
             then: () => Yup.string().required("This field is required"),
             otherwise: () => Yup.string().notRequired(),
         }),
-        BenifitDOB: Yup.date().when("isDifferentPerson", {
-            is: true,
-            then: () => Yup.date().nullable().required("This field is required").max(new Date(), "DOB cannot be in the future"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
+       
     });
-              console.log("id is",id  )
+           
     const formik = useFormik({
         validationSchema,
         initialValues: {
@@ -133,7 +130,9 @@ const PersonalInfo = () => {
             formik.setFieldValue("BenifitMiddleName", initialInformation?.data?.BenifitMiddleName);
             formik.setFieldValue("BenifitLastName", initialInformation?.data?.BenifitLastName);
             formik.setFieldValue("BenifitSSN", initialInformation?.data?.BenifitSSN);
-            formik.setFieldValue("BenifitDOB", new Date(initialInformation?.data?.BenifitDOB));
+           
+                formik.setFieldValue("BenifitDOB", new Date(initialInformation?.data?.BenifitDOB))
+            
         }
     }, []);
     const handlePaste = (event) => {
@@ -236,8 +235,10 @@ const PersonalInfo = () => {
                                                 <InputText type="password" className="mb-3" placeholder="SSN(Last 4 Digit)" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                                 {getFormErrorMessage("BenifitSSN")}
 
-                                                <Calendar  onPaste={handlePaste} className="mb-3" placeholder="mm/dd/yyyy" name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />
-                                                {getFormErrorMessage("BenifitDOB")}
+
+                                                <Calendar  onPaste={handlePaste} className="mb-3" id="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon  />
+                        {getFormErrorMessage("BenifitDOB")}
+
                                             </div>
                                         )}
                                     </div>

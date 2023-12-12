@@ -20,19 +20,20 @@ const DialogForActivateSim = ({enrollmentId,zipCode}) => {
   const [allESN, setAllESN] = useState([])
   const [allPlan, setAllPlan] = useState([])
   const [isButtonLoading, setisButtonLoading] = useState(false)
- const [checkStatus, setCheckStatus] = useState()
+  const [checkStatus, setCheckStatus] = useState(null);
+
 
 
  const options1 = [
  
-  { label: "Sim", value: "sim." },
-  { label: "Tablet", value: "tablet." },
-  { label: "Phone", value: "phone" },
+  { label: "Sim", value: "sim" },
+  { label: "Tablet", value: "tablet" },
+  { label: "Cell Phone", value: "Cell Phone" },
 ];
 const options2 = [
  
-  { label: "Sim", value: "sim." },
-  { label: "Phone", value: "phone" },
+  { label: "Sim", value: "sim" },
+  { label: "Cell Phone", value: "Cell Phone" },
 ];
 
   const loginRes = localStorage.getItem("userData");
@@ -50,7 +51,7 @@ const formik = useFormik({
       zip:"",    
       planId: "",  
       esn: "",
-      device:""
+      unitType:""
     },
     onSubmit: async (values,actions) => {
       setisButtonLoading(true);
@@ -79,6 +80,7 @@ useEffect(() => {
       const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${enrollmentId}`);
       if (res?.status === 200 || res?.status === 201) {
         setCheckStatus(res?.data?.data?.deviceEligibilty);
+       
       }
     } catch (error) {
       console.log(error?.response?.data?.msg);
@@ -91,19 +93,23 @@ useEffect(() => {
 
 useEffect(() => {
   formik.setFieldValue("zip",zipCode)
-     
-  const getESN = async () => {
-      try {
-          const res = await Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=${parseLoginRes?.compony}`);   
-          setAllESN(res?.data?.data || []);
-          
-      } catch (error) {
-         toast.error(error?.response?.data?.msg);
-      }
-      
+ 
+     if(formik.values.unitType){
+      const getESN = async () => {
+       
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/simInventory/getByUnitType?serviceProvider=${parseLoginRes?.compony}&UnitType=${formik.values.unitType}`);   
+            setAllESN(res?.data?.result || []); 
+               
+        } catch (error) {
+           toast.error(error?.response?.data?.msg);
+        }
+       
+     }
+     getESN();
 }
-getESN();
-},[] )
+
+},[formik.values.unitType])
 
 
 useEffect(() => {
@@ -125,48 +131,44 @@ const getFormErrorMessage = (name) => {
     return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
 };
 
-console.log("status is",checkStatus)
 const renderContent = () => {
-  if (checkStatus === "true" || checkStatus === true) {
-    return (
-      <>
-      
-        <div  >
-        <p className='font-bold'>This Person Is Eligible for Tablet.</p>
-          
-        </div>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <div  >
-        <p className='font-bold' >This Person Is not Eligible for Tablet.</p>        
-        </div>
-      </>
-    );
-  }
+ 
+    if (checkStatus === "true" || checkStatus === true) {
+      return (
+        <>
+        
+          <div  >
+          <p className='font-bold'>This Person Is Eligible for Tablet.</p>    
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div  >
+          <p className='font-bold' >This Person Is not Eligible for Tablet.</p>        
+          </div>
+        </>
+      );
+    }
 };
   return (
     <>
-   
-   
-
 {checkStatus !== null && (
   
       <form onSubmit={formik.handleSubmit}>
       <div className='mb-5'>{renderContent()}</div>
 <div className="flex formgrid grid mt-1  ">
  {
-  checkStatus ==true ? 
+       checkStatus && checkStatus ==true ? 
   <><div className="field col-12 md:col-4">
   <label className="field_label">Select Device<span style={{ color: "red" }}>*</span></label>
-  {getFormErrorMessage("device")}
+  {getFormErrorMessage("unitType")}
   <Dropdown
-     id="device"
-     value={formik.values.device}
+     id="unitType"
+     value={formik.values.unitType}
      onChange={(e) => {
-         formik.setFieldValue("device", e.value);
+         formik.setFieldValue("unitType", e.value);
          formik.handleChange(e);
      }}
      options={options1}
@@ -180,10 +182,10 @@ const renderContent = () => {
   {getFormErrorMessage("esn")}
   <Dropdown
      
-     id="device"
-     value={formik.values.device}
+     id="unitType"
+     value={formik.values.unitType}
      onChange={(e) => {
-         formik.setFieldValue("device", e.value);
+         formik.setFieldValue("unitType", e.value);
          formik.handleChange(e);
      }}
      options={options2}
