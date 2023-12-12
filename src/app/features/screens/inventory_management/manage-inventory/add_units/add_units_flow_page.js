@@ -114,9 +114,9 @@ const AddUnits = ({ setActiveComponent }) => {
             </div>
             {formik.values.unit === "Cell Phone" ? (
                 formik.values.upload === "Single" ? (
-                    <CellPhoneSingleUpload />
+                    <CellPhoneSingleUpload permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Bulk" ? (
-                    <CellPhoneBulkUpload />
+                    <CellPhoneBulkUpload permissions={{isCreate:isCreate}} />
                 ) : undefined
             ) : formik.values.unit === "SIM" ? (
                 formik.values.upload === "Single" && formik.values.provision === "add_stock" ? (
