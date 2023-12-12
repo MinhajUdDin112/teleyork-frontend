@@ -36,7 +36,7 @@ const [liveURL, setLiveURL] = useState()
     useEffect( () => {
         var currentURL;
         var modifiedURL;
-         const currentURL = window.location.href;
+          currentURL = window.location.href;
         // currentURL = "http://dev-ijwireless.teleyork.com/#/login";
         if (currentURL.includes("dev-")) {
             modifiedURL = currentURL.replace("http://dev-", "");
