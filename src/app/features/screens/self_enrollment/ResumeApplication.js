@@ -90,7 +90,9 @@ const ResumeApplication = () => {
                 </p>
                 <p>
                     <strong>
-                        We have received your information and this is your enrollment id <span style={{ color: "red" }}>{enrollmentId}</span> We will reach you out soon.
+                        Congratulations! Your details have been received, and your enrollment ID is <span style={{ color: "red" }}>{enrollmentId}</span>. For further assistance, please call (833) 652-7527. <br></br>
+                                  Thank you for choosing IJ Wireless!
+
                     </strong>
                 </p>
             </Dialog>

@@ -9,14 +9,20 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 import { useState } from "react";
-const BASE_URL=process.env.REACT_APP_BASE_URL
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const VerifyZip = () => {
+
+     //get live  url 
+     window.onload = function() {
+        var currentURL = window.location.href;
+        console.log("live url is",currentURL)      
+    };
+
     const { verifyZip, verifyZipLoading, verifyZipError } = useSelector((state) => state.selfEnrollment);
-    const [isButtonLoading, setIsButtonLoading] = useState(false)
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
 
     const validationSchema = Yup.object().shape({
         zipCode: Yup.string()
@@ -30,29 +36,27 @@ const VerifyZip = () => {
             email: "",
             zipCode: "",
         },
-        onSubmit: async (values)=> {
+        onSubmit: async (values) => {
             const newData = {
                 ...values,
                 serviceProvider: "65142a7ed74a5a9ef93ba53b",
                 carrier: "6455532566d6fad6eac59e34",
             };
             setIsButtonLoading(true);
-    try {
-        const response = await Axios.post(`${BASE_URL}/api/enrollment/verifyZip`, newData);
-         if (response?.status === 200 || response?.status===201) {
-            localStorage.setItem("zip", JSON.stringify(response.data));
-            localStorage.removeItem("initialInformation");
-            localStorage.removeItem("homeAddress");
-            localStorage.removeItem("selectProgram");
-            navigate("/personalinfo")
-
-         }
-    } catch (error) {
-      
-toast.error(error?.response?.data?.msg)
-setIsButtonLoading(false);
-    }
-    setIsButtonLoading(false)
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/enrollment/verifyZip`, newData);
+                if (response?.status === 200 || response?.status === 201) {
+                    localStorage.setItem("zip", JSON.stringify(response.data));
+                    localStorage.removeItem("initialInformation");
+                    localStorage.removeItem("homeAddress");
+                    localStorage.removeItem("selectProgram");
+                    navigate("/personalinfo");
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setIsButtonLoading(false);
+            }
+            setIsButtonLoading(false);
         },
     });
 
@@ -91,9 +95,9 @@ setIsButtonLoading(false);
                             <div className="col-6">
                                 <p className="text-2xl font-bold">Let's see if you are eligible for this benefit</p>
                                 <div className="flex flex-column">
-                                <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled={verifyZipLoading} />
-                                {getFormErrorMessage("zipCode")}
-                                <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={verifyZipLoading} />
+                                    <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled={verifyZipLoading} />
+                                    {getFormErrorMessage("zipCode")}
+                                    <InputText className="mb-3" placeholder="Email" name="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={verifyZipLoading} />
                                     {getFormErrorMessage("email")}
                                     <Button disabled={isButtonLoading} label="Next" type="submit" icon={isButtonLoading === true ? "pi pi-spin pi-spinner " : ""} />
                                 </div>
