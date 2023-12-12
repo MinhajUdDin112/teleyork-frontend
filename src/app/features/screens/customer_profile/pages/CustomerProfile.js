@@ -19,6 +19,7 @@ import DialogeForOneNote from "../DialogeForOneNote";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
+
     const [cpData, setCpData] = useState([]);
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
@@ -26,6 +27,10 @@ const CustomerProfile = () => {
     const [addNewType, setAddNewType] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [isOneNote, setIsOneNote] = useState(false);
+    const [isNoteId, setisNoteId] = useState()
+    const [isEnrollmentId, setisEnrollmentId] = useState()
+    const [isContact, setisContact] = useState()
+
 
     const { state } = useLocation();
     const selectedId = state?.selectedId;
@@ -111,10 +116,6 @@ const CustomerProfile = () => {
     const handleDialogeForAddType = () => {
         setAddNewType(true);
     };
-
-    const handleDialogeForSeeNote = () => {
-        setIsOneNote(true);
-    };
     const options = [
         { label: "Priority ", value: "" },
         { label: "Highest", value: "highest" },
@@ -128,6 +129,16 @@ const CustomerProfile = () => {
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
+    
+    const handleDialogeForSeeNote = (noteId) => {
+        setIsOneNote(true);
+        setisEnrollmentId(cpData?.enrollmentId)
+        setisContact(cpData?.contact)
+        setisNoteId(noteId)  
+        
+    };
+
+   
 
     return (
         <>
@@ -138,8 +149,8 @@ const CustomerProfile = () => {
                     <DialogeForAddNewType />
                 </Dialog>
 
-                <Dialog visible={isOneNote} style={{ width: "50vw" }} onHide={() => setIsOneNote(false)}>
-                    <DialogeForOneNote />
+                <Dialog visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
+                    <DialogeForOneNote enrollmentId={isEnrollmentId} noteId={isNoteId} contact={isContact} />
                 </Dialog>
 
                 <div className="pt-3">
@@ -451,17 +462,16 @@ const CustomerProfile = () => {
                                     <ScrollPanel style={{ width: "100%", height: "200px" }} className="custombar2">
                                         <ul className="pl-0">
                                             {allNotes.map((item) => (
-                                                <li className="flex justify-content-between align-items-center mb-3">
-                                                    <div>
-                                                        <Link >
-                                                        <h6 className="mb-2">{item?.user?.name}</h6>
-                                                        <p className="hide_text">
-                                                           {item?.note}
+                                                <li className="flex justify-content-between align-items-center mb-3" key={item._id}>
+                                                    <div style={{ cursor: "pointer" }}>
+                                                        <h6 className="mb-2" onClick={() => handleDialogeForSeeNote(item._id)}>
+                                                            {item?.user?.name}
+                                                        </h6>
+                                                        <p className="hide_text" onClick={() => handleDialogeForSeeNote(item._id)}>
+                                                            {item?.note}
                                                         </p>
-                                                        </Link>
                                                     </div>
                                                     <div>{item?.createdAt && new Date(item.createdAt).toLocaleDateString()}</div>
-
                                                 </li>
                                             ))}
                                         </ul>
