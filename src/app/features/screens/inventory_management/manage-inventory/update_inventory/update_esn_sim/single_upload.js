@@ -11,10 +11,11 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function EsnSimSingleUpload({ permissions }) {
-    let ref = useRef(null);
+    let ref = useRef(null);   
+    //Getting User Data from localstorage
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
-    console.log(parseLoginRes);
+    const parseLoginRes = JSON.parse(loginRes);    
+    //Adding SIM Model And Agent Details Screen Dialog Visibility
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
@@ -43,7 +44,6 @@ export default function EsnSimSingleUpload({ permissions }) {
                     }
                 })
                 .catch(() => {
-                    console.log("error");   
                     currentEsnToUpdate(null)
                 });
         }
@@ -62,8 +62,7 @@ export default function EsnSimSingleUpload({ permissions }) {
 
                 setCarrier(carrierholder);
             })
-            .catch(() => {
-                console.log("error");  
+            .catch(() => { 
 
             });
         //Getting SIM Model Type for DropDown and Setting it
@@ -80,13 +79,11 @@ export default function EsnSimSingleUpload({ permissions }) {
                 setModel(Modelholder);
             })
             .catch(() => {
-                console.log("error");
             });
         //Getting Departments for DropDown and Setting it
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
                 .then((res) => {
-                    console.log(res.data.data);
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
@@ -94,18 +91,15 @@ export default function EsnSimSingleUpload({ permissions }) {
                         obj.value = res.data.data[i]._id;
                         departmentholder.push(obj);
                     }
-                    console.log("department holder is ", departmentholder);
                     setDepartment(departmentholder);
-                    console.log(department); // Move this inside the promise callback
                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, []);
-    console.log("department is ", department);
     const formik = useFormik({
-        validationSchema: Yup.object({
+        validationSchema: Yup.object({    
+
             SimNumber: Yup.string().required("SIM Number Is Required").min(18, "Sim Number must be at least  18 characters").max(19, "Sim Number must be at most 19 characters"),
         }),
         initialValues: {
@@ -113,9 +107,9 @@ export default function EsnSimSingleUpload({ permissions }) {
             agentType: "",
             AgentName: "",
             SimNumber: "",
-            /* team: "",*/
             box: "",
-            Model: "",
+            Model: "",  
+            status:""
      
         },
         onSubmit: (e) => {
@@ -123,20 +117,31 @@ export default function EsnSimSingleUpload({ permissions }) {
         },
     });
     function handlePopulateDataByEsn(e) {    
-          if(e.target.value.length === 18 || e.target.value.length === 19 ){ 
+          if(e.target.value.length === 18 || e.target.value.length === 19 ){   
+             //Getting SIM Details 
             Axios.get(`${BASE_URL}/api/web/simInventory/getByESN?esn=${e.target.value}`).then((res)=>{  
                 console.log("res is ",res)      
                 setCurrentEsnToUpdate(e.target.value)
                       formik.setFieldValue("agentType",res.data.data.AgentType._id)  
-                      console.log("department data of agent type is",res.data.data.AgentType._id) 
-                      formik.setFieldValue("carrier",res.data.data.carrier._id) 
+                      formik.setFieldValue("carrier",res.data.data.carrier._id)  
+                      formik.setFieldValue("status",res.data.data.status) 
                       formik.setFieldValue("Model",(res.data.data.Model).toLowerCase()) 
                       formik.setFieldValue("box",res.data.data.box)
                       setDefaultSelectedAgent(res.data.data.AgentName._id)
                       setDepartmentSelected(res.data.data.AgentType._id);  
                        
-            }).catch(err=>{ 
-                    setCurrentEsnToUpdate(null)
+            }).catch(err=>{   
+                //Setting this to null so Api Not call if ESN Not found in Inventory
+                    setCurrentEsnToUpdate(null)    
+                    formik.setFieldValue("agentType","")  
+                      formik.setFieldValue("carrier","")  
+                      formik.setFieldValue("status","") 
+                      formik.setFieldValue("Model","") 
+                      formik.setFieldValue("box","")  
+                      formik.setFieldValue("AgentName","")
+                      setDefaultSelectedAgent(null)
+                      setDepartmentSelected(null);
+
             })
               
           } 
@@ -153,7 +158,7 @@ export default function EsnSimSingleUpload({ permissions }) {
           })
         if(currentEsnToUpdate !== null){ 
             Axios.put(`${BASE_URL}/api/web/simInventory/update?simNumber=${currentEsnToUpdate}`,obj).then(()=>{ 
-                
+                   
             }).catch(err=>{ 
 
             })
@@ -188,32 +193,6 @@ export default function EsnSimSingleUpload({ permissions }) {
                         <p className="m-0">Carrier</p>
                         <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder=" -- Select -- " className="w-15rem mt-2" />
                     </div>
-
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">Company Name</p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-15rem mt-2" />
-                    </div>
-                    {/*  <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
-                            Team <span style={{ color: "red" }}>* </span>
-                        </p>
-
-                        <Dropdown
-                            disabled
-                            value={formik.values.team}
-                            options={[]}
-                            onChange={(e) => {
-                                formik.setFieldValue("team", e.value);
-                            }}
-                            placeholder="Select an option"
-                            className="w-15rem mt-2"
-                        />
-                        {formik.errors.team && formik.touched.team && (
-                            <div className="mt-2" style={{ color: "red" }}>
-                                {formik.errors.team}
-                            </div>
-                        )}
-                    </div>    */}
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Department/Vendor Name</p>
 
@@ -263,7 +242,12 @@ export default function EsnSimSingleUpload({ permissions }) {
                         </p>
                         <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder=" -- Select --" className="w-15rem mt-2" />
                     </div>
-
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">Status</p>
+                      
+                        <Dropdown value={formik.values.status} options={[{label:"AVAILABLE",value:"available"},{label:"INUSE",value:"inUse"},{label:"DEACTIVATED",value:"deactivated"}]} onChange={(e) => formik.setFieldValue("status", e.value)} placeholder="Select" className="w-15rem mt-2" />
+                   
+                   </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Box#</p>
                         <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-15rem mt-2" />
