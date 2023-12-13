@@ -13,11 +13,47 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const VerifyZip = () => {
 
-     //get live  url 
-     window.onload = function() {
-        var currentURL = window.location.href;
-        console.log("live url is",currentURL)      
-    };
+    const [companyData, setcompanyData] = useState()
+
+    useEffect( () => {
+      
+        var currentURL;
+        var modifiedURL;
+          currentURL = window.location.href;
+        // currentURL = "http://dev-ijwireless.teleyork.com/#/login";
+        if (currentURL.includes("dev-")) {
+            modifiedURL = currentURL.replace("http://dev-", "");
+            modifiedURL = modifiedURL.replace("/#/", "");
+            if(modifiedURL.includes("login")){
+                modifiedURL = modifiedURL.replace("login", "");
+                console.log("modified url in login", modifiedURL);
+            }   else{
+                modifiedURL = modifiedURL.replace("selfenrollment", "");
+                console.log("modified url in self", modifiedURL);
+            }      
+          
+            
+           
+        } else {
+            modifiedURL = currentURL.replace("http://", "");
+            modifiedURL = modifiedURL.replace("/#/", "");
+            modifiedURL = modifiedURL.replace("login", "");
+            modifiedURL = modifiedURL.replace("selfenrollment", "");
+            console.log("modified url with out dev", modifiedURL);
+          
+        }
+        const sendURl = async ()=>{
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/web/serviceProvider/getSPdetailByDomain?subDomain=${modifiedURL}`);
+                    setcompanyData(response?.data)
+                    localStorage.setItem("companyName", JSON.stringify(response?.data?.data?.name));
+            } catch (error) {
+                console.log("error is", error?.response?.data?.msg);
+            }
+        }
+        sendURl();
+       
+    }, []);
 
     const { verifyZip, verifyZipLoading, verifyZipError } = useSelector((state) => state.selfEnrollment);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -39,8 +75,8 @@ const VerifyZip = () => {
         onSubmit: async (values) => {
             const newData = {
                 ...values,
-                serviceProvider: "65142a7ed74a5a9ef93ba53b",
-                carrier: "6455532566d6fad6eac59e34",
+                serviceProvider: companyData?.data?._id,
+                carrier: companyData?.data?.carrier,
             };
             setIsButtonLoading(true);
             try {

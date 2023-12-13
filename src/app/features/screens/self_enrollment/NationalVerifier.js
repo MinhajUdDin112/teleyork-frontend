@@ -10,10 +10,19 @@ const NationalVerifier = () => {
     const [checked, setChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+
     let storedData = JSON.parse(localStorage.getItem("zip"))
     const id=storedData?.data?._id
+    
     const loginRes = JSON.parse(localStorage.getItem("userData"));
-    const companyName = loginRes?.companyName;
+    
+
+    const cmpnyResString = localStorage.getItem("companyName");
+    const cmpnyRes = cmpnyResString ? JSON.parse(cmpnyResString) : null;
+    const companyName = cmpnyRes;
+    console.log("whole res is",cmpnyRes)
+    console.log("cmpny name is",companyName)
+
 
     const handleNext = async () => {
         setIsLoading(true);
