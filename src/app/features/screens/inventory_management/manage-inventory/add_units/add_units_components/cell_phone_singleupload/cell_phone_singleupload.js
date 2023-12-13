@@ -97,8 +97,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
             .catch(() => {
                 console.log("error");
             });
-    }, []);
-    console.log("department is ", department);
+    }, []); 
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
