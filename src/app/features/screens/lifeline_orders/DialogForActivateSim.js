@@ -27,7 +27,7 @@ const DialogForActivateSim = ({enrollmentId,zipCode}) => {
  const options1 = [
  
   { label: "Sim", value: "sim" },
-  { label: "Tablet", value: "tablet" },
+  { label: "Tablet", value: "Tablet" },
   { label: "Cell Phone", value: "Cell Phone" },
 ];
 const options2 = [
