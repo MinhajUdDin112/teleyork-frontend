@@ -172,29 +172,53 @@ const AllEnrollments = () => {
     const viewRow = async (rowData) => {
         setisButtonLoading(true);
         const _id = rowData._id;
-        setSelectedEnrollmentId(_id);
-        try {
-            const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
-            if (response?.status === 201 || response?.status === 200) {
-                localStorage.removeItem("zipData"); // Use removeItem instead of clearItem
-                localStorage.setItem("basicData", JSON.stringify(response.data));
-                localStorage.setItem("address", JSON.stringify(response.data));
-                localStorage.setItem("programmeId", JSON.stringify(response.data));
-                let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
-                if (storedData) {
-                    storedData = false; 
-                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
-                } else {
-                     storedData = false;
-                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+        const type=rowData?.enrollment;
+        console.log("type is",type)
+        if(type.includes("Self")){
+            setSelectedEnrollmentId(_id);
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
+                if (response?.status === 201 || response?.status === 200) {
+                    localStorage.removeItem("zip");
+                    localStorage.setItem("initialInformation", JSON.stringify(response.data));
+                    localStorage.setItem("homeAddress", JSON.stringify(response.data));
+                    localStorage.setItem("selectProgram", JSON.stringify(response.data));
+                   
+                    navigate("/personalinfo");
+                    setisButtonLoading(false);
                 }
-                navigate("/enrollment");
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-            setisButtonLoading(false);
+
         }
+        else{
+            setSelectedEnrollmentId(_id);
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
+                if (response?.status === 201 || response?.status === 200) {
+                    localStorage.removeItem("zipData"); // Use removeItem instead of clearItem
+                    localStorage.setItem("basicData", JSON.stringify(response.data));
+                    localStorage.setItem("address", JSON.stringify(response.data));
+                    localStorage.setItem("programmeId", JSON.stringify(response.data));
+                    let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
+                    if (storedData) {
+                        storedData = false; 
+                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                    } else {
+                         storedData = false;
+                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                    }
+                    navigate("/enrollment");
+                    setisButtonLoading(false);
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setisButtonLoading(false);
+            }
+        }
+       
 
         setisButtonLoading(false);
     };

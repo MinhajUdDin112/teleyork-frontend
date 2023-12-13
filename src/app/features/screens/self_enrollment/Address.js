@@ -15,30 +15,18 @@ const Address = () => {
    
 
     let storedData = JSON.parse(localStorage.getItem("zip"))
-    const id=storedData?.data?._id
+    var id;
+   let homeData = JSON.parse(localStorage.getItem("initialInformation"))
+   if(storedData){
+      id =  storedData?.data?._id
+   }else{
+       id =  homeData?.data?._id
+   }
+
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("This field is required"),
 
-        mallingAddress1: Yup.string().when("isBillAddress", {
-            is: true,
-            then: () => Yup.string().required("This field is required"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
-        mallingCity: Yup.string().when("isBillAddress", {
-            is: true,
-            then: () => Yup.string().required("This field is required"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
-        mallingState: Yup.string().when("isBillAddress", {
-            is: true,
-            then: () => Yup.string().required("This field is required"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
-        mallingZip: Yup.string().when("isBillAddress", {
-            is: true,
-            then: () => Yup.string().required("This field is required"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
+      
     });
     const formik = useFormik({
         validationSchema,
@@ -83,7 +71,8 @@ const Address = () => {
             }
         },
     });
-    const zip = JSON.parse(localStorage.getItem("zip"));
+    const zip = JSON.parse(localStorage.getItem("initialInformation"));
+
     useEffect(() => {
         formik.setFieldValue("zip", zip?.data?.zip);
         formik.setFieldValue("city", zip?.data?.city);
@@ -117,12 +106,23 @@ const Address = () => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
     };
     const handleBilling = () => {
-        if (isBillAddress === false) {
-            setIsBillAddress(true);
-        } else {
+        if (isBillAddress == true) {
             setIsBillAddress(false);
+        } else {
+            setIsBillAddress(true);
         }
     };
+
+    useEffect(() => {
+        console.log("here out side")
+       
+           
+            formik.setFieldValue("isBillAddress", isBillAddress);
+            console.log("here in  side")
+            console.log("state is",isBillAddress)
+       
+    }, [isBillAddress]);
+    
 
     return (
         <>
@@ -163,7 +163,7 @@ const Address = () => {
                                         </label>
                                     </div>
                                     <div className="mb-2 flex justify-content-center">
-                                        <Checkbox inputId="binary" name="isBillAddress" checked={isBillAddress} onChange={handleBilling} />
+                                        <Checkbox inputId="isBillAddress" name="isBillAddress" checked={isBillAddress} onChange={handleBilling} />
                                         <label htmlFor="binary" className="text-xl flex align-items-center ml-2">
                                             Is your billing address different?
                                         </label>

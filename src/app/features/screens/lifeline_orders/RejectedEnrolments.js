@@ -200,6 +200,14 @@ const RejectedEnrollments = () => {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
                 localStorage.setItem("programmeId", JSON.stringify(response.data));
+                let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
+                if (storedData) {
+                    storedData = false; 
+                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                } else {
+                     storedData = false;
+                    localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                }
                 navigate("/enrollment");
                 setisButtonLoading(false);
             }
