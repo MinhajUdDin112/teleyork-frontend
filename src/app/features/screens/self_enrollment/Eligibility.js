@@ -11,10 +11,19 @@ const Eligibility = () => {
     const [acpProgram, setAcpProgram] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
+
     let storedData = JSON.parse(localStorage.getItem("zip"))
-    const id=storedData?.data?._id
+    var id;
+   let homeData = JSON.parse(localStorage.getItem("initialInformation"))
+   if(storedData){
+      id =  storedData?.data?._id
+   }else{
+       id =  homeData?.data?._id
+   }
+
     const eligId = "65142a7ed74a5a9ef93ba53b";
     const navigate = useNavigate();
+
     const handleBack = () => {
         navigate("/selfaddress");
     };
@@ -44,7 +53,13 @@ const Eligibility = () => {
                     localStorage.setItem("selectProgram", JSON.stringify(res.data));
 
                     // Navigate to the next page
-                    navigate(`/nationalverifier`);
+                    if(storedData){
+                        navigate(`/nationalverifier`);
+                    }
+                    else{
+                        navigate(`/resumeapplication`);
+                    }
+                   
                     setIsLoading(false);
                 }
             } catch (error) {
@@ -55,10 +70,16 @@ const Eligibility = () => {
     });
     useEffect(() => {
         const selectProgram = JSON.parse(localStorage.getItem("selectProgram"));
-        if (selectProgram) {
+       if(selectProgram){
+        if (storedData) {      
             formik.setFieldValue("program", selectProgram?.data?.acpProgram);
+        } else{
+            formik.setFieldValue("program", selectProgram?.data?.acpProgram?._id)
         }
+       }
+       
     }, []);
+
     //get all ACP programs
     const getAcpPrograms = async () => {
         const res = await axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${eligId}`);

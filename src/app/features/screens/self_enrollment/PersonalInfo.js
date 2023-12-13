@@ -11,13 +11,22 @@ import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
+import moment from "moment/moment";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const PersonalInfo = () => {
     const navigate = useNavigate();
-    
-    let storedData = JSON.parse(localStorage.getItem("zip"))
-    const id=storedData?.data?._id
+
+     let storedData = JSON.parse(localStorage.getItem("zip"))
+     var id;
+    let homeData = JSON.parse(localStorage.getItem("initialInformation"))
+    if(storedData){
+       id =  storedData?.data?._id
+    }else{
+        id =  homeData?.data?._id
+    }
+   
    
 
     const location = useLocation();
@@ -70,9 +79,24 @@ const PersonalInfo = () => {
             BenifitDOB: "",
         },
         onSubmit: async (values) => {
+            const selectedDate = formik.values.DOB;   
+            const formattedDate = selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : '';
+
             const newData = {
                 userId: id,
-                ...values,
+                 firstName: formik.values.firstName,
+            middleName: formik.values.middleName,
+            lastName: formik.values.lastName,
+            SSN: formik.values.SSN,
+            suffix: formik.values.suffix,
+            contact: formik.values.contact,
+            DOB: formattedDate,
+            isDifferentPerson:  formik.values.isDifferentPerson,
+            BenifitFirstName:  formik.values.BenifitFirstName,
+            BenifitMiddleName:  formik.values.BenifitMiddleName,
+            BenifitLastName:  formik.values.BenifitLastName,
+            BenifitSSN:  formik.values.BenifitSSN,
+            BenifitDOB:  formik.values.BenifitDOB,
             };
             setIsLoading(true);
             if (formik.values.SSN === formik.values.BenifitSSN || (formik.values.firstName === formik.values.BenifitFirstName && formik.values.lastName === formik.values.BenifitLastName)) {
@@ -130,8 +154,7 @@ const PersonalInfo = () => {
             formik.setFieldValue("BenifitMiddleName", initialInformation?.data?.BenifitMiddleName);
             formik.setFieldValue("BenifitLastName", initialInformation?.data?.BenifitLastName);
             formik.setFieldValue("BenifitSSN", initialInformation?.data?.BenifitSSN);
-           
-                formik.setFieldValue("BenifitDOB", new Date(initialInformation?.data?.BenifitDOB))
+            formik.setFieldValue("BenifitDOB", new Date(initialInformation?.data?.BenifitDOB))
             
         }
     }, []);

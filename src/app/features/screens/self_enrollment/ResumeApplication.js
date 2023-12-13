@@ -53,8 +53,21 @@ const ResumeApplication = () => {
 
     const hideSuccessDialog = () => {
         setSuccessDialogVisible(false);
-        localStorage.clear();
-        navigate("/selfenrollment");
+        let storedData = JSON.parse(localStorage.getItem("zip"))
+    var id;
+   let homeData = JSON.parse(localStorage.getItem("initialInformation"))
+   if(storedData){
+      id =  storedData?.data?._id
+   }else{
+       id =  homeData?.data?._id
+   }
+        if(storedData){
+            navigate("/selfenrollment");
+        }
+        else if(homeData){
+            navigate("/all-enrollments")
+        }
+        
     };
 
     const setValues = () => {
@@ -75,6 +88,7 @@ const ResumeApplication = () => {
         <>
             <ToastContainer />
             <Dialog
+           style={{width:"60%"}}
                 className="dialoge-style"
                 visible={successDialogVisible}
                 onHide={hideSuccessDialog}
@@ -85,12 +99,12 @@ const ResumeApplication = () => {
                     </div>
                 }
             >
-                <p>
+                <p style={{fontSize:"22px"}}> 
                     <strong>Enrollment ID: {enrollmentId}</strong> 
                 </p>
-                <p>
+                <p style={{fontSize:"22px"}}>
                     <strong>
-                        Congratulations! Your details have been received, and your enrollment ID is <span style={{ color: "red" }}>{enrollmentId}</span>. For further assistance, please call (833) 652-7527. <br></br>
+                        Congratulations! Your details have been received, and your enrollment ID is <span style={{ color: "red" }}>{enrollmentId}</span>.<br></br> For further assistance, please call (833) 652-7527. <br></br>
                                   Thank you for choosing IJ Wireless!
 
                     </strong>

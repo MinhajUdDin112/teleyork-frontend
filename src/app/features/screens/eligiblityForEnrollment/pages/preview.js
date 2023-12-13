@@ -47,12 +47,16 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
         localStorage.setItem("fromIncomplete", JSON.stringify(fromIncomplete))
 
       };
+
       useEffect(() => {
+       
        if(!zipRes && parsefromIncompl==false){
         setIsChecked(true )
+       
        }
        else if(!zipRes && parsefromIncompl==true){
         setIsChecked(false )
+       
        }
       }, [])
 
