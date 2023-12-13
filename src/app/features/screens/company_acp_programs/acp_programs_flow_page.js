@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import AddAcpProgram from "./add_acp_programs";
-import ShowPrograms from "./show-acp-programs";
+import AddAcpProgram from "./pages/add_acp_programs";
+import ShowPrograms from "./pages/show-acp-programs";
 import { Button } from "primereact/button";
 export default function AcpProgramsFlowPage() {
     let [addAcpPage, setAcpPage] = useState(false);

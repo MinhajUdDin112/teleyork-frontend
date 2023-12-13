@@ -4,9 +4,9 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-const BillingNavbar = () => {  
-    const BASE_URL=process.env.REACT_APP_BASE_URL
-    const [cpData, setCpData] = useState([])
+const BillingNavbar = () => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const [cpData, setCpData] = useState([]);
 
     const selectedid = localStorage.getItem("selectedId");
     const parseselectedid = JSON.parse(selectedid);
@@ -21,9 +21,8 @@ const BillingNavbar = () => {
     };
 
     useEffect(() => {
-        getCustomerProfileData()
+        getCustomerProfileData();
     }, []);
-
 
     const items = [
         {
@@ -32,9 +31,11 @@ const BillingNavbar = () => {
         },
         {
             label: `MDN:${cpData?.phoneNumber}`,
+         
         },
         {
-            label: `Status: ${cpData?.status}`,
+            label: <span style={{ color: `${cpData?.status === "active" ? "rgba(0, 255, 0, 0.9)" : cpData?.status === "inactive" ? "rgba(255, 0, 0, 0.9)" : cpData?.status === "suspended" ? "rgba(255, 212, 0, 0.9)" : "rgba(244, 2, 231, 0.9)"}` }}>Status: {cpData?.status}</span>,
+           
         },
         {
             label: "Wallet Balance: $ 0",
