@@ -25,20 +25,16 @@ export default function TabletBulkUploadReprovision({permissions}) {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
                 .then((res) => {
-                    console.log(res.data.data);
-                    let departmentholder = [];
+                  let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
                         obj.label = res.data.data[i].department;
                         obj.value = res.data.data[i]._id;
                         departmentholder.push(obj);
                     }
-                    console.log("department holder is ", departmentholder);
                     setDepartment(departmentholder);
-                    console.log(department); // Move this inside the promise callback
                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, []);
@@ -57,7 +53,6 @@ export default function TabletBulkUploadReprovision({permissions}) {
                     setAgent(agentholder);
                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, [departmentselected]);
@@ -75,8 +70,7 @@ export default function TabletBulkUploadReprovision({permissions}) {
                 setCarrier(carrierholder);
             })
             .catch(() => {
-                console.log("error");
-            });
+           });
     }, []);
 
     const formik = useFormik({
@@ -102,10 +96,39 @@ export default function TabletBulkUploadReprovision({permissions}) {
             handlesubmit();
         },
     });
+    function ApiResponseShow({res}){   
+        
+        return( 
+           <div className="flex flex-wrap justify-content-left"> 
+               <p>{res.msg}</p>  
+               <div >
+                <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
+                  <ul className="m-0 list-none"> 
+                       { 
+                          res.data.data.duplicateNumbers.map(item=>( 
+                           <li>{item}</li>
+                          ))
+                       }
+                  </ul>      
+                   </div>
+                  <div className="mt-3">
+                  <p >    
+                  Sim Numbers Added: {res.data.data.newSimNumbers.length}  
+                   
+                   </p> 
+                   <ul className=" m-0 list-none"> 
+                       { 
+                          res.data.data.newSimNumbers.map(item=>( 
+                           <li >{item}</li>
+                          ))
+                       }
+                  </ul>     
+                   </div>
+                   
+           </div>
+        )
+        }
     function handlesubmit() {
-        console.log(formik.values);
-        console.log("handle submit is called ");
-
         const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("serviceProvider", parseLoginRes?.compony);
@@ -116,9 +139,7 @@ export default function TabletBulkUploadReprovision({permissions}) {
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
         // Perform API call or other actions with the formData
-
-        console.log(formik.errors);
-        if (Object.keys(formik.errors).length === 0) {
+      if (Object.keys(formik.errors).length === 0) {
             if (formik.values.file !== "") {
                 formik.values.serviceProvider = parseLoginRes?.compony;
                 Axios.post(`${BASE_URL}/api/web/tabletInventory/bulkAddReprovision`, formData, {
@@ -126,14 +147,11 @@ export default function TabletBulkUploadReprovision({permissions}) {
                         "Content-Type": "multipart/form-data",
                     },
                 })
-                    .then(() => {
-                        console.log("Successfully done");
-                        ref.current.show({ severity: "success", summary: "Info", detail: "Added Successfully" });
+                    .then((res) => {
+                        ref.current.show({ severity: "success", summary: "Info", detail: <ApiResponseShow res={res}/> });
                     })
-                    .catch((error) => {
-                        console.log(error.response.data.msg);
-                        console.log("error occured");
-                        ref.current.show({ severity: "error", summary: "Info", detail: error.response.data.msg });
+                    .catch(() => {
+                         ref.current.show({ severity: "error", summary: "Info", detail:"Bulk Upload Failed" });
                     });
                 formik.values.serviceProvider = parseLoginRes?.companyName;
             } else {
@@ -259,7 +277,7 @@ export default function TabletBulkUploadReprovision({permissions}) {
                                 &nbsp; (Sample file)
                             </p>
                         ) : (
-                            <a download={true} href="/images/addAndAssignNonActivateSim (1).xlsx" className="font-bold">
+                            <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold">
                                 {" "}
                                 &nbsp; (Sample file)
                             </a>

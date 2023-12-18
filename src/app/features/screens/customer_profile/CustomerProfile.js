@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BillingNavbar from "../../billing_and_invoices/components/BillingNavbar";
+import BillingNavbar from "../billing_and_invoices/components/BillingNavbar";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -7,17 +7,16 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Link, useLocation } from "react-router-dom";
-import { DialogeForAddNewType } from "../DialogeForAddNewType";
+import { DialogeForAddNewType } from "./dialogs/DialogeForAddNewType"; 
 import { Dialog } from "primereact/dialog";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";    
-import DisplayAllNotesDialog from "../dialogs/display_all_notes";
+import DisplayAllNotesDialog from "./dialogs/display_all_notes";
 import classNames from "classnames";
 import { ProgressSpinner } from "primereact/progressspinner";
-import DialogeForOneNote from "../DialogeForOneNote";
-
+import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -33,10 +32,8 @@ const CustomerProfile = () => {
      const [displayAllNotesDialogVisibility,setDisplayAllNotesDialogVisibility]=useState(false)
     const { state } = useLocation();
     const selectedId = state?.selectedId;
-
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
     // Validation Schema
     const validationSchema = Yup.object().shape({
         noteType: Yup.string().required("Note Type is Required"),
@@ -139,11 +136,11 @@ const CustomerProfile = () => {
             <ToastContainer />
             <div className="card p-0">
                 <BillingNavbar />
-                <Dialog visible={addNewType} style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
+                <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType />
                 </Dialog>
 
-                <Dialog visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
+                <Dialog  draggable={false}  visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
                     <DialogeForOneNote enrollmentId={isEnrollmentId} noteId={isNoteId} contact={isContact} />
                 </Dialog>
                  <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`  } style={{width:"90vw"}} onHide={()=> setDisplayAllNotesDialogVisibility(prev=>!prev)}> 
