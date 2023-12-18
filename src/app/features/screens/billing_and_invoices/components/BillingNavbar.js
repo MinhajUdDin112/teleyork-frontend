@@ -31,11 +31,19 @@ const BillingNavbar = () => {
         },
         {
             label: `MDN:${cpData?.phoneNumber}`,
-         
         },
         {
-            label: <span style={{ color: `${cpData?.status === "active" ? "rgba(0, 255, 0, 0.9)" : cpData?.status === "inactive" ? "rgba(255, 0, 0, 0.9)" : cpData?.status === "suspended" ? "rgba(255, 212, 0, 0.9)" : "rgba(244, 2, 231, 0.9)"}` }}>Status: {cpData?.status}</span>,
-           
+            label: (
+                <span
+                    className="p-4 text-white  "
+                    style={{
+                        borderRadius: "10px",
+                        backgroundColor: `${cpData?.status === "active" ? "rgba(21, 119, 11, 1)" : cpData?.status === "inactive" ? "rgba(174, 0, 0, 1)" : cpData?.status === "suspended" ? "rgba(255, 191, 0, 1)" : cpData?.status === "prospected" ? "rgba(120, 4, 89, 0.82)" :cpData?.status === "unfitProspect" ? "rgba(0, 0, 0, 1)":""}`,
+                    }}
+                >
+                    Status: {cpData?.status}
+                </span>
+            ),
         },
         {
             label: "Wallet Balance: $ 0",
