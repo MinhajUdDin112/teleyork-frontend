@@ -84,6 +84,8 @@ import InventoryReport from "./app/features/screens/inventory_management/invento
 import CustomerProfile from "./app/features/screens/customer_profile/CustomerProfile"
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
+import Provisioning_queue from "./app/features/screens/lifeline_orders/Provisioning_queue";
+import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
 const App = () => {
 
     const [layoutMode, setLayoutMode] = useState("static");
@@ -328,6 +330,7 @@ const App = () => {
                                 <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
                                 <Route path="/incompleteenrollments" element={isPermitted("/incompleteenrollments") ? <InCompletedEnrollments /> : <Dashboard />} />
                                 <Route path="/rejectedenrollments" element={isPermitted("/rejectedenrollments") ? <RejectedEnrollments /> : <Dashboard />} />
+                                
                                 <Route path="/nladresolutionstatus" element={isPermitted("/nladresolutionstatus") ? <NLADResolutionStatus /> : <Dashboard />} />
                                 <Route path="/handovereventorder" element={isPermitted("/handovereventorder") ? <HandoverEventOrder /> : <Dashboard />} />
                                 <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
@@ -351,6 +354,9 @@ const App = () => {
                                 <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                 <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
                                 <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
+                                <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue")? <Provisioning_queue/> :<Dashboard/>}/>
+
+                                <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments")? <Approved_Enrollments/> :<Dashboard/>}/>
 
                                 {/* <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
                                 <Route path="/sentall/:id" element={isPermitted("/sentall") ? <ShowSentAll /> : <Dashboard />} /> */}

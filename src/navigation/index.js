@@ -22,6 +22,7 @@ export const menuNavigation = [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
                     { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
+                    {label:  "Provisioning Queue", icon: "", to: "/provisioning-queue" },
                     { label: "Bulk Upload", icon: "", to: "/bulk-upload"},
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },

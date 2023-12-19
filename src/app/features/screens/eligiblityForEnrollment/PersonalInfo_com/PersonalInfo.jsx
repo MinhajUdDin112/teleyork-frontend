@@ -433,7 +433,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         <label className="field_label">
                             SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
                         </label>
-                        <InputText type="password" id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
+                        <InputText type="text" id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                         {getFormErrorMessage("SSN")}
                     </div>
 
@@ -634,7 +634,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 <label className="field_label">
                                     SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
                                 </label>
-                                <InputText type="password" className="mb-3" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
+                                <InputText type="text" className="mb-3" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                 {getFormErrorMessage("BenifitSSN")}
                             </div>
                         </div>

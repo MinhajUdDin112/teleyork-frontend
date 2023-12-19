@@ -250,20 +250,32 @@ const AllEnrollments = () => {
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
+        console.log("row data is",rowData)
         if(checkRemarks==enrolmentId){
-            try {
-                const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
-                if (response?.status === 201 || response?.status === 200) {
-                    toast.success("Approved");
+           
+            if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
+                   toast.error("declined")
+                   setisButtonLoading(false);
+                  
+            }
+            else{
+              
+                try {
+                    const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                    if (response?.status === 201 || response?.status === 200) {
+                        toast.success("Approved");
+                        setisButtonLoading(false);
+                    }
+                } catch (error) {
+                    toast.error(error?.response?.data?.msg);
                     setisButtonLoading(false);
                 }
-            } catch (error) {
-                toast.error(error?.response?.data?.msg);
-                setisButtonLoading(false);
+                getAllEnrollments();
             }
-            getAllEnrollments();
-        }
+            }
+           
         else{
+            console.log("remarks no added")
             toast.warning("Please Add Remarks First");
                  setisButtonLoading(false)
         }
@@ -342,15 +354,20 @@ const AllEnrollments = () => {
             setisButtonLoading(false);
         }
     };
+    
     const enrollUser = async (rowData) => {
+        console.log("in side fun")
         setisButtonLoading(true);
         try {
-            const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?enrollmentId=${rowData?._id}`);
+            const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?userId=${parseLoginRes?._id}&enrollmentId=${rowData?._id}`);
+            console.log("out side")
             if (response?.status == "200" || response?.status == "201") {
                 toast.success("Successfully Verify");
+                console.log("in side")
                 setisButtonLoading(false);
             }
         } catch (error) {
+            console.log("in side error")
             const body = error?.response?.data?.data?.body;
 
             const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;

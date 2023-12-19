@@ -15,6 +15,7 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+    const userid= parseLoginRes?._id
     const repId = parseLoginRes?.repId;
    
 
@@ -32,6 +33,7 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
             const data = {
                 repId: parseLoginRes?.repId,
                 enrollmentId: enrollmentId,
+                userId:userid,
                 ...values,
             };
             setisButtonLoading(true);
