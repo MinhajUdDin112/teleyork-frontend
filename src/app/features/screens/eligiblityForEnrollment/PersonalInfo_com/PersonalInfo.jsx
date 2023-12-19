@@ -320,6 +320,7 @@ const handlePaste = (event) => {
                         <label className="field_label">
                             DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                         </label>
+                    
                         <Calendar  onPaste={handlePaste} id="DOB" value={formik.values.DOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon className={classNames({ "p-invalid": isFormFieldValid("DOB") }, "input_text")} />
                         {getFormErrorMessage("DOB")}
                     </div>
