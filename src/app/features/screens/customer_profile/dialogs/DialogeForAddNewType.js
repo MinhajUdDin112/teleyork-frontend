@@ -12,7 +12,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
 
-export const DialogeForAddNewType = () => {
+export const DialogeForAddNewType = ({setNewNoteTypeAdded}) => {
 
     const [isButtonLoading, setisButtonLoading] = useState(false)
 
@@ -44,7 +44,8 @@ export const DialogeForAddNewType = () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/noteType/`, data);
                 if (response?.status == "200" || response?.status == "201") {
-                    toast.success("Successfully Added");
+                    toast.success("Successfully Added"); 
+                    setNewNoteTypeAdded(prev=>!prev)
                     setisButtonLoading(false);
                 }
             } catch (error) {       

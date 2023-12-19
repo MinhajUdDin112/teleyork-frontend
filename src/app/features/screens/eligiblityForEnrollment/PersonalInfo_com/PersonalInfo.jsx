@@ -24,16 +24,28 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     const startYear = 1900;
     const endYear = 2035;
 
-    const startMonth = 1;
-    const endMonth = 12;
+  
     const yearOptions = Array.from({ length: endYear - startYear + 1 }, (_, index) => {
-        const year = startYear + index;
+        const year = endYear - index;  // Adjusted to generate years in descending order
         return { label: year.toString(), value: year };
     });
-    const monthOptions = Array.from({ length: endMonth - startMonth + 1 }, (_, index) => {
-        const month = startMonth + index;
-        return { label: month.toString(), value: month };
-    });
+    const customItemTemplate = (option) => (
+        <div  style={{marginTop:"-10px",marginBottom:"-10px"}}>{option.label}</div>
+      );
+    const monthOptions = [
+        { label: 'Jan-01', value: 1 },
+        { label: 'Feb-02', value: 2 },
+        { label: 'Mar-03', value: 3 },
+        { label: 'Apr-04', value: 4 },
+        { label: 'May-05', value: 5 },
+        { label: 'Jun-06', value: 6 },
+        { label: 'Jul-07', value: 7 },
+        { label: 'Aug-08', value: 8 },
+        { label: 'Sep-09', value: 9 },
+        { label: 'Oct-10', value: 10 },
+        { label: 'Nov-11', value: 11 },
+        { label: 'Dec-12', value: 12 },
+      ];
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
@@ -286,7 +298,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("middleName", parsebasicResponse?.data?.middleName);
             formik.setFieldValue("lastName", parsebasicResponse?.data?.lastName);
             formik.setFieldValue("SSN", parsebasicResponse?.data?.SSN);
-            formik.setFieldValue("DOB", new Date(parsebasicResponse?.data?.DOB));
+            formik.setFieldValue("DOB", new Date(parsebasicResponse?.data?.DOB));         
+              formik.setFieldValue("month",new Date(parsebasicResponse?.data?.DOB).getMonth()+1)  
+              formik.setFieldValue("day",new Date(parsebasicResponse?.data?.DOB).getDate())  
+              formik.setFieldValue("year",new Date(parsebasicResponse?.data?.DOB).getFullYear())
             formik.setFieldValue("email", parsebasicResponse?.data?.email);
             formik.setFieldValue("suffix", parsebasicResponse?.data?.suffix);
             formik.setFieldValue("contact", parsebasicResponse?.data?.contact);
@@ -444,7 +459,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 placeholder="Year"
                                 className={classNames({ "p-invalid": formik.values.year === null && isFormFieldValid("DOB") }, "input_text md-col-3 col-4")}
                                 value={formik.values.year}
-                                id="year"
+                                id="year" 
+                                itemTemplate={customItemTemplate}
                                 onChange={(e) => {
                                     formik.handleChange(e);
                                     if (formik.values.month !== null && formik.values.day !== null) {

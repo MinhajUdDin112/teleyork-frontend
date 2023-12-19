@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import BillingNavbar from "../billing_and_invoices/components/BillingNavbar";
 import { Button } from "primereact/button";
+import "./css/customer-profile.css"
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
 import Axios from "axios";
 import { toast } from "react-toastify";
-import { ScrollPanel } from "primereact/scrollpanel";
-import { Link, useLocation } from "react-router-dom";
-import { DialogeForAddNewType } from "./dialogs/DialogeForAddNewType"; 
+import { useLocation } from "react-router-dom";
+import { DialogeForAddNewType } from "./dialogs/DialogeForAddNewType";
 import { Dialog } from "primereact/dialog";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";    
+import "react-toastify/dist/ReactToastify.css";
 import DisplayAllNotesDialog from "./dialogs/display_all_notes";
 import classNames from "classnames";
 import { ProgressSpinner } from "primereact/progressspinner";
 import DialogeForOneNote from "./dialogs/DialogeForOneNote";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -29,7 +31,10 @@ const CustomerProfile = () => {
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
-     const [displayAllNotesDialogVisibility,setDisplayAllNotesDialogVisibility]=useState(false)
+    //state to refresh Note Type when new note type is added
+    const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
+    //To Display All Notes in Seperate Dialog
+    const [displayAllNotesDialogVisibility, setDisplayAllNotesDialogVisibility] = useState(false);
     const { state } = useLocation();
     const selectedId = state?.selectedId;
     const loginRes = localStorage.getItem("userData");
@@ -78,9 +83,7 @@ const CustomerProfile = () => {
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
-        } catch (error) {
-            console.log(error?.response?.data?.msg);
-        }
+        } catch (error) {}
     };
 
     const getNotesType = async () => {
@@ -103,10 +106,13 @@ const CustomerProfile = () => {
 
     useEffect(() => {
         getCustomerProfileData();
-        getNotesType();
+
         getNotes();
     }, []);
 
+    useEffect(() => {
+        getNotesType();
+    }, [newNoteTypeAdded]);
     const handleDialogeForAddType = () => {
         setAddNewType(true);
     };
@@ -124,28 +130,21 @@ const CustomerProfile = () => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
-    const handleDialogeForSeeNote = (noteId) => {
-        setIsOneNote(true);
-        setisEnrollmentId(cpData?.enrollmentId);
-        setisContact(cpData?.contact);
-        setisNoteId(noteId);
-    };
-
     return (
         <>
             <ToastContainer />
             <div className="card p-0">
                 <BillingNavbar />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
-                    <DialogeForAddNewType />
+                    <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
                 </Dialog>
 
-                <Dialog  draggable={false}  visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
+                <Dialog draggable={false} visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
                     <DialogeForOneNote enrollmentId={isEnrollmentId} noteId={isNoteId} contact={isContact} />
                 </Dialog>
-                 <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`  } style={{width:"90vw"}} onHide={()=> setDisplayAllNotesDialogVisibility(prev=>!prev)}> 
-                    <DisplayAllNotesDialog notes={allNotes}/>
-                 </Dialog>
+                <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`} style={{ width: "90vw" }} onHide={() => setDisplayAllNotesDialogVisibility((prev) => !prev)}>
+                    <DisplayAllNotesDialog notes={allNotes} />
+                </Dialog>
                 <div className="pt-3">
                     <div className="grid">
                         <div className="col-12 lg:col-4">
@@ -439,8 +438,8 @@ const CustomerProfile = () => {
                 </div>
 
                 <div className="p-3">
-                    <div className="grid">
-                        <div className="col-12 lg:col-5">
+                    <div className="flex flex-wrap justify-content-between  flex-row w-full ">
+                        <div className="customer-profilecustomernote mt-4"   >
                             <div>
                                 <div>
                                     <h4>Customer Notes</h4>
@@ -448,41 +447,60 @@ const CustomerProfile = () => {
                                 <hr className="m-0" />
                                 <div className="flex justify-content-between pt-3 pb-3">
                                     <Button label="View Archive Notes" size="small" />
-                                    <Button label="Display Notes" size="small" onClick={()=>{ 
-                                        setDisplayAllNotesDialogVisibility(prev=>!prev)
-                                    }} />
+                                    <Button
+                                        label="Display Notes"
+                                        size="small"
+                                        onClick={() => {
+                                            setDisplayAllNotesDialogVisibility((prev) => !prev);
+                                        }}
+                                    />
                                 </div>
                                 <hr className="m-0" />
-                                <div>
-                                    <ScrollPanel style={{ width: "100%", height: "200px" }} className="custombar2">
-                                        <ul className="pl-0">
-                                            {allNotes.map((item) => (
-                                                <li className="flex justify-content-between align-items-center mb-3" key={item._id}>
-                                                    <div style={{ cursor: "pointer" }}>
-                                                        <h6 className="mb-2" onClick={() => handleDialogeForSeeNote(item._id)}>
-                                                            {item?.user?.name}
-                                                        </h6>
-                                                        <p className="hide_text" onClick={() => handleDialogeForSeeNote(item._id)}>
-                                                            {item?.note}
-                                                        </p>
-                                                    </div>
-                                                    <div>{item?.createdAt && new Date(item.createdAt).toLocaleDateString()}</div>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </ScrollPanel>
+                                <div className="h-20rem" style={{ height: "200px", overflowY: "auto" }}>
+                                    <DataTable
+                                        value={allNotes} 
+                                        tableStyle={{minWidth:"550px"}}
+                                        className="cursor-pointer"
+                                        sortField={["createdAt"]}
+                                        sortOrder={-1}
+                                        onRowClick={(rowData) => {
+                                            setisNoteId(rowData.data._id);
+                                            setisEnrollmentId(cpData?.enrollmentId);
+                                            setisContact(cpData?.contact);
+                                            setIsOneNote((prev) => !prev);
+                                        }}
+                                    >
+                                        <Column header="Created By" field="user.name"></Column>
+                                        <Column header="Note" field="note"></Column>
+                                        <Column header="Priority" field="priority"></Column>
+                                        <Column
+                                            header="Creation Date"
+                                            field="createdAt"
+                                            body={(rowData) => {
+                                                let createdAt = new Date(rowData.createdAt);
+                                                return (
+                                                    <p>{`${(createdAt.getMonth() + 1).toString().padStart(2, "0")}-${createdAt.getDate().toString().padStart(2, "0")}-${createdAt.getFullYear()} ${createdAt.getHours().toString().padStart(2, "0")}:${createdAt
+                                                        .getMinutes()
+                                                        .toString()
+                                                        .padStart(2, "0")}:${createdAt.getSeconds().toString().padStart(2, "0")}`}</p>
+                                                );
+                                            }}
+                                        ></Column>
+                                    </DataTable>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="col-12 lg:col-5">
+                        <div className="cutomer-profileaddnote mt-4"  >
+                            <div className="flex justify-content-between align-items-center  mb-3">
+                                <h4 className="m-0">Add New Note (PC83)</h4>
+                                <span></span>
+                            </div>
+                            <hr className="m-0 mb-2" />
+                            <Button label="Add New Note type" icon="pi pi-plus" size="small" className="mt-2 mb-3" onClick={handleDialogeForAddType} />
+
                             <form onSubmit={formik.handleSubmit}>
                                 <div>
-                                    <div className="flex justify-content-between align-items-center mb-3">
-                                        <h4 className="m-0">Add New Note (PC83)</h4>
-                                        <span></span>
-                                    </div>
-                                    <hr className="m-0 mb-2" />
                                     <Dropdown
                                         id="noteType"
                                         options={allNotesTypes}
@@ -496,7 +514,6 @@ const CustomerProfile = () => {
                                         className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text w-full mb-3")}
                                     />
                                     {getFormErrorMessage("noteType")}
-                                    <Button label="Add New Note type" icon="pi pi-plus" className="mb-3" onClick={handleDialogeForAddType} />
 
                                     <div className="mb-4">
                                         <InputTextarea
@@ -506,7 +523,7 @@ const CustomerProfile = () => {
                                                 formik.handleChange(e);
                                                 setNoteLength(e.target.value.length);
                                             }}
-                                            className={classNames({ "p-invalid": isFormFieldValid("note") }, "input_text")}
+                                            className={classNames({ "p-invalid": isFormFieldValid("note") }, "input_text w-full ")}
                                             rows={5}
                                             cols={64}
                                             onBlur={formik.handleBlur}
