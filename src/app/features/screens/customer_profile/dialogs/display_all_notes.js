@@ -5,6 +5,7 @@ import { Paginator } from "primereact/paginator";
 import { Column } from "primereact/column";  
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 export default function DisplayAllNotesDialog({ notes }) { 
       const [globalFilterValue,setGlobalFilterValue]=useState(null) 
       const [noteFilterValue,setNoteFilterValue]=useState(null)
@@ -13,6 +14,7 @@ export default function DisplayAllNotesDialog({ notes }) {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
          note: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+         priority:{value:null,matchMode:FilterMatchMode.EQUALS}
    });   
     //Global Filter on Notes Data by Posted By
     const onGlobalFilterValueChange = (e) => {
@@ -28,6 +30,14 @@ export default function DisplayAllNotesDialog({ notes }) {
         _filters["note"].value = value;
         setFilters(_filters);
         setNoteFilterValue(value);   
+    }  
+     const [priorityFilterValue,setPriorityFilterValue]=useState(null)
+    const onPriorityFilterValueChange=(e)=>{ 
+        const value = e.value;
+        let _filters = { ...filters };
+        _filters["priority"].value = value;
+        setFilters(_filters);
+        setPriorityFilterValue(value); 
     }
     const header=()=>{ 
          return(   
@@ -45,7 +55,10 @@ export default function DisplayAllNotesDialog({ notes }) {
                 onNoteFilterValueChange}
             className="w-15rem ml-4 mt-2"
             placeholder="Search By Note"
-        />            
+        />        
+               
+               <Dropdown value={priorityFilterValue}   className="w-15rem ml-4 mt-2"
+               placeholder="Search By Priority"  options={[{label:"Highest",value:"highest"},{label:"Low",value:"low"},{label:"Medium",value:"medium"},{label:"Lowest",value:"lowest"},{label:"High",value:"high"}]} onChange={onPriorityFilterValueChange}/>  
         </div> 
          )
     }
@@ -64,13 +77,14 @@ export default function DisplayAllNotesDialog({ notes }) {
                      
                       return( <span>{rowIndex.rowIndex + 1}</span>)}} />
     
-                <Column field="note" header="Notes" />
+                <Column field="note" header="Notes" /> 
+                <Column field="priority" header="Priority"/>
                 <Column field="noteType" header="Note Type" />
                 <Column field="user.name" header="Posted By" />
                 <Column
                     field="createdAt"
                     body={(rowData) => {
-                        console.log(rowData);
+                      
                         let createdAt = new Date(rowData.createdAt);
                         console.log(
                             `${(createdAt.getMonth() + 1).toString().padStart(2, "0")}-${createdAt.getDate().toString().padStart(2, "0")}-${createdAt.getFullYear()} ${createdAt.getHours().toString().padStart(2, "0")}:${createdAt.getMinutes().toString().padStart(2, "0")}:${createdAt

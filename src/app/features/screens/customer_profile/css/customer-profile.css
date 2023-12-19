@@ -1,0 +1,16 @@
+.customer-profilecustomernote{ 
+    width:48%; 
+
+} 
+.cutomer-profileaddnote{ 
+     width:48%;
+}
+@media(max-width:995px){ 
+    .customer-profilecustomernote{ 
+        width:100%; 
+    
+    } 
+    .cutomer-profileaddnote{ 
+         width:100%;
+    }  
+}
