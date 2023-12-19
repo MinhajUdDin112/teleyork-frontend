@@ -58,7 +58,7 @@ export default function SIMCompleteStockReport() {
     }, []);
     return (
         <>
-            <img src="/images/inventory_dashboard/sim.svg" style={{ display: "inline-block", width: "50px", height: "auto" }} />
+            <img src="/images/inventory_dashboard/sim.svg" style={{ display: "inline-block", width: "40px", height: "auto" }} />
 
             <h5 style={{ width: "50px", display: "inline-block", position: "absolute", marginTop: "12px" }}>SIMService</h5>
             {Object.keys(completedsimreport).map((item) => (
@@ -66,19 +66,20 @@ export default function SIMCompleteStockReport() {
                     <div>
                         <span>{item}</span>
                     </div>
-                    <div className="flex justify-content-center align-items-center" style={{ cursor: "pointer", background: `${colors[item]}`, borderRadius: "25px", width: "25px", height: "25px" }}>
+                    <div onClick={() => {
+                                ShowDetails(item);
+                            }} className="flex justify-content-center align-items-center" style={{ cursor: "pointer", background: `${colors[item]}`, borderRadius: "25px", width: "25px", height: "25px" }}>
                         <span
                             style={{ color: "white" }}
-                            onClick={() => {
-                                ShowDetails(item);
-                            }}
+                            
                         >
                             {completedsimreport[item]}
                         </span>
                     </div>
                 </div>
             ))}
-            <Dialog
+            <Dialog 
+              draggable={false}
                 header={currentheader}
                 visible={completereportvisibility}
                 onHide={() => {

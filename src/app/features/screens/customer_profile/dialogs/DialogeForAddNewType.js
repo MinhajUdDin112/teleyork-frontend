@@ -8,6 +8,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import classNames from "classnames";
+import { InputTextarea } from "primereact/inputtextarea";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
 
@@ -69,33 +70,33 @@ export const DialogeForAddNewType = () => {
    <form onSubmit={formik.handleSubmit}>
 
 <ToastContainer/>
-<div className="flex justify-content-between align-items-center">
-                    <div className="">
-                        <label className="field_label">
+<div className="flex justify-content-around flex-wrap ">
+                    <div className="w-15rem mt-2">
+                        <label className="field_label ">
                             Note Type <span className="steric">*</span>
                         </label>
-                        <InputText id="noteType" value={formik.values.noteType} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text")} />
+                        <InputText id="noteType" value={formik.values.noteType} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text","mt-2")} />
                         {getFormErrorMessage("noteType")}
                     </div>
-                    <div className="">
+                    <div className="w-15rem mt-2">
                         <label className="field_label">
                            Note <span className="steric">*</span>
-                        </label>
-                        <textarea id="note" value={formik.values.note} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("note") }, "input_text")} rows={3} cols={30} />
+                        </label>   
+                         <InputTextarea id="note" value={formik.values.note} onChange={formik.handleChange}  style={{border:"solid grey 1px"}} className={classNames({ "p-invalid": isFormFieldValid("note") }, "input_text","mt-2","w-15rem")}/>
                         {getFormErrorMessage("note")}
                     </div>
-                    <div >
+                    <div className="w-15rem mt-2" >
                     <label className="field_label">
                            Status
                         </label>
-                    <Dropdown className="w-15rem"  id="active" options={options} value={formik.values.active} onChange={formik.handleChange} />
+                    <Dropdown className="w-15rem mt-2 "  id="active" options={options} value={formik.values.active} onChange={formik.handleChange} />
                     </div>
                    
  
            
           
             </div>
-            <div className="text-right mt-5">
+            <div className="flex flex-wrap  justify-content-center mt-4">
                 <Button label="Submit" type="submit" icon={isButtonLoading === true ? "pi pi-spin pi-spinner " : ""} className=" ml-2" text raised disabled={isButtonLoading} />
             </div>
             </form>

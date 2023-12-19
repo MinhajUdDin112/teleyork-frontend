@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BillingNavbar from "../../billing_and_invoices/components/BillingNavbar";
+import BillingNavbar from "../billing_and_invoices/components/BillingNavbar";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -7,19 +7,18 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Link, useLocation } from "react-router-dom";
-import { DialogeForAddNewType } from "../DialogeForAddNewType";
+import { DialogeForAddNewType } from "./dialogs/DialogeForAddNewType"; 
 import { Dialog } from "primereact/dialog";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";    
+import DisplayAllNotesDialog from "./dialogs/display_all_notes";
 import classNames from "classnames";
 import { ProgressSpinner } from "primereact/progressspinner";
-import DialogeForOneNote from "../DialogeForOneNote";
-
+import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
-
     const [cpData, setCpData] = useState([]);
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
@@ -27,17 +26,14 @@ const CustomerProfile = () => {
     const [addNewType, setAddNewType] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [isOneNote, setIsOneNote] = useState(false);
-    const [isNoteId, setisNoteId] = useState()
-    const [isEnrollmentId, setisEnrollmentId] = useState()
-    const [isContact, setisContact] = useState()
-
-
+    const [isNoteId, setisNoteId] = useState();
+    const [isEnrollmentId, setisEnrollmentId] = useState();
+    const [isContact, setisContact] = useState();
+     const [displayAllNotesDialogVisibility,setDisplayAllNotesDialogVisibility]=useState(false)
     const { state } = useLocation();
     const selectedId = state?.selectedId;
-
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
     // Validation Schema
     const validationSchema = Yup.object().shape({
         noteType: Yup.string().required("Note Type is Required"),
@@ -59,7 +55,7 @@ const CustomerProfile = () => {
                 customerId: selectedId,
                 ...values,
             };
-           
+
             setisButtonLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/notes/`, data);
@@ -87,7 +83,6 @@ const CustomerProfile = () => {
         }
     };
 
-   
     const getNotesType = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/noteType/all?serviceProvider=${parseLoginRes?.compony}`);
@@ -101,9 +96,8 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
             setAllNotes(res?.data?.data || []);
-           
         } catch (error) {
-           // toast.error(error?.response?.data?.msg);
+            // toast.error(error?.response?.data?.msg);
         }
     };
 
@@ -129,30 +123,29 @@ const CustomerProfile = () => {
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-    
+
     const handleDialogeForSeeNote = (noteId) => {
         setIsOneNote(true);
-        setisEnrollmentId(cpData?.enrollmentId)
-        setisContact(cpData?.contact)
-        setisNoteId(noteId)  
-        
+        setisEnrollmentId(cpData?.enrollmentId);
+        setisContact(cpData?.contact);
+        setisNoteId(noteId);
     };
-
-   
 
     return (
         <>
             <ToastContainer />
             <div className="card p-0">
                 <BillingNavbar />
-                <Dialog visible={addNewType} style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
+                <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType />
                 </Dialog>
 
-                <Dialog visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
+                <Dialog  draggable={false}  visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
                     <DialogeForOneNote enrollmentId={isEnrollmentId} noteId={isNoteId} contact={isContact} />
                 </Dialog>
-
+                 <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`  } style={{width:"90vw"}} onHide={()=> setDisplayAllNotesDialogVisibility(prev=>!prev)}> 
+                    <DisplayAllNotesDialog notes={allNotes}/>
+                 </Dialog>
                 <div className="pt-3">
                     <div className="grid">
                         <div className="col-12 lg:col-4">
@@ -455,7 +448,9 @@ const CustomerProfile = () => {
                                 <hr className="m-0" />
                                 <div className="flex justify-content-between pt-3 pb-3">
                                     <Button label="View Archive Notes" size="small" />
-                                    <Button label="Display Notes" size="small" />
+                                    <Button label="Display Notes" size="small" onClick={()=>{ 
+                                        setDisplayAllNotesDialogVisibility(prev=>!prev)
+                                    }} />
                                 </div>
                                 <hr className="m-0" />
                                 <div>

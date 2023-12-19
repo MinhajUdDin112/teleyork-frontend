@@ -9,7 +9,6 @@ import {Dialog} from "primereact/dialog"
 import {FileUpload} from "primereact/fileupload"
 import { Column } from 'primereact/column'; 
 import { useLocation } from "react-router-dom";   
-
 import { useFormik } from "formik"; 
 import { emptydistributor, employee, emptyemployee, emptyretailer, queuename, distributor, retailer, masteragent, status } from "./asset";
 import { NewYorkStates } from "../../../../../Utils/new_york_states";
@@ -18,10 +17,8 @@ export default function ShippingQueue() {
     const location = useLocation();
     const currentPath = location?.pathname  
     const actionBasedChecks = () => {
-
         const loginPerms = localStorage.getItem("permissions")
         const parsedLoginPerms = JSON.parse(loginPerms)
-    
         const isCreate = parsedLoginPerms.some((node) =>
           node?.subModule.some((subNode) =>
             subNode?.route === currentPath && subNode?.actions.some((action) =>
@@ -30,7 +27,6 @@ export default function ShippingQueue() {
           )
         );
         setIsCreate(isCreate)
-    
         const isManage = parsedLoginPerms.some((node) =>
           node?.subModule.some((subNode) =>
             subNode?.route === currentPath && subNode?.actions.some((action) =>
@@ -39,7 +35,6 @@ export default function ShippingQueue() {
           )
         );
         setIsManage(isManage)
-    
       }; 
       const [isManage,setIsManage]=useState(null)  
       const [isCreate,setIsCreate]=useState(null) 
