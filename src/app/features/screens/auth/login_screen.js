@@ -8,6 +8,7 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import { loginAction } from "../../../store/auth/AuthAction";
 import { useState } from "react";
 import Axios from "axios";
+import { toast } from "react-toastify";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function LoginScreen() {
@@ -41,7 +42,7 @@ const [liveURL, setLiveURL] = useState()
         if (currentURL.includes("dev-")) {
             modifiedURL = currentURL.replace("http://dev-", "");
             modifiedURL = modifiedURL.replace("/#/login", "");
-            console.log("modified url is", modifiedURL);
+           
         } else {
             modifiedURL = currentURL.replace("http://", "");
             modifiedURL = modifiedURL.replace("/#/login", "");
@@ -51,7 +52,7 @@ const [liveURL, setLiveURL] = useState()
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/serviceProvider/getSPdetailByDomain?subDomain=${modifiedURL}`);
             } catch (error) {
-                console.log("error is", error?.response?.data?.msg);
+                
             }
         }
         sendURl();

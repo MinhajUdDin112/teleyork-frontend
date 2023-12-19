@@ -234,7 +234,7 @@ const PersonalInfo = () => {
                                         placeholder="Suffix"
                                     />
 
-                                    <InputText type="password" className="mb-3" placeholder="SSN(Last 4 Digit) " name="SSN" value={formik.values.SSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
+                                    <InputText type="number" className="mb-3" placeholder="SSN(Last 4 Digit) " name="SSN" value={formik.values.SSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                     {getFormErrorMessage("SSN")}
                                     <Calendar onPaste={handlePaste} className="mb-3" name="DOB" placeholder="mm/dd/yyyy" value={formik.values.DOB} onChange={formik.handleChange} showIcon />
                                     {getFormErrorMessage("DOB")}

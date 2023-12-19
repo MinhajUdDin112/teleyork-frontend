@@ -10,8 +10,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"; 
 import { FilterMatchMode} from 'primereact/api'
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const CompletedEnrollments = () => {   
-    
+
+const Approved_Enrollments = () => {
+
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
@@ -65,30 +66,6 @@ const CompletedEnrollments = () => {
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
     };
     
-    // const rowExpansionTemplate = (data) => {
-    //     return (
-    //         <div>
-              
-    //   <DataTable value={[data]} stripedRows >
-                   
-    //                 <Column field="plan.name" header="Plan Name" />
-    //                 <Column field="plan.price" header="Plan Price" />
-    //                 <Column field="Phonecost" header="Phone Cost" />
-    //                 <Column field="Amountpaid" header="Amount Paid by Customer" />
-    //                 <Column field="Postingdate" header="Posting Date" />
-    //                 <Column field="EsnNumber" header="ESN Number" />
-                   
-    //                 <Column field="Activationcall" header="Activation Call" />
-    //                 <Column field="Activationcalldatetime" header="Activation Call Date Time" />
-                   
-    //                 <Column field="Handover" header="Handover Equipment" />
-                   
-    //                 <Column field="Enrolltype" header="Enroll Type" />
-    //                 <Column field="Reviewernote" header="Reviewer Note" />
-    //             </DataTable>
-    //         </div>
-    //     );
-    // };
     
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
@@ -96,7 +73,7 @@ const CompletedEnrollments = () => {
     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${parseLoginRes?._id}`);
+            const res = await Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {   
                 for(let i=0;i<res?.data?.data?.length;i++){ 
                     res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
@@ -126,6 +103,7 @@ const CompletedEnrollments = () => {
     }, []);
     const header=()=>{  
         return(
+            
         <div className="flex flex-wrap justify-content-center mt-2">
          
          <Dropdown
@@ -175,13 +153,17 @@ const CompletedEnrollments = () => {
     </div>
     </div>)
        }
-    return (
-       
-        <div className="card bg-pink-50">
+
+
+  return (
+   <>
+   <div className="card">
+<h4>Approved Enrollments</h4>
+   </div>
+    <div className="card bg-pink-50">
              <ToastContainer/>
             <div className="card mx-5 p-0 border-noround">
               
-             
                 
                 <div className="" style={{  padding: "15px" }}>
                 <DataTable value={ allCompletedEnrollments} filters={filters}
@@ -252,7 +234,8 @@ const CompletedEnrollments = () => {
             </div>
             <br />
         </div> 
-    );
-};
+   </>
+  )
+}
 
-export default CompletedEnrollments;
+export default Approved_Enrollments

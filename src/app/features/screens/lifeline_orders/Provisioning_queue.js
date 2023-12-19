@@ -9,10 +9,15 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"; 
 import { FilterMatchMode} from 'primereact/api'
+import DialogForActivateSim from "./DialogForActivateSim";
+import { Button } from "primereact/button"; 
+import { Dialog } from "primereact/dialog";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const CompletedEnrollments = () => {   
-    
+
+const Provisioning_queue = () => {
+
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
+    const [openDialogeForActivate, setOpenDialogeForActivate] = useState(false);
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
@@ -24,6 +29,9 @@ const CompletedEnrollments = () => {
     const [allCompletedEnrollments, setAllCompletedEnrollments] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [globalFilterValue, setGlobalFilterValue] = useState("");
+    const [isEnrolmentId, setIsEnrolmentId] = useState();
+    const [zipCode, setZipCode] = useState();
+    const [isButtonLoading, setisButtonLoading] = useState(false);
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
         let _filters = { ...filters };
@@ -65,30 +73,6 @@ const CompletedEnrollments = () => {
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
     };
     
-    // const rowExpansionTemplate = (data) => {
-    //     return (
-    //         <div>
-              
-    //   <DataTable value={[data]} stripedRows >
-                   
-    //                 <Column field="plan.name" header="Plan Name" />
-    //                 <Column field="plan.price" header="Plan Price" />
-    //                 <Column field="Phonecost" header="Phone Cost" />
-    //                 <Column field="Amountpaid" header="Amount Paid by Customer" />
-    //                 <Column field="Postingdate" header="Posting Date" />
-    //                 <Column field="EsnNumber" header="ESN Number" />
-                   
-    //                 <Column field="Activationcall" header="Activation Call" />
-    //                 <Column field="Activationcalldatetime" header="Activation Call Date Time" />
-                   
-    //                 <Column field="Handover" header="Handover Equipment" />
-                   
-    //                 <Column field="Enrolltype" header="Enroll Type" />
-    //                 <Column field="Reviewernote" header="Reviewer Note" />
-    //             </DataTable>
-    //         </div>
-    //     );
-    // };
     
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
@@ -96,7 +80,7 @@ const CompletedEnrollments = () => {
     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${parseLoginRes?._id}`);
+            const res = await Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {   
                 for(let i=0;i<res?.data?.data?.length;i++){ 
                     res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
@@ -124,8 +108,25 @@ const CompletedEnrollments = () => {
     useEffect(() => {
         getAllCompletedEnrollments();
     }, []);
+
+    const handleDialogeForActivate = (rowData) => {
+        setOpenDialogeForActivate(true);
+        setIsEnrolmentId(rowData?._id);
+        setZipCode(rowData?.zip);
+    };
+
+    const actionTemplateForPR = (rowData) => {
+        return (
+            <div>
+                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+               
+            </div>
+        );
+    };
+
     const header=()=>{  
         return(
+            
         <div className="flex flex-wrap justify-content-center mt-2">
          
          <Dropdown
@@ -175,13 +176,20 @@ const CompletedEnrollments = () => {
     </div>
     </div>)
        }
-    return (
-       
-        <div className="card bg-pink-50">
+
+
+  return (
+   <>
+    <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
+                        <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
+                    </Dialog>
+   <div className="card">
+<h4>Provisioning Queue</h4>
+   </div>
+    <div className="card bg-pink-50">
              <ToastContainer/>
             <div className="card mx-5 p-0 border-noround">
               
-             
                 
                 <div className="" style={{  padding: "15px" }}>
                 <DataTable value={ allCompletedEnrollments} filters={filters}
@@ -246,13 +254,15 @@ const CompletedEnrollments = () => {
                                     }
                                 }}
                             />
+                             <Column header="Actions" body={actionTemplateForPR}></Column>
                     </DataTable>
                     {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
                 </div>
             </div>
             <br />
         </div> 
-    );
-};
+   </>
+  )
+}
 
-export default CompletedEnrollments;
+export default Provisioning_queue

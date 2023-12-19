@@ -245,11 +245,11 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     }, [isDifferent, isPoBox]);
     
     const handleAddressChange = (e) => {
- console.log("cpmlt add",e)
+
         const address = e?.value?.structured_formatting?.secondary_text
         const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
         const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
-           console.log("address is",address)
+         
         if (address) {
             let cityName = "";
             let trimmedCityName ="";
@@ -260,7 +260,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     const words = cityName.split(' ');
                     if (words.length >= 2) {
                         trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
-                        console.log("trimmed city name is", trimmedCityName);
+                       
                     }
                     
                 }
@@ -271,7 +271,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 if(extractedAddress1){
                     const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
                     formik.setFieldValue("address1",final ); 
-                    console.log("extractedAddress1 is",final)
+                   
                 }else{
                     formik.setFieldValue("address1",completeAddress ); 
                 }
