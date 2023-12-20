@@ -252,11 +252,10 @@ const AllEnrollments = () => {
         const dataToSend = { approvedBy, enrolmentId, approved };
         console.log("row data is",rowData)
         if(checkRemarks==enrolmentId){
-           
+            console.log( rowData?.QualityRemarks)           
             if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
-                   toast.error("declined")
-                   setisButtonLoading(false);
-                  
+                   toast.error("Declined sales can only rejected")
+                   setisButtonLoading(false);              
             }
             else{
               
