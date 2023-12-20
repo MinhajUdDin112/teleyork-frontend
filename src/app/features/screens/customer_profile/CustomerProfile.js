@@ -81,7 +81,8 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
-                setCpData(res?.data?.data || []);
+                setCpData(res?.data?.data || []);     
+                
             }
         } catch (error) {}
     };
@@ -364,7 +365,11 @@ const CustomerProfile = () => {
                                                 <tr>
                                                     <td>NLAD Subscriber ID</td>
                                                     <td>{cpData?.subscriberId}</td>
-                                                </tr>
+                                                </tr>   
+                                                 <tr>  
+                                                 <td>PWG Customer ID</td>
+                                                    <td>--</td>
+                                                     </tr> 
                                                 <tr>
                                                     <td>Approved by</td>
                                                     <td>--</td>
