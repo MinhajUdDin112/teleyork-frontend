@@ -149,7 +149,7 @@ const CustomerProfile = () => {
                 <div className="pt-3">
                     <div className="grid">
                         <div className="col-12 lg:col-4">
-                            <div className="p-3 h-full">
+                            <div className="p-3">
                                 <div className="shadow-2 h-full flex flex-column">
                                     <div className="text-900 font-medium text-lg p-3">Customer Information</div>
 
