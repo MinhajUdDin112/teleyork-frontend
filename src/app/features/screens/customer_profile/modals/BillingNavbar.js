@@ -59,7 +59,7 @@ const BillingNavbar = () => {
                      {cpData?.status}
                 </span>
                  )
-            }} className="mt-4 card border-none  text-xl font-semibold mx-0 bg-white mx-0 p-4" /> 
+            }} className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4" /> 
          
 
         </>

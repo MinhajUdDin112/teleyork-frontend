@@ -299,9 +299,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("lastName", parsebasicResponse?.data?.lastName);
             formik.setFieldValue("SSN", parsebasicResponse?.data?.SSN);
             formik.setFieldValue("DOB", new Date(parsebasicResponse?.data?.DOB));         
-              formik.setFieldValue("month",new Date(parsebasicResponse?.data?.DOB).getMonth()+1)  
-              formik.setFieldValue("day",new Date(parsebasicResponse?.data?.DOB).getDate())  
-              formik.setFieldValue("year",new Date(parsebasicResponse?.data?.DOB).getFullYear())
+            formik.setFieldValue("month",new Date(parsebasicResponse?.data?.DOB).getMonth()+1)  
+            formik.setFieldValue("day",new Date(parsebasicResponse?.data?.DOB).getDate())  
+            formik.setFieldValue("year",new Date(parsebasicResponse?.data?.DOB).getFullYear())
             formik.setFieldValue("email", parsebasicResponse?.data?.email);
             formik.setFieldValue("suffix", parsebasicResponse?.data?.suffix);
             formik.setFieldValue("contact", parsebasicResponse?.data?.contact);
@@ -367,7 +367,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     <h5 className="font-bold enroll">ENROLLMENT ID: {enrollment_id}</h5>
                     <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading || isDuplicate} />
                 </div>
-
                 <p>To apply for the Affordable Connectivity program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
                 <p className="text-xl font-semibold">What is your full legal name?</p>
                 <p>Please provide the name that appears on official documents such as your Social Security Card or State ID, not a nickname.</p>
@@ -454,6 +453,22 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 }}
                                 options={monthOptions}
                                 className={classNames({ "p-invalid": formik.values.month === null && isFormFieldValid("DOB") }, "input_text md-col-3 col-4")}
+                            /> 
+                            <Dropdown
+                                placeholder="Day"
+                                value={formik.values.day}
+                                id="day"
+                                onChange={(e) => {
+                                    formik.handleChange(e);
+                                    if (formik.values.month !== null && formik.values.year !== null) {
+                                        const dateObject = new Date(formik.values.year, formik.values.month - 1, e.value);
+                                        const isoString = dateObject.toISOString();
+                                        formik.setFieldValue("DOB", isoString);
+                                    }
+                                    console.log(formik.values);
+                                }}
+                                options={dayoption}
+                                className={classNames({ "p-invalid": formik.values.day === null && isFormFieldValid("DOB") }, "input_text md-col-3 col-4")}
                             />
                             <Dropdown
                                 placeholder="Year"
@@ -473,22 +488,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 }}
                                 options={yearOptions}
                             />
-                            <Dropdown
-                                placeholder="Day"
-                                value={formik.values.day}
-                                id="day"
-                                onChange={(e) => {
-                                    formik.handleChange(e);
-                                    if (formik.values.month !== null && formik.values.year !== null) {
-                                        const dateObject = new Date(formik.values.year, formik.values.month - 1, e.value);
-                                        const isoString = dateObject.toISOString();
-                                        formik.setFieldValue("DOB", isoString);
-                                    }
-                                    console.log(formik.values);
-                                }}
-                                options={dayoption}
-                                className={classNames({ "p-invalid": formik.values.day === null && isFormFieldValid("DOB") }, "input_text md-col-3 col-4")}
-                            />
+                            
                         </div>
                         {getFormErrorMessage("DOB")}
                     </div>

@@ -30,11 +30,12 @@
   }
   @media(max-width:767px){  
     .p-menuitem-text{
-  margin-top:20px;
-
+  margin-top:0px;
+   margin-left: 30px;
     } 
-    .pi-user,.pi-plus,.pi-circle-fill{ 
-      margin-top: 20px;
+   .menubar .pi-user,.menubar .pi-plus,.menubar .pi-circle-fill{ 
+      margin-top: 0px; 
+      position: absolute;
     } 
     
   }
