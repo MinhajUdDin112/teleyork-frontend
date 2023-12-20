@@ -159,10 +159,7 @@ const CustomerProfile = () => {
                                         <table className="cp_table w-full text-left">
                                             <tbody>
                                                 
-                                                <tr>
-                                                    <td>ACP Qualify</td>
-                                                    <td>{cpData?.acpQualify ? new Date(cpData.acpQualify).toLocaleDateString() : ""}</td>
-                                                </tr>
+                                               
                                                 <tr>
                                                     <td>Service Address</td>
                                                     <td>{cpData?.address1 + " " + cpData?.address2}</td>
