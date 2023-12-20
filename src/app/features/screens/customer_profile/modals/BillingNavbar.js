@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Menubar } from "primereact/menubar";
-import Axios from "axios";
+import Axios from "axios"; 
+import "../css/customer-profile.css"
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
@@ -32,39 +33,35 @@ const BillingNavbar = () => {
         {
             label: `MDN:${cpData?.phoneNumber}`,
         },
+       
         {
-            label: (
-                <span
-                    className="p-4 text-white  "
+            label: "Wallet Balance: $ 0",
+            icon: "pi pi-fw pi-plus",
+        },
+      
+        {
+            label: "ACP",
+            icon: "pi-circle-fill",
+        },
+    ];
+    return (
+        <> 
+              
+            <Menubar model={items}  end={()=>{ 
+                 return( 
+                    <span
+                    className=" text-white p-3 spanstyle"
                     style={{
                         borderRadius: "10px",
                         backgroundColor: `${cpData?.status === "active" ? "rgba(21, 119, 11, 1)" : cpData?.status === "inactive" ? "rgba(174, 0, 0, 1)" : cpData?.status === "suspended" ? "rgba(255, 191, 0, 1)" : cpData?.status === "prospected" ? "rgba(120, 4, 89, 0.82)" :cpData?.status === "unfitProspect" ? "rgba(0, 0, 0, 1)":"orangered"}`,
                     }}
                 >
-                    Status: {cpData?.status}
+                     {cpData?.status}
                 </span>
-            ),
-        },
-        {
-            label: "Wallet Balance: $ 0",
-            icon: "pi pi-fw pi-plus",
-        },
-        {
-            label: "Discount Credit: $ 0.00",
-            icon: "pi pi-fw pi-plus",
-        },
-        {
-            label: "ACP",
-            icon: "pi-circle-fill",
-        },
-        {
-            label: "Modify(PC401) Active(PC95)",
-            icon: "pi pi-fw pi-pencil",
-        },
-    ];
-    return (
-        <>
-            <Menubar model={items} className="border-noround text-sm mx-0 bg-white mx-0 p-2" />
+                 )
+            }} className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4" /> 
+         
+
         </>
     );
 };

@@ -1,0 +1,46 @@
+.customer-profilecustomernote{ 
+    width:48%; 
+
+} 
+.cutomer-profileaddnote{ 
+     width:48%;
+}
+@media(max-width:995px){ 
+    .customer-profilecustomernote{ 
+        width:100%; 
+    
+    } 
+    .cutomer-profileaddnote{ 
+         width:100%;
+    }  
+} 
+.p-menubar{ 
+    width:100%; 
+    display: flex; 
+    flex-direction: row; 
+    justify-content: center;  
+    align-items: center;
+     margin-top: 25px;
+} 
+.spanstyle{ 
+    text-transform: uppercase;
+}
+.p-menuitem-text {
+    font-size: 21px; /* Change the size as needed */
+  }
+  @media(max-width:767px){  
+    .p-menuitem-text{
+  margin-top:0px;
+   margin-left: 30px;
+    } 
+   .menubar .pi-user,.menubar .pi-plus,.menubar .pi-circle-fill{ 
+      margin-top: 0px; 
+      position: absolute;
+    } 
+    
+  }
+  
+
+
+  
+  /* Media query for smaller screens (e.g., mobile devices) */
