@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BillingNavbar from "../billing_and_invoices/components/BillingNavbar";
+import BillingNavbar from "./modals/BillingNavbar";
 import { Button } from "primereact/button";
 import "./css/customer-profile.css"
 import { Dropdown } from "primereact/dropdown";
@@ -158,12 +158,7 @@ const CustomerProfile = () => {
                                     <div>
                                         <table className="cp_table w-full text-left">
                                             <tbody>
-                                                <tr>
-                                                    <td>Verify</td>
-                                                    <td>
-                                                        <Button label="Verify Customer" size="small" />
-                                                    </td>
-                                                </tr>
+                                                
                                                 <tr>
                                                     <td>ACP Qualify</td>
                                                     <td>{cpData?.acpQualify ? new Date(cpData.acpQualify).toLocaleDateString() : ""}</td>
@@ -240,17 +235,7 @@ const CustomerProfile = () => {
                                                         <td>{parseLoginRes?.companyName}</td>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Current Balance</td>
-                                                    <td>0.00</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Add more line</td>
-                                                    <td>
-                                                        <Button label="Add Line" size="small" />
-                                                    </td>
-                                                </tr>
+                                               
                                             </tbody>
                                         </table>
                                     </div>

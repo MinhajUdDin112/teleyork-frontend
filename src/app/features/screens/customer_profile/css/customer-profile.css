@@ -13,4 +13,33 @@
     .cutomer-profileaddnote{ 
          width:100%;
     }  
+} 
+.p-menubar{ 
+    width:100%; 
+    display: flex; 
+    flex-direction: row; 
+    justify-content: center;  
+    align-items: center;
+     margin-top: 25px;
+} 
+.spanstyle{ 
+    text-transform: uppercase;
 }
+.p-menuitem-text {
+    font-size: 21px; /* Change the size as needed */
+  }
+  @media(max-width:767px){  
+    .p-menuitem-text{
+  margin-top:20px;
+
+    } 
+    .pi-user,.pi-plus,.pi-circle-fill{ 
+      margin-top: 20px;
+    } 
+    
+  }
+  
+
+
+  
+  /* Media query for smaller screens (e.g., mobile devices) */
