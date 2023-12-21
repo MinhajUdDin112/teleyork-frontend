@@ -9,18 +9,21 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { useEffect } from "react";
 import { useState } from "react";
 import { Checkbox } from "primereact/checkbox";
-const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments,checkType }) => {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
+    const [checkCompany, setcheckCompany] = useState(false);
     const enrolmentId = enrollmentId;
 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+ 
     // Get role name  from login response
     const roleName = parseLoginRes?.role?.role;
-
+    const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
+   
     const validationSchema = Yup.object().shape({
         reason: Yup.string().required("Please enter Reason"),
     });
@@ -57,10 +60,16 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments,checkType }) =
         },
     });
 
-    
-
     const assignCSRId = () => {
         formik.setFieldValue("assignees", [CSRid]);
+    };
+
+    const checkcompany = () => {
+        if (parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") || parseLoginRes?.companyName.includes("Ij")) {
+            if (toCapital.includes("PROVISION AGENT")) {
+                setcheckCompany(true);
+            }
+        }
     };
 
     useEffect(() => {
@@ -73,6 +82,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments,checkType }) =
             }
         };
         getDepartment();
+        checkcompany();
     }, []);
 
     useEffect(() => {
@@ -98,29 +108,32 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments,checkType }) =
         <>
             <form onSubmit={formik.handleSubmit}>
                 <div className="p-fluid p-formgrid grid ">
-                     {roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ?  (
-                          <>
-                          <div className="p-field col-12 md:col-4 mt-3">
-                              <Button label="Send to Retention" type="button" />
-                          </div>
-                          <div className="p-fluid p-formgrid grid m-2 mt-5">
-                              <h4>Or</h4>
-                          </div>
-                      </>
-                       
-                    ) :  checkType == "Enrollment" ? (
+                    {roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ? (
                         <>
-                        <div className="p-field col-12 md:col-4 mt-3">
-                            <Button label="Assign to Created User" type="button" onClick={assignCSRId} />
-                        </div>
-                        <div className="p-fluid p-formgrid grid m-2 mt-5">
-                            <h4>Or</h4>
-                        </div>
-                    </>
-                    ):""}
-
-                 
-
+                            <div className="p-field col-12 md:col-4 mt-3">
+                                <Button label="Send to Retention" type="button" />
+                            </div>
+                            {/* <div className="p-fluid p-formgrid grid m-2 mt-5">
+                                <h4>Or</h4>
+                            </div> */}
+                        </>
+                    ) : checkType == "Enrollment" ? (
+                        <>
+                            <div className="p-field col-12 md:col-4 mt-3">
+                                <Button label="Assign to Created User" type="button" onClick={assignCSRId} />
+                            </div>
+                            {/* <div className="p-fluid p-formgrid grid m-2 mt-5">
+                                <h4>Or</h4>
+                            </div> */}
+                        </>
+                    ) : (
+                        ""
+                    )}
+                    {checkCompany? "":
+                    <>
+                     <div className="p-fluid p-formgrid grid m-2 mt-5">
+                                <h4>Or</h4>
+                            </div>
                     <div className="p-field col-12 md:col-3">
                         <label className="Label__Text">Assign to department </label>
                         <Dropdown
@@ -134,7 +147,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments,checkType }) =
                             showClear
                             filterBy="label" // Set the property to be used for filtering
                         />
-                    </div>
+                    </div> </>}
                     {formik.values.department ? (
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text ml-3">Select User </label>

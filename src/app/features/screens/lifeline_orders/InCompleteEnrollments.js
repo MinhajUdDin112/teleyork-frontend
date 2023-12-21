@@ -251,7 +251,7 @@ const InCompleteEnrollments = () => {
         <div className="card bg-pink-50">
             <div className="card mx-5 p-0 border-noround">
                 <div className="" style={{ padding: "15px" }}>
-                    <DataTable value={allInCompletedEnrollments} stripedRows resizableColumns  paginator rows={10} filters={filters}
+                    <DataTable  size="small" value={allInCompletedEnrollments} stripedRows resizableColumns  paginator rows={10} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found." rowsPerPageOptions={[25, 50]}>
                         {/* <Column expander style={{ width: "3em" }} /> */}
                         <Column header="Name" field="name"></Column>
