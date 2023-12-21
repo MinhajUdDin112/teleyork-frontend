@@ -22,7 +22,7 @@ import moment from "moment/moment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     const startYear = 1900;
-    const endYear = 2035;
+    const endYear = new Date().getFullYear();
 
   
     const yearOptions = Array.from({ length: endYear - startYear + 1 }, (_, index) => {
