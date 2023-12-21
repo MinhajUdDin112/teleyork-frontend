@@ -276,8 +276,12 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     formik.setFieldValue("address1",completeAddress ); 
                 }
                 const match = completeAddress.match(regex);            
-                const add2 = match ? match[0] : '';
-                formik.setFieldValue("address2", add2);
+                var add2 = match ? match[0] : '';
+                if(add2){
+                   add2 = add2.toUpperCase();
+                    formik.setFieldValue("address2", add2);
+                }
+               
                
             } else {
                 toast.error(`Please choose an address associated with ${formik.values.city}, ${formik.values.state} `);
