@@ -333,8 +333,18 @@ const RejectedEnrollments = () => {
                 <div className="flex justify-content-end border-bottom-2 bg-orange-200 px-5 py-2">{/* <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText> */}</div>
                 {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
                 <div className="">
-                <DataTable value={ allEnrollments} filters={filters}
-                            globalFilterFields={['enrollmentId','name']} header={header} emptyMessage="No customers found." stripedRows resizableColumns columnResizeMode="fit"  paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                <DataTable 
+                value={ allEnrollments} 
+                filters={filters}
+                            globalFilterFields={['enrollmentId','name']}
+                             header={header}
+                              emptyMessage="No customers found." 
+                              stripedRows 
+                              resizableColumns 
+                              columnResizeMode="fit"  
+                              paginator rows={10} 
+                              rowsPerPageOptions={[ 25, 50]}  
+                              size="small">
                             {/* <Column expander style={{ width: "3em" }} /> */}
                            
                             <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
@@ -361,7 +371,7 @@ const RejectedEnrollments = () => {
                                         .replace(/\//g, "-")
                                 }
                             />
-                        <Column field="createdBy?.name" header="Created BY" />
+                        <Column field="createdBy.name" header="Created BY" />
                         <Column field="reajectedReason" header="Rejected Reason" />
                         <Column field="status" header="Status" />
     

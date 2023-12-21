@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import classNames from "classnames";
 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogeForRemarksForIJ = ({enrollmentId,getstateFromRemarks}) => {
+const DialogeForRemarksForIJ = ({enrollmentId, getAllEnrollments}) => {
     const [isCallQualityRemarks, setIsCallQualityRemarks] = useState();
 
     const validationSchema = Yup.object().shape({
@@ -33,7 +33,7 @@ const DialogeForRemarksForIJ = ({enrollmentId,getstateFromRemarks}) => {
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
                     actions.resetForm();
-                    getstateFromRemarks(enrollmentId)
+                    getAllEnrollments();
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

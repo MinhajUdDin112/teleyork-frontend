@@ -192,7 +192,7 @@ const Provisioning_queue = () => {
               
                 
                 <div className="" style={{  padding: "15px" }}>
-                <DataTable value={ allCompletedEnrollments} filters={filters}
+                <DataTable  size="small" value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
                             stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
