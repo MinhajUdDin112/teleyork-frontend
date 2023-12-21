@@ -278,7 +278,7 @@ const AllEnrollments = () => {
            
         else{
             console.log("remarks no added")
-            toast.warning("Please Add Remarks First");
+            toast.error("Please Add Remarks First");
                  setisButtonLoading(false)
         }
     }
