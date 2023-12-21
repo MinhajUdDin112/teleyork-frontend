@@ -22,9 +22,7 @@ import { Column } from "primereact/column";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);     
-    const [expand2,setExpand2]=useState(false) 
-    const [expand,setExpand]=useState(false);  
-    const [expand3,setExpand3]=useState(false)
+    const [expand,setExpand]=useState(false)  
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
     const [allNotes, setAllNotes] = useState([]);
@@ -159,7 +157,7 @@ const CustomerProfile = () => {
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div className={classNames({ "customstyle": !expand2 })}>
+                                    <div >
                                         <table className="cp_table w-full text-left" >
                                             <tbody>
                                                 
@@ -245,7 +243,6 @@ const CustomerProfile = () => {
                                                 </tr>
                                             </tbody>
                                         </table> 
-                                        <Button label={`${!expand2 ? "See More":"See Less"}`} onClick={()=>{setExpand2(prev=>!prev)}} className={classNames({ "seemore-button": !expand2 },"w-full")} icon={`${!expand2 ? "pi pi-plus" :"pi pi-minus"}`} iconPos="right" />
                                   
                                     </div>
                                 </div>
@@ -400,7 +397,7 @@ const CustomerProfile = () => {
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div className={classNames({ "customstyle": !expand3 })}>
+                                    <div >
                                         <table class="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
@@ -465,7 +462,6 @@ const CustomerProfile = () => {
                                                 </tr>
                                             </tbody>
                                         </table>  
-                                        <Button label={`${!expand3 ? "See More":"See Less"}`} onClick={()=>{setExpand3(prev=>!prev)}} className={classNames({ "seemore-button": !expand3 },"w-full")} icon={`${!expand3 ? "pi pi-plus" :"pi pi-minus"}`} iconPos="right" />
                                     
                                     </div>
                                 </div>
