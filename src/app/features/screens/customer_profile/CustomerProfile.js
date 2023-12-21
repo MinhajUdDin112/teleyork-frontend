@@ -132,7 +132,7 @@ const CustomerProfile = () => {
     };
 
     return (
-        <>
+        <div className="card">
             <ToastContainer />
             <div className="card p-0">
                 <BillingNavbar />
@@ -148,9 +148,9 @@ const CustomerProfile = () => {
                 </Dialog>
                 <div className="pt-3">
                     <div className="grid">
-                        <div className="col-12 lg:col-4">
-                            <div className="p-3">
-                                <div className="shadow-2 h-full flex flex-column">
+                        <div className="col-12 lg:col-4 ">
+                            <div className="p-3 ">
+                                <div className="card h-full flex flex-column overflow-x">
                                     <div className="text-900 font-medium text-lg p-3">Customer Information</div>
 
                                     <hr className="m-0" />
@@ -225,15 +225,21 @@ const CustomerProfile = () => {
                                                     <td>Customer DOB (PC253)</td>
                                                     <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : ""}</td>
                                                 </tr>
-
+                                                
+                                                <tr>
+                                                    <td>Tribal (Y/N)</td>
+                                                    <td>{cpData?.isTerribleTerritory ? "Y":"N"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Company</td>
                                                     <td>
-                                                        {" "}
-                                                        <td>{parseLoginRes?.companyName}</td>
+                                                        {parseLoginRes?.companyName}
                                                     </td>
                                                 </tr>
-                                               
+                                                <tr>
+                                                    <td>Sales Channel</td>
+                                                    <td>--</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -243,7 +249,7 @@ const CustomerProfile = () => {
 
                         <div className="col-12 lg:col-4">
                             <div className="p-3 h-full">
-                                <div className="shadow-2 flex flex-column">
+                                <div className="card flex flex-column overflow-x">
                                     <div className="text-900 font-medium text-lg p-3">Line Information</div>
 
                                     <hr className="m-0" />
@@ -270,15 +276,19 @@ const CustomerProfile = () => {
                                                     <td>--</td>
                                                 </tr>
 
+                                              
                                                 <tr>
-                                                    <td>Device ID</td>
+                                                    <td>Inventory Type</td>
                                                     <td>--</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Make & Model</td>
-                                                    <td>--</td>
-                                                </tr>
-
+                                                 <tr> 
+                                                     <td> 
+                                                        Make & Model
+                                                     </td>
+                                                       <td> 
+                                                        --
+                                                       </td>
+                                                 </tr>
                                                 <tr>
                                                     <td>eSIM</td>
                                                     <td>{cpData?.ESim === true ? "Yes" : "No"}</td>
@@ -293,7 +303,7 @@ const CustomerProfile = () => {
                                                     <td>--</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Telgoo 5 Plan</td>
+                                                    <td>Teleyork Plan</td>
                                                     <td>{cpData?.plan?.name}</td>
                                                 </tr>
                                                 <tr>
@@ -309,7 +319,7 @@ const CustomerProfile = () => {
                                                     <td>{cpData?.carrier?.name}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Query Usage</td>
+                                                    <td>Plan Activation Date</td>
                                                     <td>{cpData?.carrier?.name}</td>
                                                 </tr>
                                                 <tr>
@@ -318,6 +328,54 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>OCS Live Status</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>Talk Balance</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>SMS Balance</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>Data Balance</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>Last Usage</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>Plan ID</td>
+                                                    <td>{cpData?.plan?.planId}</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>Plan Expiration Date</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>SOC</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>IMEI In Use</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>ICCID</td>
+                                                    <td>--</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>MVNO</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>PUK Code</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>Sim Status</td>
                                                     <td>--</td>
                                                 </tr>
                                             </tbody>
@@ -328,8 +386,8 @@ const CustomerProfile = () => {
                         </div>
 
                         <div className="col-12 lg:col-4">
-                            <div className="p-3 h-full">
-                                <div className="shadow-2 flex flex-column">
+                            <div className="p-3 custom-height-400">
+                                <div className="card flex flex-column overflow-x">
                                     <div className="text-900 font-medium text-lg p-3">Other Information</div>
 
                                     <hr className="m-0" />
@@ -346,14 +404,7 @@ const CustomerProfile = () => {
                                                     <td>Order by</td>
                                                     <td>{cpData?.createdBy?.name}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Master Agent ID</td>
-                                                    <td>--</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Agent Name</td>
-                                                    <td>{cpData?.createdBy?.name}</td>
-                                                </tr>
+                                              
                                                 <tr>
                                                     <td>Enrollment ID</td>
                                                     <td>{cpData?.enrollmentId}</td>
@@ -370,15 +421,11 @@ const CustomerProfile = () => {
                                                  <td>PWG Customer ID</td>
                                                     <td>--</td>
                                                      </tr> 
-                                                <tr>
-                                                    <td>Approved by</td>
-                                                    <td>--</td>
-                                                </tr>
+                                               
                                                 <tr>
                                                     <td>Source</td>
                                                     <td>
-                                                        {" "}
-                                                        <td>{parseLoginRes?.companyName}</td>
+                                                      --
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -391,20 +438,14 @@ const CustomerProfile = () => {
 
                                                     <td>{cpData?.deviceEligibilty}</td>
                                                 </tr>
+                                             
                                                 <tr>
-                                                    <td>ACP Device Order Type</td>
+                                                    <td>Enrollment Date</td>
                                                     <td>--</td>
                                                 </tr>
+                                               
                                                 <tr>
-                                                    <td>Application Approval </td>
-                                                    <td>--</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> Lifeline Activation </td>
-                                                    <td>--</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Disconnection</td>
+                                                    <td>Disconnection Date</td>
                                                     <td>--</td>
                                                 </tr>
                                                 <tr>
@@ -424,9 +465,9 @@ const CustomerProfile = () => {
                     </div>
                 </div>
 
-                <div className="p-3">
+                <div className="p-3 card">
                     <div className="flex flex-wrap justify-content-between  flex-row w-full ">
-                        <div className="customer-profilecustomernote mt-4"   >
+                        <div className="customer-profilecustomernote mt-4 card"   >
                             <div>
                                 <div>
                                     <h4>Customer Notes</h4>
@@ -478,7 +519,7 @@ const CustomerProfile = () => {
                             </div>
                         </div>
 
-                        <div className="cutomer-profileaddnote mt-4"  >
+                        <div className="cutomer-profileaddnote mt-4 card"  >
                             <div className="flex justify-content-between align-items-center  mb-3">
                                 <h4 className="m-0">Add New Note (PC83)</h4>
                                 <span></span>
@@ -540,7 +581,7 @@ const CustomerProfile = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
