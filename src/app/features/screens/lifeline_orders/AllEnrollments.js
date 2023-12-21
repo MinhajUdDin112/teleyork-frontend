@@ -278,16 +278,10 @@ const AllEnrollments = () => {
            
         else{
             console.log("remarks no added")
-            toast.warning("Please Add Remarks First");
+            toast.error("Please Add Remarks First");
                  setisButtonLoading(false)
         }
     }
-
-
-    const getstateFromRemarks=(e)=>{
-        //setCheckRemarks(e)  
-       
-     }
 
     const runNLAD = async (rowData) => {
         setisButtonLoading(true);
@@ -498,12 +492,26 @@ const AllEnrollments = () => {
         );
     };
     const handleOpenDialog = (rowData) => {
-        setisButtonLoading(true);
+
+        if(rowData?.QualityRemarks){
+            if ( rowData.QualityRemarks.includes("declined")) {
+                setisButtonLoading(true);
         setIsModalOpen(true);
         setIsEnrolmentId(rowData?._id);
         setCsrId(rowData?.csr);
         setCheckType(rowData?.enrollment)
-        setisButtonLoading(false);
+        setisButtonLoading(false);             
+         }
+         else{
+            toast.error("Declined sales can only rejected")
+         }
+
+        }
+        else{
+            toast.error("Please Add Remarks First")
+        }
+
+       
     };
 
     const handleDialogeForActivate = (rowData) => {
@@ -741,7 +749,7 @@ const AllEnrollments = () => {
                                 }}
                             />
 
-                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
+                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ||roleName == "Team Lead" ||roleName == "TEAM LEAD" ? (
                                 ""
                             ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("retention") || roleName.includes("RETENTION") || roleName.includes("Retention") ? (
                                 <Column header="Actions" body={actionTemplateForPR}></Column>
