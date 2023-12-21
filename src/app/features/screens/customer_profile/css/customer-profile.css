@@ -21,6 +21,7 @@
     justify-content: center;  
     align-items: center;
      margin-top: 25px;
+    
 } 
 .spanstyle{ 
     text-transform: uppercase;
@@ -33,14 +34,41 @@
   margin-top:0px;
    margin-left: 30px;
     } 
-   .menubar .pi-user,.menubar .pi-plus,.menubar .pi-circle-fill{ 
+   .menubar-styling .menubar .pi-user,.menubar-styling .pi-plus,.menubar-styling .menubar .pi-circle-fill{ 
       margin-top: 0px; 
       position: absolute;
     } 
     
+  }   
+  .menubar-styling .menubar .pi-user, 
+.menubar-styling .pi-plus,.menubar-styling .menubar .pi-circle-fill{ 
+   
+   padding: 5px;
+  }   
+  .menubar-styling .menubar .pi-circle-fill{ 
+    margin-left:3px;
   }
-  
+  .menubar-styling{ 
+    margin: 15px; 
+    padding-top: 15px;
+  }
+  .custom-height-400 {
+    height: 400px; 
 
+  }
+  .overflow-x{ 
+  
+    overflow-x:auto;
+  }
+  .custom-icon-user{ 
+    width:50px;
+     
+  }
+  .custom-icon-plus{ 
+    width:25px;  
+    margin-right: 6px;
+    margin-left:5px;
+  }
 
   
   /* Media query for smaller screens (e.g., mobile devices) */
