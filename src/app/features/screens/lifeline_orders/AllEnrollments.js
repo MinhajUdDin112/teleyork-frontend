@@ -137,6 +137,7 @@ const AllEnrollments = () => {
                 } 
                
                 else if(res?.data?.data){
+                    console.log("data is",res?.data?.data)
                     for(let i=0;i<res.data.data.length;i++){ 
                         res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
                            res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
@@ -250,8 +251,10 @@ const AllEnrollments = () => {
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-        console.log("row data is",rowData)
-        if(checkRemarks==enrolmentId){
+       
+         setCheckRemarks(rowData?.QualityRemarks)
+        
+        if(rowData?.QualityRemarks ){
             console.log( rowData?.QualityRemarks)           
             if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
                    toast.error("Declined sales can only rejected")
@@ -282,12 +285,9 @@ const AllEnrollments = () => {
 
 
     const getstateFromRemarks=(e)=>{
-        setCheckRemarks(e)  
+        //setCheckRemarks(e)  
        
      }
-    
-
-
 
     const runNLAD = async (rowData) => {
         setisButtonLoading(true);
@@ -606,11 +606,11 @@ const AllEnrollments = () => {
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
-                        <DialogeForRemarks getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId} />
+                        <DialogeForRemarks  getAllEnrollments={ getAllEnrollments} enrollmentId={isEnrolmentId} />
                     </Dialog>
 
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
-                        <DialogeForRemarksForIJ getstateFromRemarks={getstateFromRemarks} enrollmentId={isEnrolmentId} />
+                        <DialogeForRemarksForIJ  getAllEnrollments={ getAllEnrollments} enrollmentId={isEnrolmentId} />
                     </Dialog>
 
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>

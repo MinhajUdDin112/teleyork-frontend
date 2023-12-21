@@ -8,7 +8,7 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogeForRemarks = ({enrollmentId,getstateFromRemarks}) => {
+const DialogeForRemarks = ({enrollmentId, getAllEnrollments}) => {
     const [isComRemarks, setIsComRemarks] = useState();
     const [isConfidenceRemarks, setIsConfidenceRemarks] = useState();
     const [isVerificationRemarks, setIsVerificationRemarks] = useState();
@@ -41,7 +41,7 @@ const DialogeForRemarks = ({enrollmentId,getstateFromRemarks}) => {
                 const response = await Axios.patch(`${BASE_URL}/api/user/remarks`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Remarks Added");
-                    getstateFromRemarks(enrollmentId);
+                    getAllEnrollments();
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
