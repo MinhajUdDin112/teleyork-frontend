@@ -69,6 +69,13 @@
     margin-right: 6px;
     margin-left:5px;
   }
-
-  
+   .customstyle{ 
+    height:450px;  
+    overflow: hidden; 
+    position: relative;
+   }
+  .seemore-button{ 
+    position: absolute;
+    bottom:0px;
+  }
   /* Media query for smaller screens (e.g., mobile devices) */

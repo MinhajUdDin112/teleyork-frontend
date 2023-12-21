@@ -21,7 +21,10 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
-    const [cpData, setCpData] = useState([]);
+    const [cpData, setCpData] = useState([]);     
+    const [expand2,setExpand2]=useState(false) 
+    const [expand,setExpand]=useState(false);  
+    const [expand3,setExpand3]=useState(false)
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
     const [allNotes, setAllNotes] = useState([]);
@@ -156,8 +159,8 @@ const CustomerProfile = () => {
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div>
-                                        <table className="cp_table w-full text-left">
+                                    <div className={classNames({ "customstyle": !expand2 })}>
+                                        <table className="cp_table w-full text-left" >
                                             <tbody>
                                                 
                                                
@@ -241,7 +244,9 @@ const CustomerProfile = () => {
                                                     <td>--</td>
                                                 </tr>
                                             </tbody>
-                                        </table>
+                                        </table> 
+                                        <Button label={`${!expand2 ? "See More":"See Less"}`} onClick={()=>{setExpand2(prev=>!prev)}} className={classNames({ "seemore-button": !expand2 },"w-full")} icon={`${!expand2 ? "pi pi-plus" :"pi pi-minus"}`} iconPos="right" />
+                                  
                                     </div>
                                 </div>
                             </div>
@@ -255,7 +260,7 @@ const CustomerProfile = () => {
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div>
+                                    <div className={classNames({ "customstyle": !expand })}>
                                         <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
@@ -363,15 +368,15 @@ const CustomerProfile = () => {
                                                     <td>--</td>
                                                 </tr> 
                                                 <tr>
-                                                    <td>ICCID</td>
-                                                    <td>--</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>MVNO</td>
+                                                    <td>PUK1</td>
                                                     <td>--</td>
                                                 </tr> 
                                                 <tr>
-                                                    <td>PUK Code</td>
+                                                    <td>PUK2</td>
+                                                    <td>--</td>
+                                                </tr> 
+                                                <tr>
+                                                    <td>MVNO</td>
                                                     <td>--</td>
                                                 </tr> 
                                                 <tr>
@@ -379,21 +384,23 @@ const CustomerProfile = () => {
                                                     <td>--</td>
                                                 </tr>
                                             </tbody>
-                                        </table>
+                                        </table>     
+                                           
+                                         <Button label={`${!expand ? "See More":"See Less"}`} onClick={()=>{setExpand(prev=>!prev)}} className={classNames({ "seemore-button": !expand },"w-full")} icon={`${!expand ? "pi pi-plus" :"pi pi-minus"}`} iconPos="right" />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="col-12 lg:col-4">
-                            <div className="p-3 custom-height-400">
-                                <div className="card flex flex-column overflow-x">
+                            <div className="p-3 ">
+                                <div className="card h-full flex flex-column overflow-x">
                                     <div className="text-900 font-medium text-lg p-3">Other Information</div>
 
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div>
+                                    <div className={classNames({ "customstyle": !expand3 })}>
                                         <table class="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
@@ -457,7 +464,9 @@ const CustomerProfile = () => {
                                                     <td>{cpData?.acpProgram?.name}</td>
                                                 </tr>
                                             </tbody>
-                                        </table>
+                                        </table>  
+                                        <Button label={`${!expand3 ? "See More":"See Less"}`} onClick={()=>{setExpand3(prev=>!prev)}} className={classNames({ "seemore-button": !expand3 },"w-full")} icon={`${!expand3 ? "pi pi-plus" :"pi pi-minus"}`} iconPos="right" />
+                                    
                                     </div>
                                 </div>
                             </div>
