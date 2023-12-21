@@ -233,8 +233,7 @@ const CustomerProfile = () => {
                                                 <tr>
                                                     <td>Company</td>
                                                     <td>
-                                                        {" "}
-                                                        <td>{parseLoginRes?.companyName}</td>
+                                                        {parseLoginRes?.companyName}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -277,15 +276,19 @@ const CustomerProfile = () => {
                                                     <td>--</td>
                                                 </tr>
 
-                                                <tr>
-                                                    <td>Device ID</td>
-                                                    <td>--</td>
-                                                </tr>
+                                              
                                                 <tr>
                                                     <td>Inventory Type</td>
                                                     <td>--</td>
                                                 </tr>
-
+                                                 <tr> 
+                                                     <td> 
+                                                        Make & Model
+                                                     </td>
+                                                       <td> 
+                                                        --
+                                                       </td>
+                                                 </tr>
                                                 <tr>
                                                     <td>eSIM</td>
                                                     <td>{cpData?.ESim === true ? "Yes" : "No"}</td>
