@@ -277,10 +277,7 @@ const CustomerProfile = () => {
                                                     <td>--</td>
                                                 </tr>
 
-                                                <tr>
-                                                    <td>Device ID</td>
-                                                    <td>--</td>
-                                                </tr>
+                                              
                                                 <tr>
                                                     <td>Inventory Type</td>
                                                     <td>--</td>
