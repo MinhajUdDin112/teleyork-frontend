@@ -19,11 +19,11 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) 
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
- 
+
     // Get role name  from login response
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
-   
+
     const validationSchema = Yup.object().shape({
         reason: Yup.string().required("Please enter Reason"),
     });
@@ -108,10 +108,22 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) 
         <>
             <form onSubmit={formik.handleSubmit}>
                 <div className="p-fluid p-formgrid grid ">
-                    {roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") ? (
+                    { 
+                                            roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") && checkCompany ?( 
+                                                <>
+                                                <div className="p-field col-12 md:col-4 mt-3">
+                                                    <Button label="Assign to Created User" type="button" onClick={assignCSRId} />
+                                                </div>
+                                                {/* <div className="p-fluid p-formgrid grid m-2 mt-5">
+                                                    <h4>Or</h4>
+                                                </div> */}
+                                            </>
+                                            )
+                      :
+                     roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION")  ? (
                         <>
                             <div className="p-field col-12 md:col-4 mt-3">
-                                <Button label="Send to Retention" type="button" />
+                                <Button label="Send To Retension" type="button"  />
                             </div>
                             {/* <div className="p-fluid p-formgrid grid m-2 mt-5">
                                 <h4>Or</h4>
@@ -129,25 +141,29 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) 
                     ) : (
                         ""
                     )}
-                    {checkCompany? "":
-                    <>
-                     <div className="p-fluid p-formgrid grid m-2 mt-5">
+                    {checkCompany ? (
+                        ""
+                    ) : (
+                        <>
+                            <div className="p-fluid p-formgrid grid m-2 mt-5">
                                 <h4>Or</h4>
                             </div>
-                    <div className="p-field col-12 md:col-3">
-                        <label className="Label__Text">Assign to department </label>
-                        <Dropdown
-                            id="department"
-                            options={allDepartment.map((item) => ({ label: item.department, value: item._id }))}
-                            value={formik.values.department}
-                            onChange={(e) => formik.setFieldValue("department", e.value)}
-                            optionLabel="label" // Use "label" as the property to display as an option
-                            optionValue="value" // Use "value" as the property representing the selected value
-                            filter
-                            showClear
-                            filterBy="label" // Set the property to be used for filtering
-                        />
-                    </div> </>}
+                            <div className="p-field col-12 md:col-3">
+                                <label className="Label__Text">Assign to department </label>
+                                <Dropdown
+                                    id="department"
+                                    options={allDepartment.map((item) => ({ label: item.department, value: item._id }))}
+                                    value={formik.values.department}
+                                    onChange={(e) => formik.setFieldValue("department", e.value)}
+                                    optionLabel="label" // Use "label" as the property to display as an option
+                                    optionValue="value" // Use "value" as the property representing the selected value
+                                    filter
+                                    showClear
+                                    filterBy="label" // Set the property to be used for filtering
+                                />
+                            </div>{" "}
+                        </>
+                    )}
                     {formik.values.department ? (
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text ml-3">Select User </label>
