@@ -257,8 +257,9 @@ const Provisioning_queue = () => {
                             />
                              <Column header="Actions" body={actionTemplateForPR}></Column>
                     </DataTable>
-                    {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
-                </div>
+                    {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+              
+                  </div>
             </div>
             <br />
         </div> 
