@@ -22,7 +22,7 @@ import { Dropdown } from "primereact/dropdown";
 import DialogeForApprove from "./DialogeForApprove";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const AllEnrollments = () => {
+const AllEnrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -459,8 +459,26 @@ const AllEnrollments = () => {
                 )}
 
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRowByTl(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Approve" onClick={() =>{  
+                    if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
+                        approveRowByTl(rowData) 
+                         } 
+                         else{  
+                            toast.error("Enrollment having Satisfactory,Good or Average Quality Remarks  can only be Approved")
+                         }
+                 
+                 
+                 }} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => {
+                     if(rowData.QualityRemarks === "declined"){
+                    handleOpenDialog(rowData);  
+                     } 
+                     else{  
+                        toast.error("Enrollment having Declined Quality Remarks  can only be Rejected")  
+
+                     }
+                    
+                     }} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
     };
