@@ -511,23 +511,14 @@ const AllEnrollments = () => {
     };
     const handleOpenDialog = (rowData) => {
 
-        if(rowData?.QualityRemarks){
-            if ( rowData.QualityRemarks.includes("declined")) {
                 setisButtonLoading(true);
         setIsModalOpen(true);
         setIsEnrolmentId(rowData?._id);
         setCsrId(rowData?.csr);
         setCheckType(rowData?.enrollment)
         setisButtonLoading(false);             
-         }
-         else{
-            toast.error("Declined sales can only rejected")
-         }
-
-        }
-        else{
-            toast.error("Please Add Remarks First")
-        }
+         
+       
 
        
     };
