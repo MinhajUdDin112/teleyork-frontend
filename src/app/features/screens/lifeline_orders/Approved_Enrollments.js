@@ -157,15 +157,17 @@ const Approved_Enrollments = () => {
 
   return (
    <>
-   <div className="card">
-<h4>Approved Enrollments</h4>
-   </div>
-    <div className="card bg-pink-50">
+   
+    <div className="card ">
              <ToastContainer/>
-            <div className="card mx-5 p-0 border-noround">
-              
+            <div className="card  p-0 ">
+            <div className="flex justify-content-between ">
+                <div className="">
+                    <h3 className="font-bold   pl-2 mt-4"><strong>Approved Enrollments</strong></h3>
+                </div>
+            </div>
                 
-                <div className="" style={{  padding: "15px" }}>
+                <div className="">
                 <DataTable    value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
                             stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
@@ -176,6 +178,8 @@ const Approved_Enrollments = () => {
                         {rowData.enrollmentId}
                     </button>
                 )}></Column>
+                 <Column header="Enrollment Type" field="enrollment"></Column>
+                       
                         <Column header="Name" field="name"></Column>
                         <Column header="Address" field="address1"></Column>
                         <Column header="City" field="city"></Column>

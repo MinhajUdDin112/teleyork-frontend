@@ -177,13 +177,17 @@ const CompletedEnrollments = () => {
        }
     return (
        
-        <div className="card bg-pink-50">
+        <div className="card ">
              <ToastContainer/>
-            <div className="card mx-5 p-0 border-noround">
-              
+            <div className="card  p-0 ">
+            <div className="flex justify-content-between ">
+                <div className="">
+                    <h3 className="font-bold   pl-2 mt-4"><strong>Completed Enrollments</strong></h3>
+                </div>
+            </div>
              
                 
-                <div className="" style={{  padding: "15px" }}>
+                <div className="" >
                 <DataTable  size="small" value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
                             stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>

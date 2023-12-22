@@ -68,7 +68,10 @@ const DialogeForRemarksForIJ = ({enrollmentId, getAllEnrollments}) => {
         inputId="isCallQualityRemarks"
         name="pizza"
         value="good"
-        onChange={(e) => setIsCallQualityRemarks(e.value)}
+        onChange={(e) => {
+          setIsCallQualityRemarks(e.value)  
+         
+        }}
         checked={isCallQualityRemarks === "good"}
         className="mt-2"
       />
