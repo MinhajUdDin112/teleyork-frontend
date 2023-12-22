@@ -621,7 +621,7 @@ const AllEnrollments = () => {
         <>
             <ToastContainer className="custom-toast-container" />
 
-            <div className="card bg-pink-50">
+            <div className="card ">
                 <form>
                     <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
                         <DialogForReject checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
@@ -647,12 +647,11 @@ const AllEnrollments = () => {
                     </Dialog> */}
                 </form>
 
-                <div className="card mx-5 p-0 border-noround">
-                    <div className="flex mb-4 " style={{ padding: "10px" }}>
-                        <div className="mt-2 ml-2">
+                <div className="card mx-5 p-0 ">
+                    <div className="flex font-bold pt-2">
+                        <div className="mt-2 ml-2 pt-2 pl-1">
                             <h3>
-                                {" "}
-                                <strong>All Enrollments</strong>{" "}
+                             <strong> All Enrollments</strong>
                             </h3>
                         </div>
 
@@ -660,13 +659,13 @@ const AllEnrollments = () => {
                             <div className="mr-5">
                                
                             </div>
-                            <div className="  flex ">
+                            <div className="  flex pr-4 ">
                                 {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" 
                                 : 
                                 //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ? 
                                 //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
                                 // :
-                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3 card " text  disabled={isButtonLoading} />
                                 }
 
                                 {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? ""
@@ -674,7 +673,7 @@ const AllEnrollments = () => {
                                 //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
                                 //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
                                 : 
-                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3 card" text  disabled={isButtonLoading || selectedRows.length === 0} /> 
                                 }
                             </div>
                         </div>

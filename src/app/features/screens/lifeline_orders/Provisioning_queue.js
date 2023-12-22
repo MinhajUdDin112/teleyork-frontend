@@ -183,15 +183,16 @@ const Provisioning_queue = () => {
     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
                         <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
                     </Dialog>
-   <div className="card">
-<h4>Provisioning Queue</h4>
-   </div>
-    <div className="card bg-pink-50">
+    <div className="card ">
              <ToastContainer/>
-            <div className="card mx-5 p-0 border-noround">
-              
+            <div className="card  p-0 ">
+            <div className="flex justify-content-between ">
+                <div className="">
+                    <h3 className="font-bold   pl-2 mt-4"><strong>Provisioning Queue</strong></h3>
+                </div>
+            </div>
                 
-                <div className="" style={{  padding: "15px" }}>
+                <div className="" >
                 <DataTable  size="small" value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
                             stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
