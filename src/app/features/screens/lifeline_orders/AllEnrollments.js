@@ -679,7 +679,7 @@ const AllEnrollments = () => {
                         </div>
                     </div>
                     <div>
-                        {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
+                        {isButtonLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" />: null}
 
                         <DataTable
                             value={filteredDates || allEnrollments}
@@ -776,9 +776,10 @@ const AllEnrollments = () => {
                                 <Column header="Actions" body={actionTemplate}></Column>
                             )}
                         </DataTable>
-
-                        {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
-                    </div>
+                        {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+              
+                    
+                     </div>
                 </div>
                 <br />
             </div>
