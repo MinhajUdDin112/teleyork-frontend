@@ -344,7 +344,8 @@
 }
 .p-datepicker:not(.p-datepicker-inline) .p-datepicker-header {
   background: #ffffff;
-}
+} 
+
 .p-datepicker .p-datepicker-header {
   padding: 0.5rem;
   color: #495057;

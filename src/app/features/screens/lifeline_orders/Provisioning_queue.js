@@ -15,7 +15,9 @@ import { Dialog } from "primereact/dialog";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
 const Provisioning_queue = () => {
-
+       // State For Select Row
+       const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+       const [rowClick, setRowClick] = useState(true);  
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
     const [openDialogeForActivate, setOpenDialogeForActivate] = useState(false);
     const [filters, setFilters] = useState({
@@ -118,7 +120,7 @@ const Provisioning_queue = () => {
     const actionTemplateForPR = (rowData) => {
         return (
             <div>
-                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
                
             </div>
         );
@@ -183,20 +185,23 @@ const Provisioning_queue = () => {
     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
                         <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
                     </Dialog>
-   <div className="card">
-<h4>Provisioning Queue</h4>
-   </div>
-    <div className="card bg-pink-50">
+    <div className="card ">
              <ToastContainer/>
-            <div className="card mx-5 p-0 border-noround">
-              
+            <div className="card  p-0 ">
+            <div className="flex justify-content-between ">
+                <div className="">
+                    <h3 className="font-bold   pl-2 mt-4"><strong>Provisioning Queue</strong></h3>
+                </div>
+            </div>
                 
-                <div className="" style={{  padding: "15px" }}>
-                <DataTable  size="small" value={ allCompletedEnrollments} filters={filters}
+                <div className="" >
+                <DataTable selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)}  size="small" value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
                             stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
                         {/* <Column header="#" field="SNo"></Column> */}
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
                         <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
                     <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
                         {rowData.enrollmentId}
@@ -256,8 +261,9 @@ const Provisioning_queue = () => {
                             />
                              <Column header="Actions" body={actionTemplateForPR}></Column>
                     </DataTable>
-                    {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
-                </div>
+                    {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+              
+                  </div>
             </div>
             <br />
         </div> 

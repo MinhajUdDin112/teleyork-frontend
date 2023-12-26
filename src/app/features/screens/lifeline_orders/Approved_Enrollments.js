@@ -12,7 +12,9 @@ import { FilterMatchMode} from 'primereact/api'
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
 const Approved_Enrollments = () => {
-
+    // State For Select Row
+    const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+    const [rowClick, setRowClick] = useState(true);
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
@@ -157,25 +159,31 @@ const Approved_Enrollments = () => {
 
   return (
    <>
-   <div className="card">
-<h4>Approved Enrollments</h4>
-   </div>
-    <div className="card bg-pink-50">
+   
+    <div className="card ">
              <ToastContainer/>
-            <div className="card mx-5 p-0 border-noround">
-              
+            <div className="card  p-0 ">
+            <div className="flex justify-content-between ">
+                <div className="">
+                    <h3 className="font-bold   pl-2 mt-4"><strong>Approved Enrollments</strong></h3>
+                </div>
+            </div>
                 
-                <div className="" style={{  padding: "15px" }}>
-                <DataTable    value={ allCompletedEnrollments} filters={filters}
+                <div className="">
+                <DataTable  selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)}   value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
-                            stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                            stripedRows resizableColumns size="small"   paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
-                        {/* <Column header="#" field="SNo"></Column> */}
+                        {/* <Column header="#" field="SNo"></Column> */}       
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
                         <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
                     <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
                         {rowData.enrollmentId}
                     </button>
                 )}></Column>
+                 <Column header="Enrollment Type" field="enrollment"></Column>
+                       
                         <Column header="Name" field="name"></Column>
                         <Column header="Address" field="address1"></Column>
                         <Column header="City" field="city"></Column>
@@ -229,8 +237,9 @@ const Approved_Enrollments = () => {
                                 }}
                             />
                     </DataTable>
-                    {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
-                </div>
+                    {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+              
+                 </div>
             </div>
             <br />
         </div> 

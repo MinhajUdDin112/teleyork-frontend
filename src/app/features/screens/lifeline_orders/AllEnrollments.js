@@ -22,7 +22,7 @@ import { Dropdown } from "primereact/dropdown";
 import DialogeForApprove from "./DialogeForApprove";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const AllEnrollments = () => {
+const AllEnrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -443,9 +443,9 @@ const AllEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1"  text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -453,14 +453,32 @@ const AllEnrollments = () => {
         return (
             <div>
                 {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ? (
-                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 ) : (
-                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    <Button label="Add Remarks"  onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRowByTl(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
+                <Button label="Approve"   onClick={() =>{  
+                    if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
+                        approveRowByTl(rowData) 
+                         } 
+                         else{  
+                            toast.error("Enrollment having Satisfactory,Good or Average Quality Remarks  can only be Approved")
+                         }
+                 
+                 
+                 }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Reject"  onClick={() => {
+                     if(rowData.QualityRemarks === "declined"){
+                    handleOpenDialog(rowData);  
+                     } 
+                     else{  
+                        toast.error("Enrollment having Declined Quality Remarks  can only be Rejected")  
+
+                     }
+                    
+                     }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -468,48 +486,39 @@ const AllEnrollments = () => {
     const actionTemplateForPR = (rowData) => {
         return (
             <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
                 {/* <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {selectedRow === rowData && link ? (
                     <Button
                         label="Go To Link"
                         onClick={() => {
                             window.open(link, "_blank");
                         }}
-                        className=" mr-2 ml-2 p-button-warning"
+                        className=" mr-2 ml-2 pt-1 pb-1 p-button-warning"
                         text
                         raised
                         disabled={isButtonLoading}
                     />
                 ) : null}
-                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
-                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
+                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {/* <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text  raised disabled={isButtonLoading} />
             </div>
         );
     };
     const handleOpenDialog = (rowData) => {
 
-        if(rowData?.QualityRemarks){
-            if ( rowData.QualityRemarks.includes("declined")) {
                 setisButtonLoading(true);
         setIsModalOpen(true);
         setIsEnrolmentId(rowData?._id);
         setCsrId(rowData?.csr);
         setCheckType(rowData?.enrollment)
         setisButtonLoading(false);             
-         }
-         else{
-            toast.error("Declined sales can only rejected")
-         }
-
-        }
-        else{
-            toast.error("Please Add Remarks First")
-        }
+         
+       
 
        
     };
@@ -603,7 +612,7 @@ const AllEnrollments = () => {
         <>
             <ToastContainer className="custom-toast-container" />
 
-            <div className="card bg-pink-50">
+            <div className="card ">
                 <form>
                     <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
                         <DialogForReject checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
@@ -629,12 +638,11 @@ const AllEnrollments = () => {
                     </Dialog> */}
                 </form>
 
-                <div className="card mx-5 p-0 border-noround">
-                    <div className="flex mb-4 " style={{ padding: "10px" }}>
-                        <div className="mt-2 ml-2">
+                <div className="card mx-5 p-0 ">
+                    <div className="flex font-bold pt-2">
+                        <div className="mt-2 ml-2 pt-2 pl-1">
                             <h3>
-                                {" "}
-                                <strong>All Enrollments</strong>{" "}
+                             <strong> All Enrollments</strong>
                             </h3>
                         </div>
 
@@ -642,13 +650,13 @@ const AllEnrollments = () => {
                             <div className="mr-5">
                                
                             </div>
-                            <div className="  flex ">
+                            <div className="  flex pr-4 ">
                                 {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" 
                                 : 
                                 //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ? 
                                 //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
                                 // :
-                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3 card " text  disabled={isButtonLoading} />
                                 }
 
                                 {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? ""
@@ -656,13 +664,13 @@ const AllEnrollments = () => {
                                 //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
                                 //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
                                 : 
-                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3 card" text  disabled={isButtonLoading || selectedRows.length === 0} /> 
                                 }
                             </div>
                         </div>
                     </div>
                     <div>
-                        {isButtonLoading ? <ProgressSpinner style={{ width: "50px", height: "50px", marginLeft: "40rem" }} strokeWidth="4" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
+                        {isButtonLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" />: null}
 
                         <DataTable
                             value={filteredDates || allEnrollments}
@@ -759,9 +767,10 @@ const AllEnrollments = () => {
                                 <Column header="Actions" body={actionTemplate}></Column>
                             )}
                         </DataTable>
-
-                        {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
-                    </div>
+                        {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+              
+                    
+                     </div>
                 </div>
                 <br />
             </div>

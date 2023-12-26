@@ -11,7 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { FilterMatchMode} from 'primereact/api'
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const CompletedEnrollments = () => {   
-    
+      // State For Select Row
+      const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+      const [rowClick, setRowClick] = useState(true);  
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
@@ -148,9 +150,9 @@ const CompletedEnrollments = () => {
                     className="w-15rem ml-4 mt-2"
                     placeholder="Search By Name or Enrollment ID"
                 />     
-                <div className="w-25rem ml-4 mt-2" >
+                <div className="w-45rem ml-4 mt-2" >
                 <Calendar
-                 className="w-11rem" 
+                 className="w-21rem" 
       value={createDateFilterValue}
       dateFormat="mm/dd/yy"  
       placeholder="Search By Created Date"
@@ -160,9 +162,9 @@ const CompletedEnrollments = () => {
 
       showIcon
     />     
-    <label className="w-9rem p-2" style={{textAlign:"center",color:"grey"}}>To</label>  
+    <label className="p-2" style={{fontSize:"19px",textAlign:"center",color:"grey"}}>To</label>  
     <Calendar
-              className="w-11rem"   
+              className="w-21rem"   
       value={createDateToFilterValue}
       dateFormat="mm/dd/yy"  
       placeholder="Search By Created Date"
@@ -177,18 +179,24 @@ const CompletedEnrollments = () => {
        }
     return (
        
-        <div className="card bg-pink-50">
+        <div className="card ">
              <ToastContainer/>
-            <div className="card mx-5 p-0 border-noround">
-              
+            <div className="card  p-0 ">
+            <div className="flex justify-content-between ">
+                <div className="">
+                    <h3 className="font-bold   pl-2 mt-4"><strong>Completed Enrollments</strong></h3>
+                </div>
+            </div>
              
                 
-                <div className="" style={{  padding: "15px" }}>
-                <DataTable  size="small" value={ allCompletedEnrollments} filters={filters}
+                <div className="" >
+                <DataTable   selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)} value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
-                            stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                            stripedRows resizableColumns size="small"   paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
-                        {/* <Column header="#" field="SNo"></Column> */}
+                        {/* <Column header="#" field="SNo"></Column> */} 
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
                         <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
                     <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
                         {rowData.enrollmentId}
@@ -247,7 +255,7 @@ const CompletedEnrollments = () => {
                                 }}
                             />
                     </DataTable>
-                    {isLoading ? <ProgressSpinner style={{ marginLeft: "550px" }} /> : null}
+                    {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
                 </div>
             </div>
             <br />
