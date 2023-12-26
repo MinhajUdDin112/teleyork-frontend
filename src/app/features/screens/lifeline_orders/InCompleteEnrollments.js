@@ -287,7 +287,7 @@ const InCompleteEnrollments = () => {
                         <Column field="createdDate" header="Created At" />
 
                         <Column field="createdBy.name" header="Created BY" />
-                        <Column field="status" header="Status" />
+                        <Column field="status" header="Phase" />
                        
                         <Column header="Address"    field="address1"></Column>
                         <Column header="Actions" body={actionTemplate}></Column>

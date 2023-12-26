@@ -335,7 +335,7 @@ const RejectedEnrollments = () => {
                         />
                         <Column field="createdBy.name" header="Created BY" />
                         <Column field="reajectedReason" header="Rejected Reason" />
-                        <Column field="status" header="Status" />
+                        <Column field="status" header="Phase" />
 
                         {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? <Column header="Actions" body={actionTemplateForCsr}></Column> : <Column header="Actions" body={actionTemplate}></Column>}
                     </DataTable>
