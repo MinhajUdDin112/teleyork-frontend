@@ -19,4 +19,17 @@
          
         width:45vw;
     }
+}  
+.manage-inventory{ 
+    width:23%;
+} 
+@media(max-width:1300px){ 
+    .manage-inventory{ 
+        width:40%;
+    }   
+} 
+@media(max-width:800px){ 
+    .manage-inventory{ 
+        width:70%;
+    }   
 }
