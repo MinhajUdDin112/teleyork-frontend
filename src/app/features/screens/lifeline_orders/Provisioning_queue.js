@@ -151,9 +151,9 @@ const Provisioning_queue = () => {
                     className="w-15rem ml-4 mt-2"
                     placeholder="Search By Name or Enrollment ID"
                 />     
-                <div className="w-25rem ml-4 mt-2" >
+                <div className="w-45rem ml-4 mt-2" >
                 <Calendar
-                 className="w-11rem" 
+                 className="w-21rem" 
       value={createDateFilterValue}
       dateFormat="mm/dd/yy"  
       placeholder="Search By Created Date"
@@ -163,9 +163,9 @@ const Provisioning_queue = () => {
 
       showIcon
     />     
-    <label className="w-9rem p-2" style={{textAlign:"center",color:"grey"}}>To</label>  
+    <label className="p-2" style={{textAlign:"center",color:"grey"}}>To</label>  
     <Calendar
-              className="w-11rem"   
+              className="w-21rem"   
       value={createDateToFilterValue}
       dateFormat="mm/dd/yy"  
       placeholder="Search By Created Date"

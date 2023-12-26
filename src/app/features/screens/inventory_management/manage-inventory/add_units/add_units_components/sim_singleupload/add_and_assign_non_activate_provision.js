@@ -1,6 +1,7 @@
 //company agent tracking master carrier tin
 import React, { useState, useEffect,useRef } from "react";
-import { useFormik } from "formik";
+import { useFormik } from "formik"; 
+import "./css/style.css"
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -158,7 +159,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -170,7 +171,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                         <p className="m-0">
                             ESN/SIM Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.SimNumber} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText keyfilter="int" value={formik.values.SimNumber} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.SimNumber && formik.touched.SimNumber && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumber}
@@ -181,7 +182,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                         <p className="m-0">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
                   {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -218,7 +219,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="w-20rem mt-2"
+                            className="field-width mt-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -242,7 +243,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -264,7 +265,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.Model && formik.touched.Model && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Model}
@@ -276,7 +277,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                         <p className="m-0">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.box && formik.touched.box && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.box}

@@ -463,8 +463,14 @@ const AllEnrollments = () => {
                     if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
                         approveRowByTl(rowData) 
                          } 
-                         else{  
-                            toast.error("Enrollment having Satisfactory,Good or Average Quality Remarks  can only be Approved")
+                         else{      
+                            if(rowData.QualityRemarks !== undefined){
+                            toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved") 
+                            } 
+                            else{ 
+                                toast.error("Please Add Remarks") 
+                            
+                            }
                          }
                  
                  
@@ -473,9 +479,16 @@ const AllEnrollments = () => {
                      if(rowData.QualityRemarks === "declined"){
                     handleOpenDialog(rowData);  
                      } 
-                     else{  
-                        toast.error("Enrollment having Declined Quality Remarks  can only be Rejected")  
+                     else{    
+                        if(rowData.QualityRemarks !== undefined){
+                            toast.error("Only enrollment with call quality marked as declined will be rejected")  
 
+                        } 
+                            else{ 
+                                toast.error("Please add remarks") 
+                            
+                            }
+                       
                      }
                     
                      }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />

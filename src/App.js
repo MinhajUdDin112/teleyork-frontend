@@ -86,6 +86,7 @@ import ManageModelFlowPage from "./app/features/screens/inventory_management/man
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 import Provisioning_queue from "./app/features/screens/lifeline_orders/Provisioning_queue";
 import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
+import { Button } from "primereact/button";
 const App = () => {
 
     const [layoutMode, setLayoutMode] = useState("static");
@@ -186,7 +187,8 @@ const App = () => {
         event.preventDefault();
     };
 
-    const onMenuItemClick = (event) => {
+    const onMenuItemClick = (event) => {   
+        setSearchBy(null)
         if (!event.item.items) {
             setOverlayMenuActive(false);
             setMobileMenuActive(false);
@@ -200,7 +202,6 @@ const App = () => {
         if (element.classList) element.classList.add(className);
         else element.className += " " + className;
     };
-
     const removeClass = (element, className) => {
         if (element.classList) element.classList.remove(className);
         else element.className = element.className.replace(new RegExp("(^|\\b)" + className.split(" ").join("|") + "(\\b|$)", "gi"), " ");
@@ -287,24 +288,35 @@ const App = () => {
     }
 
     
-
+    const [searchBy, setSearchBy] = useState(null);
+    const [searchValue, setSearchValue] = useState(null);
     useEffect(() => {
         getPermissions();
     }, [window.localStorage.permissions]);
-
+    
     return (
         <>
             {protectedRoute === true ? (
                 <div className={wrapperClass} onClick={onWrapperClick}>
                     <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-                    <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                    <AppTopbar searchBy={searchBy} searchValue={searchValue} setSearchBy={setSearchBy} setSearchValue={setSearchValue}  onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
                     <div className="layout-sidebar" onClick={onSidebarClick}>
                         <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
                     </div>
-                    <div className="layout-main-container">
-                        <div className="layout-main">
+                    <div className="layout-main-container " > 
+                                            <div className="layout-main"> 
+                                 { 
+                                  searchBy !== null ?<div  className="card searchby flex flex-row flex-wrap justify-content-around align-items-center"> 
+                                   <div><h1 className="text-center w-full "> 
+                                    {searchBy.name}
+                                  </h1>      
+                                  <h5 className="text-center w-full mt-4 ">Get Ready!
+We are working on something really cool.</h5>  
+                                   </div> 
+                                 
+                                   </div> : 
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/" element={<Dashboard />} />
@@ -383,7 +395,8 @@ const App = () => {
                                 <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                 <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                 <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} />
-                            </Routes>
+                            </Routes>   
+} 
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
 

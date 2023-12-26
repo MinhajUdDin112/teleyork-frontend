@@ -1,0 +1,22 @@
+.field-width{ 
+     width:25vw;
+} 
+@media(max-width:1860px){ 
+    .field-width{  
+         
+        width:23vw;
+    }
+}   
+@media(max-width:1560px){ 
+    .field-width{  
+         
+        width:23vw;
+    }
+} 
+
+@media(max-width:1154px){ 
+    .field-width{  
+         
+        width:45vw;
+    }
+}

@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from "react";
 import { Dropdown } from "primereact/dropdown";
-import * as Yup from "yup";
+import * as Yup from "yup";  
+import "./add_units_components/sim_singleupload/css/style.css"
 import { Button } from "primereact/button";
 import { useFormik } from "formik"; 
 import { useLocation } from "react-router-dom";
@@ -94,20 +95,20 @@ const AddUnits = ({ setActiveComponent }) => {
                         <p className="m-0">
                             Inventory Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
+                        <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="field-width" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Upload Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="w-21rem" />
+                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="field-width" />
                     </div>
                     {formik.values.unit !== "Cell Phone" ? (
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Provision Type <span style={{ color: "red" }}>*</span>
                             </p>
-                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ?simprovision:provision} onChange={formik.handleChange} placeholder="Select an option" className="w-20rem" />
+                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ?simprovision:provision} onChange={formik.handleChange} placeholder="Select an option" className="field-width" />
                         </div>
                     ) : undefined}
                 </div>
