@@ -66,7 +66,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) 
 
     const checkcompany = () => {
         if (parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") || parseLoginRes?.companyName.includes("Ij")) {
-            if (toCapital.includes("PROVISION AGENT")) {
+            if (toCapital.includes("PROVISION AGENT") || toCapital.includes("PROVISION MANAGER")) {
                 setcheckCompany(true);
             }
         }
@@ -191,11 +191,11 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) 
                     )}
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-2">
                     <h4>
                         Reject Reason <span className="steric"> *</span>
                     </h4>
-                    <textarea id="reason" value={formik.values.reason} onChange={formik.handleChange} cols={60} rows={9} className="p-2" />
+                    <textarea  id="reason" value={formik.values.reason} onChange={formik.handleChange} cols={60} rows={9} className="p-2 textarea-border" />
                     {getFormErrorMessage("reason")}
                 </div>
 

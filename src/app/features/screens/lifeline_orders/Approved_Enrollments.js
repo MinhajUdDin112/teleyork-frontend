@@ -12,7 +12,9 @@ import { FilterMatchMode} from 'primereact/api'
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
 const Approved_Enrollments = () => {
-
+    // State For Select Row
+    const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+    const [rowClick, setRowClick] = useState(true);
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
@@ -168,11 +170,13 @@ const Approved_Enrollments = () => {
             </div>
                 
                 <div className="">
-                <DataTable    value={ allCompletedEnrollments} filters={filters}
+                <DataTable  selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)}   value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
-                            stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+                            stripedRows resizableColumns size="small"   paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
-                        {/* <Column header="#" field="SNo"></Column> */}
+                        {/* <Column header="#" field="SNo"></Column> */}       
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
                         <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
                     <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
                         {rowData.enrollmentId}

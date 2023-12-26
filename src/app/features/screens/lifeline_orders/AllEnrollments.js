@@ -443,9 +443,9 @@ const AllEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1"  text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -453,13 +453,13 @@ const AllEnrollments = () => {
         return (
             <div>
                 {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ? (
-                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 ) : (
-                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className=" p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    <Button label="Add Remarks"  onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() =>{  
+                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
+                <Button label="Approve"   onClick={() =>{  
                     if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
                         approveRowByTl(rowData) 
                          } 
@@ -468,8 +468,8 @@ const AllEnrollments = () => {
                          }
                  
                  
-                 }} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => {
+                 }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Reject"  onClick={() => {
                      if(rowData.QualityRemarks === "declined"){
                     handleOpenDialog(rowData);  
                      } 
@@ -478,7 +478,7 @@ const AllEnrollments = () => {
 
                      }
                     
-                     }} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
+                     }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -486,26 +486,26 @@ const AllEnrollments = () => {
     const actionTemplateForPR = (rowData) => {
         return (
             <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
                 {/* <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {selectedRow === rowData && link ? (
                     <Button
                         label="Go To Link"
                         onClick={() => {
                             window.open(link, "_blank");
                         }}
-                        className=" mr-2 ml-2 p-button-warning"
+                        className=" mr-2 ml-2 pt-1 pb-1 p-button-warning"
                         text
                         raised
                         disabled={isButtonLoading}
                     />
                 ) : null}
-                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
-                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
+                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {/* <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text  raised disabled={isButtonLoading} />
             </div>
         );
     };

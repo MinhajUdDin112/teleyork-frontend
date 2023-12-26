@@ -15,7 +15,9 @@ import { Dialog } from "primereact/dialog";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
 const Provisioning_queue = () => {
-
+       // State For Select Row
+       const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+       const [rowClick, setRowClick] = useState(true);  
     const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
     const [openDialogeForActivate, setOpenDialogeForActivate] = useState(false);
     const [filters, setFilters] = useState({
@@ -118,7 +120,7 @@ const Provisioning_queue = () => {
     const actionTemplateForPR = (rowData) => {
         return (
             <div>
-                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} />
+                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
                
             </div>
         );
@@ -193,11 +195,13 @@ const Provisioning_queue = () => {
             </div>
                 
                 <div className="" >
-                <DataTable  size="small" value={ allCompletedEnrollments} filters={filters}
+                <DataTable selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)}  size="small" value={ allCompletedEnrollments} filters={filters}
                             globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
                             stripedRows resizableColumns    paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
                             {/* <Column expander style={{ width: "3em" }} /> */}
                         {/* <Column header="#" field="SNo"></Column> */}
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
                         <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
                     <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
                         {rowData.enrollmentId}
