@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import AddUnits from "./add_units/add_units_flow_page.js";
 import { Card } from "primereact/card";  
-import { useLocation } from "react-router-dom";  
+import { useLocation } from "react-router-dom";     
+import "././add_units/add_units_components/sim_singleupload/css/style.css"
 import { useEffect } from "react";
 import InventoryDashboard from "./inventory_dashboard/inventory_dashboard_flow_page";
 import CreateAssignBox from "./create_assign_box/create_assign_box";
@@ -144,21 +145,22 @@ const Manage_inventory = () => {
                 <Equipment_And_Accessories_Request setActiveComponent={setActiveComponent} />
             ) : (
                 <>
-                    <div className="card " style={{ fontSize: "17px", color: "grey",  }}>
+                  <div className="font-bold card " style={{ fontSize: "21px", color: "grey",  }}>
                         Manage Inventory
                     </div>
-                    <div className="flex justify-content-around flex-wrap pt-3">
+                    <div className="flex justify-content-around flex-wrap pt-3 card"> 
+                   
                         <>
                             {InventoryManagment.map((inventory) => (
                                 <Card
                                     style={{
-                                        width: "17em",
-                                        height: "17em",
+                                       
                                         backgroundColor: "#fff",
                                         marginBottom: "20px",
                                         fontWeight:"900",
                                         boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",cursor:"pointer"
-                                    }}
+                                    }} 
+                                    className="manage-inventory"
                                     onClick={() => {
                                     inventory.title === "Dropship Orders" ? navigate("/dropshiporders"):handleImageClick(inventory.component) 
                                     }}
@@ -174,7 +176,7 @@ const Manage_inventory = () => {
                                         }}
                                         // Set the active component when image 1 is clicked
                                     />
-                                    <div className="flex justify-content-center" style={{ fontSize: "14px",fontWeight:"normal",fontFamily:"Inter", marginTop: "35px", color: "grey" }}>
+                                    <div className="flex justify-content-center font-bold " style={{ fontSize: "17px",fontWeight:"normal",fontFamily:"Inter", marginTop: "35px", color: "grey" }}>
                                         <p>{inventory.title}</p>
                                     </div>
                                 </Card>
