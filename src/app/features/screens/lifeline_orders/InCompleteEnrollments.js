@@ -15,7 +15,11 @@ import AllEnrollmentSearchbar from "./AllEnrollmentSearchbar";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { InputText } from "primereact/inputtext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const InCompleteEnrollments = () => {
+const InCompleteEnrollments = () => { 
+     // State For Select Row
+     const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+     const [rowClick, setRowClick] = useState(true);
+    
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -234,7 +238,7 @@ const InCompleteEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="Continue" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading || !isCreate} />
+                <Button label="Continue" className="pb-1 pt-1" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading || !isCreate} />
             </div>
         );
     };
@@ -248,8 +252,10 @@ const InCompleteEnrollments = () => {
                 </div>
             </div>
                 <div>
-                    <DataTable  size="small"   value={allInCompletedEnrollments} stripedRows resizableColumns paginator rows={10} filters={filters} globalFilterFields={["enrollmentId", "name"]} header={header} emptyMessage="No customers found." rowsPerPageOptions={[25, 50]}>
+                    <DataTable selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)}  size="small"   value={allInCompletedEnrollments} stripedRows resizableColumns paginator rows={10} filters={filters} globalFilterFields={["enrollmentId", "name"]} header={header} emptyMessage="No customers found." rowsPerPageOptions={[25, 50]}>
                         {/* <Column expander style={{ width: "3em" }} /> */}
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
                         <Column
                             header="Enrollment ID"
                             field="enrollmentId"

@@ -14,6 +14,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const RejectedEnrollments = () => {
+    const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+    const [rowClick, setRowClick] = useState(true);
+   
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -35,6 +38,7 @@ const RejectedEnrollments = () => {
         setGlobalFilterValue(value);
     };
     const onNameDateEnrollmentIdValueFilter = (e, field) => {
+       
         const value = e.target.value;
         let _filters = { ...filters };
         if (field === "enrollment") {
@@ -210,14 +214,14 @@ const RejectedEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2  " text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1  " text raised disabled={isButtonLoading} />
             </div>
         );
     };
 
     const actionTemplateForCsr = (rowData) => {
-        return <Button label="Edit" onClick={() => viewRow(rowData)} text card raised/>;
+        return <Button label="Edit" className="pb-1 pt-1" onClick={() => viewRow(rowData)} text card raised/>;
     };
     const header = () => {
         return (
@@ -295,9 +299,10 @@ const RejectedEnrollments = () => {
                 {isButtonLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" />: null}
 
                 <div className="">
-                    <DataTable value={allEnrollments} filters={filters} globalFilterFields={["enrollmentId", "name"]} header={header} emptyMessage="No customers found." stripedRows resizableColumns columnResizeMode="fit" paginator rows={10} rowsPerPageOptions={[25, 50]} size="small">
+                    <DataTable selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)} value={allEnrollments} filters={filters} globalFilterFields={["enrollmentId", "name"]} header={header} emptyMessage="No customers found." stripedRows resizableColumns size="small"  paginator rows={10} rowsPerPageOptions={[25, 50]} >
                         {/* <Column expander style={{ width: "3em" }} /> */}
-
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
                         <Column
                             header="Enrollment ID"
                             field="enrollmentId"
