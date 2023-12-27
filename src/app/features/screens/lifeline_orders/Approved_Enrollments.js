@@ -206,7 +206,7 @@ const Approved_Enrollments = () => {
                         <Column field="createdBy.name" header="Created BY"/>
                         <Column
                                 field="level"
-                                header="Status"
+                                header="Phase"
                                 body={(rowData) => {
                                     if (Array.isArray(rowData.level) && rowData.level.length > 0) {
                                         const statusArray = rowData.level.map((level) => {
