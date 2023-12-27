@@ -20,32 +20,35 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
 import moment from "moment/moment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
+const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {  
+    const [checkdoberror,setCheckDOBError]=useState(false)  
+     console.log("personal info is calling")
     const startYear = 1900;
     const endYear = new Date().getFullYear();
-
-  
+     const [selectedYear,setSelectedYear]=useState(null)   
+      const [selectedMonth,setSelectedMonth]=useState(null)  
+      const [selectedDay,setSelectedDay]=useState(null)
     const yearOptions = Array.from({ length: endYear - startYear + 1 }, (_, index) => {
-        const year = endYear - index;  // Adjusted to generate years in descending order
+        const year = endYear - index; // Adjusted to generate years in descending order
         return { label: year.toString(), value: year };
-    });
-    const customItemTemplate = (option) => (
-        <div  style={{marginTop:"-10px",marginBottom:"-10px"}}>{option.label}</div>
-      );
+    }); 
+    
+    console.log("checkdoberror is",checkdoberror)
+    const customItemTemplate = (option) => <div style={{ marginTop: "-10px", marginBottom: "-10px" }}>{option.label}</div>;
     const monthOptions = [
-        { label: 'Jan-01', value: 1 },
-        { label: 'Feb-02', value: 2 },
-        { label: 'Mar-03', value: 3 },
-        { label: 'Apr-04', value: 4 },
-        { label: 'May-05', value: 5 },
-        { label: 'Jun-06', value: 6 },
-        { label: 'Jul-07', value: 7 },
-        { label: 'Aug-08', value: 8 },
-        { label: 'Sep-09', value: 9 },
-        { label: 'Oct-10', value: 10 },
-        { label: 'Nov-11', value: 11 },
-        { label: 'Dec-12', value: 12 },
-      ];
+        { label: "Jan-01", value: 1 },
+        { label: "Feb-02", value: 2 },
+        { label: "Mar-03", value: 3 },
+        { label: "Apr-04", value: 4 },
+        { label: "May-05", value: 5 },
+        { label: "Jun-06", value: 6 },
+        { label: "Jul-07", value: 7 },
+        { label: "Aug-08", value: 8 },
+        { label: "Sep-09", value: 9 },
+        { label: "Oct-10", value: 10 },
+        { label: "Nov-11", value: 11 },
+        { label: "Dec-12", value: 12 },
+    ];
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
     const [isSelfReceive, setIsSelfReceive] = useState(true);
@@ -54,7 +57,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isDuplicate, setIsDuplicate] = useState(false);
     const validationSchema = Yup.object().shape({
-        DOB: Yup.string().required("This is Required"),
         firstName: Yup.string().required("This is Required"),
         lastName: Yup.string().required("This is Required"),
         SSN: Yup.string().required("This is Required."),
@@ -109,8 +111,15 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             BenifitDOB: "",
             isACP: acp,
         },
-        onSubmit: async (values, actions) => {
-            const selectedDate = formik.values.DOB;
+        onSubmit: async (values, actions) => {   
+            if(selectedDay === null || selectedYear === null || selectedMonth === null){ 
+                  setCheckDOBError(true)
+            }   
+            else{
+            const dateObject = new Date(selectedYear, formik.values.month - 1, formik.values.day);
+            const isoString = dateObject.toISOString();
+
+            const selectedDate = isoString;
             console.log(selectedDate);
             const formattedDate = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : "";
             console.log(formattedDate);
@@ -151,7 +160,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
-            }
+            } 
+        }
         },
     });
 
@@ -209,7 +219,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     const [dayoption, setDayOptions] = useState(null);
     //get zipData
     const zipResponse = localStorage.getItem("zipData");
-    const parsezipResponse = JSON.parse(zipResponse);
+    const parsezipResponse = JSON.parse(zipResponse);   
+   
     useEffect(() => {
         if (formik.values.month === 1 || formik.values.month === 3 || formik.values.month === 5 || formik.values.month === 7 || formik.values.month === 8 || formik.values.month === 10 || formik.values.month === 12) {
             const startDay = 1;
@@ -219,6 +230,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 return { label: day.toString(), value: day };
             });
             setDayOptions(option);
+            if (formik.values.day !== null && formik.values.year !== null) {
+                const dateObject = new Date(formik.values.year, formik.values.month - 1, formik.values.day);
+                const isoString = dateObject.toISOString();
+                formik.setFieldValue("DOB", isoString);
+            } else {
+                formik.setFieldValue("DOB", "");
+            }
         } else if (formik.values.month === 4 || formik.values.month === 6 || formik.values.month === 9 || formik.values.month === 11) {
             const startDay = 1;
             const endDay = 30;
@@ -227,11 +245,21 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 return { label: day.toString(), value: day };
             });
             setDayOptions(option);
+            if (formik.values.day !== null && formik.values.year !== null) {
+                if (formik.values.day > 30) {
+                    formik.setFieldValue("day", 30);   
+                     setSelectedDay(30)
+                }
+                const dateObject = new Date(formik.values.year, formik.values.month - 1, formik.values.day);
+                const isoString = dateObject.toISOString();
+                formik.setFieldValue("DOB", isoString);
+            } else {
+                formik.setFieldValue("DOB", "");
+            }
         } else {
             if (formik.values.year !== null) {
                 if (isLeapYear(formik.values.year)) {
                     if (formik.values.month === 2) {
-                        formik.setFieldValue("day", null);
                         const startDay = 1;
                         const endDay = 29;
                         const option = Array.from({ length: endDay - startDay + 1 }, (_, index) => {
@@ -239,6 +267,17 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             return { label: day.toString(), value: day };
                         });
                         setDayOptions(option);
+                        if (formik.values.day !== null) {
+                            if (formik.values.day > 29) {
+                                formik.setFieldValue("day", 29);  
+                                setSelectedDay(29)
+                            }
+                            const dateObject = new Date(formik.values.year, formik.values.month - 1, formik.values.day);
+                            const isoString = dateObject.toISOString();
+                            formik.setFieldValue("DOB", isoString);
+                        } else {
+                            formik.setFieldValue("DOB", "");
+                        }
                     }
                 } else {
                     const startDay = 1;
@@ -248,24 +287,19 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         return { label: day.toString(), value: day };
                     });
                     setDayOptions(option);
+                    if (formik.values.day !== null && formik.values.year !== null) {
+                        if (formik.values.day > 28) {
+                            formik.setFieldValue("day", 28);  
+                            setSelectedDay(28)
+                        }
+                        const dateObject = new Date(formik.values.year, formik.values.month - 1, formik.values.day);
+                        const isoString = dateObject.toISOString();
+                        formik.setFieldValue("DOB", isoString);
+                    } else {
+                        formik.setFieldValue("DOB", "");
+                    }
                 }
             } else {
-                const startDay = 1;
-                const endDay = 28;
-                const option = Array.from({ length: endDay - startDay + 1 }, (_, index) => {
-                    const day = startDay + index;
-                    return { label: day.toString(), value: day };
-                });
-                setDayOptions(option);
-            }
-        }
-        console.log(dayoption);
-    }, [formik.values.month]);
-
-    useEffect(() => {
-        if (isLeapYear(formik.values.year)) {
-            if (formik.values.month === 2) {
-                formik.setFieldValue("day", null);
                 const startDay = 1;
                 const endDay = 29;
                 const option = Array.from({ length: endDay - startDay + 1 }, (_, index) => {
@@ -275,53 +309,41 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 setDayOptions(option);
             }
         }
-    }, [formik.values.year]);
-    function isLeapYear() {
-        if (formik.values.year % 4 === 0) {
-            // Check if the year is divisible by 100
-            if (formik.values.year % 100 === 0) {
-                // Check if the year is divisible by 400
-                return formik.values.year % 400 === 0;
-            } else {
-                return true;
+        console.log("month is change ");
+    }, [formik.values.month]);
+
+    useEffect(() => {
+        if (isLeapYear(formik.values.year)) {
+            if (formik.values.month === 2) {
+                const startDay = 1;
+                const endDay = 29;
+                const option = Array.from({ length: endDay - startDay + 1 }, (_, index) => {
+                    const day = startDay + index;
+                    return { label: day.toString(), value: day };
+                });
+                setDayOptions(option);
             }
+        } else {
+            if (formik.values.month === 2) {
+                const startDay = 1;
+                const endDay = 28;
+
+                const option = Array.from({ length: endDay - startDay + 1 }, (_, index) => {
+                    const day = startDay + index;
+                    return { label: day.toString(), value: day };
+                });
+                setDayOptions(option);
+            }
+        }
+    }, [formik.values.year]);
+    function isLeapYear(year) {
+        if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+            return true;
         } else {
             return false;
         }
     }
-    useEffect(() => {
-        const dobString = parsebasicResponse?.data?.DOB;
-
-        if (dobString) {
-            // set data in feilds from local storage
-            formik.setFieldValue("firstName", parsebasicResponse?.data?.firstName);
-            formik.setFieldValue("middleName", parsebasicResponse?.data?.middleName);
-            formik.setFieldValue("lastName", parsebasicResponse?.data?.lastName);
-            formik.setFieldValue("SSN", parsebasicResponse?.data?.SSN);
-            formik.setFieldValue("DOB", new Date(parsebasicResponse?.data?.DOB));         
-            formik.setFieldValue("month",new Date(parsebasicResponse?.data?.DOB).getMonth()+1)  
-            formik.setFieldValue("day",new Date(parsebasicResponse?.data?.DOB).getDate())  
-            formik.setFieldValue("year",new Date(parsebasicResponse?.data?.DOB).getFullYear())
-            formik.setFieldValue("email", parsebasicResponse?.data?.email);
-            formik.setFieldValue("suffix", parsebasicResponse?.data?.suffix);
-            formik.setFieldValue("contact", parsebasicResponse?.data?.contact);
-            formik.setFieldValue("drivingLicense", parsebasicResponse?.data?.drivingLicense);
-            formik.setFieldValue("ESim", parsebasicResponse?.data?.ESim);
-            formik.setFieldValue("bestWayToReach", parsebasicResponse?.data?.bestWayToReach);
-            formik.setFieldValue("isSelfReceive", parsebasicResponse?.data?.isSelfReceive);
-            formik.setFieldValue("BenifitFirstName", parsebasicResponse?.data?.BenifitFirstName);
-            formik.setFieldValue("BenifitMiddleName", parsebasicResponse?.data?.BenifitMiddleName);
-            formik.setFieldValue("BenifitLastName", parsebasicResponse?.data?.BenifitLastName);
-            formik.setFieldValue("BenifitDOB", new Date(parsebasicResponse?.data?.BenifitDOB));
-            formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
-            formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
-            //chnage state
-            seteSim(parsebasicResponse?.data?.ESim);
-            setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
-            setAcp(parsebasicResponse?.data?.isACP);
-            setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive);
-        }
-    }, []);
+    
 
     useEffect(() => {
         if (!isSelfReceive) {
@@ -352,7 +374,47 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         };
 
         fetchData();
-    }, [formik.values.contact]);
+    }, [formik.values.contact]);   
+    useEffect(() => {
+        const dobString = parsebasicResponse?.data?.DOB;
+
+        if (dobString) {     
+            console.log("dob string is",dobString)
+            // set data in feilds from local storage  
+            setSelectedYear(new Date(parsebasicResponse?.data?.DOB).getFullYear())  
+            setSelectedMonth(new Date(parsebasicResponse?.data?.DOB).getMonth() + 1) 
+            setSelectedDay(new Date(parsebasicResponse?.data?.DOB).getDate())
+            console.log(new Date(parsebasicResponse?.data?.DOB).getDate());
+            formik.setFieldValue("firstName", parsebasicResponse?.data?.firstName);
+            formik.setFieldValue("middleName", parsebasicResponse?.data?.middleName);
+            formik.setFieldValue("lastName", parsebasicResponse?.data?.lastName);
+            formik.setFieldValue("SSN", parsebasicResponse?.data?.SSN);
+            formik.setFieldValue("DOB", new Date(parsebasicResponse?.data?.DOB));
+            formik.setFieldValue("month", new Date(parsebasicResponse?.data?.DOB).getMonth() + 1);
+            formik.setFieldValue("day", new Date(parsebasicResponse?.data?.DOB).getDate());
+            formik.setFieldValue("year", new Date(parsebasicResponse?.data?.DOB).getFullYear());
+            formik.setFieldValue("email", parsebasicResponse?.data?.email);
+            formik.setFieldValue("suffix", parsebasicResponse?.data?.suffix);
+            formik.setFieldValue("contact", parsebasicResponse?.data?.contact);
+            formik.setFieldValue("drivingLicense", parsebasicResponse?.data?.drivingLicense);
+            formik.setFieldValue("ESim", parsebasicResponse?.data?.ESim);
+            formik.setFieldValue("bestWayToReach", parsebasicResponse?.data?.bestWayToReach);
+            formik.setFieldValue("isSelfReceive", parsebasicResponse?.data?.isSelfReceive);
+            formik.setFieldValue("BenifitFirstName", parsebasicResponse?.data?.BenifitFirstName);
+            formik.setFieldValue("BenifitMiddleName", parsebasicResponse?.data?.BenifitMiddleName);
+            formik.setFieldValue("BenifitLastName", parsebasicResponse?.data?.BenifitLastName);
+            formik.setFieldValue("BenifitDOB", new Date(parsebasicResponse?.data?.BenifitDOB));
+            formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
+            formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
+
+            //chnage state
+            seteSim(parsebasicResponse?.data?.ESim);
+            setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
+            setAcp(parsebasicResponse?.data?.isACP);
+            setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive);
+            console.log("formik values is", formik.values);
+        }
+    }, []);
 
     const handlePaste = (event) => {
         event.preventDefault();
@@ -365,7 +427,11 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                     <h5 className="font-bold enroll">ENROLLMENT ID: {enrollment_id}</h5>
-                    <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading || isDuplicate} />
+                    <Button label="Continue" type="submit" onClick={()=>{ 
+                         if(selectedDay === null || selectedMonth === null || selectedYear === null){
+                        setCheckDOBError(true)    
+                         }
+                    }}  icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading || isDuplicate} />
                 </div>
                 <p>To apply for the Affordable Connectivity program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
                 <p className="text-xl font-semibold">What is your full legal name?</p>
@@ -446,20 +512,24 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 value={formik.values.month}
                                 id="month"
                                 onChange={(e) => {
-                                    formik.setFieldValue("day", null);
-                                    formik.setFieldValue("DOB", "");
-                                    formik.handleChange(e);
-                                    console.log(formik.values);
+                                    formik.handleChange(e);  
+                                     setCheckDOBError(false)
+                                    formik.handleChange(e)
+                                    console.log(formik.values); 
+                                    setSelectedMonth(e.value) 
+                                    
                                 }}
                                 options={monthOptions}
-                                className={classNames({ "p-invalid": formik.values.month === null && isFormFieldValid("DOB") }, "input_text md-col-3 col-4")}
-                            /> 
+                                className={classNames({ "p-invalid": formik.values.month === null && checkdoberror }, "input_text md-col-3 col-4")}
+                            />
                             <Dropdown
                                 placeholder="Day"
                                 value={formik.values.day}
                                 id="day"
-                                onChange={(e) => {
-                                    formik.handleChange(e);
+                                onChange={(e) => { 
+                                    setCheckDOBError(false)
+                                    formik.handleChange(e);  
+                                       setSelectedDay(e.value)
                                     if (formik.values.month !== null && formik.values.year !== null) {
                                         const dateObject = new Date(formik.values.year, formik.values.month - 1, e.value);
                                         const isoString = dateObject.toISOString();
@@ -468,29 +538,66 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                     console.log(formik.values);
                                 }}
                                 options={dayoption}
-                                className={classNames({ "p-invalid": formik.values.day === null && isFormFieldValid("DOB") }, "input_text md-col-3 col-4")}
+                                className={classNames({ "p-invalid": formik.values.day === null && checkdoberror  }, "input_text md-col-3 col-4")}
                             />
                             <Dropdown
                                 placeholder="Year"
-                                className={classNames({ "p-invalid": formik.values.year === null && isFormFieldValid("DOB") }, "input_text md-col-3 col-4")}
+                                className={classNames({ "p-invalid": formik.values.year === null && checkdoberror  }, "input_text md-col-3 col-4")}
                                 value={formik.values.year}
-                                id="year" 
+                                name="year"
                                 itemTemplate={customItemTemplate}
-                                onChange={(e) => {
-                                    formik.handleChange(e);
+                                onChange={(e) => { 
+                                    setCheckDOBError(false)
+                                    setSelectedYear(e.value)
                                     if (formik.values.month !== null && formik.values.day !== null) {
-                                        const dateObject = new Date(e.value, formik.values.month - 1, formik.values.day);
-                                        const isoString = dateObject.toISOString();
+                                        if (isLeapYear(e.value)) {
+                                            if (formik.values.month === 2) {
+                                                if (formik.values.day <= 29) {  
 
-                                        formik.setFieldValue("DOB", isoString);
-                                    }
-                                    console.log(formik.values);
+                                                    const dateObject = new Date(e.value, formik.values.month - 1, formik.values.day);
+                                                    const isoString = dateObject.toISOString();
+            
+                                                    formik.setFieldValue("DOB", isoString); 
+                                                     
+                                                } else {
+                                                    formik.setFieldValue("day", 29);  
+                                                    setSelectedDay(e.value)
+                                                    const dateObject = new Date(e.value, formik.values.month - 1, 29);
+                                                    const isoString = dateObject.toISOString();
+            
+                                                    formik.setFieldValue("DOB", isoString);
+                                                }
+                                            }
+                                        } else {       
+                                           
+                                            if (formik.values.month === 2) {
+                                                if (formik.values.day > 28) {
+                                                    formik.setFieldValue("day", 28);    
+                                                    setSelectedDay(28)       
+                                                    const dateObject = new Date(e.value, formik.values.month - 1, 28);
+                                                    const isoString = dateObject.toISOString();
+            
+                                                    formik.setFieldValue("DOB", isoString);
+                                                } else { 
+                                                    const dateObject = new Date(e.value, formik.values.month - 1, formik.values.day);
+                                                    const isoString = dateObject.toISOString();
+            
+                                                    formik.setFieldValue("DOB", isoString);
+                                                }
+                                            }
+                                        }
+                                        formik.handleChange(e)
+                                    } 
+                               
+                                   else{ 
+                                    formik.handleChange(e)
+                                   }
+                                 console.log(formik.values.year)
                                 }}
                                 options={yearOptions}
                             />
-                            
                         </div>
-                        {getFormErrorMessage("DOB")}
+                        {checkdoberror ? <p className="steric mt-1">This is required</p>:""}
                     </div>
 
                     <div className="field col-12 md:col-3">

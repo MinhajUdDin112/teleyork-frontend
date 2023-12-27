@@ -5,16 +5,16 @@ import Eligibility from "./eligibility";
 import plan from "./plan";
 import Preview from "./preview";
 export default function EnrollmentFlowPage() {
-
     const [activeIndex, setActiveIndex] = useState(0);
     const toast = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const csr = parseLoginRes?._id;
+    const csr = parseLoginRes?._id; 
  // Get role name  from login response     
       const roleName= parseLoginRes?.role?.role;
+      
+    //     getting _id and enrollment id from local storage 
    
-    //     getting _id and enrollment id from local storage
     const zipRes = localStorage.getItem("zipData");
     const parseZipRes = JSON.parse(zipRes);
     const enrollment_id = parseZipRes?.data?.enrollmentId;
