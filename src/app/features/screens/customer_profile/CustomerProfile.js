@@ -77,7 +77,7 @@ const CustomerProfile = () => {
             }
         },
     });
-
+console.log("cp data is",cpData)
     const getCustomerProfileData = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
@@ -322,7 +322,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Activation Date</td>
-                                                    <td>{cpData?.carrier?.name}</td>
+                                                    <td>{cpData?.planEffectiveDate}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>TMB Live Status</td>
@@ -334,15 +334,15 @@ const CustomerProfile = () => {
                                                 </tr> 
                                                 <tr>
                                                     <td>Talk Balance</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.talkBalance}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>SMS Balance</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.textBalance}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>Data Balance</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.dataBalance}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>Last Usage</td>
@@ -354,7 +354,7 @@ const CustomerProfile = () => {
                                                 </tr> 
                                                 <tr>
                                                     <td>Plan Expiration Date</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.planExpirationDate}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>SOC</td>
@@ -378,7 +378,7 @@ const CustomerProfile = () => {
                                                 </tr> 
                                                 <tr>
                                                     <td>Sim Status</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.simStatus}</td>
                                                 </tr>
                                             </tbody>
                                         </table>     
