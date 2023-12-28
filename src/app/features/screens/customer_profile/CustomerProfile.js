@@ -396,11 +396,11 @@ console.log("cp data is",cpData)
                                                 </tr> 
                                                 <tr>
                                                     <td>PUK1</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.PUK1}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>PUK2</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.PUK2}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>MVNO</td>
