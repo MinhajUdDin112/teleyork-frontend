@@ -14,8 +14,7 @@ export default function CellPhoneSingleUpload  ({permissions}) {
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    console.log(parseLoginRes);
-    
+  
 const [add_cellphone_model_dialog_visibility, setAddCellPhoneModelDialogVisbility] = useState(false);
 const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
     const [carrier, setCarrier] = useState(null);
@@ -35,12 +34,11 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         obj.value = res.data.data[i]._id;
                         departmentholder.push(obj);
                     }
-                    console.log("department holder is ", departmentholder);
                     setDepartment(departmentholder);
-                    console.log(department); // Move this inside the promise callback
+                   // Move this inside the promise callback
                 })
                 .catch(() => {
-                    console.log("error");
+                 
                 });
         }
     }, []);
@@ -59,7 +57,6 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                     setAgent(agentholder);
                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, [departmentselected]);
@@ -77,13 +74,10 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                 setCarrier(carrierholder);
             })
             .catch(() => {
-                console.log("error");
             });
         Axios.get(`${BASE_URL}/api/deviceinventory/getPhoneDeviceModel`)
             .then((res) => { 
-                console.log(res)
-                
-                let Modelholder = [];
+               let Modelholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
                     const obj = {};
                     obj.label = res.data.data[i].name;
@@ -95,13 +89,12 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
             
             })
             .catch(() => {
-                console.log("error");
             });
     }, []); 
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-           Esn: Yup.string().required("Esn Number Is require").min(19, "Esn Number must be at least 19 characters").max(25, "Esn Number must be at most 25 characters"),
+           Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
 
             box: Yup.string().required("Box is required"),
 
@@ -132,7 +125,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
         },
     });
     function handlesubmit() {
-        console.log(formik.errors);  
+     
          let obj=formik.values; 
          obj.serviceProvider=parseLoginRes.compony 
         if (Object.keys(formik.errors).length === 0) {
@@ -142,13 +135,13 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                 .then((res) => {
                     console.log("Successfully done");  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
+                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
                 })
                 .catch((error) => {  
                
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail: error.response.data.msg });
+                    ref.current.show({ severity: "error", summary: "Inventory", detail: error.response.data.msg });
                 });  
                   
         }           
@@ -161,7 +154,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -173,7 +166,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         <p className="m-0">
                             ESN <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.Esn && formik.touched.Esn && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Esn}
@@ -184,7 +177,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         <p className="m-0">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
                   {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -221,7 +214,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="w-20rem mt-2"
+                            className="field-width mt-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -246,7 +239,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -268,7 +261,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.Model && formik.touched.Model && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Model}
@@ -279,7 +272,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
@@ -290,24 +283,26 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         <p className="m-0">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.box && formik.touched.box && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.box}
                             </div>
                         )}
-                    </div>
-                </div>
-                <div className="flex flex-wrap justify-content-center align-item-center">
+                    </div>   
+                    <div className="mr-3 mb-3 mt-4" >
                     <Button
-                        label="Submit"
+                        label="Submit" 
+                        className="field-width mt-4"
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()
                         }}  
                         disabled={!(permissions.isCreate)}
-                    />
+                    /> 
+                     </div>
                 </div>
+               
             </div>
             <Dialog
                 visible={add_cellphone_model_dialog_visibility}

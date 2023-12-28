@@ -11,12 +11,9 @@ import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function SIMSingleUploadAddProvision({permissions}) {  
-        
-    console.log("Permissions is here", permissions.isCreate)
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    console.log(parseLoginRes);
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
@@ -36,12 +33,11 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                         obj.value = res.data.data[i]._id;
                         departmentholder.push(obj);
                     }
-                    console.log("department holder is ", departmentholder);
                     setDepartment(departmentholder);
-                    console.log(department); // Move this inside the promise callback
+                    // Move this inside the promise callback
                 })
                 .catch(() => {
-                    console.log("error");
+                  
                 });
         }
     }, []);
@@ -60,7 +56,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                     setAgent(agentholder);
                 })
                 .catch(() => {
-                    console.log("error");
+                 
                 });
         }
     }, [departmentselected]);
@@ -78,7 +74,6 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                 setCarrier(carrierholder);
             })
             .catch(() => {
-                console.log("error");
             });
         Axios.get(`${BASE_URL}/api/simType/all`)
             .then((res) => {
@@ -93,14 +88,12 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                 setModel(Modelholder);
             })
             .catch(() => {
-                console.log("error");
             });
     }, []);
-    console.log("department is ", department);
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-            SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least 19 characters").max(25, "Sim Number must be at most 25 characters"),
+            SimNumber: Yup.string().required("SIM Number Is require").min(18, "Sim Number must be at least 18 characters").max(19, "Sim Number must be at most 19 characters"),
             box: Yup.string().required("Box is required"),
             Model: Yup.string().required("Model is required"),
         AgentName: Yup.string().required("Agent Name is required"),
@@ -136,14 +129,14 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                 .then((res) => {
                     console.log("Successfully done");  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
+                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
                 })
                 .catch((error) => {     
                       
                     console.log(error.response.data.msg)   
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
+                    ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
                 });  
                   
         }           
@@ -156,7 +149,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -168,7 +161,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             ESN/SIM Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.SimNumber} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText keyfilter="int" value={formik.values.SimNumber} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.SimNumber && formik.touched.SimNumber && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumber}
@@ -179,7 +172,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
                   {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -216,7 +209,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="w-20rem mt-2"
+                            className="field-width mt-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -238,7 +231,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -263,7 +256,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                                 </Button>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.Model && formik.touched.Model && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Model}
@@ -274,7 +267,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.box && formik.touched.box && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.box}
@@ -284,7 +277,8 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                 </div>
                 <div className="flex flex-wrap justify-content-center align-item-center">
                     <Button
-                        label="Submit"
+                        label="Submit" 
+                        className="field-width"
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()

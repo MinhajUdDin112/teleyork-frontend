@@ -14,7 +14,6 @@ export default function TabletSingleUploadAddProvision({permissions}) {
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    console.log(parseLoginRes);
     const [addTablet_Model_dialog_visibility, setAddTabletModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
@@ -26,7 +25,6 @@ export default function TabletSingleUploadAddProvision({permissions}) {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
                 .then((res) => {
-                    console.log(res.data.data);
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
@@ -34,9 +32,8 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                         obj.value = res.data.data[i]._id;
                         departmentholder.push(obj);
                     }
-                    console.log("department holder is ", departmentholder);
                     setDepartment(departmentholder);
-                    console.log(department); // Move this inside the promise callback
+              // Move this inside the promise callback
                 })
                 .catch(() => {
                     console.log("error");
@@ -58,7 +55,6 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                     setAgent(agentholder);
                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, [departmentselected]);
@@ -76,13 +72,10 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                 setCarrier(carrierholder);
             })
             .catch(() => {
-                console.log("error");
             });
         Axios.get(`${BASE_URL}/api/deviceinventory/getTabletDeviceModel`)
             .then((res) => {     
-                console.log("Tablet Type is") 
-                console.log(res)
-                
+               
                 let Modelholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
                     const obj = {};
@@ -91,19 +84,16 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                     Modelholder.push(obj);
                 }
  
-                   console.log(Modelholder)
                 setModel(Modelholder);  
                 
             })
             .catch(() => {
-                console.log("error");
             });
     }, []);
-    console.log("department is ", department);
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-           Esn: Yup.string().required("Esn Number Is require").min(19, "Esn Number must be at least 19 characters").max(25, "Esn Number must be at most 25 characters"),
+           Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
 
             box: Yup.string().required("Box is required"),
 
@@ -141,16 +131,14 @@ export default function TabletSingleUploadAddProvision({permissions}) {
             //formik.values.serviceProvider = parseLoginRes?.compony;  
             
             Axios.post(`${BASE_URL}/api/web/tabletInventory/tabletAddStock`, obj)
-                .then((res) => {
-                    console.log("Successfully done");  
+                .then((res) => { 
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
+                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
                 })
                 .catch((error) => {  
                  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
+                    ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
                 });  
                   
         }           
@@ -163,7 +151,7 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -175,7 +163,7 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             ESN <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.Esn && formik.touched.Esn && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Esn}
@@ -186,7 +174,7 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
                   {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -223,7 +211,7 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="w-20rem mt-2"
+                            className="field-width mt-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -248,7 +236,7 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -270,7 +258,7 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.Model && formik.touched.Model && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Model}
@@ -281,7 +269,7 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
@@ -292,24 +280,26 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-20rem mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.box && formik.touched.box && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.box}
                             </div>
                         )}
-                    </div>
-                </div>
-                <div className="flex flex-wrap justify-content-center align-item-center">
-                    <Button
+                    </div>  
+                    <div className="mr-3 mb-3 mt-4"> 
+                    <Button 
+                      className="field-width mt-4 justify-content-center"
                         label="Submit"
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()
-                        }}  
+                        }}     
                         disabled={!(permissions.isCreate)}
                     />
+                    </div>
                 </div>
+                
             </div>
             <Dialog
                 visible={addTablet_Model_dialog_visibility}
