@@ -92,23 +92,23 @@ const AddUnits = ({ setActiveComponent }) => {
             <div>
                 <div className="flex flex-wrap mb-3  justify-content-around">
                     <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                        <p className="m-0 ">
                             Inventory Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="field-width" />
+                        <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Upload Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="field-width" />
+                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>
                     {formik.values.unit !== "Cell Phone" ? (
                         <div className="mr-3 mb-3 mt-3">
                             <p className="m-0">
                                 Provision Type <span style={{ color: "red" }}>*</span>
                             </p>
-                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ?simprovision:provision} onChange={formik.handleChange} placeholder="Select an option" className="field-width" />
+                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ?simprovision:provision} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                         </div>
                     ) : undefined}
                 </div>

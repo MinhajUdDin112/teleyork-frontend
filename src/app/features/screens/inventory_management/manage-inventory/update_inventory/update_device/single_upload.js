@@ -123,7 +123,7 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
           if(e.target.value.length === 18 || e.target.value.length === 19 ){   
              //Getting SIM Details 
             Axios.get(`${BASE_URL}/api/web/simInventory/getByESN?esn=${e.target.value}`).then((res)=>{  
-                console.log("res is ", res);
+            
                 setEsnExist(e.target.value);
 
                       formik.setFieldValue("agentType",res.data.data.AgentType._id)  
@@ -263,7 +263,7 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                                 handlePopulateDataByEsn(e);
                             }}
                             onBlur={formik.handleBlur}
-                            className="w-15rem mt-2"
+                            className="field-width mt-2"
                         />
                         {formik.errors.SimNumberToUpdate && formik.touched.SimNumberToUpdate && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -283,10 +283,10 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                                 setSimNumberError(false);
                             }}
                             onBlur={formik.handleBlur}
-                            className="w-15rem mt-2"
+                            className="field-width mt-2"
                         />
                         {simNumberError === true ? (
-                            <p className="w-15rem mt-2" style={{ color: "red" }}>
+                            <p className="field-width mt-2" style={{ color: "red" }}>
                                 Sim Number must be at least 18 and at most 19 characters
                             </p>
                         ) : undefined}
@@ -296,9 +296,9 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                         <InputText type="text" keyfilter="int"   value={formik.values.IMEI} name="IMEI" onChange={(e)=>{ 
                            formik.setFieldValue("IMEI",e.target.value)       
                            setImeiNumberError(false)
-                        }} onBlur={formik.handleBlur} className="w-15rem mt-2" />
+                        }} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {imeiNumberError === true ? (
-                            <p className="w-15rem mt-2" style={{ color: "red" }}>
+                            <p className="field-width mt-2" style={{ color: "red" }}>
                                 IMEI Number must be of 15 characters
                             </p>
                         ) : undefined}
@@ -306,7 +306,7 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                 
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Carrier</p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder=" -- Select -- " className="w-15rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder=" -- Select -- " className="field-width mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Department/Vendor Name</p>
@@ -320,7 +320,7 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder=" Select "
-                            className="w-15rem mt-2"
+                            className="field-width mt-2"
                         />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
@@ -339,7 +339,7 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select" className="w-15rem mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select" className="field-width mt-2" />
                     </div>
 
                     <div className="mr-3 mb-3 mt-3">
@@ -355,21 +355,22 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder=" -- Select --" className="w-15rem mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder=" -- Select --" className="field-width mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Status</p>
                       
-                        <Dropdown value={formik.values.status} options={[{label:"AVAILABLE",value:"available"},{label:"INUSE",value:"inUse"},{label:"DEACTIVATED",value:"deactivated"}]} onChange={(e) => formik.setFieldValue("status", e.value)} placeholder="Select" className="w-15rem mt-2" />
+                        <Dropdown value={formik.values.status} options={[{label:"AVAILABLE",value:"available"},{label:"INUSE",value:"inUse"},{label:"DEACTIVATED",value:"deactivated"}]} onChange={(e) => formik.setFieldValue("status", e.value)} placeholder="Select" className="field-width mt-2" />
                    
                    </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Box#</p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-15rem mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                     </div>
                 </div>
                 <div className="flex flex-wrap justify-content-center align-item-center">
-                    <Button
+                    <Button  
+                      className="field-width justify-content-center"
                         label="Submit"
                         onClick={() => {
                             formik.handleSubmit();

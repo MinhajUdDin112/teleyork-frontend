@@ -40,7 +40,7 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/transferUserNlad`, data);
                 if (response?.status == "200" || response?.status == "201") {
-                    toast.success("Successfully Verify");
+                    toast.success("Successfully Transferred");
                     setisButtonLoading(false);
                 }
             } catch (error) {

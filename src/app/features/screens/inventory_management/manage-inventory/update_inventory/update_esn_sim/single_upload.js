@@ -116,7 +116,7 @@ export default function EsnSimSingleUpload({ permissions }) {
             //Getting SIM Details
             Axios.get(`${BASE_URL}/api/web/simInventory/getByESN?esn=${e.target.value}`)
                 .then((res) => {
-                    console.log("res is ", res);
+           
                     setEsnExist(e.target.value);
 
                     formik.setFieldValue("agentType", res.data.data.AgentType._id);
@@ -208,8 +208,9 @@ export default function EsnSimSingleUpload({ permissions }) {
                                 handlePopulateDataByEsn(e);
                             }}
                             onBlur={formik.handleBlur}
-                            className="w-15rem mt-2"
-                        />
+                            className="field-width mt-2"
+                         
+                          />
                         {formik.errors.SimNumberToUpdate && formik.touched.SimNumberToUpdate && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumberToUpdate}
@@ -228,7 +229,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                                 setSimNumberError(false);
                             }}
                             onBlur={formik.handleBlur}
-                            className="w-15rem mt-2"
+                            className="field-width  mt-2"
                         />
                         {simNumberError === true ? (
                             <p className="w-15rem mt-2" style={{ color: "red" }}>
@@ -238,7 +239,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Carrier</p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder=" -- Select -- " className="w-15rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder=" -- Select -- " className="field-width  mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Department/Vendor Name</p>
@@ -253,7 +254,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder=" Select "
-                            className="w-15rem mt-2"
+                            className="field-width  mt-2"
                         />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
@@ -272,7 +273,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select" className="w-15rem mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select" className="field-width  mt-2" />
                     </div>
 
                     <div className="mr-3 mb-3 mt-3">
@@ -288,7 +289,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder=" -- Select --" className="w-15rem mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder=" -- Select --" className="field-width  mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Status</p>
@@ -302,16 +303,16 @@ export default function EsnSimSingleUpload({ permissions }) {
                             ]}
                             onChange={(e) => formik.setFieldValue("status", e.value)}
                             placeholder="Select"
-                            className="w-15rem mt-2"
+                            className="field-width  mt-2"
                         />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Box#</p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-15rem mt-2" />
-                    </div>
-                </div>
-                <div className="flex flex-wrap justify-content-center align-item-center">
-                    <Button
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width  mt-2" />
+                    </div>      
+                    <div className="mt-4 mr-3 mb-3 ">
+                    <Button 
+                    className="field-width jusitfy-content-center mt-4"
                         label="Submit"
                         onClick={() => {
                             formik.handleSubmit();
@@ -320,6 +321,8 @@ export default function EsnSimSingleUpload({ permissions }) {
                         disabled={!permissions.isCreate}
                     />
                 </div>
+                </div>
+                
             </div>
             <Dialog
                 visible={addsim_Model_dialog_visibility}
