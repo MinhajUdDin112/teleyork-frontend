@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
@@ -11,9 +11,13 @@ import { ListBox } from "primereact/listbox";
 
 export const AppTopbar = (props) => {     
     console.log(props)
-   
+      useEffect(()=>{ 
+        document.addEventListener("click",docOnClick,false)
+      })
     const [visibleSearch, setVisibleSearch] = useState(false);
-    
+    function docOnClick(e){ 
+     setVisibleSearch(false)
+    }
     const countries = [
         { name: "Inventory Search", code: "inventorysearch" },
         { name: "Payment Search", code: "paymentsearch" },
@@ -23,7 +27,7 @@ export const AppTopbar = (props) => {
 
     const countryTemplate = (option) => {
         return (
-            <div className="flex align-items-center">
+            <div className="flex align-items-center" >
                 {option.name === "Payment Search" ? (
                     <img src="/images/Dashboard-Search/payment-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Recent Searches" ? (
@@ -101,21 +105,23 @@ export const AppTopbar = (props) => {
                         props.setSearchValue(e.target.value);
                     }}
                     value={props.searchValue}
-                    onClick={() => {
+                    onClick={(e) => {    
+                        e.stopPropagation()
                         setVisibleSearch(prev=>!prev);
                     }}
                     placeholder="Search Customer"
                 />
-                <div onMouseLeave={()=>{ 
-                    setVisibleSearch(prev=>!prev)
-                }} className={classNames({ card: visibleSearch }, "flex justify-content-center listbox")}>
+                <div  onClick={(e)=>{
+                            e.stopPropagation()
+                         }} className={classNames({ card: visibleSearch }, "flex justify-content-center listbox")}>
                     <ListBox
+                        
                         value={props.searchBy}
                         style={{ display: `${visibleSearch === true ? "block" : "none"}` }}
                         onChange={(e) => {  
                        
                             props.setSearchBy(e.value);
-                            setVisibleSearch(false);
+                           
                         }}
                         options={countries}
                         optionLabel="name"
