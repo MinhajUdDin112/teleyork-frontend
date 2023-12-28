@@ -5,6 +5,7 @@ import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
+import { Dialog } from "primereact/dialog";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import { useEffect } from "react";
@@ -16,7 +17,8 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const RejectedEnrollments = () => {
     const [selectedEnrollments, setSelectedEnrollments] = useState(null);
     const [rowClick, setRowClick] = useState(true);
-   
+   const [reasonbody,setReasonBody]=useState(null) 
+   const [visible,setVisible]=useState(false)
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -334,14 +336,84 @@ const RejectedEnrollments = () => {
                             }
                         />
                         <Column field="createdBy.name" header="Created BY" />
-                        <Column field="reajectedReason" header="Rejected Reason" />
-                        <Column field="status" header="Phase" />
+                        <Column field="reajectedReason" header="Rejected Reason"   
+                           body={(rowData) => {   
+                            if(rowData.reajectedReason !== undefined){
+                            let template = rowData.reajectedReason;                           ;
+                            let shortline = template.substring(0, 10);
+                            let fullline = template.substring(15, template.length);
+                          
+                            return (
+                                <div id="template">
+                                    {template.length > 10 ? (
+                                        <p>
+                                            {shortline}
+                                            <span
+                                                style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                                                onClick={(e) => {
+                                                    setReasonBody(rowData.reajectedReason);
+                                                    setVisible(true);
+                                                }}
+                                            >
+                                                {" "}
+                                                See more
+                                            </span>
+                                        </p>
+                                    ) : (
+                                        <p>{template}</p>
+                                    )}
+                                </div>
+                            );
+                           }}}  
+                         />
+                        <Column field="status" header="Phase"   
+                         
+                         body={(rowData) => {
+                            if (Array.isArray(rowData.level) && rowData.level.length > 0) {
+                                const statusArray = rowData.level.map((level) => {
+                                    switch (level) {
+                                        case 1:
+                                            return "CSR";
+                                        case 2:
+                                            return "Team Lead";
+                                        case 3:
+                                            return "QA Agent";
+                                        case 4:
+                                            return "QA Manager";
+                                        case 5:
+                                            return "Provision Manager";
+                                        case 6:
+                                            return "Retention";
+                                        case 7:
+                                            return "Dispatch Manager";
+                                        default:
+                                            return "";
+                                    }
+                                });
+
+                                return statusArray.join(", "); // Join multiple statuses into a string
+                            } else {
+                                return ""; // Handle the case when "level" is not an array or is empty
+                            }
+                        }}
+                         />
 
                         {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? <Column header="Actions" body={actionTemplateForCsr}></Column> : <Column header="Actions" body={actionTemplate}></Column>}
                     </DataTable>
                 </div>
             </div>
-            <br /> 
+            <br />   
+            <Dialog
+                            header="Rejected Reason"
+                            visible={visible}
+                            style={{ width: "50vw" }}
+                            draggable={false}
+                            onHide={() => {
+                                setVisible(false);
+                            }}
+                        >
+                         <p>{reasonbody}</p>
+                        </Dialog>
             </div>
         </div>
     );
