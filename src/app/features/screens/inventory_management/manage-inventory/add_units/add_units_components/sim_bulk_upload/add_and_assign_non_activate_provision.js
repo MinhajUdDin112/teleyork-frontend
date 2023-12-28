@@ -152,10 +152,10 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
             })
                 .then((res) => {
                     
-                    ref.current.show({ severity: "success", summary: "Info", detail:<ApiResponseShow res={res}/> });
+                    ref.current.show({ severity: "success", summary: "Inventory", detail:<ApiResponseShow res={res}/> });
                 })
                 .catch((error) => {
-                    ref.current.show({ severity: "error", summary: "Info", detail:"Bulk Upload Failed"  });
+                    ref.current.show({ severity: "error", summary: "Inventory", detail:"Bulk Upload Failed"  });
                 });
             formik.values.serviceProvider = parseLoginRes?.companyName; }  
             else{ 
@@ -234,7 +234,8 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                     </div>
                 </div>
                 <div className="flex justify-content-around align-item-center ">
-                   <div> <Button
+                   <div> <Button  
+                     className="field-width justify-content-center"
                         onClick={() => {  
                             setFileError(false)
                             let input = document.createElement("input");
@@ -256,7 +257,9 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                     </p>  :undefined
 }
                     </div>
-                    <Button
+                    <Button 
+                    className="field-width  justify-content-center" 
+                  
                         onClick={() => {   
                              if(formik.values.file === ""){ 
                                  setFileError(true)

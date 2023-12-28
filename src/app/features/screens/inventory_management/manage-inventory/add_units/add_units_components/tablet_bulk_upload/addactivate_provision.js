@@ -148,11 +148,11 @@ export default function TabletBulkUploadAddActivateProvision({permissions}) {
                 },
             })
                 .then((res) => {
-                    ref.current.show({ severity: "success", summary: "Info", detail: <ApiResponseShow res={res}/> });
+                    ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
                 })
                 .catch(() => {
                   
-                    ref.current.show({ severity: "error", summary: "Info", detail:"Bulk Upload Failed"});
+                    ref.current.show({ severity: "error", summary: "Inventory", detail:"Bulk Upload Failed"});
                
                 });
             formik.values.serviceProvider = parseLoginRes?.companyName; }  
@@ -169,7 +169,7 @@ export default function TabletBulkUploadAddActivateProvision({permissions}) {
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -180,7 +180,7 @@ export default function TabletBulkUploadAddActivateProvision({permissions}) {
                         <p className="m-0">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
 
                     <div className="mr-3 mb-3 mt-3">
@@ -197,41 +197,16 @@ export default function TabletBulkUploadAddActivateProvision({permissions}) {
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="w-20rem mt-2"
+                            className="field-width mt-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.agentType}
                             </div>
                         )}
-                    </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
-                            Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? ( 
-                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
-                              
-                                <i
-                                    onClick={() => {
-                                        setAddAgentDialogVisibility((prev) => !prev);
-                                    }}
-                                    className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i> 
-                                </Button>
-                            ) : undefined}
-                        </p>
-
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
-                        {formik.errors.AgentName && formik.touched.AgentName && (
-                            <div className="mt-2" style={{ color: "red" }}>
-                                {formik.errors.AgentName}
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <div className="flex justify-content-around align-item-center ">
-                   <div> <Button
+                    </div>   
+                    <div className="mr-3 mb-3 mt-4"> <Button 
+                    className="mt-4 justify-content-center field-width"
                         onClick={() => {  
                             setFileError(false)
                             let input = document.createElement("input");
@@ -253,7 +228,34 @@ export default function TabletBulkUploadAddActivateProvision({permissions}) {
                     </p>  :undefined
 }
                     </div>
-                    <Button
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">
+                            Agent Name <span style={{ color: "red" }}>* </span>
+                            {formik.values.AgentName !== "" ? ( 
+                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
+                              
+                                <i
+                                    onClick={() => {
+                                        setAddAgentDialogVisibility((prev) => !prev);
+                                    }}
+                                    className="pi pi pi-plus"
+                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                ></i> 
+                                </Button>
+                            ) : undefined}
+                        </p>
+
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        {formik.errors.AgentName && formik.touched.AgentName && (
+                            <div className="mt-2" style={{ color: "red" }}>
+                                {formik.errors.AgentName}
+                            </div>
+                        )}
+                    </div>     
+                    <div className="mr-3 mb-3 mt-4 ">
+                
+                    <Button 
+                      className="mt-4 justify-content-center field-width"
                         onClick={() => {   
                              if(formik.values.file === ""){ 
                                  setFileError(true)
@@ -265,6 +267,9 @@ export default function TabletBulkUploadAddActivateProvision({permissions}) {
                         Submit{" "}
                     </Button>
                 </div>
+                    
+                </div>
+                
            
                 <>
                     <p className="mt-4">
@@ -280,7 +285,7 @@ export default function TabletBulkUploadAddActivateProvision({permissions}) {
                        
                          </p>    
                 </>        
-               <InfoForUsers ProvisionType={"AddActivate"}/>
+               {/*<InfoForUsers ProvisionType={"AddActivate"}/>  */}
                 <Dialog
                     style={{ width: "90vw" }}
                     visible={addAgentDialogVisibility}

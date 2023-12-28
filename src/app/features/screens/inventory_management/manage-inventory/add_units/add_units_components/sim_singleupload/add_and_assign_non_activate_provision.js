@@ -100,7 +100,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-            SimNumber: Yup.string().required("SIM Number Is require").min(19, "Sim Number must be at least  19 characters").max(25, "Sim Number must be at most 25 characters"),
+            SimNumber: Yup.string().required("SIM Number Is require").min(18, "Sim Number must be at least  18 characters").max(19, "Sim Number must be at most 19 characters"),
         
             box: Yup.string().required("Box is required"),
 
@@ -139,13 +139,13 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                 .then((res) => {
                     console.log("Successfully done");  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Info", detail:"Successfully Added"});
+                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Inventory Successfully Added"});
                 })
                 .catch((error) => {  
                     console.log(error.response.data.msg)   
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Info", detail:error.response.data.msg});
+                    ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
                
                 });  
                   
@@ -288,7 +288,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                 </div>
                 <div className="flex flex-wrap justify-content-center align-item-center">
                     <Button
-                        label="Submit"
+                        label="Submit" 
+                        className="field-width"
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()

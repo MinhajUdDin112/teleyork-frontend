@@ -148,10 +148,10 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                     },
                 })
                     .then((res) => {
-                        ref.current.show({ severity: "success", summary: "Info", detail: <ApiResponseShow res={res}/> });
+                        ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
                     })
                     .catch((error) => {
-                        ref.current.show({ severity: "error", summary: "Info", detail: "Bulk Upload Failed" });
+                        ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
                     });
                 formik.values.serviceProvider = parseLoginRes?.companyName;
             } else {
@@ -167,7 +167,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -178,7 +178,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                         <p className="m-0">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-20rem mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
 
                     <div className="mr-3 mb-3 mt-3">
@@ -195,7 +195,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="w-20rem mt-2"
+                            className="field-width mt-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -220,7 +220,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-20rem mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -231,7 +231,8 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                 <div className="flex justify-content-around align-item-center ">
                     <div>
                         {" "}
-                        <Button
+                        <Button 
+                         className="field-width justify-content-center"
                             onClick={() => {
                                 setFileError(false);
                                 let input = document.createElement("input");
@@ -254,7 +255,8 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                             </p>
                         ) : undefined}
                     </div>
-                    <Button
+                    <Button 
+                     className="field-width justify-content-center"
                         onClick={() => {
                             if (formik.values.file === "") {
                                 setFileError(true);

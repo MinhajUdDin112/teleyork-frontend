@@ -55,7 +55,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     const [isHouseHold, setIsHouseHold] = useState(false);
     const [acp, setAcp] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [isDuplicate, setIsDuplicate] = useState(false);
+    const [isDuplicate, setIsDuplicate] = useState(false);  
+    const[dayerror,setDayError]=useState(false) 
+    const[montherror,setMonthError]=useState(false) 
+    const[yearerror,setYearError]=useState(false)
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This is Required"),
         lastName: Yup.string().required("This is Required"),
@@ -428,7 +431,16 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 <div className="flex flex-row justify-content-between align-tems-center mb-2 sticky-buttons">
                     <h5 className="font-bold enroll">ENROLLMENT ID: {enrollment_id}</h5>
                     <Button label="Continue" type="submit" onClick={()=>{ 
-                         if(selectedDay === null || selectedMonth === null || selectedYear === null){
+                         if(selectedDay === null || selectedMonth === null || selectedYear === null){    
+                              if(selectedDay === null){ 
+                                 setDayError(true)
+                              }
+                              if(selectedYear === null){ 
+                                setYearError(true)
+                             } 
+                             if(selectedMonth === null){ 
+                                setMonthError(true)
+                             }
                         setCheckDOBError(true)    
                          }
                     }}  icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading || isDuplicate} />
@@ -511,23 +523,30 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 placeholder="Month"
                                 value={formik.values.month}
                                 id="month"
-                                onChange={(e) => {
+                                onChange={(e) => { 
+                                     if(selectedYear !== null && selectedDay !== null){ 
+                                      setCheckDOBError(false)
+                                     } 
+                                     setMonthError(false)
                                     formik.handleChange(e);  
-                                     setCheckDOBError(false)
+                                 
                                     formik.handleChange(e)
                                     console.log(formik.values); 
                                     setSelectedMonth(e.value) 
                                     
                                 }}
                                 options={monthOptions}
-                                className={classNames({ "p-invalid": formik.values.month === null && checkdoberror }, "input_text md-col-3 col-4")}
+                                className={classNames({ "p-invalid": montherror  }, "input_text md-col-3 col-4")}
                             />
                             <Dropdown
                                 placeholder="Day"
                                 value={formik.values.day}
                                 id="day"
                                 onChange={(e) => { 
-                                    setCheckDOBError(false)
+                                    if(selectedYear !== null && selectedMonth !== null){ 
+                                        setCheckDOBError(false)
+                                       } 
+                                       setDayError(false)
                                     formik.handleChange(e);  
                                        setSelectedDay(e.value)
                                     if (formik.values.month !== null && formik.values.year !== null) {
@@ -538,16 +557,19 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                     console.log(formik.values);
                                 }}
                                 options={dayoption}
-                                className={classNames({ "p-invalid": formik.values.day === null && checkdoberror  }, "input_text md-col-3 col-4")}
+                                className={classNames({ "p-invalid": dayerror   }, "input_text md-col-3 col-4")}
                             />
                             <Dropdown
                                 placeholder="Year"
-                                className={classNames({ "p-invalid": formik.values.year === null && checkdoberror  }, "input_text md-col-3 col-4")}
+                                className={classNames({ "p-invalid": yearerror }, "input_text md-col-3 col-4")}
                                 value={formik.values.year}
                                 name="year"
                                 itemTemplate={customItemTemplate}
                                 onChange={(e) => { 
-                                    setCheckDOBError(false)
+                                    if(selectedMonth !== null && selectedDay !== null){ 
+                                        setCheckDOBError(false)
+                                       } 
+                                       setYearError(false)
                                     setSelectedYear(e.value)
                                     if (formik.values.month !== null && formik.values.day !== null) {
                                         if (isLeapYear(e.value)) {
@@ -597,7 +619,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 options={yearOptions}
                             />
                         </div>
-                        {checkdoberror ? <p className="steric mt-1">This is required</p>:""}
+                        {checkdoberror  ? <p className="steric mt-1" style={{color: "#e24c4c"}}>This is required</p>:""}
                     </div>
 
                     <div className="field col-12 md:col-3">
