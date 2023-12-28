@@ -29,11 +29,11 @@ export default function EsnSimBulkUpload(){
                 <div className="flex flex-wrap mb-3 mt-8 justify-content-around ">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Carrier</p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-20rem" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Vendor</p>
-                        <Dropdown value={formik.values.vendor} options={vendor} onChange={(e) => formik.setFieldValue("vendor", e.value)} placeholder="Select an option" className="w-20rem" />
+                        <Dropdown value={formik.values.vendor} options={vendor} onChange={(e) => formik.setFieldValue("vendor", e.value)} placeholder="Select an option" className="field-width" />
                     </div>
                 </div>
                 <div style={{marginLeft:"55%",marginTop:"50px",transform:"translate(-50%)"}}>

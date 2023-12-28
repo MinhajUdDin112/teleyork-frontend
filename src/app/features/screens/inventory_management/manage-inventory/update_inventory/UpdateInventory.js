@@ -34,13 +34,13 @@ const UpdateInventory = ({ setActiveComponent,permissions }) => {
                     <p className="m-0">
                         Update Feature <span style={{ color: "red" }}>*</span>
                     </p>
-                    <Dropdown value={formik.values.updatefeature} options={feature} onChange={(e) => formik.setFieldValue("updatefeature", e.value)} placeholder="Select an option" className="w-21rem" />
+                    <Dropdown value={formik.values.updatefeature} options={feature} onChange={(e) => formik.setFieldValue("updatefeature", e.value)} placeholder="Select an option" className="field-width" />
                 </div>
                 <div className="mr-3 mb-3">
                     <p className="m-0">
                         Upload Type <span style={{ color: "red" }}>*</span>
                     </p>
-                    <Dropdown value={formik.values.uploadtype} options={type} onChange={(e) => formik.setFieldValue("uploadtype", e.value)} placeholder="Select an option" className="w-21rem" />
+                    <Dropdown value={formik.values.uploadtype} options={type} onChange={(e) => formik.setFieldValue("uploadtype", e.value)} placeholder="Select an option" className="field-width" />
                 </div>
             </div>
             <div >

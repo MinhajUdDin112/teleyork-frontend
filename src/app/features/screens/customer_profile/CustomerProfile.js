@@ -126,12 +126,42 @@ console.log("cp data is",cpData)
         { label: "Low ", value: "low" },
         { label: "Lowest ", value: "lowest" },
     ];
-
+    function convertDateToRequiredFormat(inputDate) {
+        // Create a new Date object from the input string
+        var originalDate = new Date(inputDate);
+      
+        // Extract the components of the date
+        var year = originalDate.getFullYear();
+        var month = ('0' + (originalDate.getMonth() + 1)).slice(-2);
+        var day = ('0' + originalDate.getDate()).slice(-2);
+        var hours = ('0' + originalDate.getHours()).slice(-2);
+        var minutes = ('0' + originalDate.getMinutes()).slice(-2);
+        var seconds = ('0' + originalDate.getSeconds()).slice(-2);
+      
+        // Create a new date string in the desired format
+        var newDateString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      
+        return newDateString;
+      }
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-
+   function showsocs(socarray){   
+       if(socarray !== undefined){
+         console.log(socarray)   
+         var commaSeparatedString=""; 
+          for(let i=0;i<socarray.length;i++){  
+                if(i === 0){
+               commaSeparatedString+=` ${socarray[i]}` 
+                } 
+                else{ 
+                    commaSeparatedString+=`, ${socarray[i]}` 
+                }
+          }
+        return commaSeparatedString
+       }
+   }
     return (
         <div className="card">
             <ToastContainer />
@@ -298,7 +328,7 @@ console.log("cp data is",cpData)
 
                                                 <tr>
                                                     <td>Ported MDN</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.portedMDN === false ? "No":"Yes"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Acc. Type</td>
@@ -322,15 +352,15 @@ console.log("cp data is",cpData)
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Activation Date</td>
-                                                    <td>{cpData?.planEffectiveDate}</td>
+                                                    <td>{  cpData?.planEffectiveDate !== undefined? convertDateToRequiredFormat(cpData?.planEffectiveDate):""}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>TMB Live Status</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.serviceStatus}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>OCS Live Status</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.serviceStatus}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>Talk Balance</td>
@@ -354,11 +384,11 @@ console.log("cp data is",cpData)
                                                 </tr> 
                                                 <tr>
                                                     <td>Plan Expiration Date</td>
-                                                    <td>{cpData?.planExpirationDate}</td>
+                                                    <td>{cpData?.planExpirationDate !== undefined? convertDateToRequiredFormat(cpData?.planExpirationDate):""}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>SOC</td>
-                                                    <td>--</td>
+                                                    <td>{showsocs(cpData?.socs)}</td>
                                                 </tr> 
                                                 <tr>
                                                     <td>IMEI In Use</td>
@@ -423,7 +453,7 @@ console.log("cp data is",cpData)
                                                 </tr>   
                                                  <tr>  
                                                  <td>PWG Customer ID</td>
-                                                    <td>--</td>
+                                                    <td>{cpData?.customerId}</td>
                                                      </tr> 
                                                
                                                 <tr>
@@ -433,7 +463,7 @@ console.log("cp data is",cpData)
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Fulfillment Metdod</td>
+                                                    <td>Fulfillment Method</td>
                                                     <td>--</td>
                                                 </tr>
                                                 <tr>

@@ -14,7 +14,7 @@ const DialogeForRemarksForIJ = ({enrollmentId, getAllEnrollments,setOpenDialogeF
     const [isCallQualityRemarks, setIsCallQualityRemarks] = useState();
 
     const validationSchema = Yup.object().shape({
-      remarksNote: Yup.string().required("Remarks  is Required"),
+      remarksNote: Yup.string().required("Remarks Required"),
      
   });
     const formik = useFormik({

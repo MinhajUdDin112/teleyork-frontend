@@ -59,19 +59,32 @@ export const AppTopbar = (props) => {
             </p>
         </div>
     );
-
+    function capitalizeEveryWord(sentence) {
+        // Split the sentence into an array of words
+        var words = sentence.split(' ');
+      
+        // Capitalize the first letter of each word
+        var capitalizedWords = words.map(function(word) {
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        });
+      
+        // Join the words back into a sentence
+        var capitalizedSentence = capitalizedWords.join(' ');
+      
+        return capitalizedSentence;
+      }
     return (
         <div>
             <div className="logodisplay ">
                 <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                    <span>{parseLoginRes?.companyName}</span>
+                    <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
                 </Link>
             </div>
             <div className="layout-topbar">
                 <Link to="/" className="layout-topbar-logo insidetopbarlogo">
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                    <span>{parseLoginRes?.companyName}</span>
+                    <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
                 </Link>
 
                 <button type="button" className="p-link  layout-menu-button layout-topbar-button" onClick={props.onToggleMenuClick}>

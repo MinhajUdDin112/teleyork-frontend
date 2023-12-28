@@ -12,18 +12,12 @@ import { InputText } from 'primereact/inputtext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { ProgressSpinner } from 'primereact/progressspinner';
-
-
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogForActivateSim = ({enrollmentId,zipCode}) => {
-
+const DialogForActivateSim = ({enrollmentId,zipCode,setOpenDialogeForActivate}) => {
   const [allESN, setAllESN] = useState([])
   const [allPlan, setAllPlan] = useState([])
   const [isButtonLoading, setisButtonLoading] = useState(false)
   const [checkStatus, setCheckStatus] = useState(null);
-
-
-
  const options1 = [
  
   { label: "Sim", value: "sim" },
@@ -60,9 +54,10 @@ const formik = useFormik({
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend);
             if (response?.status === 201 || response?.status === 200) {
-                toast.success("Successfully Run");
-                setisButtonLoading(false);
-                actions.resetForm();
+                toast.success("Account Successfully Activated");
+                setisButtonLoading(false);  
+                actions.resetForm(); 
+                setOpenDialogeForActivate(prev=>!prev)
             }
         } catch (error) {
           toast.error(error?.response?.data?.msg, {

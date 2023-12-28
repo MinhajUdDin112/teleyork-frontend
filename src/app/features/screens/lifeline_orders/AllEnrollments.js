@@ -355,7 +355,7 @@ const AllEnrollments = () => {
             const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?userId=${parseLoginRes?._id}&enrollmentId=${rowData?._id}`);
             console.log("out side")
             if (response?.status == "200" || response?.status == "201") {
-                toast.success("Successfully Verify");
+                toast.success("Successfully Enrolled");
                 console.log("in side")
                 setisButtonLoading(false);
             }
@@ -485,7 +485,7 @@ const AllEnrollments = () => {
 
                         } 
                             else{ 
-                                toast.error("Please add remarks") 
+                                toast.error("Please Add Remarks") 
                             
                             }
                        
@@ -618,31 +618,23 @@ const AllEnrollments = () => {
         setDialogeForTransfer(true);
         setIsEnrolmentId(rowData?._id);
     };
-
-   
-
     return (
         <>
             <ToastContainer className="custom-toast-container" />
-
             <div className="card ">
                 <form>
                     <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
                         <DialogForReject checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
                     </Dialog>
-
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
-                        <DialogForActivateSim enrollmentId={isEnrolmentId} zipCode={zipCode} />
+                        <DialogForActivateSim enrollmentId={isEnrolmentId} setOpenDialogeForActivate={setOpenDialogeForActivate} zipCode={zipCode} />
                     </Dialog>
-
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
                         <DialogeForRemarks  getAllEnrollments={ getAllEnrollments} enrollmentId={isEnrolmentId} />
                     </Dialog>
-
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
                         <DialogeForRemarksForIJ  getAllEnrollments={ getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
                     </Dialog>
-
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
                         <DialogeForTransferUser enrollmentId={isEnrolmentId} />
                     </Dialog>
