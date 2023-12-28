@@ -10,34 +10,35 @@ const Header = ({unit}) => {
                 <Card
                     style={{
                         width: "70%",
-        
+                          
                         backgroundColor: "#aae5e9",
                         marginBottom: "20px",
                         marginLeft: "50%",   
                           transform:"translate(-50%)",
                         boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",
                         boxSizing:"border-box"
-                    }}
+                    }} 
+                    className='mt-4'
                 >
-                    <div className="flex">
-                        <div>
+                    <div className="flex flex-wrap justify-content-center">
+                        <div className='mt-2'>
                             <i className="pi pi-info-circle custom-icon"></i>
                         </div>   
                         {   
                         unit === "" ?
-                        <div className="ml-3 " style={{width:"70%",textAlign:"justify"}}>
+                        <div className="ml-4 mt-2" style={{textAlign:"justify"}}>
                             <p>1. if you are adding only sim card to the inventory select "sim" as the unit type when uploading SIMs.</p>
                             <p>2. If you are adding only Tables/Tagged Tablets to the inventory select "Tablets" as the Inventory type</p>
                             <p>3. If you are adding only Cell Phones/Tagged Cell Phones to the inventory select "Cell Phones "as the inventory type</p>
                             <p>4. A tagged device refer to a situation where a sim card is inserted into a device , and they are paired together.</p>
-                        </div> :  unit === "SIM"  ? <div className="ml-3 " style={{width:"70%",textAlign:"justify"}}>
+                        </div> :  unit === "SIM"  ? <div className="ml-4 " style={{textAlign:"justify"}}>
                              <p>You are about to load the SIMs in the inventory.</p>
                             <p>1 Make sure starting digits of your SIM numbers are "8901"</p>
                             <p>2 Make sure your SIM numbers have 19 or more digits</p>
-                         </div> : unit === "Cell Phone"? <div className="ml-3 " style={{width:"70%",textAlign:"justify"}}>
+                         </div> : unit === "Cell Phone"? <div className="ml-4 " style={{textAlign:"justify"}}>
                              <p>You are about to load the Cell Phones/ Tablets in the inventory.</p>
                             <p>1. Make sure your device numbers have 14 or 15 digits</p>
-                         </div>: <div className="ml-3 " style={{width:"70%",textAlign:"justify"}}>
+                         </div>: <div className="ml-3 " style={{textAlign:"justify"}}>
                              <p>You are about to load the  Tablets in the inventory.</p>
                             <p>1. Make sure your device numbers have 14 or 15 digits</p>
                          </div>
