@@ -248,12 +248,12 @@ console.log("cp data is",cpData)
                                                     </td>
                                                 </tr> */}
                                                 <tr>
-                                                    <td>Customer SSN (PC253)</td>
+                                                    <td>Customer SSN</td>
                                                     <td>{cpData?.SSN}</td>
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Customer DOB (PC253)</td>
+                                                    <td>Customer DOB</td>
                                                     <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : ""}</td>
                                                 </tr>
                                                 

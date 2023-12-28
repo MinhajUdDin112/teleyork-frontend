@@ -23,6 +23,16 @@ let InventoryManagment = [
         imgsrc: "/images/Inventory Module.png",
     }, 
     {
+        component: "UpdateInventory",
+        title: "Update Inventory",
+        imgsrc: "/images/Inventory Module.png",
+    },
+    {
+        component: "InventoryDashboard",
+        title: "Inventory Dashboard",
+        imgsrc: "/images/Inventory Module.png",
+    },
+   /* {
         component: "Reportings",
         title: "Reportings",
         imgsrc: "/images/Inventory Module.png",
@@ -48,11 +58,7 @@ let InventoryManagment = [
         title: "Dropship Orders",
         imgsrc: "/images/Inventory Module.png",
     },
-    {
-        component: "UpdateInventory",
-        title: "Update Inventory",
-        imgsrc: "/images/Inventory Module.png",
-    },
+  
     {
         component: "ChangeESN_SIM",
         title: "Change ESN/SIM",
@@ -63,11 +69,7 @@ let InventoryManagment = [
         title: "Adjustment",
         imgsrc: "/images/Inventory Module.png",
     },        
-    {
-        component: "InventoryDashboard",
-        title: "Inventory Dashboard",
-        imgsrc: "/images/Inventory Module.png",
-    }, 
+    
     { 
         component:"Untagged_MEID_DEVICEID", 
         title:"Untagged MEID/DEVICE ID", 
@@ -77,7 +79,7 @@ let InventoryManagment = [
         component:"Equipment_And_Accessories_Request", 
         title:"Equipment & Accessories Request", 
         imgsrc:"/images/Inventory Module.png",
-    }
+    } */
 ];
 const Manage_inventory = () => {     
     const location = useLocation();
