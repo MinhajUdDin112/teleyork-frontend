@@ -81,22 +81,26 @@ export const AppTopbar = (props) => {
                 <button type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={props.onMobileTopbarMenuClick}>
                     <i className="pi pi-ellipsis-v" />
                 </button>
-                <InputText
+                <InputText 
+               
                     className="search-customer"
                     onChange={(e) => {
                         props.setSearchValue(e.target.value);
                     }}
                     value={props.searchValue}
                     onClick={() => {
-                        setVisibleSearch(true);
+                        setVisibleSearch(prev=>!prev);
                     }}
                     placeholder="Search Customer"
                 />
-                <div className={classNames({ card: visibleSearch }, "flex justify-content-center listbox")}>
+                <div onMouseLeave={()=>{ 
+                    setVisibleSearch(prev=>!prev)
+                }} className={classNames({ card: visibleSearch }, "flex justify-content-center listbox")}>
                     <ListBox
                         value={props.searchBy}
                         style={{ display: `${visibleSearch === true ? "block" : "none"}` }}
-                        onChange={(e) => {
+                        onChange={(e) => {  
+                       
                             props.setSearchBy(e.value);
                             setVisibleSearch(false);
                         }}
