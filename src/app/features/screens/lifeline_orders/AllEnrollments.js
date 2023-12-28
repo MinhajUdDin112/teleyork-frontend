@@ -167,7 +167,8 @@ const AllEnrollments = () => {
     };
 
     useEffect(() => {
-        getAllEnrollments();
+        getAllEnrollments();  
+       
     }, []);
 
     const viewRow = async (rowData) => {
@@ -184,7 +185,6 @@ const AllEnrollments = () => {
                     localStorage.setItem("initialInformation", JSON.stringify(response.data));
                     localStorage.setItem("homeAddress", JSON.stringify(response.data));
                     localStorage.setItem("selectProgram", JSON.stringify(response.data));
-                   
                     navigate("/personalinfo");
                     setisButtonLoading(false);
                 }
@@ -623,8 +623,8 @@ const AllEnrollments = () => {
             <ToastContainer className="custom-toast-container" />
             <div className="card ">
                 <form>
-                    <Dialog visible={isModalOpen} style={{ width: "50vw" }} onHide={() => setIsModalOpen(false)}>
-                        <DialogForReject checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
+                    <Dialog visible={isModalOpen} style={{ width: "50vw" }} draggable={false} onHide={() => setIsModalOpen(false)}>
+                        <DialogForReject   setIsModalOpen={setIsModalOpen} checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
                     </Dialog>
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
                         <DialogForActivateSim enrollmentId={isEnrolmentId} setOpenDialogeForActivate={setOpenDialogeForActivate} zipCode={zipCode} />

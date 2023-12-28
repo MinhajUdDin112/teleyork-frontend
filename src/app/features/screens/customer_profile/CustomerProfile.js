@@ -556,7 +556,7 @@ console.log("cp data is",cpData)
 
                         <div className="cutomer-profileaddnote mt-4 card"  >
                             <div className="flex justify-content-between align-items-center  mb-3">
-                                <h4 className="m-0">Add New Note (PC83)</h4>
+                                <h4 className="m-0">Add New Note</h4>
                                 <span></span>
                             </div>
                             <hr className="m-0 mb-2" />
@@ -603,7 +603,7 @@ console.log("cp data is",cpData)
                                         </div>
                                     </div>
 
-                                    <Button label="Do you want to create a ticket? (PC402)" icon="pi pi-plus" className="pl-0" link />
+                                    <Button label="Do you want to create a ticket? " icon="pi pi-plus" className="pl-0" link />
 
                                     <hr className="m-0 mb-2" />
 

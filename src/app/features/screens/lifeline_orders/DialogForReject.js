@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Checkbox } from "primereact/checkbox";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) => {
+const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,setIsModalOpen}) => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
     const [checkCompany, setcheckCompany] = useState(false);
@@ -97,16 +97,24 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) 
                 }
             };
             getRoles();
+        }  
+        document.addEventListener("click",documentOnClick,false)    
+        return ()=>{ 
+             document.removeEventListener("click",documentOnClick,false)
         }
     }, [formik.values.department]);
-
+     function documentOnClick(e){ 
+        setIsModalOpen(false)
+     }
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
     return (
-        <>
-            <form onSubmit={formik.handleSubmit}>
+        <div onClick={(e)=>{
+            e.stopPropagation()
+        }}>
+            <form onSubmit={formik.handleSubmit} >
                 <div className="p-fluid p-formgrid grid ">
                     { 
                                             roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") && checkCompany ?( 
@@ -202,7 +210,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType }) 
                 <br />
                 <Button label="Submit" type="submit" className="mt-3" />
             </form>
-        </>
+        </div>
     );
 };
 
