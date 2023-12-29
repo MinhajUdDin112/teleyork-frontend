@@ -241,7 +241,7 @@ const App = () => {
 
     const loginPerms = localStorage.getItem("permissions")
     const parsedLoginPerms = JSON.parse(loginPerms)
-
+    console.log(parsedLoginPerms?.role?.role)
     const [dynamicMenu, setDynamicMenu] = useState([])
 
     const getPermissions = () => {
@@ -278,8 +278,10 @@ const App = () => {
 
         setDynamicMenu(() => [{
             items: modules
-        }]);
-        setPermittedRoutes(permittedRoutes);
+        }]); 
+     
+        setPermittedRoutes(permittedRoutes); 
+      
     };
 
     const isPermitted = (route) => {
@@ -319,7 +321,7 @@ We are working on something really cool.</h5>
                                    </div> : 
                             <Routes>
                                 <Route path="*" element={<NotFound />} />
-                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/" element={<Dashboard  permittedRoutes={permittedRoutes}/>} />
                                 <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
                                 <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
                                 <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />

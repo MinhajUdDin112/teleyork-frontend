@@ -473,14 +473,14 @@ console.log("cp data is",cpData)
                                                     <td>Tablet Subsidy Qualification</td>
                                                        <td> 
                                                         { 
-                                                         cpData?.deviceEligibility !== undefined ? cpData?.deviceEligibility === true ?"Yes":"NO":"NIL" 
+                                                         cpData?.deviceEligibilty !== undefined ? cpData?.deviceEligibilty === true ?"Yes":"NO":"NIL" 
                                                         }
                                                        </td>
                                                 </tr>
                                              
                                                 <tr>
                                                     <td>Enrollment Date</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.nladEnrollmentDate !== undefined ? cpData?.nladEnrollmentDate :"NIL"}</td>
                                                 </tr>
                                                
                                                 <tr>

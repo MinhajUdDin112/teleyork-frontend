@@ -11,7 +11,8 @@ export default function EnrollmentFlowPage() {
     const parseLoginRes = JSON.parse(loginRes);
     const csr = parseLoginRes?._id; 
  // Get role name  from login response     
-      const roleName= parseLoginRes?.role?.role;
+      const roleName= parseLoginRes?.role?.role;  
+      console.log(roleName)
       
     //     getting _id and enrollment id from local storage 
    
