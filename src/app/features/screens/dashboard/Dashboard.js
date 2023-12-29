@@ -1,9 +1,11 @@
 import React from "react";
-
-const Dashboard = () => {
+import EnrollmentByStates from "./components/enrollment_stats/enroolment_stats";
+const Dashboard = ({permittedRoutes}) => {
     return (
-        <div>
-            <p>Welcome to dashboard</p>
+        <div className="card">
+           <div> 
+              <EnrollmentByStates permittedRoutes={permittedRoutes}/>
+           </div>
         </div>
     );
 };
