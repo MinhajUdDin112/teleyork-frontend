@@ -133,7 +133,7 @@ const AllEnrollments = () => {
             const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
                 if(!(res?.data?.data)){
-                    toast.error(res?.data?.msg)
+                    toast.success(" No enrollments have been received from the previous department yet")
                 } 
                
                 else if(res?.data?.data){
@@ -160,7 +160,8 @@ const AllEnrollments = () => {
                 setIsLoading(false);
              
             }
-         catch (error) {
+         catch (error) {    
+             console.log(error)
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
@@ -728,7 +729,7 @@ const AllEnrollments = () => {
                             />
                             <Column field="contact" header="Contact" />
                             <Column field="createdDate" header="Created At" />
-                            <Column field="createdBy.name" header="Created BY" />
+                            <Column field="createdBy.name" header="Created By" />
                             <Column
                                 field="level"
                                 header="Phase"

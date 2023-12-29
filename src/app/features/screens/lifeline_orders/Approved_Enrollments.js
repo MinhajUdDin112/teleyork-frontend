@@ -203,7 +203,7 @@ const Approved_Enrollments = () => {
                                         .replace(/\//g, "-")
                                 }
                             />
-                        <Column field="createdBy.name" header="Created BY"/>
+                        <Column field="createdBy.name" header="Created By"/>
                         <Column
                                 field="level"
                                 header="Phase"

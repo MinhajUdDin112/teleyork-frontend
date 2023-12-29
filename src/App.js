@@ -241,7 +241,7 @@ const App = () => {
 
     const loginPerms = localStorage.getItem("permissions")
     const parsedLoginPerms = JSON.parse(loginPerms)
-
+    console.log(parsedLoginPerms?.role?.role)
     const [dynamicMenu, setDynamicMenu] = useState([])
 
     const getPermissions = () => {

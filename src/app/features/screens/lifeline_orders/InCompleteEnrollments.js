@@ -286,7 +286,7 @@ const InCompleteEnrollments = () => {
                         />
                         <Column field="createdDate" header="Created At" />
 
-                        <Column field="createdBy.name" header="Created BY" />
+                        <Column field="createdBy.name" header="Created By" />
                         <Column field="status" header="Phase"  body={(rowData) => {
                                     if (Array.isArray(rowData.level) && rowData.level.length > 0) {
                                         const statusArray = rowData.level.map((level) => {

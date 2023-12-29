@@ -59,8 +59,8 @@ export default function EnrollmentByStates({permittedRoutes}){
       
         
      </div>  
-     
-        <EnrollmentStatChart BASE_URL={BASE_URL} userid={userid} permittedRoutes={permittedRoutes} />
+        <EnrollmentStatChart BASE_URL={BASE_URL} userid={userid} permittedRoutes={permittedRoutes} />  
+
         </>
      )
 }   

@@ -213,11 +213,11 @@ const RejectedEnrollments = () => {
             setisButtonLoading(false);
         }
     };
-    const actionTemplate = (rowData) => {
+    const actionTemplate = (rowData) => {  
         return (
-            <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1  " text raised disabled={isButtonLoading} />
+            <div>        
+ <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
+  <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1  " text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -335,7 +335,7 @@ const RejectedEnrollments = () => {
                                     .replace(/\//g, "-")
                             }
                         />
-                        <Column field="createdBy.name" header="Created BY" />
+                        <Column field="createdBy.name" header="Created By" />
                         <Column field="reajectedReason" header="Rejected Reason"   
                            body={(rowData) => {   
                             if(rowData.reajectedReason !== undefined){

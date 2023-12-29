@@ -480,7 +480,7 @@ console.log("cp data is",cpData)
                                              
                                                 <tr>
                                                     <td>Enrollment Date</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.nladEnrollmentDate !== undefined ? cpData?.nladEnrollmentDate :"NIL"}</td>
                                                 </tr>
                                                
                                                 <tr>

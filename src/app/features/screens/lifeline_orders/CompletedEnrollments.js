@@ -221,7 +221,7 @@ const CompletedEnrollments = () => {
                                         .replace(/\//g, "-")
                                 }
                             />
-                        <Column field="createdBy.name" header="Created BY"/>
+                        <Column field="createdBy.name" header="Created By"/>
                         <Column
                                 field="level"
                                 header="Status"
