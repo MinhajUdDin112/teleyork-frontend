@@ -218,7 +218,9 @@ const App = () => {
 
     let token = JSON.parse(localStorage.getItem("accessToken"));
     let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
-
+    useEffect(() => {
+        getPermissions();
+    }, [window.localStorage.permissions]);
     useEffect(() => {
         const url = window.location.hash;
         if (url.startsWith("#/selfenrollment")) {
@@ -288,9 +290,7 @@ const App = () => {
     
     const [searchBy, setSearchBy] = useState(null);
     const [searchValue, setSearchValue] = useState(null);
-    useEffect(() => {
-        getPermissions();
-    }, [window.localStorage.permissions]);
+   
     
     return (
         <>
@@ -315,9 +315,17 @@ We are working on something really cool.</h5>
                                    </div> 
                                  
                                    </div> : 
-                            <Routes>
-                                <Route path="*" element={<NotFound />} />
-                                <Route path="/" element={<Dashboard  permittedRoutes={permittedRoutes}/>} />
+                            <Routes> 
+
+                                <Route path="*" element={<NotFound />} /> 
+                                
+                                {
+  permittedRoutes.length !== 0 ? (
+    <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} />
+  ) : (
+    undefined
+  )
+}  
                                 <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
                                 <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
                                 <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />

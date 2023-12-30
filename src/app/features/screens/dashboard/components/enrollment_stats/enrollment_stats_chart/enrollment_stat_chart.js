@@ -2,7 +2,8 @@ import React,{useEffect,useState} from "react"
 import { Chart } from "react-google-charts";
 import Axios from "axios" 
  import "./css/barchart_style.css"
-export default function EnrollmentStatChart({BASE_URL,userid,permittedRoutes}){   
+export default function EnrollmentStatChart({BASE_URL,userid,permittedRoutes}){    
+   console.log("permitted routes is ",permittedRoutes) 
     console.log("EnrollmentStatChart is rendering")     
     const [data,setData] =useState( [
         ["Task", "Enrollments"],
@@ -73,7 +74,7 @@ export default function EnrollmentStatChart({BASE_URL,userid,permittedRoutes}){
      Axios.get(`${BASE_URL}/api/web/dashboard/inCompleteSingleEnrollmentUserList?userId=${userid}`).then((response)=>{ 
                   
         
-        setData(prevStat => [...prevStat, ["In Complete",response.data.data]]);
+        setData(prevStat => [...prevStat, ["Incomplete",response.data.data]]);
 }) 
 }         
          },[])
