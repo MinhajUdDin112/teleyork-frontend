@@ -9,8 +9,9 @@ export default function EnrollmentStatChart({BASE_URL,userid,permittedRoutes}){
         
       ])
       const options = {
-        title: "",
-        bars: 'vertical',
+        title: "Enrollments",
+        bars: 'vertical',   
+        is3D: true,
       };
     const obj={   
           

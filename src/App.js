@@ -86,9 +86,7 @@ import ManageModelFlowPage from "./app/features/screens/inventory_management/man
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 import Provisioning_queue from "./app/features/screens/lifeline_orders/Provisioning_queue";
 import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
-import { Button } from "primereact/button";
 const App = () => {
-
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -223,14 +221,13 @@ const App = () => {
 
     useEffect(() => {
         const url = window.location.hash;
-
         if (url.startsWith("#/selfenrollment")) {
             return;
         }
         if (token) {
-            if (protectedRoute === false) {
-                navigate("/");
+            if (protectedRoute === false) { 
                 localStorage.setItem("protectedRoute", JSON.stringify(true));
+                navigate("/");
             } else {
                 return;
             }
@@ -241,7 +238,6 @@ const App = () => {
 
     const loginPerms = localStorage.getItem("permissions")
     const parsedLoginPerms = JSON.parse(loginPerms)
-    console.log(parsedLoginPerms?.role?.role)
     const [dynamicMenu, setDynamicMenu] = useState([])
 
     const getPermissions = () => {

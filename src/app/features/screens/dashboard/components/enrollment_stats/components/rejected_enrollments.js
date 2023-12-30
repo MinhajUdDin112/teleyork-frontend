@@ -6,7 +6,7 @@ export default function RejectedEnrollmentsStat({userid,BASE_URL}){
     
      useEffect(()=>{ 
              Axios.get(`${BASE_URL}/api/web/dashboard/rejectedSingleEnrollmentUserList?userId=${userid}`).then((response)=>{ 
-                   console.log(response)  
+                 
                     
                    setRejectedEnrollments(response.data.data)  
 
