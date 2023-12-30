@@ -74,7 +74,7 @@ export default function EnrollmentStatChart({BASE_URL,userid,permittedRoutes}){
      Axios.get(`${BASE_URL}/api/web/dashboard/inCompleteSingleEnrollmentUserList?userId=${userid}`).then((response)=>{ 
                   
         
-        setData(prevStat => [...prevStat, ["In Complete",response.data.data]]);
+        setData(prevStat => [...prevStat, ["Incomplete",response.data.data]]);
 }) 
 }         
          },[])
