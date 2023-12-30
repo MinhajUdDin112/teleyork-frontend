@@ -1,12 +1,16 @@
 import React from 'react';
-
+import "./css/app_footer.css"
 export const AppFooter = (props) => {
 
     return (
-        <div className="text-center">
+        <div className="  footer-main flex  flex-wrap flex-row justify-content-center " >  
+           <h5>Powered By</h5>
+         <div>
                 <a href="https://teleyork.com" target="_blank" rel="noopener noreferrer">
-                <img src={props.layoutColorMode === 'light' ? 'assets/layout/images/teleyork-logo.png' : 'assets/layout/images/teleyork-logo.png'} alt="Logo" height="20"  />
-                </a>
+                
+                  <img src="/FooterLogo/CompanyLogo.png"/>
+                </a> 
+                 </div>
            
         </div>
     );
