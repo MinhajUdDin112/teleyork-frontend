@@ -1,0 +1,23 @@
+.footer-main{ 
+     
+     height:70px;  
+     overflow: hidden; 
+     background-color: white;
+     border-radius: 5px;
+} 
+.footer-main img{ 
+    height:200px;      
+     transform: translate(0,-86%); 
+      margin-top: 50%;  
+      background: black; 
+      border-radius: 95px;
+      display: inline-block;
+
+} 
+.footer-main h5{ 
+    display: inline-block; 
+ 
+ padding-top: 27px;   
+ margin-right: 25px;
+ color:black;
+}
