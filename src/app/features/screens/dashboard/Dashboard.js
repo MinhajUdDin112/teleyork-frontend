@@ -1,5 +1,5 @@
 import React from "react";
-import EnrollmentByStates from "./components/enrollment_stats/enroolment_stats";
+import EnrollmentByStates from "./components/enrollment_stats/enrollment_stats";
 const Dashboard = ({permittedRoutes}) => {
     return (
         <div className="card">

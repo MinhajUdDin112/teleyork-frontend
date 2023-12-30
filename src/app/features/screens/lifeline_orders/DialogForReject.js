@@ -66,7 +66,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
 
     const checkcompany = () => {
         if (parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") || parseLoginRes?.companyName.includes("Ij")) {
-            if (toCapital.includes("PROVISION AGENT") || toCapital.includes("PROVISION MANAGER")) {
+            if (toCapital.includes("PROVISION AGENT") || toCapital.includes("PROVISION MANAGER") || (toCapital.includes("QA AGENT")  )) {
                 setcheckCompany(true);
             }
         }
@@ -117,7 +117,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
             <form onSubmit={formik.handleSubmit} >
                 <div className="p-fluid p-formgrid grid ">
                     { 
-                                            roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") && checkCompany ?( 
+                                            roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("QA AGENT")  && checkCompany ?( 
                                                 <>
                                                 <div className="p-field col-12 md:col-4 mt-3">
                                                     <Button label="Assign to Created User" type="button" onClick={assignCSRId} />
