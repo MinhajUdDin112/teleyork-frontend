@@ -4,7 +4,7 @@ export default function AllEnrollmentsStat({userid,BASE_URL}){
     const  [allenrollments,setAllEnrollments]=useState(0)
      useEffect(()=>{ 
              Axios.get(`${BASE_URL}/api/web/dashboard/EnrollmentApprovedBySingleUser?userId=${userid}`).then((response)=>{ 
-                    console.log(response)
+                  
                    setAllEnrollments(response.data.data)  
          }).catch(err=>{ 
 

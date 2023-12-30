@@ -10,7 +10,7 @@ import { InputText } from "primereact/inputtext";
 import { ListBox } from "primereact/listbox";
 
 export const AppTopbar = (props) => {     
-    console.log(props)
+ 
       useEffect(()=>{ 
         document.addEventListener("click",docOnClick,false)
       })
