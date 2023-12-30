@@ -20,7 +20,6 @@ import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
 import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
 import DialogeForApprove from "./DialogeForApprove";
-
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const AllEnrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
