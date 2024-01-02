@@ -6,10 +6,8 @@ import { useEffect } from "react";
 const BillingNavbar = () => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const [cpData, setCpData] = useState([]);
-
     const selectedid = localStorage.getItem("selectedId");
     const parseselectedid = JSON.parse(selectedid);
-
     const getCustomerProfileData = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`);
@@ -48,7 +46,7 @@ const BillingNavbar = () => {
             <Menubar model={items}  end={()=>{ 
                  return( 
                     <span
-                    className=" text-white p-3 spanstyle"
+                    className=" text-white p-3  spanstyle"
                     style={{
                         borderRadius: "10px",
                         backgroundColor: `${cpData?.status === "active" ? "rgba(21, 119, 11, 1)" : cpData?.status === "inactive"  ? "rgba(174, 0, 0, 1)" : cpData?.status === "suspended" || cpData?.status === "Suspended" ? "rgba(255, 191, 0, 1)" : cpData?.status === "prospected" || cpData?.status === "prospect" ? "rgba(120, 4, 89, 0.82)" :cpData?.status === "unfitProspect" || cpData?.status === "UnfitProspect" ? "rgba(0, 0, 0, 1)":"orangered"}`,

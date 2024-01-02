@@ -43,9 +43,11 @@ export default function EnrollmentByStates({permittedRoutes}){
    const parseLoginRes = JSON.parse(loginRes);  
    const userid=parseLoginRes._id     
    
-    
-     return( <> 
-     <div className="flex flex-wrap justify-content-around">   
+     
+     return( <>  
+      <h1 className="font-semibold p-4 ml-4">Complete Enrollments Stats</h1>
+     <div className="flex flex-wrap justify-content-around">      
+       
      {Object.keys(obj).map(item => {
         const Component = obj[item].component; // Assign the component to a variable
         return (
