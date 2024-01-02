@@ -168,7 +168,7 @@ console.log("cp data is",cpData)
     return (
         <div className="card">
             <ToastContainer />
-            <div className="card p-0">
+            <div className="p-0">
                 <BillingNavbar />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
@@ -505,7 +505,7 @@ console.log("cp data is",cpData)
                     </div>
                 </div>
 
-                <div className="p-3 card">
+                <div className="p-3 ">
                     <div className="flex flex-wrap justify-content-between  flex-row w-full ">
                         <div className="customer-profilecustomernote mt-4 card"   >
                             <div>
