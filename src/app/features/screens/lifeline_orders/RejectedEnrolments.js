@@ -217,7 +217,7 @@ const RejectedEnrollments = () => {
         return (
             <div>        
  <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
-  <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1  " text raised disabled={isButtonLoading} />
+  {/* <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1  " text raised disabled={isButtonLoading} /> */}
             </div>
         );
     };
