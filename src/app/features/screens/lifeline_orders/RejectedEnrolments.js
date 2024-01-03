@@ -111,8 +111,9 @@ const RejectedEnrollments = () => {
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    // Get role name  from login response
-    const roleName = parseLoginRes?.role?.role;
+     // Get role name  from login response
+     const roleName = parseLoginRes?.role?.role;
+     const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
 
     const actionBasedChecks = () => {
         const loginPerms = localStorage.getItem("permissions");
@@ -134,7 +135,7 @@ const RejectedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                console.log("data is", res?.data?.data);
+              
                 if (!res?.data?.data) {
                     toast.error(res?.data?.msg);
                 } else if (res?.data?.data) {
@@ -153,12 +154,13 @@ const RejectedEnrollments = () => {
                 }
 
                 setAllEnrollments(res?.data?.data);
+              
                 setIsLoading(false);
                 localStorage.removeItem("zipData");
             }
         } catch (error) {
             // toast.error("Error fetching All  Rejected Enrollment: " + error?.response);
-            console.log("error is", error);
+          
             setIsLoading(false);
         }
     };
@@ -335,7 +337,10 @@ const RejectedEnrollments = () => {
                                     .replace(/\//g, "-")
                             }
                         />
-                        <Column field="createdBy.name" header="Created By" />
+                        <Column  field="createdBy.name" header="Created By" />
+                        {
+                            toCapital.includes("QA") ? <Column field="rejectedBy.name" header="Rejected By" />:""
+                        }
                         <Column field="reajectedReason" header="Rejected Reason"   
                            body={(rowData) => {   
                             if(rowData.reajectedReason !== undefined){

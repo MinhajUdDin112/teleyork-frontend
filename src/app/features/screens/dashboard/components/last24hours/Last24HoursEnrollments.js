@@ -8,7 +8,7 @@ import ProvisioningQueue from "./components/ProvisioningQueue";
 import Last24EnrollmentStatChart from "./last24_enrollment_stats_chart/last24_enrollment_stat_chart.js"
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-const userid = parseLoginRes._id;
+const userid = parseLoginRes?._id;
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function Last24HoursEnrollments({ permittedRoutes }) {
     const obj = {
