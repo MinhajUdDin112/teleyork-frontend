@@ -95,6 +95,11 @@ const CompletedEnrollments = () => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+    // Get role name  from login response
+    const roleName = parseLoginRes?.role?.role;
+    const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
+
+
     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
@@ -222,6 +227,31 @@ const CompletedEnrollments = () => {
                                 }
                             />
                         <Column field="createdBy.name" header="Created By"/>
+                        {
+                            toCapital.includes("PROVISION") ?
+                            <Column field="activatedBy.name" header="Activated By" />
+                            :""
+                        }
+                       {
+    toCapital.includes("PROVISION") ?
+    <Column field="activatedAt" header="Activated At" 
+        body={(rowData) => {
+            if (rowData?.activatedAt) {
+                return new Date(rowData.activatedAt)
+                    .toLocaleDateString("en-US", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        year: "numeric",
+                    })
+                    .replace(/\//g, "-");
+            }
+            return null; // Handle the case when activatedAt is not available
+        }}
+    />
+    : ""
+}
+
+
                         <Column
                                 field="level"
                                 header="Status"

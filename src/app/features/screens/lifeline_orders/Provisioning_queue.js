@@ -79,6 +79,7 @@ const Provisioning_queue = () => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+
     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
@@ -227,6 +228,21 @@ const Provisioning_queue = () => {
                                 }
                             />
                         <Column field="createdBy.name" header="Created By"/>
+                        <Column field="EnrolledBy.name" header="Enrolled By"/>
+                        <Column field="nladEnrollmentDate" header="Enrolled At"
+                        body={(rowData) => {
+                            if (rowData?.nladEnrollmentDate) {
+                                return new Date(rowData.nladEnrollmentDate)
+                                    .toLocaleDateString("en-US", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })
+                                    .replace(/\//g, "-");
+                            }
+                            return null; // Handle the case when activatedAt is not available
+                        }}
+                        />
                         <Column
                                 field="level"
                                 header="Status"

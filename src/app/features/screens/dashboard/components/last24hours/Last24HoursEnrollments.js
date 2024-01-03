@@ -11,7 +11,7 @@ export default function Last24HoursEnrollments({ permittedRoutes }) {
 
     const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-const userid = parseLoginRes._id;
+const userid = parseLoginRes?._id;
 const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
         rejectedenrollments: { label: "Rejected Enrollments", component: RejectedEnrollments },
