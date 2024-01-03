@@ -5,9 +5,14 @@ import ApprovedEnrollmentsStat from "./components/approved_enrollments";
 import IncompleteEnrollmentsStat from "./components/incomplete_enrollments";
 import RejectedEnrollmentsStat from "./components/rejected_enrollments";
 import AllEnrollmentsStat from "./components/all_enrollments";
+import ProvisioningQueue from "./components/provisioning_queue";
+import TransferOutEnrollmentsStat from "./components/transferout_enrollments";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function EnrollmentByStates({permittedRoutes}){                
-      
+  console.log(permittedRoutes)    
+  const loginRes = localStorage.getItem("userData");
+  const parseLoginRes = JSON.parse(loginRes);  
+  const userid=parseLoginRes._id   
        const obj={   
           
            rejectedenrollments:{label:"Rejected Enrollments", 
@@ -17,10 +22,19 @@ export default function EnrollmentByStates({permittedRoutes}){
           approvedEnrollments:{
             label:"Approved Enrollments", 
             component:ApprovedEnrollmentsStat
-          }, 
+          },    
+          provisionedenrollments:{ 
+            label:"Provisioning Enrollments", 
+            component:ProvisioningQueue
+          }
+          ,
           allenrollments:{ 
             label:"All Enrollments", 
             component:AllEnrollmentsStat
+          }, 
+          transferoutenrollments:{ 
+             label:"Transfer Out Enrollments", 
+             component:TransferOutEnrollmentsStat
           }
        }   
         if(permittedRoutes !== undefined){  
@@ -34,18 +48,23 @@ export default function EnrollmentByStates({permittedRoutes}){
        } 
        if(!permittedRoutes.includes("/incompleteenrollments")){ 
          delete obj.incompleteenrollments
-       } 
-     
-      
+       }  
+       if(!permittedRoutes.includes("/provisioning-queue")){ 
+            delete obj.provisionedenrollments
+       }  
+        if(parseLoginRes.role.role !== "PROVISION MANAGER" ) { 
+           if(parseLoginRes.role.role !== "PROVISION AGENT"){ 
+            delete obj.transferoutenrollments
+           }
+        } 
+       
+         
       }
-   console.log(permittedRoutes)    
-   const loginRes = localStorage.getItem("userData");
-   const parseLoginRes = JSON.parse(loginRes);  
-   const userid=parseLoginRes._id     
+    
    
      
      return( <>  
-      <h1 className="font-semibold p-4 ml-4">Complete Enrollments Stats</h1>
+      <h1 className="completeenrollmentstat p-4 ml-4">Complete Enrollments Stats</h1>
      <div className="flex flex-wrap justify-content-around">      
        
      {Object.keys(obj).map(item => {
