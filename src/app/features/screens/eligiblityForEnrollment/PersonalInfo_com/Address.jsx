@@ -253,36 +253,62 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
         if (address) {
             let cityName = "";
             let trimmedCityName ="";
+            let tolowerTrimmedCityName="";
             if (address && address.includes(",")) {
                 const parts = address.split(",");
                 if (parts.length >= 1) {
-                    cityName = parts[0];   
+                    cityName = parts[0];
+                    cityName=cityName.toLowerCase();
+                    console.log("city name is",cityName)
                     const words = cityName.split(' ');
                     if (words.length >= 2) {
                         trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
-                       
+                        tolowerTrimmedCityName = trimmedCityName.toLowerCase();    
+                    }
+                    else{
+                        tolowerTrimmedCityName = cityName;
                     }
                     
                 }
             }
-            if (trimmedCityName.includes(formik.values.city) || formik.values.city.includes(trimmedCityName) || cityName.includes(formik.values.city) || formik.values.city.includes(cityName) ) {
+            const cityFromDb = formik.values.city;
+            let toLower;
+            if(cityFromDb.includes(" ")){
+                const words = cityFromDb.split(' ');
+                if (words.length >= 2) {
+                    toLower = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
+                    toLower=toLower.toLowerCase();  
+                    toLower=toLower.trim();       
+                }
+            }
+            else{
+               toLower=cityFromDb.toLowerCase();   
+               toLower=toLower.trim();    
+            }
+           console.log("tolower is",toLower)
+          
+           console.log("tolower trimed is",tolowerTrimmedCityName)
+            if (tolowerTrimmedCityName.includes(toLower) || toLower.includes(tolowerTrimmedCityName) || cityName.includes(toLower) || toLower.includes(cityName) ) {
                 const completeAddress= e?.value?.structured_formatting?.main_text;
+              console.log("complete add is",completeAddress)
                 const extractedAddress1 = completeAddress.match(pattern);
+               
                 if(extractedAddress1){
                     const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
+                   
                     formik.setFieldValue("address1",final ); 
                    
                 }else{
                     formik.setFieldValue("address1",completeAddress ); 
                 }
-                const match = completeAddress.match(regex);            
+                const match = completeAddress.match(regex);   
+                   
                 var add2 = match ? match[0] : '';
+               
                 if(add2){
                    add2 = add2.toUpperCase();
                     formik.setFieldValue("address2", add2);
-                }
-               
-               
+                }     
             } else {
                 toast.error(`Please choose an address associated with ${formik.values.city}, ${formik.values.state} `);
             }
@@ -331,7 +357,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                             apiKey="AIzaSyDa1KFekZkev2CAqrcrU_nYDe_1jC-PHA0"
                             selectProps={{
                                 onChange: (e)=> handleAddressChange(e),
-                                
+      
                             }}
                         />
                     </div>

@@ -151,6 +151,7 @@ const AllEnrollments = () => {
                        } 
                 } 
                     setAllEnrollments(res?.data?.data); 
+                    console.log("all enrollment is",res?.data?.data)
                 setIsLoading(false);
               
                
@@ -460,7 +461,10 @@ const AllEnrollments = () => {
 
                 <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
                 <Button label="Approve"   onClick={() =>{  
-                    if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
+                    if(!rowData.QualityRemarks){
+                        toast.error("Please Add Remarks")
+                    }
+                  else  if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
                         approveRowByTl(rowData) 
                          } 
                          else{      
@@ -476,7 +480,10 @@ const AllEnrollments = () => {
                  
                  }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
                 <Button label="Reject"  onClick={() => {
-                     if(rowData.QualityRemarks === "declined"){
+                    if(!rowData?.QualityRemarks){
+                        toast.error("Please Add Remarks")
+                    }
+                   else   if(rowData.QualityRemarks === "declined"){
                     handleOpenDialog(rowData);  
                      } 
                      else{    
@@ -496,7 +503,7 @@ const AllEnrollments = () => {
         );
     };
 
-    const actionTemplateForPR = (rowData) => {
+    const actionTemplateForPR = (rowData) => { 
         return (
             <div>
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} />
@@ -730,36 +737,9 @@ const AllEnrollments = () => {
                             <Column field="createdDate" header="Created At" />
                             <Column field="createdBy.name" header="Created By" />
                             <Column
-                                field="level"
+                                field="department.department"
                                 header="Phase"
-                                body={(rowData) => {
-                                    if (Array.isArray(rowData.level) && rowData.level.length > 0) {
-                                        const statusArray = rowData.level.map((level) => {
-                                            switch (level) {
-                                                case 1:
-                                                    return "CSR";
-                                                case 2:
-                                                    return "Team Lead";
-                                                case 3:
-                                                    return "QA Agent";
-                                                case 4:
-                                                    return "QA Manager";
-                                                case 5:
-                                                    return "Provision Manager";
-                                                case 6:
-                                                    return "Retention";
-                                                case 7:
-                                                    return "Dispatch Manager";
-                                                default:
-                                                    return "";
-                                            }
-                                        });
-
-                                        return statusArray.join(", "); // Join multiple statuses into a string
-                                    } else {
-                                        return ""; // Handle the case when "level" is not an array or is empty
-                                    }
-                                }}
+                               
                             />
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ||roleName == "Team Lead" ||roleName == "TEAM LEAD" ? (
