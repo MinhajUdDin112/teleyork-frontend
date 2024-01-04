@@ -1,18 +1,18 @@
-import React, { useEffect } from "react"  
-import RejectedEnrollments from "./components/RejectedEnrollments";
-import IncompleteEnrollments from "./components/IncompleteEnrollments";
-import ApprovedEnrollments from "./components/ApprovedEnrollments";
-import AllEnrollments from "./components/AllEnrollments";
-import CompletedEnrollments from "./components/CompletedEnrollments";
-import ProvisioningQueue from "./components/ProvisioningQueue";  
-import DateRangeEnrollmentStatChart from "./daterange_enrollment_stats_chart/daterange_enrollment_stat_chart";
+import React from "react";
+import RejectedEnrollments from "./components/RejectedEnrollments.js";
+import IncompleteEnrollments from "./components/IncompleteEnrollments.js";
+import ApprovedEnrollments from "./components/ApprovedEnrollments.js";
+import AllEnrollments from "./components/AllEnrollments.js";
+import CompletedEnrollments from "./components/CompletedEnrollments.js";
+import ProvisioningQueue from "./components/ProvisioningQueue.js";  
+import Last24EnrollmentStatChart from "./last24_enrollment_stats_chart/last24_enrollment_stat_chart.js"
 
-export default function DateRangeStats({startDate,endDate,permittedRoutes}){   
+export default function Last24HoursAgentEnrollments({agentid, permittedRoutes }) {    
+
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes); 
-    
-    const userid = parseLoginRes._id;
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
+const parseLoginRes = JSON.parse(loginRes);
+const userid = parseLoginRes._id;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
         rejectedenrollments: { label: "Rejected Enrollments", component: RejectedEnrollments },
         incompleteenrollments: { label: "Incomplete Enrollments", component: IncompleteEnrollments },
@@ -53,24 +53,23 @@ export default function DateRangeStats({startDate,endDate,permittedRoutes}){
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
         }
-    }  
-   
-     return(    
+    }
+    return (
         <div>
-            <h1 className="daterange p-4 ml-4">Date Range Enrollments </h1>
+            <h1 className=" p-4 ml-4 last24">Last 24 Hours Enrollments </h1>
             <div className="flex flex-wrap justify-content-around">
                 {Object.keys(obj).map((item) => {
                     const Component = obj[item].component; // Assign the component to a variable
                     return (
                         <div key={item} className="card info">
-                            <Component userid={userid} BASE_URL={BASE_URL} startDate={startDate} endDate={endDate} /> {/* Render the component dynamically */}
+                            <Component userid={agentid} BASE_URL={BASE_URL} /> {/* Render the component dynamically */}
                             <h5 className="w-full text-center">{obj[item].label}</h5>
                         </div>
                     );
                 })}
             </div>  
-              <DateRangeEnrollmentStatChart BASE_URL={BASE_URL} userid={userid} permittedRoutes={permittedRoutes} startDate={startDate} endDate={endDate}/>
+              <Last24EnrollmentStatChart BASE_URL={BASE_URL} userid={agentid} permittedRoutes={permittedRoutes}/>
             <hr />
         </div>
-     )
+    );
 }

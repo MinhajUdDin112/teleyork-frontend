@@ -13,7 +13,7 @@ export default function ApprovedEnrollments({ BASE_URL, userid, startDate, endDa
         Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
             .then((response) => {
                 const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                    return enrollment.approvedAt >= startDate && enrollment.approvedAt <= endDateEnrollment;
+                    return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
                 });
                 setApprovedEnrollments(enrollmentsInDateRange.length);
             })

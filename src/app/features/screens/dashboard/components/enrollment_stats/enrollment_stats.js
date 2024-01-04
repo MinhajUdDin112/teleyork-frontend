@@ -6,7 +6,9 @@ import IncompleteEnrollmentsStat from "./components/incomplete_enrollments";
 import RejectedEnrollmentsStat from "./components/rejected_enrollments";
 import AllEnrollmentsStat from "./components/all_enrollments";
 import ProvisioningQueue from "./components/provisioning_queue";
-import TransferOutEnrollmentsStat from "./components/transferout_enrollments";
+import TransferOutEnrollmentsStat from "./components/transferout_enrollments";  
+import ActivatedEnrollments from "./components/completed_enrollments";
+import NvsEnrollmentsStat from "./components/nvs_enrollments";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function EnrollmentByStates({permittedRoutes}){                
   console.log(permittedRoutes)    
@@ -31,7 +33,15 @@ export default function EnrollmentByStates({permittedRoutes}){
           allenrollments:{ 
             label:"All Enrollments", 
             component:AllEnrollmentsStat
+          },   
+          activatedenrollments:{ 
+            label:"Completed Enrollments" , 
+            component:ActivatedEnrollments
           }, 
+          nvsenrollments:{ 
+            label:"Successfull NVS" , 
+            component:NvsEnrollmentsStat
+          },
           transferoutenrollments:{ 
              label:"Transfer Out Enrollments", 
              component:TransferOutEnrollmentsStat
@@ -54,9 +64,13 @@ export default function EnrollmentByStates({permittedRoutes}){
        }  
         if(parseLoginRes.role.role !== "PROVISION MANAGER" ) { 
            if(parseLoginRes.role.role !== "PROVISION AGENT"){ 
-            delete obj.transferoutenrollments
+            delete obj.transferoutenrollments    
+            delete obj.nvsenrollments;
            }
-        } 
+        }        
+        if(!permittedRoutes.includes("/completedenrollments")){ 
+          delete obj.activatedenrollments
+        }
        
          
       }

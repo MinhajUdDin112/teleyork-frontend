@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-export default function ApprovedEnrollments({ BASE_URL, userid, startDate, endDate }) {  
+export default function CompletedEnrollments({ BASE_URL, userid, startDate, endDate }) {
+    const [completedenrollments, setCompletedEnrollments] = useState(0);  
     let endDateEnrollment=endDate; 
       if(startDate !== null){ 
          if(endDate === null){ 
             endDateEnrollment=new Date().toISOString()
          }
       }  
-    const [approvedenrollments, setApprovedEnrollments] = useState(0);     
-
     useEffect(() => {
-        Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
+        Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`)
             .then((response) => {
                 const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                    return enrollment.approvedAt >= startDate && enrollment.approvedAt <= endDateEnrollment;
+                    return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
                 });
-                setApprovedEnrollments(enrollmentsInDateRange.length);
+                setCompletedEnrollments(enrollmentsInDateRange.length);
             })
             .catch((err) => {});
     }, [startDate, endDateEnrollment]);
-    return <h1 className="text-center">{approvedenrollments}</h1>;
+    return <h1 className="text-center">{completedenrollments}</h1>;
 }
