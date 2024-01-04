@@ -72,6 +72,12 @@ const Approved_Enrollments = () => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+ 
+     // Get role name  from login response
+     const roleName = parseLoginRes?.role?.role;
+     const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
+
+
     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
@@ -89,9 +95,9 @@ const Approved_Enrollments = () => {
                        .replace(/\//g, "-")
                        res.data.data[i].createdTo=res.data.data[i].createdAt
                    }  
+                
                 setAllCompletedEnrollments(res?.data?.data);    
-
-                console.log("All enrollment data is",res.data.data)
+              
                 setIsLoading(false);
             }
         } catch (error) {
@@ -204,6 +210,9 @@ const Approved_Enrollments = () => {
                                 }
                             />
                         <Column field="createdBy.name" header="Created By"/>
+                        {
+                            toCapital.includes("QA") ? <Column field="approvedBy.name" header="Approved By" />:""
+                        }
                         <Column
                                 field="level"
                                 header="Phase"
