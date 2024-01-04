@@ -4,7 +4,7 @@ export default function CompletedEnrollments({BASE_URL,userid}){
      const [completedenrollments,setCompletedEnrollments]=useState(0)     
      useEffect(()=>{   
         Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`).then(response=>{ 
-         console.log(response)  
+      
          const currentTime = new Date().getTime();
 
 // Set the time for 24 hours ago
