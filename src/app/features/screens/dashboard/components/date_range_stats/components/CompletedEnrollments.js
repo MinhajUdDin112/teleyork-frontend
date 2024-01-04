@@ -10,13 +10,18 @@ export default function CompletedEnrollments({ BASE_URL, userid, startDate, endD
       }  
     useEffect(() => {
         Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`)
-            .then((response) => {
+            .then((response) => {  
+                 if(response.data.data !== undefined){
                 const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                     return enrollment.activateddAt >= startDate && enrollment.activateddAt <= endDateEnrollment;
                 });
-                setCompletedEnrollments(enrollmentsInDateRange.length);
+                setCompletedEnrollments(enrollmentsInDateRange.length);  
+            } 
+            else{ 
+                setCompletedEnrollments(0)
+            }
             })
             .catch((err) => {});
-    }, [startDate, endDateEnrollment]);
+    }, [startDate, endDate]);
     return <h1 className="text-center">{completedenrollments}</h1>;
 }

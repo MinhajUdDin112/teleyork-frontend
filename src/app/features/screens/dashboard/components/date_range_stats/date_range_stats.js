@@ -6,11 +6,9 @@ import AllEnrollments from "./components/AllEnrollments";
 import CompletedEnrollments from "./components/CompletedEnrollments";
 import ProvisioningQueue from "./components/ProvisioningQueue";  
 import DateRangeEnrollmentStatChart from "./daterange_enrollment_stats_chart/daterange_enrollment_stat_chart";
-
 export default function DateRangeStats({startDate,endDate,permittedRoutes}){   
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes); 
-    
     const userid = parseLoginRes._id;
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
@@ -54,7 +52,6 @@ export default function DateRangeStats({startDate,endDate,permittedRoutes}){
             delete obj.completedenrollments;
         }
     }  
-   
      return(    
         <div>
             <h1 className="daterange p-4 ml-4">Date Range Enrollments </h1>

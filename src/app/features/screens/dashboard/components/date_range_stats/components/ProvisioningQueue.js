@@ -10,16 +10,17 @@ export default function ProvisioningQueue({BASE_URL,userid,startDate,endDate}){
     const [provisioningqueueenrollments,setProvisioningQueueEnrollments]=useState(0)     
     useEffect(()=>{   
         Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then(response=>{ 
-            const enrollmentsInDateRange = response.data.data.filter(enrollment => {
-   
+            if(response.data.data !== undefined){
+                const enrollmentsInDateRange = response.data.data.filter(enrollment => {
                 return enrollment.nladenrollmentDate >= startDate && enrollment.nladenrollmentDate <= endDateEnrollment;
               });     
-setProvisioningQueueEnrollments(enrollmentsInDateRange.length)
+setProvisioningQueueEnrollments(enrollmentsInDateRange.length)  
+            }
         }).catch(err=>{ 
 
         })
 
-    },[startDate,endDateEnrollment])  
+    },[startDate,endDate])  
     return ( 
         <h1 className="text-center">{provisioningqueueenrollments}</h1>
     )
