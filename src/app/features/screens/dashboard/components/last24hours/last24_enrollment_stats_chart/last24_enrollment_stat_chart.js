@@ -63,9 +63,10 @@ const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
 const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
  const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
  return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-});   
+});     
+if(enrollmentsInLast24Hours.length !== 0){
                     setData((prevStat) => [...prevStat, ["Rejected", enrollmentsInLast24Hours.length]]);
-                })
+         } })
                 .catch((err) => {});
         }
         if (obj.approvedEnrollments) {
@@ -81,26 +82,23 @@ const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
 const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
  const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
  return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-});   
+});      
+if(enrollmentsInLast24Hours.length !== 0){
                     setData((prevStat) => [...prevStat, ["Approved", enrollmentsInLast24Hours.length]]);
-                })
+          }  })
                 .catch((err) => {});
         }
         if (obj.allenrollments) {
             Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`)
                 .then((response) => { 
-                    console.log(response)  
          const currentTime = new Date().getTime();
-
-// Set the time for 24 hours ago
 const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-
-// Filter the enrollments based on the end timestamp
 const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
  const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
  return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-});   
+});                 if(enrollmentsInLast24Hours.length !== 0){
                     setData((prevStat) => [...prevStat, ["All",enrollmentsInLast24Hours.length]]);
+    }
                 })
                 .catch((err) => {});
         }
@@ -117,9 +115,10 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
         const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
         return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
        });    
-              
+       if(enrollmentsInLast24Hours.length !== 0){  
+         
                 setData((prevStat) => [...prevStat, ["Incomplete", enrollmentsInLast24Hours.length]]);
-            });
+            }    });
         }  
         if (obj.completedenrollments) {
             Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`).then((response) => {
@@ -134,9 +133,9 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
         const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
         return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
        });    
-              
+       if(enrollmentsInLast24Hours.length !== 0){
                 setData((prevStat) => [...prevStat, ["Completed", enrollmentsInLast24Hours.length]]);
-            });
+         } });
         }    
         if (obj.provisioningqueue) {
             Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then((response) => {
@@ -151,12 +150,15 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
         const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
         return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
        });    
-              
-                setData((prevStat) => [...prevStat, ["Completed", enrollmentsInLast24Hours.length]]);
+                if(enrollmentsInLast24Hours.length !== 0){
+                setData((prevStat) => [...prevStat, ["Completed", enrollmentsInLast24Hours.length]]);   
+                } 
+
             });
         }   
 
-    }, []);
+    }, []);   
+      console.log(data)
     return (
         <div className="flex flex-wrap justify-content-around flex-row "> 
              { 
