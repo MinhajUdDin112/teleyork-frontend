@@ -371,37 +371,10 @@ const RejectedEnrollments = () => {
                             );
                            }}}  
                          />
-                        <Column field="status" header="Phase"   
-                         
-                         body={(rowData) => {
-                            if (Array.isArray(rowData.level) && rowData.level.length > 0) {
-                                const statusArray = rowData.level.map((level) => {
-                                    switch (level) {
-                                        case 1:
-                                            return "CSR";
-                                        case 2:
-                                            return "Team Lead";
-                                        case 3:
-                                            return "QA Agent";
-                                        case 4:
-                                            return "QA Manager";
-                                        case 5:
-                                            return "Provision Manager";
-                                        case 6:
-                                            return "Retention";
-                                        case 7:
-                                            return "Dispatch Manager";
-                                        default:
-                                            return "";
-                                    }
-                                });
-
-                                return statusArray.join(", "); // Join multiple statuses into a string
-                            } else {
-                                return ""; // Handle the case when "level" is not an array or is empty
-                            }
-                        }}
-                         />
+                         <Column
+                                field="department.department"
+                                header="Phase"             
+                            />
 
                         {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? <Column header="Actions" body={actionTemplateForCsr}></Column> : <Column header="Actions" body={actionTemplate}></Column>}
                     </DataTable>

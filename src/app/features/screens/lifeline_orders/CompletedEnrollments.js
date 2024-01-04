@@ -250,8 +250,6 @@ const CompletedEnrollments = () => {
     />
     : ""
 }
-
-
                         <Column
                                 field="level"
                                 header="Status"
