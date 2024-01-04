@@ -12,7 +12,7 @@ export default function RejectedEnrollments({BASE_URL,userid,startDate,endDate})
         Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`).then(response=>{ 
             const enrollmentsInDateRange = response.data.data.filter(enrollment => {
    
-                return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                return enrollment.rejectedAt >= startDate && enrollment.rejectedAt <= endDateEnrollment;
               });     
 setRejectedEnrollments(enrollmentsInDateRange.length)
         }).catch(err=>{ 

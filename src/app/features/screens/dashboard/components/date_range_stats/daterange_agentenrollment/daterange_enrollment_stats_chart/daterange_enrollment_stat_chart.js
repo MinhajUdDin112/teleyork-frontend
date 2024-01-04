@@ -61,7 +61,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
             Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
                 .then((response) => {
                     const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                        return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                        return enrollment.rejectedAt >= startDate && enrollment.rejectedAt <= endDateEnrollment;
                     });
                     if (enrollmentsInDateRange.length !== 0) {
                         setData((prevStat) => [...prevStat, ["Rejected", enrollmentsInDateRange.length]]);
@@ -73,7 +73,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
             Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
                 .then((response) => {
                     const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                        return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                        return enrollment.approvedAt >= startDate && enrollment.approvedAt <= endDateEnrollment;
                     });
                     console.log("Approved Enrollmet lengt is", enrollmentsInDateRange);
                     if (enrollmentsInDateRange.length !== 0) {
@@ -107,7 +107,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         if (obj.completedenrollments) {
             Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`).then((response) => {
                 const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                    return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                    return enrollment.activatedAt >= startDate && enrollment.activatedAt <= endDateEnrollment;
                 });
                 if (enrollmentsInDateRange.length !== 0) {
                     setData((prevStat) => [...prevStat, ["Completed", enrollmentsInDateRange.length]]);
@@ -117,7 +117,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         if (obj.provisioningqueue) {
             Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then((response) => {
                 const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                    return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                    return enrollment.nladEnrollmentDate >= startDate && enrollment.nladEnrollmentDate <= endDateEnrollment;
                 });
                 if (enrollmentsInDateRange.length !== 0) {
                     setData((prevStat) => [...prevStat, ["Completed", enrollmentsInDateRange.length]]);
