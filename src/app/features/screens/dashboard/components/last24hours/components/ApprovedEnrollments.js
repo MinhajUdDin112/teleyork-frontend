@@ -5,7 +5,7 @@ export default function ApprovedEnrollments({BASE_URL,userid}){
      const [approvedenrollments,setApprovedEnrollments]=useState(0)
      useEffect(()=>{   
         Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`).then(response=>{ 
-         console.log("Approved Enrollments is ",response)  
+        
          const currentTime = new Date().getTime();
 
 // Set the time for 24 hours ago
@@ -17,7 +17,7 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
  return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
 });   
 setApprovedEnrollments(enrollmentsInLast24Hours.length) 
- console.log("inlast 24",enrollmentsInLast24Hours)
+
         }).catch(err=>{ 
 
         })

@@ -354,14 +354,12 @@ const RejectedEnrollments = () => {
                                         <p>
                                             {shortline}
                                             <span
-                                                style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                                                style={{ color: "black", cursor: "pointer", fontSize: "28px" }}
                                                 onClick={(e) => {
                                                     setReasonBody(rowData.reajectedReason);
                                                     setVisible(true);
                                                 }}
-                                            >
-                                                {" "}
-                                                See more
+                                            >...
                                             </span>
                                         </p>
                                     ) : (
@@ -372,9 +370,18 @@ const RejectedEnrollments = () => {
                            }}}  
                          />
                          <Column
-                                field="department.department"
-                                header="Phase"             
-                            />
+    field="Phase"
+    header="Phase"
+    body={(rowData) => (
+        <span>
+            {rowData.assignedToUser.map((user) => (
+                <span key={user?.department?.department}>
+                    {user?.department?.department}
+                </span>
+            ))}
+        </span>
+    )}
+/>
 
                         {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? <Column header="Actions" body={actionTemplateForCsr}></Column> : <Column header="Actions" body={actionTemplate}></Column>}
                     </DataTable>

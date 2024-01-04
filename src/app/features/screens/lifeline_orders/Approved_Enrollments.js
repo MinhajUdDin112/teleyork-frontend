@@ -96,7 +96,8 @@ const Approved_Enrollments = () => {
                        res.data.data[i].createdTo=res.data.data[i].createdAt
                    }  
                 
-                setAllCompletedEnrollments(res?.data?.data);    
+                setAllCompletedEnrollments(res?.data?.data); 
+                console.log("all enrollment is",res?.data?.data)   
               
                 setIsLoading(false);
             }
@@ -161,7 +162,7 @@ const Approved_Enrollments = () => {
     </div>
     </div>)
        }
-
+console.log("assignee is",allCompletedEnrollments[0]?.assignedToUser[0]?.department?.department)
 
   return (
    <>
@@ -213,13 +214,26 @@ const Approved_Enrollments = () => {
                         {
                             toCapital.includes("QA") ? <Column field="approvedBy.name" header="Approved By" />:""
                         }
-                         <Column
-                                field="department.department"
-                                header="Phase"
-                               
-                            />
+                     <Column
+    field="Phase"
+    header="Phase"
+    body={(rowData) => (
+        <span>
+            {rowData.assignedToUser.map((user) => (
+                <span key={user?.department?.department}>
+                    {user?.department?.department}
+                </span>
+            ))}
+        </span>
+    )}
+/>
+
+
+
+                        
+                             
                     </DataTable>
-                    {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+                    {isLoading ? <ProgressSpinner rr  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
               
                  </div>
             </div>
