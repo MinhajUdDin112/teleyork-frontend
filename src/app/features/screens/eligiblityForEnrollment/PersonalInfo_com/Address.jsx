@@ -258,13 +258,15 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 const parts = address.split(",");
                 if (parts.length >= 1) {
                     cityName = parts[0];
+                    cityName=cityName.toLowerCase();
+                    console.log("city name is",cityName)
                     const words = cityName.split(' ');
                     if (words.length >= 2) {
                         trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
                         tolowerTrimmedCityName = trimmedCityName.toLowerCase();    
                     }
                     else{
-                        tolowerTrimmedCityName = trimmedCityName;
+                        tolowerTrimmedCityName = cityName;
                     }
                     
                 }
@@ -274,32 +276,35 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             if(cityFromDb.includes(" ")){
                 const words = cityFromDb.split(' ');
                 if (words.length >= 2) {
-                    trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
-                    toLower=trimmedCityName.toLowerCase();        
+                    toLower = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
+                    toLower=toLower.toLowerCase();  
+                    toLower=toLower.trim();       
                 }
             }
             else{
-               toLower=cityFromDb.toLowerCase();       
+               toLower=cityFromDb.toLowerCase();   
+               toLower=toLower.trim();    
             }
            console.log("tolower is",toLower)
+          
            console.log("tolower trimed is",tolowerTrimmedCityName)
             if (tolowerTrimmedCityName.includes(toLower) || toLower.includes(tolowerTrimmedCityName) || cityName.includes(toLower) || toLower.includes(cityName) ) {
                 const completeAddress= e?.value?.structured_formatting?.main_text;
-                console.log("complete address is",completeAddress)
+              console.log("complete add is",completeAddress)
                 const extractedAddress1 = completeAddress.match(pattern);
-                console.log("extract address 1 is",extractedAddress1)
+               
                 if(extractedAddress1){
                     const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
-                    console.log("final is",final)
+                   
                     formik.setFieldValue("address1",final ); 
                    
                 }else{
                     formik.setFieldValue("address1",completeAddress ); 
                 }
                 const match = completeAddress.match(regex);   
-                console.log("match is",match)         
+                   
                 var add2 = match ? match[0] : '';
-                console.log("Add 2 is",add2)
+               
                 if(add2){
                    add2 = add2.toUpperCase();
                     formik.setFieldValue("address2", add2);
