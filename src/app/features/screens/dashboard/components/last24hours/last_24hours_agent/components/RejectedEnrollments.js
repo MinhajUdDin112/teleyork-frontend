@@ -4,7 +4,7 @@ export default function RejectedEnrollments({BASE_URL,userid}){
      const [rejectedenrollments,setRejectedEnrollments]=useState(0)   
      useEffect(()=>{   
         Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`).then(response=>{ 
-       
+         console.log(response)  
          const currentTime = new Date().getTime();
 
 // Set the time for 24 hours ago

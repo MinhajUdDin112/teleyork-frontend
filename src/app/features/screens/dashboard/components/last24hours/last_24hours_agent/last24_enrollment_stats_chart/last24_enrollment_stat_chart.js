@@ -3,7 +3,7 @@ import { Chart } from "react-google-charts";
 import Axios from "axios";
 import "./css/barchart_style.css"
 export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedRoutes }) {
-   
+    console.log("it is calling")
     const [data, setData] = useState([["Task", "Enrollments"]]);
     const options = {
         title: "Enrollments",
@@ -27,7 +27,8 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         },
     };
     if (permittedRoutes !== undefined) {
-      
+        console.log("not null");
+
         if (!permittedRoutes.includes("/approved-enrollments")) {
             delete obj.approvedEnrollments;
         }
@@ -52,7 +53,7 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         if (obj.rejectedenrollments) {
             Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)   
                 .then((response) => {      
-                  
+                    console.log("rejected is",response.data)  
          const currentTime = new Date().getTime();
 
 // Set the time for 24 hours ago
@@ -70,8 +71,9 @@ if(enrollmentsInLast24Hours.length !== 0){
         }
         if (obj.approvedEnrollments) {
             Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
-                .then((response) => {  
-                   
+                .then((response) => {    
+                    console.log("rejected is",response.data) 
+                 
          const currentTime = new Date().getTime();
 
 // Set the time for 24 hours ago
@@ -105,7 +107,7 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
         if (obj.incompleteenrollments) {  
 
             Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${userid}`).then((response) => {
-             
+                console.log("InComplete",response.data) 
                 const currentTime = new Date().getTime();
        
        // Set the time for 24 hours ago
@@ -123,7 +125,7 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
         }  
         if (obj.completedenrollments) {
             Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`).then((response) => {
-               
+                console.log("complete is",response.data) 
                 const currentTime = new Date().getTime();
        
        // Set the time for 24 hours ago
@@ -140,7 +142,7 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
         }    
         if (obj.provisioningqueue) {
             Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then((response) => {
-                
+                console.log("Provisioned At",response.data) 
                 const currentTime = new Date().getTime();
        
        // Set the time for 24 hours ago
@@ -159,7 +161,7 @@ const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
         }   
 
     }, []);   
-    
+      console.log(data)
     return (
         <div className="flex flex-wrap justify-content-around flex-row "> 
              { 

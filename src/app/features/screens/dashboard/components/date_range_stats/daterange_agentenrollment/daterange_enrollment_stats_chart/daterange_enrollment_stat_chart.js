@@ -9,8 +9,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
          if(endDate === null){ 
             endDateEnrollment=new Date().toISOString()
          }
-      }        
-      
+      }  
     const [data, setData] = useState([["Task", "Enrollments"]]);
     const options = {
         title: "Enrollments",
@@ -121,7 +120,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
                     return enrollment.nladEnrollmentDate >= startDate && enrollment.nladEnrollmentDate <= endDateEnrollment;
                 });
                 if (enrollmentsInDateRange.length !== 0) {
-                    setData((prevStat) => [...prevStat, ["Provisioning", enrollmentsInDateRange.length]]);
+                    setData((prevStat) => [...prevStat, ["Completed", enrollmentsInDateRange.length]]);
                 }
             });
         }

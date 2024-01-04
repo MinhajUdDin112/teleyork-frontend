@@ -4,7 +4,7 @@ export default function ProvisioningQueue({BASE_URL,userid}){
     const [provisioningqueueenrollments,setProvisioningQueueEnrollments]=useState(0)     
     useEffect(()=>{   
         Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then(response=>{ 
-        
+         console.log(response)  
          const currentTime = new Date().getTime();
 
 // Set the time for 24 hours ago
