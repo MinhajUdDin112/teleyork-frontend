@@ -259,7 +259,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 if (parts.length >= 1) {
                     cityName = parts[0];
                     cityName=cityName.toLowerCase();
-                    console.log("city name is",cityName)
+                  
                     const words = cityName.split(' ');
                     if (words.length >= 2) {
                         trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
@@ -285,12 +285,12 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                toLower=cityFromDb.toLowerCase();   
                toLower=toLower.trim();    
             }
-           console.log("tolower is",toLower)
+        
           
-           console.log("tolower trimed is",tolowerTrimmedCityName)
+          
             if (tolowerTrimmedCityName.includes(toLower) || toLower.includes(tolowerTrimmedCityName) || cityName.includes(toLower) || toLower.includes(cityName) ) {
                 const completeAddress= e?.value?.structured_formatting?.main_text;
-              console.log("complete add is",completeAddress)
+             
                 const extractedAddress1 = completeAddress.match(pattern);
                
                 if(extractedAddress1){

@@ -3,7 +3,7 @@ import React,{useState,useEffect} from "react";
 export default function AllEnrollments({BASE_URL,userid}){     
      useEffect(()=>{   
          Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`).then(response=>{ 
-          console.log(response)  
+          
           const currentTime = new Date().getTime();
 
 // Set the time for 24 hours ago

@@ -136,7 +136,7 @@ const AllEnrollments = () => {
                 } 
                
                 else if(res?.data?.data){
-                    console.log("data is",res?.data?.data)
+                 
                     for(let i=0;i<res.data.data.length;i++){ 
                         res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
                            res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
@@ -151,7 +151,7 @@ const AllEnrollments = () => {
                        } 
                 } 
                     setAllEnrollments(res?.data?.data); 
-                    console.log("all enrollment is",res?.data?.data)
+                   
                 setIsLoading(false);
               
                
@@ -161,7 +161,7 @@ const AllEnrollments = () => {
              
             }
          catch (error) {    
-             console.log(error)
+           
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
@@ -176,7 +176,7 @@ const AllEnrollments = () => {
         setisButtonLoading(true);
         const _id = rowData._id;
         const type=rowData?.enrollment;
-        console.log("type is",type)
+     
         if(type.includes("Self")){
             setSelectedEnrollmentId(_id);
             try {
@@ -256,8 +256,7 @@ const AllEnrollments = () => {
          setCheckRemarks(rowData?.QualityRemarks)
         
         if(rowData?.QualityRemarks ){
-            console.log( rowData?.QualityRemarks)           
-            if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
+           if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
                    toast.error("Declined sales can only rejected")
                    setisButtonLoading(false);              
             }
@@ -278,7 +277,7 @@ const AllEnrollments = () => {
             }
            
         else{
-            console.log("remarks no added")
+          
             toast.error("Please Add Remarks First");
                  setisButtonLoading(false)
         }
@@ -350,18 +349,18 @@ const AllEnrollments = () => {
     };
     
     const enrollUser = async (rowData) => {
-        console.log("in side fun")
+       
         setisButtonLoading(true);
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?userId=${parseLoginRes?._id}&enrollmentId=${rowData?._id}`);
-            console.log("out side")
+          
             if (response?.status == "200" || response?.status == "201") {
                 toast.success("Successfully Enrolled");
                 console.log("in side")
                 setisButtonLoading(false);
             }
         } catch (error) {
-            console.log("in side error")
+          
             const body = error?.response?.data?.data?.body;
 
             const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
@@ -417,7 +416,7 @@ const AllEnrollments = () => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
-            console.log("selected row is",enrollmentIds)
+           
             const dataToSend = {
                 approvedBy: parseLoginRes?._id,
                 enrolmentIds: enrollmentIds,
@@ -737,10 +736,18 @@ const AllEnrollments = () => {
                             <Column field="createdDate" header="Created At" />
                             <Column field="createdBy.name" header="Created By" />
                             <Column
-                                field="department.department"
-                                header="Phase"
-                               
-                            />
+    field="Phase"
+    header="Phase"
+    body={(rowData) => (
+        <span>
+            {rowData.assignedToUser.map((user) => (
+                <span key={user?.department?.department}>
+                    {user?.department?.department}
+                </span>
+            ))}
+        </span>
+    )}
+/>
 
                             {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ||roleName == "Team Lead" ||roleName == "TEAM LEAD" ? (
                                 ""

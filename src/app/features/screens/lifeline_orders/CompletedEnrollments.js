@@ -250,38 +250,19 @@ const CompletedEnrollments = () => {
     />
     : ""
 }
-                        <Column
-                                field="level"
-                                header="Status"
-                                body={(rowData) => {
-                                    if (Array.isArray(rowData.level) && rowData.level.length > 0) {
-                                        const statusArray = rowData.level.map((level) => {
-                                            switch (level) {
-                                                case 1:
-                                                    return "CSR";
-                                                case 2:
-                                                    return "Team Lead";
-                                                case 3:
-                                                    return "QA Agent";
-                                                case 4:
-                                                    return "QA Manager";
-                                                case 5:
-                                                    return "Provision Manager";
-                                                case 6:
-                                                    return "Retention";
-                                                case 7:
-                                                    return "Dispatch Manager";
-                                                default:
-                                                    return "";
-                                            }
-                                        });
-
-                                        return statusArray.join(", "); // Join multiple statuses into a string
-                                    } else {
-                                        return ""; // Handle the case when "level" is not an array or is empty
-                                    }
-                                }}
-                            />
+<Column
+    field="Phase"
+    header="Phase"
+    body={(rowData) => (
+        <span>
+            {rowData.assignedToUser.map((user) => (
+                <span key={user?.department?.department}>
+                    {user?.department?.department}
+                </span>
+            ))}
+        </span>
+    )}
+/>
                     </DataTable>
                     {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
                 </div>
