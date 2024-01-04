@@ -354,14 +354,12 @@ const RejectedEnrollments = () => {
                                         <p>
                                             {shortline}
                                             <span
-                                                style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                                                style={{ color: "black", cursor: "pointer", fontSize: "28px" }}
                                                 onClick={(e) => {
                                                     setReasonBody(rowData.reajectedReason);
                                                     setVisible(true);
                                                 }}
-                                            >
-                                                {" "}
-                                                See more
+                                            >...
                                             </span>
                                         </p>
                                     ) : (
