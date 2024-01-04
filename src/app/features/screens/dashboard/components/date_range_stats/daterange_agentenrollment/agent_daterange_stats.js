@@ -7,10 +7,10 @@ import CompletedEnrollments from "./components/CompletedEnrollments";
 import ProvisioningQueue from "./components/ProvisioningQueue";  
 import DateRangeEnrollmentStatChart from "./daterange_enrollment_stats_chart/daterange_enrollment_stat_chart";
 
-export default function AgentDateRangeStats({startDate,endDate,permittedRoutes,setStartDateValue,setEndDateValue,setStartDate,setEndDate,agentid}){   
+export default function AgentDateRangeStats({startDate,endDate,permittedRoutes,agentid}){   
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes); 
-    
+    console.log("it is calling again ")
     const userid = parseLoginRes._id;
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {

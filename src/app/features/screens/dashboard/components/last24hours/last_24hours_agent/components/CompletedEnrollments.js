@@ -10,17 +10,21 @@ export default function CompletedEnrollments({BASE_URL,userid}){
 // Set the time for 24 hours ago
 const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
 
-// Filter the enrollments based on the end timestamp
+// Filter the enrollments based on the end timestamp   
+if(response.data.data !== undefined){
 const enrollmentsInLast24Hours = response.data.data.filter(enrollment => {
  const enrollmentEndTime = new Date(enrollment.activatedAt).getTime();
  return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
 });   
-setCompletedEnrollments(enrollmentsInLast24Hours.length)
+setCompletedEnrollments(enrollmentsInLast24Hours.length) 
+} 
+ setCompletedEnrollments(0)
         }).catch(err=>{ 
 
-        })
+        })  
+    
 
-    },[])  
+    },[userid])  
     return ( 
         <h1 className="text-center">{completedenrollments}</h1>
     )
