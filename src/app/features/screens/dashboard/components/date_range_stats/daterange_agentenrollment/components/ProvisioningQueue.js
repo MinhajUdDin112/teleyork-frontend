@@ -12,7 +12,7 @@ export default function ProvisioningQueue({BASE_URL,userid,startDate,endDate}){
         Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then(response=>{ 
             const enrollmentsInDateRange = response.data.data.filter(enrollment => {
    
-                return enrollment.nladenrollmentDate >= startDate && enrollment.nladenrollmentDate <= endDateEnrollment;
+                return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
               });     
 setProvisioningQueueEnrollments(enrollmentsInDateRange.length)
         }).catch(err=>{ 

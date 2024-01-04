@@ -17,6 +17,10 @@
     position: absolute;
     bottom: 0;
     left: 0;
+}  
+.dropdownstyle{ 
+height:40px;
+margin-top: 28px;
 }
 .date-range {
     width: 60%;

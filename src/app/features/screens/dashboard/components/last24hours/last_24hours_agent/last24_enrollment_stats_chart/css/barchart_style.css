@@ -1,0 +1,28 @@
+.pie-chart{
+width:800px; 
+height:500px;
+} 
+.bar-chart{ 
+    width:600px; 
+    height:450px;
+}   
+@media(max-width:1836px){ 
+    .pie-chart{
+        width:600px; 
+        height:300px;
+        } 
+        .bar-chart{ 
+            width:400px; 
+            height:250px;
+        }  
+}
+@media(max-width:861px){ 
+    .pie-chart{
+        width:100%; 
+        height:auto;
+        } 
+        .bar-chart{ 
+            width:100%; 
+            height:auto;
+        }  
+}
