@@ -97,7 +97,7 @@ const Approved_Enrollments = () => {
                    }  
                 
                 setAllCompletedEnrollments(res?.data?.data); 
-                console.log("all enrollment is",res?.data?.data)   
+                
               
                 setIsLoading(false);
             }
@@ -162,7 +162,7 @@ const Approved_Enrollments = () => {
     </div>
     </div>)
        }
-console.log("assignee is",allCompletedEnrollments[0]?.assignedToUser[0]?.department?.department)
+     
 
   return (
    <>

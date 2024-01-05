@@ -8,6 +8,8 @@ import { logout } from "./app/store/auth/AuthSlice";
 import { Message } from "primereact/message";
 import { InputText } from "primereact/inputtext";
 import { ListBox } from "primereact/listbox";
+import { Dialog } from "primereact/dialog";
+import DialogeForAdvanceSearch from "./DialogeForAdvanceSearch";
 
 export const AppTopbar = (props) => {     
  
@@ -18,22 +20,28 @@ export const AppTopbar = (props) => {
     function docOnClick(e){ 
      setVisibleSearch(false)
     }
+
+    const [dialogeForAdvance, setDialogeForAdvance] = useState(false)
+
+     function openAdvance(){
+setDialogeForAdvance(true);
+    }
     const countries = [
         { name: "Inventory Search", code: "inventorysearch" },
         { name: "Payment Search", code: "paymentsearch" },
         { name: "Recent Searches", code: "recentsearches" },
-        { name: "Advance Search", code: "advance search" },
+        { name: "Advance Search", code: "advance search", onclick:openAdvance },
     ];
 
     const countryTemplate = (option) => {
         return (
-            <div className="flex align-items-center" >
+            <div className="flex align-items-center" onClick={option.onclick} >
                 {option.name === "Payment Search" ? (
                     <img src="/images/Dashboard-Search/payment-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Recent Searches" ? (
                     <img src="/images/Dashboard-Search/recent-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Advance Search" ? (
-                    <img src="/images/Dashboard-Search/advance-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img onClick={openAdvance} src="/images/Dashboard-Search/advance-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : (
                     <img src="/images/Dashboard-Search/inventory-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 )}
@@ -78,7 +86,11 @@ export const AppTopbar = (props) => {
         return capitalizedSentence;
       }
     return (
+
         <div>
+             <Dialog header="Advance Search" visible={dialogeForAdvance} style={{ width: "35vw" }} draggable={false} onHide={() => setDialogeForAdvance(false)}>
+                        <DialogeForAdvanceSearch setDialogeForAdvance={setDialogeForAdvance}  />
+                    </Dialog>
             <div className="logodisplay ">
                 <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
@@ -99,27 +111,27 @@ export const AppTopbar = (props) => {
                     <i className="pi pi-ellipsis-v" />
                 </button>
                 <InputText 
-               
                     className="search-customer"
                     onChange={(e) => {
                         props.setSearchValue(e.target.value);
                     }}
+                    
                     value={props.searchValue}
                     onClick={(e) => {    
+                      
                         e.stopPropagation()
                         setVisibleSearch(prev=>!prev);
                     }}
                     placeholder="Search Customer"
                 />
+                
                 <div  onClick={(e)=>{
                             e.stopPropagation()
                          }} className={classNames({ card: visibleSearch }, "flex justify-content-center listbox")}>
-                    <ListBox
-                        
+                    <ListBox   
                         value={props.searchBy}
                         style={{ display: `${visibleSearch === true ? "block" : "none"}` }}
                         onChange={(e) => {  
-                       
                             props.setSearchBy(e.value);
                            
                         }}
