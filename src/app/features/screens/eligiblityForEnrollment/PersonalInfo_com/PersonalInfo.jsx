@@ -22,7 +22,7 @@ import moment from "moment/moment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {  
     const [checkdoberror,setCheckDOBError]=useState(false)  
-     console.log("personal info is calling")
+    
     const startYear = 1900;
     const endYear = new Date().getFullYear();
      const [selectedYear,setSelectedYear]=useState(null)   

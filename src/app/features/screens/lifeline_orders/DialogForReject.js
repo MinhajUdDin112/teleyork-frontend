@@ -14,6 +14,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
     const [checkCompany, setcheckCompany] = useState(false);
+    const [assignButtonClicked, setAssignButtonClicked] = useState(false); // Added state
     const enrolmentId = enrollmentId;
 
     // Get user data from ls
@@ -62,6 +63,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
 
     const assignCSRId = () => {
         formik.setFieldValue("assignees", [CSRid]);
+        setAssignButtonClicked(true)
     };
 
     const checkcompany = () => {
@@ -120,7 +122,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
                                             roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("QA ")  && checkCompany ?( 
                                                 <>
                                                 <div className="p-field col-12 md:col-4 mt-3">
-                                                    <Button label="Assign to Created User" type="button" onClick={assignCSRId} />
+                                                    <Button label="Assign to Created User" type="button" onClick={assignCSRId} style={{ backgroundColor: assignButtonClicked ? 'grey' : '',transition: 'background-color 0.3s ease', border:'none' }} />
                                                 </div>
                                                 {/* <div className="p-fluid p-formgrid grid m-2 mt-5">
                                                     <h4>Or</h4>
@@ -131,7 +133,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
                      roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION")  ? (
                         <>
                             <div className="p-field col-12 md:col-4 mt-3">
-                                <Button label="Send To Retension" type="button"  />
+                                <Button label="Send To Retension" onClick={()=>{setAssignButtonClicked(true)}} type="button" style={{ backgroundColor: assignButtonClicked ? 'grey' : '',transition: 'background-color 0.3s ease', border:'none' }} />
                             </div>
                             {/* <div className="p-fluid p-formgrid grid m-2 mt-5">
                                 <h4>Or</h4>
@@ -140,7 +142,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
                     ) : checkType == "Enrollment" ? (
                         <>
                             <div className="p-field col-12 md:col-4 mt-3">
-                                <Button label="Assign to Created User" type="button" onClick={assignCSRId} />
+                                <Button label="Assign to Created User" type="button" onClick={assignCSRId} style={{ backgroundColor: assignButtonClicked ? 'grey' : '',transition: 'background-color 0.3s ease', border:'none' }}/>
                             </div>
                             {/* <div className="p-fluid p-formgrid grid m-2 mt-5">
                                 <h4>Or</h4>

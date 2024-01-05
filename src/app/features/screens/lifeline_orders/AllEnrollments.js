@@ -90,6 +90,7 @@ const AllEnrollments = () => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
+    const toCapital = roleName.toUpperCase();
    
 
     const onGlobalFilterValueChange = (e) => {
@@ -151,6 +152,7 @@ const AllEnrollments = () => {
                        } 
                 } 
                     setAllEnrollments(res?.data?.data); 
+                    console.log("all enroll is",res?.data?.data)
                    
                 setIsLoading(false);
               
@@ -733,8 +735,12 @@ const AllEnrollments = () => {
                                 }
                             />
                             <Column field="contact" header="Contact" />
-                            <Column field="createdDate" header="Created At" />
                             <Column field="createdBy.name" header="Created By" />
+                            <Column field="createdDate" header="Created At" />
+                            {
+                            toCapital.includes("QA MANAGER") ? <Column field="assignToQa.name" header="Initial Assignee"/>:""
+                            }
+                          
                             <Column
     field="Phase"
     header="Phase"
