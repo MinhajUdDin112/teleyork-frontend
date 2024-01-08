@@ -60,7 +60,6 @@ const DialogeForAdvanceSearch = ({setDialogeForAdvance}) => {
                 IMEI: formik.values.IMEI,
                 applicationId: formik.values.applicationId,
                 subscriberId: formik.values.subscriberId,
-
             };
 
             setIsLoading(true);
@@ -68,10 +67,10 @@ const DialogeForAdvanceSearch = ({setDialogeForAdvance}) => {
                 const response = await Axios.post(`${BASE_URL}/api/web/search/advancesearch`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                  setSearchData(response?.data)
-                 console.log("search data is",response?.data)
+                
                 }
             } catch (error) {
-            console.log("error is",error)
+            
                 setIsLoading(false);
             } 
         }
@@ -106,8 +105,8 @@ const DialogeForAdvanceSearch = ({setDialogeForAdvance}) => {
                     <div className="field col-12 md:col-6">
                         <InputText
                             id="phoneNumber"
-                             value={formik.values.phoneNumber}
-                             onChange={formik.handleChange}
+                            value={formik.values.phoneNumber}
+                            onChange={formik.handleChange}
                             placeHolder="Phone Number"
                         />
                     </div>
