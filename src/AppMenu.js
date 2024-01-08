@@ -81,10 +81,10 @@ const AppSubmenu = (props) => {
                     <li className={styleClass} key={i} role="none">
                         {props.root === true && (
                             <React.Fragment>
-                                <div className="layout-menuitem-root-text" aria-label={item.label}>
+                                <div className="layout-menuitem-root-text"  aria-label={item.label}>
                                     {item.label}
                                 </div>
-                                <AppSubmenu items={item.items} onMenuItemClick={props.onMenuItemClick} />
+                                <AppSubmenu items={item.items}  onMenuItemClick={props.onMenuItemClick} />
                             </React.Fragment>
                         )}
                     </li>
@@ -94,7 +94,7 @@ const AppSubmenu = (props) => {
                     <li className={styleClass} key={i} role="none" >
                         {renderLink(item, i)}
                         <CSSTransition classNames="layout-submenu-wrapper" timeout={{ enter: 1000, exit: 450 }} in={active} unmountOnExit>
-                            <AppSubmenu items={item.items} onMenuItemClick={props.onMenuItemClick} />
+                            <AppSubmenu items={item.items}  onMenuItemClick={props.onMenuItemClick} />
                         </CSSTransition>
                     </li>
                 );

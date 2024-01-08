@@ -51,11 +51,7 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
             Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
                 .then((response) => {
                     const currentTime = new Date().getTime();
-
-                    // Set the time for 24 hours ago
                     const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-
-                    // Filter the enrollments based on the end timestamp
                     if (response.data.data !== undefined) {
                         const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
                             const enrollmentEndTime = new Date(enrollment.rejectedAt).getTime();
@@ -72,11 +68,7 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
             Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
                 .then((response) => {
                     const currentTime = new Date().getTime();
-
-                    // Set the time for 24 hours ago
                     const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-
-                    // Filter the enrollments based on the end timestamp
                     if (response.data.data !== undefined) {
                         const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
                             const enrollmentEndTime = new Date(enrollment.approvedAt).getTime();
@@ -109,11 +101,7 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         if (obj.incompleteenrollments) {
             Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${userid}`).then((response) => {
                 const currentTime = new Date().getTime();
-
-                // Set the time for 24 hours ago
                 const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-
-                // Filter the enrollments based on the end timestamp
                 if (response.data.data !== undefined) {
                     const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
                         const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
@@ -128,11 +116,7 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         if (obj.completedenrollments) {
             Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`).then((response) => {
                 const currentTime = new Date().getTime();
-
-                // Set the time for 24 hours ago
                 const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-
-                // Filter the enrollments based on the end timestamp
                 if (response.data.data !== undefined) {
                     const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
                         const enrollmentEndTime = new Date(enrollment.activatedAt).getTime();

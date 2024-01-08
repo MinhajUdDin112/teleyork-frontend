@@ -1,17 +1,13 @@
-import React, { useEffect } from "react"  
+import React, { useEffect } from "react";
 import RejectedEnrollments from "./components/RejectedEnrollments";
 import IncompleteEnrollments from "./components/IncompleteEnrollments";
 import ApprovedEnrollments from "./components/ApprovedEnrollments";
 import AllEnrollments from "./components/AllEnrollments";
 import CompletedEnrollments from "./components/CompletedEnrollments";
-import ProvisioningQueue from "./components/ProvisioningQueue";  
+import ProvisioningQueue from "./components/ProvisioningQueue";
 import DateRangeEnrollmentStatChart from "./daterange_enrollment_stats_chart/daterange_enrollment_stat_chart";
 
-export default function AgentDateRangeStats({startDate,endDate,permittedRoutes,agentid}){   
-    const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes); 
-    console.log("it is calling again ")
-    const userid = parseLoginRes._id;
+export default function AgentDateRangeStats({ startDate, endDate, permittedRoutes, agentid }) {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
         rejectedenrollments: { label: "Rejected Enrollments", component: RejectedEnrollments },
@@ -34,7 +30,6 @@ export default function AgentDateRangeStats({startDate,endDate,permittedRoutes,a
         },
     };
     if (permittedRoutes !== undefined) {
-
         if (!permittedRoutes.includes("/approved-enrollments")) {
             delete obj.approvedEnrollments;
         }
@@ -53,9 +48,9 @@ export default function AgentDateRangeStats({startDate,endDate,permittedRoutes,a
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
         }
-    }  
-   
-     return(    
+    }
+
+    return (
         <div>
             <h1 className="daterange p-4 ml-4">Date Range Enrollments </h1>
             <div className="flex flex-wrap justify-content-around">
@@ -68,9 +63,9 @@ export default function AgentDateRangeStats({startDate,endDate,permittedRoutes,a
                         </div>
                     );
                 })}
-            </div>  
-              <DateRangeEnrollmentStatChart BASE_URL={BASE_URL} userid={agentid} permittedRoutes={permittedRoutes} startDate={startDate} endDate={endDate}/>
+            </div>
+            <DateRangeEnrollmentStatChart BASE_URL={BASE_URL} userid={agentid} permittedRoutes={permittedRoutes} startDate={startDate} endDate={endDate} />
             <hr />
         </div>
-     )
+    );
 }

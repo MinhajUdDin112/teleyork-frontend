@@ -16,9 +16,8 @@ export default function ApprovedEnrollments({ BASE_URL, userid, startDate, endDa
                         return enrollment.approvedAt >= startDate && enrollment.approvedAt <= endDateEnrollment;
                     });
                     setApprovedEnrollments(enrollmentsInDateRange.length);
-                } 
-                else{
-                setApprovedEnrollments(0); 
+                } else {
+                    setApprovedEnrollments(0);
                 }
             })
             .catch((err) => {});
