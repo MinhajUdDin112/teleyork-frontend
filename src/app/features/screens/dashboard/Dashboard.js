@@ -19,31 +19,21 @@ const Dashboard = ({ permittedRoutes }) => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const userid = parseLoginRes._id;
-    const BASE_URL = process.env.REACT_APP_BASE_URL;  
-    
-        const capitalizedSentence = (sentence) => {
-          // Split the sentence into an array of words
-          let words = sentence.split(' ');
-      
-          // Capitalize the first letter of each word
-          let capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
-      
-          // Join the words back into a sentence
-          let capitalizedSentence = capitalizedWords.join(' ');
-      
-          return capitalizedSentence;
-        }; 
-      
-
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const capitalizedSentence = (sentence) => {
+        let words = sentence.split(" ");
+        let capitalizedWords = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+        let capitalizedSentence = capitalizedWords.join(" ");
+        return capitalizedSentence;
+    };
     useEffect(() => {
         if (parseLoginRes.role.role === "PROVISION MANAGER") {
             Axios.get(`${BASE_URL}/api/web/dashboard/getEnrollmentsForProvision?userId=${userid}`)
                 .then((response) => {
                     let arr = [];
                     for (let i = 0; i < response.data.data.length; i++) {
-                        console.log("data here is", response.data.data[i]);
                         let obj = {};
-                        obj.name =  capitalizedSentence(response.data.data[i].agentName);
+                        obj.name = capitalizedSentence(response.data.data[i].agentName);
                         obj.value = response.data.data[i].agentId;
                         arr.push(obj);
                     }
@@ -55,7 +45,6 @@ const Dashboard = ({ permittedRoutes }) => {
                 .then((response) => {
                     let arr = [];
                     for (let i = 0; i < response.data.data.length; i++) {
-                        console.log("data here is", response.data.data[i]);
                         let obj = {};
                         obj.name = capitalizedSentence(response.data.data[i].agentName);
                         obj.value = response.data.data[i].agentId;
@@ -69,9 +58,8 @@ const Dashboard = ({ permittedRoutes }) => {
                 .then((response) => {
                     let arr = [];
                     for (let i = 0; i < response.data.data.length; i++) {
-                        console.log("data here is", response.data.data[i]);
                         let obj = {};
-                        obj.name =capitalizedSentence(response.data.data[i].agentName);
+                        obj.name = capitalizedSentence(response.data.data[i].agentName);
                         obj.value = response.data.data[i].agentId;
                         arr.push(obj);
                     }
@@ -80,7 +68,6 @@ const Dashboard = ({ permittedRoutes }) => {
                 .catch((err) => {});
         }
     }, []);
-    console.log("agentoption is", agentOptions);
     return (
         <div className="card">
             <div>
@@ -139,5 +126,4 @@ const Dashboard = ({ permittedRoutes }) => {
         </div>
     );
 };
-
 export default Dashboard;

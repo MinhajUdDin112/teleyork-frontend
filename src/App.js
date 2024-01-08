@@ -11,6 +11,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import ClearDeviceReportFlowPage from "./app/features/screens/inventory_management/bulk_processes/clear_device_report/clear_esn_report_flow_page";
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
+import AdvanceSearch from "./app/features/screens/search_customer/advance_search/advance_search";
 import "primereact/resources/primereact.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
@@ -81,7 +82,7 @@ import SwapEsnReportFlowPage from "./app/features/screens/inventory_management/b
 import ImeiDrawer from "./app/features/screens/inventory_management/imei-drawer/imei-drawer";
 import EsnSimDrawer from "./app/features/screens/inventory_management/esn_sim_drawer/esn_sim_drawer";
 import InventoryReport from "./app/features/screens/inventory_management/inventory_report.js/inventory_report";
-import CustomerProfile from "./app/features/screens/customer_profile/CustomerProfile"
+import CustomerProfile from "./app/features/screens/customer_profile/CustomerProfile";
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 import Provisioning_queue from "./app/features/screens/lifeline_orders/Provisioning_queue";
@@ -133,7 +134,7 @@ const App = () => {
         setLayoutColorMode(mode);
     };
 
-    const onWrapperClick = (event) => {
+    const onWrapperClick = (event) => {  
         if (!menuClick) {
             setOverlayMenuActive(false);
             setMobileMenuActive(false);
@@ -147,7 +148,8 @@ const App = () => {
         menuClick = false;
     };
 
-    const onToggleMenuClick = (event) => {
+    const onToggleMenuClick = (event) => {  
+        event.stopPropagation()
         menuClick = true;
 
         if (isDesktop()) {
@@ -172,21 +174,28 @@ const App = () => {
         menuClick = true;
     };
 
-    const onMobileTopbarMenuClick = (event) => {
+    const onMobileTopbarMenuClick = (event) => {    
+         event.stopPropagation()
         mobileTopbarMenuClick = true;
 
         setMobileTopbarMenuActive((prevState) => !prevState);
         event.preventDefault();
     };
 
-    const onMobileSubTopbarMenuClick = (event) => {
+    const onMobileSubTopbarMenuClick = (event) => { 
+        event.stopPropagation()
         mobileTopbarMenuClick = true;
 
         event.preventDefault();
     };
 
-    const onMenuItemClick = (event) => {   
-        setSearchBy(null)
+    const onMenuItemClick = (event) => {
+          if(event.item.items !== undefined){ 
+             
+          } 
+          else{ 
+            setSearchBy(null)
+          }
         if (!event.item.items) {
             setOverlayMenuActive(false);
             setMobileMenuActive(false);
@@ -227,7 +236,7 @@ const App = () => {
             return;
         }
         if (token) {
-            if (protectedRoute === false) { 
+            if (protectedRoute === false) {
                 localStorage.setItem("protectedRoute", JSON.stringify(true));
                 navigate("/");
             } else {
@@ -238,12 +247,12 @@ const App = () => {
         }
     }, [token]);
 
-    const loginPerms = localStorage.getItem("permissions")
-    const parsedLoginPerms = JSON.parse(loginPerms)
-    const [dynamicMenu, setDynamicMenu] = useState([])
+    const loginPerms = localStorage.getItem("permissions");
+    const parsedLoginPerms = JSON.parse(loginPerms);
+    const [dynamicMenu, setDynamicMenu] = useState([]);
 
     const getPermissions = () => {
-        const storedPermissions = localStorage.getItem('permissions');
+        const storedPermissions = localStorage.getItem("permissions");
         if (!storedPermissions) {
             return;
         }
@@ -252,9 +261,9 @@ const App = () => {
 
         const modules = parsedLoginPerms
             .map((node) => {
-                if (node.subModule.some(subNode => subNode?.actions?.some(action => action?.name === "view"))) {
+                if (node.subModule.some((subNode) => subNode?.actions?.some((action) => action?.name === "view"))) {
                     const moduleRoutes = node.subModule
-                        .filter(subNode => subNode?.actions?.some(action => action?.name === "view"))
+                        .filter((subNode) => subNode?.actions?.some((action) => action?.name === "view"))
                         .map((child) => {
                             permittedRoutes.push(child.route);
                             return {
@@ -274,136 +283,136 @@ const App = () => {
             })
             .filter((item) => item && item.items.length > 0);
 
-        setDynamicMenu(() => [{
-            items: modules
-        }]); 
-     
-        setPermittedRoutes(permittedRoutes); 
-      
+        setDynamicMenu(() => [
+            {
+                items: modules,
+            },
+        ]);
+
+        setPermittedRoutes(permittedRoutes);
     };
 
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
-    }
+    };
 
-    
     const [searchBy, setSearchBy] = useState(null);
     const [searchValue, setSearchValue] = useState(null);
-   
-    
+
     return (
         <>
             {protectedRoute === true ? (
                 <div className={wrapperClass} onClick={onWrapperClick}>
                     <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-                    <AppTopbar searchBy={searchBy} searchValue={searchValue} setSearchBy={setSearchBy} setSearchValue={setSearchValue}  onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                    <AppTopbar
+                        searchBy={searchBy}
+                        searchValue={searchValue}
+                        setSearchBy={setSearchBy}
+                        setSearchValue={setSearchValue}
+                        onToggleMenuClick={onToggleMenuClick}
+                        layoutColorMode={layoutColorMode}
+                        mobileTopbarMenuActive={mobileTopbarMenuActive}   
+                       
+                        onMobileTopbarMenuClick={onMobileTopbarMenuClick}
+                        onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
+                    />
 
-                    <div className="layout-sidebar" onClick={onSidebarClick}>
-                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                    <div className="layout-sidebar" >
+                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
                     </div>
-                    <div className="layout-main-container " > 
-                                            <div className="layout-main"> 
-                                 { 
-                                  searchBy !== null ?<div  className="card searchby flex flex-row flex-wrap justify-content-around align-items-center"> 
-                                   <div><h1 className="text-center w-full "> 
-                                    {searchBy.name}
-                                  </h1>      
-                                  <h5 className="text-center w-full mt-4 ">Get Ready!
-We are working on something really cool.</h5>  
-                                   </div> 
-                                 
-                                   </div> : 
-                            <Routes> 
+                    <div className="layout-main-container ">
+                        <div className="layout-main">
+                            {searchBy !== null ? (   
+                                   searchBy.code === "advance search" ? <AdvanceSearch setSearchBy={setSearchBy}/>:
+                                <div className="card searchby flex flex-row flex-wrap justify-content-around align-items-center">
+                                    <div>
+                                        <h1 className="text-center w-full ">{searchBy.name}</h1>
+                                        <h5 className="text-center w-full mt-4 ">Get Ready! We are working on something really cool.</h5>
+                                    </div>
+                                </div>
+                            ) : (
+                                <Routes>
+                                    <Route path="*" element={<NotFound />} />
 
-                                <Route path="*" element={<NotFound />} /> 
-                                
-                                {
-  permittedRoutes.length !== 0 ? (
-    <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} />
-  ) : (
-    undefined
-  )
-}  
-                                <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
-                                <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
-                                <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
-                              
-                                <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
-                                <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />
-                                <Route path="/emei-drawer" element={isPermitted("/emei-drawer") ? <ImeiDrawer /> : <Dashboard />} />
-                                <Route path="/manage-model" element={isPermitted("/manage-model") ? <ManageModelFlowPage /> : <Dashboard />} />
-                                <Route path="/manageinventory" element={isPermitted("/manageinventory") ? <Manage_inventory /> : <Dashboard />} />
-                                <Route path="/esn-sim-drawer" element={isPermitted("/esn-sim-drawer") ? <EsnSimDrawer /> : <Dashboard />} />
-                                <Route path="/dropshiporders" element={isPermitted("/dropshiporders") ? <DropshipOrdersFlowPage /> : <Dashboard />} />
-                                <Route path="/inventory-report" element={isPermitted("/inventory-report") ? <InventoryReport /> : <Dashboard />} />
-                                <Route path="/companyacpprograms" element={isPermitted("/companyacpprograms") ? <AcpProgramsFlowPage /> : <Dashboard />} />
-                                <Route path="/newenrolment" element={isPermitted("/newenrolment") ? <ServiceAvailablityPage /> : <Dashboard />} />
-                                {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
-                                <Route path="/enrollment" element={<EnrollmentFlowPage/>}/>
-                                <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
-                                <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
-                                <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
-                                <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
-                                <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
-                                <Route path="/incompleteenrollments" element={isPermitted("/incompleteenrollments") ? <InCompletedEnrollments /> : <Dashboard />} />
-                                <Route path="/rejectedenrollments" element={isPermitted("/rejectedenrollments") ? <RejectedEnrollments /> : <Dashboard />} />
-                                
-                                <Route path="/nladresolutionstatus" element={isPermitted("/nladresolutionstatus") ? <NLADResolutionStatus /> : <Dashboard />} />
-                                <Route path="/handovereventorder" element={isPermitted("/handovereventorder") ? <HandoverEventOrder /> : <Dashboard />} />
-                                <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
-                                <Route path="/withoutproofenrollments" element={isPermitted("/withoutproofenrollments") ? <WithoutProofEnrollments /> : <Dashboard />} />
-                                <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
-                                <Route path="/incomplete" element={isPermitted("/incomplete") ? <IncompleteEnrollments /> : <Dashboard />} />
-                                <Route path="/completeenrollments" element={isPermitted("/completeenrollments") ? <CompleteEnrollments /> : <Dashboard />} />
-                                <Route path="/bulkportin" element={isPermitted("/bulkportin") ? <BulkPortin /> : <Dashboard />} />
-                                <Route path="/allenrollmentorders" element={isPermitted("/allenrollmentorders") ? <Allenrollments /> : <Dashboard />} />
-                                <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
-                                <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentSearchTool /> : <Dashboard />} />
-                                <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
-                                <Route path="/customerhistory" element={isPermitted("/customerhistory") ? <CustomerHistory /> : <Dashboard />} />
-                                <Route path="/agentstorelocator" element={isPermitted("/agentstorelocator") ? <AgentStoreLocator /> : <Dashboard />} />
-                                <Route path="/deactivateesn" element={isPermitted("/deactivateesn") ? <DeactivatEsn /> : <Dashboard />} />
-                                <Route path="/tickets" element={isPermitted("/tickets") ? <Tickets /> : <Dashboard />} />
-                                <Route path="/eligibilityproofupload" element={isPermitted("/eligibilityproofupload") ? <EligibilityProofUpload /> : <Dashboard />} />
-                                <Route path="/dealerwallet" element={isPermitted("/dealerwallet") ? <DealerWallet /> : <Dashboard />} />
-                                <Route path="/orderhistory" element={isPermitted("/orderhistory") ? <OrderHistory /> : <Dashboard />} />
+                                    {permittedRoutes.length !== 0 ? <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} /> : undefined}
+                                    <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
+                                    <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
+                                    <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
 
-                                <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
-                                <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
-                                <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
-                                <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue")? <Provisioning_queue/> :<Dashboard/>}/>
+                                    <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
+                                    <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />
+                                    <Route path="/emei-drawer" element={isPermitted("/emei-drawer") ? <ImeiDrawer /> : <Dashboard />} />
+                                    <Route path="/manage-model" element={isPermitted("/manage-model") ? <ManageModelFlowPage /> : <Dashboard />} />
+                                    <Route path="/manageinventory" element={isPermitted("/manageinventory") ? <Manage_inventory /> : <Dashboard />} />
+                                    <Route path="/esn-sim-drawer" element={isPermitted("/esn-sim-drawer") ? <EsnSimDrawer /> : <Dashboard />} />
+                                    <Route path="/dropshiporders" element={isPermitted("/dropshiporders") ? <DropshipOrdersFlowPage /> : <Dashboard />} />
+                                    <Route path="/inventory-report" element={isPermitted("/inventory-report") ? <InventoryReport /> : <Dashboard />} />
+                                    <Route path="/companyacpprograms" element={isPermitted("/companyacpprograms") ? <AcpProgramsFlowPage /> : <Dashboard />} />
+                                    <Route path="/newenrolment" element={isPermitted("/newenrolment") ? <ServiceAvailablityPage /> : <Dashboard />} />
+                                    {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
+                                    <Route path="/enrollment" element={<EnrollmentFlowPage />} />
+                                    <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
+                                    <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
+                                    <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
+                                    <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
+                                    <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
+                                    <Route path="/incompleteenrollments" element={isPermitted("/incompleteenrollments") ? <InCompletedEnrollments /> : <Dashboard />} />
+                                    <Route path="/rejectedenrollments" element={isPermitted("/rejectedenrollments") ? <RejectedEnrollments /> : <Dashboard />} />
 
-                                <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments")? <Approved_Enrollments/> :<Dashboard/>}/>
+                                    <Route path="/nladresolutionstatus" element={isPermitted("/nladresolutionstatus") ? <NLADResolutionStatus /> : <Dashboard />} />
+                                    <Route path="/handovereventorder" element={isPermitted("/handovereventorder") ? <HandoverEventOrder /> : <Dashboard />} />
+                                    <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
+                                    <Route path="/withoutproofenrollments" element={isPermitted("/withoutproofenrollments") ? <WithoutProofEnrollments /> : <Dashboard />} />
+                                    <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
+                                    <Route path="/incomplete" element={isPermitted("/incomplete") ? <IncompleteEnrollments /> : <Dashboard />} />
+                                    <Route path="/completeenrollments" element={isPermitted("/completeenrollments") ? <CompleteEnrollments /> : <Dashboard />} />
+                                    <Route path="/bulkportin" element={isPermitted("/bulkportin") ? <BulkPortin /> : <Dashboard />} />
+                                    <Route path="/allenrollmentorders" element={isPermitted("/allenrollmentorders") ? <Allenrollments /> : <Dashboard />} />
+                                    <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
+                                    <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentSearchTool /> : <Dashboard />} />
+                                    <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
+                                    <Route path="/customerhistory" element={isPermitted("/customerhistory") ? <CustomerHistory /> : <Dashboard />} />
+                                    <Route path="/agentstorelocator" element={isPermitted("/agentstorelocator") ? <AgentStoreLocator /> : <Dashboard />} />
+                                    <Route path="/deactivateesn" element={isPermitted("/deactivateesn") ? <DeactivatEsn /> : <Dashboard />} />
+                                    <Route path="/tickets" element={isPermitted("/tickets") ? <Tickets /> : <Dashboard />} />
+                                    <Route path="/eligibilityproofupload" element={isPermitted("/eligibilityproofupload") ? <EligibilityProofUpload /> : <Dashboard />} />
+                                    <Route path="/dealerwallet" element={isPermitted("/dealerwallet") ? <DealerWallet /> : <Dashboard />} />
+                                    <Route path="/orderhistory" element={isPermitted("/orderhistory") ? <OrderHistory /> : <Dashboard />} />
 
-                                {/* <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
+                                    <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
+                                    <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
+                                    <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
+                                    <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue") ? <Provisioning_queue /> : <Dashboard />} />
+
+                                    <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments") ? <Approved_Enrollments /> : <Dashboard />} />
+
+                                    {/* <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
                                 <Route path="/sentall/:id" element={isPermitted("/sentall") ? <ShowSentAll /> : <Dashboard />} /> */}
 
+                                    <Route path="/draftall/:id" element={<ShowDraftAll />} />
+                                    <Route path="/sentall/:id" element={<ShowSentAll />} />
+                                    <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
+                                    <Route path="/personalinfo" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
+                                    <Route path="/selfaddress" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
+                                    <Route path="/selfeligibile" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
+                                    <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
+                                    <Route path="/resumeapplication" element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
 
-                                <Route path="/draftall/:id" element={<ShowDraftAll/>}/>
-                                 <Route path="/sentall/:id" element={<ShowSentAll/>}/>
-                                <Route  path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
-                                <Route  path="/personalinfo" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
-                                <Route path="/selfaddress" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
-                                <Route path="/selfeligibile" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
-                                <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
-                                <Route path="/resumeapplication"element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
-
-
-                                <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
-                                <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
-                                <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
-                                <Route path="/manage-user" element={isPermitted("/manage-user") ? <ManageUser /> : <Dashboard />} />
-                                {/* <Route path="/create-user" element={isPermitted("/create-user") ? <CreateUser /> : <Dashboard />} /> */}
-                                <Route path="/create-user" element={<CreateUser/>}/>
-                                <Route path="/edit-user" element={isPermitted("/edit-user") ? <EditUser /> : <Dashboard />} />
-                                <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />
-                                <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
-                                <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} />
-                            </Routes>   
-} 
+                                    <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
+                                    <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
+                                    <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
+                                    <Route path="/manage-user" element={isPermitted("/manage-user") ? <ManageUser /> : <Dashboard />} />
+                                    {/* <Route path="/create-user" element={isPermitted("/create-user") ? <CreateUser /> : <Dashboard />} /> */}
+                                    <Route path="/create-user" element={<CreateUser />} />
+                                    <Route path="/edit-user" element={isPermitted("/edit-user") ? <EditUser /> : <Dashboard />} />
+                                    <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />
+                                    <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
+                                    <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
+                                    <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} />
+                                </Routes>
+                            )}
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
 
