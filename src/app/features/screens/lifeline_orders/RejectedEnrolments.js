@@ -29,6 +29,7 @@ const RejectedEnrollments = () => {
     const [enrollmentIdFilterValue, setEnrollmentIdFilterValue] = useState("");
     const [createDateFilterValue, setCreatedDateFilterValue] = useState("");
     const [globalFilterValue, setGlobalFilterValue] = useState("");
+       
 
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
@@ -111,9 +112,11 @@ const RejectedEnrollments = () => {
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+   
      // Get role name  from login response
      const roleName = parseLoginRes?.role?.role;
      const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
+
 
     const actionBasedChecks = () => {
         const loginPerms = localStorage.getItem("permissions");
@@ -216,17 +219,27 @@ const RejectedEnrollments = () => {
         }
     };
     const actionTemplate = (rowData) => {  
-        return (
-            <div>        
- <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
-  {/* <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1  " text raised disabled={isButtonLoading} /> */}
-            </div>
-        );
+        const createduser = rowData?.createdBy?.name
+        const toCapitalCreatedUser = createduser.toUpperCase();
+        const userName = parseLoginRes?.userName
+        const toCapitalUserName=userName.toUpperCase();
+        console.log(" toCapitalCreatedUser is",toCapitalCreatedUser)
+        console.log("tocapi is",toCapitalUserName)
+        if(toCapitalCreatedUser==toCapitalUserName){
+            return (
+                  
+                <Button label="Edit" onClick={() => viewRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                             
+                       );
+        }
+        else{
+            return null
+        }
+
+      
     };
 
-    const actionTemplateForCsr = (rowData) => {
-        return <Button label="Edit" className="pb-1 pt-1" onClick={() => viewRow(rowData)} text card raised/>;
-    };
+   
     const header = () => {
         return (
             <div className="flex flex-wrap justify-content-center mt-2">
@@ -383,7 +396,7 @@ const RejectedEnrollments = () => {
     )}
 />
 
-                        {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? <Column header="Actions" body={actionTemplateForCsr}></Column> : <Column header="Actions" body={actionTemplate}></Column>}
+     <Column header="Actions" body={actionTemplate}></Column>
                     </DataTable>
                 </div>
             </div>
