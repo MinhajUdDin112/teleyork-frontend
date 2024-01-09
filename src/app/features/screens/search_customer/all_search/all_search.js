@@ -6,11 +6,10 @@ import { useState } from "react";
 import "../css/advance_search.css";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import DisplayAdvanceSearchApiResponse from "./component/search_result";
-import { ProgressSpinner } from "primereact/progressspinner";  
-import { InputMask } from 'primereact/inputmask';
+import DisplayAllSearchApiResponse from "./component/allsearch_result";
+import { ProgressSpinner } from "primereact/progressspinner";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const AdvanceSearch = ({ setSearchBy }) => {
+const AllSearch = ({ setSearchBy }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [searchData, setSearchData] = useState([]);  
     const [carrierholder,setCarrier]=useState([])
@@ -38,13 +37,13 @@ const AdvanceSearch = ({ setSearchBy }) => {
         onSubmit: async (values, actions) => {
             const dataToSend = {
                 phoneNumber: formik.values.phoneNumber,
-                firstName: (formik.values.firstName).toUpperCase(),
-                lastName: formik.values.lastName.toUpperCase(),
+                firstName: formik.values.firstName,
+                lastName: formik.values.lastName,
                 email: formik.values.email,
                 address1: formik.values.address1,
                 address2: formik.values.address2,
-                city: formik.values.city.toUpperCase(),
-                state: formik.values.state.toUpperCase(),
+                city: formik.values.city,
+                state: formik.values.state,
                 zip: formik.values.zip,
                 DOB: formik.values.DOB,
                 SSN: formik.values.SSN,
@@ -91,7 +90,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
             for (let i = 0; i < res.data.data.length; i++) {
                 const obj = {};
                 obj.label = res.data.data[i].name;
-                obj.value = obj.label;
+                obj.value = res.data.data[i]._id;
                 carrierholder.push(obj);
             }
 
@@ -109,7 +108,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
                 <h1 className="daterange p-4 ml-4">Advance Search </h1>
                 <div className="flex flex-wrap justify-content-around wrapper flex-row">
                     <div className="field-width2 mt-2">
-                        <InputText id="phoneNumber" keyfilter="pint" value={formik.values.phoneNumber} onChange={formik.handleChange} className="w-full" placeHolder="Phone Number" />
+                        <InputText id="phoneNumber" value={formik.values.phoneNumber} onChange={formik.handleChange} className="w-full" placeHolder="Phone Number" />
                     </div>
                     <div className="field-width2 mt-2">
                         <InputText id="address1" value={formik.values.address1} onChange={formik.handleChange} className="w-full" placeHolder="Street Address" />
@@ -120,15 +119,15 @@ const AdvanceSearch = ({ setSearchBy }) => {
                     <div className="field-width2 mt-2">
                         <InputText id="address2" value={formik.values.address2} onChange={formik.handleChange} className="w-full" placeHolder="Apartment or Unit" />
                     </div>
-                    {/*<div className="field-width2 mt-2">
+                    <div className="field-width2 mt-2">
                         <InputText
                             // id="phoneNumber"
-                            // value={formik.values.phoneNumber}  
+                            // value={formik.values.phoneNumber}
                             onChange={formik.handleChange}
                             placeHolder="Enroll Id"
                             className="w-full"
                         />
-                    </div>  */}
+                    </div>
                     <div className="field-width2 mt-2">
                         <InputText id="city" className="w-full" value={formik.values.city} onChange={formik.handleChange} placeHolder="City" />
                     </div>
@@ -136,7 +135,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
                         <InputText id="firstName" className="w-full" value={formik.values.firstName} onChange={formik.handleChange} placeHolder="First Name" />
                     </div>
                     <div className="field-width2 mt-2">
-                        <InputText id="state" className="w-full" value={formik.values.state} onChange={formik.handleChange} placeHolder="State" />
+                        <InputText id="State" className="w-full" value={formik.values.State} onChange={formik.handleChange} placeHolder="State" />
                     </div>
                     <div className="field-width2 mt-2">
                         <InputText id="lastName" className="w-full" value={formik.values.lastName} onChange={formik.handleChange} placeHolder="Last Name" />
@@ -148,7 +147,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
                         <InputText id="email" className="w-full" value={formik.values.email} onChange={formik.handleChange} placeHolder="Email" />
                     </div>
                     <div className="field-width2 mt-2">
-                        <InputText id="ssn" keyfilter="pint" className="w-full" value={formik.values.SSN} onChange={formik.handleChange} placeHolder="SSN" />
+                        <InputText id="ssn" className="w-full" value={formik.values.ssn} onChange={formik.handleChange} placeHolder="SSN" />
                     </div>
 
                     <div className="field-width2 mt-2">
@@ -166,8 +165,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
                         />
                     </div>
                     <div className="field-width2 mt-2">
-                        <InputMask id="DOB"  mask="99-99-9999"
-      placeholder="MM-DD-YYYY" className="w-full"  value={formik.values.DOB} onChange={formik.handleChange} />
+                        <InputText id="DOB" className="w-full" value={formik.values.DOB} onChange={formik.handleChange} placeHolder=" DOB(MM-DD-YYYY)" />
                     </div>
                     <div className="field-width2 mt-2">
                         <Dropdown
@@ -183,7 +181,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
                         />
                     </div>
                     <div className="field-width2 mt-2">
-                        <InputText id="esn"  keyfilter="pint" className="w-full" value={formik.values.esn} onChange={formik.handleChange} placeHolder="SIM/ESN" />
+                        <InputText id="esn" className="w-full" value={formik.values.esn} onChange={formik.handleChange} placeHolder="SIM/ESN" />
                     </div>
                     <div className="field-width2 mt-2">
                         <Dropdown
@@ -199,7 +197,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
                         />
                     </div>
                     <div className="field-width2 mt-2">
-                        <InputText id="IMEI" className="w-full" keyfilter="pint" value={formik.values.IMEI} onChange={formik.handleChange} placeHolder="IMEI" />
+                        <InputText id="IMEI" className="w-full" value={formik.values.IMEI} onChange={formik.handleChange} placeHolder="IMEI" />
                     </div>
                     <div className="field-width2 mt-2">
                         <InputText id="subscriberId" className="w-full" value={formik.values.subscriberId} onChange={formik.handleChange} placeHolder="NLAD Subscriber Id" />
@@ -214,7 +212,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
                
             </form>  
             {!isLoading ? (
-            <DisplayAdvanceSearchApiResponse  searchData={searchData} setSearchBy={setSearchBy} />
+            <DisplayAllSearchApiResponse  searchData={searchData} setSearchBy={setSearchBy} />
             ):
                 <div>
                     <ProgressSpinner className="mt-4 pt-4 flex flex-wrap justify-content-center flex-row " />

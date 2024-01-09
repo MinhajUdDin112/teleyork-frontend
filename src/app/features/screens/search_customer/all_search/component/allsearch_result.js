@@ -2,7 +2,7 @@ import React from "react"
 import { DataTable } from "primereact/datatable"; 
 import { useNavigate } from "react-router-dom";
 import { Column } from "primereact/column";
-export default function DisplayAdvanceSearchApiResponse({searchData,setSearchBy}){  
+export default function DisplayAllSearchApiResponse({searchData,setSearchBy}){  
      const navigate=useNavigate()    
      const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
