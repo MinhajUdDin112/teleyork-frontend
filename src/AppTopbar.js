@@ -19,7 +19,7 @@ export const AppTopbar = (props) => {
     //Dialogues for Advance Search
     const countries = [
         { name: "Inventory Search", code: "inventorysearch" },
-        { name: "Payment Search", code: "paymentsearch" },
+    // { name: "Payment Search", code: "paymentsearch" },
         { name: "Recent Searches", code: "recentsearches" },
         { name: "Advance Search", code: "advance search"},
     ];
@@ -76,7 +76,7 @@ export const AppTopbar = (props) => {
         <div >
             
             <div className="logodisplay "  onClick={(e)=>{  
-                
+                     e.stopPropagation()
                  props.setSearchBy(null)  
                  }} >
                 <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
@@ -84,11 +84,15 @@ export const AppTopbar = (props) => {
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
                 </Link>
             </div>
-            <div className="layout-topbar"  onClick={(e)=>{  
+            <div className="layout-topbar"  onClick={(e)=>{   
+                
                setVisibleSearch(false)
                e.stopPropagation()
             }}>  
-                <Link to="/" className="layout-topbar-logo insidetopbarlogo">
+                <Link to="/" className="layout-topbar-logo insidetopbarlogo"   onClick={(e)=>{  
+                     e.stopPropagation()
+                 props.setSearchBy(null)  
+                 }}>
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
                 </Link>
