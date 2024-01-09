@@ -4,15 +4,13 @@ import IncompleteEnrollments from "./components/IncompleteEnrollments";
 import ApprovedEnrollments from "./components/ApprovedEnrollments";
 import AllEnrollments from "./components/AllEnrollments";
 import CompletedEnrollments from "./components/CompletedEnrollments";
-import ProvisioningQueue from "./components/ProvisioningQueue";  
-import Last24EnrollmentStatChart from "./last24_enrollment_stats_chart/last24_enrollment_stat_chart.js"
-
-export default function Last24HoursEnrollments({ permittedRoutes }) {    
-
+import ProvisioningQueue from "./components/ProvisioningQueue";
+import Last24EnrollmentStatChart from "./last24_enrollment_stats_chart/last24_enrollment_stat_chart.js";
+export default function Last24HoursEnrollments({ permittedRoutes }) {
     const loginRes = localStorage.getItem("userData");
-const parseLoginRes = JSON.parse(loginRes);
-const userid = parseLoginRes?._id;
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const parseLoginRes = JSON.parse(loginRes);
+    const userid = parseLoginRes?._id;
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
         rejectedenrollments: { label: "Rejected Enrollments", component: RejectedEnrollments },
         incompleteenrollments: { label: "Incomplete Enrollments", component: IncompleteEnrollments },
@@ -34,7 +32,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
         },
     };
     if (permittedRoutes !== undefined) {
-
         if (!permittedRoutes.includes("/approved-enrollments")) {
             delete obj.approvedEnrollments;
         }
@@ -59,7 +56,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
             <h1 className=" p-4 ml-4 last24">Last 24 Hours Enrollments </h1>
             <div className="flex flex-wrap justify-content-around">
                 {Object.keys(obj).map((item) => {
-                    const Component = obj[item].component; // Assign the component to a variable
+                    const Component = obj[item].component;
                     return (
                         <div key={item} className="card info">
                             <Component userid={userid} BASE_URL={BASE_URL} /> {/* Render the component dynamically */}
@@ -67,8 +64,8 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
                         </div>
                     );
                 })}
-            </div>  
-              <Last24EnrollmentStatChart BASE_URL={BASE_URL} userid={userid} permittedRoutes={permittedRoutes}/>
+            </div>
+            <Last24EnrollmentStatChart BASE_URL={BASE_URL} userid={userid} permittedRoutes={permittedRoutes} />
             <hr />
         </div>
     );

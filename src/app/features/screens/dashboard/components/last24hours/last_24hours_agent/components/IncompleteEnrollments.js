@@ -5,7 +5,6 @@ export default function IncompleteEnrollments({ BASE_URL, userid }) {
     useEffect(() => {
         Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${userid}`)
             .then((response) => {
-                console.log(response);
                 const currentTime = new Date().getTime();
                 const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
                 if (response.data.data !== undefined) {

@@ -10,16 +10,15 @@ export default function AllEnrollments({ BASE_URL, userid, startDate, endDate })
     }
     useEffect(() => {
         Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`)
-            .then((response) => { 
-                 if(response.data.data !== undefined){
-                const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                    return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
-                });
-                setAllEnrollments(enrollmentsInDateRange.length); 
-            } 
-             else{ 
-                setAllEnrollments(0)
-             }
+            .then((response) => {
+                if (response.data.data !== undefined) {
+                    const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
+                        return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                    });
+                    setAllEnrollments(enrollmentsInDateRange.length);
+                } else {
+                    setAllEnrollments(0);
+                }
             })
             .catch((err) => {});
     }, [startDate, endDate]);

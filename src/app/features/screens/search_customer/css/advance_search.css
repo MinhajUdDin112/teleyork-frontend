@@ -1,0 +1,12 @@
+.field-width2{ 
+    width: 26%;
+} 
+.wrapper{ 
+    width:100%; 
+    position: relative;
+}  
+@media(max-width:900px){ 
+    .field-width2{ 
+        width:45%;
+    }
+}

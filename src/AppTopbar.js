@@ -1,47 +1,37 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
+import { ConfirmPopup } from "primereact/confirmpopup";
 import { logout } from "./app/store/auth/AuthSlice";
-import { Message } from "primereact/message";
 import { InputText } from "primereact/inputtext";
 import { ListBox } from "primereact/listbox";
-import { Dialog } from "primereact/dialog";
-import DialogeForAdvanceSearch from "./DialogeForAdvanceSearch";
-
 export const AppTopbar = (props) => {     
- 
       useEffect(()=>{ 
         document.addEventListener("click",docOnClick,false)
       })
     const [visibleSearch, setVisibleSearch] = useState(false);
-    function docOnClick(e){ 
+    function docOnClick(e){   
+       
      setVisibleSearch(false)
-    }
-
-    const [dialogeForAdvance, setDialogeForAdvance] = useState(false)
-
-     function openAdvance(){
-setDialogeForAdvance(true);
-    }
+    }  
+    //Dialogues for Advance Search
     const countries = [
         { name: "Inventory Search", code: "inventorysearch" },
-        { name: "Payment Search", code: "paymentsearch" },
+    // { name: "Payment Search", code: "paymentsearch" },
         { name: "Recent Searches", code: "recentsearches" },
-        { name: "Advance Search", code: "advance search", onclick:openAdvance },
+        { name: "Advance Search", code: "advance search"},
     ];
-
     const countryTemplate = (option) => {
         return (
-            <div className="flex align-items-center" onClick={option.onclick} >
+            <div className="flex align-items-center"  >
                 {option.name === "Payment Search" ? (
                     <img src="/images/Dashboard-Search/payment-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Recent Searches" ? (
                     <img src="/images/Dashboard-Search/recent-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Advance Search" ? (
-                    <img onClick={openAdvance} src="/images/Dashboard-Search/advance-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img  src="/images/Dashboard-Search/advance-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : (
                     <img src="/images/Dashboard-Search/inventory-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 )}
@@ -52,20 +42,16 @@ setDialogeForAdvance(true);
     const [visible, setVisible] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
     const handleLogout = () => {
         dispatch(logout());
-
         navigate("/login");
     };
-
     const CustomMessage = () => (
-        <div className="flex flex-column w-15rem">
-            <i className="pi pi-user p-mr-2 text-center" style={{ fontSize: "2rem" }}></i>
+        <div className="flex flex-column w-15rem" onClick={(e)=>{ e.stopPropagation() }}>
+            <i  className="pi pi-user p-mr-2 text-center" style={{ fontSize: "2rem" }}></i>
             <p className="text-center mt-2" style={{ fontSize: "1.5rem" }}>
                 {parseLoginRes?.userName ? parseLoginRes?.userName.toUpperCase() : ""}
             </p>
@@ -87,18 +73,26 @@ setDialogeForAdvance(true);
       }
     return (
 
-        <div>
-             <Dialog header="Advance Search" visible={dialogeForAdvance} style={{ width: "35vw" }} draggable={false} onHide={() => setDialogeForAdvance(false)}>
-                        <DialogeForAdvanceSearch setDialogeForAdvance={setDialogeForAdvance}  />
-                    </Dialog>
-            <div className="logodisplay ">
+        <div >
+            
+            <div className="logodisplay "  onClick={(e)=>{  
+                     e.stopPropagation()
+                 props.setSearchBy(null)  
+                 }} >
                 <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
                 </Link>
             </div>
-            <div className="layout-topbar">
-                <Link to="/" className="layout-topbar-logo insidetopbarlogo">
+            <div className="layout-topbar"  onClick={(e)=>{   
+                
+               setVisibleSearch(false)
+               e.stopPropagation()
+            }}>  
+                <Link to="/" className="layout-topbar-logo insidetopbarlogo"   onClick={(e)=>{  
+                     e.stopPropagation()
+                 props.setSearchBy(null)  
+                 }}>
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
                 </Link>
@@ -107,7 +101,9 @@ setDialogeForAdvance(true);
                     <i className="pi pi-bars" />
                 </button>
 
-                <button type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={props.onMobileTopbarMenuClick}>
+                <button type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={(e)=>{ 
+                       e.stopPropagation()
+                     props.onMobileTopbarMenuClick(e)} }>
                     <i className="pi pi-ellipsis-v" />
                 </button>
                 <InputText 
@@ -118,7 +114,6 @@ setDialogeForAdvance(true);
                     
                     value={props.searchValue}
                     onClick={(e) => {    
-                      
                         e.stopPropagation()
                         setVisibleSearch(prev=>!prev);
                     }}
@@ -131,27 +126,35 @@ setDialogeForAdvance(true);
                     <ListBox   
                         value={props.searchBy}
                         style={{ display: `${visibleSearch === true ? "block" : "none"}` }}
-                        onChange={(e) => {  
-                            props.setSearchBy(e.value);
-                           
+                        onChange={(e) => {     
+                            if(e.value !== null){
+                            props.setSearchBy(e.value);  
+                            }
+                             
                         }}
                         options={countries}
-                        optionLabel="name"
+                        optionLabel="name"   
+                          onClick={(e)=>{  
+                            e.stopPropagation()
+                             if(e.target.textContent === "Advance Search"){ 
+                                
+                             }   
+                             
+                          }}
                         itemTemplate={countryTemplate}
                         className="w-full"
                         listStyle={{ maxHeight: "250px" }}
                     />
                 </div>
-                <ConfirmPopup target={document.getElementById("li")} visible={visible} onHide={() => setVisible(false)} message={<CustomMessage />} acceptLabel="Logout" accept={handleLogout} />
-
+                <ConfirmPopup target={document.getElementById("li")}  visible={visible}  onHide={() => setVisible(false)} message={<CustomMessage />} acceptLabel="Logout" accept={handleLogout} />
                 <ul className={classNames("layout-topbar-menu lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
                     <div className="flex  ">
                         <p className="mr-7 mt-2" style={{ fontSize: "1.3rem" }}>
                             {parseLoginRes?.role?.role}
                         </p>
 
-                        <div className="flex">
-                            <li>
+                        <div className="flex" onClick={(e)=>{e.stopPropagation()}}>
+                            <li >
                                 <i style={{ cursor: "pointer", fontSize: "1.5rem", marginTop: "5px" }} className="pi pi-user" onClick={() => setVisible(true)} />
                             </li>
                             <p className="" id="li" style={{ cursor: "pointer", fontSize: "1.5rem", marginLeft: "10px" }} onClick={() => setVisible(true)}>

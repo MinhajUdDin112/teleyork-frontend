@@ -4,15 +4,10 @@ import IncompleteEnrollments from "./components/IncompleteEnrollments.js";
 import ApprovedEnrollments from "./components/ApprovedEnrollments.js";
 import AllEnrollments from "./components/AllEnrollments.js";
 import CompletedEnrollments from "./components/CompletedEnrollments.js";
-import ProvisioningQueue from "./components/ProvisioningQueue.js";  
-import Last24EnrollmentStatChart from "./last24_enrollment_stats_chart/last24_enrollment_stat_chart.js"
-
-export default function Last24HoursAgentEnrollments({agentid, permittedRoutes }) {    
-
-    const loginRes = localStorage.getItem("userData");
-const parseLoginRes = JSON.parse(loginRes);
-const userid = parseLoginRes._id;
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+import ProvisioningQueue from "./components/ProvisioningQueue.js";
+import Last24EnrollmentStatChart from "./last24_enrollment_stats_chart/last24_enrollment_stat_chart.js";
+export default function Last24HoursAgentEnrollments({ agentid, permittedRoutes }) {
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
         rejectedenrollments: { label: "Rejected Enrollments", component: RejectedEnrollments },
         incompleteenrollments: { label: "Incomplete Enrollments", component: IncompleteEnrollments },
@@ -34,7 +29,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
         },
     };
     if (permittedRoutes !== undefined) {
-
         if (!permittedRoutes.includes("/approved-enrollments")) {
             delete obj.approvedEnrollments;
         }
@@ -67,8 +61,8 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
                         </div>
                     );
                 })}
-            </div>  
-              <Last24EnrollmentStatChart BASE_URL={BASE_URL} userid={agentid} permittedRoutes={permittedRoutes}/>
+            </div>
+            <Last24EnrollmentStatChart BASE_URL={BASE_URL} userid={agentid} permittedRoutes={permittedRoutes} />
             <hr />
         </div>
     );
