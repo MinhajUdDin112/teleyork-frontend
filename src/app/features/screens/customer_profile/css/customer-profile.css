@@ -78,5 +78,8 @@
   .seemore-button{ 
     position: absolute;
     bottom:0px;
-  }
-  /* Media query for smaller screens (e.g., mobile devices) */
+  }  
+ /* Add this CSS in your stylesheet or use a style tag in your component */
+
+
+

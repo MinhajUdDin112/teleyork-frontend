@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
-import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
 import { toast } from "react-toastify";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import classNames from "classnames";
-import { ProgressSpinner } from "primereact/progressspinner";
-
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-
 const DialogeForOneNote = ({enrollmentId,noteId,contact}) => {
-
-    const [cpData, setCpData] = useState([]);
-    
-   
+ const [cpData, setCpData] = useState([]); 
 useEffect(() => {
-
+  console.log("one note is calling")
 const getOneNote= async()=>{
-
 try {
   const response = await Axios.get(`${BASE_URL}/api/web/notes/getOne?noteId=${noteId}`)
   if(response?.status===200 || response?.status===201){
@@ -34,7 +22,14 @@ try {
 getOneNote();
 
 }, [])
-    
+    function markVoid(){ 
+        Axios.put(`${BASE_URL}/api/web/notes/markVoid`,{"noteId":cpData?.data._id,
+        "markVoid":true}).then(()=>{   
+             toast.success("Successfully Void")
+        }).catch(err=>{  
+             toast.error("Fialed To Mark Void")
+        })
+    }
     return (
         <>
             <div className="">
@@ -90,7 +85,7 @@ getOneNote();
                       
                     </div>
                     <div  className="mt-3 text-right">
-                    <Button label="Mark Void"/>
+                    <Button label="Mark Void"  onClick={markVoid}/>
                     </div>
                    
                 </div>
