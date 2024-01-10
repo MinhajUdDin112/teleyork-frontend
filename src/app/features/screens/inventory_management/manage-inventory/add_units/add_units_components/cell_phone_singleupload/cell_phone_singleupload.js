@@ -1,27 +1,30 @@
-import React, { useState,useRef,useEffect } from "react";
-import { useFormik } from "formik"; 
-import * as Yup from "yup";    
-import Axios  from "axios";    
+import React, { useState, useRef, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Axios from "axios";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-import AddCellPhoneModelDialog from "./Dialogs/add_cell_phone_model_dialog";  
-const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function CellPhoneSingleUpload  ({permissions}) {
-    let ref=useRef(null)
+import AddCellPhoneModelDialog from "./Dialogs/add_cell_phone_model_dialog";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+export default function CellPhoneSingleUpload({ permissions }) {
+    let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-  
-const [add_cellphone_model_dialog_visibility, setAddCellPhoneModelDialogVisbility] = useState(false);
-const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(false)
+
+    const [add_cellphone_model_dialog_visibility, setAddCellPhoneModelDialogVisbility] = useState(false);
+    const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
     const [departmentselected, setDepartmentSelected] = useState(null);
-    const [Model, setModel] = useState(null);
+    const [Model, setModel] = useState(null);  
+    //Make Options
+    const [makeOptions,setMakeOption]=useState(null) 
+    const [selectedMakeId,setSelectedMakeId]=useState(null)
     useEffect(() => {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
@@ -35,11 +38,9 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         departmentholder.push(obj);
                     }
                     setDepartment(departmentholder);
-                   // Move this inside the promise callback
+                    // Move this inside the promise callback
                 })
-                .catch(() => {
-                 
-                });
+                .catch(() => {});
         }
     }, []);
     useEffect(() => {
@@ -53,11 +54,9 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         obj.value = res.data.data[i]._id;
                         agentholder.push(obj);
                     }
-
                     setAgent(agentholder);
                 })
-                .catch(() => {
-                });
+                .catch(() => {});
         }
     }, [departmentselected]);
     useEffect(() => {
@@ -70,36 +69,52 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                     obj.value = res.data.data[i]._id;
                     carrierholder.push(obj);
                 }
-
                 setCarrier(carrierholder);
             })
-            .catch(() => {
-            });
-        Axios.get(`${BASE_URL}/api/deviceinventory/getPhoneDeviceModel`)
-            .then((res) => { 
-               let Modelholder = [];
+            .catch(() => {});    
+            Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.compony}&device=phone`)
+            .then((res) => {     
+                let Makeholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
                     const obj = {};
-                    obj.label = res.data.data[i].name;
-                    obj.value = res.data.data[i].name;
-                    Modelholder.push(obj);
+                    obj.label = res.data.data[i].make;
+                    obj.value = res.data.data[i]._id;
+                    Makeholder.push(obj);
                 }
-
-                setModel(Modelholder);  
-            
+                setMakeOption(Makeholder);        
             })
             .catch(() => {
-            });
+            });   
+       
     }, []); 
+    useEffect(()=>{   
+        if(selectedMakeId !== null){
+       Axios.get(`${BASE_URL}/api/deviceinventory/getmodelbymake?makeId=${selectedMakeId}`)
+       .then((res) => {     
+          
+           let Modelholder = [];
+           for (let i = 0; i < res.data.data.length; i++) {
+               const obj = {};
+               obj.label = res.data.data[i].name;
+               obj.value = res.data.data[i].name;
+               Modelholder.push(obj);
+           }
+
+           setModel(Modelholder);  
+           
+       })
+       .catch(() => {
+       }); 
+   }
+    },[selectedMakeId])
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-           Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
-
+            make:Yup.string().required("Make is required"),
+            Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
             box: Yup.string().required("Box is required"),
-
             Model: Yup.string().required("Model is required"),
-              IMEI:Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
+            IMEI: Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
             AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
@@ -114,41 +129,37 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
             Model: "",
             unitType: "Cell Phone",
             Uploaded_by: parseLoginRes?._id,
-            provisionType: "Add Stock", 
-            IMEI:""
+            provisionType: "Add Stock",
+            IMEI: "", 
+            make:""
         },
 
         onSubmit: (e) => {
-        
-            handlesubmit();  
-        
+            handlesubmit();
         },
     });
     function handlesubmit() {
-     
-         let obj=formik.values; 
-         obj.serviceProvider=parseLoginRes.compony 
+        let obj = formik.values;
+        obj.serviceProvider = parseLoginRes.compony;
         if (Object.keys(formik.errors).length === 0) {
-            //formik.values.serviceProvider = parseLoginRes?.compony;  
-            
+            //formik.values.serviceProvider = parseLoginRes?.compony;
+
             Axios.post(`${BASE_URL}/api/web/phoneInventory/phoneAddStock`, obj)
                 .then((res) => {
-                    console.log("Successfully done");  
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                    console.log("Successfully done");
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    ref.current.show({ severity: "success", summary: "Inventory", detail: "Successfully Added" });
                 })
-                .catch((error) => {  
-               
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    console.log("error occured");  
+                .catch((error) => {
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    console.log("error occured");
                     ref.current.show({ severity: "error", summary: "Inventory", detail: error.response.data.msg });
-                });  
-                  
-        }           
+                });
+        }
     }
     return (
         <>
-           <div>
+            <div>
                 <div className="flex flex-wrap mb-3 justify-content-around ">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -179,7 +190,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         </p>
                         <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
-                  {/*  <div className="mr-3 mb-3 mt-3">
+                    {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Team <span style={{ color: "red" }}>* </span>
                         </p>
@@ -210,7 +221,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName","")
+                                formik.setFieldValue("AgentName", "");
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -225,16 +236,15 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (  
-                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
-                              
-                                <i
-                                    onClick={() => {
-                                        setAddAgentDialogVisbility((prev) => !prev);
-                                    }}
-                                    className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i>  
+                            {formik.values.AgentName !== "" ? (
+                                <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
+                                    <i
+                                        onClick={() => {
+                                            setAddAgentDialogVisbility((prev) => !prev);
+                                        }}
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
                                 </Button>
                             ) : undefined}
                         </p>
@@ -246,7 +256,28 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                             </div>
                         )}
                     </div>
-
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">
+                            Make <span style={{ color: "red" }}>*</span>
+                        </p>
+                        <Dropdown id="make" value={selectedMakeId} options={makeOptions} onChange={(e)=>{   
+                           
+                            
+                              for(let i=0;i<makeOptions.length;i++){ 
+                                 if(e.value === makeOptions[i].value){  
+                                    formik.setFieldValue("make",makeOptions[i].label)  
+                                     break
+                                 }
+                              }
+                             setSelectedMakeId(e.value)
+                        }
+                        } placeholder="Select an option" className="field-width mt-2" />
+                        {formik.errors.make && formik.touched.make && (
+                            <div className="mt-2" style={{ color: "red" }}>
+                                {formik.errors.make}
+                            </div>
+                        )}
+                    </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Model
@@ -272,7 +303,7 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText type="text" keyfilter="int" value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
@@ -289,20 +320,19 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                                 {formik.errors.box}
                             </div>
                         )}
-                    </div>   
-                    <div className="mr-3 mb-3 mt-4" >
-                    <Button
-                        label="Submit" 
-                        className="field-width mt-4"
-                        onClick={() => {
-                            formik.handleSubmit();
-                            //  handlesubmit()
-                        }}  
-                        disabled={!(permissions.isCreate)}
-                    /> 
-                     </div>
+                    </div>
+                    <div className="mr-3 mb-3 mt-4">
+                        <Button
+                            label="Submit"
+                            className="field-width mt-4"
+                            onClick={() => {
+                                formik.handleSubmit();
+                                //  handlesubmit()
+                            }}
+                            disabled={!permissions.isCreate}
+                        />
+                    </div>
                 </div>
-               
             </div>
             <Dialog
                 visible={add_cellphone_model_dialog_visibility}
@@ -319,8 +349,8 @@ const [add_agent_detail_dialog_visibility,setAddAgentDialogVisbility]=useState(f
                 }}
             >
                 <AddAgentDetail agent={"Dummy"} />
-            </Dialog>   
-            <Toast ref={ref}/>
+            </Dialog>
+            <Toast ref={ref} />
         </>
     );
 }

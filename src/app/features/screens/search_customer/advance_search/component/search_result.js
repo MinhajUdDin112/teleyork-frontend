@@ -28,7 +28,7 @@ export default function DisplayAdvanceSearchApiResponse({ searchData, setSearchB
                     )}
                 ></Column>
                 <Column header="Enrollment Type" field="enrollment" body={(rowData) => (rowData?.isSelfEnrollment ? <p>Self Enrollment</p> : <p>Enrollment</p>)}></Column>
-                <Column header="Name" field="name" body={(rowData) => <p>{`${rowData.firstName}  ${rowData.lastName}`}</p>}></Column>
+                <Column header="Name" field="name" body={(rowData) => <p>{rowData.firstName !== undefined ? rowData.lastName !== undefined ? rowData.firstName + " "+rowData.lastName:rowData.lastName:rowData.lastName !== undefined ? rowData.lastName:" "}</p>}></Column>
                 <Column header="Address" field="address1"></Column>
                 <Column header="City" field="city"></Column>
                 <Column header="State" field="state"></Column>
@@ -74,7 +74,7 @@ export default function DisplayAdvanceSearchApiResponse({ searchData, setSearchB
                 {user?.department?.department}
                 </span>
             ))}*/}
-                                {rowData.assignedToUser[0] !== undefined ? rowData.assignedToUser[0].name : undefined}
+                                {rowData.assignedToUser[0] !== undefined ? rowData.assignedToUser[0].department.department : undefined}
                             </span>
                         );
                     }}

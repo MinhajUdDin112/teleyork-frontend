@@ -16,7 +16,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
     const [carrierholder,setCarrier]=useState([])
     const formik = useFormik({
         initialValues: {
-            phoneNumber: "",
+            contact: "",
             firstName: "",
             lastName: "",
             email: "",
@@ -37,7 +37,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
         },
         onSubmit: async (values, actions) => {
             const dataToSend = {
-                contact: formik.values.phoneNumber,
+                contact: formik.values.contact,
                 firstName: formik.values.firstName,
                 lastName: formik.values.lastName,
                 email: formik.values.email,
@@ -78,7 +78,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
     ];*/
     //Status
     const optionsForStatus = [  
-         {label:"--Select--",value:""},
+         {label:"Status",value:""},
         { label: "Active", value: "active" },
         { label: "Inactive", value: "inactive" },
         { label: "Rejected", value: "rejected" },
@@ -89,7 +89,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
     useEffect(()=>{
     Axios.get(`${BASE_URL}/api/web/carrier/all`)
         .then((res) => {
-            let carrierholder = [{label:"--Select--",value:""}];
+            let carrierholder = [{label:"Carrier",value:""}];
             for (let i = 0; i < res.data.data.length; i++) {
                 const obj = {};
                 obj.label = res.data.data[i].name;

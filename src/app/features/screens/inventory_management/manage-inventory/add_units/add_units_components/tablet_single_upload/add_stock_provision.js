@@ -20,7 +20,10 @@ export default function TabletSingleUploadAddProvision({permissions}) {
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
     const [departmentselected, setDepartmentSelected] = useState(null);
-    const [Model, setModel] = useState(null);
+    const [Model, setModel] = useState(null);    
+     //Make Options   
+     const [makeOptions,setMakeOption]=useState(null) 
+     const [selectedMakeId,setSelectedMakeId]=useState(null)
     useEffect(() => {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
@@ -39,7 +42,8 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                     console.log("error");
                 });
         }
-    }, []);
+    }, []);  
+     
     useEffect(() => {
         if (departmentselected !== null) {
             Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departmentselected}`)
@@ -72,27 +76,49 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                 setCarrier(carrierholder);
             })
             .catch(() => {
-            });
-        Axios.get(`${BASE_URL}/api/deviceinventory/getTabletDeviceModel`)
-            .then((res) => {     
-               
-                let Modelholder = [];
-                for (let i = 0; i < res.data.data.length; i++) {
-                    const obj = {};
-                    obj.label = res.data.data[i].name;
-                    obj.value = res.data.data[i].name;
-                    Modelholder.push(obj);
-                }
- 
-                setModel(Modelholder);  
-                
-            })
-            .catch(() => {
-            });
-    }, []);
+            });  
+            Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.compony}&device=tablet`)
+        .then((res) => {     
+           
+            let Makeholder = [];
+            for (let i = 0; i < res.data.data.length; i++) {
+                const obj = {};
+                obj.label = res.data.data[i].make;
+                obj.value = res.data.data[i]._id;
+                Makeholder.push(obj);
+            }
+
+            setMakeOption(Makeholder);  
+           
+        })
+        .catch(() => {
+        });   
+         
+    }, []);     
+     useEffect(()=>{   
+         if(selectedMakeId !== null){
+        Axios.get(`${BASE_URL}/api/deviceinventory/getmodelbymake?makeId=${selectedMakeId}`)
+        .then((res) => {     
+           
+            let Modelholder = [];
+            for (let i = 0; i < res.data.data.length; i++) {
+                const obj = {};
+                obj.label = res.data.data[i].name;
+                obj.value = res.data.data[i].name;
+                Modelholder.push(obj);
+            }
+
+            setModel(Modelholder);  
+            
+        })
+        .catch(() => {
+        }); 
+    }
+     },[selectedMakeId])
     const formik = useFormik({
         validationSchema: Yup.object({
-            carrier: Yup.string().required("Carrier is required"),
+            carrier: Yup.string().required("Carrier is required"), 
+            make:Yup.string().required("Make is required"),
            Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
 
             box: Yup.string().required("Box is required"),
@@ -114,7 +140,8 @@ export default function TabletSingleUploadAddProvision({permissions}) {
             unitType: "Tablet",
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add Stock", 
-            IMEI:""
+            IMEI:"", 
+            make:""
         },
 
         onSubmit: (e) => {
@@ -243,7 +270,28 @@ export default function TabletSingleUploadAddProvision({permissions}) {
                             </div>
                         )}
                     </div>
-
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">
+                            Make <span style={{ color: "red" }}>*</span>
+                        </p>
+                        <Dropdown id="make" value={selectedMakeId} options={makeOptions} onChange={(e)=>{   
+                           
+                            
+                              for(let i=0;i<makeOptions.length;i++){ 
+                                 if(e.value === makeOptions[i].value){  
+                                    formik.setFieldValue("make",makeOptions[i].label)  
+                                     break
+                                 }
+                              }
+                             setSelectedMakeId(e.value)
+                        }
+                        } placeholder="Select an option" className="field-width mt-2" />
+                        {formik.errors.make && formik.touched.make && (
+                            <div className="mt-2" style={{ color: "red" }}>
+                                {formik.errors.make}
+                            </div>
+                        )}
+                    </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Model
