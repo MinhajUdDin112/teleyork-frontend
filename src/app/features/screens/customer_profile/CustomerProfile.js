@@ -79,7 +79,6 @@ const CustomerProfile = () => {
             }
         },
     });
-    console.log("cp data is", cpData);
     const getCustomerProfileData = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
@@ -275,7 +274,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Sales Channel</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.salesChannel !== undefined ?cpData.salesChannel :"NIL" }</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -472,7 +471,9 @@ const CustomerProfile = () => {
 
                                                 <tr>
                                                     <td>Source</td>
-                                                    <td>NIL</td>
+                                                    <td>
+                                                      NIL
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Fulfillment Method</td>
