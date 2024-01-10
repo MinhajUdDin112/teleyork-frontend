@@ -1,7 +1,7 @@
 import React, { useDebugValue, useEffect, useState } from "react";
 import BillingNavbar from "./modals/BillingNavbar";
 import { Button } from "primereact/button";
-import "./css/customer-profile.css"
+import "./css/customer-profile.css";
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
 import Axios from "axios";
@@ -19,10 +19,11 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { DialogeForHistory } from "./dialogs/DialogeForHistory";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
-    const [cpData, setCpData] = useState([]);     
-    const [expand,setExpand]=useState(false)  
+    const [cpData, setCpData] = useState([]);
+    const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
     const [allNotes, setAllNotes] = useState([]);
@@ -32,6 +33,7 @@ const CustomerProfile = () => {
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
+    const [openistory, setOpenHistory] = useState(false)
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
@@ -81,8 +83,7 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
-                setCpData(res?.data?.data || []);     
-                
+                setCpData(res?.data?.data || []);
             }
         } catch (error) {}
     };
@@ -128,42 +129,40 @@ const CustomerProfile = () => {
     function convertDateToRequiredFormat(inputDate) {
         // Create a new Date object from the input string
         var originalDate = new Date(inputDate);
-      
+
         // Extract the components of the date
         var year = originalDate.getFullYear();
-        var month = ('0' + (originalDate.getMonth() + 1)).slice(-2);
-        var day = ('0' + originalDate.getDate()).slice(-2);
-        var hours = ('0' + originalDate.getHours()).slice(-2);
-        var minutes = ('0' + originalDate.getMinutes()).slice(-2);
-        var seconds = ('0' + originalDate.getSeconds()).slice(-2);
-      
+        var month = ("0" + (originalDate.getMonth() + 1)).slice(-2);
+        var day = ("0" + originalDate.getDate()).slice(-2);
+        var hours = ("0" + originalDate.getHours()).slice(-2);
+        var minutes = ("0" + originalDate.getMinutes()).slice(-2);
+        var seconds = ("0" + originalDate.getSeconds()).slice(-2);
+
         // Create a new date string in the desired format
         var newDateString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      
+
         return newDateString;
-      }
+    }
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-   function showsocs(socarray){   
-       if(socarray !== undefined){
-         console.log(socarray)   
-         var commaSeparatedString=""; 
-          for(let i=0;i<socarray.length;i++){  
-                if(i === 0){
-               commaSeparatedString+=` ${socarray[i]}` 
-                } 
-                else{ 
-                    commaSeparatedString+=`, ${socarray[i]}` 
+    function showsocs(socarray) {
+        if (socarray !== undefined) {
+            console.log(socarray);
+            var commaSeparatedString = "";
+            for (let i = 0; i < socarray.length; i++) {
+                if (i === 0) {
+                    commaSeparatedString += ` ${socarray[i]}`;
+                } else {
+                    commaSeparatedString += `, ${socarray[i]}`;
                 }
-          }
-        return commaSeparatedString
-       }
-       else{ 
-        return "NIL"
-       }
-   }
+            }
+            return commaSeparatedString;
+        } else {
+            return "NIL";
+        }
+    }
     return (
         <div className="card">
             <ToastContainer />
@@ -179,6 +178,10 @@ const CustomerProfile = () => {
                 <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`} style={{ width: "90vw" }} onHide={() => setDisplayAllNotesDialogVisibility((prev) => !prev)}>
                     <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
+                
+                <Dialog visible={openistory} header="Customer History" style={{ width: "60vw" }} onHide={() => setOpenHistory(false)}>
+                    <DialogeForHistory selectedId={selectedId} />
+                </Dialog>
                 <div className="pt-3">
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
@@ -189,28 +192,26 @@ const CustomerProfile = () => {
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div >
-                                        <table className="cp_table w-full text-left" >
+                                    <div>
+                                        <table className="cp_table w-full text-left">
                                             <tbody>
-                                                
-                                               
                                                 <tr>
                                                     <td>Service Address</td>
-                                                    <td>{cpData?.address1 !== undefined || cpData?.address2 !== undefined ?cpData?.address1 + " " + cpData?.address2:"NIL"}</td>
+                                                    <td>{cpData?.address1 !== undefined || cpData?.address2 !== undefined ? cpData?.address1 + " " + cpData?.address2 : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>City</td>
-                                                    <td>{cpData?.city !== undefined ? cpData?.city:"NIL"}</td>
+                                                    <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>State</td>
-                                                    <td>{cpData?.state !== undefined ? cpData?.state:"NIL"}</td>
+                                                    <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Zip</td>
-                                                    <td>{cpData?.zip !== undefined ? cpData?.zip :"NIL"}</td>
+                                                    <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -220,27 +221,31 @@ const CustomerProfile = () => {
 
                                                 <tr>
                                                     <td>Alternate Ph</td>
-                                                    <td>{cpData?.contact !== undefined ? cpData?.contact:"NIL"}</td>
+                                                    <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Email</td>
-                                                    <td>{cpData?.email !== undefined ? cpData?.email :"NIL"}</td>
+                                                    <td>{cpData?.email !== undefined ? cpData?.email : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ? <td>{cpData?.mailingAddress1 !== undefined || cpData?.mailingAddress2 !== undefined ?cpData?.mailingAddress1 + " " + cpData?.mailingAddress2:"NIL"}</td> : <td>{cpData?.address2 !== undefined || cpData.address1 !== undefined?cpData?.address1 + " " + cpData?.address2:"NIL"}</td>}
+                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ? (
+                                                        <td>{cpData?.mailingAddress1 !== undefined || cpData?.mailingAddress2 !== undefined ? cpData?.mailingAddress1 + " " + cpData?.mailingAddress2 : "NIL"}</td>
+                                                    ) : (
+                                                        <td>{cpData?.address2 !== undefined || cpData.address1 !== undefined ? cpData?.address1 + " " + cpData?.address2 : "NIL"}</td>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
-                                                    {cpData?.mailingCity  ? <td>{cpData?.mailingCity !== undefined ? cpData?.mailingCity:"NIL"}</td> : <td>{cpData?.city !== undefined ? cpData?.city:"NIL"}</td>}
+                                                    {cpData?.mailingCity ? <td>{cpData?.mailingCity !== undefined ? cpData?.mailingCity : "NIL"}</td> : <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td>}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing State</td>
-                                                    {cpData?.mailingState ? <td>{cpData?.mailingState !== undefined ? cpData?.mailingState:"NIL"}</td> : <td>{cpData?.state !== undefined ?cpData?.state:"NIL"}</td>}
+                                                    {cpData?.mailingState ? <td>{cpData?.mailingState !== undefined ? cpData?.mailingState : "NIL"}</td> : <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td>}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Zip</td>
-                                                    {cpData?.mailingZip ? <td>{cpData?.mailingZip !== undefined ? cpData?.mailingZip:"NIL"}</td> : <td>{cpData?.zip !== undefined ?cpData?.zip:"NIL"}</td>}
+                                                    {cpData?.mailingZip ? <td>{cpData?.mailingZip !== undefined ? cpData?.mailingZip : "NIL"}</td> : <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td>}
                                                 </tr>
 
                                                 {/* <tr>
@@ -251,34 +256,37 @@ const CustomerProfile = () => {
                                                 </tr> */}
                                                 <tr>
                                                     <td>Customer SSN</td>
-                                                    <td>{cpData?.SSN !== undefined ? cpData?.SSN:"NIL"}</td>
+                                                    <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>Customer DOB</td>
                                                     <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : "NIL"}</td>
                                                 </tr>
-                                                
+
                                                 <tr>
                                                     <td>Tribal</td>
-                                                    <td>{cpData?.isTerribleTerritory !== undefined ?cpData?.isTerribleTerritory === true ? "Yes":"No":"NIL"}</td>
+                                                    <td>{cpData?.isTerribleTerritory !== undefined ? (cpData?.isTerribleTerritory === true ? "Yes" : "No") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Company</td>
-                                                    <td>
-                                                        {parseLoginRes?.companyName}
-                                                    </td>
+                                                    <td>{parseLoginRes?.companyName}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Sales Channel</td>
                                                     <td>{cpData?.salesChannel !== undefined ?cpData.salesChannel :"NIL" }</td>
                                                 </tr>
                                             </tbody>
-                                        </table> 
-                                  
+                                        </table>
                                     </div>
                                 </div>
                             </div>
+                            {
+                    selectedId ?  <div className="ml-5" >
+                    <Button  label="Interaction History" onClick={()=>{setOpenHistory(true)}} />
+                </div>:""
+                }
+                           
                         </div>
 
                         <div className="col-12 lg:col-4">
@@ -289,20 +297,20 @@ const CustomerProfile = () => {
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div className={classNames({ "customstyle": !expand })}>
+                                    <div className={classNames({ customstyle: !expand })}>
                                         <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
                                                     <td>MDN</td>
-                                                    <td>{cpData?.phoneNumber !== undefined ? cpData?.phoneNumber :"NIL"}</td>
+                                                    <td>{cpData?.phoneNumber !== undefined ? cpData?.phoneNumber : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>SIM/ESN</td>
-                                                    <td>{cpData?.esn !== undefined ? cpData?.esn :"NIL"}</td>
+                                                    <td>{cpData?.esn !== undefined ? cpData?.esn : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IMEI</td>
-                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI:"NIL"}</td>
+                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -310,27 +318,22 @@ const CustomerProfile = () => {
                                                     <td>NIL</td>
                                                 </tr>
 
-                                              
                                                 <tr>
                                                     <td>Inventory Type</td>
                                                     <td>NIL</td>
                                                 </tr>
-                                                 <tr> 
-                                                     <td> 
-                                                        Make & Model
-                                                     </td>
-                                                       <td> 
-                                                        NIL
-                                                       </td>
-                                                 </tr>
+                                                <tr>
+                                                    <td>Make & Model</td>
+                                                    <td>NIL</td>
+                                                </tr>
                                                 <tr>
                                                     <td>eSIM</td>
-                                                    <td>{cpData?.ESim !== undefined ?cpData?.ESim === true ? "Yes" : "No":"NIL"}</td>
+                                                    <td>{cpData?.ESim !== undefined ? (cpData?.ESim === true ? "Yes" : "No") : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>Ported MDN</td>
-                                                    <td>{cpData?.portedMDN !== undefined ? cpData?.portedMDN === false ? "No":"Yes":"NIL"}</td>
+                                                    <td>{cpData?.portedMDN !== undefined ? (cpData?.portedMDN === false ? "No" : "Yes") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Acc. Type</td>
@@ -338,84 +341,92 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Teleyork Plan</td>
-                                                    <td>{cpData?.plan !== undefined ?cpData?.plan?.name!== undefined ?cpData.plan?.name:"NIL":"NIL"}</td>
+                                                    <td>{cpData?.plan !== undefined ? (cpData?.plan?.name !== undefined ? cpData.plan?.name : "NIL") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Details</td>
-                                                    <td>{cpData?.plan !== undefined ?cpData?.plan?.description !== undefined?cpData?.plan?.description:"NIL":"NIL"}</td>
+                                                    <td>{cpData?.plan !== undefined ? (cpData?.plan?.description !== undefined ? cpData?.plan?.description : "NIL") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Price</td>
-                                                    <td>{cpData?.plan !== undefined ?cpData?.plan?.price!==undefined ?cpData?.plan?.price :"NIL":"NIL"}</td>
+                                                    <td>{cpData?.plan !== undefined ? (cpData?.plan?.price !== undefined ? cpData?.plan?.price : "NIL") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Carrier</td>
-                                                    <td>{cpData?.carrier !== undefined ? cpData?.carrier?.name !== undefined ?cpData?.carrier?.name:"NIL":"NIL"}</td>
+                                                    <td>{cpData?.carrier !== undefined ? (cpData?.carrier?.name !== undefined ? cpData?.carrier?.name : "NIL") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Activation Date</td>
-                                                    <td>{  cpData?.planEffectiveDate !== undefined? convertDateToRequiredFormat(cpData?.planEffectiveDate):"NIL"}</td>
+                                                    <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>TMB Live Status</td>
-                                                    <td>{cpData?.serviceStatus !== undefined ?cpData?.serviceStatus:"NIL"}</td>
+                                                    <td>{cpData?.serviceStatus !== undefined ? cpData?.serviceStatus : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>OCS Live Status</td>
-                                                    <td>{cpData?.serviceStatus !== undefined ?cpData?.serviceStatus :"NIL"}</td>
-                                                </tr> 
+                                                    <td>{cpData?.serviceStatus !== undefined ? cpData?.serviceStatus : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Talk Balance</td>
-                                                    <td>{cpData?.talkBalance !== undefined ? cpData?.talkBalance:"NIL"}</td>
-                                                </tr> 
+                                                    <td>{cpData?.talkBalance !== undefined ? cpData?.talkBalance : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>SMS Balance</td>
-                                                    <td>{cpData?.textBalance!==undefined ?cpData?.textBalance :"NIL"}</td>
-                                                </tr> 
+                                                    <td>{cpData?.textBalance !== undefined ? cpData?.textBalance : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Data Balance</td>
-                                                    <td>{cpData?.dataBalance !== undefined ? cpData?.dataBalance:"NIL"}</td>
-                                                </tr> 
+                                                    <td>{cpData?.dataBalance !== undefined ? cpData?.dataBalance : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Last Usage</td>
                                                     <td>NIL</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <td>Plan ID</td>
-                                                    <td>{cpData?.plan?.planId !== undefined ? cpData?.plan?.planId !== undefined ? cpData?.plan?.planId:"NIL":"NIL"}</td>
-                                                </tr> 
+                                                    <td>{cpData?.plan?.planId !== undefined ? (cpData?.plan?.planId !== undefined ? cpData?.plan?.planId : "NIL") : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Plan Expiration Date</td>
-                                                    <td>{cpData?.planExpirationDate !== undefined? convertDateToRequiredFormat(cpData?.planExpirationDate):"NIL"}</td>
-                                                </tr> 
+                                                    <td>{cpData?.planExpirationDate !== undefined ? convertDateToRequiredFormat(cpData?.planExpirationDate) : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>SOC</td>
                                                     <td>{showsocs(cpData?.socs)}</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <td>IMEI In Use</td>
                                                     <td>NIL</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <td>PUK1</td>
-                                                    <td>{cpData?.PUK1 != undefined ? cpData?.PUK1:"NIL"}</td>
-                                                </tr> 
+                                                    <td>{cpData?.PUK1 != undefined ? cpData?.PUK1 : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>PUK2</td>
-                                                    <td>{cpData?.PUK2 != undefined ?cpData?.PUK2:"NIL" }</td>
-                                                </tr> 
+                                                    <td>{cpData?.PUK2 != undefined ? cpData?.PUK2 : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>MVNO</td>
                                                     <td>NIL</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <td>Sim Status</td>
-                                                    <td>{cpData?.simStatus !== undefined ? cpData?.simStatus :"NIL"}</td>
+                                                    <td>{cpData?.simStatus !== undefined ? cpData?.simStatus : "NIL"}</td>
                                                 </tr>
                                             </tbody>
-                                        </table>     
-                                           
-                                         <Button label={`${!expand ? "See More":"See Less"}`} onClick={()=>{setExpand(prev=>!prev)}} className={classNames({ "seemore-button": !expand },"w-full")} icon={`${!expand ? "pi pi-plus" :"pi pi-minus"}`} iconPos="right" />
+                                        </table>
+
+                                        <Button
+                                            label={`${!expand ? "See More" : "See Less"}`}
+                                            onClick={() => {
+                                                setExpand((prev) => !prev);
+                                            }}
+                                            className={classNames({ "seemore-button": !expand }, "w-full")}
+                                            icon={`${!expand ? "pi pi-plus" : "pi pi-minus"}`}
+                                            iconPos="right"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -429,7 +440,7 @@ const CustomerProfile = () => {
                                     <hr className="m-0" />
 
                                     {/* Table */}
-                                    <div >
+                                    <div>
                                         <table class="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
@@ -438,30 +449,30 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Order by</td>
-                                                    <td>{cpData?.createdBy !== undefined ?cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name:"NIL":"NIL"}</td>
+                                                    <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td>
                                                 </tr>
-                                              
+
                                                 <tr>
                                                     <td>Enrollment ID</td>
-                                                    <td>{cpData?.enrollmentId !== undefined ?cpData?.enrollmentId:"NIL"}</td>
+                                                    <td>{cpData?.enrollmentId !== undefined ? cpData?.enrollmentId : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>NV Application ID</td>
-                                                    <td>{cpData?.applicationId !== undefined ?cpData?.applicationId:"NIL"}</td>
+                                                    <td>{cpData?.applicationId !== undefined ? cpData?.applicationId : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>NLAD Subscriber ID</td>
-                                                    <td>{cpData?.subscriberId !== undefined ?cpData?.subscriberId :"NIL"  }</td>
-                                                </tr>   
-                                                 <tr>  
-                                                 <td>PWG Customer ID</td>
-                                                    <td>{cpData?.customerId !== undefined ?cpData?.customerId:"NIL"}</td>
-                                                     </tr> 
-                                               
+                                                    <td>{cpData?.subscriberId !== undefined ? cpData?.subscriberId : "NIL"}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>PWG Customer ID</td>
+                                                    <td>{cpData?.customerId !== undefined ? cpData?.customerId : "NIL"}</td>
+                                                </tr>
+
                                                 <tr>
                                                     <td>Source</td>
                                                     <td>
-                                                     {cpData?.source !== undefined ? cpData.source :"NIL"}
+                                                      NIL
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -470,18 +481,14 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Tablet Subsidy Qualification</td>
-                                                       <td> 
-                                                        { 
-                                                         cpData?.deviceEligibilty !== undefined ? cpData?.deviceEligibilty === true ?"Yes":"NO":"NIL" 
-                                                        }
-                                                       </td>
+                                                    <td>{cpData?.deviceEligibilty !== undefined ? (cpData?.deviceEligibilty === true ? "Yes" : "NO") : "NIL"}</td>
                                                 </tr>
-                                             
+
                                                 <tr>
                                                     <td>Enrollment Date</td>
-                                                    <td>{cpData?.nladEnrollmentDate !== undefined ? cpData?.nladEnrollmentDate :"NIL"}</td>
+                                                    <td>{cpData?.nladEnrollmentDate !== undefined ? cpData?.nladEnrollmentDate : "NIL"}</td>
                                                 </tr>
-                                               
+
                                                 <tr>
                                                     <td>Disconnection Date</td>
                                                     <td>NIL</td>
@@ -492,11 +499,10 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Lifeline Program Participation</td>
-                                                    <td>{cpData?.acpProgram !== undefined ? cpData?.acpProgram?.name !== undefined?cpData?.acpProgram.name:"NIL":"NIL"}</td>
+                                                    <td>{cpData?.acpProgram !== undefined ? (cpData?.acpProgram?.name !== undefined ? cpData?.acpProgram.name : "NIL") : "NIL"}</td>
                                                 </tr>
                                             </tbody>
-                                        </table>  
-                                    
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -506,7 +512,7 @@ const CustomerProfile = () => {
 
                 <div className="p-3 ">
                     <div className="flex flex-wrap justify-content-between  flex-row w-full ">
-                        <div className="customer-profilecustomernote mt-4 card"   >
+                        <div className="customer-profilecustomernote mt-4 card">
                             <div>
                                 <div>
                                     <h4>Customer Notes</h4>
@@ -525,8 +531,8 @@ const CustomerProfile = () => {
                                 <hr className="m-0" />
                                 <div className="h-20rem" style={{ height: "200px", overflowY: "auto" }}>
                                     <DataTable
-                                        value={allNotes} 
-                                        tableStyle={{minWidth:"550px"}}
+                                        value={allNotes}
+                                        tableStyle={{ minWidth: "550px" }}
                                         className="cursor-pointer"
                                         sortField={["createdAt"]}
                                         sortOrder={-1}
@@ -558,7 +564,7 @@ const CustomerProfile = () => {
                             </div>
                         </div>
 
-                        <div className="cutomer-profileaddnote mt-4 card"  >
+                        <div className="cutomer-profileaddnote mt-4 card">
                             <div className="flex justify-content-between align-items-center  mb-3">
                                 <h4 className="m-0">Add New Note</h4>
                                 <span></span>
