@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import EnrollmentByStates from "./components/enrollment_stats/enrollment_stats";
+//import EnrollmentByStates from "./components/enrollment_stats/enrollment_stats";
 import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import Last24HoursEnrollments from "./components/last24hours/Last24HoursEnrollments";
@@ -30,7 +30,7 @@ const Dashboard = ({ permittedRoutes }) => {
         if (parseLoginRes.role.role === "PROVISION MANAGER") {
             Axios.get(`${BASE_URL}/api/web/dashboard/getEnrollmentsForProvision?userId=${userid}`)
                 .then((response) => {
-                    let arr = [];
+                    let arr = [{name:"--Select--",value:null}];
                     for (let i = 0; i < response.data.data.length; i++) {
                         let obj = {};
                         obj.name = capitalizedSentence(response.data.data[i].agentName);
@@ -43,7 +43,7 @@ const Dashboard = ({ permittedRoutes }) => {
         } else if (parseLoginRes.role.role === "TEAM LEAD") {
             Axios.get(`${BASE_URL}/api/web/dashboard/getEnrollmentsForTeamlead?userId=${userid}`)
                 .then((response) => {
-                    let arr = [];
+                    let arr = [{name:"--Select--",value:null}];
                     for (let i = 0; i < response.data.data.length; i++) {
                         let obj = {};
                         obj.name = capitalizedSentence(response.data.data[i].agentName);
@@ -56,7 +56,7 @@ const Dashboard = ({ permittedRoutes }) => {
         } else if (parseLoginRes.role.role === "QA MANAGER") {
             Axios.get(`${BASE_URL}/api/web/dashboard/getEnrollmentsForUser?userId=${userid}`)
                 .then((response) => {
-                    let arr = [];
+                    let arr = [{name:"--Select--",value:null}];
                     for (let i = 0; i < response.data.data.length; i++) {
                         let obj = {};
                         obj.name = capitalizedSentence(response.data.data[i].agentName);
