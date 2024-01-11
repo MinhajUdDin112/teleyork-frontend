@@ -19,7 +19,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { DialogeForHistory } from "./dialogs/DialogeForHistory";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -33,7 +33,6 @@ const CustomerProfile = () => {
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
-    const [openistory, setOpenHistory] = useState(false)
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
@@ -180,9 +179,7 @@ const CustomerProfile = () => {
                     <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
                 
-                <Dialog visible={openistory} header="Customer History" style={{ width: "60vw" }} onHide={() => setOpenHistory(false)}>
-                    <DialogeForHistory selectedId={selectedId} />
-                </Dialog>
+                
                 <div className="pt-3">
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
@@ -282,11 +279,7 @@ const CustomerProfile = () => {
                                     </div>
                                 </div>
                             </div>
-                            {
-                    selectedId ?  <div className="ml-5" >
-                    <Button  label="Interaction History" onClick={()=>{setOpenHistory(true)}} />
-                </div>:""
-                }
+                          
                            
                         </div>
 
