@@ -16,7 +16,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
     const [carrierholder,setCarrier]=useState([])
     const formik = useFormik({
         initialValues: {
-            phoneNumber: "",
+            contact: "",
             firstName: "",
             lastName: "",
             email: "",
@@ -37,14 +37,14 @@ const AdvanceSearch = ({ setSearchBy }) => {
         },
         onSubmit: async (values, actions) => {
             const dataToSend = {
-                phoneNumber: formik.values.phoneNumber,
-                firstName: (formik.values.firstName).toUpperCase(),
-                lastName: formik.values.lastName.toUpperCase(),
+                contact: formik.values.contact,
+                firstName: formik.values.firstName,
+                lastName: formik.values.lastName,
                 email: formik.values.email,
                 address1: formik.values.address1,
                 address2: formik.values.address2,
-                city: formik.values.city.toUpperCase(),
-                state: formik.values.state.toUpperCase(),
+                city: formik.values.city,
+                state: formik.values.state,
                 zip: formik.values.zip,
                 DOB: formik.values.DOB,
                 SSN: formik.values.SSN,
@@ -71,12 +71,14 @@ const AdvanceSearch = ({ setSearchBy }) => {
         },
     });
     //Account Type
-    const optionsForAccountType = [
+   /* const optionsForAccountType = [ 
+         {label:"--Select--",value:""},
         { label: "ACP", value: "acp" },
         { label: "Non ACP", value: "nonAcp" },
-    ];
+    ];*/
     //Status
-    const optionsForStatus = [
+    const optionsForStatus = [  
+         {label:"Status",value:""},
         { label: "Active", value: "active" },
         { label: "Inactive", value: "inactive" },
         { label: "Rejected", value: "rejected" },
@@ -87,7 +89,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
     useEffect(()=>{
     Axios.get(`${BASE_URL}/api/web/carrier/all`)
         .then((res) => {
-            let carrierholder = [];
+            let carrierholder = [{label:"Carrier",value:""}];
             for (let i = 0; i < res.data.data.length; i++) {
                 const obj = {};
                 obj.label = res.data.data[i].name;
@@ -102,24 +104,24 @@ const AdvanceSearch = ({ setSearchBy }) => {
         });
     
 }, [])
-    const optionsForCarrier = [{ label: "TMB", value: "TMB" }];
     return (
         <div className="card">
             <form onSubmit={formik.handleSubmit}>
                 <h1 className="daterange p-4 ml-4">Advance Search </h1>
                 <div className="flex flex-wrap justify-content-around wrapper flex-row">
                     <div className="field-width2 mt-2">
-                        <InputText id="phoneNumber" keyfilter="pint" value={formik.values.phoneNumber} onChange={formik.handleChange} className="w-full" placeHolder="Phone Number" />
+                        <InputText id="contact" keyfilter="pint" value={formik.values.contact} onChange={formik.handleChange} className="w-full" placeHolder="Phone Number" />
                     </div>
                     <div className="field-width2 mt-2">
                         <InputText id="address1" value={formik.values.address1} onChange={formik.handleChange} className="w-full" placeHolder="Street Address" />
+                    </div>  
+                    <div className="field-width2 mt-2">
+                        <InputText id="address2" value={formik.values.address2} onChange={formik.handleChange} className="w-full" placeHolder="Apartment or Unit" />
                     </div>
                     <div className="field-width2 mt-2">
                         <InputText id="esnId" value={formik.values.esnId} onChange={formik.handleChange} className="w-full" placeHolder="Account Number" />
                     </div>
-                    <div className="field-width2 mt-2">
-                        <InputText id="address2" value={formik.values.address2} onChange={formik.handleChange} className="w-full" placeHolder="Apartment or Unit" />
-                    </div>
+                    
                     {/*<div className="field-width2 mt-2">
                         <InputText
                             // id="phoneNumber"
@@ -148,23 +150,10 @@ const AdvanceSearch = ({ setSearchBy }) => {
                         <InputText id="email" className="w-full" value={formik.values.email} onChange={formik.handleChange} placeHolder="Email" />
                     </div>
                     <div className="field-width2 mt-2">
-                        <InputText id="ssn" keyfilter="pint" className="w-full" value={formik.values.SSN} onChange={formik.handleChange} placeHolder="SSN" />
+                        <InputText id="SSN" keyfilter="pint" className="w-full" value={formik.values.SSN} onChange={formik.handleChange} placeHolder="SSN" />
                     </div>
 
-                    <div className="field-width2 mt-2">
-                        <Dropdown
-                            //id=""
-                            // value={formik.values.suffix}
-                            placeholder="Account Type"
-                            options={optionsForAccountType}
-                            onChange={(e) => {
-                                formik.setFieldValue("suffix", e.value);
-                                formik.handleChange(e);
-                            }}
-                            className="w-full"
-                            onBlur={formik.handleBlur}
-                        />
-                    </div>
+                   
                     <div className="field-width2 mt-2">
                         <InputMask id="DOB"  mask="99-99-9999"
       placeholder="MM-DD-YYYY" className="w-full"  value={formik.values.DOB} onChange={formik.handleChange} />
@@ -172,13 +161,10 @@ const AdvanceSearch = ({ setSearchBy }) => {
                     <div className="field-width2 mt-2">
                         <Dropdown
                             id="status"
-                            // value={formik.values.suffix}
+                            value={formik.values.status}
                             placeholder="Status"
                             options={optionsForStatus}
-                            onChange={(e) => {
-                                formik.setFieldValue("status", e.value);
-                                formik.handleChange(e);
-                            }}
+                            onChange={formik.handleChange}
                             className="w-full"
                         />
                     </div>

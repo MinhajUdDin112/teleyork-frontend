@@ -296,10 +296,8 @@ const App = () => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
     };
-
     const [searchBy, setSearchBy] = useState(null);
     const [searchValue, setSearchValue] = useState(null);
-
     return (
         <>
             {protectedRoute === true ? (

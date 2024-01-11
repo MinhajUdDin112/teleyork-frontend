@@ -52,7 +52,7 @@ const CustomerProfile = () => {
         initialValues: {
             noteType: "",
             note: "",
-            priority: "",
+            priority: "highest",
         },
         onSubmit: async (values, actions) => {
             // Prepare the data to send to the server
@@ -78,7 +78,6 @@ const CustomerProfile = () => {
             }
         },
     });
-    console.log("cp data is", cpData);
     const getCustomerProfileData = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
@@ -100,7 +99,8 @@ const CustomerProfile = () => {
     const getNotes = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
-            setAllNotes(res?.data?.data || []);
+            setAllNotes(res?.data?.data || []);     
+      
         } catch (error) {
             // toast.error(error?.response?.data?.msg);
         }
@@ -108,7 +108,6 @@ const CustomerProfile = () => {
 
     useEffect(() => {
         getCustomerProfileData();
-
         getNotes();
     }, []);
 
@@ -146,7 +145,8 @@ const CustomerProfile = () => {
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-    };
+    }; 
+    //For Showing SOCS Which is Comma Seperated array
     function showsocs(socarray) {
         if (socarray !== undefined) {
             console.log(socarray);
@@ -272,7 +272,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Sales Channel</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.salesChannel !== undefined ?cpData.salesChannel :"NIL" }</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -465,7 +465,9 @@ const CustomerProfile = () => {
 
                                                 <tr>
                                                     <td>Source</td>
-                                                    <td>NIL</td>
+                                                    <td>
+                                                      {cpData?.source !== undefined ? cpData?.source :"NIL"}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Fulfillment Method</td>
@@ -511,7 +513,7 @@ const CustomerProfile = () => {
                                 </div>
                                 <hr className="m-0" />
                                 <div className="flex justify-content-between pt-3 pb-3">
-                                    <Button label="View Archive Notes" size="small" />
+                                   {/* <Button label="View Archive Notes" size="small" /> */}
                                     <Button
                                         label="Display Notes"
                                         size="small"
@@ -525,16 +527,24 @@ const CustomerProfile = () => {
                                     <DataTable
                                         value={allNotes}
                                         tableStyle={{ minWidth: "550px" }}
-                                        className="cursor-pointer"
+                                        className="cursor-pointer notesrow"
                                         sortField={["createdAt"]}
-                                        sortOrder={-1}
-                                        onRowClick={(rowData) => {
+                                        sortOrder={-1}   
+                                        rowClassName={rowClassName}
+                                        onRowClick={(rowData) => {    
+                                            if(rowData.data.void === true){ 
+
+                                            }
+                                             else {
                                             setisNoteId(rowData.data._id);
                                             setisEnrollmentId(cpData?.enrollmentId);
                                             setisContact(cpData?.contact);
-                                            setIsOneNote((prev) => !prev);
-                                        }}
-                                    >
+                                            setIsOneNote((prev) => !prev); 
+                                              } 
+                                              
+                                        }}   
+                                     
+                                    >   
                                         <Column header="Created By" field="user.name"></Column>
                                         <Column header="Note" field="note"></Column>
                                         <Column header="Priority" field="priority"></Column>
@@ -550,7 +560,7 @@ const CustomerProfile = () => {
                                                         .padStart(2, "0")}:${createdAt.getSeconds().toString().padStart(2, "0")}`}</p>
                                                 );
                                             }}
-                                        ></Column>
+                                        ></Column>  
                                     </DataTable>
                                 </div>
                             </div>
@@ -597,18 +607,14 @@ const CustomerProfile = () => {
                                         <div></div>
                                         <div className="flex justify-content-between">
                                             <span className="counter_span mt-2">{noteLength}</span>
-
                                             <div>
                                                 <Dropdown id="priority" options={options} value={formik.values.priority} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text w-15rem mt-2")} />
                                                 {getFormErrorMessage("priority")}
                                             </div>
                                         </div>
                                     </div>
-
                                     <Button label="Do you want to create a ticket? " icon="pi pi-plus" className="pl-0" link />
-
                                     <hr className="m-0 mb-2" />
-
                                     <div className="text-right">
                                         <Button label="Add Note" type="submit" icon={isButtonLoading ? <ProgressSpinner strokeWidth="6" style={{ width: "1.5rem", height: "1.5rem", color: "white" }} /> : null} disabled={isButtonLoading} />
                                     </div>
@@ -621,5 +627,12 @@ const CustomerProfile = () => {
         </div>
     );
 };
-
 export default CustomerProfile;
+const rowClassName = (rowData) => {
+    if(rowData.void){
+    return 'custom-row'; 
+    } 
+    else{ 
+        return
+    }
+  };
