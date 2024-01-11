@@ -86,7 +86,8 @@ import CustomerProfile from "./app/features/screens/customer_profile/CustomerPro
 import ManageModelFlowPage from "./app/features/screens/inventory_management/manage_model/model_list";
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 import Provisioning_queue from "./app/features/screens/lifeline_orders/Provisioning_queue";
-import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
+import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";  
+import Searchall from "./app/features/screens/search_customer/search_all/search_all";
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
@@ -291,13 +292,13 @@ const App = () => {
 
         setPermittedRoutes(permittedRoutes);
     };
-
+    const [searchByValueClick,setSearchByValueClick]=useState(false)
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
     };
     const [searchBy, setSearchBy] = useState(null);
-    const [searchValue, setSearchValue] = useState(null);
+    const [searchValue, setSearchValue] = useState("");
     return (
         <>
             {protectedRoute === true ? (
@@ -307,7 +308,8 @@ const App = () => {
                     <AppTopbar
                         searchBy={searchBy}
                         searchValue={searchValue}
-                        setSearchBy={setSearchBy}
+                        setSearchBy={setSearchBy} 
+                        setSearchByValueClick={setSearchByValueClick}
                         setSearchValue={setSearchValue}
                         onToggleMenuClick={onToggleMenuClick}
                         layoutColorMode={layoutColorMode}
@@ -322,7 +324,8 @@ const App = () => {
                     </div>
                     <div className="layout-main-container ">
                         <div className="layout-main">
-                            {searchBy !== null ? (   
+                            { searchBy !== null || searchByValueClick ? (  
+                                    searchByValueClick  ?  <Searchall setSearchByValueClick={setSearchByValueClick} searchValue={searchValue} setSearchBy={setSearchBy}/>:   
                                    searchBy.code === "advance search" ? <AdvanceSearch setSearchBy={setSearchBy}/>:
                                 <div className="card searchby flex flex-row flex-wrap justify-content-around align-items-center">
                                     <div>
