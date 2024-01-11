@@ -105,9 +105,10 @@ export const AppTopbar = (props) => {
                        e.stopPropagation()
                      props.onMobileTopbarMenuClick(e)} }>
                     <i className="pi pi-ellipsis-v" />
-                </button>
+                </button> 
+                 <div className="search-customer">
                 <InputText 
-                    className="search-customer"
+                    className="w-full"
                     onChange={(e) => {
                         props.setSearchValue(e.target.value);
                     }}
@@ -115,10 +116,16 @@ export const AppTopbar = (props) => {
                     value={props.searchValue}
                     onClick={(e) => {    
                         e.stopPropagation()
-                        setVisibleSearch(prev=>!prev);
+                        setVisibleSearch(true);
                     }}
                     placeholder="Search Customer"
-                />
+                />    
+                  <i className="pi pi-search search-toggle" onClick={(e)=>{ 
+                     e.stopPropagation()
+                     setVisibleSearch(false) 
+                     props.setSearchByValueClick(true)
+                  }} />
+                 </div>
                 
                 <div  onClick={(e)=>{
                             e.stopPropagation()
@@ -127,7 +134,8 @@ export const AppTopbar = (props) => {
                         value={props.searchBy}
                         style={{ display: `${visibleSearch === true ? "block" : "none"}` }}
                         onChange={(e) => {     
-                            if(e.value !== null){
+                            if(e.value !== null){  
+                                props.setSearchByValueClick(false)
                             props.setSearchBy(e.value);  
                             }
                              
