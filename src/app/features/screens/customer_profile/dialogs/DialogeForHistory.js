@@ -28,32 +28,32 @@ const [isHistory, setIsHistory] = useState()
                                         <tbody>
                                             <tr>
                                                 <td>CreatedBy</td>
-                                                <td>{setIsHistory}</td>
+                                                <td>{isHistory}</td>
                                             </tr>
                                             <tr>
                                                 <td>Created Date </td>
-                                                <td>{setIsHistory}</td>
+                                                <td>{isHistory}</td>
                                             </tr>
 
                                             <tr>
                                                 <td>Approved By</td>
-                                                <td>{setIsHistory}</td>
+                                                <td>{isHistory}</td>
                                             </tr>
                                             <tr>
                                                 <td>Rejected By</td>
-                                                <td>{setIsHistory}</td>
+                                                <td>{isHistory}</td>
                                             </tr>
                                             <tr>
                                                 <td>City</td>
-                                                <td>{setIsHistory}</td>
+                                                <td>{isHistory}</td>
                                             </tr>
                                             <tr>
                                                 <td>City</td>
-                                                <td>{setIsHistory}</td>
+                                                <td>{isHistory}</td>
                                             </tr>
                                             <tr>
                                                 <td>City</td>
-                                                <td>{setIsHistory}</td>
+                                                <td>{isHistory}</td>
                                             </tr>
                                         </tbody>
                                     </table>
