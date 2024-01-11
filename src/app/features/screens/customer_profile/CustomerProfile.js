@@ -53,7 +53,7 @@ const CustomerProfile = () => {
         initialValues: {
             noteType: "",
             note: "",
-            priority: "",
+            priority: "highest",
         },
         onSubmit: async (values, actions) => {
             // Prepare the data to send to the server
@@ -520,7 +520,7 @@ const CustomerProfile = () => {
                                 </div>
                                 <hr className="m-0" />
                                 <div className="flex justify-content-between pt-3 pb-3">
-                                    <Button label="View Archive Notes" size="small" />
+                                   {/* <Button label="View Archive Notes" size="small" /> */}
                                     <Button
                                         label="Display Notes"
                                         size="small"
@@ -568,7 +568,6 @@ const CustomerProfile = () => {
                                                 );
                                             }}
                                         ></Column>  
-                                        <Column  header="Void" field="void"/>
                                     </DataTable>
                                 </div>
                             </div>
@@ -636,6 +635,11 @@ const CustomerProfile = () => {
     );
 };
 export default CustomerProfile;
-const rowClassName = () => {
-    return 'custom-row';
+const rowClassName = (rowData) => {
+    if(rowData.void){
+    return 'custom-row'; 
+    } 
+    else{ 
+        return
+    }
   };

@@ -81,5 +81,17 @@
   }  
  /* Add this CSS in your stylesheet or use a style tag in your component */
 
-
+.custom-row{ 
+  position: relative;
+} 
+.custom-row::after{ 
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: rgba(0,0,0,.4); /* Change the color if needed */
+  
+}
 

@@ -20,7 +20,6 @@ try {
 }
 }
 getOneNote();
-
 }, [])
     function markVoid(){ 
         Axios.put(`${BASE_URL}/api/web/notes/markVoid`,{"noteId":cpData?.data._id,
