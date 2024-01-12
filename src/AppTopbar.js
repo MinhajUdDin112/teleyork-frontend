@@ -13,7 +13,6 @@ export const AppTopbar = (props) => {
       })
     const [visibleSearch, setVisibleSearch] = useState(false);
     function docOnClick(e){   
-       
      setVisibleSearch(false)
     }  
     //Dialogues for Advance Search
@@ -77,7 +76,8 @@ export const AppTopbar = (props) => {
             
             <div className="logodisplay "  onClick={(e)=>{  
                      e.stopPropagation()
-                 props.setSearchBy(null)  
+                 props.setSearchBy(null)    
+                 props.setSearchByValueClick(false)
                  }} >
                 <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
@@ -91,7 +91,9 @@ export const AppTopbar = (props) => {
             }}>  
                 <Link to="/" className="layout-topbar-logo insidetopbarlogo"   onClick={(e)=>{  
                      e.stopPropagation()
-                 props.setSearchBy(null)  
+                 props.setSearchBy(null)    
+                 
+                 props.setSearchByValueClick(false)
                  }}>
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
@@ -108,11 +110,10 @@ export const AppTopbar = (props) => {
                 </button> 
                  <div className="search-customer">
                 <InputText 
-                    className="w-full"
+                    className=""
                     onChange={(e) => {
                         props.setSearchValue(e.target.value);
                     }}
-                    
                     value={props.searchValue}
                     onClick={(e) => {    
                         e.stopPropagation()
@@ -122,8 +123,14 @@ export const AppTopbar = (props) => {
                 />    
                   <i className="pi pi-search search-toggle" onClick={(e)=>{ 
                      e.stopPropagation()
-                     setVisibleSearch(false) 
-                     props.setSearchByValueClick(true)
+                     setVisibleSearch(false)   
+                      props.setSearchBy(null)
+                     props.setSearchByValueClick(true)  
+                      if(props.searchByValueClick === true){ 
+                         console.log(true)
+                        props.setCallSearchApi(prev=>!prev) 
+                      }
+                      
                   }} />
                  </div>
                 
@@ -150,7 +157,7 @@ export const AppTopbar = (props) => {
                              
                           }}
                         itemTemplate={countryTemplate}
-                        className="w-full"
+                        className="w-full card"
                         listStyle={{ maxHeight: "250px" }}
                     />
                 </div>

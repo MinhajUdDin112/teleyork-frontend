@@ -52,15 +52,16 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         }
     }
     useEffect(() => {
-        setData([["Task", "Enrollments"]]);
+        setData([["Task", "Enrollments"]]); 
+        let isMounted = true;
         if (obj.rejectedenrollments) {
             Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
                 .then((response) => {
-                    if (response.data.data !== undefined) {
+                    if (isMounted && response.data.data !== undefined) {
                         const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                             return enrollment.rejectedAt >= startDate && enrollment.rejectedAt <= endDateEnrollment;
                         });
-                        if (enrollmentsInDateRange.length !== 0) {
+                        if ( isMounted && enrollmentsInDateRange.length !== 0) {
                             setData((prevStat) => [...prevStat, ["Rejected", enrollmentsInDateRange.length]]);
                         }
                     }
@@ -70,11 +71,11 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         if (obj.approvedEnrollments) {
             Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
                 .then((response) => {
-                    if (response.data.data !== undefined) {
+                    if ( response.data.data !== undefined) {
                         const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                             return enrollment.approvedAt >= startDate && enrollment.approvedAt <= endDateEnrollment;
                         });
-                        if (enrollmentsInDateRange.length !== 0) {
+                        if (isMounted && enrollmentsInDateRange.length !== 0) {
                             setData((prevStat) => [...prevStat, ["Approved", enrollmentsInDateRange.length]]);
                         }
                     }
@@ -88,7 +89,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
                         const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                             return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
                         });
-                        if (enrollmentsInDateRange.length !== 0) {
+                        if (isMounted && enrollmentsInDateRange.length !== 0) {
                             setData((prevStat) => [...prevStat, ["All", enrollmentsInDateRange.length]]);
                         }
                     }
@@ -101,7 +102,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
                     const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                         return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
                     });
-                    if (enrollmentsInDateRange.length !== 0) {
+                    if (isMounted && enrollmentsInDateRange.length !== 0) {
                         setData((prevStat) => [...prevStat, ["Incomplete", enrollmentsInDateRange.length]]);
                     }
                 }
@@ -113,7 +114,7 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
                     const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                         return enrollment.activatedAt >= startDate && enrollment.activatedAt <= endDateEnrollment;
                     });
-                    if (enrollmentsInDateRange.length !== 0) {
+                    if (isMounted && enrollmentsInDateRange.length !== 0) {
                         setData((prevStat) => [...prevStat, ["Completed", enrollmentsInDateRange.length]]);
                     }
                 }
@@ -125,11 +126,14 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
                     const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                         return enrollment.nladEnrollmentDate >= startDate && enrollment.nladEnrollmentDate <= endDateEnrollment;
                     });
-                    if (enrollmentsInDateRange.length !== 0) {
+                    if (isMounted && enrollmentsInDateRange.length !== 0) {
                         setData((prevStat) => [...prevStat, ["Provisioning", enrollmentsInDateRange.length]]);
                     }
                 }
             });
+        }  
+        return ( )=>{ 
+            isMounted=false
         }
     }, [startDate, endDate]);
     return (

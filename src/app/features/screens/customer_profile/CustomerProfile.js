@@ -19,7 +19,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-
+import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -32,7 +32,8 @@ const CustomerProfile = () => {
     const [isOneNote, setIsOneNote] = useState(false);
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
-    const [isContact, setisContact] = useState();
+    const [isContact, setisContact] = useState();   
+    const [changeCustomerStatusDialog,setChangeCustomerStatus]=useState(false)
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
@@ -167,7 +168,7 @@ const CustomerProfile = () => {
         <div className="card">
             <ToastContainer />
             <div className="p-0">
-                <BillingNavbar />
+                <BillingNavbar  setChangeCustomerStatus={setChangeCustomerStatus}/>
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
                 </Dialog>
@@ -176,9 +177,11 @@ const CustomerProfile = () => {
                     <DialogeForOneNote enrollmentId={isEnrollmentId} noteId={isNoteId} contact={isContact} />
                 </Dialog>
                 <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`} style={{ width: "90vw" }} onHide={() => setDisplayAllNotesDialogVisibility((prev) => !prev)}>
-                    <DisplayAllNotesDialog notes={allNotes} />
+                    <DisplayAllNotesDialog notes={allNotes}  />
                 </Dialog>
-                
+                <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
+                    <ChangeCustomerStatus   cpData={cpData} />
+                </Dialog>
                 
                 <div className="pt-3">
                     <div className="grid">

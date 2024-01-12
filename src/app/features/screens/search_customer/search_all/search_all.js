@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Column } from "primereact/column";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function Searchall({ searchValue, setSearchBy,setSearchByValueClick }) {
+export default function Searchall({ searchValue,callSearchApi, setSearchBy,setSearchByValueClick }) {
     const navigate = useNavigate();
     const [searchData, setSearchData] = useState([]);
     const loginRes = localStorage.getItem("userData");
@@ -19,14 +19,20 @@ export default function Searchall({ searchValue, setSearchBy,setSearchByValueCli
     };
     useEffect(() => {
         Axios.get(`${BASE_URL}/api/web/search/${searchValue}`)
-            .then((response) => {  
-               
-                setSearchData(response.data.data);
+            .then((response) => {    
+                if (typeof response.data.data === 'object' && !Array.isArray(response.data.data)) {
+                    console.log('It is an object'); 
+                     let arr=[response.data.data] 
+                     setSearchData(arr); 
+                  }  
+                  else{
+                setSearchData(response.data.data); 
+                  }
             })
             .catch((err) => {
                 setSearchData([]);
             });
-    }, [searchValue]);
+    }, [callSearchApi]);
     return (
         <div className="card">
             <div className="card mx-5 pl-0 pr-0 pt-0">

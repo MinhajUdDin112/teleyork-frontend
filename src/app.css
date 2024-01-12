@@ -17,27 +17,28 @@
   transform: translate(-50%); 
   margin-left:50%; 
   cursor: pointer;
-  width:35%;
+  width:35%; 
+  border:solid rgb(206, 212, 218) 1px ; 
+  z-index: 999; 
+  height: 40px; 
+  border-top-right-radius: 5px; 
+  border-top-left-radius: 5px;
 } .search-customer input{ 
-  border-bottom-right-radius:0px ; 
-  border-top-right-radius: 0px; 
-  
-  border-bottom-left-radius: 0px;
+     border: none;  
+     width:90%; 
+     height: 35px;
 }
 .search-toggle{ 
   position: absolute;  
-   margin-left: 0px;  
-   border-radius: 5px;
-  top: 59%; 
-   transform: translate(0%,-50%);  
-    box-sizing: border-box; 
-    height:39.5px;
-   padding: 11px; 
-   border:solid rgb(206, 212, 218) 1px; 
-   color:grey;
-   border-bottom-left-radius:0px ; 
-   border-left: none; 
-   border-top-left-radius: 0px; 
+  right:0px;  
+  color: grey;
+  padding: 12.5px;  
+  padding-left: 4%;
+  width: 10%;
+  border-left: solid  rgb(206, 212, 218) 1px; 
+  
+  box-sizing: border-box;
+ 
 }
 .search-toggle:hover{ 
   cursor: pointer;   
@@ -52,7 +53,7 @@
 } 
 .listbox{ 
   position: absolute; 
-  top:60px;  
+  top:55px;  
   margin-left: 50%; 
   transform: translate(-50%); 
   width:35%; 
@@ -76,9 +77,20 @@
 
 @media(max-width:1400px){ 
   .search-customer{ 
-    width:150px;
+    width:250px;
   
-  }     
+  }   
+  .listbox{ 
+    width:250px; 
+    font-size: 10px;
+  }    
+  .search-customer input{ 
+    width:75%; 
+  } 
+  .search-toggle{ 
+     width: 25%; 
+     padding-left: 9%;
+  }
  
 }   
 .logodisplay{ 
@@ -113,6 +125,9 @@
   } 
   .layout-main-container{
     margin-top: 95px;
+  }
+  .listbox{ 
+    width: 50%;
   }
 }
 .searchby{ 
