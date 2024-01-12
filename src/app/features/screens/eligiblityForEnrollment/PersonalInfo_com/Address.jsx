@@ -32,8 +32,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const zipState = zipDataParsed?.data?.state;
 
     const validationSchema = Yup.object().shape({
-        address1: Yup.string().required("Address is required"),
-        
+        address1: Yup.string().required("Address is required"),     
     });
    
     const formik = useFormik({
