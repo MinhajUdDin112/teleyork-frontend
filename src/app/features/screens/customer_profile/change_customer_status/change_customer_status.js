@@ -25,7 +25,7 @@ export default function ChangeCustomerStatus({ cpData }) {
     const connectionTypeOption=connection
     function UpdateStatus() {
         if (statusTo === "disconnect") {
-            Axios.post(`${BASE_URL}/api/user/disconnectMdnByPwg`, { enrollmentId: cpData._id })
+            Axios.post(`${BASE_URL}/api/user/disconnectMdnByPwg`, { enrollmentId: cpData?._id })
                 .then(() => { 
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Disconnected" });
                                  
@@ -47,7 +47,7 @@ export default function ChangeCustomerStatus({ cpData }) {
                 });
         } else if (statusTo === "transfer-in") {
             if (transferExceptionTo !== "") {
-                Axios.post(`${BASE_URL}/api/user/transferUserNlad`, { enrollmentId: cpData._id, repId: parseLoginRes.repId, transferException: "", userId: parseLoginRes._id })
+                Axios.post(`${BASE_URL}/api/user/transferUserNlad`, { enrollmentId: cpData?._id, repId: parseLoginRes?.repId, transferException: transferExceptionTo, userId: parseLoginRes?._id })
                     .then(() => { 
                         toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Transfer-In" });
                   
