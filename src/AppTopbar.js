@@ -44,7 +44,9 @@ export const AppTopbar = (props) => {
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const handleLogout = () => {
+    const handleLogout = () => {    
+        props.setSearchByValueClick(false) 
+        props.setSearchBy(null)
         dispatch(logout());
         navigate("/login");
     };
@@ -116,8 +118,13 @@ export const AppTopbar = (props) => {
                     }}
                     value={props.searchValue}
                     onClick={(e) => {    
-                        e.stopPropagation()
-                        setVisibleSearch(true);
+                        e.stopPropagation()  
+                        if(e.value !== ""){ 
+                            props.setSearchByValueClick(true)
+                           props.setCallSearchApi(prev=>!prev) 
+                         }
+                        setVisibleSearch(true);  
+
                     }}
                     placeholder="Search Customer"
                 />    
