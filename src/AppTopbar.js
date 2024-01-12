@@ -13,7 +13,6 @@ export const AppTopbar = (props) => {
       })
     const [visibleSearch, setVisibleSearch] = useState(false);
     function docOnClick(e){   
-       
      setVisibleSearch(false)
     }  
     //Dialogues for Advance Search
@@ -45,7 +44,10 @@ export const AppTopbar = (props) => {
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const handleLogout = () => {
+    const handleLogout = () => {     
+        props.setSearchValue("")
+        props.setSearchByValueClick(false) 
+        props.setSearchBy(null)
         dispatch(logout());
         navigate("/login");
     };
@@ -77,7 +79,8 @@ export const AppTopbar = (props) => {
             
             <div className="logodisplay "  onClick={(e)=>{  
                      e.stopPropagation()
-                 props.setSearchBy(null)  
+                 props.setSearchBy(null)    
+                 props.setSearchByValueClick(false)
                  }} >
                 <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
@@ -91,7 +94,9 @@ export const AppTopbar = (props) => {
             }}>  
                 <Link to="/" className="layout-topbar-logo insidetopbarlogo"   onClick={(e)=>{  
                      e.stopPropagation()
-                 props.setSearchBy(null)  
+                 props.setSearchBy(null)    
+                 
+                 props.setSearchByValueClick(false)
                  }}>
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
@@ -105,20 +110,38 @@ export const AppTopbar = (props) => {
                        e.stopPropagation()
                      props.onMobileTopbarMenuClick(e)} }>
                     <i className="pi pi-ellipsis-v" />
-                </button>
+                </button> 
+                 <div className="search-customer">
                 <InputText 
-                    className="search-customer"
+                    className=""
                     onChange={(e) => {
                         props.setSearchValue(e.target.value);
                     }}
-                    
                     value={props.searchValue}
-                    onClick={(e) => {    
-                        e.stopPropagation()
-                        setVisibleSearch(prev=>!prev);
+                    onClick={(e) => {   
+                        console.log(props.searchValue)  
+                        e.stopPropagation()  
+                        if(props.searchValue !== ""){ 
+                            props.setSearchByValueClick(true)
+                           props.setCallSearchApi(prev=>!prev) 
+                         }
+                        setVisibleSearch(true);  
+
                     }}
                     placeholder="Search Customer"
-                />
+                />    
+                  <i className="pi pi-search search-toggle" onClick={(e)=>{ 
+                     e.stopPropagation()
+                     setVisibleSearch(false)   
+                      props.setSearchBy(null)
+                     props.setSearchByValueClick(true)  
+                      if(props.searchByValueClick === true){ 
+                         console.log(true)
+                        props.setCallSearchApi(prev=>!prev) 
+                      }
+                      
+                  }} />
+                 </div>
                 
                 <div  onClick={(e)=>{
                             e.stopPropagation()
@@ -127,7 +150,8 @@ export const AppTopbar = (props) => {
                         value={props.searchBy}
                         style={{ display: `${visibleSearch === true ? "block" : "none"}` }}
                         onChange={(e) => {     
-                            if(e.value !== null){
+                            if(e.value !== null){  
+                                props.setSearchByValueClick(false)
                             props.setSearchBy(e.value);  
                             }
                              
@@ -142,7 +166,7 @@ export const AppTopbar = (props) => {
                              
                           }}
                         itemTemplate={countryTemplate}
-                        className="w-full"
+                        className="w-full card"
                         listStyle={{ maxHeight: "250px" }}
                     />
                 </div>

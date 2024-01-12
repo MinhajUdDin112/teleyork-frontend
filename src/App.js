@@ -88,7 +88,18 @@ import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 import Provisioning_queue from "./app/features/screens/lifeline_orders/Provisioning_queue";
 import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
 import ViewFiles from "./app/features/screens/customer_services/ViewFiles";
+import Searchall from "./app/features/screens/search_customer/search_all/search_all";
 const App = () => {
+    const loginPerms = localStorage.getItem("permissions");
+    const parsedLoginPerms = JSON.parse(loginPerms);
+    const [dynamicMenu, setDynamicMenu] = useState([]);
+    //CallSearchApi when click on Search
+    const [callSearchApi, setCallSearchApi] = useState(false);
+    const [searchByValueClick, setSearchByValueClick] = useState(false);
+    let token = JSON.parse(localStorage.getItem("accessToken"));
+    let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
+    const [searchBy, setSearchBy] = useState(null);
+    const [searchValue, setSearchValue] = useState("");
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -105,7 +116,7 @@ const App = () => {
     let menuClick = false;
     let mobileTopbarMenuClick = false;
     const { user } = useSelector((state) => state.login);
-
+    //MobileMenu When ACTIVE
     useEffect(() => {
         if (mobileMenuActive) {
             addClass(document.body, "body-overflow-hidden");
@@ -113,20 +124,17 @@ const App = () => {
             removeClass(document.body, "body-overflow-hidden");
         }
     }, [mobileMenuActive]);
-
+    //TOOLTIP When Change
     useEffect(() => {
         copyTooltipRef && copyTooltipRef.current && copyTooltipRef.current.updateTargetEvents();
     }, [location]);
-
     const onInputStyleChange = (inputStyle) => {
         setInputStyle(inputStyle);
     };
-
     const onRipple = (e) => {
         PrimeReact.ripple = e.value;
         setRipple(e.value);
     };
-
     const onLayoutModeChange = (mode) => {
         setLayoutMode(mode);
     };
@@ -135,7 +143,7 @@ const App = () => {
         setLayoutColorMode(mode);
     };
 
-    const onWrapperClick = (event) => {  
+    const onWrapperClick = (event) => {
         if (!menuClick) {
             setOverlayMenuActive(false);
             setMobileMenuActive(false);
@@ -149,10 +157,9 @@ const App = () => {
         menuClick = false;
     };
 
-    const onToggleMenuClick = (event) => {  
-        event.stopPropagation()
+    const onToggleMenuClick = (event) => {
+        event.stopPropagation();
         menuClick = true;
-
         if (isDesktop()) {
             if (layoutMode === "overlay") {
                 if (mobileMenuActive === true) {
@@ -170,33 +177,28 @@ const App = () => {
 
         event.preventDefault();
     };
-
     const onSidebarClick = () => {
         menuClick = true;
     };
-
-    const onMobileTopbarMenuClick = (event) => {    
-         event.stopPropagation()
+    const onMobileTopbarMenuClick = (event) => {
+        event.stopPropagation();
         mobileTopbarMenuClick = true;
-
         setMobileTopbarMenuActive((prevState) => !prevState);
         event.preventDefault();
     };
 
-    const onMobileSubTopbarMenuClick = (event) => { 
-        event.stopPropagation()
+    const onMobileSubTopbarMenuClick = (event) => {
+        event.stopPropagation();
         mobileTopbarMenuClick = true;
 
         event.preventDefault();
     };
-
     const onMenuItemClick = (event) => {
-          if(event.item.items !== undefined){ 
-             
-          } 
-          else{ 
-            setSearchBy(null)
-          }
+        if (event.item.items !== undefined) {
+        } else {
+            setSearchBy(null);
+            setSearchByValueClick(false);
+        }
         if (!event.item.items) {
             setOverlayMenuActive(false);
             setMobileMenuActive(false);
@@ -225,9 +227,6 @@ const App = () => {
         "p-ripple-disabled": ripple === false,
         "layout-theme-light": layoutColorMode === "light",
     });
-
-    let token = JSON.parse(localStorage.getItem("accessToken"));
-    let protectedRoute = JSON.parse(localStorage.getItem("protectedRoute")) ?? false;
     useEffect(() => {
         getPermissions();
     }, [window.localStorage.permissions]);
@@ -247,19 +246,12 @@ const App = () => {
             navigate("/login");
         }
     }, [token]);
-
-    const loginPerms = localStorage.getItem("permissions");
-    const parsedLoginPerms = JSON.parse(loginPerms);
-    const [dynamicMenu, setDynamicMenu] = useState([]);
-
     const getPermissions = () => {
         const storedPermissions = localStorage.getItem("permissions");
         if (!storedPermissions) {
             return;
         }
-
         const permittedRoutes = [];
-
         const modules = parsedLoginPerms
             .map((node) => {
                 if (node.subModule.some((subNode) => subNode?.actions?.some((action) => action?.name === "view"))) {
@@ -292,45 +284,48 @@ const App = () => {
 
         setPermittedRoutes(permittedRoutes);
     };
-
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
     };
-    const [searchBy, setSearchBy] = useState(null);
-    const [searchValue, setSearchValue] = useState(null);
+
     return (
         <>
             {protectedRoute === true ? (
                 <div className={wrapperClass} onClick={onWrapperClick}>
                     <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
-
                     <AppTopbar
                         searchBy={searchBy}
                         searchValue={searchValue}
                         setSearchBy={setSearchBy}
-                        setSearchValue={setSearchValue}
+                        setSearchByValueClick={setSearchByValueClick}
+                        setSearchValue={setSearchValue}    
+                        searchByValueClick={searchByValueClick} 
+                        setCallSearchApi={setCallSearchApi}
                         onToggleMenuClick={onToggleMenuClick}
                         layoutColorMode={layoutColorMode}
-                        mobileTopbarMenuActive={mobileTopbarMenuActive}   
-                       
+                        mobileTopbarMenuActive={mobileTopbarMenuActive}
                         onMobileTopbarMenuClick={onMobileTopbarMenuClick}
                         onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
                     />
-
-                    <div className="layout-sidebar" >
-                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
+                    <div className="layout-sidebar">
+                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
                     </div>
                     <div className="layout-main-container ">
                         <div className="layout-main">
-                            {searchBy !== null ? (   
-                                   searchBy.code === "advance search" ? <AdvanceSearch setSearchBy={setSearchBy}/>:
-                                <div className="card searchby flex flex-row flex-wrap justify-content-around align-items-center">
-                                    <div>
-                                        <h1 className="text-center w-full ">{searchBy.name}</h1>
-                                        <h5 className="text-center w-full mt-4 ">Get Ready! We are working on something really cool.</h5>
+                            {searchBy !== null || searchByValueClick ? (
+                                searchByValueClick ? (
+                                    <Searchall setSearchByValueClick={setSearchByValueClick} callSearchApi={callSearchApi} searchValue={searchValue} setSearchBy={setSearchBy} />
+                                ) : searchBy.code === "advance search" ? (
+                                    <AdvanceSearch setSearchBy={setSearchBy} />
+                                ) : (
+                                    <div className="card searchby flex flex-row flex-wrap justify-content-around align-items-center">
+                                        <div>
+                                            <h1 className="text-center w-full ">{searchBy.name}</h1>
+                                            <h5 className="text-center w-full mt-4 ">Get Ready! We are working on something really cool.</h5>
+                                        </div>
                                     </div>
-                                </div>
+                                )
                             ) : (
                                 <Routes>
                                     <Route path="*" element={<NotFound />} />
