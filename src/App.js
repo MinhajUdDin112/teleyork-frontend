@@ -87,6 +87,7 @@ import ManageModelFlowPage from "./app/features/screens/inventory_management/man
 import UploadBulk from "./app/features/screens/lifeline_orders/UploadBulk";
 import Provisioning_queue from "./app/features/screens/lifeline_orders/Provisioning_queue";
 import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
+import ViewFiles from "./app/features/screens/customer_services/ViewFiles";
 const App = () => {
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
@@ -378,6 +379,7 @@ const App = () => {
                                     <Route path="/eligibilityproofupload" element={isPermitted("/eligibilityproofupload") ? <EligibilityProofUpload /> : <Dashboard />} />
                                     <Route path="/dealerwallet" element={isPermitted("/dealerwallet") ? <DealerWallet /> : <Dashboard />} />
                                     <Route path="/orderhistory" element={isPermitted("/orderhistory") ? <OrderHistory /> : <Dashboard />} />
+                                    <Route path="/viewfile" element={isPermitted("/viewfile") ? <ViewFiles /> : <Dashboard />} />
 
                                     <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                     <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
