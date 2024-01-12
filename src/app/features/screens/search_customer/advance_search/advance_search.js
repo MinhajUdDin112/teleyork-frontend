@@ -10,7 +10,9 @@ import DisplayAdvanceSearchApiResponse from "./component/search_result";
 import { ProgressSpinner } from "primereact/progressspinner";  
 import { InputMask } from 'primereact/inputmask';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const AdvanceSearch = ({ setSearchBy }) => {
+const AdvanceSearch = ({ setSearchBy }) => {  
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
     const [isLoading, setIsLoading] = useState(false);
     const [searchData, setSearchData] = useState([]);  
     const [carrierholder,setCarrier]=useState([])
@@ -58,7 +60,7 @@ const AdvanceSearch = ({ setSearchBy }) => {
             };
             try {
                 setIsLoading(true);
-                const response = await Axios.post(`${BASE_URL}/api/web/search/advancesearch`, dataToSend);
+                const response = await Axios.post(`${BASE_URL}/api/web/search/advancesearch?userId=${parseLoginRes._id}`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     setSearchData(response?.data);
                     setIsLoading(false);

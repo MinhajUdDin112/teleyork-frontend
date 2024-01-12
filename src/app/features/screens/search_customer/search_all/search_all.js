@@ -10,7 +10,7 @@ export default function Searchall({ searchValue,callSearchApi, setSearchBy,setSe
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
-    const toCapital = roleName.toUpperCase();
+    const toCapital = roleName.toUpperCase();  
     const handleEnrollmentIdClick = (rowData) => { 
         setSearchByValueClick(false)
         setSearchBy(null);
@@ -18,7 +18,7 @@ export default function Searchall({ searchValue,callSearchApi, setSearchBy,setSe
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
     useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/search/${searchValue}`)
+        Axios.get(`${BASE_URL}/api/web/search/?query=${searchValue}&userId=${parseLoginRes._id}`)
             .then((response) => {    
                 if (typeof response.data.data === 'object' && !Array.isArray(response.data.data)) {
                     console.log('It is an object'); 
