@@ -44,7 +44,8 @@ export const AppTopbar = (props) => {
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const handleLogout = () => {    
+    const handleLogout = () => {     
+        props.setSearchValue("")
         props.setSearchByValueClick(false) 
         props.setSearchBy(null)
         dispatch(logout());
@@ -117,9 +118,10 @@ export const AppTopbar = (props) => {
                         props.setSearchValue(e.target.value);
                     }}
                     value={props.searchValue}
-                    onClick={(e) => {    
+                    onClick={(e) => {   
+                        console.log(props.searchValue)  
                         e.stopPropagation()  
-                        if(e.value !== ""){ 
+                        if(props.searchValue !== ""){ 
                             props.setSearchByValueClick(true)
                            props.setCallSearchApi(prev=>!prev) 
                          }
