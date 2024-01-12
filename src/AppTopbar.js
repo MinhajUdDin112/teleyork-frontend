@@ -44,7 +44,9 @@ export const AppTopbar = (props) => {
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const handleLogout = () => {
+    const handleLogout = () => {    
+        props.setSearchByValueClick(false) 
+        props.setSearchBy(null)
         dispatch(logout());
         navigate("/login");
     };
