@@ -118,8 +118,13 @@ export const AppTopbar = (props) => {
                     }}
                     value={props.searchValue}
                     onClick={(e) => {    
-                        e.stopPropagation()
-                        setVisibleSearch(true);
+                        e.stopPropagation()  
+                        if(e.value !== ""){ 
+                            props.setSearchByValueClick(true)
+                           props.setCallSearchApi(prev=>!prev) 
+                         }
+                        setVisibleSearch(true);  
+
                     }}
                     placeholder="Search Customer"
                 />    
