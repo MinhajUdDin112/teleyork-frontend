@@ -157,6 +157,11 @@ export const menuNavigation = [
                         to: "/manageinventory",
                     },
                     {
+                        label: "Billing Configuration",
+                        icon: "",
+                        to: "/billingconfiguration",
+                    },
+                    {
                         label: "Drop Ship Orders",
                         icon: "",
                         to: "/dropshiporders",
