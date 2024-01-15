@@ -84,7 +84,6 @@ const UploadBulk = () => {
         }
     };
 
-    console.log("link is", isLink);
 
     const handleButtonClick = () => {
        

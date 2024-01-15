@@ -56,6 +56,11 @@ export const menuNavigation = [
                         icon: "",
                         to: "/orderhistory",
                     },
+                    {
+                        label: "View Files",
+                        icon: "",
+                        to: "/viewfile",
+                    },
 
                     {
                         label: "Purchase history",
