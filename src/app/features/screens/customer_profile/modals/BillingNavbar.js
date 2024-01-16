@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Menubar } from "primereact/menubar";
 import Axios from "axios"; 
-import "../css/customer-profile.css"
+import "../css/customer-profile.css"   
+import html2canvas from "html2canvas";
 import { useEffect } from "react";
 const BillingNavbar = ({setChangeCustomerStatus}) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -51,8 +52,9 @@ const BillingNavbar = ({setChangeCustomerStatus}) => {
                         borderRadius: "10px",
                         backgroundColor: `${cpData?.status === "active" ? "rgba(21, 119, 11, 1)" : cpData?.status === "inactive"  ? "rgba(174, 0, 0, 1)" : cpData?.status === "suspended" || cpData?.status === "Suspended" ? "rgba(255, 191, 0, 1)" : cpData?.status === "prospected" || cpData?.status === "prospect" ? "rgba(120, 4, 89, 0.82)" :cpData?.status === "unfitProspect" || cpData?.status === "UnfitProspect" ? "rgba(0, 0, 0, 1)":"orangered"}`,
                     }}  
-                    onClick={()=>{ 
-                        setChangeCustomerStatus(true)
+                    onClick={async ()=>{   
+                       
+                      setChangeCustomerStatus(true)
                     }}
                 >
                      {cpData?.status === "prospect" || cpData?.status === "prospected" ? "Prospect":cpData?.status}
