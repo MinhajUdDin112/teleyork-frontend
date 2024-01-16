@@ -644,7 +644,7 @@ const AllEnrollments = () => {
                         <DialogeForRemarksForIJ  getAllEnrollments={ getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
                     </Dialog>
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
-                        <DialogeForTransferUser enrollmentId={isEnrolmentId} />
+                        <DialogeForTransferUser enrollmentId={isEnrolmentId} setDialogeForTransfer={setDialogeForTransfer} />
                     </Dialog>
                     {/* <Dialog header={"Add Remarks"} visible={dialogeForApprove} style={{ width: "30vw" }} onHide={() => setDialogeForApprove(false)}>
                         <DialogeForApprove enrollmentIds={selectedIdsForApprove} />

@@ -89,6 +89,8 @@ import Provisioning_queue from "./app/features/screens/lifeline_orders/Provision
 import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
 import ViewFiles from "./app/features/screens/customer_services/ViewFiles";
 import Searchall from "./app/features/screens/search_customer/search_all/search_all";
+import BillingConfiguration from "./app/features/screens/inventory_management/BillingConfiguration";
+import CustomerUsage from "./app/features/screens/customer_services/CustomerUsage";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
 const App = () => {
     const loginPerms = localStorage.getItem("permissions");
@@ -369,6 +371,7 @@ const App = () => {
                                     <Route path="/allenrollmentorders" element={isPermitted("/allenrollmentorders") ? <Allenrollments /> : <Dashboard />} />
                                     <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
                                     <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentSearchTool /> : <Dashboard />} />
+                                    <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
                                     <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
                                     <Route path="/customerhistory" element={isPermitted("/customerhistory") ? <CustomerHistory /> : <Dashboard />} />
                                     <Route path="/agentstorelocator" element={isPermitted("/agentstorelocator") ? <AgentStoreLocator /> : <Dashboard />} />
@@ -409,6 +412,7 @@ const App = () => {
                                     <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                     <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                     <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} />
+                                    <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                 </Routes>
                             )}
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}

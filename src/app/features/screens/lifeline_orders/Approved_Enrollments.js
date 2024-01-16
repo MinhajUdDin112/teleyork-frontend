@@ -214,6 +214,20 @@ const Approved_Enrollments = () => {
                         {
                             toCapital.includes("QA") ? <Column field="approvedBy.name" header="Approved By" />:""
                         }
+                          <Column
+                                field="Approved At"
+                                header="Approved At"
+                                body={(rowData) =>
+                                    new Date(rowData.approvedAt)
+                                        .toLocaleDateString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })
+                                        .replace(/\//g, "-")
+                                }
+                            />
+                         <Column/>
                      <Column
     field="Phase"
     header="Phase"

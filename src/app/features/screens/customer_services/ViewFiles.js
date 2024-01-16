@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import Axios from "axios";
 import { Dropdown } from "primereact/dropdown";
 import { Column } from "primereact/column";
+import BillingNavbar from "../customer_profile/modals/BillingNavbar";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ViewFiles = () => {
@@ -65,6 +66,7 @@ const ViewFiles = () => {
 
     return (
         <>
+        <BillingNavbar/>    
             <div></div>
             <div className="card">
                 <h3>Upload Files</h3>
@@ -81,6 +83,7 @@ const ViewFiles = () => {
                                 
                             }}
                             onBlur={formik.handleBlur}
+
                         />
                         {formik.touched.fileType && formik.errors.fileType ? (
                             <p className="mt-2 ml-2" style={{ color: "red" }}>
@@ -99,9 +102,9 @@ const ViewFiles = () => {
                     }}
                     
                     multiple
-                    accept=".csv,.pdf,png,.jpg,.peg,.bmp,.mp3,.wav,.wma,.gsm,.3gp,.amr,.txt,.doc,.docx"
-                    onUpload={onUpload}
+                    accept=".csv,.pdf,png,.jpg,.peg,.bmp,.mp3,.wav,.wma,.gsm,.3gp,.amr,.txt,.doc,.docx"            
                     maxFileSize={5000000}
+                    onUpload={onUpload}
                     emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}
                 />
             </div>

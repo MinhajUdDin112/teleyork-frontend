@@ -57,6 +57,11 @@ export const menuNavigation = [
                         to: "/orderhistory",
                     },
                     {
+                        label: "Usage",
+                        icon: "",
+                        to: "/usage",
+                    },
+                    {
                         label: "View Files",
                         icon: "",
                         to: "/viewfile",
@@ -155,6 +160,11 @@ export const menuNavigation = [
                         label: "Manage Inventory",
                         icon: "",
                         to: "/manageinventory",
+                    },
+                    {
+                        label: "Billing Configuration",
+                        icon: "",
+                        to: "/billingconfiguration",
                     },
                     {
                         label: "Drop Ship Orders",

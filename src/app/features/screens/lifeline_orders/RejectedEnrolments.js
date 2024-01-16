@@ -364,7 +364,7 @@ const RejectedEnrollments = () => {
                                         <p>
                                             {shortline}
                                             <span
-                                                style={{ color: "black", cursor: "pointer", fontSize: "28px" }}
+                                                style={{ color: "black", cursor: "pointer", fontSize: "28px", lineHeight:'0px' }}
                                                 onClick={(e) => {
                                                     setReasonBody(rowData.reajectedReason);
                                                     setVisible(true);
@@ -379,6 +379,19 @@ const RejectedEnrollments = () => {
                             );
                            }}}  
                          />
+                         <Column
+                                field="Rejected At"
+                                header="Rejected At"
+                                body={(rowData) =>
+                                    new Date(rowData.rejectedAt)
+                                        .toLocaleDateString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })
+                                        .replace(/\//g, "-")
+                                }
+                            />
                          <Column
     field="Phase"
     header="Phase"
