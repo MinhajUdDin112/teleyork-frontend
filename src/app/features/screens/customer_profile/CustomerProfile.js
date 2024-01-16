@@ -1,4 +1,4 @@
-import React, { useDebugValue, useEffect, useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";  
 import BillingNavbar from "./modals/BillingNavbar";
 import { Button } from "primereact/button";
 import "./css/customer-profile.css";
@@ -20,6 +20,7 @@ import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
+import CustomerInvoice from "./customer_invoice/customer_invoice";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -167,7 +168,7 @@ const CustomerProfile = () => {
     return (
         <div className="card">
             <ToastContainer />
-            <div className="p-0">
+            <div className="p-0 customer-profile">
                 <BillingNavbar  setChangeCustomerStatus={setChangeCustomerStatus}/>
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
@@ -626,7 +627,10 @@ const CustomerProfile = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>   
+            <div>
+             <CustomerInvoice/> 
+             </div>
         </div>
     );
 };

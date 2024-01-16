@@ -89,6 +89,7 @@ import Provisioning_queue from "./app/features/screens/lifeline_orders/Provision
 import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approved_Enrollments";
 import ViewFiles from "./app/features/screens/customer_services/ViewFiles";
 import Searchall from "./app/features/screens/search_customer/search_all/search_all";
+import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
 const App = () => {
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
@@ -318,7 +319,9 @@ const App = () => {
                                     <Searchall setSearchByValueClick={setSearchByValueClick} callSearchApi={callSearchApi} searchValue={searchValue} setSearchBy={setSearchBy} />
                                 ) : searchBy.code === "advance search" ? (
                                     <AdvanceSearch setSearchBy={setSearchBy} />
-                                ) : (
+                                ) :searchBy.code === "inventorysearch" ? (<h1> 
+                                     <InvenotorySearch/>
+                                </h1>):(
                                     <div className="card searchby flex flex-row flex-wrap justify-content-around align-items-center">
                                         <div>
                                             <h1 className="text-center w-full ">{searchBy.name}</h1>
