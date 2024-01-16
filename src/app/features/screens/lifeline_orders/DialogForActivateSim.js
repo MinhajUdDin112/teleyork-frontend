@@ -57,7 +57,8 @@ const formik = useFormik({
                 toast.success("Account Successfully Activated");
                 setisButtonLoading(false);  
                 actions.resetForm(); 
-                setOpenDialogeForActivate(prev=>!prev)
+                // setOpenDialogeForActivate(prev=>!prev)
+                setOpenDialogeForActivate(false)
             }
         } catch (error) {
           toast.error(error?.response?.data?.msg, {
@@ -66,6 +67,7 @@ const formik = useFormik({
           });
           setisButtonLoading(false);
         }
+      
     },
 });
 

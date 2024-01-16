@@ -52,7 +52,8 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
                 const response = await Axios.patch(`${BASE_URL}/api/user/rejected`, dataToSend);
                 if (response?.status === 201 || response?.status === 200) {
                     toast.success("Rejected");
-                }
+                    setIsModalOpen(false)
+                } 
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
             }

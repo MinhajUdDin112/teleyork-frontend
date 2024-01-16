@@ -8,7 +8,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const DialogeForTransferUser = ({ enrollmentId }) => {
+const DialogeForTransferUser = ({ enrollmentId,setDialogeForTransfer }) => {
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [allPrograme, setAllPrograme] = useState([]);
 
@@ -50,6 +50,7 @@ const DialogeForTransferUser = ({ enrollmentId }) => {
                 toast.error("Error is " + errorMessage);
                 setisButtonLoading(false);
             }
+            setDialogeForTransfer(false)
         },
     });
 
