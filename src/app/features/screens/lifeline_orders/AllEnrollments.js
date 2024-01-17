@@ -132,38 +132,31 @@ const AllEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                if(!(res?.data?.data)){
-                    toast.success(" No enrollments have been received from the previous department yet")
-                } 
-               
-                else if(res?.data?.data){
-                 
-                    for(let i=0;i<res.data.data.length;i++){ 
-                        res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
-                           res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
-                           res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
-                           .toLocaleDateString("en-US", {
-                               month: "2-digit",
-                               day: "2-digit",
-                               year: "numeric",
-                           })
-                           .replace(/\//g, "-")
-                           res.data.data[i].createdTo=res.data.data[i].createdAt
-                       } 
-                } 
-                    setAllEnrollments(res?.data?.data); 
-                    console.log("all enroll is",res?.data?.data)
-                   
+                if (!(res?.data?.data)) {
+                    toast.success(" No enrollments have been received from the previous department yet");
+                } else if (res?.data?.data) {
+                    const updatedData = res?.data?.data.map((item) => ({
+                        ...item,
+                        enrollment: item.isSelfEnrollment ? "Self Enrollments" : "Enrollment",
+                        name: `${item?.firstName ? item?.firstName.toUpperCase() : ""} ${item?.lastName ? item?.lastName.toUpperCase() : ""}`,
+                        createdDate: new Date(item.createdAt)
+                            .toLocaleDateString("en-US", {
+                                month: "2-digit",
+                                day: "2-digit",
+                                year: "numeric",
+                            })
+                            .replace(/\//g, "-"),
+                        createdTo: item.createdAt,
+                    }));
+    
+                    // Sort the array by createdTo in descending order
+                    updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
+    
+                    setAllEnrollments(updatedData);
+                }
                 setIsLoading(false);
-              
-               
-                }  
-               setAllEnrollments(res?.data?.data);
-                setIsLoading(false);
-             
             }
-         catch (error) {    
-           
+        } catch (error) {
             toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }

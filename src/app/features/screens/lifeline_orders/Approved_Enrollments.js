@@ -78,31 +78,34 @@ const Approved_Enrollments = () => {
      const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
 
 
-    const getAllCompletedEnrollments = async () => {
+     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${parseLoginRes?._id}`);
-            if (res?.status === 200 || res?.status === 201) {   
-                for(let i=0;i<res?.data?.data?.length;i++){ 
-                    res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"
-                       res.data.data[i].name=`${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`
-                       res.data.data[i].createdDate=new Date(res.data.data[i].createdAt)
-                       .toLocaleDateString("en-US", {
-                           month: "2-digit",
-                           day: "2-digit",
-                           year: "numeric",
-                       })
-                       .replace(/\//g, "-")
-                       res.data.data[i].createdTo=res.data.data[i].createdAt
-                   }  
-                
-                setAllCompletedEnrollments(res?.data?.data); 
-                
-              
+            if (res?.status === 200 || res?.status === 201) {
+                const updatedData = res?.data?.data.map((item) => ({
+                    ...item,
+                    enrollment: item.isSelfEnrollment ? "Self Enrollments" : "Enrollment",
+                    name: `${item?.firstName ? item?.firstName.toUpperCase() : ""} ${item?.lastName ? item?.lastName.toUpperCase() : ""}`,
+                    createdDate: new Date(item.createdAt)
+                        .toLocaleDateString("en-US", {
+                            month: "2-digit",
+                            day: "2-digit",
+                            year: "numeric",
+                        })
+                        .replace(/\//g, "-"),
+                    createdTo: item.createdAt,
+                }));
+    
+                // Sort the array by createdDate in descending order
+                updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
+    
+                setAllCompletedEnrollments(updatedData);
+    
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching competed enrollment is : + ${error?.response?.data?.msg}`);
+            toast.error(`Error fetching completed enrollment is : + ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
     };
@@ -212,21 +215,26 @@ const Approved_Enrollments = () => {
                             />
                         <Column field="createdBy.name" header="Created By"/>
                         {
-                            toCapital.includes("QA") ? <Column field="approvedBy.name" header="Approved By" />:""
+                            toCapital.includes("CSR") ? "":
+                            <Column field="approvedBy.name" header="Approved By" />  
+                           
                         }
-                          <Column
-                                field="Approved At"
-                                header="Approved At"
-                                body={(rowData) =>
-                                    new Date(rowData.approvedAt)
-                                        .toLocaleDateString("en-US", {
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                        })
-                                        .replace(/\//g, "-")
-                                }
-                            />
+                        {
+                            toCapital.includes("CSR") ? "": <Column
+                            field="Approved At"
+                            header="Approved At"
+                            body={(rowData) =>
+                                new Date(rowData.approvedAt)
+                                    .toLocaleDateString("en-US", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })
+                                    .replace(/\//g, "-")
+                            }
+                        />
+                        }
+                        
                          <Column/>
                      <Column
     field="Phase"

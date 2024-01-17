@@ -64,8 +64,8 @@ const CustomerUsage = () => {
 
     const options = [
         { label: "Select Type", value: "" },
-        { label: "ALlIncomming Call", value: "purchaseHistory" },
-        { label: "OutGoing Call", value: "orderHistory" },
+        { label: "All Incomming Call", value: "purchaseHistory" },
+        { label: "Out Going Call", value: "orderHistory" },
         { label: "Text", value: "shipmentHistory" },
         { label: "Data", value: "acStatusHistory" },
        

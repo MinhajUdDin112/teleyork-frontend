@@ -1,53 +1,87 @@
-import React, { useState } from "react";
-import { FileUpload } from "primereact/fileupload";
-import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { DataTable } from "primereact/datatable";
-import { Formik, useFormik } from "formik";
-import * as Yup from "yup";
+import React, { useRef, useState, useEffect } from "react";
+import { useFormik } from "formik";
 import Axios from "axios";
+import * as Yup from "yup";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { Toast } from "primereact/toast";
 import { Dropdown } from "primereact/dropdown";
 import { Column } from "primereact/column";
-import BillingNavbar from "../customer_profile/modals/BillingNavbar";
-
+import { DataTable } from "primereact/datatable";
+import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const ViewFiles = () => {
+
+export default function ViewFiles() {
+    const [isLoading, setIsLoading] = useState(false)
     const [fileData, setFileData] = useState();
+    const [filename, setFilename] = useState(null);
+    const [fileerror, setFileError] = useState(false);
+
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
 
     const selectedid = localStorage.getItem("selectedId");
     const parseselectedid = JSON.parse(selectedid);
 
-    const validationSchema = Yup.object().shape({
-        fileType: Yup.string().required("Please select File Type"),
-    });
+    const getFiles = async () => {
+        try {
+            const response = await Axios.get(`${BASE_URL}/api/web/uploadfiles/get-uploaded-files?enrollmentId=${parseselectedid}`);
+            if (response?.status == 200 || response?.status == 201) {
+                setFileData(response?.data);
+            }
+        } catch (error) {
+            console.log("error is", error?.response?.data?.msg);
+        }
+    };
+    useEffect(() => {
+        getFiles();
+    }, []);
+
     const formik = useFormik({
-        validationSchema: validationSchema,
+        validationSchema: Yup.object({
+            fileType: Yup.string().required("File Type is required"),
+            file: Yup.string().required("file is required"),
+        }),
         initialValues: {
             fileType: "",
             file: "",
         },
-        onSubmit: async (values, actions) => {
-            const dataToSend = {
-                UserId: parseselectedid,
-                fileType: formik.values.fileType,
-                file: formik.values.file,
-            };
-            
-            console.log("data to send is", dataToSend);
-           
-            try {
-                const response = await Axios.post(`${BASE_URL}/api/user/customerHistory`, dataToSend);
-                if (response?.status === 200 || response?.status === 201) {
-                    setFileData(response?.data?.data);
-                    console.log("Data is", response?.data?.data);
-                }
-            } catch (error) {
-                toast.error(error?.response?.data?.msg);
-               
-            }
+        onSubmit: (e) => {
+            handlesubmit();
         },
     });
+
+    const handlesubmit =async()=> {
+       
+        const formData = new FormData();
+        formData.append("file", formik.values.file);
+        formData.append("fileType", formik.values.fileType);
+        formData.append("enrollmentId", parseselectedid);
+        formData.append("uploadedBy", parseLoginRes?._id);
+        setIsLoading(true)
+        if (Object.keys(formik.errors).length === 0) {
+            if (formik.values.file !== "") {
+          try {
+            const response =    Axios.post(`${BASE_URL}/api/web/uploadfiles/upload-file`, formData)  
+                toast.success("File is Uploaded Successfully")
+                setIsLoading(true)
+                getFiles();
+          } catch (error) {
+            toast.error(error?.response?.data?.msg)
+            setIsLoading(true);
+          }
+            
+                   
+                  
+            } else {
+                setFileError(true);
+                setIsLoading(false)
+           }
+           
+        }
+       
+    }
 
     const options = [
         { label: "Select File Type", value: "" },
@@ -55,22 +89,13 @@ const ViewFiles = () => {
         { label: "Bill Proof History", value: "orderHistory" },
     ];
 
-    const onUpload = async () => {
-        try {
-            toast.success("File Successfully Uploaded.");
-        } catch (error) {
-            console.log("error is", error);
-        } finally {
-        }
-    };
-
     return (
         <>
-        <BillingNavbar/>    
-            <div></div>
+        <ToastContainer/>
             <div className="card">
                 <h3>Upload Files</h3>
-                <div className="flex " style={{alignItems:'center'}}>
+
+                <div className="card flex" style={{ alignItems: "center" }}>
                     <div className="mt-3 mb-2 mr-3 ">
                         <Dropdown
                             className="w-21rem"
@@ -80,10 +105,8 @@ const ViewFiles = () => {
                             onChange={(e) => {
                                 formik.setFieldValue("fileType", e.value);
                                 formik.handleChange(e);
-                                
                             }}
                             onBlur={formik.handleBlur}
-
                         />
                         {formik.touched.fileType && formik.errors.fileType ? (
                             <p className="mt-2 ml-2" style={{ color: "red" }}>
@@ -91,39 +114,72 @@ const ViewFiles = () => {
                             </p>
                         ) : null}
                     </div>
-                    <h5 > <span className="font-bold">Note:</span>  Only JPG, PNG, PDF, JPEG, BMP, MP3, WAV, WMA, GSM, 3GP, AMR, TXT, DOC, and DOCX files are allowed. The file size should be less than 5 MB.</h5>
-                </div>
 
-                <FileUpload
-                    name="demo[]"
-                    onSelect={(event) => {
-                        const selectedFile = event.files && event.files.length > 0 ? event.files[0] : null;
-                        formik.setFieldValue("file", selectedFile);
-                    }}
-                    
-                    multiple
-                    accept=".csv,.pdf,png,.jpg,.peg,.bmp,.mp3,.wav,.wma,.gsm,.3gp,.amr,.txt,.doc,.docx"            
-                    maxFileSize={5000000}
-                    onUpload={onUpload}
-                    emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}
-                />
+                    <div>
+                        <Button
+                            className="mr-3 mt-1 text-lg font-bold"
+                            onClick={() => {
+                                setFileError(false);
+                                let input = document.createElement("input");
+                                input.type = "file";
+                                input.accept = ".csv,.pdf,.png,.jpg,.peg,.bmp,.mp3,.wav,.wma,.gsm,.3gp,.amr,.txt,.doc,.docx,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                                input.click();
+                                input.onchange = (e) => {
+                                    setFilename(e.target.files[0].name);
+                                    formik.setFieldValue("file", e.target.files[0]);
+                                };
+                            }}
+                        >
+                            {filename === null ? "Choose File" : filename}
+                        </Button>
+                        {fileerror ? (
+                            <p className="mt-2" style={{ color: "red" }}>
+                                File is required
+                            </p>
+                        ) : undefined}
+                    </div>
+                    <div className="mt-1">
+                        <Button
+                        disabled={isLoading}
+                            label="Upload"
+                            onClick={() => {
+                                if (formik.values.file === "") {
+                                    setFileError(true);
+                                }
+                                formik.handleSubmit();
+                            }}
+                        />
+                    </div>
+                </div>
             </div>
-            <div>
-            <div className=" card">
-                            <h3 className="font-bold">Uploaded Files</h3>
-                            <DataTable value={fileData} showGridlines resizableColumns columnResizeMode="fit" >
-                                <Column header="#" field="historyData.firstName" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                                <Column header="File Type" field="historyData.firstName" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                                <Column header="DateTime" field="NahistoryDatame.firstName" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                                <Column header="UploadBy" field="historyData.firstName" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                                <Column header="File" field="historyData.firstName" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                               
-                            </DataTable>
-                            
-                        </div>
+            <div className="card">
+                <div className=" ">
+                    <h3 className="font-bold">Uploaded Files</h3>
+                    <DataTable value={fileData} showGridlines resizableColumns columnResizeMode="fit">
+                     
+                        <Column header="File Type" field="fileType" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                        <Column header="Date" field="uploadDate"   body={(rowData) =>
+                                    new Date(rowData.uploadDate)
+                                        .toLocaleDateString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })
+                                        .replace(/\//g, "-")
+                                } headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                        <Column header="UploadBy" field="uploadedBy.name" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                        <Column
+        header="File"
+        body={(rowData) => (
+            <Link to={`${BASE_URL}${rowData.filepath}`} target="_blank" download>
+                {rowData.filepath}
+            </Link>
+        )}
+        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+    />
+                    </DataTable>
+                </div>
             </div>
         </>
     );
-};
-
-export default ViewFiles;
+}

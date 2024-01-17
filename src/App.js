@@ -92,6 +92,7 @@ import Searchall from "./app/features/screens/search_customer/search_all/search_
 import BillingConfiguration from "./app/features/screens/inventory_management/BillingConfiguration";
 import CustomerUsage from "./app/features/screens/customer_services/CustomerUsage";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
+import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
 const App = () => {
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
@@ -370,7 +371,7 @@ const App = () => {
                                     <Route path="/bulkportin" element={isPermitted("/bulkportin") ? <BulkPortin /> : <Dashboard />} />
                                     <Route path="/allenrollmentorders" element={isPermitted("/allenrollmentorders") ? <Allenrollments /> : <Dashboard />} />
                                     <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
-                                    <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentSearchTool /> : <Dashboard />} />
+                                    <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentScreen /> : <Dashboard />} />
                                     <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
                                     <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
                                     <Route path="/customerhistory" element={isPermitted("/customerhistory") ? <CustomerHistory /> : <Dashboard />} />

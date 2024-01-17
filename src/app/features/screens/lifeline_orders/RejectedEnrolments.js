@@ -138,32 +138,34 @@ const RejectedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-              
                 if (!res?.data?.data) {
                     toast.error(res?.data?.msg);
                 } else if (res?.data?.data) {
-                    for (let i = 0; i < res.data.data.length; i++) {
-                        res.data.data[i].enrollment = res.data.data[i].isSelfEnrollment ? "Self Enrollments" : "Enrollment";
-                        res.data.data[i].name = `${res.data.data[i]?.firstName ? (res.data.data[i]?.firstName).toUpperCase() : ""} ${res.data.data[i]?.lastName ? (res.data.data[i]?.lastName).toUpperCase() : ""}`;
-                        res.data.data[i].createdDate = new Date(res.data.data[i].createdAt)
+                    const updatedData = res?.data?.data.map((item) => ({
+                        ...item,
+                        enrollment: item.isSelfEnrollment ? "Self Enrollments" : "Enrollment",
+                        name: `${item?.firstName ? item?.firstName.toUpperCase() : ""} ${item?.lastName ? item?.lastName.toUpperCase() : ""}`,
+                        createdDate: new Date(item.createdAt)
                             .toLocaleDateString("en-US", {
                                 month: "2-digit",
                                 day: "2-digit",
                                 year: "numeric",
                             })
-                            .replace(/\//g, "-");
-                        res.data.data[i].createdTo = res.data.data[i].createdAt;
-                    }
+                            .replace(/\//g, "-"),
+                        createdTo: item.createdAt,
+                    }));
+    
+                    // Sort the array by createdTo in descending order
+                    updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
+    
+                    setAllEnrollments(updatedData);
                 }
-
-                setAllEnrollments(res?.data?.data);
-              
+    
                 setIsLoading(false);
                 localStorage.removeItem("zipData");
             }
         } catch (error) {
             // toast.error("Error fetching All  Rejected Enrollment: " + error?.response);
-          
             setIsLoading(false);
         }
     };
@@ -349,8 +351,24 @@ const RejectedEnrollments = () => {
                         />
                         <Column  field="createdBy.name" header="Created By" />
                         {
-                            toCapital.includes("QA") ? <Column field="rejectedBy.name" header="Rejected By" />:""
+                            toCapital.includes("CSR") ? "":<Column field="rejectedBy.name" header="Rejected By" />
                         }
+                        {
+                            toCapital.includes("CSR") ? "": <Column
+                            field="Rejected At"
+                            header="Rejected At"
+                            body={(rowData) =>
+                                new Date(rowData.rejectedAt)
+                                    .toLocaleDateString("en-US", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })
+                                    .replace(/\//g, "-")
+                            }
+                        />
+                        }
+
                         <Column field="reajectedReason" header="Rejected Reason"   
                            body={(rowData) => {   
                             if(rowData.reajectedReason !== undefined){
@@ -379,19 +397,7 @@ const RejectedEnrollments = () => {
                             );
                            }}}  
                          />
-                         <Column
-                                field="Rejected At"
-                                header="Rejected At"
-                                body={(rowData) =>
-                                    new Date(rowData.rejectedAt)
-                                        .toLocaleDateString("en-US", {
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                        })
-                                        .replace(/\//g, "-")
-                                }
-                            />
+                        
                          <Column
     field="Phase"
     header="Phase"
