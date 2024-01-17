@@ -119,16 +119,22 @@ const UploadBulk = () => {
                     onError={(error) => {
                         console.log("error is", error?.xhr?.response);
                         const response = error?.xhr?.response;
-                        const jsonString = JSON.stringify(response);
-                        const splitArray = jsonString.split(",");
+                        if(response){
+                            var jsonString = JSON.stringify(response);
+                        }
+                        
+                        if( jsonString && jsonString.includes(",")){
+                            var splitArray = jsonString.split(",");
+                        }
+                       
 
-                        if (splitArray.length >= 4) {
+                        if ( splitArray && splitArray.length >= 4) {
                             const valueAtIndex3 = splitArray[3];
                             const valueAtIndex4 = splitArray[4];
 
                             toast.error("error is " + valueAtIndex3 + valueAtIndex4);
                         } else {
-                            console.error("Not enough elements in the split array.");
+                            toast.error("File Uploaded Failed due to Network error or Wrong File");
                         }
                     }}
                     accept=".csv"
