@@ -10,10 +10,11 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import BillingNavbar from "../customer_profile/modals/BillingNavbar";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function ViewFiles() {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const [fileData, setFileData] = useState();
     const [filename, setFilename] = useState(null);
     const [fileerror, setFileError] = useState(false);
@@ -30,9 +31,7 @@ export default function ViewFiles() {
             if (response?.status == 200 || response?.status == 201) {
                 setFileData(response?.data);
             }
-        } catch (error) {
-            console.log("error is", error?.response?.data?.msg);
-        }
+        } catch (error) {}
     };
     useEffect(() => {
         getFiles();
@@ -52,47 +51,54 @@ export default function ViewFiles() {
         },
     });
 
-    const handlesubmit =async()=> {
-       
+    const handlesubmit = async () => {
         const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("fileType", formik.values.fileType);
         formData.append("enrollmentId", parseselectedid);
         formData.append("uploadedBy", parseLoginRes?._id);
-        setIsLoading(true)
+        setIsLoading(true);
         if (Object.keys(formik.errors).length === 0) {
             if (formik.values.file !== "") {
-          try {
-            const response =    Axios.post(`${BASE_URL}/api/web/uploadfiles/upload-file`, formData)  
-                toast.success("File is Uploaded Successfully")
-                setIsLoading(true)
-                getFiles();
-          } catch (error) {
-            toast.error(error?.response?.data?.msg)
-            setIsLoading(true);
-          }
-            
-                   
-                  
+                try {
+                    const response = Axios.post(`${BASE_URL}/api/web/uploadfiles/upload-file`, formData);
+                    toast.success("File is Uploaded Successfully");
+                    setIsLoading(true);
+                    getFiles();
+                } catch (error) {
+                    toast.error(error?.response?.data?.msg);
+                    setIsLoading(true);
+                }
             } else {
                 setFileError(true);
-                setIsLoading(false)
-           }
-           
+                setIsLoading(false);
+            }
         }
-       
-    }
+    };
 
     const options = [
         { label: "Select File Type", value: "" },
         { label: "Address Proof", value: "purchaseHistory" },
         { label: "Bill Proof History", value: "orderHistory" },
     ];
+    const handleFileDownload = (filePath) => {
+        // You may need to modify the file path based on your server configuration
+        const fileUrl = `${BASE_URL}/${filePath}`;
+
+        // Trigger the download by creating an invisible link element
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.setAttribute("download", ""); // Use an empty attribute to indicate that the file should be downloaded
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     return (
         <>
-        <ToastContainer/>
-            <div className="card">
+            <ToastContainer />
+            <BillingNavbar/>
+            <div className="card ">
                 <h3>Upload Files</h3>
 
                 <div className="card flex" style={{ alignItems: "center" }}>
@@ -140,7 +146,7 @@ export default function ViewFiles() {
                     </div>
                     <div className="mt-1">
                         <Button
-                        disabled={isLoading}
+                            disabled={isLoading}
                             label="Upload"
                             onClick={() => {
                                 if (formik.values.file === "") {
@@ -156,27 +162,23 @@ export default function ViewFiles() {
                 <div className=" ">
                     <h3 className="font-bold">Uploaded Files</h3>
                     <DataTable value={fileData} showGridlines resizableColumns columnResizeMode="fit">
-                     
                         <Column header="File Type" field="fileType" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                        <Column header="Date" field="uploadDate"   body={(rowData) =>
-                                    new Date(rowData.uploadDate)
-                                        .toLocaleDateString("en-US", {
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                        })
-                                        .replace(/\//g, "-")
-                                } headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                        <Column header="UploadBy" field="uploadedBy.name" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                         <Column
-        header="File"
-        body={(rowData) => (
-            <Link to={`${BASE_URL}${rowData.filepath}`} target="_blank" download>
-                {rowData.filepath}
-            </Link>
-        )}
-        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
-    />
+                            header="Date"
+                            field="uploadDate"
+                            body={(rowData) =>
+                                new Date(rowData.uploadDate)
+                                    .toLocaleDateString("en-US", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })
+                                    .replace(/\//g, "-")
+                            }
+                            headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+                        />
+                        <Column header="UploadBy" field="uploadedBy.name" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                        <Column header="File" body={(rowData) => <Button onClick={() => handleFileDownload(rowData.filepath)}>Download</Button>} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     </DataTable>
                 </div>
             </div>

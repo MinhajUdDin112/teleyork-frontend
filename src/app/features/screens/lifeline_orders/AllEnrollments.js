@@ -351,7 +351,7 @@ const AllEnrollments = () => {
           
             if (response?.status == "200" || response?.status == "201") {
                 toast.success("Successfully Enrolled");
-                console.log("in side")
+               
                 setisButtonLoading(false);
             }
         } catch (error) {
@@ -554,7 +554,7 @@ const AllEnrollments = () => {
 
     // const handleApproveSelectedForQa=()=>{
     //     const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
-    //     console.log("ids is",enrollmentIds)
+
     //     setSelectedIdsForApprove(enrollmentIds)
     //     setDialogeForApprove(true);
         
