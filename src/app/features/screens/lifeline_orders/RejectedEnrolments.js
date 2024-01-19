@@ -154,10 +154,17 @@ const RejectedEnrollments = () => {
                             .replace(/\//g, "-"),
                         createdTo: item.createdAt,
                     }));
-    
-                    // Sort the array by createdTo in descending order
-                    updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
-    
+      updatedData.sort((a, b) => {
+                        const dateComparison = new Date(b.rejectedAt) - new Date(a.rejectedAt);
+
+                        if (dateComparison !== 0) {
+                            return dateComparison;
+                        }
+
+                        // If dates are equal, compare by time
+                        return new Date(b.rejectedAt).getTime() - new Date(a.rejectedAt).getTime();
+                    });
+
                     setAllEnrollments(updatedData);
                 }
     
@@ -169,7 +176,6 @@ const RejectedEnrollments = () => {
             setIsLoading(false);
         }
     };
-
     useEffect(() => {
         getAllEnrollments();
     }, []);
@@ -225,8 +231,7 @@ const RejectedEnrollments = () => {
         const toCapitalCreatedUser = createduser.toUpperCase();
         const userName = parseLoginRes?.userName
         const toCapitalUserName=userName.toUpperCase();
-        console.log(" toCapitalCreatedUser is",toCapitalCreatedUser)
-        console.log("tocapi is",toCapitalUserName)
+       
         if(toCapitalCreatedUser==toCapitalUserName){
             return (
                   

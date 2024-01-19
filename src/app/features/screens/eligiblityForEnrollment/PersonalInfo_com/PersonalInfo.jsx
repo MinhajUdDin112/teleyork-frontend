@@ -121,9 +121,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 const isoString = dateObject.toISOString();
 
                 const selectedDate = isoString;
-                console.log(selectedDate);
+              
                 const formattedDate = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : "";
-                console.log(formattedDate);
+              
 
                 const userId = _id;
 
@@ -565,7 +565,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                     formik.handleChange(e);
 
                                     formik.handleChange(e);
-                                    console.log(formik.values);
+                                   
                                     setSelectedMonth(e.value);
                                 }}
                                 options={monthOptions}

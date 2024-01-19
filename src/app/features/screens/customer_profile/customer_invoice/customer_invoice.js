@@ -40,18 +40,20 @@ export default function CustomerInvoice() {
                 <ProgressSpinner  className="spinner"/>
             </div>
             <div className="flex flex-wrap justify-content-around  downloadtemp">
-                <div className="flex flex-wrap justify-content-center  companyinfo">
-                    <img src="/companyLogo2.png" height="100" />
-                    <div>
-                        <h1 className="font-bold">IJWIRELESS</h1>
-                        <h6>1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
-                    </div>                       
-                    <div className="customer-info">     
-                     <p className="font-semibold">TEST TEST</p> 
-                     <p className="font-semibold">1001 TEST LANE
-PLANO TX 75023</p>
+                <div className="flex flex-column ">
+                <div >
+                    <img className="mb-0" src="/companyLogo2.png" height="80" width="200" />
+                    <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
+                    </div>   
+
+                    <div className="customer-info mt-3 line1">     
+                     <p className="font-semibold line3">Hamza Akram</p> 
+                     <p className="font-semibold line3">3042828588</p> 
+                     <p className="font-semibold line3">UAAR Iqball Boys Hostel Behind Allama Iqball<br></br> Park Shamsabad Rawalpindi</p>
                      </div>
-                </div>  
+                </div>
+              
+                
                 <div className="center-linetop">
                     <hr />
                 </div>
@@ -77,7 +79,7 @@ PLANO TX 75023</p>
                                 <p>Total Amount Due</p>
                                 <p>$42</p>
                             </div>
-                            <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between">
+                            <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
                                 <p>01/06/23</p>
                             </div>
@@ -91,10 +93,7 @@ PLANO TX 75023</p>
                         </p>
 
                         <div className="remittancebottom"></div>
-                        <div className="mt-4">
-                            <h1 className="company font-bold">IJWIRELESS</h1>
-                            <h6>1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
-                        </div>
+                       
                     </div>
                 </div>
                 <p className="w-full text-center mt-4">
@@ -102,62 +101,94 @@ PLANO TX 75023</p>
                 </p>
                 <div className="dashed-line"></div>
                 <div className="account-summary mt-4 ">
-                    <h3 className="text-center font-bold">ACCOUNT SUMMARY</h3>
-                    <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between">
+                    <h4 className="text-center font-bold line2">ACCOUNT SUMMARY</h4>
+                    <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                         <p>Account No</p>
                         <p> 212121</p>
                     </div>
-                    <div className="pl-2 w-full   flex flex-wrap justify-content-between">
+                    <div className="pl-2 w-full   flex flex-wrap justify-content-between line">
                         <p>Customer Name</p>
                         <p>TEST TEST</p>
                     </div>
-                    <div className="pl-2  flex flex-wrap justify-content-between">
+                    <div className="pl-2  flex flex-wrap justify-content-between line">
                         <p>Invoice Date</p>
                         <p>01/06/23</p>
                     </div>
-                    <div className=" pl-2  flex flex-wrap justify-content-between">
+                    <div className=" pl-2  flex flex-wrap justify-content-between line">
                         <p>Invoice Number</p>
                         <p>1052</p>
                     </div>
-                    <div className=" pl-2  flex flex-wrap justify-content-between">
-                        <p>Due Date</p>
+                    <div className=" pl-2  flex flex-wrap justify-content-between line">
+
+                        <p className="line">Due Date</p>
                         <p>01/06/23</p>
                     </div>
-                    <h3 className="font-bold">ACCOUNT DETAILS</h3>
-                    <div className="pl-2 w-full  flex flex-wrap justify-content-between">
+                    <h5 className="font-bold line2">ACCOUNT DETAILS</h5>
+                    <div className="pl-2 w-full mt-2  flex flex-wrap justify-content-between line">
                         <p>Previous Balance</p>
                         <p> $0.00</p>
                     </div>
-                    <div className="pl-2  flex flex-wrap justify-content-between">
+                    <div className="pl-2  flex flex-wrap justify-content-between line">
                         <p>Payment Received On Account</p>
                         <p>$0.00</p>
                     </div>
-                    <div className=" pl-2 font-bold  flex flex-wrap justify-content-between">
+                    <div className=" pl-2 flex flex-wrap justify-content-between">
                         <p>Balance Forward</p>
                         <p>$0.00</p>
                     </div>
-                    <h3 className="font-bold">CURRENT SERVICES</h3>
-                    <div className="pl-2 w-full  flex flex-wrap justify-content-between">
+                    <div >
+                    <h5 className="font-bold line2">CURRENT SERVICES</h5>
+                    <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
                         <p>Current Activity Charges</p>
                         <p>$30.30</p>
                     </div>
-                    <div className="pl-2  flex flex-wrap justify-content-between">
+                    <div className="pl-2  flex flex-wrap justify-content-between ">
                         <p>Taxes and Surcharges</p>
                         <p>$12.19</p>
                     </div>
-                    <div className="topline"></div>
-                    <div className=" pl-2 balance-due   flex flex-wrap justify-content-between">
-                        <h3 className="inline font-bold">BALANCE DUE</h3>
-                        <h3 className="inline font-bold">$42</h3>
                     </div>
-                    <div className="bottomline"></div>
+                   
+                    <div className="topline"></div>
+                    <div className=" flex justify-content-between blnc-due line">
+                        <h5 className="inline font-bold mt-2">BALANCE DUE</h5>
+                        <h5 className="inline font-bold">$42</h5>
+                    </div>
+                   
                 </div>
                 <div className="center-line">
                     <hr />
                 </div>
                 <div className="recurring-charges mt-4">
-                    <div className="topline"></div>
-                    <h6 className="text-left font-bold">Recurring Charges:</h6>
+                   
+                    <h6 className="text-left font-bold">One time Charges</h6>
+                    <div className="bottomline"></div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Billed Number</td>
+                                <td>Description</td>
+                                <td>Period</td>
+                                <td>Amount</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>(134) 577-6543</td>
+                                <td>TEST T-10GB Plan</td>
+                                <td>01/06/2023 to 02/05/2023</td>
+
+                                <td>28.49$</td>
+                            </tr>
+                            <tr>
+                                <td>(134) 577-6543</td>
+                                <td>TEST T-10GB Plan</td>
+                                <td>01/06/2023 to 02/05/2023</td>
+
+                                <td>28.49$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h6 className="text-left font-bold mt-3">Recurring Charges:</h6>
                     <div className="bottomline"></div>
                     <table>
                         <thead>

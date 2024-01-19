@@ -25,7 +25,7 @@ const UploadBulk = () => {
             toast.success("File Successfully Uploaded.");
             setIsUpload(true);
         } catch (error) {
-            console.log("error is", error);
+          
         } finally {
         }
     };
@@ -35,18 +35,18 @@ const UploadBulk = () => {
         const timeoutId = setTimeout(async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/getBatchStatus`);
-                console.log("response of status is ", response?.data?.data);
+             
                 setStatusResponse(response?.data?.data);
                 const finalResponse = response?.data?.data;
                 const nonEmptyRejectedRowFiles = finalResponse.filter((item) => item.rejectedRowFile !== "").map((item) => item.rejectedRowFile);
 
-                console.log("Rejected Row Files:", nonEmptyRejectedRowFiles);
+            
                 if (nonEmptyRejectedRowFiles) {
                     setIsLink(nonEmptyRejectedRowFiles);
                 }
                 setIsLoading(false);
             } catch (error) {
-                console.log("get status error is", error?.response);
+               
                 setIsLoading(false);
             }
             setIsLoading(false);
@@ -63,9 +63,9 @@ const UploadBulk = () => {
                 link: isLink,
             };
             const response = await Axios.post(`${BASE_URL}/api/user/getErroredData`, data);
-            console.log("link response is", response?.data?.data);
+        
             const csvData = response?.data?.data;
-            console.log("csv data is", csvData);
+          
 
             // Parse the CSV data
             const records = parse(csvData, {
@@ -75,11 +75,10 @@ const UploadBulk = () => {
             });
 
             // Set the JSON data into the state
-            console.log("json record is", records);
+         
             setLinkResponse(records);
             setLinkbuttonLoading(false)
         } catch (error) {
-            console.log("link error is", error);
             setLinkbuttonLoading(false)
         }
     };
@@ -117,7 +116,7 @@ const UploadBulk = () => {
                     name="file"
                     url={`${BASE_URL}/api/user/upload`}
                     onError={(error) => {
-                        console.log("error is", error?.xhr?.response);
+                      
                         const response = error?.xhr?.response;
                         if(response){
                             var jsonString = JSON.stringify(response);
@@ -155,7 +154,7 @@ const UploadBulk = () => {
         <Column field="rowsRejected" header="Rows Rejected"></Column>
         <Column field="totalRows" header="Total Rows"></Column>
         <Column field="statusCode" header="Status Code"></Column>
-        <Column
+        <Column 
             field="uploadDateTime"
             header="uploadDateTime"
             body={(rowData) =>
