@@ -138,7 +138,19 @@ const InCompleteEnrollments = () => {
                         .replace(/\//g, "-");
                     res.data.data[i].createdTo = res.data.data[i].createdAt;
                 }
+                res.data.data.sort((a, b) => {
+                    const dateComparison = new Date(b.activatedAt) - new Date(a.activatedAt);
+
+                    if (dateComparison !== 0) {
+                        return dateComparison;
+                    }
+
+                    // If dates are equal, compare by time
+                    return new Date(b.activatedAt).getTime() - new Date(a.activatedAt).getTime();
+                });
+
                 setAllInCompletedEnrollments(res?.data?.data);
+              
                 setIsLoading(false);
 
                 localStorage.removeItem("basicData");

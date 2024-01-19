@@ -149,8 +149,16 @@ const AllEnrollments = () => {
                         createdTo: item.createdAt,
                     }));
     
-                    // Sort the array by createdTo in descending order
-                    updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
+                    updatedData.sort((a, b) => {
+                        const dateComparison = new Date(b.rejectedAt) - new Date(a.rejectedAt);
+
+                        if (dateComparison !== 0) {
+                            return dateComparison;
+                        }
+
+                        // If dates are equal, compare by time
+                        return new Date(b.rejectedAt).getTime() - new Date(a.rejectedAt).getTime();
+                    });
     
                     setAllEnrollments(updatedData);
                 }
@@ -748,7 +756,7 @@ const AllEnrollments = () => {
     )}
 />
 
-                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ||roleName == "Team Lead" ||roleName == "TEAM LEAD" ? (
+                            {toCapital == "CSR" || toCapital == "CS" ||toCapital == "TEAM LEAD" ||toCapital == "CS MANAGER" ? (
                                 ""
                             ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("retention") || roleName.includes("RETENTION") || roleName.includes("Retention") ? (
                                 <Column header="Actions" body={actionTemplateForPR}></Column>

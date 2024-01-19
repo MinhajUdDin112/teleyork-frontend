@@ -154,10 +154,17 @@ const RejectedEnrollments = () => {
                             .replace(/\//g, "-"),
                         createdTo: item.createdAt,
                     }));
-    
-                    // Sort the array by createdTo in descending order
-                    updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
-    console.log("updtaed data is",updatedData)
+      updatedData.sort((a, b) => {
+                        const dateComparison = new Date(b.rejectedAt) - new Date(a.rejectedAt);
+
+                        if (dateComparison !== 0) {
+                            return dateComparison;
+                        }
+
+                        // If dates are equal, compare by time
+                        return new Date(b.rejectedAt).getTime() - new Date(a.rejectedAt).getTime();
+                    });
+
                     setAllEnrollments(updatedData);
                 }
     

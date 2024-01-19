@@ -117,7 +117,18 @@ const CompletedEnrollments = () => {
                        .replace(/\//g, "-")
                        res.data.data[i].createdTo=res.data.data[i].createdAt
                    }  
-                setAllCompletedEnrollments(res?.data?.data);    
+                   res.data.data.sort((a, b) => {
+                    const dateComparison = new Date(b.activatedAt) - new Date(a.activatedAt);
+
+                    if (dateComparison !== 0) {
+                        return dateComparison;
+                    }
+
+                    // If dates are equal, compare by time
+                    return new Date(b.activatedAt).getTime() - new Date(a.activatedAt).getTime();
+                });
+
+                setAllCompletedEnrollments(res?.data?.data);  
 
                 console.log("All enrollment data is",res.data.data)
                 setIsLoading(false);

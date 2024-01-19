@@ -18,6 +18,7 @@ export default function ViewFiles() {
     const [fileData, setFileData] = useState();
     const [filename, setFilename] = useState(null);
     const [fileerror, setFileError] = useState(false);
+    const [customerFile, setCustomerFile] = useState()
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -25,16 +26,38 @@ export default function ViewFiles() {
     const selectedid = localStorage.getItem("selectedId");
     const parseselectedid = JSON.parse(selectedid);
 
+    const getData = async () => {       
+       
+        try {
+            const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`);
+          if(response?.status==200){
+            setCustomerFile(response?.data?.data?.pdfPath)
+            console.log("customer data is",response?.data?.data?.pdfPath)
+          }
+         
+        } catch (error) {
+         toast.error(error?.response?.data?.msg)
+        
+        }
+       
+      };
+
     const getFiles = async () => {
+        console.log("function is called")
         try {
             const response = await Axios.get(`${BASE_URL}/api/web/uploadfiles/get-uploaded-files?enrollmentId=${parseselectedid}`);
-            if (response?.status == 200 || response?.status == 201) {
-                setFileData(response?.data);
+            if (response?.status === 200 || response?.status === 201) {
+                const sortedFiles = response?.data?.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+                setFileData(sortedFiles);
             }
-        } catch (error) {}
+        } catch (error) {
+           toast.error("Error of getting of All Files is" + error)
+           console.log("error of getting is",error)
+        }
     };
     useEffect(() => {
         getFiles();
+        getData();
     }, []);
 
     const formik = useFormik({
@@ -61,11 +84,15 @@ export default function ViewFiles() {
         if (Object.keys(formik.errors).length === 0) {
             if (formik.values.file !== "") {
                 try {
-                    const response = Axios.post(`${BASE_URL}/api/web/uploadfiles/upload-file`, formData);
-                    toast.success("File is Uploaded Successfully");
+                    const response = await Axios.post(`${BASE_URL}/api/web/uploadfiles/upload-file`, formData);
+                 if(response?.status==200){
+                    toast.success("File uploaded Successfully")
                     setIsLoading(true);
                     getFiles();
+                 }
+                   
                 } catch (error) {
+                    console.log("error is",error)
                     toast.error(error?.response?.data?.msg);
                     setIsLoading(true);
                 }
@@ -74,18 +101,17 @@ export default function ViewFiles() {
                 setIsLoading(false);
             }
         }
+        setIsLoading(false);
     };
 
     const options = [
         { label: "Select File Type", value: "" },
-        { label: "Address Proof", value: "purchaseHistory" },
-        { label: "Bill Proof History", value: "orderHistory" },
+        { label: "Address Proof", value: "Address Proof History" },
+        { label: "Bill Proof History", value: "Bill Proof History" },
     ];
     const handleFileDownload = (filePath) => {
-        // You may need to modify the file path based on your server configuration
-        const fileUrl = `${BASE_URL}/${filePath}`;
-
-        // Trigger the download by creating an invisible link element
+        const trimmedPath = filePath.replace(/^uploads\//, '');  
+        const fileUrl = `http://dev-api.teleyork.com/${trimmedPath}`;  
         const link = document.createElement("a");
         link.href = fileUrl;
         link.setAttribute("download", ""); // Use an empty attribute to indicate that the file should be downloaded
@@ -94,12 +120,24 @@ export default function ViewFiles() {
         document.body.removeChild(link);
     };
 
+    const downloadCustomerFile=()=>{
+        const fileUrl = `http://dev-api.teleyork.com/${customerFile}`;
+        console.log("path is",fileUrl)
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.setAttribute("download", ""); // Use an empty attribute to indicate that the file should be downloaded
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     return (
         <>
             <ToastContainer />
             <BillingNavbar/>
             <div className="card ">
                 <h3>Upload Files</h3>
+               
 
                 <div className="card flex" style={{ alignItems: "center" }}>
                     <div className="mt-3 mb-2 mr-3 ">
@@ -160,7 +198,10 @@ export default function ViewFiles() {
             </div>
             <div className="card">
                 <div className=" ">
-                    <h3 className="font-bold">Uploaded Files</h3>
+                    <div className="flex justify-content-between pr-5">
+                    <h3 className="font-bold">Uploaded Files</h3>  <Button onClick={downloadCustomerFile} className="mb-3 mr-5" label="Download Customer File"/>
+                    </div>
+                   
                     <DataTable value={fileData} showGridlines resizableColumns columnResizeMode="fit">
                         <Column header="File Type" field="fileType" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                         <Column
@@ -179,6 +220,7 @@ export default function ViewFiles() {
                         />
                         <Column header="UploadBy" field="uploadedBy.name" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                         <Column header="File" body={(rowData) => <Button onClick={() => handleFileDownload(rowData.filepath)}>Download</Button>} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                       
                     </DataTable>
                 </div>
             </div>
