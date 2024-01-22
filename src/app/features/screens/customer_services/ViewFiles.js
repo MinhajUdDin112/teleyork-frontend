@@ -43,7 +43,7 @@ export default function ViewFiles() {
       };
 
     const getFiles = async () => {
-        console.log("function is called")
+      
         try {
             const response = await Axios.get(`${BASE_URL}/api/web/uploadfiles/get-uploaded-files?enrollmentId=${parseselectedid}`);
             if (response?.status === 200 || response?.status === 201) {
@@ -119,10 +119,17 @@ export default function ViewFiles() {
         link.click();
         document.body.removeChild(link);
     };
-
+if(customerFile){
+    // const trimmedPath = customerFile.replace(/^uploads\//, '');  
+    const fileUrl = `http://dev-api.teleyork.com/${customerFile}`;   
+    console.log("customer file path is",fileUrl)
+}
+   
     const downloadCustomerFile=()=>{
-        const fileUrl = `http://dev-api.teleyork.com/${customerFile}`;
-        console.log("path is",fileUrl)
+
+       // const trimmedPath = customerFile.replace(/^uploads\//, '');  
+        const fileUrl = `http://dev-api.teleyork.com/${customerFile}`;   
+        console.log("customer file path is",fileUrl)
         const link = document.createElement("a");
         link.href = fileUrl;
         link.setAttribute("download", ""); // Use an empty attribute to indicate that the file should be downloaded

@@ -119,7 +119,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                    
                    </p> 
                    <ul className=" m-0 list-none"> 
-                       { 
+                       {
                           res.data.data.newSimNumbers.map(item=>( 
                            <li >{item}</li>
                           ))
@@ -153,10 +153,26 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                 .then((res) => {
                     
                     ref.current.show({ severity: "success", summary: "Inventory", detail:<ApiResponseShow res={res}/> });
+                    formik.resetForm();
                 })
                 .catch((error) => {
-                    ref.current.show({ severity: "error", summary: "Inventory", detail:"Bulk Upload Failed"  });
+                    if (error.response && error.response.data && error.response.data.msg) {
+                        // Display the backend error message
+                        ref.current.show({
+                            severity: "error",
+                            summary: "Inventory",
+                            detail: error.response.data.msg,
+                        });
+                    } else {
+                        // Display a generic error message for network errors
+                        ref.current.show({
+                            severity: "error",
+                            summary: "Inventory",
+                            detail: "Bulk Upload Failed Due To Network Error Please try Again",
+                        });
+                    }
                 });
+                
             formik.values.serviceProvider = parseLoginRes?.companyName; }  
             else{ 
                 setFileError(true)
