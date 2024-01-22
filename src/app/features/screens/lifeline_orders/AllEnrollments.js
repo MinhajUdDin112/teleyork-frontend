@@ -350,7 +350,7 @@ const AllEnrollments = () => {
           
             if (response?.status == "200" || response?.status == "201") {
                 toast.success("Successfully Enrolled");
-               
+                getAllEnrollments();
                 setisButtonLoading(false);
             }
         } catch (error) {
