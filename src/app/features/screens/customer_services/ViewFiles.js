@@ -126,7 +126,6 @@ if(customerFile){
 }
    
     const downloadCustomerFile=()=>{
-
        // const trimmedPath = customerFile.replace(/^uploads\//, '');  
         const fileUrl = `http://dev-api.teleyork.com/${customerFile}`;   
         console.log("customer file path is",fileUrl)
@@ -140,12 +139,11 @@ if(customerFile){
 
     return (
         <>
+       
             <ToastContainer />
             <BillingNavbar/>
             <div className="card ">
                 <h3>Upload Files</h3>
-               
-
                 <div className="card flex" style={{ alignItems: "center" }}>
                     <div className="mt-3 mb-2 mr-3 ">
                         <Dropdown
@@ -159,6 +157,7 @@ if(customerFile){
                             }}
                             onBlur={formik.handleBlur}
                         />
+
                         {formik.touched.fileType && formik.errors.fileType ? (
                             <p className="mt-2 ml-2" style={{ color: "red" }}>
                                 {formik.errors.fileType}
