@@ -76,9 +76,13 @@ const Provisioning_queue = () => {
     };
     
     
+    
+    
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+    const roleName = parseLoginRes?.role?.role;
+    const toCapital = roleName.toUpperCase();
 
     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
@@ -119,13 +123,27 @@ const Provisioning_queue = () => {
     };
 
     const actionTemplateForPR = (rowData) => {
+        const enrollmentDate = new Date(rowData.nladEnrollmentDate);
+        const currentTime = new Date();
+        const timeDifference = (currentTime - enrollmentDate) / (1000 * 60 * 60); // Difference in hours
+    
+        const isProvisionManager = toCapital.includes("PROVISION MANAGER");
+        const isActivationEnabled = isProvisionManager && timeDifference >= 8;
+    
         return (
             <div>
-                <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
-               
+                <Button
+                    label="Activate Sim"
+                    onClick={() => handleDialogeForActivate(rowData)}
+                    className="mr-2 ml-2 pt-1 pb-1"
+                    text
+                    raised
+                    disabled={!isActivationEnabled || isButtonLoading}
+                />
             </div>
         );
     };
+    
 
     const header=()=>{  
         return(

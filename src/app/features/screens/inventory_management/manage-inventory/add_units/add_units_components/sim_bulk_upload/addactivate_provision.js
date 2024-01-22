@@ -149,12 +149,27 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                 })
                     .then((res) => {
                         ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                        formik.resetForm();
                     })
                     .catch((error) => {
-                        ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
+                        if (error.response && error.response.data && error.response.data.msg) {
+                            // Display the backend error message
+                            ref.current.show({
+                                severity: "error",
+                                summary: "Inventory",
+                                detail: error.response.data.msg,
+                            });
+                        } else {
+                            // Display a generic error message for network errors
+                            ref.current.show({
+                                severity: "error",
+                                summary: "Inventory",
+                                detail: "Bulk Upload Failed Due To Network Error Please try Again",
+                            });
+                        }
                     });
-                formik.values.serviceProvider = parseLoginRes?.companyName;
-            } else {
+                    
+                formik.values.serviceProvider = parseLoginRes?.companyName; }   else {
                 setFileError(true);
             }
         }
