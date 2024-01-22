@@ -74,9 +74,7 @@ const Provisioning_queue = () => {
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
     };
-    
-    
-    
+       
     
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
@@ -127,7 +125,7 @@ const Provisioning_queue = () => {
         const currentTime = new Date();
         const timeDifference = (currentTime - enrollmentDate) / (1000 * 60 * 60); // Difference in hours
     
-        const isProvisionManager = toCapital.includes("PROVISION MANAGER");
+        const isProvisionManager = toCapital.includes("PROVISION AGENT");
         const isActivationEnabled = isProvisionManager && timeDifference >= 8;
     
         return (
@@ -143,8 +141,6 @@ const Provisioning_queue = () => {
             </div>
         );
     };
-    
-
     const header=()=>{  
         return(
             
@@ -277,7 +273,7 @@ const Provisioning_queue = () => {
                                                 case 4:
                                                     return "QA Manager";
                                                 case 5:
-                                                    return "Provision Manager";
+                                                    return "PROVISIONING";
                                                 case 6:
                                                     return "Retention";
                                                 case 7:

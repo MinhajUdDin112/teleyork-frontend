@@ -149,16 +149,7 @@ const AllEnrollments = () => {
                         createdTo: item.createdAt,
                     }));
     
-                    updatedData.sort((a, b) => {
-                        const dateComparison = new Date(b.rejectedAt) - new Date(a.rejectedAt);
-
-                        if (dateComparison !== 0) {
-                            return dateComparison;
-                        }
-
-                        // If dates are equal, compare by time
-                        return new Date(b.rejectedAt).getTime() - new Date(a.rejectedAt).getTime();
-                    });
+                   
     
                     setAllEnrollments(updatedData);
                 }
@@ -359,7 +350,7 @@ const AllEnrollments = () => {
           
             if (response?.status == "200" || response?.status == "201") {
                 toast.success("Successfully Enrolled");
-               
+                getAllEnrollments();
                 setisButtonLoading(false);
             }
         } catch (error) {
