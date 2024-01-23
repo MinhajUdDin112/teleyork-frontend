@@ -97,18 +97,6 @@ const Approved_Enrollments = () => {
                     createdTo: item.createdAt,
                 }));
     
-                // Sort the array by createdDate in descending order
-                updatedData.sort((a, b) => {
-                    const dateComparison = new Date(b.rejectedAt) - new Date(a.rejectedAt);
-
-                    if (dateComparison !== 0) {
-                        return dateComparison;
-                    }
-
-                    // If dates are equal, compare by time
-                    return new Date(b.rejectedAt).getTime() - new Date(a.rejectedAt).getTime();
-                });
-    
                 setAllCompletedEnrollments(updatedData);
     
                 setIsLoading(false);
