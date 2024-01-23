@@ -31,7 +31,8 @@ const BillingConfiguration = () => {
             paymentMethod: "",
             discount:"",
             discountName:"",
-            discountPrice:""
+            discountPrice:"",
+            billCreationDate:""
         },
         onSubmit: async (values, actions) => {
             const dataToSend = {
@@ -41,7 +42,8 @@ const BillingConfiguration = () => {
                 monthlyCharge: formik.values.monthlyCharge,
                 dueDate: formik.values.dueDate,
                 paymentMethod: formik.values.paymentMethod,
-                discount:formik.values.discount
+                discount:formik.values.discount,
+               billCreationDate:formik.values.billCreationDate
             };
             try {
                 const response = await Axios.post(`${BASE_URL}`, dataToSend);
@@ -84,8 +86,11 @@ const BillingConfiguration = () => {
         { label: "E-Check", value: "Check2" },
         { label: "Skip Payment", value: "Skip" },
     ];
+    const optionsForCreation = [
+       
+        { label: "On Activation", value: "Skip" },
+    ];
     const optionsForDiscount = [
-        { label: "Select Discount ", value: "" },
         { label: "Acp-30%", value: "Cash" },
         { label: "Acp-40%", value: "Credit" },
         { label: "Acp-50%", value: "Money" },
@@ -190,7 +195,26 @@ try {
                    <label className="field_label text-md">Due days</label>
                    <InputText id="dueDate" placeholder="Ennter No of days" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur}  />
                </div>
-
+              
+               <div className="mt-3 field col-12 md:col-3  ">
+                       <label className="field_label mb-2 text-md">Bill Creation Date</label>
+                       <Dropdown
+                           className="w-21rem"
+                           id="billCreation"
+                           options={optionsForCreation}
+                           value={formik.values.billCreationDate}
+                           onChange={(e) => {
+                               formik.setFieldValue("billCreationDate", e.value);
+                               formik.handleChange(e);
+                           }}
+                           onBlur={formik.handleBlur}
+                       />
+                       {formik.touched.billCreationDate && formik.errors.billCreationDate ? (
+                           <p className="mt-2 ml-2" style={{ color: "red" }}>
+                               {formik.errors.billCreationDate}
+                           </p>
+                       ) : null}
+                   </div>
                <div className="mt-3 field col-12 md:col-3  ">
                        <label className="field_label mb-2 text-md">Payment Method</label>
                        <Dropdown
@@ -212,7 +236,8 @@ try {
                    </div>
                    <div className="mt-3 field col-12 md:col-3  ">
                        <label className="field_label mb-2 text-md">Select Discount OR <span onClick={showDiscount} style={{color:'blue',cursor:'pointer'}}>Add Discount</span> </label>
-                       <Dropdown
+                       <MultiSelect
+                       display="chip" 
                            className="w-21rem"
                            id="discount"
                            options={optionsForDiscount}

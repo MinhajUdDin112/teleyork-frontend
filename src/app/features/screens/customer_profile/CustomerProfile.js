@@ -1,4 +1,4 @@
-import React, { useDebugValue, useEffect, useState } from "react";  
+import React, { useDebugValue, useEffect, useState } from "react";
 import BillingNavbar from "./modals/BillingNavbar";
 import { Button } from "primereact/button";
 import "./css/customer-profile.css";
@@ -33,8 +33,8 @@ const CustomerProfile = () => {
     const [isOneNote, setIsOneNote] = useState(false);
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
-    const [isContact, setisContact] = useState();   
-    const [changeCustomerStatusDialog,setChangeCustomerStatus]=useState(false)
+    const [isContact, setisContact] = useState();
+    const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
@@ -85,6 +85,7 @@ const CustomerProfile = () => {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
+                console.log("cp data is", res?.data?.data);
             }
         } catch (error) {}
     };
@@ -101,8 +102,7 @@ const CustomerProfile = () => {
     const getNotes = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
-            setAllNotes(res?.data?.data || []);     
-      
+            setAllNotes(res?.data?.data || []);
         } catch (error) {
             // toast.error(error?.response?.data?.msg);
         }
@@ -147,7 +147,7 @@ const CustomerProfile = () => {
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-    }; 
+    };
     //For Showing SOCS Which is Comma Seperated array
     function showsocs(socarray) {
         if (socarray !== undefined) {
@@ -169,7 +169,7 @@ const CustomerProfile = () => {
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar  setChangeCustomerStatus={setChangeCustomerStatus}/>
+                <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
                 </Dialog>
@@ -178,12 +178,12 @@ const CustomerProfile = () => {
                     <DialogeForOneNote enrollmentId={isEnrollmentId} noteId={isNoteId} contact={isContact} />
                 </Dialog>
                 <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`} style={{ width: "90vw" }} onHide={() => setDisplayAllNotesDialogVisibility((prev) => !prev)}>
-                    <DisplayAllNotesDialog notes={allNotes}  />
+                    <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
                 <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
-                    <ChangeCustomerStatus   cpData={cpData} />
+                    <ChangeCustomerStatus cpData={cpData} />
                 </Dialog>
-                
+
                 <div className="pt-3">
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
@@ -198,8 +198,12 @@ const CustomerProfile = () => {
                                         <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
-                                                    <td>Service Address</td>
-                                                    <td>{cpData?.address1 !== undefined || cpData?.address2 !== undefined ? cpData?.address1 + " " + cpData?.address2 : "NIL"}</td>
+                                                    <td>Address 1</td>
+                                                    <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Address 2</td>
+                                                    <td>{cpData?.address2 !== undefined && cpData?.address2.trim() !== "" ? cpData?.address2.toUpperCase() : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -276,15 +280,13 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Sales Channel</td>
-                                                    <td>{cpData?.salesChannel !== undefined ?cpData.salesChannel :"NIL" }</td>
+                                                    <td>{cpData?.salesChannel !== undefined ? cpData.salesChannel : "NIL"}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                          
-                           
                         </div>
 
                         <div className="col-12 lg:col-4">
@@ -318,12 +320,17 @@ const CustomerProfile = () => {
 
                                                 <tr>
                                                     <td>Inventory Type</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.esnId?.unitType ? cpData?.esnId?.unitType : "NIL"}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Make & Model</td>
-                                                    <td>NIL</td>
+                                                    <td>MAKE</td>
+                                                    <td>{cpData?.esnId?.Make ? cpData?.esnId?.Make : "NIL"}</td>
                                                 </tr>
+                                                <tr>
+                                                    <td>MODEL</td>
+                                                    <td>{cpData?.esnId?.Model ? cpData?.esnId?.Model : "NIL"}</td>
+                                                </tr>
+
                                                 <tr>
                                                     <td>eSIM</td>
                                                     <td>{cpData?.ESim !== undefined ? (cpData?.ESim === true ? "Yes" : "No") : "NIL"}</td>
@@ -469,9 +476,7 @@ const CustomerProfile = () => {
 
                                                 <tr>
                                                     <td>Source</td>
-                                                    <td>
-                                                      {cpData?.source !== undefined ? cpData?.source :"NIL"}
-                                                    </td>
+                                                    <td>{cpData?.source !== undefined ? cpData?.source : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Fulfillment Method</td>
@@ -517,7 +522,7 @@ const CustomerProfile = () => {
                                 </div>
                                 <hr className="m-0" />
                                 <div className="flex justify-content-between pt-3 pb-3">
-                                   {/* <Button label="View Archive Notes" size="small" /> */}
+                                    {/* <Button label="View Archive Notes" size="small" /> */}
                                     <Button
                                         label="Display Notes"
                                         size="small"
@@ -533,22 +538,18 @@ const CustomerProfile = () => {
                                         tableStyle={{ minWidth: "550px" }}
                                         className="cursor-pointer notesrow"
                                         sortField={["createdAt"]}
-                                        sortOrder={-1}   
+                                        sortOrder={-1}
                                         rowClassName={rowClassName}
-                                        onRowClick={(rowData) => {    
-                                            if(rowData.data.void === true){ 
-
+                                        onRowClick={(rowData) => {
+                                            if (rowData.data.void === true) {
+                                            } else {
+                                                setisNoteId(rowData.data._id);
+                                                setisEnrollmentId(cpData?.enrollmentId);
+                                                setisContact(cpData?.contact);
+                                                setIsOneNote((prev) => !prev);
                                             }
-                                             else {
-                                            setisNoteId(rowData.data._id);
-                                            setisEnrollmentId(cpData?.enrollmentId);
-                                            setisContact(cpData?.contact);
-                                            setIsOneNote((prev) => !prev); 
-                                              } 
-                                              
-                                        }}   
-                                     
-                                    >   
+                                        }}
+                                    >
                                         <Column header="Created By" field="user.name"></Column>
                                         <Column header="Note" field="note"></Column>
                                         <Column header="Priority" field="priority"></Column>
@@ -564,7 +565,7 @@ const CustomerProfile = () => {
                                                         .padStart(2, "0")}:${createdAt.getSeconds().toString().padStart(2, "0")}`}</p>
                                                 );
                                             }}
-                                        ></Column>  
+                                        ></Column>
                                     </DataTable>
                                 </div>
                             </div>
@@ -627,19 +628,18 @@ const CustomerProfile = () => {
                         </div>
                     </div>
                 </div>
-            </div>   
+            </div>
             <div>
-             <CustomerInvoice/> 
-             </div>
+                <CustomerInvoice />
+            </div>
         </div>
     );
 };
 export default CustomerProfile;
 const rowClassName = (rowData) => {
-    if(rowData.void){
-    return 'custom-row'; 
-    } 
-    else{ 
-        return
+    if (rowData.void) {
+        return "custom-row";
+    } else {
+        return;
     }
-  };
+};
