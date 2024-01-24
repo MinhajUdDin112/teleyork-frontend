@@ -97,9 +97,6 @@ const Approved_Enrollments = () => {
                     createdTo: item.createdAt,
                 }));
     
-                // Sort the array by createdDate in descending order
-                updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
-    
                 setAllCompletedEnrollments(updatedData);
     
                 setIsLoading(false);

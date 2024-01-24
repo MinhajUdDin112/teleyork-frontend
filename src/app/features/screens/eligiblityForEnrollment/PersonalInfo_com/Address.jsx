@@ -16,8 +16,8 @@ import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-const BASE_URL=process.env.REACT_APP_BASE_URL
-const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [confrimAddress, setConfrimAddress] = useState("same");
     const [isSame, setIsSame] = useState();
     const [isDifferent, setIsDifferent] = useState();
@@ -32,9 +32,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     const zipState = zipDataParsed?.data?.state;
 
     const validationSchema = Yup.object().shape({
-        address1: Yup.string().required("Address is required"),     
+        address1: Yup.string().required("Address is required"),
     });
-   
+
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -43,7 +43,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             zip: "",
             city: "",
             state: "",
-           
+
             isSameServiceAddress: true,
             isNotSameServiceAddress: false,
             isPoBoxAddress: false,
@@ -81,10 +81,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 userId: userId,
                 csr: csr,
             };
-           
+
             setIsLoading(true);
             try {
-
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     localStorage.setItem("address", JSON.stringify(response.data));
@@ -95,23 +94,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
             }
-            
         },
     });
 
-    const checkEligiblity = async()=>{
+    const checkEligiblity = async () => {
         try {
-
             const response = await Axios.post(`${BASE_URL}/api/user/deviceEligibilty?enrollmentId=${_id}`);
             if (response?.status === 200 || response?.status === 201) {
                 localStorage.setItem("checkEligiblity", JSON.stringify(response.data));
-             
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
-            
         }
-    }
+    };
 
     // useEffect(() => {
     //     console.log("mailing address ", formik.values.mailingAddress1);
@@ -152,20 +147,18 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
     }, [formik.values.mailingZip]);
 
     useEffect(() => {
-       // if (formik.values.isPoBoxAddress) {
-            if (formik.values.poBoxZip && formik.values.poBoxZip.length === 5) {
-                async function getData() {
-                    const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`);
-                    const data = response?.data?.data;
-                    formik.setFieldValue("poBoxCity", data?.city);
-                    formik.setFieldValue("poBoxState", data?.abbreviation);
-                }
-                getData();
+        // if (formik.values.isPoBoxAddress) {
+        if (formik.values.poBoxZip && formik.values.poBoxZip.length === 5) {
+            async function getData() {
+                const response = await Axios.get(`${BASE_URL}/api/zipCode/getByZipCode?zipCode=${formik.values.poBoxZip}`);
+                const data = response?.data?.data;
+                formik.setFieldValue("poBoxCity", data?.city);
+                formik.setFieldValue("poBoxState", data?.abbreviation);
             }
-       // }
+            getData();
+        }
+        // }
     }, [formik.values.isPoBoxAddress, formik.values.poBoxZip]);
-
-   
 
     const handleSame = () => {
         formik.setFieldValue("isSameServiceAddress", true);
@@ -231,8 +224,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             //changing state
             setIsSame(parseaddressResponse?.data?.isSameServiceAddress);
             setIsDifferent(parseaddressResponse?.data?.isNotSameServiceAddress);
-         
-            setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);  
+
+            setIsPoBox(parseaddressResponse?.data?.isPoBoxAddress);
         }
     }, []);
     useEffect(() => {
@@ -242,77 +235,76 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
             setConfrimAddress("pobox");
         }
     }, [isDifferent, isPoBox]);
-    
-    const handleAddressChange = (e) => {
 
-        const address = e?.value?.structured_formatting?.secondary_text
+    const handleAddressChange = (e) => {
+        const address = e?.value?.structured_formatting?.secondary_text;
         const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
         const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
-         
+
         if (address) {
             let cityName = "";
-            let trimmedCityName ="";
-            let tolowerTrimmedCityName="";
+            let cityName1 = "";
+            let trimmedCityName = "";
+            let tolowerTrimmedCityName = "";
+
             if (address && address.includes(",")) {
                 const parts = address.split(",");
                 if (parts.length >= 1) {
                     cityName = parts[0];
-                    cityName=cityName.toLowerCase();
-                  
-                    const words = cityName.split(' ');
+                    cityName1 = parts[1];
+
+                    cityName = cityName.toLowerCase();
+                    cityName1 = cityName1.toLowerCase();
+
+                    const words = cityName.split(" ");
+
                     if (words.length >= 2) {
                         trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
-                        tolowerTrimmedCityName = trimmedCityName.toLowerCase();    
-                    }
-                    else{
+                        tolowerTrimmedCityName = trimmedCityName.toLowerCase();
+                    } else {
                         tolowerTrimmedCityName = cityName;
                     }
-                    
                 }
             }
             const cityFromDb = formik.values.city;
+
             let toLower;
-            if(cityFromDb.includes(" ")){
-                const words = cityFromDb.split(' ');
+            if (cityFromDb.includes(" ")) {
+                const words = cityFromDb.split(" ");
                 if (words.length >= 2) {
                     toLower = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
-                    toLower=toLower.toLowerCase();  
-                    toLower=toLower.trim();       
+                    toLower = toLower.toLowerCase();
+                    toLower = toLower.trim();
                 }
+            } else {
+                toLower = cityFromDb.toLowerCase();
+                toLower = toLower.trim();
             }
-            else{
-               toLower=cityFromDb.toLowerCase();   
-               toLower=toLower.trim();    
-            }
-        
-          
-          
-            if (tolowerTrimmedCityName.includes(toLower) || toLower.includes(tolowerTrimmedCityName) || cityName.includes(toLower) || toLower.includes(cityName) ) {
-                const completeAddress= e?.value?.structured_formatting?.main_text;
-             
+            if (tolowerTrimmedCityName.includes(toLower) || toLower.includes(tolowerTrimmedCityName) || cityName.includes(toLower) || toLower.includes(cityName) || cityName1.includes(toLower) || toLower.includes(cityName1)) {
+                const completeAddress = e?.value?.structured_formatting?.main_text;
+
                 const extractedAddress1 = completeAddress.match(pattern);
-               
-                if(extractedAddress1){
+
+                if (extractedAddress1) {
                     const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
-                   
-                    formik.setFieldValue("address1",final ); 
-                   
-                }else{
-                    formik.setFieldValue("address1",completeAddress ); 
+
+                    formik.setFieldValue("address1", final);
+                } else {
+                    formik.setFieldValue("address1", completeAddress);
                 }
-                const match = completeAddress.match(regex);   
-                   
-                var add2 = match ? match[0] : '';
-               
-                if(add2){
-                   add2 = add2.toUpperCase();
+                const match = completeAddress.match(regex);
+
+                var add2 = match ? match[0] : "";
+
+                if (add2) {
+                    add2 = add2.toUpperCase();
                     formik.setFieldValue("address2", add2);
-                }     
+                }
             } else {
                 toast.error(`Please choose an address associated with ${formik.values.city}, ${formik.values.state} `);
             }
         }
-    }
+    };
 
     return (
         <>
@@ -322,10 +314,13 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                     <div>
                         <Button label="Back" type="button" onClick={handleBack} />
                     </div>
-                    <div className="fixed-button-container"> <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} /></div>
+                    <div className="fixed-button-container">
+                        {" "}
+                        <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
+                    </div>
                 </div>
                 <div>
-                <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
+                    <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                 </div>
 
                 <br></br>
@@ -355,8 +350,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                         <GooglePlacesAutocomplete
                             apiKey="AIzaSyDa1KFekZkev2CAqrcrU_nYDe_1jC-PHA0"
                             selectProps={{
-                                onChange: (e)=> handleAddressChange(e),
-      
+                                onChange: (e) => handleAddressChange(e),
                             }}
                         />
                     </div>
@@ -380,7 +374,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                         <InputText value={formik.values.zip} name="zip" disabled className="w-21rem disable-color" />
                     </div>
                 </div>
-              
+
                 <div className="flex flex-wrap mt-4">
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
@@ -417,7 +411,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                                 <label className="field_label"> Address 2 </label>
                                 <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} autoComplete="new-password" />
                             </div>
-                           
+
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
@@ -445,12 +439,12 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id,csr }) => {
                         <div className="p-fluid formgrid grid mt-5">
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
-                                PO Box No <span className="steric">*</span> 
+                                    PO Box No <span className="steric">*</span>
                                 </label>
-                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/}  autoComplete="new-password"/>
+                                <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/} autoComplete="new-password" />
                                 {getFormErrorMessage("PoBoxAddress")}
                             </div>
-                          
+
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}

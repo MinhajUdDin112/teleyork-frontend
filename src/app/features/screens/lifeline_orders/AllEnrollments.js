@@ -149,8 +149,7 @@ const AllEnrollments = () => {
                         createdTo: item.createdAt,
                     }));
     
-                    // Sort the array by createdTo in descending order
-                    updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
+                   
     
                     setAllEnrollments(updatedData);
                 }
@@ -351,7 +350,7 @@ const AllEnrollments = () => {
           
             if (response?.status == "200" || response?.status == "201") {
                 toast.success("Successfully Enrolled");
-                console.log("in side")
+                getAllEnrollments();
                 setisButtonLoading(false);
             }
         } catch (error) {
@@ -554,7 +553,7 @@ const AllEnrollments = () => {
 
     // const handleApproveSelectedForQa=()=>{
     //     const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
-    //     console.log("ids is",enrollmentIds)
+
     //     setSelectedIdsForApprove(enrollmentIds)
     //     setDialogeForApprove(true);
         
@@ -748,7 +747,7 @@ const AllEnrollments = () => {
     )}
 />
 
-                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ||roleName == "Team Lead" ||roleName == "TEAM LEAD" ? (
+                            {toCapital == "CSR" || toCapital == "CS" ||toCapital == "TEAM LEAD" ||toCapital == "CS MANAGER" ? (
                                 ""
                             ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("retention") || roleName.includes("RETENTION") || roleName.includes("Retention") ? (
                                 <Column header="Actions" body={actionTemplateForPR}></Column>

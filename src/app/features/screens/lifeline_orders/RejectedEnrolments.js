@@ -154,11 +154,8 @@ const RejectedEnrollments = () => {
                             .replace(/\//g, "-"),
                         createdTo: item.createdAt,
                     }));
-    
-                    // Sort the array by createdTo in descending order
-                    updatedData.sort((a, b) => new Date(b.createdTo) - new Date(a.createdTo));
-    
-                    setAllEnrollments(updatedData);
+      
+                  setAllEnrollments(updatedData);
                 }
     
                 setIsLoading(false);
@@ -169,7 +166,6 @@ const RejectedEnrollments = () => {
             setIsLoading(false);
         }
     };
-
     useEffect(() => {
         getAllEnrollments();
     }, []);
@@ -225,8 +221,7 @@ const RejectedEnrollments = () => {
         const toCapitalCreatedUser = createduser.toUpperCase();
         const userName = parseLoginRes?.userName
         const toCapitalUserName=userName.toUpperCase();
-        console.log(" toCapitalCreatedUser is",toCapitalCreatedUser)
-        console.log("tocapi is",toCapitalUserName)
+       
         if(toCapitalCreatedUser==toCapitalUserName){
             return (
                   
