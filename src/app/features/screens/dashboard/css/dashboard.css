@@ -1,12 +1,28 @@
 .last24,
 .completeenrollmentstat,
-.daterange {
-    font-size: 21px;
+.daterange,.sales-channel-stats {
+    font-size: 18px;
     font-weight: 900;
     display: inline-block;
     position: relative;
+} 
+.content1{ 
+    width:49%; 
+    overflow: hidden;
+    border-radius: 0px; 
+} 
+.content2{ 
+     width:49%; 
+     overflow: hidden;
+    border-radius: 0px;  
+     margin-left: 20px;
+} 
+.forrange{ 
+    
+    border-radius: 0px; 
 }
 .last24::after,
+.sales-channel-stats::after,
 .completeenrollmentstat::after,
 .daterange::after {
     content: "";
@@ -20,7 +36,7 @@
 }  
 .dropdownstyle{ 
 height:40px;
-margin-top: 28px;
+margin-top: 0px;
 }
 .date-range {
     width: 60%;
@@ -37,6 +53,7 @@ margin-top: 28px;
     color: grey;
     text-align: center;
 }
+
 .date-range .calendar2 {
     width: 40%;
     height: 40px;
@@ -44,6 +61,14 @@ margin-top: 28px;
 .date-range button {
     width: 50%;
     margin-top: 20px;
+}
+@media(max-width:1464px){ 
+    .content1,.content2{ 
+        width:99%;
+    } 
+    .content2{ 
+        margin-left: 0px;
+    }
 }
 @media (max-width: 1050px) {
     .date-range {
@@ -65,13 +90,15 @@ margin-top: 28px;
     width: 70%;  
     font-size: 91px;
 } 
-  
+  .label{ 
+    margin-top: 0px;
+  }
 .dropdown .p-dropdown-label {
     font-size: 21px !important;
     font-weight: 900;
 }   
 .info { 
-    width:45%;
+    width:150px;
 }
  
 

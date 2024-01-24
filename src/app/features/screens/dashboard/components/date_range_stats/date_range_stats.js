@@ -6,30 +6,32 @@ import AllEnrollments from "./components/AllEnrollments";
 import CompletedEnrollments from "./components/CompletedEnrollments";
 import ProvisioningQueue from "./components/ProvisioningQueue";  
 import DateRangeEnrollmentStatChart from "./daterange_enrollment_stats_chart/daterange_enrollment_stat_chart";
-export default function DateRangeStats({startDate,endDate,permittedRoutes}){   
+import ActiveEnrollments from "./components/ActiveEnrollments";
+export default function DateRangeStats({role,startDate,endDate,permittedRoutes}){   
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes); 
     const userid = parseLoginRes._id;
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
-        rejectedenrollments: { label: "Rejected Enrollments", component: RejectedEnrollments },
-        incompleteenrollments: { label: "Incomplete Enrollments", component: IncompleteEnrollments },
+        rejectedenrollments: { label: "Rejected", component: RejectedEnrollments },
+        incompleteenrollments: { label: "Incomplete", component: IncompleteEnrollments },
         approvedEnrollments: {
-            label: "Approved Enrollments",
+            label: "Approved",
             component: ApprovedEnrollments,
         },
         allenrollments: {
-            label: "All Enrollments",
+            label: "All",
             component: AllEnrollments,
         },
         completedenrollments: {
-            label: "Completed Enrollments",
+            label: "Completed",
             component: CompletedEnrollments,
         },
         provisioningqueue: {
-            label: "Provisioning Queue",
+            label: "Provisioning",
             component: ProvisioningQueue,
         },
+
     };
     if (permittedRoutes !== undefined) {
 
@@ -50,7 +52,13 @@ export default function DateRangeStats({startDate,endDate,permittedRoutes}){
         }
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
-        }
+        } 
+        if(role === "TEAM LEAD" || role === "CSR"){ 
+            obj.activeenrollments={ 
+                 label:"Active", 
+                 component:ActiveEnrollments
+             }
+         } 
     }  
      return(    
         <div>
@@ -60,8 +68,8 @@ export default function DateRangeStats({startDate,endDate,permittedRoutes}){
                     const Component = obj[item].component; // Assign the component to a variable
                     return (
                         <div key={item} className="card info">
-                            <Component userid={userid} BASE_URL={BASE_URL} startDate={startDate} endDate={endDate} /> {/* Render the component dynamically */}
-                            <h5 className="w-full text-center">{obj[item].label}</h5>
+                            <Component role={role} userid={userid} BASE_URL={BASE_URL} startDate={startDate} endDate={endDate} /> {/* Render the component dynamically */}
+                            <p className="w-full text-center">{obj[item].label}</p>
                         </div>
                     );
                 })}

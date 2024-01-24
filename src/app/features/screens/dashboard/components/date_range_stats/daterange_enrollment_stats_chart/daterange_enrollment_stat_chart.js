@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Chart } from "react-google-charts";
+import { Chart } from "react-google-charts"; 
+import { DateTime } from "luxon";
 import Axios from "axios";
 import "./css/barchart_style.css";
-export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permittedRoutes, startDate, endDate }) {
+export default function DateRangeEnrollmentStatChart({role, BASE_URL, userid, permittedRoutes, startDate, endDate }) {
     let endDateEnrollment = endDate;
     if (startDate !== null) {
-        if (endDate === null) {
-            endDateEnrollment = new Date().toISOString();
+        if (endDate === null) { 
+            endDateEnrollment = DateTime.local()
+            .setZone("America/New_York", { keepLocalTime: false })
+            .set({ hour: 23, minute: 59, second: 0 })
+            .toFormat("d LLL yyyy, hh:mm a");
+        
+        endDateEnrollment = DateTime.fromFormat(endDateEnrollment, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+          
         }
     }
     const [data, setData] = useState([["Task", "Enrollments"]]);
@@ -29,7 +36,9 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         },
         provisioningqueue: {
             label: "Provisioning Queue",
-        },
+        },   
+        
+
     };
     if (permittedRoutes !== undefined) {
         if (!permittedRoutes.includes("/approved-enrollments")) {
@@ -44,12 +53,22 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         if (!permittedRoutes.includes("/all-enrollments")) {
             delete obj.incompleteenrollments;
         }
+        if(permittedRoutes.includes("/incompleteenrollments")){ 
+            if(role === "TEAM LEAD"){ 
+                delete obj.incompleteenrollments
+            }
+        }
         if (!permittedRoutes.includes("/provisioning-queue")) {
             delete obj.provisioningqueue;
         }
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
-        }
+        } 
+        if(role === "TEAM LEAD" || role === "CSR"){ 
+            obj.activeenrollments={ 
+                 label:"Active Enrollments", 
+             }
+         } 
     }
     useEffect(() => {
         setData([["Task", "Enrollments"]]); 
@@ -57,13 +76,29 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         if (obj.rejectedenrollments) {
             Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
                 .then((response) => {
-                    if (isMounted && response.data.data !== undefined) {
-                        const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                            return enrollment.rejectedAt >= startDate && enrollment.rejectedAt <= endDateEnrollment;
-                        });
-                        if ( isMounted && enrollmentsInDateRange.length !== 0) {
-                            setData((prevStat) => [...prevStat, ["Rejected", enrollmentsInDateRange.length]]);
-                        }
+                    if ( response.data.data !== undefined) {           
+                        let enrollmentsInDateRange; 
+                        if(role === "CSR" || role === "TEAM LEAD"){
+               
+                            enrollmentsInDateRange= response.data.data.filter((enrollment) => { 
+                                return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+                   
+                            }); 
+                                
+                                  } 
+                                  else{  
+                                    enrollmentsInDateRange= response.data.data.filter((enrollment) => {   
+                                        return DateTime.fromFormat(enrollment.rejectedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.rejectedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+                                   
+                    
+                                    });  
+                                  }
+                              if ( isMounted && enrollmentsInDateRange.length !== 0) {
+                                setData((prevStat) => [...prevStat, ["Rejected", enrollmentsInDateRange.length]]);
+                            }
+                             
+                       
+                      
                     }
                 })
                 .catch((err) => {});
@@ -72,11 +107,38 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
             Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
                 .then((response) => {
                     if ( response.data.data !== undefined) {
+                        let enrollmentsInDateRange; 
+                        if(role == "CSR" || role === "TEAM LEAD"){
+                
+                            enrollmentsInDateRange= response.data.data.filter((enrollment) => { 
+                                return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+                  
+                    }); 
+                              } 
+                              else{  
+                           
+                        enrollmentsInDateRange= response.data.data.filter((enrollment) => {   
+                            return DateTime.fromFormat(enrollment.approvedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.approvedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+                       
+                        }); 
+                              }
+                              if ( isMounted && enrollmentsInDateRange.length !== 0) {
+                                setData((prevStat) => [...prevStat, ["Approved", enrollmentsInDateRange.length]]);
+                            }
+                    }
+                })
+                .catch((err) => {});
+        }  
+        if (obj.activeenrollments) {
+            Axios.get(`${BASE_URL}/api/web/dashboard/getactivesalescsr?userId=${userid}`)
+                .then((response) => {
+                    if (response.data.data !== undefined) {
                         const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                            return enrollment.approvedAt >= startDate && enrollment.approvedAt <= endDateEnrollment;
+                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+                  
                         });
                         if (isMounted && enrollmentsInDateRange.length !== 0) {
-                            setData((prevStat) => [...prevStat, ["Approved", enrollmentsInDateRange.length]]);
+                            setData((prevStat) => [...prevStat, ["Active", enrollmentsInDateRange.length]]);
                         }
                     }
                 })
@@ -87,7 +149,8 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
                 .then((response) => {
                     if (response.data.data !== undefined) {
                         const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                            return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+              
                         });
                         if (isMounted && enrollmentsInDateRange.length !== 0) {
                             setData((prevStat) => [...prevStat, ["All", enrollmentsInDateRange.length]]);
@@ -100,7 +163,8 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
             Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${userid}`).then((response) => {
                 if (response.data.data !== undefined) {
                     const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                        return enrollment.createdAt >= startDate && enrollment.createdAt <= endDateEnrollment;
+                        return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+              
                     });
                     if (isMounted && enrollmentsInDateRange.length !== 0) {
                         setData((prevStat) => [...prevStat, ["Incomplete", enrollmentsInDateRange.length]]);
@@ -111,12 +175,24 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         if (obj.completedenrollments) {
             Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`).then((response) => {
                 if (response.data.data !== undefined) {
-                    const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                        return enrollment.activatedAt >= startDate && enrollment.activatedAt <= endDateEnrollment;
-                    });
-                    if (isMounted && enrollmentsInDateRange.length !== 0) {
-                        setData((prevStat) => [...prevStat, ["Completed", enrollmentsInDateRange.length]]);
-                    }
+                    let enrollmentsInDateRange; 
+                    if(role === "CSR" || role === "TEAM LEAD"){
+                        enrollmentsInDateRange= response.data.data.filter((enrollment) => { 
+                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+              
+                }); 
+                        
+                          } 
+                          else{  
+                          
+                    enrollmentsInDateRange= response.data.data.filter((enrollment) => {   
+                        return DateTime.fromFormat(enrollment.activatedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.activatedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+               
+                    }); 
+                          }
+                              if ( isMounted && enrollmentsInDateRange.length !== 0) {
+                                setData((prevStat) => [...prevStat, ["Completed", enrollmentsInDateRange.length]]);
+                            }
                 }
             });
         }
@@ -124,7 +200,8 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
             Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then((response) => {
                 if (response.data.data !== undefined) {
                     const enrollmentsInDateRange = response.data.data.filter((enrollment) => {
-                        return enrollment.nladEnrollmentDate >= startDate && enrollment.nladEnrollmentDate <= endDateEnrollment;
+                        return DateTime.fromFormat(enrollment.nladEnrollmentDate, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.nladEnrollmentDate, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
+                    
                     });
                     if (isMounted && enrollmentsInDateRange.length !== 0) {
                         setData((prevStat) => [...prevStat, ["Provisioning", enrollmentsInDateRange.length]]);
@@ -135,13 +212,13 @@ export default function DateRangeEnrollmentStatChart({ BASE_URL, userid, permitt
         return ( )=>{ 
             isMounted=false
         }
-    }, [startDate, endDate]);
+    }, [startDate, endDate,role]);
     return (
         <div className="flex flex-wrap justify-content-around flex-row ">
             {data.length !== 1 ? (
                 <>
                     <Chart chartType="PieChart" data={data} options={options} className="flex flex-wrap justify-content-center pie-chart" />
-                    <Chart chartType="ColumnChart" data={data} options={options} className="flex flex-wrap justify-content-center bar-chart" />
+                   {/* <Chart chartType="ColumnChart" data={data} options={options} className="flex flex-wrap justify-content-center bar-chart" />*/}
                 </>
             ) : undefined}{" "}
         </div>
