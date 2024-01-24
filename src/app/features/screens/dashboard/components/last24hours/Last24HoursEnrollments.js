@@ -6,30 +6,32 @@ import AllEnrollments from "./components/AllEnrollments";
 import CompletedEnrollments from "./components/CompletedEnrollments";
 import ProvisioningQueue from "./components/ProvisioningQueue";
 import Last24EnrollmentStatChart from "./last24_enrollment_stats_chart/last24_enrollment_stat_chart.js";
-export default function Last24HoursEnrollments({ permittedRoutes }) {
+import ActiveEnrollments from "./components/Activesales.js";
+export default function Last24HoursEnrollments({role, permittedRoutes }) {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const userid = parseLoginRes?._id;
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const obj = {
-        rejectedenrollments: { label: "Rejected Enrollments", component: RejectedEnrollments },
-        incompleteenrollments: { label: "Incomplete Enrollments", component: IncompleteEnrollments },
+        rejectedenrollments: { label: "Rejected", component: RejectedEnrollments },
+        incompleteenrollments: { label: "Incomplete", component: IncompleteEnrollments },
         approvedEnrollments: {
-            label: "Approved Enrollments",
+            label: "Approved",
             component: ApprovedEnrollments,
         },
         allenrollments: {
-            label: "All Enrollments",
+            label: "All",
             component: AllEnrollments,
         },
         completedenrollments: {
-            label: "Completed Enrollments",
+            label: "Completed",
             component: CompletedEnrollments,
         },
         provisioningqueue: {
-            label: "Provisioning Queue",
+            label: "Provisioning",
             component: ProvisioningQueue,
-        },
+        }, 
+       
     };
     if (permittedRoutes !== undefined) {
         if (!permittedRoutes.includes("/approved-enrollments")) {
@@ -49,7 +51,14 @@ export default function Last24HoursEnrollments({ permittedRoutes }) {
         }
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
-        }
+        } 
+        if(role === "TEAM LEAD" || role === "CSR"){ 
+           obj.activeenrollments={ 
+                label:"Active", 
+                component:ActiveEnrollments
+            }
+        } 
+       
     }
     return (
         <div>
@@ -59,13 +68,13 @@ export default function Last24HoursEnrollments({ permittedRoutes }) {
                     const Component = obj[item].component;
                     return (
                         <div key={item} className="card info">
-                            <Component userid={userid} BASE_URL={BASE_URL} /> {/* Render the component dynamically */}
-                            <h5 className="w-full text-center">{obj[item].label}</h5>
+                            <Component role={role} userid={userid} BASE_URL={BASE_URL} /> {/* Render the component dynamically */}
+                            <p className="w-full text-center">{obj[item].label}</p>
                         </div>
                     );
                 })}
             </div>
-            <Last24EnrollmentStatChart BASE_URL={BASE_URL} userid={userid} permittedRoutes={permittedRoutes} />
+            <Last24EnrollmentStatChart role={role} BASE_URL={BASE_URL} userid={userid} permittedRoutes={permittedRoutes} />
             <hr />
         </div>
     );

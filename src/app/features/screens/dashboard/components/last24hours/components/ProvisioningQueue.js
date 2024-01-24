@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { DateTime } from "luxon";
 export default function ProvisioningQueue({ BASE_URL, userid }) {
     const [provisioningqueueenrollments, setProvisioningQueueEnrollments] = useState(0);
     useEffect(() => {
         Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`)
             .then((response) => {
-                const currentTime = new Date().getTime();
-                const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-                const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
-                    const enrollmentEndTime = new Date(enrollment.nladEnrollmentDate).getTime();
-                    return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-                });
-                setProvisioningQueueEnrollments(enrollmentsInLast24Hours.length);
+                const currentDateTime = DateTime.local() 
+                .setZone("America/New_York", {
+                    keepLocalTime: false,
+                })
+                .set({
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                })
+                .toFormat("d LLL yyyy, hh:mm a"); 
+                let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+               
+                if (response.data.data !== undefined) {
+                    const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
+                        return DateTime.fromFormat(enrollment.nladEnrollmentDate, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                 
+                    });
+                    setProvisioningQueueEnrollments(enrollmentsInCurrentShift.length);
+                }
             })
             .catch((err) => {});
     }, []);
-    return <h1 className="text-center">{provisioningqueueenrollments}</h1>;
+    return <h2 className="text-center">{provisioningqueueenrollments}</h2>;
 }

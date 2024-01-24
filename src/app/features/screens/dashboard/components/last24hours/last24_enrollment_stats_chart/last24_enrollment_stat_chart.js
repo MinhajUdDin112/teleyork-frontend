@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import Axios from "axios";
+import { DateTime } from "luxon";
 import "./css/barchart_style.css";
-export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedRoutes }) {
+export default function Last24EnrollmentStatChart({role, BASE_URL, userid, permittedRoutes }) {
     const [data, setData] = useState([["Task", "Enrollments"]]);
     const options = {
         title: "Enrollments",
@@ -34,7 +35,8 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         }
         if (!permittedRoutes.includes("/incompleteenrollments")) {
             delete obj.incompleteenrollments;
-        }
+        } 
+        
         if (!permittedRoutes.includes("/all-enrollments")) {
             delete obj.incompleteenrollments;
         }
@@ -43,22 +45,53 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         }
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
-        }
+        } 
+        if(role === "TEAM LEAD" || role === "CSR"){ 
+            obj.activeenrollments={ 
+                 label:"Active Enrollments", 
+             }
+         } 
     }
 
     useEffect(() => {
+        setData([["Task", "Enrollments"]]);
+        let isMounted = true;
         if (obj.rejectedenrollments) {
             Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
                 .then((response) => {
-                    const currentTime = new Date().getTime();
-                    const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
                     if (response.data.data !== undefined) {
-                        const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
-                            const enrollmentEndTime = new Date(enrollment.rejectedAt).getTime();
-                            return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-                        });
-                        if (enrollmentsInLast24Hours.length !== 0) {
-                            setData((prevStat) => [...prevStat, ["Rejected", enrollmentsInLast24Hours.length]]);
+                        const currentDateTime = DateTime.local() 
+                        .setZone("America/New_York", {
+                            keepLocalTime: false,
+                        })
+                        .set({
+                            hour: 0,
+                            minute: 0,
+                            second: 0,
+                        })
+                        .toFormat("d LLL yyyy, hh:mm a"); 
+                        let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+                       
+                        if (response.data.data !== undefined) {
+                            let enrollmentsInCurrentShift; 
+                            if(role === "CSR" || role === "TEAM LEAD"){
+                                enrollmentsInCurrentShift= response.data.data.filter((enrollment) => {   
+                                    return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                              
+                                }); 
+                                    
+                                      } 
+                                      else{  
+                                        enrollmentsInCurrentShift= response.data.data.filter((enrollment) => { 
+                                            return DateTime.fromFormat(enrollment.rejectedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                                
+                                }); 
+                                      }
+                                  if (isMounted && enrollmentsInCurrentShift.length !== 0) {
+                   
+                          
+                            setData((prevStat) => [...prevStat, ["Rejected", enrollmentsInCurrentShift.length]]);
+                                  }
                         }
                     }
                 })
@@ -67,15 +100,39 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         if (obj.approvedEnrollments) {
             Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
                 .then((response) => {
-                    const currentTime = new Date().getTime();
-                    const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-                    if (response.data.data !== undefined) {
-                        const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
-                            const enrollmentEndTime = new Date(enrollment.approvedAt).getTime();
-                            return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-                        });
-                        if (enrollmentsInLast24Hours.length !== 0) {
-                            setData((prevStat) => [...prevStat, ["Approved", enrollmentsInLast24Hours.length]]);
+                    if (response.data.data !== undefined && isMounted) {
+                        const currentDateTime = DateTime.local() 
+                        .setZone("America/New_York", {
+                            keepLocalTime: false,
+                        })
+                        .set({
+                            hour: 0,
+                            minute: 0,
+                            second: 0,
+                        })
+                        .toFormat("d LLL yyyy, hh:mm a"); 
+                        let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+                      
+                        if (response.data.data !== undefined) {
+                            let enrollmentsInCurrentShift; 
+                            if(role === "CSR" || role === "TEAM LEAD"){
+                                enrollmentsInCurrentShift= response.data.data.filter((enrollment) => {   
+                                    return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                              
+                                }); 
+                                    
+                                      } 
+                                      else{  
+                                        enrollmentsInCurrentShift= response.data.data.filter((enrollment) => { 
+                                            return DateTime.fromFormat(enrollment.approvedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                                
+                                }); 
+                                      }
+                                  if (isMounted && enrollmentsInCurrentShift.length !== 0) {
+                   
+                          
+                            setData((prevStat) => [...prevStat, ["Approved", enrollmentsInCurrentShift.length]]);
+                                  }
                         }
                     }
                 })
@@ -84,15 +141,28 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         if (obj.allenrollments) {
             Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`)
                 .then((response) => {
-                    const currentTime = new Date().getTime();
-                    const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-                    if (response.data.data !== undefined) {
-                        const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
-                            const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
-                            return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-                        });
-                        if (enrollmentsInLast24Hours.length !== 0) {
-                            setData((prevStat) => [...prevStat, ["All", enrollmentsInLast24Hours.length]]);
+                    if (response.data.data !== undefined ) {
+                        const currentDateTime = DateTime.local() 
+                        .setZone("America/New_York", {
+                            keepLocalTime: false,
+                        })
+                        .set({
+                            hour: 0,
+                            minute: 0,
+                            second: 0,
+                        })
+                        .toFormat("d LLL yyyy, hh:mm a"); 
+                        let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+                      
+                        if (response.data.data !== undefined) {
+                            const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
+                                return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                
+                            }); 
+                            if (isMounted && enrollmentsInCurrentShift.length !== 0) {
+                   
+                            setData((prevStat) => [...prevStat, ["All", enrollmentsInCurrentShift.length]]);
+                            }
                         }
                     }
                 })
@@ -100,49 +170,125 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
         }
         if (obj.incompleteenrollments) {
             Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${userid}`).then((response) => {
-                const currentTime = new Date().getTime();
-                const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-                if (response.data.data !== undefined) {
-                    const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
-                        const enrollmentEndTime = new Date(enrollment.createdAt).getTime();
-                        return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-                    });
-                    if (enrollmentsInLast24Hours.length !== 0) {
-                        setData((prevStat) => [...prevStat, ["Incomplete", enrollmentsInLast24Hours.length]]);
+                if (response.data.data !== undefined ) {
+                    const currentDateTime = DateTime.local() 
+                .setZone("America/New_York", {
+                    keepLocalTime: false,
+                })
+                .set({
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                })
+                .toFormat("d LLL yyyy, hh:mm a"); 
+                let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+              
+                    if (response.data.data !== undefined) {
+                        const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
+                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                        }); 
+                        if (isMounted && enrollmentsInCurrentShift.length !== 0) {
+                   
+                        setData((prevStat) => [...prevStat, ["Incomplete", enrollmentsInCurrentShift.length]]);
+                        }
                     }
                 }
             });
         }
         if (obj.completedenrollments) {
             Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`).then((response) => {
-                const currentTime = new Date().getTime();
-                const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
                 if (response.data.data !== undefined) {
-                    const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
-                        const enrollmentEndTime = new Date(enrollment.activatedAt).getTime();
-                        return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
-                    });
-                    if (enrollmentsInLast24Hours.length !== 0) {
-                        setData((prevStat) => [...prevStat, ["Completed", enrollmentsInLast24Hours.length]]);
+                    const currentDateTime = DateTime.local() 
+                    .setZone("America/New_York", {
+                        keepLocalTime: false,
+                    })
+                    .set({
+                        hour: 0,
+                        minute: 0,
+                        second: 0,
+                    })
+                    .toFormat("d LLL yyyy, hh:mm a"); 
+                    let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();    
+                    if (response.data.data !== undefined) {
+                        let enrollmentsInCurrentShift; 
+                        if(role === "CSR" || role === "TEAM LEAD"){
+                            enrollmentsInCurrentShift= response.data.data.filter((enrollment) => {   
+                                return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                          
+                            }); 
+                                
+                                  } 
+                                  else{  
+                                    enrollmentsInCurrentShift= response.data.data.filter((enrollment) => { 
+                                        return DateTime.fromFormat(enrollment.activatedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+                            
+                            }); 
+                                  }
+                              if (isMounted && enrollmentsInCurrentShift.length !== 0) {
+                   
+                      
+                        setData((prevStat) => [...prevStat, ["Completed", enrollmentsInCurrentShift.length]]);
+                              }
                     }
                 }
             });
+        }  
+        if(obj.activeenrollments){ 
+            Axios.get(`${BASE_URL}/api/web/dashboard/getactivesalescsr?userId=${userid}`)
+            .then((response) => {
+                if (response.data.data !== undefined ) {
+                    const currentDateTime = DateTime.local() 
+                .setZone("America/New_York", {
+                    keepLocalTime: false,
+                })
+                .set({
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                })
+                .toFormat("d LLL yyyy, hh:mm a"); 
+                let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+               
+                        const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
+                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
+               
+                        }); 
+                        if (isMounted && enrollmentsInCurrentShift.length !== 0) {
+                   
+                        setData((prevStat) => [...prevStat, ["Active", enrollmentsInCurrentShift.length]]);
+                        }
+                }
+            })
+            .catch((err) => {});
         }
         if (obj.provisioningqueue) {
             Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`).then((response) => {
-                const currentTime = new Date().getTime();
-                const twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000;
-                if (response.data.data !== undefined) {
-                    const enrollmentsInLast24Hours = response.data.data.filter((enrollment) => {
-                        const enrollmentEndTime = new Date(enrollment.nladEnrollmentDate).getTime();
-                        return enrollmentEndTime >= twentyFourHoursAgo && enrollmentEndTime <= currentTime;
+                if (response.data.data !== undefined ) {
+                    const currentDateTime = DateTime.local();
+                    let etDateTime = currentDateTime.setZone("America/New_York", {
+                        keepLocalTime: false,
                     });
-                    if (enrollmentsInLast24Hours.length !== 0) {
-                        setData((prevStat) => [...prevStat, ["Completed", enrollmentsInLast24Hours.length]]);
+                    etDateTime = etDateTime.set({
+                        hour: 0,
+                        minute: 0,
+                        second: 0,
+                    });
+                    const startCountFrom = etDateTime.toFormat("d LLL yyyy, hh:mm a");
+                    if (response.data.data !== undefined) {
+                        const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
+                            return enrollment.nladEnrollmentDate >= startCountFrom;
+                        }); 
+                        if (isMounted && enrollmentsInCurrentShift.length !== 0) {
+                   
+                        setData((prevStat) => [...prevStat, ["Provisioning", enrollmentsInCurrentShift.length]]);
+                        }
                     }
                 }
             });
         }
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     return (
@@ -150,7 +296,7 @@ export default function Last24EnrollmentStatChart({ BASE_URL, userid, permittedR
             {data.length !== 1 ? (
                 <>
                     <Chart chartType="PieChart" data={data} options={options} className="flex flex-wrap justify-content-center pie-chart" />
-                    <Chart chartType="ColumnChart" data={data} options={options} className="flex flex-wrap justify-content-center bar-chart" />
+                   {/* <Chart chartType="ColumnChart" data={data} options={options} className="flex flex-wrap justify-content-center bar-chart" />*/}
                 </>
             ) : undefined}{" "}
         </div>
