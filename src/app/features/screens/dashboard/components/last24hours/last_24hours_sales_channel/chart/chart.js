@@ -9,7 +9,8 @@ export default function Last24AgentSalesChannelChart({ BASE_URL, roleId }) {
         bars: "vertical",
         is3D: true,
     };
-    useEffect(() => {    
+    useEffect(() => {     
+        let isMounted=true
         Axios.get(`${BASE_URL}/api/web/dashboard/salesStatsByChannel?userId=${roleId}`)
             .then((response) => {
                 if (response.data.data !== undefined) {
@@ -57,13 +58,17 @@ export default function Last24AgentSalesChannelChart({ BASE_URL, roleId }) {
                         if(obj[item] !== 0){
                         arr.push(arr2); 
                         }
-                    });
-                    setData(arr);
-                    console.log("arr is ", arr);
+                    });  
+                    if(isMounted){
+                    setData(arr); 
+                    }
                 } else {
                 }
             })
-            .catch((error) => {});
+            .catch((error) => {}); 
+            return ()=>{ 
+                isMounted=false
+            }
     }, [roleId]);
     return (
         <div className="flex flex-wrap justify-content-around flex-row ">
