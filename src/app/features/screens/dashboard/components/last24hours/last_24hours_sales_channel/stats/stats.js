@@ -13,10 +13,9 @@ export default function Last24AgentSalesChannel({BASE_URL,roleId}){
     const [auto,setAuto]=useState(0) 
 
    useEffect(()=>{  
-       
+       let isMounted=true;
      Axios.get(`${BASE_URL}/api/web/dashboard/salesStatsByChannel?userId=${roleId}`).then((response)=>{ 
        if(response.data.data !== undefined){  
-          console.log(response.data.data[0].enrollments)
           const currentDateTime = DateTime.local() 
           .setZone("America/New_York", {
               keepLocalTime: false,
@@ -29,7 +28,7 @@ export default function Last24AgentSalesChannel({BASE_URL,roleId}){
           .toFormat("d LLL yyyy, hh:mm a"); 
           let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
         
-            response.data.data[0].enrollments.map(enrollment=>{ 
+            response.data.data.enrollments.map(enrollment=>{ 
                if((DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom)) { 
                    if(enrollment.salesChannel === "Auto"){  
                   

@@ -9,7 +9,7 @@ export default function Last24AgentSalesChannelChart({ BASE_URL, roleId }) {
         bars: "vertical",
         is3D: true,
     };
-    useEffect(() => {
+    useEffect(() => {    
         Axios.get(`${BASE_URL}/api/web/dashboard/salesStatsByChannel?userId=${roleId}`)
             .then((response) => {
                 if (response.data.data !== undefined) {
