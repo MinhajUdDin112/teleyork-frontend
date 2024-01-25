@@ -138,35 +138,58 @@ export default function Last24EnrollmentStatChart({role, BASE_URL, userid, permi
                 })
                 .catch((err) => {});
         }
-        if (obj.allenrollments) {
+        if (obj.allenrollments) {        
             Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`)
-                .then((response) => {
-                    if (response.data.data !== undefined ) {
-                        const currentDateTime = DateTime.local() 
-                        .setZone("America/New_York", {
-                            keepLocalTime: false,
-                        })
-                        .set({
-                            hour: 0,
-                            minute: 0,
-                            second: 0,
-                        })
-                        .toFormat("d LLL yyyy, hh:mm a"); 
-                        let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-                      
-                        if (response.data.data !== undefined) {
-                            const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
-                                return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
-                
-                            }); 
-                            if (isMounted && enrollmentsInCurrentShift.length !== 0) {
-                   
-                            setData((prevStat) => [...prevStat, ["All", enrollmentsInCurrentShift.length]]);
-                            }
-                        }
-                    }
-                })
-                .catch((err) => {});
+            .then((response1) => {
+                Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
+                    .then((response2) => {
+                        Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
+                            .then((response3) => {
+                                const currentDateTime = DateTime.local() 
+                                .setZone("America/New_York", {
+                                    keepLocalTime: false,
+                                })
+                                .set({
+                                    hour: 0,
+                                    minute: 0,
+                                    second: 0,
+                                })
+                                .toFormat("d LLL yyyy, hh:mm a"); 
+                                let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+                                let data=[]
+                                if(response1.data.data !== undefined){ 
+                                   data.push(response1.data.data)
+                                }  
+                                if(response2.data.data !== undefined){ 
+                                   data.push(response2.data.data)
+                                }  
+                                if(response3.data.data !== undefined){ 
+                                   data.push(response3.data.data)
+                                } 
+                                let arr=[]
+                                for (let i = 0; i < data.length; i++) {
+                                    for (let k = 0; k < data[i].length; k++) {
+                                        if (DateTime.fromFormat(data[i][k].createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom) {
+                                              arr.push(data[i][k])
+                                        }
+                                    }
+                                }   
+                                if(isMounted){ 
+                                    setData((prevStat) => [...prevStat, ["All", arr.length]]);
+                          
+                                }
+                            })
+                            .catch((err) => { 
+                              
+                            });
+                    })
+                    .catch((err) => { 
+                        
+                    });
+            })
+            .catch((err) => {
+               
+            });
         }
         if (obj.incompleteenrollments) {
             Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${userid}`).then((response) => {
