@@ -30,7 +30,8 @@ export default function Last24AgentSalesChannel({BASE_URL,roleId}){
         
             response.data.data.enrollments.map(enrollment=>{ 
                if((DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom)) { 
-                   if(enrollment.salesChannel === "Auto"){  
+                  if(isMounted){
+                  if(enrollment.salesChannel === "Auto"){  
                   
                      setAuto(prev=>prev+1)
                    }  
@@ -49,7 +50,8 @@ export default function Last24AgentSalesChannel({BASE_URL,roleId}){
                    } 
                    else if(enrollment.salesChannel === "Email"){ 
                        setEmail(prev=>prev+1)
-                   }
+                   } 
+                  }
                }
             })
        }  
@@ -61,7 +63,8 @@ export default function Last24AgentSalesChannel({BASE_URL,roleId}){
      }).catch(error=>{ 
 
      }) 
-      return ()=>{ 
+      return ()=>{  
+         isMounted=false
          setWebConsent(0) 
          setAuto(0) 
          setOldFacebook(0) 
