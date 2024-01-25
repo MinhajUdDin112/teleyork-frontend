@@ -24,10 +24,10 @@ export default function DepartmentWiseAgentRejectedInLast24({ role, roleId, BASE
                     let provisioningRejectedEnrollments;
                     if (role === "CSR" || role === "TEAM LEAD") {
                         qaRejectedEnrollment = response.data.data.filter((enrollment) => {
-                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.name === "QA";
+                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.department === "QA";
                         });
                         provisioningRejectedEnrollments = response.data.data.filter((enrollment) => {
-                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.name === "PROVISIONING";
+                            return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.department === "PROVISIONING";
                         });
                     }
                     if (isMounted) {

@@ -7,16 +7,18 @@ export default function RejectedEnrollments({ role, BASE_URL, userid }) {
         let isMounted = true;
         Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
             .then((response) => {
-                const currentDateTime = DateTime.local();
-                let etDateTime = currentDateTime.setZone("America/New_York", {
-                    keepLocalTime: false,
-                });
-                etDateTime = etDateTime.set({
-                    hour: 0,
-                    minute: 0,
-                    second: 0,
-                });
-                const startCountFrom = etDateTime.toFormat("d LLL yyyy, hh:mm a");
+                const currentDateTime = DateTime.local()
+                    .setZone("America/New_York", {
+                        keepLocalTime: false,
+                    })
+                    .set({
+                        hour: 0,
+                        minute: 0,
+                        second: 0,
+                    })
+                    .toFormat("d LLL yyyy, hh:mm a");
+                let startCountFrom = DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+
                 if (response.data.data !== undefined) {
                     let enrollmentsInCurrentShift;
                     if (role !== "TEAM LEAD") {
@@ -24,9 +26,12 @@ export default function RejectedEnrollments({ role, BASE_URL, userid }) {
                             return DateTime.fromFormat(enrollment.rejectedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom;
                         });
                     } else {
+                        console.log("inside enrollment team lead");
+                        console.log(response.data.data);
                         enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
                             return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom;
                         });
+                        console.log("enrollment in current Shift", enrollmentsInCurrentShift);
                     }
                     if (isMounted) {
                         setRejectedEnrollments(enrollmentsInCurrentShift.length);
