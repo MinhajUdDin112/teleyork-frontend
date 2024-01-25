@@ -64,7 +64,7 @@ export default function DateRangeSalesChannelChart({ BASE_URL, roleId, startDate
         return () => {
             isMounted = false;
         };
-    }, [startDate, endDate]);
+    }, [startDate, endDate,roleId]);
     return (
         <div className="flex flex-wrap justify-content-around flex-row ">
             {data.length !== 1 ? (

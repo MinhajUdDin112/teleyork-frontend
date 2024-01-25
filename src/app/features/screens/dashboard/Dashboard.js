@@ -13,7 +13,6 @@ import Axios from "axios";
 import DepartmentWiseRejectedInLast24 from "./components/last24hours/department_wise_rejected/department_wise_stats/department_wise_stats";
 import DepartmentWiseRejectedByDateRange from "./components/date_range_stats/department_wise_rejected/department_wise_rejected_stat/department_wise_rejected_stat";
 import DepartmentWiseRejectedDateRangeChart from "./components/date_range_stats/department_wise_rejected/department_wise_rejected_chart/department_wise_rejected_chart";
-
 import Last24HoursSalesChannel from "./components/last24hours/last_24hours_sales_channel/stats/stats";
 import DepartmentWiseRejectedLast24Chart from "./components/last24hours/department_wise_rejected/department_wise_rejected_last_24_chart/department_wise_rejected_last_24";
 import DepartmentWiseAgentRejectedByDateRange from "./components/date_range_stats/daterange_agentenrollment/department_wise_rejected/department_wise_agent_rejected_stat/department_wise_agent_rejected_stat";
@@ -102,7 +101,6 @@ const Dashboard = ({ permittedRoutes }) => {
                                 const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
                                 const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
                                 setStartDate(etDateObject.toSeconds());
-                                console.log(startDate);
                             } else {
                                 setStartDate(null);
                             }
@@ -130,7 +128,6 @@ const Dashboard = ({ permittedRoutes }) => {
                                 const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
                                 const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
                                 setEndDate(etDateObject.toSeconds());
-                                console.log(endDate);
                             } else {
                                 setEndDate(null);
                             }
@@ -183,7 +180,7 @@ const Dashboard = ({ permittedRoutes }) => {
                             <>
                                 <h6 className="sales-channel-stats p-4 ml-4">Last 24 Hours Sales Channel</h6>
                                 <Last24HoursAgentSalesChannel BASE_URL={BASE_URL} roleId={selectedAgent} />
-                                <Last24AgentSalesChannelChart BASE_URL={BASE_URL} roleId={selectedAgent}  />
+                                <Last24AgentSalesChannelChart BASE_URL={BASE_URL} roleId={selectedAgent} />
                             </>
                         )}
                     </div>

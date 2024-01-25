@@ -68,7 +68,7 @@ export default function Last24HoursAgentEnrollments({role, agentid, permittedRou
                     const Component = obj[item].component; // Assign the component to a variable
                     return (
                         <div key={item} className="card info">
-                            <Component userid={agentid} BASE_URL={BASE_URL} /> {/* Render the component dynamically */}
+                            <Component role={role} userid={agentid} BASE_URL={BASE_URL} /> {/* Render the component dynamically */}
                             <p className="w-full text-center">{obj[item].label}</p>
                         </div>
                     );

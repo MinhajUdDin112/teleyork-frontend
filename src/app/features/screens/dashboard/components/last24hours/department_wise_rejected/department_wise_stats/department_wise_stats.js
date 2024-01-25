@@ -20,18 +20,19 @@ export default function DepartmentWiseRejectedInLast24({role,roleId,BASE_URL}){
           .toFormat("d LLL yyyy, hh:mm a"); 
           let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
          
-          if (response.data.data !== undefined) {
+          if (response.data.data !== undefined) { 
+              
               let qaRejectedEnrollment; 
               let provisioningRejectedEnrollments; 
-              if(role === "CSR" || role === "TEAM LEAD"){
+              if(role === "CSR" || role === "TEAM LEAD"){  
                   qaRejectedEnrollment= response.data.data.filter((enrollment) => {   
-                      return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.name === "QA"
+                      return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.department === "QA"
                 
                   });   
                   provisioningRejectedEnrollments= response.data.data.filter((enrollment) => {   
-                     return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.name === "PROVISIONING"
+                     return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom && enrollment.rejectedBy.department.department === "PROVISIONING"
                
-                 }); 
+                 });   
                       
                         } 
                         if(isMounted){

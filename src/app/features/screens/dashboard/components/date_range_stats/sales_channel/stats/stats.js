@@ -13,7 +13,6 @@ export default function DateRangeSalesChannel({ BASE_URL, roleId, startDate, end
         Axios.get(`${BASE_URL}/api/web/dashboard/salesStatsByChannel?userId=${roleId}`)
             .then((response) => {
                 if (response.data.data !== undefined) {
-                    console.log("it is not undefiend");
                     let endDateEnrollment = endDate;
                     if (startDate !== null) {
                         if (endDate === null) {

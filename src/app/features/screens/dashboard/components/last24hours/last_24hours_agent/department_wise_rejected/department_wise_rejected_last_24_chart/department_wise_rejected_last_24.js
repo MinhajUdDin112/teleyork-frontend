@@ -16,17 +16,17 @@ export default function DepartmentWiseAgentRejectedLast24Chart({role,roleId,BASE
       .then((response) => {
           if (response.data.data !== undefined) { 
             const currentDateTime = DateTime.local() 
-            .setZone("America/New_York", {
-                keepLocalTime: false,
-            })
-            .set({
-                hour: 0,
-                minute: 0,
-                second: 0,
-            })
-            .toFormat("d LLL yyyy, hh:mm a"); 
-            let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-              let qaRejectedEnrollment; 
+                        .setZone("America/New_York", {
+                            keepLocalTime: false,
+                        })
+                        .set({
+                            hour: 0,
+                            minute: 0,
+                            second: 0,
+                        })
+                        .toFormat("d LLL yyyy, hh:mm a"); 
+                        let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
+                        let qaRejectedEnrollment; 
               let provisioningRejectedEnrollments; 
               if(role === "CSR" || role === "TEAM LEAD"){
                   qaRejectedEnrollment= response.data.data.filter((enrollment) => {   
