@@ -5,18 +5,13 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId,startDate,en
     const [webConsent,setWebConsent]=useState(0) 
     const [oldFacebook,setOldFacebook]=useState(0) 
     const [newFacebook,setNewFacebook]=useState(0) 
-     
     const [SMM,setSMM]=useState(0)  
-     
     const [email,setEmail]=useState(0)  
-     
     const [auto,setAuto]=useState(0) 
-
-   useEffect(()=>{  
+   useEffect(()=>{   
+       let isMounted=true
      Axios.get(`${BASE_URL}/api/web/dashboard/salesStatsByChannel?userId=${roleId}`).then((response)=>{ 
-        
       if(response.data.data !== undefined){  
-         console.log("it is not undefiend")
          let endDateEnrollment = endDate;
                 if (startDate !== null) {
                     if (endDate === null) {
@@ -24,15 +19,13 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId,startDate,en
                         .setZone("America/New_York", { keepLocalTime: false })
                         .set({ hour: 23, minute: 59, second: 0 })
                         .toFormat("d LLL yyyy, hh:mm a");
-                    
                     endDateEnrollment = DateTime.fromFormat(endDateEnrollment, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-                      
                     }  
                 }  
             response.data.data.enrollments.map(enrollment=>{   
-               if((DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate) && (DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment)) { 
-                 
-                  if(enrollment.salesChannel === "Auto"){  
+               if(isMounted && (DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate) && (DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment)) { 
+                
+                  if(enrollment.salesChannel === "Auto"){   
                      setAuto(prev=>prev+1)
                    }  
                    else if(enrollment.salesChannel === "Web Consent"){ 
@@ -50,7 +43,8 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId,startDate,en
                    } 
                    else if(enrollment.salesChannel === "Email"){ 
                        setEmail(prev=>prev+1)
-                   }
+                   } 
+               
                }
             })
        }  
@@ -60,15 +54,23 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId,startDate,en
           
 
      }).catch(error=>{ 
-
+             if(isMounted){ 
+               setWebConsent(0) 
+               setAuto(0) 
+               setOldFacebook(0) 
+               setNewFacebook(0) 
+               setSMM(0) 
+               setEmail(0)
+             }
      })
      return ()=>{ 
-      setWebConsent(0) 
-      setAuto(0) 
-      setOldFacebook(0) 
-      setNewFacebook(0) 
-      setSMM(0) 
-      setEmail(0)
+     isMounted=false 
+     setWebConsent(0) 
+     setAuto(0) 
+     setOldFacebook(0) 
+     setNewFacebook(0) 
+     setSMM(0) 
+     setEmail(0)
      }
    },[startDate,endDate,roleId])
     return( 

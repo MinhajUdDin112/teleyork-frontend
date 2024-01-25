@@ -3,7 +3,8 @@ import Axios from "axios";
 import { DateTime } from "luxon";
 export default function ProvisioningQueue({ BASE_URL, userid }) {
     const [provisioningqueueenrollments, setProvisioningQueueEnrollments] = useState(0);
-    useEffect(() => {
+    useEffect(() => { 
+        let isMounted=true
         Axios.get(`${BASE_URL}/api/user/provisionedEnrollmentUserList?userId=${userid}`)
             .then((response) => {
                 const currentDateTime = DateTime.local() 
@@ -22,11 +23,25 @@ export default function ProvisioningQueue({ BASE_URL, userid }) {
                     const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
                         return DateTime.fromFormat(enrollment.nladEnrollmentDate, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
                  
-                    });
-                    setProvisioningQueueEnrollments(enrollmentsInCurrentShift.length);
+                    }); 
+                    if(isMounted){
+                    setProvisioningQueueEnrollments(enrollmentsInCurrentShift.length); 
+                    }
+                } 
+                else{ 
+                    if(isMounted){ 
+                        setProvisioningQueueEnrollments(0)
+                    }
                 }
             })
-            .catch((err) => {});
+            .catch((err) => { 
+                if(isMounted){ 
+                    setProvisioningQueueEnrollments(0)
+                }
+            });
+            return ()=>{ 
+                isMounted=false
+            }
     }, []);
     return <h2 className="text-center">{provisioningqueueenrollments}</h2>;
 }

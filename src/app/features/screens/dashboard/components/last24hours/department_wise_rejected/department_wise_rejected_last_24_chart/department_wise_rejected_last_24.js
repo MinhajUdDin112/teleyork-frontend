@@ -14,7 +14,6 @@ export default function DepartmentWiseRejectedLast24Chart({role,roleId,BASE_URL}
         setData([["Task", "Enrollments"]])
       Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${roleId}`)
       .then((response) => {
-    
           if (response.data.data !== undefined) { 
             const currentDateTime = DateTime.local() 
             .setZone("America/New_York", {
@@ -27,8 +26,6 @@ export default function DepartmentWiseRejectedLast24Chart({role,roleId,BASE_URL}
             })
             .toFormat("d LLL yyyy, hh:mm a"); 
             let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-           
-               
               let qaRejectedEnrollment; 
               let provisioningRejectedEnrollments; 
               if(role === "CSR" || role === "TEAM LEAD"){
@@ -49,7 +46,7 @@ export default function DepartmentWiseRejectedLast24Chart({role,roleId,BASE_URL}
                   
                   }); */  
                         }   
-                        if (isMounted) {
+                    
                             let newData = [["Task", "Enrollments"]];
                             if (qaRejectedEnrollment.length !== 0) {
                               newData.push(["QA", qaRejectedEnrollment.length]);
@@ -59,7 +56,7 @@ export default function DepartmentWiseRejectedLast24Chart({role,roleId,BASE_URL}
                                 "Provisioning",
                                 provisioningRejectedEnrollments.length,
                               ]);
-                            }
+                            }     if (isMounted) {
                             setData(newData);
                           }
 

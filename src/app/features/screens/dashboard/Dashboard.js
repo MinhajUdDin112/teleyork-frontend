@@ -183,6 +183,7 @@ const Dashboard = ({ permittedRoutes }) => {
                             <>
                                 <h6 className="sales-channel-stats p-4 ml-4">Last 24 Hours Sales Channel</h6>
                                 <Last24HoursAgentSalesChannel BASE_URL={BASE_URL} roleId={selectedAgent} />
+                                <Last24AgentSalesChannelChart BASE_URL={BASE_URL} roleId={selectedAgent}  />
                             </>
                         )}
                     </div>
