@@ -23,7 +23,7 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId}){
           })
           .toFormat("d LLL yyyy, hh:mm a"); 
           let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-            response.data.data[0].enrollments.map(enrollment=>{ 
+            response.data.data.enrollments.map(enrollment=>{ 
                if( (DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom)) { 
                   if(isMounted){  
                   if(enrollment.salesChannel === "Auto"){  
