@@ -4,20 +4,15 @@ import React,{useEffect,useState} from "react"
 export default function DateRangeAgentSalesChannel({BASE_URL,roleId}){  
     const [webConsent,setWebConsent]=useState(0) 
     const [oldFacebook,setOldFacebook]=useState(0) 
-    const [newFacebook,setNewFacebook]=useState(0) 
-     
+    const [newFacebook,setNewFacebook]=useState(0)
     const [SMM,setSMM]=useState(0)  
-     
     const [email,setEmail]=useState(0)  
-     
     const [auto,setAuto]=useState(0) 
-
    useEffect(()=>{  
-       
+        let isMounted=true
      Axios.get(`${BASE_URL}/api/web/dashboard/salesStatsByChannel?userId=${roleId}`).then((response)=>{ 
        if(response.data.data !== undefined){  
-          console.log(response.data.data[0].enrollments)
-          const currentDateTime = DateTime.local() 
+           const currentDateTime = DateTime.local() 
           .setZone("America/New_York", {
               keepLocalTime: false,
           })
@@ -28,11 +23,10 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId}){
           })
           .toFormat("d LLL yyyy, hh:mm a"); 
           let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-        
             response.data.data[0].enrollments.map(enrollment=>{ 
-               if((DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom)) { 
-                   if(enrollment.salesChannel === "Auto"){  
-                  
+               if( (DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom)) { 
+                  if(isMounted){  
+                  if(enrollment.salesChannel === "Auto"){  
                      setAuto(prev=>prev+1)
                    }  
                    else if(enrollment.salesChannel === "Web Consent"){ 
@@ -50,7 +44,8 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId}){
                    } 
                    else if(enrollment.salesChannel === "Email"){ 
                        setEmail(prev=>prev+1)
-                   }
+                   } 
+                  }
                }
             })
        }  
@@ -60,8 +55,17 @@ export default function DateRangeAgentSalesChannel({BASE_URL,roleId}){
           
 
      }).catch(error=>{ 
-
-     })
+       
+     })  
+     return () => { 
+      isMounted=false
+         setWebConsent(0);
+         setAuto(0);
+         setOldFacebook(0);
+         setNewFacebook(0);
+         setSMM(0);
+         setEmail(0);
+     };
    },[roleId])
     return( 
         <div className="flex flex-wrap justify-content-around flex-row">  

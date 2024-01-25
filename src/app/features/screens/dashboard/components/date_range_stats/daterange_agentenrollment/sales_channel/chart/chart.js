@@ -10,6 +10,7 @@ export default function DateRangeAgentSalesChannelChart({ BASE_URL, roleId, star
         is3D: true,
     };
     useEffect(() => {
+        let isMounted = true;
         Axios.get(`${BASE_URL}/api/web/dashboard/salesStatsByChannel?userId=${roleId}`)
             .then((response) => {
                 if (response.data.data !== undefined) {
@@ -51,19 +52,22 @@ export default function DateRangeAgentSalesChannelChart({ BASE_URL, roleId, star
                         let arr2 = [item, obj[item]];
                         arr.push(arr2);
                     });
-                    setData(arr);
-                    console.log("arr is ", arr);
+                    if (isMounted) {
+                        setData(arr);
+                    }
                 } else {
                 }
             })
             .catch((error) => {});
+        return () => {
+            isMounted = false;
+        };
     }, [startDate, endDate, roleId]);
     return (
         <div className="flex flex-wrap justify-content-around flex-row ">
             {data.length !== 1 ? (
                 <>
                     <Chart chartType="PieChart" data={data} options={options} className="flex flex-wrap justify-content-center pie-chart" />
-                    {/* <Chart chartType="ColumnChart" data={data} options={options} className="flex flex-wrap justify-content-center bar-chart" />*/}
                 </>
             ) : undefined}{" "}
         </div>

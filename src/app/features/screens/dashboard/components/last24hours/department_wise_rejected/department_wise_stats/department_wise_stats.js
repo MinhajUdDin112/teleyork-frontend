@@ -4,7 +4,8 @@ import { DateTime } from "luxon"
 export default function DepartmentWiseRejectedInLast24({role,roleId,BASE_URL}){   
      const [qaRejected,setQaRejected]=useState(0) 
       const [provisioningRejected,setProvisioningRejected]=useState(0)
-    useEffect(()=>{ 
+    useEffect(()=>{   
+        let isMounted=true
       Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${roleId}`)
       .then((response) => {
           const currentDateTime = DateTime.local() 
@@ -33,17 +34,27 @@ export default function DepartmentWiseRejectedInLast24({role,roleId,BASE_URL}){
                  }); 
                       
                         } 
-                        else{  /*
-                          enrollmentsInCurrentShift= response.data.data.filter((enrollment) => { 
-                              return DateTime.fromFormat(enrollment.rejectedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
-                  
-                  }); */
-                        }
+                        if(isMounted){
                      setQaRejected(qaRejectedEnrollment.length)  
-                     setProvisioningRejected(provisioningRejectedEnrollments.length)
+                     setProvisioningRejected(provisioningRejectedEnrollments.length) 
+                        }
+          } 
+          else{ 
+            if(isMounted){ 
+                setQaRejected(0)  
+                     setProvisioningRejected(0)   
+            }
           }
       })
-      .catch((err) => {});
+      .catch((err) => { 
+        if(isMounted){ 
+            setQaRejected(0)  
+                 setProvisioningRejected(0)   
+        }
+      }); 
+      return ()=>{ 
+        isMounted=false
+      }
     },[])
     return ( 
         <div className="flex flex-wrap justify-content-around flex-row">  

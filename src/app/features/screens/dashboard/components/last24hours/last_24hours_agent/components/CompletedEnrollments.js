@@ -3,7 +3,8 @@ import Axios from "axios";
 import { DateTime } from "luxon";
 export default function CompletedEnrollments({role, BASE_URL, userid }) {
     const [completedenrollments, setCompletedEnrollments] = useState(0);
-    useEffect(() => {
+    useEffect(() => { 
+         let isMounted=true
         Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${userid}`)
             .then((response) => {
                 const currentDateTime = DateTime.local() 
@@ -35,11 +36,24 @@ export default function CompletedEnrollments({role, BASE_URL, userid }) {
                     
                     }); 
                           }
-                  
-                          setCompletedEnrollments(enrollmentsInCurrentShift.length);
+                      if(isMounted){
+                          setCompletedEnrollments(enrollmentsInCurrentShift.length); 
+                      }
+                } 
+                else{ 
+                    if(isMounted){ 
+                        setCompletedEnrollments(0)
+                     }  
                 }
             })
-            .catch((err) => {});
+            .catch((err) => { 
+                 if(isMounted){ 
+                    setCompletedEnrollments(0)
+                 }
+            });   
+            return ()=>{ 
+                isMounted=false
+            }
     }, [userid]);
     return <h2 className="text-center">{completedenrollments}</h2>;
 }

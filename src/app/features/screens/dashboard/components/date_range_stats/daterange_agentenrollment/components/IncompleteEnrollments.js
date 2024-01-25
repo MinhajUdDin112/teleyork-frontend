@@ -9,7 +9,8 @@ export default function IncompleteEnrollments({ BASE_URL, userid, startDate, end
             endDateEnrollment = new Date().toISOString();
         }
     }
-    useEffect(() => {
+    useEffect(() => {  
+        let isMounted=true
         Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${userid}`)
             .then((response) => {
                 if(response.data.data !== undefined){
@@ -19,29 +20,31 @@ export default function IncompleteEnrollments({ BASE_URL, userid, startDate, end
                             endDateEnrollment = DateTime.local()
                             .setZone("America/New_York", { keepLocalTime: false })
                             .set({ hour: 23, minute: 59, second: 0 })
-                            .toFormat("d LLL yyyy, hh:mm a");
-                        
+                            .toFormat("d LLL yyyy, hh:mm a"); 
                         endDateEnrollment = DateTime.fromFormat(endDateEnrollment, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-                          
-                          
-                        
-                        }
                     }
-                   
-                     const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
-                         
+                    }
+                     const enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {    
                         return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <=endDateEnrollment
-                  
-                    });      
-                     setIncompleteEnrollments(enrollmentsInCurrentShift.length)  
+                    }); 
+                    if(isMounted){      
+                     setIncompleteEnrollments(enrollmentsInCurrentShift.length) 
+                    }  
                 } 
-                else{ 
-                    setIncompleteEnrollments(0)
+                else{  
+                    if(isMounted){
+                    setIncompleteEnrollments(0) 
+                    }
                 }
             })
-            .catch((err) => { 
-                setIncompleteEnrollments(0)
-            });
+            .catch((err) => {  
+                if(isMounted){
+                setIncompleteEnrollments(0) 
+                }
+            }); 
+            return ()=>{ 
+                isMounted=false
+            }
     }, [startDate, endDate, userid]);
     return <h2 className="text-center"> {incompleteenrollments}</h2>;
 }

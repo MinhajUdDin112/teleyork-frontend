@@ -3,7 +3,8 @@ import { DateTime } from "luxon";
 import Axios from "axios";
 export default function ApprovedEnrollments({ role,BASE_URL, userid }) {
     const [approvedenrollments, setApprovedEnrollments] = useState(0);
-    useEffect(() => {
+    useEffect(() => { 
+        let isMounted=true
         Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
             .then((response) => {
                 const currentDateTime = DateTime.local() 
@@ -33,11 +34,25 @@ export default function ApprovedEnrollments({ role,BASE_URL, userid }) {
                     
                     }); 
                           }
-                  
+                          if(isMounted){ 
+                           
                           setApprovedEnrollments(enrollmentsInCurrentShift.length);
+                        }
+                } 
+                else{  
+                    if(isMounted){
+                    setApprovedEnrollments(0) 
+                    }
                 }
             })
-            .catch((err) => {});
+            .catch((err) => { 
+                if(isMounted){
+                    setApprovedEnrollments(0) 
+                    }
+            }); 
+            return ()=>{ 
+                isMounted=false
+            }
     }, []);
     return <h2 className="text-center">{approvedenrollments}</h2>;
 }

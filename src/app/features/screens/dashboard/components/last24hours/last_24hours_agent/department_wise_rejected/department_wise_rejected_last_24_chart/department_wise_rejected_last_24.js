@@ -14,7 +14,6 @@ export default function DepartmentWiseAgentRejectedLast24Chart({role,roleId,BASE
         setData([["Task", "Enrollments"]])
       Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${roleId}`)
       .then((response) => {
-    
           if (response.data.data !== undefined) { 
             const currentDateTime = DateTime.local() 
             .setZone("America/New_York", {
@@ -27,8 +26,6 @@ export default function DepartmentWiseAgentRejectedLast24Chart({role,roleId,BASE
             })
             .toFormat("d LLL yyyy, hh:mm a"); 
             let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();
-           
-               
               let qaRejectedEnrollment; 
               let provisioningRejectedEnrollments; 
               if(role === "CSR" || role === "TEAM LEAD"){
@@ -43,13 +40,6 @@ export default function DepartmentWiseAgentRejectedLast24Chart({role,roleId,BASE
                  }); 
                       
                         } 
-                        else{  /*
-                          enrollmentsInCurrentShift= response.data.data.filter((enrollment) => { 
-                              return DateTime.fromFormat(enrollment.rejectedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
-                  
-                  }); */  
-                        }   
-                        if (isMounted) {
                             let newData = [["Task", "Enrollments"]];
                             if (qaRejectedEnrollment.length !== 0) {
                               newData.push(["QA", qaRejectedEnrollment.length]);
@@ -59,14 +49,18 @@ export default function DepartmentWiseAgentRejectedLast24Chart({role,roleId,BASE
                                 "Provisioning",
                                 provisioningRejectedEnrollments.length,
                               ]);
-                            }
+                            } 
+                            
+                        if (isMounted) {
                             setData(newData);
                           }
 
                     
           }
       })
-      .catch((err) => {}); 
+      .catch((err) => {  
+         
+      }); 
       return ()=>{ 
         isMounted=false
       }
@@ -76,7 +70,6 @@ export default function DepartmentWiseAgentRejectedLast24Chart({role,roleId,BASE
             {data.length !== 1 ? (
                 <>
                     <Chart chartType="PieChart" data={data} options={options} className="flex flex-wrap justify-content-center pie-chart" />
-                    {/*<Chart chartType="ColumnChart" data={data} options={options} className="flex flex-wrap justify-content-center bar-chart" />*/}
                 </>
             ) : undefined}{" "}
         </div>
