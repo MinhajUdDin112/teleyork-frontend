@@ -197,6 +197,14 @@ const CustomerProfile = () => {
                                     <div>
                                         <table className="cp_table w-full text-left">
                                             <tbody>
+                                            <tr>
+                                                    <td >First Name</td>
+                                                    <td>{cpData?.firstName !== undefined ? cpData?.firstName.toUpperCase() : "NIL"}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Name</td>
+                                                    <td>{cpData?.lastName !== undefined ? cpData?.lastName.toUpperCase() : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Address 1</td>
                                                     <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td>
@@ -456,7 +464,10 @@ const CustomerProfile = () => {
                                                     <td>Order by</td>
                                                     <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td>
                                                 </tr>
-
+                                                <tr>
+                                                    <td>Account ID</td>
+                                                    <td>{cpData?.accountId !== undefined ? cpData?.accountId : "NIL"}</td>
+                                                </tr>
                                                 <tr>
                                                     <td>Enrollment ID</td>
                                                     <td>{cpData?.enrollmentId !== undefined ? cpData?.enrollmentId : "NIL"}</td>

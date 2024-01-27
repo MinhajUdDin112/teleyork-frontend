@@ -29,7 +29,7 @@ const PaymentScreen = () => {
         cardNo2: Yup.string().required("Please Enter Complete Card Number"),
         cardNo3: Yup.string().required("Please Enter Complete Card Number"),
         cardNo4: Yup.string().required("Please Enter Complete Card Number"),
-        securityCode: Yup.string().required("Please Enter Code"),
+        CVC: Yup.string().required("Please Enter Code"),
         expDate: Yup.string().required("Please Enter Date"),
         receiptNumber: Yup.string().required("Please Enter Number"),
         name: Yup.string().required("Please Enter Name"),
@@ -52,7 +52,7 @@ const PaymentScreen = () => {
             cardNo3: "",
             cardNo4: "",
             cardType: "",
-            securityCode: "",
+            CVC: "",
             expDate: "",
             receiptNumber: "",
             name: "",
@@ -115,9 +115,9 @@ const PaymentScreen = () => {
     ];
     const optionsForCardType = [
         { label: "Select ", value: "" },
-        { label: "Type 1", value: "card" },
-        { label: "Type 2", value: "cash" },
-        { label: "Type 3", value: "pin" },
+        { label: "Master", value: "Master" },
+        { label: "Visa", value: "Visa" },
+       
     ];
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
@@ -173,21 +173,21 @@ const PaymentScreen = () => {
                         />
                     </div>
                 </div>
-            </div>
 
-            {formik.values.paymentMode == "card" ? (
+
+                {formik.values.paymentMode == "card" ? (
                 <>
                     <table className="cp_table w-full ml-3">
                         <tbody>
                             <tr className="text-lg">
                                 <td className="w-21rem ">Credit Card Number</td>
                                 <td>
-                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo1") }, "input_text")} type="text" id="cardNo1" value={formik.values.cardNo1} onChange={formik.handleChange} />
+                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo1") }, "input_text")} type="text" id="cardNo1" value={formik.values.cardNo1} onChange={formik.handleChange} maxLength={4}/>
                                     {getFormErrorMessage("cardNo1")}
-                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo2") }, "input_text")} type="text" id="cardNo2" value={formik.values.cardNo2} onChange={formik.handleChange} />
-                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo3") }, "input_text")} type="text" id="cardNo3" value={formik.values.cardNo3} onChange={formik.handleChange} />
+                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo2") }, "input_text")} type="text" id="cardNo2" value={formik.values.cardNo2} onChange={formik.handleChange} maxLength={4}/>
+                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo3") }, "input_text")} type="text" id="cardNo3" value={formik.values.cardNo3} onChange={formik.handleChange}maxLength={4} />
                                     {getFormErrorMessage("cardNo3")}
-                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo4") }, "input_text")} type="text" id="cardNo4" value={formik.values.cardNo4} onChange={formik.handleChange} />
+                                    <InputText className={classNames({ "w-7rem mr-3": true, "p-invalid": isFormFieldValid("cardNo4") }, "input_text")} type="text" id="cardNo4" value={formik.values.cardNo4} onChange={formik.handleChange} maxLength={4}/>
                                     {getFormErrorMessage("cardNo4")}
                                 </td>
                             </tr>
@@ -209,14 +209,14 @@ const PaymentScreen = () => {
                             <tr>
                                 <td className="text-lg">Security Code</td>
                                 <td>
-                                    <InputText className={classNames({ "w-15rem mr-3": true, "p-invalid": isFormFieldValid("securityCode") }, "input_text")} type="password" id="securityCode" value={formik.values.securityCode} onChange={formik.handleChange} />
-                                    {getFormErrorMessage("securityCode")}
+                                    <InputText className={classNames({ "w-15rem mr-3": true, "p-invalid": isFormFieldValid("CVC") }, "input_text")} type="password" id="CVC" value={formik.values.CVC} onChange={formik.handleChange} />
+                                    {getFormErrorMessage("CVC")}
                                 </td>
                             </tr>
                             <tr>
                                 <td className="text-lg">EXP Date</td>
                                 <td>
-                                    <Calendar id="expDate" value={formik.values.expDate} onChange={formik.handleChange} showIcon style={{ width: "15rem" }} />
+                                    <InputText id="expDate" value={formik.values.expDate} onChange={formik.handleChange} showIcon style={{ width: "15rem" }} />
                                     {getFormErrorMessage("expDate")}
                                 </td>
                             </tr>
@@ -295,6 +295,15 @@ const PaymentScreen = () => {
             ) : (
                 ""
             )}
+
+
+                <div className="text-right">
+                <Button label="Submit" type="Submit"/>
+            </div>
+            </div>
+
+           
+           
         </>
     );
 };
