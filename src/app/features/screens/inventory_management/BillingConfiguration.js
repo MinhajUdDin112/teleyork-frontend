@@ -129,7 +129,7 @@ const BillingConfiguration = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/billing/getall`);
             setconfigData(res?.data?.data || []);
-            // console.log("config data is",res?.data?.data)
+            console.log("config data is", res?.data?.data)
 
         } catch (error) {
             toast.error(error?.response?.data?.msg);
@@ -162,7 +162,6 @@ const BillingConfiguration = () => {
     };
 
     const addFeature = async () => {
-
         const dataToSend = {
             ServiceProvider: parseLoginRes?.compony,
             featureName: formik.values.featureName,
@@ -172,8 +171,7 @@ const BillingConfiguration = () => {
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/feature/addfeature`, dataToSend);
             if (response?.status == 200 || response?.status == 201) {
-
-                setAllFeature(false);
+                setNewFeature(false); // Fix the typo here
                 getFeature();
                 toast.success("Feature added successfully");
             }
@@ -181,6 +179,7 @@ const BillingConfiguration = () => {
             toast.error(error?.response?.data?.msg);
         }
     };
+
 
     useEffect(() => {
         const getPlan = async () => {
@@ -413,12 +412,36 @@ const BillingConfiguration = () => {
                 <DataTable value={configData} showGridlines resizableColumns columnResizeMode="fit">
                     <Column header="Billing Model" field="billingmodel" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Inventory Type" field="inventoryType" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="One Time Charge" field="oneTimeCharge" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column
+                        header="One Time Charge"
+                        field="oneTimeCharge"
+                        body={(rowData) => `$${rowData.oneTimeCharge}`}
+                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+                    />
+
                     <Column header="Monthly Charges" body={(rowData) => rowData?.monthlyCharge?.map(mc => mc.name).join(', ')} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Bill Creation Date" field="BillCreationDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Due Date" field="dueDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Feature" body={(rowData) => rowData?.additionalFeature?.map(sd => sd.featureName).join(', ')} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Discount" body={(rowData) => rowData?.selectdiscount?.map(sd => sd.discountname).join(', ')} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column
+                        header="Feature"
+                        body={(rowData) =>
+                            rowData?.additionalFeature
+                                ?.map((sd) => `${sd.featureName} - $${sd.featureAmount}`)
+                                .join(', ')
+                        }
+                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+                    />
+
+                    <Column
+                        header="Discount"
+                        body={(rowData) =>
+                            rowData?.selectdiscount
+                                ?.map((sd) => `${sd.discountname} - $${sd.amount}`)
+                                .join(', ')
+                        }
+                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+                    />
+
                     <Column header="Payment Method" field="paymentMethod" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     {/* <Column header="Actions" body={actionTemplate} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} /> */}
                 </DataTable>
