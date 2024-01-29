@@ -14,7 +14,7 @@ import { Dropdown } from "primereact/dropdown";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const RejectedEnrollments = () => {
+const Rejected_Enrollments = () => {
     const [selectedEnrollments, setSelectedEnrollments] = useState(null);
     const [rowClick, setRowClick] = useState(true);
    const [reasonbody,setReasonBody]=useState(null) 
@@ -136,7 +136,7 @@ const RejectedEnrollments = () => {
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}&accountType=ACP`);
+            const res = await Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${parseLoginRes?._id}&accountType=Postpaid`);
             if (res?.status === 200 || res?.status === 201) {
                 if (!res?.data?.data) {
                     toast.error(res?.data?.msg);
@@ -188,7 +188,7 @@ const RejectedEnrollments = () => {
                     storedData = false;
                     localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
                 }
-                navigate("/enrollment");
+                navigate("/post-enrollment");
                 setisButtonLoading(false);
             }
         } catch (error) {
@@ -428,4 +428,4 @@ const RejectedEnrollments = () => {
     );
 };
 
-export default RejectedEnrollments;
+export default Rejected_Enrollments;

@@ -94,6 +94,14 @@ import InvenotorySearch from "./app/features/screens/search_customer/advance_sea
 import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
 import Post_service_availbilty from "./app/features/screens/PostPaid-order/Pages/Post_Service_availbilty";
 import Post_enrollment_Flow from "./app/features/screens/PostPaid-order/Pages/post_enrollment_flow";
+import Completed_Enrollments from"./app/features/screens/PostPaid-order/PostOrder-Screens/Completed_enrollment";
+import All_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/All_Enrollments"
+import Incompleted_Enrollment from "./app/features/screens/PostPaid-order/PostOrder-Screens/Incomplete_ENrollment"
+import Rejected_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Rejected_Enrollment"
+import ApprovedEnrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Approved_Enrollment";
+import Provisioningqueue from "./app/features/screens/PostPaid-order/PostOrder-Screens/Provising_Queue";
+import Upload_Bulk from "./app/features/screens/PostPaid-order/PostOrder-Screens/Bulk_Upload";
+import PostPersonalInfo from "./app/features/screens/PostPaid-order/PersonalInfo_com/PersonalInfo";
 const App = () => {
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
@@ -418,6 +426,14 @@ const App = () => {
 
                                     {/* PostPaid Order Route */}
                                     <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
+                                    <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />
+                                    <Route exact path="postpaid-allenrollment" element={isPermitted("/postpaid-allenrollment") ? <All_Enrollments /> : <Dashboard />} />
+                                    <Route exact path="postpaid-incomplete" element={isPermitted("/postpaid-incomplete") ? <Incompleted_Enrollment /> : <Dashboard />} />
+                                    <Route exact path="postpaid-rejectedenrollment" element={isPermitted("/postpaid-rejectedenrollment") ? <Rejected_Enrollments /> : <Dashboard />} />
+                                    <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments/> : <Dashboard />} />
+                                    {/* <Route exact path="postpaid-provisingenrollment" element={isPermitted("/postpaid-provisingenrollment") ? <Provisioningqueue/> : <Dashboard />} />
+                                    <Route exact path="postpaid-bulkenrollment" element={isPermitted("/postpaid-bulkenrollment") ? <Upload_Bulk/> : <Dashboard />} /> */}
+                                    <Route path="/Postpersonalinfo" element={<PostPersonalInfo/>} />
 
                                 </Routes>
                             )}

@@ -727,7 +727,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
 import moment from "moment/moment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
+const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     const [checkdoberror, setCheckDOBError] = useState(false);
 
     const startYear = 1900;
@@ -833,9 +833,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
               
 
                 const userId = _id;
-
                 const dataToSend = {
-                    accountType:"ACP",
+                    accountType:"Postpaid",
                     csr: csr,
                     userId: userId,
                     firstName: formik.values.firstName,
@@ -1465,4 +1464,4 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     );
 };
 
-export default PersonalInfo;
+export default PostPersonalInfo;
