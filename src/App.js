@@ -35,10 +35,9 @@ import HandoverEventOrder from "./app/features/screens/lifeline_orders/HandoverE
 import PendingEventOrder from "./app/features/screens/lifeline_orders/PendingEventOrder";
 import WithProofEnrollments from "./app/features/screens/lifeline_orders/WithProofEnrollments";
 import WithoutProofEnrollments from "./app/features/screens/lifeline_orders/WithoutProofEnrollments";
-import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
-import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
-import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
-import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
+// import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
+// import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
+
 import DropshipOrdersFlowPage from "./app/features/screens/inventory_management/dropship_orders/dropship_orders_flow_page";
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
 import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
@@ -93,6 +92,8 @@ import BillingConfiguration from "./app/features/screens/inventory_management/Bi
 import CustomerUsage from "./app/features/screens/customer_services/CustomerUsage";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
 import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
+import Post_service_availbilty from "./app/features/screens/PostPaid-order/Pages/Post_Service_availbilty";
+import Post_enrollment_Flow from "./app/features/screens/PostPaid-order/Pages/post_enrollment_flow";
 const App = () => {
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
@@ -353,6 +354,7 @@ const App = () => {
                                     <Route path="/newenrolment" element={isPermitted("/newenrolment") ? <ServiceAvailablityPage /> : <Dashboard />} />
                                     {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
                                     <Route path="/enrollment" element={<EnrollmentFlowPage />} />
+                                    <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                     <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
                                     <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
                                     <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
@@ -366,10 +368,9 @@ const App = () => {
                                     <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
                                     <Route path="/withoutproofenrollments" element={isPermitted("/withoutproofenrollments") ? <WithoutProofEnrollments /> : <Dashboard />} />
                                     <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
-                                    <Route path="/incomplete" element={isPermitted("/incomplete") ? <IncompleteEnrollments /> : <Dashboard />} />
-                                    <Route path="/completeenrollments" element={isPermitted("/completeenrollments") ? <CompleteEnrollments /> : <Dashboard />} />
-                                    <Route path="/bulkportin" element={isPermitted("/bulkportin") ? <BulkPortin /> : <Dashboard />} />
-                                    <Route path="/allenrollmentorders" element={isPermitted("/allenrollmentorders") ? <Allenrollments /> : <Dashboard />} />
+                                   
+                                  
+                                  
                                     <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
                                     <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentScreen /> : <Dashboard />} />
                                     <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
@@ -414,6 +415,10 @@ const App = () => {
                                     <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                     <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} />
                                     <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
+
+                                    {/* PostPaid Order Route */}
+                                    <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
+
                                 </Routes>
                             )}
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}

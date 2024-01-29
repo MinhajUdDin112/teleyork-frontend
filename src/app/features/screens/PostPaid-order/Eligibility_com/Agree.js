@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { Calendar } from "primereact/calendar";
+import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
+import { Image } from "primereact/image";
+import Axios from "axios";
+
+import { Calendar } from "primereact/calendar";
+
 import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
-import Axios from "axios";
+
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
@@ -13,120 +17,241 @@ import classNames from "classnames";
 import { MultiSelect } from "primereact/multiselect";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const PaymentScreen = () => {
-    const [isLoading, setIsLoading] = useState();
-    const [isSearch, setIsSearch] = useState(false);
-    const [historyData, setHistoryData] = useState();
+const Agree = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
 
-    const selectedid = localStorage.getItem("selectedId");
-    const parseselectedid = JSON.parse(selectedid);
+    const [acpPrograms, setAcpPrograms] = useState([]);
+    const [selectedAcpProgramId, setSelectedAcpProgramId] = useState(null);
+    const [btnState, setBtnState] = useState(true);
+    const [isBack, setIsBack] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const validationSchema = Yup.object().shape({
-        plan: Yup.string().required("please select Payment Mode"),
-        product: Yup.string().required("Please Enter Complete Card Number"),
-        paymentMode: Yup.string().required("please select Payment Mode"),
-        cardNo1: Yup.string().required("Please Enter Complete Card Number"),
-        cardNo2: Yup.string().required("Please Enter Complete Card Number"),
-        cardNo3: Yup.string().required("Please Enter Complete Card Number"),
-        cardNo4: Yup.string().required("Please Enter Complete Card Number"),
-        CVC: Yup.string().required("Please Enter Code"),
-        expDate: Yup.string().required("Please Enter Date"),
-        receiptNumber: Yup.string().required("Please Enter Number"),
-        name: Yup.string().required("Please Enter Name"),
-        city: Yup.string().required("Please Enter City"),
-        state: Yup.string().required("Please Enter state"),
-        zip: Yup.string().required("Please Enter Zip"),
-        address1: Yup.string().required("Please Enter Address 1"),
-        address2: Yup.string().required("Please Enter Address 2"),
-        pin: Yup.string().required("Please Enter Pin"),
-    });
-    const formik = useFormik({
-        validationSchema: validationSchema,
-        initialValues: {
-            amount: "",
-            plan: "",
-            product: "",
-            paymentMode: "",
-            cardNo1: "",
-            cardNo2: "",
-            cardNo3: "",
-            cardNo4: "",
-            cardType: "",
-            CVC: "",
-            expDate: "",
-            receiptNumber: "",
-            name: "",
-            city: "",
-            state: "",
-            zip: "",
-            address1: "",
-            address2: "",
-            pin: "",
-            totall:"$24",
-        },
-        onSubmit: async (values, actions) => {
-            const selectedStartDate = formik.values.startDate;
+    // Get user data from localStorage
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
 
-            const formattedStartDate = selectedStartDate ? moment(selectedStartDate).format("YYYY-MM-DD") : "";
+    
+    const enrollmentUserId = _id;
 
-            setIsSearch(true);
-            const dataToSend = {
-                UserId: parseselectedid,
-                reportType: formik.values.reportType,
-                startDate: formattedStartDate,
-            };
-            console.log("data to send is", dataToSend);
-            setIsLoading(true);
-            try {
-                const response = await Axios.post(`${BASE_URL}/api/user/customerHistory`, dataToSend);
-                if (response?.status === 200 || response?.status === 201) {
-                    setHistoryData(response?.data?.data);
-                    console.log("Data is", response?.data?.data);
-                }
-            } catch (error) {
-                toast.error(error?.response?.data?.msg);
-                setIsLoading(false);
-            }
-        },
-    });
-
-    const options = [
-        { label: "Select", value: "" },
-        { label: "Plan 1", value: "sim2" },
-        { label: "Plan 2", value: "tablet2" },
-        { label: "Plan 3", value: "cell2" },
-        { label: "Plan 4", value: "sim1" },
-        { label: "Plan 5", value: "tablet1" },
-        { label: "Plan 6", value: "cell1" },
-    ];
-    const optionsForPayment = [
-        { label: "Select ", value: "" },
-        { label: "Credit/Debit card", value: "card" },
-        { label: "Cash", value: "cash" },
-        { label: "Money Order", value: "money" },
-        { label: "Skip Payment", value: "skip" },
-    ];
-    const optionsForProduct = [
-        { label: "Cell Phone", value: "cell" },
-        { label: "Tablet", value: "tablet" },
-        { label: "Wireless Device", value: "wireless" },
-        { label: "Titan", value: "titan" },
-        { label: "Sim Card", value: "Sim" },
-    ];
-    const optionsForCardType = [
-        { label: "Select ", value: "" },
-        { label: "Master", value: "Master" },
-        { label: "Visa", value: "Visa" },
-       
-    ];
-
-    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
-    const getFormErrorMessage = (name) => {
-        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+    const getAcpPrograms = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`);
+            setAcpPrograms(res?.data?.data || []);
+        } catch (error) {
+            toast.error(`Error fetching module data : + ${error?.response?.data?.msg}`);
+        }
     };
+
+    useEffect(() => {
+        getAcpPrograms();
+    }, []);
+
+   const postData = async () => {
+    setIsLoading(true);
+
+    const data = {
+        csr: csr,
+        userId: enrollmentUserId,
+        program: selectedAcpProgramId
+    }
+    try{
+        const res = await Axios.post(`${BASE_URL}/api/user/selectProgram`, data);
+        if (res?.status === 200 || res?.status === 201) {
+            localStorage.setItem("programmeId",JSON.stringify(res?.data))
+           
+            setIsBack(isBack+1);
+            handleNext();
+            setIsLoading(false);
+        }
+    }
+    catch(error){
+       toast.error(error?.response?.data?.msg)
+       setIsLoading(false);
+       handleNext();
+    }
+}
+
+//get programme data from local storage 
+const programedata= localStorage.getItem("programmeId");
+const parseprogramedata = JSON.parse(programedata);
+
+ //get ZipData data from local storage 
+ const zipdata= localStorage.getItem("zipData");
+ const parseZipData = JSON.parse(zipdata);
+
+//get personal info  data from local storage 
+ const basicResponse = localStorage.getItem("basicData");
+
+ 
+
+ 
+
+ 
+
+    const handleAcpSelection = (acpId) => {      
+            if (selectedAcpProgramId === acpId) {
+                setSelectedAcpProgramId(null);
+            } else {
+                setSelectedAcpProgramId(acpId);
+            }
+    };
+
+
+    useEffect(() => {
+        if (selectedAcpProgramId) 
+        {     setBtnState(false) } else { setBtnState(true)        
+        }
+    }, [selectedAcpProgramId]);
+
+
+useEffect(() => {
+    
+    if(parseprogramedata){
+        if(zipdata ){
+            setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram); 
+           
+        }
+        else{
+            setSelectedAcpProgramId(parseprogramedata?.data?.acpProgram?._id);    
+            
+        }
+       
+    }
+}, [])
+
+
+
+const [isSearch, setIsSearch] = useState(false);
+const [historyData, setHistoryData] = useState();
+
+const selectedid = localStorage.getItem("selectedId");
+const parseselectedid = JSON.parse(selectedid);
+
+const validationSchema = Yup.object().shape({
+    plan: Yup.string().required("please select Payment Mode"),
+    product: Yup.string().required("Please Enter Complete Card Number"),
+    paymentMode: Yup.string().required("please select Payment Mode"),
+    cardNo1: Yup.string().required("Please Enter Complete Card Number"),
+    cardNo2: Yup.string().required("Please Enter Complete Card Number"),
+    cardNo3: Yup.string().required("Please Enter Complete Card Number"),
+    cardNo4: Yup.string().required("Please Enter Complete Card Number"),
+    CVC: Yup.string().required("Please Enter Code"),
+    expDate: Yup.string().required("Please Enter Date"),
+    receiptNumber: Yup.string().required("Please Enter Number"),
+    name: Yup.string().required("Please Enter Name"),
+    city: Yup.string().required("Please Enter City"),
+    state: Yup.string().required("Please Enter state"),
+    zip: Yup.string().required("Please Enter Zip"),
+    address1: Yup.string().required("Please Enter Address 1"),
+    address2: Yup.string().required("Please Enter Address 2"),
+    pin: Yup.string().required("Please Enter Pin"),
+});
+const formik = useFormik({
+    validationSchema: validationSchema,
+    initialValues: {
+        amount: "",
+        plan: "",
+        product: "",
+        paymentMode: "",
+        cardNo1: "",
+        cardNo2: "",
+        cardNo3: "",
+        cardNo4: "",
+        cardType: "",
+        CVC: "",
+        expDate: "",
+        receiptNumber: "",
+        name: "",
+        city: "",
+        state: "",
+        zip: "",
+        address1: "",
+        address2: "",
+        pin: "",
+        totall:"$24",
+    },
+    onSubmit: async (values, actions) => {
+        const selectedStartDate = formik.values.startDate;
+
+        const formattedStartDate = selectedStartDate ? moment(selectedStartDate).format("YYYY-MM-DD") : "";
+
+        setIsSearch(true);
+        const dataToSend = {
+            UserId: parseselectedid,
+            reportType: formik.values.reportType,
+            startDate: formattedStartDate,
+        };
+        console.log("data to send is", dataToSend);
+        setIsLoading(true);
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/user/customerHistory`, dataToSend);
+            if (response?.status === 200 || response?.status === 201) {
+                setHistoryData(response?.data?.data);
+                console.log("Data is", response?.data?.data);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+            setIsLoading(false);
+        }
+    },
+});
+
+const options = [
+    { label: "Select", value: "" },
+    { label: "Plan 1", value: "sim2" },
+    { label: "Plan 2", value: "tablet2" },
+    { label: "Plan 3", value: "cell2" },
+    { label: "Plan 4", value: "sim1" },
+    { label: "Plan 5", value: "tablet1" },
+    { label: "Plan 6", value: "cell1" },
+];
+const optionsForPayment = [
+    { label: "Select ", value: "" },
+    { label: "Credit/Debit card", value: "card" },
+    { label: "Cash", value: "cash" },
+    { label: "Money Order", value: "money" },
+    { label: "Skip Payment", value: "skip" },
+];
+const optionsForProduct = [
+    { label: "Cell Phone", value: "cell" },
+    { label: "Tablet", value: "tablet" },
+    { label: "Wireless Device", value: "wireless" },
+    { label: "Titan", value: "titan" },
+    { label: "Sim Card", value: "Sim" },
+];
+const optionsForCardType = [
+    { label: "Select ", value: "" },
+    { label: "Master", value: "Master" },
+    { label: "Visa", value: "Visa" },
+   
+];
+
+const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+const getFormErrorMessage = (name) => {
+    return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+};
 
     return (
         <>
+        <ToastContainer/>
+            <div>
+                <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
+                    <Button label="Back" type="submit" onClick={handleBack} />
+                       <Button
+                            label="Continue"
+                            type="submit"
+                            onClick={postData}
+                            // disabled={btnState}
+                            icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} 
+                        />    
+                </div>
+                <div>
+                <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
+                </div>
+                <br />
+              
+            </div>
+         
+
             <div className="card flex flex-column justify-content-center mx-5 border-noround">
                 <h2 className="font-bold"> Payment</h2>
                 <div className="flex flex-wrap mx-3 my-3">
@@ -158,6 +283,11 @@ const PaymentScreen = () => {
                             filter
                             maxSelectedLabels={5}
                         />
+                    </div>
+
+                    <div className="mt-1 mr-3 ">
+                    <label className="m-0 pb-1 text-md font-semibold flex flex-colum ">Totall Amount</label>
+                    <InputText placeholder="$24"/>
                     </div>
                     <div className="mt-1 mr-3 ">
                         <label className="m-0 pb-1 text-md font-semibold flex flex-colum ">Select Payment Method</label>
@@ -301,11 +431,8 @@ const PaymentScreen = () => {
                 <Button label="Submit" type="Submit"/>
             </div>
             </div>
-
-           
-           
         </>
     );
 };
 
-export default PaymentScreen;
+export default Agree;
