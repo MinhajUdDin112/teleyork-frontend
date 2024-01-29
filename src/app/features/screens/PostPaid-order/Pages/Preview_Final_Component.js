@@ -1,8 +1,37 @@
-import React from "react"
-const Preview_Final_Component=()=>{
-    return(
+import React from "react";
+import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom";
+const Preview_Final_component = ({ enrollment_id }) => {
+    const navigate = useNavigate();
+
+    const zipRes = localStorage.getItem("zipData");
+    const basicRes = localStorage.getItem("basicData");
+
+    const movePage = () => {
+        navigate("/postpaid-newenrollment");
+        localStorage.removeItem("basicData");
+        localStorage.removeItem("address");
+        localStorage.removeItem("zipData");
+        localStorage.removeItem("agreeData");
+        localStorage.removeItem("programmeId");
+    };
+    const movepageToAll=()=>{
+        navigate("/postpaid-allenrollment");
+        localStorage.removeItem("basicData");
+        localStorage.removeItem("address");
+        localStorage.removeItem("zipData");
+        localStorage.removeItem("agreeData");
+        localStorage.removeItem("programmeId");
+    }
+
+    return (
         <>
+            <div className="card final-pre">
+                <h3>Enrollement is successfully saved against enrollment id: <span className="steric">{enrollment_id}</span> </h3>
+                <Button label="OK" onClick={zipRes? movePage: movepageToAll} className="final-btn" />
+            </div>
         </>
-    )
-}
-export default Preview_Final_Component
+    );
+};
+
+export default Preview_Final_component;

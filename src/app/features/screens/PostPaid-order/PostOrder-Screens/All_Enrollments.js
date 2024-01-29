@@ -10,18 +10,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
-import DialogForReject from "./DialogForReject";
-import DialogForActivateSim from "./DialogForActivateSim";
+import DialogForReject from "../PostPaid-Dialoge/DialogeFor_Reject"
+import DialogForActivateSim from "../PostPaid-Dialoge/DialogeFor_Activate"
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
-import DialogeForRemarks from "./DialogeForRemarks";
-import DialogeForTransferUser from "./DialogeForTransferUser";
-import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
+import DialogeForRemarks from "../PostPaid-Dialoge/DialogeFor_Remarks";
+import DialogeForTransferUser from "../PostPaid-Dialoge/DialogeFor_TransferUser";
+import DialogeForRemarksForIJ from "../PostPaid-Dialoge/DialogeFor_RemaeksForIJ";
 import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
-import DialogeForApprove from "./DialogeForApprove";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const AllEnrollments = () => {  
+const All_Enrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -130,7 +130,7 @@ const AllEnrollments = () => {
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=ACP`);
+            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=Postpaid`);
             if (res?.status === 200 || res?.status === 201) {
                 if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
@@ -206,7 +206,7 @@ const AllEnrollments = () => {
                          storedData = false;
                         localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
                     }
-                    navigate("/enrollment");
+                    navigate("/post-enrollment");
                     setisButtonLoading(false);
                 }
             } catch (error) {
@@ -746,6 +746,10 @@ const AllEnrollments = () => {
         </span>
     )}
 />
+<Column field="" header="Product" />
+<Column field="" header="Plan" />
+<Column field="" header="Price" />
+
 
                             {toCapital == "CSR" || toCapital == "CS" ||toCapital == "TEAM LEAD" ||toCapital == "CS MANAGER" ? (
                                 ""
@@ -767,5 +771,5 @@ const AllEnrollments = () => {
         </>
     );
 };
-export default AllEnrollments;
+export default All_Enrollments;
  

@@ -82,8 +82,8 @@ const BillingConfiguration = () => {
     const optionsForInventoryType = [
         { label: "Select Inventory Type", value: "" },
         { label: "Sim Card", value: "SimCard" },
-        { label: "Tablet", value: "Tablet" },
-        { label: "Cell Phone", value: "CellPhone" },
+        { label: "Wireless Device", value: "Wireless Device" },
+       
     ];
 
     const optionsForPayment = [

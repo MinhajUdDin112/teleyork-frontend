@@ -14,7 +14,7 @@ import { FilterMatchMode } from "primereact/api";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { InputText } from "primereact/inputtext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const InCompleteEnrollments = () => { 
+const InComplete_Enrollments = () => { 
      // State For Select Row
      const [selectedEnrollments, setSelectedEnrollments] = useState(null);
      const [rowClick, setRowClick] = useState(true);
@@ -123,7 +123,7 @@ const InCompleteEnrollments = () => {
     const getAllInCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${parseLoginRes?._id}&accountType=ACP`);
+            const res = await Axios.get(`${BASE_URL}/api/user/inCompleteEnrollmentUser?userId=${parseLoginRes?._id}&accountType=Postpaid`);
             if (res?.status === 200 || res?.status === 201) {
                 for (let i = 0; i < res?.data?.data?.length; i++) {
                     res.data.data[i].enrollment = res.data.data[i].isSelfEnrollment ? "Self Enrollments" : "Enrollment";
@@ -187,7 +187,7 @@ const InCompleteEnrollments = () => {
                 localStorage.setItem("address", JSON.stringify(response.data));
                 // localStorage.setItem("programmeId", JSON.stringify(response.data));
 
-                navigate("/enrollment");
+                navigate("/post-enrollment");
                 setisButtonLoading(false);
             }
         } catch (error) {
@@ -325,4 +325,4 @@ const InCompleteEnrollments = () => {
     );
 };
 
-export default InCompleteEnrollments;
+export default InComplete_Enrollments;

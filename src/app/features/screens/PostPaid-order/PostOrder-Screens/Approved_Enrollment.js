@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { FilterMatchMode} from 'primereact/api'
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
-const Approved_Enrollments = () => {
+const ApprovedEnrollments = () => {
     // State For Select Row
     const [selectedEnrollments, setSelectedEnrollments] = useState(null);
     const [rowClick, setRowClick] = useState(true);
@@ -81,7 +81,7 @@ const Approved_Enrollments = () => {
      const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${parseLoginRes?._id}&accountType=ACP`);
+            const res = await Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${parseLoginRes?._id}&accountType=Postpaid`);
             if (res?.status === 200 || res?.status === 201) {
                 const updatedData = res?.data?.data.map((item) => ({
                     ...item,
@@ -262,4 +262,4 @@ const Approved_Enrollments = () => {
   )
 }
 
-export default Approved_Enrollments
+export default ApprovedEnrollments
