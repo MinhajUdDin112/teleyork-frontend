@@ -106,9 +106,17 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                     <p className="w-6 ml-4">DOB:</p>
                                     <p className="w-6">{formatDate(previewInfo?.DOB)}</p>
                                 </div>
-                                <div className="flex  pt-2">
+                                <div className="flex  pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Telephone:</p>
                                     <p className="w-6">{previewInfo?.contact}</p>
+                                </div>
+                                <div className="flex  pt-2 border-bottom-2">
+                                    <p className="w-6 ml-4">Product:</p>
+                                    <p className="w-6">Nil</p>
+                                </div>
+                                <div className="flex  pt-2">
+                                    <p className="w-6 ml-4">Price:</p>
+                                    <p className="w-6">Nil</p>
                                 </div>
                              
                             </div>
@@ -129,14 +137,18 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">SSN:</p>
                                     <p className="w-6">{previewInfo?.SSN}</p>
-                                </div>
-                             
+                                </div>  
                               
-                              
-                                <div className="flex pt-2">
+                                <div className="flex pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Email:</p>
                                     <p className="w-6">{previewInfo?.email}</p>
                                 </div>
+                                <div className="flex pt-2 border-bottom-2">
+                                    <p className="w-6 ml-4">Plan:</p>
+                                    <p className="w-6">Nil</p>
+                                </div>
+                               
+                              
                             </div>
                         </div>
 

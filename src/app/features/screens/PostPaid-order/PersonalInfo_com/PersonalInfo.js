@@ -1445,7 +1445,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 </div>
             </div>
 
-            <div className="mt-4">
+            {/* <div className="mt-4">
                 <p className="font-semibold">Who is receiving government assistance?</p>
                 <div className="flex">
                     <div className="flex align-items-center">
@@ -1457,80 +1457,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         <label className="ml-2">Somebody Else in the Household</label>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-            {isHouseHold && (
-                <div>
-                    <div className="mt-4">
-                        <p className="font-semibold">Information of benefit qualifying person</p>
-                        <div className="p-fluid formgrid grid">
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    First Name <span className="steric">*</span>
-                                </label>
-                                <InputText className="mb-3" name="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
-                                {getFormErrorMessage("BenifitFirstName")}
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">Middle Name</label>
-                                <InputText
-                                    id="BenifitMiddleName"
-                                    value={formik.values.BenifitMiddleName}
-                                    onChange={formik.handleChange}
-                                    className={classNames({ "p-invalid": isFormFieldValid("BenifitMiddleName") }, "input_text")}
-                                    keyfilter={/^[a-zA-Z\s]*$/}
-                                    minLength={3}
-                                    maxLength={20}
-                                    style={{ textTransform: "uppercase" }}
-                                />
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Last Name <span className="steric">*</span>
-                                </label>
-                                <InputText className="mb-3" name="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
-                                {getFormErrorMessage("BenifitLastName")}
-                            </div>
-
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
-                                </label>
-                                <Calendar onPaste={handlePaste} className="mb-3" name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />
-                                {getFormErrorMessage("BenifitDOB")}
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
-                                </label>
-                                <InputText type="text" className="mb-3" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
-                                {getFormErrorMessage("BenifitSSN")}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <div className="mt-4">
-                <h3>Affordable Connectivity Program (ACP) Consent</h3>
-                <div className="sp_small">
-                    <Checkbox
-                        id="isACP"
-                        checked={acp}
-                        onChange={(e) => {
-                            handleACP(e);
-                            formik.handleChange(e);
-                        }}
-                        className={classNames({ "p-invalid": isFormFieldValid("isACP") }, "input_mask")}
-                    />
-                    <label className="p-checkbox-label mx-2">
-                        By proceeding with your application, you acknowledge and understand that the Affordable Connectivity Program is an FCC benefit initiative that lowers your monthly broadband bill. This program has an indefinite duration, and you will receive a 30-day notice upon its
-                        conclusion, after which you can choose to maintain your plan at the undiscounted rate. As a participant, you have the option to transfer your ACP benefit to another service provider. It's important to note that the Affordable Connectivity Program offers a single monthly
-                        service discount and one device discount per household
-                    </label>
-                    {getFormErrorMessage("isACP")}
-                </div>
-            </div>
+         
+          
         </>
     );
 };
