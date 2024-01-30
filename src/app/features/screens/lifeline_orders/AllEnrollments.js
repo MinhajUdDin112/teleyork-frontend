@@ -91,7 +91,9 @@ const AllEnrollments = () => {
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName.toUpperCase();
-   
+    const companyName =parseLoginRes?.companyName;
+
+
 
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
@@ -132,9 +134,11 @@ const AllEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=ACP`);
             if (res?.status === 200 || res?.status === 201) {
+              
                 if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
                 } else if (res?.data?.data) {
+                   
                     const updatedData = res?.data?.data.map((item) => ({
                         ...item,
                         enrollment: item.isSelfEnrollment ? "Self Enrollments" : "Enrollment",
@@ -268,6 +272,36 @@ const AllEnrollments = () => {
                 }
                 getAllEnrollments();
             }
+            }
+           
+        else{
+          
+            toast.error("Please Add Remarks First");
+                 setisButtonLoading(false)
+        }
+    }
+
+    const approveRowByTlForTalkDaily = async(rowData)=>{
+        setisButtonLoading(true);
+        const approvedBy = parseLoginRes?._id;
+        const enrolmentId = rowData?._id;
+        const approved = true;
+        const dataToSend = { approvedBy, enrolmentId, approved };
+       
+         setCheckRemarks(rowData?.callQualityRemarks)
+        
+        if(rowData?.callQualityRemarks ){   
+                try {
+                    const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                    if (response?.status === 201 || response?.status === 200) {
+                        toast.success("Approved");
+                        setisButtonLoading(false);
+                    }
+                } catch (error) {
+                    toast.error(error?.response?.data?.msg);
+                    setisButtonLoading(false);
+                }
+                getAllEnrollments();
             }
            
         else{
@@ -446,52 +480,89 @@ const AllEnrollments = () => {
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
-                {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ? (
+                {companyName.includes("IJ") || companyName.includes("ij") ? (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 ) : (
                     <Button label="Add Remarks"  onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
                 <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
-                <Button label="Approve"   onClick={() =>{  
-                    if(!rowData.QualityRemarks){
-                        toast.error("Please Add Remarks")
-                    }
-                  else  if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
-                        approveRowByTl(rowData) 
-                         } 
-                         else{      
-                            if(rowData.QualityRemarks !== undefined){
-                            toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved") 
-                            } 
-                            else{ 
-                                toast.error("Please Add Remarks") 
-                            
-                            }
-                         }
-                 
-                 
-                 }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
-                <Button label="Reject"  onClick={() => {
-                    if(!rowData?.QualityRemarks){
-                        toast.error("Please Add Remarks")
-                    }
-                   else   if(rowData.QualityRemarks === "declined"){
-                    handleOpenDialog(rowData);  
-                     } 
-                     else{    
-                        if(rowData.QualityRemarks !== undefined){
-                            toast.error("Only enrollment with call quality marked as declined will be rejected")  
 
-                        } 
-                            else{ 
-                                toast.error("Please Add Remarks") 
+                {companyName.includes("IJ") || companyName.includes("ij") ? (
+                    <>
+                    <Button label="Approve"   onClick={() =>{  
+                        if(!rowData.QualityRemarks){
+                            toast.error("Please Add Remarks")
+                        }
+                      else  if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
+                            approveRowByTl(rowData) 
+                             } 
+                             else{      
+                                if(rowData.QualityRemarks !== undefined){
+                                toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved") 
+                                } 
+                                else{ 
+                                    toast.error("Please Add Remarks") 
+                                
+                                }
+                             }
+                     
+                     
+                     }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                    <Button label="Reject"  onClick={() => {
+                        if(!rowData?.QualityRemarks){
+                            toast.error("Please Add Remarks")
+                        }
+                       else   if(rowData.QualityRemarks === "declined"){
+                        handleOpenDialog(rowData);  
+                         } 
+                         else{    
+                            if(rowData.QualityRemarks !== undefined){
+                                toast.error("Only enrollment with call quality marked as declined will be rejected")  
+    
+                            } 
+                                else{ 
+                                    toast.error("Please Add Remarks") 
+                                
+                                }
+                           
+                         }
+                        
+                         }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} /></>
+                ) : (
+
+                    <>
+                    <Button label="Approve"   onClick={() =>{  
+                        if(!rowData.callQualityRemarks  ){
+                          
+                            toast.error("Please Add Remarks")
+                        }
+                      else  {
+                      
+                            approveRowByTlForTalkDaily(rowData) 
+                             } 
                             
-                            }
-                       
-                     }
-                    
-                     }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
+                     
+                     
+                     }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                    <Button label="Reject"  onClick={() => {
+                        if(!rowData?.callQualityRemarks
+                            ){
+                            toast.error("Please Add Remarks")
+                        }
+                       else {
+                        handleOpenDialog(rowData);  
+                         } 
+                        
+                        
+                         }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} /></>
+                )}
+
+
+
+
+
+                
             </div>
         );
     };

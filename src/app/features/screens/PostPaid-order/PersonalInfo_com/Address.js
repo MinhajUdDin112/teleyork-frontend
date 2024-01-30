@@ -382,13 +382,13 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
                         <label htmlFor="sameAdress" className="ml-2">
-                            Same As service Address
+                            Same as service address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="different" onClick={handleDifferent} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "different"} />
                         <label htmlFor="differentAddress" className="ml-2">
-                            Different from Service address
+                            Different from service address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
@@ -401,7 +401,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
                 {isDifferent && (
                     <>
-                        <div className="mt-3">Mailing Address</div>
+                        <div className="mt-3">Billing Address</div>
                         <div className="p-fluid formgrid grid mt-3">
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">

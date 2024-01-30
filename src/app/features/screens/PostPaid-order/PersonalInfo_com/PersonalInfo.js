@@ -1186,7 +1186,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         {getFormErrorMessage("salesChannel")}
                     </div>
                 </div>
-                <p>To apply for the Affordable Connectivity program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
+                <p>To create an order, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
                 <p className="text-xl font-semibold">What is your full legal name?</p>
                 <p>Please provide the name that appears on official documents such as your Social Security Card or State ID, not a nickname.</p>
 
