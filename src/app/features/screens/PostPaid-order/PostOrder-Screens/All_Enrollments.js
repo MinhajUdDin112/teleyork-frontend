@@ -502,7 +502,7 @@ const All_Enrollments = () => {
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
                 {/* <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
+                {/* <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {selectedRow === rowData && link ? (
                     <Button
                         label="Go To Link"
@@ -514,11 +514,11 @@ const All_Enrollments = () => {
                         raised
                         disabled={isButtonLoading}
                     />
-                ) : null}
-                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
+                ) : null} */}
+                {/* <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} /> */}
                 <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {/* <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text  raised disabled={isButtonLoading} />
+                {/* <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text  raised disabled={isButtonLoading} /> */}
             </div>
         );
     };

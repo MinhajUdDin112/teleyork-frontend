@@ -70,7 +70,8 @@ export default function Post_service_availbilty() {
 
       const csr = parseLoginRes?._id;
       const carrier = "6455532566d6fad6eac59e34";
-      const dataToSend = { serviceProvider, csr, department, carrier, ...values };
+      const accountType="Postpaid";
+      const dataToSend = { serviceProvider, csr, department, carrier, accountType, ...values };
               setIsLoading(true)
       try {
         const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);
