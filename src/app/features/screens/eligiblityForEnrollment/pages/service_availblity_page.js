@@ -70,7 +70,8 @@ export default function ServiceAvailabilityPage() {
 
       const csr = parseLoginRes?._id;
       const carrier = "6455532566d6fad6eac59e34";
-      const dataToSend = { serviceProvider, csr, department, carrier, ...values };
+      const accountType= "ACP";
+      const dataToSend = { serviceProvider, csr, department,accountType, carrier, ...values };
               setIsLoading(true)
       try {
         const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);
