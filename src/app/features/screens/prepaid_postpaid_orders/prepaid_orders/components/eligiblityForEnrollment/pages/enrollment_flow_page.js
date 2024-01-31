@@ -171,9 +171,9 @@ export default function EnrollmentFlowPage() {
         pages = [
             PersonalInfoPage({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
             Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
-            PaymentScreen({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
+            PaymentScreen({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
             //plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
-            Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: id, csr: csr }),
+            Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
         ];
     }
 
