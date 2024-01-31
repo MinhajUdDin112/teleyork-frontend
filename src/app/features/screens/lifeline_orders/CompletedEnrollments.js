@@ -103,7 +103,7 @@ const CompletedEnrollments = () => {
     const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${parseLoginRes?._id}`);
+            const res = await Axios.get(`${BASE_URL}/api/user/completeEnrollmentUser?userId=${parseLoginRes?._id}&accountType=ACP`);
             if (res?.status === 200 || res?.status === 201) {   
                 for(let i=0;i<res?.data?.data?.length;i++){ 
                     res.data.data[i].enrollment=res.data.data[i].isSelfEnrollment?"Self Enrollments":"Enrollment"

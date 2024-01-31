@@ -7,17 +7,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import Axios from "axios";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function ServiceAvailabilityPage() {
+export default function Post_service_availbilty() {
+  
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const [isCreate, setIsCreate] = useState(false);
   const [isManage, setIsManage] = useState(false);
+
   const location = useLocation();
   const currentPath = location?.pathname
   const actionBasedChecks = () => {
+
     const loginPerms = localStorage.getItem("permissions")
     const parsedLoginPerms = JSON.parse(loginPerms)
+
     const isCreate = parsedLoginPerms.some((node) =>
       node?.subModule.some((subNode) =>
         subNode?.route === currentPath && subNode?.actions.some((action) =>
@@ -26,6 +30,7 @@ export default function ServiceAvailabilityPage() {
       )
     );
     setIsCreate(isCreate)
+
     const isManage = parsedLoginPerms.some((node) =>
       node?.subModule.some((subNode) =>
         subNode?.route === currentPath && subNode?.actions.some((action) =>
@@ -34,10 +39,14 @@ export default function ServiceAvailabilityPage() {
       )
     );
     setIsManage(isManage)
+
   };
+
   useEffect(() => {
     actionBasedChecks();
   }, []);
+  
+
   // Get user data from localStorage
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);
@@ -61,8 +70,8 @@ export default function ServiceAvailabilityPage() {
 
       const csr = parseLoginRes?._id;
       const carrier = "6455532566d6fad6eac59e34";
-      const accountType= "ACP";
-      const dataToSend = { serviceProvider, csr, department,accountType, carrier, ...values };
+      const accountType="Postpaid";
+      const dataToSend = { serviceProvider, csr, department, carrier, accountType, ...values };
               setIsLoading(true)
       try {
         const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);
@@ -74,7 +83,7 @@ export default function ServiceAvailabilityPage() {
           localStorage.removeItem("agreeData");
           localStorage.removeItem("programmeId");
           localStorage.removeItem("fromIncomplete")
-          navigate("/enrollment")
+          navigate("/post-enrollment")
         }
       } catch (error) {
       

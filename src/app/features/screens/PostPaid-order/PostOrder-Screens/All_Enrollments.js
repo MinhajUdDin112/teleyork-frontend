@@ -10,18 +10,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
-import DialogForReject from "./DialogForReject";
-import DialogForActivateSim from "./DialogForActivateSim";
+import DialogForReject from "../PostPaid-Dialoge/DialogeFor_Reject"
+import DialogForActivateSim from "../PostPaid-Dialoge/DialogeFor_Activate"
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
-import DialogeForRemarks from "./DialogeForRemarks";
-import DialogeForTransferUser from "./DialogeForTransferUser";
-import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
+import DialogeForRemarks from "../PostPaid-Dialoge/DialogeFor_Remarks";
+import DialogeForTransferUser from "../PostPaid-Dialoge/DialogeFor_TransferUser";
+import DialogeForRemarksForIJ from "../PostPaid-Dialoge/DialogeFor_RemaeksForIJ";
 import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
-import DialogeForApprove from "./DialogeForApprove";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const AllEnrollments = () => {  
+const All_Enrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -91,9 +91,7 @@ const AllEnrollments = () => {
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName.toUpperCase();
-    const companyName =parseLoginRes?.companyName;
-
-
+   
 
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
@@ -132,13 +130,11 @@ const AllEnrollments = () => {
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=ACP`);
+            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=Postpaid`);
             if (res?.status === 200 || res?.status === 201) {
-              
                 if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
                 } else if (res?.data?.data) {
-                   
                     const updatedData = res?.data?.data.map((item) => ({
                         ...item,
                         enrollment: item.isSelfEnrollment ? "Self Enrollments" : "Enrollment",
@@ -210,7 +206,7 @@ const AllEnrollments = () => {
                          storedData = false;
                         localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
                     }
-                    navigate("/enrollment");
+                    navigate("/post-enrollment");
                     setisButtonLoading(false);
                 }
             } catch (error) {
@@ -272,36 +268,6 @@ const AllEnrollments = () => {
                 }
                 getAllEnrollments();
             }
-            }
-           
-        else{
-          
-            toast.error("Please Add Remarks First");
-                 setisButtonLoading(false)
-        }
-    }
-
-    const approveRowByTlForTalkDaily = async(rowData)=>{
-        setisButtonLoading(true);
-        const approvedBy = parseLoginRes?._id;
-        const enrolmentId = rowData?._id;
-        const approved = true;
-        const dataToSend = { approvedBy, enrolmentId, approved };
-       
-         setCheckRemarks(rowData?.callQualityRemarks)
-        
-        if(rowData?.callQualityRemarks ){   
-                try {
-                    const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
-                    if (response?.status === 201 || response?.status === 200) {
-                        toast.success("Approved");
-                        setisButtonLoading(false);
-                    }
-                } catch (error) {
-                    toast.error(error?.response?.data?.msg);
-                    setisButtonLoading(false);
-                }
-                getAllEnrollments();
             }
            
         else{
@@ -480,89 +446,52 @@ const AllEnrollments = () => {
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
-                {companyName.includes("IJ") || companyName.includes("ij") ? (
+                {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ? (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 ) : (
                     <Button label="Add Remarks"  onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
                 <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
-
-                {companyName.includes("IJ") || companyName.includes("ij") ? (
-                    <>
-                    <Button label="Approve"   onClick={() =>{  
-                        if(!rowData.QualityRemarks){
-                            toast.error("Please Add Remarks")
-                        }
-                      else  if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
-                            approveRowByTl(rowData) 
-                             } 
-                             else{      
-                                if(rowData.QualityRemarks !== undefined){
-                                toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved") 
-                                } 
-                                else{ 
-                                    toast.error("Please Add Remarks") 
-                                
-                                }
-                             }
-                     
-                     
-                     }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
-                    <Button label="Reject"  onClick={() => {
-                        if(!rowData?.QualityRemarks){
-                            toast.error("Please Add Remarks")
-                        }
-                       else   if(rowData.QualityRemarks === "declined"){
-                        handleOpenDialog(rowData);  
+                <Button label="Approve"   onClick={() =>{  
+                    if(!rowData.QualityRemarks){
+                        toast.error("Please Add Remarks")
+                    }
+                  else  if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
+                        approveRowByTl(rowData) 
                          } 
-                         else{    
+                         else{      
                             if(rowData.QualityRemarks !== undefined){
-                                toast.error("Only enrollment with call quality marked as declined will be rejected")  
-    
+                            toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved") 
                             } 
-                                else{ 
-                                    toast.error("Please Add Remarks") 
-                                
-                                }
-                           
-                         }
-                        
-                         }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} /></>
-                ) : (
-
-                    <>
-                    <Button label="Approve"   onClick={() =>{  
-                        if(!rowData.callQualityRemarks  ){
-                          
-                            toast.error("Please Add Remarks")
-                        }
-                      else  {
-                      
-                            approveRowByTlForTalkDaily(rowData) 
-                             } 
+                            else{ 
+                                toast.error("Please Add Remarks") 
                             
-                     
-                     
-                     }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
-                    <Button label="Reject"  onClick={() => {
-                        if(!rowData?.callQualityRemarks
-                            ){
-                            toast.error("Please Add Remarks")
-                        }
-                       else {
-                        handleOpenDialog(rowData);  
-                         } 
-                        
-                        
-                         }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} /></>
-                )}
+                            }
+                         }
+                 
+                 
+                 }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Reject"  onClick={() => {
+                    if(!rowData?.QualityRemarks){
+                        toast.error("Please Add Remarks")
+                    }
+                   else   if(rowData.QualityRemarks === "declined"){
+                    handleOpenDialog(rowData);  
+                     } 
+                     else{    
+                        if(rowData.QualityRemarks !== undefined){
+                            toast.error("Only enrollment with call quality marked as declined will be rejected")  
 
-
-
-
-
-                
+                        } 
+                            else{ 
+                                toast.error("Please Add Remarks") 
+                            
+                            }
+                       
+                     }
+                    
+                     }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
     };
@@ -573,7 +502,7 @@ const AllEnrollments = () => {
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
                 {/* <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
+                {/* <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {selectedRow === rowData && link ? (
                     <Button
                         label="Go To Link"
@@ -585,11 +514,11 @@ const AllEnrollments = () => {
                         raised
                         disabled={isButtonLoading}
                     />
-                ) : null}
-                <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
+                ) : null} */}
+                {/* <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} /> */}
                 <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {/* <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text  raised disabled={isButtonLoading} />
+                {/* <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text  raised disabled={isButtonLoading} /> */}
             </div>
         );
     };
@@ -817,6 +746,10 @@ const AllEnrollments = () => {
         </span>
     )}
 />
+<Column field="" header="Product" />
+<Column field="" header="Plan" />
+<Column field="" header="Price" />
+
 
                             {toCapital == "CSR" || toCapital == "CS" ||toCapital == "TEAM LEAD" ||toCapital == "CS MANAGER" ? (
                                 ""
@@ -838,5 +771,5 @@ const AllEnrollments = () => {
         </>
     );
 };
-export default AllEnrollments;
+export default All_Enrollments;
  

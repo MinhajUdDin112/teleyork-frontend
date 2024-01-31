@@ -36,6 +36,9 @@ import HandoverEventOrder from "./app/features/screens/lifeline_orders/HandoverE
 import PendingEventOrder from "./app/features/screens/lifeline_orders/PendingEventOrder";
 import WithProofEnrollments from "./app/features/screens/lifeline_orders/WithProofEnrollments";
 import WithoutProofEnrollments from "./app/features/screens/lifeline_orders/WithoutProofEnrollments";
+// import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
+// import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
+
 import DropshipOrdersFlowPage from "./app/features/screens/inventory_management/dropship_orders/dropship_orders_flow_page";
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
 import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
@@ -91,6 +94,17 @@ import CustomerUsage from "./app/features/screens/customer_services/CustomerUsag
 import PrepaidInCompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/incomplete_enrollments.js/incomplete";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
 import PrepaidAllEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_enrollments.js/all_enrollment";
+import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
+import Post_service_availbilty from "./app/features/screens/PostPaid-order/Pages/Post_Service_availbilty";
+import Post_enrollment_Flow from "./app/features/screens/PostPaid-order/Pages/post_enrollment_flow";
+import Completed_Enrollments from"./app/features/screens/PostPaid-order/PostOrder-Screens/Completed_enrollment";
+import All_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/All_Enrollments"
+import Incompleted_Enrollment from "./app/features/screens/PostPaid-order/PostOrder-Screens/Incomplete_ENrollment"
+import Rejected_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Rejected_Enrollment"
+import ApprovedEnrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Approved_Enrollment";
+import Provisioningqueue from "./app/features/screens/PostPaid-order/PostOrder-Screens/Provising_Queue";
+import Upload_Bulk from "./app/features/screens/PostPaid-order/PostOrder-Screens/Bulk_Upload";
+import PostPersonalInfo from "./app/features/screens/PostPaid-order/PersonalInfo_com/PersonalInfo";
 const App = () => {
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
@@ -350,6 +364,7 @@ const App = () => {
                                     <Route path="/newenrolment" element={isPermitted("/newenrolment") ? <ServiceAvailablityPage /> : <Dashboard />} />
                                     {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
                                     <Route path="/enrollment" element={<EnrollmentFlowPage />} />
+                                    <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                     <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
                                     <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
                                     <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
@@ -363,6 +378,9 @@ const App = () => {
                                     <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
                                     <Route path="/withoutproofenrollments" element={isPermitted("/withoutproofenrollments") ? <WithoutProofEnrollments /> : <Dashboard />} />
                                     <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
+                                   
+                                  
+                                  
                                     <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
                                    <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
                                     <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
@@ -405,8 +423,22 @@ const App = () => {
                                     <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />
                                     <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                     <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                    <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} />
+                                    {/* <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> */}
+                                     <Route exact path="/customer-profile" element={ <CustomerProfile /> } />
+
                                     <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
+
+                                    {/* PostPaid Order Route */}
+                                    <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
+                                    <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />
+                                    <Route exact path="postpaid-allenrollment" element={isPermitted("/postpaid-allenrollment") ? <All_Enrollments /> : <Dashboard />} />
+                                    <Route exact path="postpaid-incomplete" element={isPermitted("/postpaid-incomplete") ? <Incompleted_Enrollment /> : <Dashboard />} />
+                                    <Route exact path="postpaid-rejectedenrollment" element={isPermitted("/postpaid-rejectedenrollment") ? <Rejected_Enrollments /> : <Dashboard />} />
+                                    <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments/> : <Dashboard />} />
+                                    {/* <Route exact path="postpaid-provisingenrollment" element={isPermitted("/postpaid-provisingenrollment") ? <Provisioningqueue/> : <Dashboard />} />
+                                    <Route exact path="postpaid-bulkenrollment" element={isPermitted("/postpaid-bulkenrollment") ? <Upload_Bulk/> : <Dashboard />} /> */}
+                                    <Route path="/Postpersonalinfo" element={<PostPersonalInfo/>} />
+
                                 </Routes>
                             )}
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
