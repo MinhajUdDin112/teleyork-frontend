@@ -174,7 +174,7 @@ export default function Last24EnrollmentStatChart({role, BASE_URL, userid, permi
                                         }
                                     }
                                 }   
-                                if(isMounted){ 
+                                if(isMounted && arr.length > 0){ 
                                     setData((prevStat) => [...prevStat, ["All", arr.length]]);
                           
                                 }

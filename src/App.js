@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
+import MainPrepaidOrders from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/prepaid_orders_main";
 import ShippingQueue from "./app/features/screens/inventory_management/shipping_queue/shipping_queue";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
@@ -35,10 +36,6 @@ import HandoverEventOrder from "./app/features/screens/lifeline_orders/HandoverE
 import PendingEventOrder from "./app/features/screens/lifeline_orders/PendingEventOrder";
 import WithProofEnrollments from "./app/features/screens/lifeline_orders/WithProofEnrollments";
 import WithoutProofEnrollments from "./app/features/screens/lifeline_orders/WithoutProofEnrollments";
-import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
-import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
-import BulkPortin from "./app/features/screens/prepaid_postpaid_orders/BulkPortin";
-import Allenrollments from "./app/features/screens/prepaid_postpaid_orders/AllEnrollments_PP";
 import DropshipOrdersFlowPage from "./app/features/screens/inventory_management/dropship_orders/dropship_orders_flow_page";
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
 import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
@@ -48,7 +45,7 @@ import EligibilityProofUpload from "./app/features/screens/customer_services/Eli
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
 import PurchaseHistory from "./app/features/screens/customer_services/PurchaseHistory";
 import CustomerHistory from "./app/features/screens/customer_services/CustomerHistory";
-import SmsNotification from "./app/features/screens/sms_notification/Upload";
+import SmsNotification from "./app/features/screens/sms_notification/Upload"; 
 import Upload from "./app/features/screens/sms_notification/Upload";
 import Sent from "./app/features/screens/sms_notification/Sent";
 import Draft from "./app/features/screens/sms_notification/Draft";
@@ -64,7 +61,7 @@ import ManageTemplate from "./app/features/screens/sms_notification/ManageTempla
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
 import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
 import Dashboard from "./app/features/screens/dashboard/Dashboard";
-import LoginScreen from "./app/features/screens/auth/login_screen";
+import LoginScreen from "./app/features/screens/auth/login_screen";  
 import { menuNavigation } from "./navigation";
 import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole";
 import CreateUser from "./app/features/screens/user_management/CreateUser";
@@ -90,9 +87,10 @@ import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approve
 import ViewFiles from "./app/features/screens/customer_services/ViewFiles";
 import Searchall from "./app/features/screens/search_customer/search_all/search_all";
 import BillingConfiguration from "./app/features/screens/inventory_management/BillingConfiguration";
-import CustomerUsage from "./app/features/screens/customer_services/CustomerUsage";
+import CustomerUsage from "./app/features/screens/customer_services/CustomerUsage" 
+import PrepaidInCompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/incomplete_enrollments.js/incomplete";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
-import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
+import PrepaidAllEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_enrollments.js/all_enrollment";
 const App = () => {
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
@@ -335,12 +333,11 @@ const App = () => {
                             ) : (
                                 <Routes>
                                     <Route path="*" element={<NotFound />} />
-
                                     {permittedRoutes.length !== 0 ? <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} /> : undefined}
                                     <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
-
+                                     <Route path="/prepaid-newenrollment" element={isPermitted("/prepaid-newenrollment") ? <MainPrepaidOrders /> : <Dashboard />}/>
                                     <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />
                                     <Route path="/emei-drawer" element={isPermitted("/emei-drawer") ? <ImeiDrawer /> : <Dashboard />} />
@@ -360,19 +357,14 @@ const App = () => {
                                     <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
                                     <Route path="/incompleteenrollments" element={isPermitted("/incompleteenrollments") ? <InCompletedEnrollments /> : <Dashboard />} />
                                     <Route path="/rejectedenrollments" element={isPermitted("/rejectedenrollments") ? <RejectedEnrollments /> : <Dashboard />} />
-
+                                    <Route path="/prepaid-incompleteenrollment" element={isPermitted("/prepaid-incompleteenrollment") ? <PrepaidInCompleteEnrollments /> : <Dashboard />} />
                                     <Route path="/nladresolutionstatus" element={isPermitted("/nladresolutionstatus") ? <NLADResolutionStatus /> : <Dashboard />} />
                                     <Route path="/handovereventorder" element={isPermitted("/handovereventorder") ? <HandoverEventOrder /> : <Dashboard />} />
                                     <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
                                     <Route path="/withoutproofenrollments" element={isPermitted("/withoutproofenrollments") ? <WithoutProofEnrollments /> : <Dashboard />} />
                                     <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
-                                    <Route path="/incomplete" element={isPermitted("/incomplete") ? <IncompleteEnrollments /> : <Dashboard />} />
-                                    <Route path="/completeenrollments" element={isPermitted("/completeenrollments") ? <CompleteEnrollments /> : <Dashboard />} />
-                                    <Route path="/bulkportin" element={isPermitted("/bulkportin") ? <BulkPortin /> : <Dashboard />} />
-                                    <Route path="/allenrollmentorders" element={isPermitted("/allenrollmentorders") ? <Allenrollments /> : <Dashboard />} />
                                     <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
-                                    <Route path="/paymentsearchtool" element={isPermitted("/paymentsearchtool") ? <PaymentScreen /> : <Dashboard />} />
-                                    <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
+                                   <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
                                     <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
                                     <Route path="/customerhistory" element={isPermitted("/customerhistory") ? <CustomerHistory /> : <Dashboard />} />
                                     <Route path="/agentstorelocator" element={isPermitted("/agentstorelocator") ? <AgentStoreLocator /> : <Dashboard />} />
@@ -382,6 +374,7 @@ const App = () => {
                                     <Route path="/dealerwallet" element={isPermitted("/dealerwallet") ? <DealerWallet /> : <Dashboard />} />
                                     <Route path="/orderhistory" element={isPermitted("/orderhistory") ? <OrderHistory /> : <Dashboard />} />
                                     <Route path="/viewfile" element={isPermitted("/viewfile") ? <ViewFiles /> : <Dashboard />} />
+                                    <Route path="/prepaid-allenrollment" element={isPermitted("/prepaid-allenrollment") ? <PrepaidAllEnrollments /> : <Dashboard />} />
 
                                     <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                     <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
