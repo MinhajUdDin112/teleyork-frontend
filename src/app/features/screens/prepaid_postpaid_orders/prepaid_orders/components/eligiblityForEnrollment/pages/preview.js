@@ -18,7 +18,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const previewInfo = parsepreviewsRes?.data;
     const zipRes = localStorage.getItem("prepaidzipData");
      //check that user come from incomplete or not 
-     const fromIncompl = localStorage.getItem("prepaidfromIncomplete");
+     const fromIncompl = localStorage.getItem("comingfromincomplete");
      const parsefromIncompl = JSON.parse(fromIncompl);
 
     const formatDate = (date) => {
@@ -42,7 +42,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
         }
         setShowFinalComponent(true);
         setFromIncomplete(false)
-        localStorage.setItem("prepaidfromIncomplete", JSON.stringify(fromIncomplete))
+        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete))
         
       };
 

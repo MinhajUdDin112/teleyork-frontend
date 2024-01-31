@@ -182,7 +182,6 @@ export default function EnrollmentFlowPage() {
             <div className="card">
                 <Steps model={items} activeIndex={activeIndex} />
             </div>
-
             <div>{pages[activeIndex]}</div>
         </div>
     );
