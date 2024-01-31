@@ -34,6 +34,7 @@ const CustomerProfile = () => {
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
+    const [isShow, setIsShow] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
@@ -87,7 +88,7 @@ const CustomerProfile = () => {
                 setCpData(res?.data?.data || []);
                 console.log("cp data is", res?.data?.data);
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const getNotesType = async () => {
@@ -165,6 +166,15 @@ const CustomerProfile = () => {
             return "NIL";
         }
     }
+
+    const handleView = () => {
+        if (isShow == true) {
+            setIsShow(false)
+        }
+        else {
+            setIsShow(true)
+        }
+    }
     return (
         <div className="card">
             <ToastContainer />
@@ -189,7 +199,16 @@ const CustomerProfile = () => {
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
                                 <div className="card h-full flex flex-column overflow-x">
-                                    <div className="text-900 font-medium text-lg p-3">Customer Information</div>
+                                    <div className="flex justify-content-between">
+                                        <div className="text-900 font-medium text-lg p-3">Customer Information </div>
+                                        <div>
+
+                                            <i className="pi pi-eye p-3" style={{ fontSize: '2rem' }} onClick={handleView}></i>
+
+
+                                        </div>
+                                    </div>
+
 
                                     <hr className="m-0" />
 
@@ -197,69 +216,102 @@ const CustomerProfile = () => {
                                     <div>
                                         <table className="cp_table w-full text-left">
                                             <tbody>
-                                            <tr>
+                                                <tr>
                                                     <td >First Name</td>
-                                                    <td>{cpData?.firstName !== undefined ? cpData?.firstName.toUpperCase() : "NIL"}</td>
+                                                    {isShow && isShow ? <td>{cpData?.firstName !== undefined ? cpData?.firstName.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name</td>
-                                                    <td>{cpData?.lastName !== undefined ? cpData?.lastName.toUpperCase() : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.lastName !== undefined ? cpData?.lastName.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
                                                 </tr>
                                                 <tr>
                                                     <td>Address 1</td>
-                                                    <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>*******</h3></div>}
                                                 </tr>
                                                 <tr>
                                                     <td>Address 2</td>
-                                                    <td>{cpData?.address2 !== undefined && cpData?.address2.trim() !== "" ? cpData?.address2.toUpperCase() : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.address2 !== undefined && cpData?.address2.trim() !== "" ? cpData?.address2.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
                                                 </tr>
 
                                                 <tr>
                                                     <td>City</td>
-                                                    <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td> : <div className="mt-3"><h3>***</h3></div>}
                                                 </tr>
 
                                                 <tr>
                                                     <td>State</td>
-                                                    <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
                                                 </tr>
                                                 <tr>
                                                     <td>Zip</td>
-                                                    <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Password</td>
-                                                    <td>NIL</td>
+
+                                                    {isShow && isShow ? <td>NIL</td> : <div className="mt-3"><h3>***</h3></div>}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Alternate Ph</td>
-                                                    <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
                                                 </tr>
                                                 <tr>
                                                     <td>Email</td>
-                                                    <td>{cpData?.email !== undefined ? cpData?.email : "NIL"}</td>
+
+                                                    {isShow && isShow ? <td>{cpData?.email !== undefined ? cpData?.email : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    {cpData?.mailingAddress1 || cpData?.mailingAddress2 ? (
-                                                        <td>{cpData?.mailingAddress1 !== undefined || cpData?.mailingAddress2 !== undefined ? cpData?.mailingAddress1 + " " + cpData?.mailingAddress2 : "NIL"}</td>
-                                                    ) : (
-                                                        <td>{cpData?.address2 !== undefined || cpData.address1 !== undefined ? cpData?.address1 + " " + cpData?.address2 : "NIL"}</td>
-                                                    )}
+                                                    {isShow && isShow ? <td>{cpData?.malingAddress1 !== undefined || cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " " ? cpData?.malingAddress12 && cpData?.malingAddress : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+
+
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
-                                                    {cpData?.mailingCity ? <td>{cpData?.mailingCity !== undefined ? cpData?.mailingCity : "NIL"}</td> : <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td>}
+                                                    {isShow ? (
+                                                        <td>{cpData?.mailingCity && cpData?.mailingCity.trim() !== "" ? cpData?.mailingCity : "NIL"}</td>
+                                                    ) : (
+                                                        <td>
+                                                            <div className="mt-3">
+                                                                <h3>****</h3>
+                                                            </div>
+                                                        </td>
+                                                    )}
                                                 </tr>
+
                                                 <tr>
                                                     <td>Mailing State</td>
-                                                    {cpData?.mailingState ? <td>{cpData?.mailingState !== undefined ? cpData?.mailingState : "NIL"}</td> : <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td>}
+                                                    {isShow ? (
+                                                        <td>{cpData?.mailingState && cpData?.mailingState.trim() !== "" ? cpData?.mailingState : "NIL"}</td>
+                                                    ) : (
+                                                        <td>
+                                                            <div className="mt-3">
+                                                                <h3>****</h3>
+                                                            </div>
+                                                        </td>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Zip</td>
-                                                    {cpData?.mailingZip ? <td>{cpData?.mailingZip !== undefined ? cpData?.mailingZip : "NIL"}</td> : <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td>}
+                                                    {isShow ? (
+                                                        <td>{cpData?.mailingZip && cpData?.mailingZip.trim() !== "" ? cpData?.mailingZip : "NIL"}</td>
+                                                    ) : (
+                                                        <td>
+                                                            <div className="mt-3">
+                                                                <h3>*****</h3>
+                                                            </div>
+                                                        </td>
+                                                    )}
                                                 </tr>
 
                                                 {/* <tr>
@@ -270,17 +322,23 @@ const CustomerProfile = () => {
                                                 </tr> */}
                                                 <tr>
                                                     <td>Customer SSN</td>
-                                                    <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td>
+
+
+                                                    {isShow && isShow ? <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Customer DOB</td>
-                                                    <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : "NIL"}</td>
+
+
+                                                    {isShow && isShow ? <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Tribal</td>
-                                                    <td>{cpData?.isTerribleTerritory !== undefined ? (cpData?.isTerribleTerritory === true ? "Yes" : "No") : "NIL"}</td>
+
+
+                                                    {isShow && isShow ? <td>{cpData?.isTerribleTerritory !== undefined ? (cpData?.isTerribleTerritory === true ? "Yes" : "No") : "NIL"}</td> : <div className="mt-3"><h3>***</h3></div>}
                                                 </tr>
                                                 <tr>
                                                     <td>Company</td>
@@ -472,14 +530,17 @@ const CustomerProfile = () => {
                                                     <td>Enrollment ID</td>
                                                     <td>{cpData?.enrollmentId !== undefined ? cpData?.enrollmentId : "NIL"}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>NV Application ID</td>
-                                                    <td>{cpData?.applicationId !== undefined ? cpData?.applicationId : "NIL"}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>NLAD Subscriber ID</td>
-                                                    <td>{cpData?.subscriberId !== undefined ? cpData?.subscriberId : "NIL"}</td>
-                                                </tr>
+                                                {
+                                                    cpData?.accountType == "ACP" ? <> <tr>
+                                                        <td>NV Application ID</td>
+                                                        <td>{cpData?.applicationId !== undefined ? cpData?.applicationId : "NIL"}</td>
+                                                    </tr>
+                                                        <tr>
+                                                            <td>NLAD Subscriber ID</td>
+                                                            <td>{cpData?.subscriberId !== undefined ? cpData?.subscriberId : "NIL"}</td>
+                                                        </tr></> : ""
+                                                }
+
                                                 <tr>
                                                     <td>PWG Customer ID</td>
                                                     <td>{cpData?.customerId !== undefined ? cpData?.customerId : "NIL"}</td>
@@ -511,10 +572,13 @@ const CustomerProfile = () => {
                                                     <td>Disconnection Reason</td>
                                                     <td>NIL</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Lifeline Program Participation</td>
-                                                    <td>{cpData?.acpProgram !== undefined ? (cpData?.acpProgram?.name !== undefined ? cpData?.acpProgram.name : "NIL") : "NIL"}</td>
-                                                </tr>
+                                                {
+                                                    cpData?.accountType == "ACP" ? (<tr>
+                                                        <td>Lifeline Program Participation</td>
+                                                        <td>{cpData?.acpProgram !== undefined ? (cpData?.acpProgram?.name !== undefined ? cpData?.acpProgram.name : "NIL") : "NIL"}</td>
+                                                    </tr>) : ""
+                                                }
+
                                             </tbody>
                                         </table>
                                     </div>
