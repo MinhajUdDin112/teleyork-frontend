@@ -50,10 +50,11 @@ export default function Last24EnrollmentStatChart({ role,BASE_URL, userid, permi
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
         }    
-        if(role === "TEAM LEAD" || role === "CSR"){ 
+        if(role === "TEAM LEAD"){ 
             obj.activeenrollments={ 
                  label:"Active Enrollments", 
-             }
+             } 
+             delete obj.incompleteenrollments
          } 
         
     }
@@ -78,7 +79,7 @@ export default function Last24EnrollmentStatChart({ role,BASE_URL, userid, permi
                        
                         if (response.data.data !== undefined) {
                             let enrollmentsInCurrentShift; 
-                            if(role === "CSR" || role === "TEAM LEAD"){
+                            if( role === "TEAM LEAD"){
                                 enrollmentsInCurrentShift= response.data.data.filter((enrollment) => {   
                                     return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
                               
@@ -119,7 +120,7 @@ export default function Last24EnrollmentStatChart({ role,BASE_URL, userid, permi
                       
                         if (response.data.data !== undefined) {
                             let enrollmentsInCurrentShift; 
-                            if(role === "CSR" || role === "TEAM LEAD"){
+                            if(role === "TEAM LEAD"){
                                 enrollmentsInCurrentShift= response.data.data.filter((enrollment) => {   
                                     return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
                               
@@ -179,7 +180,7 @@ export default function Last24EnrollmentStatChart({ role,BASE_URL, userid, permi
                                         }
                                     }
                                 }   
-                                if(isMounted){ 
+                                if(isMounted && arr.length !== 0){ 
                                     setData((prevStat) => [...prevStat, ["All", arr.length]]);
                           
                                 }
@@ -239,7 +240,7 @@ export default function Last24EnrollmentStatChart({ role,BASE_URL, userid, permi
                     let startCountFrom=DateTime.fromFormat(currentDateTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds();    
                     if (response.data.data !== undefined) {
                         let enrollmentsInCurrentShift; 
-                        if(role === "CSR" || role === "TEAM LEAD"){
+                        if(role === "TEAM LEAD"){
                             enrollmentsInCurrentShift= response.data.data.filter((enrollment) => {   
                                 return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom
                           
@@ -323,7 +324,6 @@ export default function Last24EnrollmentStatChart({ role,BASE_URL, userid, permi
             {data.length !== 1 ? (
                 <>
                     <Chart chartType="PieChart" data={data} options={options} className="flex flex-wrap justify-content-center pie-chart" />
-                    {/*<Chart chartType="ColumnChart" data={data} options={options} className="flex flex-wrap justify-content-center bar-chart" />*/}
                 </>
             ) : undefined}{" "}
         </div>

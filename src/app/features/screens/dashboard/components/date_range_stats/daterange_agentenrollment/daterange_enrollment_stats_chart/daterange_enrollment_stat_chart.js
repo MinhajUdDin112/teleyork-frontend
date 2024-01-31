@@ -53,11 +53,13 @@ export default function DateRangeEnrollmentStatChart({ role, BASE_URL, userid, p
         if (!permittedRoutes.includes("/completedenrollments")) {
             delete obj.completedenrollments;
         }
-        if (role === "TEAM LEAD" || role === "CSR") {
+        if (role === "TEAM LEAD" ) {
             obj.activeenrollments = {
                 label: "Active Enrollments",
-            };
-        }
+            }; 
+            delete obj.incompleteenrollments
+        } 
+        
     }
     useEffect(() => {
         setData([["Task", "Enrollments"]]);

@@ -1,17 +1,11 @@
 import React, { useEffect } from "react";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { InputMask } from "primereact/inputmask";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
-import { Calendar } from "primereact/calendar";
-import { Checkbox } from "primereact/checkbox";
 import { useState } from "react";
 import { RadioButton } from "primereact/radiobutton";
-import { useDispatch } from "react-redux";
 import { Dropdown } from "primereact/dropdown";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
@@ -48,9 +42,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     ];
     const [eSim, seteSim] = useState(false);
     const [selectedOption, setSelectedOption] = useState("email");
-    const [isSelfReceive, setIsSelfReceive] = useState(true);
-    const [isHouseHold, setIsHouseHold] = useState(false);
-    const [acp, setAcp] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isDuplicate, setIsDuplicate] = useState(false);
     const [dayerror, setDayError] = useState(false);
@@ -63,27 +54,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         contact: Yup.string().required("This is Required."),
         email: Yup.string().email().required("This is Required."),
         salesChannel: Yup.string().required("This is Required."),
-        BenifitFirstName: Yup.string().when("isSelfReceive", {
-            is: false,
-            then: () => Yup.string().required("This field is required"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
-
-        BenifitLastName: Yup.string().when("isSelfReceive", {
-            is: false,
-            then: () => Yup.string().required("This field is required"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
-        BenifitSSN: Yup.string().when("isSelfReceive", {
-            is: false,
-            then: () => Yup.string().required("This field is required"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
-        BenifitDOB: Yup.date().when("isSelfReceive", {
-            is: false,
-            then: () => Yup.date().nullable().required("This field is required").max(new Date(), "DOB cannot be in the future"),
-            otherwise: () => Yup.string().notRequired(),
-        }),
     });
 
     const formik = useFormik({
@@ -103,14 +73,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             email: "",
             ESim: "",
             bestWayToReach: "",
-            isSelfReceive: "",
-            BenifitFirstName: "",
-            BenifitMiddleName: "",
-            BenifitLastName: "",
-            BenifitSSN: "",
-            BenifitDOB: "",
-            isACP: acp,
             salesChannel: "",
+            accountType: "Prepaid", 
+            isACP:false
         },
         onSubmit: async (values, actions) => {
             if (selectedDay === null || selectedYear === null || selectedMonth === null) {
@@ -118,18 +83,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             } else {
                 const dateObject = new Date(selectedYear, formik.values.month - 1, formik.values.day);
                 const isoString = dateObject.toISOString();
-
                 const selectedDate = isoString;
-              
                 const formattedDate = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : "";
-              
-
                 const userId = _id;
-
                 const dataToSend = {
-                    accountType:"ACP",
                     csr: csr,
-                    userId: userId,
+                    userId: userId, 
+                    isACP:formik.values.isACP,
                     firstName: formik.values.firstName,
                     middleName: formik.values.middleName,
                     lastName: formik.values.lastName,
@@ -141,21 +101,14 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     email: formik.values.email,
                     ESim: formik.values.ESim,
                     bestWayToReach: formik.values.bestWayToReach,
-                    isSelfReceive: formik.values.isSelfReceive,
-                    BenifitFirstName: formik.values.BenifitFirstName,
-                    BenifitMiddleName: formik.values.BenifitMiddleName,
-                    BenifitLastName: formik.values.BenifitLastName,
-                    BenifitSSN: formik.values.BenifitSSN,
-                    BenifitDOB: formik.values.BenifitDOB,
-                    isACP: acp, 
-                    salesChannel:formik.values.salesChannel
+                    salesChannel: formik.values.salesChannel,
+                    accountType: formik.values.accountType,
                 };
-
                 setIsLoading(true);
                 try {
                     const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
                     if (response?.status === 200 || response?.status === 201) {
-                        localStorage.setItem("basicData", JSON.stringify(response.data));
+                        localStorage.setItem("prepaidbasicData", JSON.stringify(response.data));
                         toast.success("information saved Successfully");
                         handleNext();
                     }
@@ -175,34 +128,12 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         formik.setFieldValue("bestWayToReach", selectedOption);
     }, [selectedOption]);
 
-    useEffect(() => {
-        formik.setFieldValue("isSelfReceive", isSelfReceive);
-    }, [isSelfReceive]);
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
     const handleESim = (e) => {
         seteSim(e.target.value);
-    };
-
-    const handleRadio = (value) => {
-        setIsSelfReceive(value === "myself");
-        if (value === "somebody") {
-            setIsHouseHold(true);
-        } else {
-            setIsHouseHold(false);
-        }
-    };
-
-    const handleACP = (e) => {
-        if (formik.values.isACP == true) {
-            formik.values.isACP = false;
-            setAcp(false);
-        } else {
-            formik.values.isACP = true;
-            setAcp(true);
-        }
     };
     const options = [
         { label: "Select", value: "" },
@@ -214,13 +145,12 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         { label: "V", value: "V" },
     ];
     const disableSuggestion = () => null;
-    const basicResponse = localStorage.getItem("basicData");
+    const basicResponse = localStorage.getItem("prepaidbasicData");
     const parsebasicResponse = JSON.parse(basicResponse);
     const [dayoption, setDayOptions] = useState(null);
     //get zipData
-    const zipResponse = localStorage.getItem("zipData");
+    const zipResponse = localStorage.getItem("prepaidzipData");
     const parsezipResponse = JSON.parse(zipResponse);
-
     useEffect(() => {
         if (formik.values.month === 1 || formik.values.month === 3 || formik.values.month === 5 || formik.values.month === 7 || formik.values.month === 8 || formik.values.month === 10 || formik.values.month === 12) {
             const startDay = 1;
@@ -342,15 +272,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             return false;
         }
     }
-
-    useEffect(() => {
-        if (!isSelfReceive) {
-            setIsHouseHold(true);
-        }
-    }, [isSelfReceive]);
-
     //check customer Duplication
-
     useEffect(() => {
         const fetchData = async () => {
             if (parsezipResponse && !basicResponse) {
@@ -361,7 +283,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
 
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-
                         setIsDuplicate(false);
                     } catch (error) {
                         toast.error(error?.response?.data?.msg);
@@ -370,12 +291,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 }
             }
         };
-
         fetchData();
     }, [formik.values.contact]);
     useEffect(() => {
         const dobString = parsebasicResponse?.data?.DOB;
-
         if (dobString) {
             // set data in feilds from local storage
             setSelectedYear(new Date(parsebasicResponse?.data?.DOB).getFullYear());
@@ -395,22 +314,11 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("drivingLicense", parsebasicResponse?.data?.drivingLicense);
             formik.setFieldValue("ESim", parsebasicResponse?.data?.ESim);
             formik.setFieldValue("bestWayToReach", parsebasicResponse?.data?.bestWayToReach);
-            formik.setFieldValue("isSelfReceive", parsebasicResponse?.data?.isSelfReceive);
-            formik.setFieldValue("BenifitFirstName", parsebasicResponse?.data?.BenifitFirstName);
-            formik.setFieldValue("BenifitMiddleName", parsebasicResponse?.data?.BenifitMiddleName);
-            formik.setFieldValue("BenifitLastName", parsebasicResponse?.data?.BenifitLastName);
-            formik.setFieldValue("BenifitDOB", new Date(parsebasicResponse?.data?.BenifitDOB));
-            formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
-            formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
-            formik.setFieldValue("salesChannel",parsebasicResponse?.data?.salesChannel)
-            //chnage state
+            formik.setFieldValue("salesChannel", parsebasicResponse?.data?.salesChannel);
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
-            setAcp(parsebasicResponse?.data?.isACP);
-            setIsSelfReceive(parsebasicResponse?.data?.isSelfReceive);
         }
     }, []);
-
     const handlePaste = (event) => {
         event.preventDefault();
         toast.warning("Pasting is not allowed in this field.");
@@ -442,7 +350,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             value: "SMM",
         },
     ];
-
     return (
         <>
             <ToastContainer />
@@ -475,7 +382,15 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         <label className="field_label mb-2 font-semibold">
                             Sales Channel <span className="steric">*</span>
                         </label>
-                        <Dropdown placeholder="Select Channel" id="salesChannel" className={classNames({ "p-invalid": isFormFieldValid("salesChannel") }, "input_text w-full mb-2")} options={salesChannelOptions} value={formik.values.salesChannel} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <Dropdown
+                            placeholder="Select Channel"
+                            id="salesChannel"
+                            className={classNames({ "p-invalid": isFormFieldValid("salesChannel") }, "input_text w-full mb-2")}
+                            options={salesChannelOptions}
+                            value={formik.values.salesChannel}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
                         {getFormErrorMessage("salesChannel")}
                     </div>
                 </div>
@@ -506,6 +421,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         <label className="field_label">Middle Name</label>
                         <InputText id="middleName" value={formik.values.middleName} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^[a-zA-Z\s]*$/} maxLength={10} autoComplete="off" style={{ textTransform: "uppercase" }} />
                     </div>
+
                     <div className="field col-12 md:col-3">
                         <label className="field_label">
                             Last Name <span className="steric">*</span>
@@ -564,7 +480,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                     formik.handleChange(e);
 
                                     formik.handleChange(e);
-                                   
+
                                     setSelectedMonth(e.value);
                                 }}
                                 options={monthOptions}
@@ -733,93 +649,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             Any
                         </label>
                     </div>
-                </div>
-            </div>
-
-            <div className="mt-4">
-                <p className="font-semibold">Who is receiving government assistance?</p>
-                <div className="flex">
-                    <div className="flex align-items-center">
-                        <RadioButton inputId="myself" value="myself" name="myself" onChange={() => handleRadio("myself")} checked={isSelfReceive} />
-                        <label className="ml-2">Myself</label>
-                    </div>
-                    <div className="flex align-items-center ml-2">
-                        <RadioButton inputId="somebody" value="somebody" name="somebody" onChange={() => handleRadio("somebody")} checked={!isSelfReceive} />
-                        <label className="ml-2">Somebody Else in the Household</label>
-                    </div>
-                </div>
-            </div>
-
-            {isHouseHold && (
-                <div>
-                    <div className="mt-4">
-                        <p className="font-semibold">Information of benefit qualifying person</p>
-                        <div className="p-fluid formgrid grid">
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    First Name <span className="steric">*</span>
-                                </label>
-                                <InputText className="mb-3" name="BenifitFirstName" value={formik.values.BenifitFirstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
-                                {getFormErrorMessage("BenifitFirstName")}
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">Middle Name</label>
-                                <InputText
-                                    id="BenifitMiddleName"
-                                    value={formik.values.BenifitMiddleName}
-                                    onChange={formik.handleChange}
-                                    className={classNames({ "p-invalid": isFormFieldValid("BenifitMiddleName") }, "input_text")}
-                                    keyfilter={/^[a-zA-Z\s]*$/}
-                                    minLength={3}
-                                    maxLength={20}
-                                    style={{ textTransform: "uppercase" }}
-                                />
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Last Name <span className="steric">*</span>
-                                </label>
-                                <InputText className="mb-3" name="BenifitLastName" value={formik.values.BenifitLastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
-                                {getFormErrorMessage("BenifitLastName")}
-                            </div>
-
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
-                                </label>
-                                <Calendar onPaste={handlePaste} className="mb-3" name="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} showIcon />
-                                {getFormErrorMessage("BenifitDOB")}
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
-                                </label>
-                                <InputText type="text" className="mb-3" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
-                                {getFormErrorMessage("BenifitSSN")}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <div className="mt-4">
-                <h3>Affordable Connectivity Program (ACP) Consent</h3>
-                <div className="sp_small">
-                    <Checkbox
-                        id="isACP"
-                        checked={acp}
-                        onChange={(e) => {
-                            handleACP(e);
-                            formik.handleChange(e);
-                        }}
-                        className={classNames({ "p-invalid": isFormFieldValid("isACP") }, "input_mask")}
-                    />
-                    <label className="p-checkbox-label mx-2">
-                        By proceeding with your application, you acknowledge and understand that the Affordable Connectivity Program is an FCC benefit initiative that lowers your monthly broadband bill. This program has an indefinite duration, and you will receive a 30-day notice upon its
-                        conclusion, after which you can choose to maintain your plan at the undiscounted rate. As a participant, you have the option to transfer your ACP benefit to another service provider. It's important to note that the Affordable Connectivity Program offers a single monthly
-                        service discount and one device discount per household
-                    </label>
-                    {getFormErrorMessage("isACP")}
                 </div>
             </div>
         </>

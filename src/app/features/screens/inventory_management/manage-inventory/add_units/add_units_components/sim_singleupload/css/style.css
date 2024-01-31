@@ -1,12 +1,15 @@
 .field-width{ 
      width:25vw;
-} 
+}  
+.card-sub{ 
+    width:23%;
+}
 @media(max-width:1860px){ 
     .field-width{  
          
         width:23vw;
     }
-}   
+}    
 @media(max-width:1560px){ 
     .field-width{  
          
