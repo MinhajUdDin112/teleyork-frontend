@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Button } from "primereact/button";
 import { useFormik, formi, setIn } from "formik";
 import * as Yup from "yup";
-import Axios from "axios";
 import { Dropdown } from "primereact/dropdown";
 import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect"; 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     console.log(localStorage.getItem("simdiscount"));
     console.log(localStorage.getItem("simplan"));
@@ -41,34 +39,19 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             customerid:_id, 
 
         },
-        onSubmit: async (values, actions) => {
-            console.log("inside payment submit");
-            //setActiveIndex(3); 
-            let paymentproceed=localStorage.getItem("paymentstatus")   
-            console.log("customer id is",formik.values.customerid)
-            if(paymentproceed === "paid"){  
-                let plan=[] 
-                plan.push(formik.values.plan)
-            let dataToSend = { 
-               customerid:formik.values.customerid, 
-               plan:plan, 
-               totalAmount:formik.values.totalamount,  
-               discount:formik.values.discount, 
-               additionalFeature:formik.values.additional,
-                billId:formik.values.billId,  
-                stripeId:localStorage.getItem("stripeId"), 
-                status:localStorage.getItem("paymentstatus"), 
-                billingPeriod:"onActivation"
-            }; 
-            console.log("Data To Send Is",dataToSend)  
-            
-            Axios.post(`${BASE_URL}/api/web/invoices/invoices`,dataToSend).then((response)=>{ 
-              localStorage.setItem("paymentallinfo",JSON.stringify(response.data)) 
-              setActiveIndex(3)
-            }).catch(err=>{ 
-                
-            })
-        }
+        onSubmit: async (values, actions) => {  
+            if(localStorage.getItem("paymentstatus") ){
+                if(localStorage.getItem("paymentstatus") === "paid"){ 
+                      setActiveIndex(3)
+                } 
+                else{ 
+                    
+                setPaymentDialogVisibility(true) 
+                }
+            } 
+            else{ 
+                setPaymentDialogVisibility(true) 
+            }
         },
     }); 
     useEffect(()=>{  
@@ -299,9 +282,9 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             onChange={(e) => {
                                 formik.setFieldValue("paymentMode", e.value);
                                 formik.handleChange(e);
-                                if (e.value === "card") {
+                               /* if (e.value === "card") {
                                     setPaymentDialogVisibility(true);
-                                }
+                                }*/
                             }}
                         />
                         {getFormErrorMessage("paymentMode")}
@@ -309,7 +292,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     {formik.values.paymentMode == "card" ? (
                         <>
                             <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
-                                <PaymentStripModule amount={formik.values.totalamount} />
+                                <PaymentStripModule amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex}/>
                             </Dialog>
                         </>
                     ) : undefined}

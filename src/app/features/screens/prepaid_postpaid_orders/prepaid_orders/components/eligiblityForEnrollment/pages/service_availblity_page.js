@@ -59,38 +59,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
 
                 if (response?.status === 200) {
                     localStorage.setItem("prepaidzipData", JSON.stringify(response.data)); 
-                    localStorage.removeItem("paymentallinfo")
-                    localStorage.removeItem("prepaidbasicData");
-                    localStorage.removeItem("prepaidaddress"); 
-                    localStorage.removeItem("simpricing")
-                    localStorage.removeItem("devicepricing")
-                    localStorage.removeItem("prepaidcheckEligibility");
-                    localStorage.removeItem("prepaidagreeData");
-                    localStorage.removeItem("prepaidprogrammeId");
-                    localStorage.removeItem("comingfromincomplete");
-                    localStorage.removeItem("paymentmethod");
-                    localStorage.removeItem("paymentdetails");  
-                    localStorage.removeItem("inventoryType");  
-                    //Payment Status 
-                    localStorage.removeItem("paymentstatus")  
-
-                    localStorage.removeItem("stripeId")
-                    //Device local 
-                    localStorage.removeItem("deviceadditional"); 
-                    localStorage.removeItem("deviceadditionaltotal");  
-                    localStorage.removeItem("deviceadditionalfeaturearray");  
-                    localStorage.removeItem("totaldevicediscount");   
-                    localStorage.removeItem("devicediscountobjectarray");  
-                    localStorage.removeItem("deviceplan"); 
-                    localStorage.removeItem("devicepricing");  
-                    //SIM Local 
-                    localStorage.removeItem("simadditional"); 
-                    localStorage.removeItem("simadditionaltotal");  
-                    localStorage.removeItem("simadditionalfeaturearray");  
-                    localStorage.removeItem("totalsimdiscount");   
-                    localStorage.removeItem("simdiscountobjectarray");  
-                    localStorage.removeItem("simplan"); 
-                    localStorage.removeItem("simpricing"); 
+              
                     setZipVerified(true);
                 }
             } catch (error) {

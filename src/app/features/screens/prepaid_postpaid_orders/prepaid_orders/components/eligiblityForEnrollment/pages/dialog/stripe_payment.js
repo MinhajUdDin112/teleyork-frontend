@@ -5,7 +5,8 @@ import Axios from "axios";
 import { useEffect,useState } from "react";
 import PaymentStripeForm from "./stripe_payment_dialog/stripe_payment_form";
 const stripePromise = loadStripe("pk_test_51OcirDLVLQnJs4K0bDuAGI0kOqwpv7EPz8QAHP1ck2233eZ1EtPjZHT1CWgPamZKCAlEZdhPSAQwtjBKQXgpm9zF00t20QE6EZ");
-export default function PaymentStripModule({amount}) {  
+export default function PaymentStripModule({amount,object,setActiveIndex}) { 
+  console.log("object is ",object)  
   let [clientSecret,setClientSecret]=useState(null)  
    
   useEffect(()=>{  
@@ -22,7 +23,7 @@ export default function PaymentStripModule({amount}) {
         <Elements stripe={stripePromise} options={{
             clientSecret
         }}>
-           <PaymentStripeForm clientSecret={clientSecret} amount={amount}/>
+           <PaymentStripeForm clientSecret={clientSecret} amount={amount} setActiveIndex={setActiveIndex} object={object}/>
         </Elements>:undefined      
 }  
  </>
