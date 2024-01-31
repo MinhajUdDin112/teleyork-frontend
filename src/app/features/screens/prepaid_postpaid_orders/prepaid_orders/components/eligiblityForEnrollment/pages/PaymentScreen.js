@@ -6,63 +6,58 @@ import { Dropdown } from "primereact/dropdown";
 import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
-import { MultiSelect } from "primereact/multiselect"; 
+import { MultiSelect } from "primereact/multiselect";
 const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     console.log(localStorage.getItem("simdiscount"));
     console.log(localStorage.getItem("simplan"));
-    console.log(localStorage.getItem("deviceplan")); 
-    const [inventory,setInventory]=useState()
+    console.log(localStorage.getItem("deviceplan"));
+    const [inventory, setInventory] = useState();
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isSearch, setIsSearch] = useState(false);
     const [historyData, setHistoryData] = useState();
-    //Handle Back  
-    let paymentInfo= JSON.parse(localStorage.getItem("paymentallinfo"))?.data
-   
+    //Handle Back
+    let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
+
     const handleBack = () => {
         setActiveIndex(1);
     };
     const validationSchema = Yup.object().shape({
-        plan: Yup.string().required("Plan are required"),
         billId: Yup.string().required("Product is required"),
         paymentMode: Yup.string().required("Payment Mode are required"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
-            plan:"",
+            plan: "",
             billId: "",
             paymentMode: "",
             discount: [],
             additional: [],
-            totalamount: "", 
-            customerid:_id, 
-
+            totalamount: "",
+            customerid: _id,
         },
-        onSubmit: async (values, actions) => {  
-            if(localStorage.getItem("paymentstatus") ){
-                if(localStorage.getItem("paymentstatus") === "paid"){ 
-                      setActiveIndex(3)
-                } 
-                else{ 
-                    
-                setPaymentDialogVisibility(true) 
+        onSubmit: async (values, actions) => {
+            if (localStorage.getItem("paymentstatus")) {
+                if (localStorage.getItem("paymentstatus") === "paid") {
+                    setActiveIndex(3);
+                } else {
+                    setPaymentDialogVisibility(true);
                 }
-            } 
-            else{ 
-                setPaymentDialogVisibility(true) 
+            } else {
+                setPaymentDialogVisibility(true);
             }
         },
-    }); 
-    useEffect(()=>{  
-        if(paymentInfo){
-       formik.setFieldValue("billId",paymentInfo.billId) ; 
-       formik.setFieldValue("plan",paymentInfo.plan) 
-       formik.setFieldValue("additionalFeature",paymentInfo.additionalFeature) 
-       formik.setFieldValue("discount",paymentInfo.discount)   
-       formik.setFieldValue("totalamount",paymentInfo.totalAmount) 
+    });
+    useEffect(() => {
+        if (paymentInfo) {
+            formik.setFieldValue("billId", paymentInfo.billId);
+            formik.setFieldValue("plan", paymentInfo.plan);
+            formik.setFieldValue("additionalFeature", paymentInfo.additionalFeature);
+            formik.setFieldValue("discount", paymentInfo.discount);
+            formik.setFieldValue("totalamount", paymentInfo.totalAmount);
         }
-    },[])
+    }, []);
     const optionsForPayment = [
         { label: "Select ", value: "" },
         { label: "Credit/Debit card", value: "card" },
@@ -90,30 +85,30 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 <div className="flex flex-wrap flex-row justify-content-around">
                     <div className="mt-2">
                         <label className="block">Select Product</label>
-                        <Dropdown 
-                        disabled={paymentInfo?true:false}
+                        <Dropdown
+                            disabled={paymentInfo ? true : false}
                             className="field-width mt-2"
                             value={formik.values.billId}
                             onChange={(e) => {
-                                formik.setFieldValue("billId", e.value);  
-                                let inventory; 
-                                let inventoryType=JSON.parse(localStorage.getItem("inventoryType"))
-                                for(let i=0;i<inventoryType.length;i++){ 
-                                      if(e.value === inventoryType[i].value){  
-                                        inventory=inventoryType[i].label
+                                formik.setFieldValue("billId", e.value);
+                                let inventory;
+                                let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
+                                for (let i = 0; i < inventoryType.length; i++) {
+                                    if (e.value === inventoryType[i].value) {
+                                        inventory = inventoryType[i].label;
                                         break;
-                                      }
-                                } 
-                                setInventory(inventory)
+                                    }
+                                }
+                                setInventory(inventory);
                                 if (inventory === "Sim Card") {
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("simdiscountobjectarray")));
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) :[] );
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
                                     formik.setFieldValue("totalamount", amountafterdiscount);
                                 } else if (inventory === "Wireless Device") {
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")):[] );
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing")).oneTimeCharge;
@@ -132,9 +127,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                         <label className="block">Select Plan</label>
                         {inventory === "Sim Card" ? (
                             <>
-                                <Dropdown 
-                                
-                        disabled={paymentInfo?true:false}
+                                <Dropdown
+                                    disabled={paymentInfo ? true : false}
                                     className="field-width mt-2"
                                     id="plan"
                                     placeholder="Select Plan"
@@ -150,9 +144,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             </>
                         ) : (
                             <>
-                                <Dropdown 
-                                
-                        disabled={paymentInfo?true:false}
+                                <Dropdown
+                                    disabled={paymentInfo ? true : false}
                                     className="field-width mt-2"
                                     placeholder="Select Plan"
                                     id="plan"
@@ -172,9 +165,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                         <label className="block">Select Additional Feature</label>
                         {inventory === "Sim Card" ? (
                             <>
-                                <MultiSelect 
-                                
-                        disabled={paymentInfo?true:false}
+                                <MultiSelect
+                                    disabled={paymentInfo ? true : false}
                                     className="field-width mt-2"
                                     id="additional"
                                     placeholder="Select Additional Feature"
@@ -199,30 +191,29 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         for (let i = 0; i < additionalnew.length; i++) {
                                             for (let k = 0; k < simpricing.additionalFeature.length; k++) {
                                                 if (simpricing.additionalFeature[k]._id === additionalnew[i]) {
-                                                    newadditionaltotal += (parseFloat(simpricing.additionalFeature[k].featureAmount));
+                                                    newadditionaltotal += parseFloat(simpricing.additionalFeature[k].featureAmount);
                                                 }
                                             }
                                         }
                                         totalamount += newadditionaltotal;
                                         localStorage.setItem("simadditionalfeaturearray", JSON.stringify(e.value));
                                         formik.setFieldValue("additional", e.value);
-                                        formik.setFieldValue("totalamount", (totalamount).toString());
+                                        formik.setFieldValue("totalamount", totalamount.toString());
                                     }}
                                 />
                                 {getFormErrorMessage("additional")}
                             </>
                         ) : (
                             <>
-                                <MultiSelect 
-                                
-                        disabled={paymentInfo?true:false}
+                                <MultiSelect
+                                    disabled={paymentInfo ? true : false}
                                     className="field-width mt-2"
                                     placeholder="Select Additional Feature"
                                     id="additional"
                                     optionLabel="name"
-                                    options={formik.values.product === "Wireless Device" && JSON.parse(localStorage.getItem("deviceadditional")).length > 0  ? JSON.parse(localStorage.getItem("deviceadditional")) :[]}
+                                    options={formik.values.product === "Wireless Device" && JSON.parse(localStorage.getItem("deviceadditional")).length > 0 ? JSON.parse(localStorage.getItem("deviceadditional")) : []}
                                     value={formik.values.additional}
-                                    onChange={(e) => {   
+                                    onChange={(e) => {
                                         let additional = formik.values.additional;
                                         let prerviousadditionaltotal = 0;
                                         let totalamount = parseFloat(formik.values.totalamount);
@@ -240,14 +231,14 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         for (let i = 0; i < additionalnew.length; i++) {
                                             for (let k = 0; k < devicepricing.additionalFeature.length; k++) {
                                                 if (devicepricing.additionalFeature[k]._id === additionalnew[i]) {
-                                                    newadditionaltotal += (parseFloat(devicepricing.additionalFeature[k].featureAmount));
+                                                    newadditionaltotal += parseFloat(devicepricing.additionalFeature[k].featureAmount);
                                                 }
                                             }
                                         }
                                         totalamount += newadditionaltotal;
                                         localStorage.setItem("deviceadditionalfeaturearray", JSON.stringify(e.value));
                                         formik.setFieldValue("additional", e.value);
-                                        formik.setFieldValue("totalamount", (totalamount).toString());
+                                        formik.setFieldValue("totalamount", totalamount.toString());
                                     }}
                                 />
                                 {getFormErrorMessage("additional")}
@@ -256,9 +247,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     </div>
                     <div className="mt-2">
                         <label className="block">Net Amount</label>
-                        <InputText 
-                        
-                    
+                        <InputText
                             disabled
                             className="field-width mt-2"
                             id="totalamount"
@@ -272,9 +261,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     </div>
                     <div className="mt-2">
                         <label className="block">Select Payment Method</label>
-                        <Dropdown 
-                        
-                        disabled={paymentInfo?true:false}
+                        <Dropdown
+                            disabled={paymentInfo ? true : false}
                             className="field-width mt-2"
                             id="paymentMode"
                             options={optionsForPayment}
@@ -282,7 +270,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             onChange={(e) => {
                                 formik.setFieldValue("paymentMode", e.value);
                                 formik.handleChange(e);
-                               /* if (e.value === "card") {
+                                /* if (e.value === "card") {
                                     setPaymentDialogVisibility(true);
                                 }*/
                             }}
@@ -292,7 +280,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     {formik.values.paymentMode == "card" ? (
                         <>
                             <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
-                                <PaymentStripModule amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex}/>
+                                <PaymentStripModule amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
                             </Dialog>
                         </>
                     ) : undefined}
