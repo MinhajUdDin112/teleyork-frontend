@@ -42,7 +42,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
   } else {
     items = [
       {
-        label: `${cpData?.firstName} ${cpData?.lastName} (${cpData?.accoundId})`,
+        label: `${cpData?.firstName} ${cpData?.lastName} (${cpData?.accountId})`,
         icon: (
           <svg
             className="custom-icon-user"
