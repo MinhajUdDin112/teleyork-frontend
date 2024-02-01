@@ -80,6 +80,7 @@ export default function Post_service_availbilty() {
           localStorage.setItem("zipData", JSON.stringify(response.data));
           localStorage.removeItem("basicData");
           localStorage.removeItem("address");
+          localStorage.removeItem("toWordsBack");
           localStorage.removeItem("agreeData");
           localStorage.removeItem("programmeId");
           localStorage.removeItem("fromIncomplete")

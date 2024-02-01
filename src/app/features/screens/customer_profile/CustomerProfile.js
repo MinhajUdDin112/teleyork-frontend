@@ -410,7 +410,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Acc. Type</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.accountType}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Teleyork Plan</td>

@@ -40,6 +40,9 @@ const BillingConfiguration = () => {
             additionalFeature: [],
             featureName: "",
             featureAmount: "",
+            latefeeCharge:"",
+            applyLateFee:"",
+            subsequentBillCreateDate :"",
         },
         onSubmit: async (values, actions) => {
             const dataToSend = {
@@ -53,6 +56,9 @@ const BillingConfiguration = () => {
                 selectdiscount: formik.values.selectdiscount,
                 BillCreationDate: formik.values.BillCreationDate,
                 additionalFeature: formik.values.additionalFeature,
+                latefeeCharge: formik.values.latefeeCharge,
+                applyLateFee: formik.values.applyLateFee,
+                subsequentBillCreateDate: formik.values.subsequentBillCreateDate,
             };
 
             try {
@@ -96,7 +102,7 @@ const BillingConfiguration = () => {
     ];
     const optionsForCreation = [
         { label: "On Activation", value: "onActivation" },
-        { label: "On QA Approve", value: "onQAApprove" }];
+        { label: "After QA Approval ", value: "onQAApprove" }];
 
     function showDiscount() {
         setNewDiscount(true);
@@ -281,7 +287,7 @@ const BillingConfiguration = () => {
                                 ) : null}
                             </div>
                             <div className="mt-3 field col-12 md:col-3  ">
-                                <label className="field_label mb-2 text-md">Bill Create Date</label>
+                                <label className="field_label mb-2 text-md">First Bill Create Date</label>
                                 <Dropdown
                                     className="w-21rem"
                                     id="BillCreationDate"
@@ -300,10 +306,21 @@ const BillingConfiguration = () => {
                                 ) : null}
                             </div>
                             <div className="field col-12 md:col-3 mt-3">
+                                <label className="field_label text-md">Subsequent Bill Create Date </label>
+                                <InputText id="subsequentBillCreateDate" placeholder="No of days From Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
+                            <div className="field col-12 md:col-3 mt-3">
                                 <label className="field_label text-md">Due Date</label>
                                 <InputText id="dueDate" placeholder="No of days From Bill Create Date" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
-
+                            <div className="field col-12 md:col-3 mt-3">
+                                <label className="field_label text-md">Late Fee Charge</label>
+                                <InputText id="latefeeCharge"  value={formik.values.latefeeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
+                            <div className="field col-12 md:col-3 mt-3">
+                                <label className="field_label text-md">Apply Late Fee </label>
+                                <InputText id="applyLateFee" placeholder="No of Days from Due Date" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
 
                             <div className="mt-3 field col-12 md:col-3  ">
                                 <label className="field_label mb-2 text-md">Payment Method</label>

@@ -12,6 +12,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const [isLoading, setIsLoading] = useState(false)
    const [checked, setChecked] = useState(false)
    const [fromIncomplete, setFromIncomplete] = useState(false);
+   const [goBack, setGoBack] = useState(false);
     //get preview  information from local storage
     const previewsRes = localStorage.getItem("address");
     const parsepreviewsRes = JSON.parse(previewsRes);
@@ -60,6 +61,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
        }
       }, [])
 
+      useEffect(()=>{
+        
+localStorage.setItem("toWordsBack",goBack)
+      },[goBack])
+
    const handleSign=()=>{
     setChecked(true);
    }
@@ -73,6 +79,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                             label="Back"
                             onClick={() => {
                                 setActiveIndex(1);
+                                setGoBack(true);
                             }}
                         />
                         <Button label="Submit" onClick={postData} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}  />
