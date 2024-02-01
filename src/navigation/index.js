@@ -10,6 +10,32 @@ export const menuNavigation = [
                 label: "Acp Programs",
                 icon: "pi pi-fw pi-dollar",
                 to: "/companyacpprograms",
+            }, 
+
+        ],
+    }, 
+    {
+        items: [
+            {
+                label: "Prepaid Orders",
+                icon: "pi pi-fw pi-bookmark",
+                items: [
+                    { label: "New Enrollment", icon: "", to: "/prepaid-newenrollment" }, 
+                    { label: "Incomplete Enrollment", icon: "", to: "/prepaid-incompleteenrollment" }, 
+                    { label:"All Enrollment",icon: "", to: "/prepaid-allenrollment"}
+                 /*   { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
+                    { label: "All Enrollments", icon: "", to: "/all-enrollments" },
+                    {label:  "Provisioning Queue", icon: "", to: "/provisioning-queue" },
+                    { label: "Bulk Upload", icon: "", to: "/bulk-upload"},
+                    { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
+                    { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
+                    { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
+                    { label: "Incomplete Enrollments", icon: "", to: "/incompleteenrollments" },
+                    { label: "Rejected Enrollments", icon: "", to: "/rejectedenrollments" },
+                    { label: "NLAD Resolution Status", icon: "", to: "/nladresolutionstatus" },
+                    { label: "Handover Event Order", icon: "", to: "/handovereventorder" },
+                    { label: "Pending Event Order", icon: "", to: "/pendingeventorder" },*/
+                ],
             },
         ],
     },
@@ -87,11 +113,7 @@ export const menuNavigation = [
                         icon: "",
                         to: "/recentsearches",
                     },
-                    {
-                        label: "Payment Search Tool",
-                        icon: "",
-                        to: "/paymentsearchtool",
-                    },
+                   
                     {
                         label: "Deactivate ESN",
                         icon: "",
@@ -112,40 +134,6 @@ export const menuNavigation = [
                         label: "Eligibility Proof Upload",
                         icon: "",
                         to: "/eligibilityproofupload",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        items: [
-            {
-                label: "Prepaid/Postpaid Orders",
-                items: [
-                    {
-                        label: "New Enrollments",
-                        icon: "",
-                        to: "",
-                    },
-                    {
-                        label: "All Enrollments",
-                        icon: "",
-                        to: "/allenrollmentorders",
-                    },
-                    {
-                        label: "Bulk Portin Report",
-                        icon: "",
-                        to: "/bulkportin",
-                    },  
-                    {
-                        label: "Completed Enrollments",
-                        icon: "",
-                        to: "/completeenrollments",
-                    },
-                    {
-                        label: "Incomplete Enrolments",
-                        icon: "",
-                        to: "/incomplete",
                     },
                 ],
             },
