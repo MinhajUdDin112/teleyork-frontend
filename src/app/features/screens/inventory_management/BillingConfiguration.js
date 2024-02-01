@@ -94,7 +94,9 @@ const BillingConfiguration = () => {
         { label: "E-Check", value: "E-Check" },
         { label: "Skip Payment", value: "Skip Payment" },
     ];
-    const optionsForCreation = [{ label: "On Activation", value: "onActivation" }];
+    const optionsForCreation = [
+        { label: "On Activation", value: "onActivation" },
+        { label: "On QA Approve", value: "onQAApprove" }];
 
     function showDiscount() {
         setNewDiscount(true);
