@@ -1,19 +1,126 @@
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Steps } from "primereact/steps";
 import Personal_info_page from "./Personal_info_page";
 import Eligibility from "./Eligibilty";
 import Plan from "./Plan";
 import Preview from "./Preview";
+import Axios from "axios"; 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 export default function Post_enrollment_Flow() {
     const [activeIndex, setActiveIndex] = useState(0);
     const toast = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const csr = parseLoginRes?._id; 
- // Get role name  from login response     
+ // Get role name  from login response           
       const roleName= parseLoginRes?.role?.role;  
-      console.log(roleName)
+     
+      const fromIncompl = localStorage.getItem("fromIncomplete");
+      const parsefromIncompl = JSON.parse(fromIncompl);
+
+      useEffect(() => {
+        Axios.get(`${BASE_URL}/api/web/billing/plans?inventoryType=SimCard,Wireless Device&billingmodel=Prepaid`)
+            .then((response) => {
+                let inventoryType = []; 
+                for (let i = 0; i < response.data.data.length; i++) {
+                    let plans = [];
+                    let discountobjectarray = [];
+                    let additionalfeature = []; 
+                    let totaldiscounts=0    
+                    let additionaltotal=0;
+                    let additionalfeaturearray=[]
+                    if (response.data.data[i].inventoryType === "SimCard") {
+                        let obj = { label: "Sim Card", value:response.data.data[i]._id };
+                        //objectforpricing[response.data.data[i].inventoryType]["oneTimeCharge"]=response.data.data[i].inventoryType.oneTimeCharge
+                        inventoryType.push(obj);
+                        for (let k = 0; k < response.data.data[i].monthlyCharge.length; k++) {
+                            let obj = {
+                                name: response.data.data[i].monthlyCharge[k].name,
+                                value: response.data.data[i].monthlyCharge[k]._id,
+                            };
+                            plans.push(obj);
+                        } 
+                        for (let z = 0; z < response.data.data[i].additionalFeature.length; z++) {
+                            let obj = {
+                                name: response.data.data[i].additionalFeature[z].featureName,
+                                value: response.data.data[i].additionalFeature[z]._id,
+                            };  
+                            additionaltotal+=parseFloat(response.data.data[i].additionalFeature[z].featureAmount)
+                             additionalfeaturearray.push((response.data.data[i].additionalFeature[z]._id).toString())
+                            additionalfeature.push(obj);
+                        }
+                        for (let y = 0; y < response.data.data[i].selectdiscount.length; y++) {
+                            discountobjectarray.push(response.data.data[i].selectdiscount[y]._id.toString());
+                            totaldiscounts += parseFloat(response.data.data[i].selectdiscount[y].amount);
+                        }
+                        //Additional Features 
+                               //_id array
+                        localStorage.setItem("simadditionalfeaturearray",JSON.stringify(additionalfeaturearray))  
+                               // Options array name and _id
+                        localStorage.setItem("simadditional", JSON.stringify(additionalfeature));
+                                //totalfeatureamount 
+                        localStorage.setItem("simadditionaltotal", JSON.stringify(additionaltotal));
+                        //Discounts 
+                                //Total Discounts
+                        localStorage.setItem("totalsimdiscount", JSON.stringify(totaldiscounts)); 
+                                //discount _id array will send to backend 
+                        localStorage.setItem("simdiscountobjectarray", JSON.stringify(discountobjectarray));   
+                        //SIM Complete Object include additional discount and any other
+                        localStorage.setItem("simpricing", JSON.stringify(response.data.data[i]));
+                         //SIM Plans
+                        localStorage.setItem("simplan", JSON.stringify(plans));
+                    } else if (response.data.data[i].inventoryType === "Wireless Device") {
+                        let obj = { label: "Wireless Device", value:response.data.data[i]._id };
+                        inventoryType.push(obj);
+                        for (let k = 0; k < response.data.data[i].monthlyCharge.length; k++) {
+                            let obj = {
+                                name: response.data.data[i].monthlyCharge[k].name,
+                                value: response.data.data[i].monthlyCharge[k]._id,
+                            };
+                            plans.push(obj);
+                        }
+                        for (let z = 0; z < response.data.data[i].additionalFeature; z++) {
+                            let obj = {
+                                name: response.data.data[i].additionalFeature[z].featureName,
+                                value: response.data.data[i].additionalFeature[z]._id,
+                            };
+                            additionaltotal+=parseFloat(response.data.data[i].additionalFeature[z].featureAmount) 
+                             additionalfeaturearray.push(response.data.data[i].additionalFeature[z]._id.toString())
+                            additionalfeature.push(obj);
+                            additionalfeature.push(obj);
+                        }
+                        for (let y = 0; y < response.data.data[i].selectdiscount; y++) {
+                            discountobjectarray.push(response.data.data[i].additionalFeature[y]._id.toString());
+                            totaldiscounts +=parseFloat(parseFloat(response.data.data[i].selectdiscounts[y].amount))
+                        } 
+                        //Device Features 
+                              // additional feature value and name 
+                        localStorage.setItem("deviceadditional", JSON.stringify(additionalfeature)); 
+                              // additionalfeaturetotal 
+                        localStorage.setItem("deviceadditionaltotal",JSON.stringify(additionaltotal))  
+                              //additional feature array object  
+                        localStorage.setItem("deviceadditionalfeaturearray",JSON.stringify(additionalfeaturearray))
+                        //Discounts 
+                             //total device discount
+                        localStorage.setItem("totaldevicediscount", JSON.stringify(totaldiscounts)); 
+                            //discount _id sennding to backend
+                        localStorage.setItem("devicediscountobjectarray", JSON.stringify(discountobjectarray)); 
+                        //Plans 
+                              //Device Plans 
+                        localStorage.setItem("deviceplan", JSON.stringify(plans)); 
+                        //Complete Device Pricing including additional feature and discount
+                        localStorage.setItem("devicepricing", JSON.stringify(response.data.data[i]));
+                    }
+                }
+                localStorage.setItem("inventoryType", JSON.stringify(inventoryType));
+            })
+            .catch((err) => {});
+    }, []);
+
+
+
       
     //     getting _id and enrollment id from local storage 
    
@@ -66,10 +173,19 @@ let items;
             Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
         ];
     }
+    else if(!zipRes && parsefromIncompl==true){
+        pages = [
+            Personal_info_page({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
+           // Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
+            //plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
+            Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
+        ];
+       
+       }
     else if(basicRes){
         pages = [
             Personal_info_page({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
-            Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
+           // Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
             //plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
             Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
         ];

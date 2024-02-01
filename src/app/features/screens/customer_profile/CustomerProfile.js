@@ -202,9 +202,11 @@ const CustomerProfile = () => {
                                     <div className="flex justify-content-between">
                                         <div className="text-900 font-medium text-lg p-3">Customer Information </div>
                                         <div>
-
-                                            <i className="pi pi-eye p-3" style={{ fontSize: '2rem' }} onClick={handleView}></i>
-
+{
+    isShow ==true ?  <i className="pi pi-eye-slash p-3" style={{ fontSize: '2rem' }} onClick={handleView}></i>
+    :   <i className="pi pi-eye p-3" style={{ fontSize: '2rem' }} onClick={handleView}></i> 
+}
+                                       
 
                                         </div>
                                     </div>
@@ -408,7 +410,7 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Acc. Type</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.accountType}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Teleyork Plan</td>
