@@ -100,25 +100,21 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     };
 
     const checkBoxLabels = [
-        "I'm going to go over the required information to participate in the Affordable Connectivity Program. Answering affirmatively is required in order to enroll in the Affordable Connectivity Program in my state.",
-        "This authorization is only for the purpose of verifying my participation in this program and will not be used for any purpose other than Affordable Connectivity Program(ACP)",
-        `I am authorizing the Company, ${companyName}, Inc., to access any records required to verify my statements on this form and to confirm my eligibility for the Affordable Connectivity Program.`,
-        `For my household, I affirm and understand that the ACP is a temporary federal government subsidy that reduces my broadband internet access service bill and at the conclusion of the program, my household will be subject to the provider's undiscounted general rates, terms, and conditions if my household continues to subscribe to the service.`,
-        <p>
-            My annual household income is 200% or less than the Federal Poverty Guidelines (the amount listed in the Federal Poverty Guidelines on FCC's website (
-            <a href="https://www.usac.org/lifeline/consumer-eligibility/" target="_blank" rel="noopener noreferrer">
-                https://www.usac.org/lifeline/consumer-eligibility/
-            </a>
-            )
-        </p>,
-        `I agree that if I move I will provide my new address to my service provider within 30 days.`,
-        "I understand that I have to tell my service provider within 30 days if I do not qualify for ACP benefit anymore, including: I, or the person in my household that qualifies, do not qualify through a government program or income anymore.",
-        "I know that my household can only get one ACP benefit and, to the best of my knowledge, my household is not getting more than one ACP benefit. ",
-        `I understand that I can only receive one connected device (Tablet) through the ACP benefit, even if I switch ACP providers.`,
-        "I agree that all of the information I provided on this form may be collected, used, shared, and retained for the purposes of applying for and/or receiving the ACP benefit. I understand that if this information is not provided to the Program Administrator, I will not be able to get ACP benefits.",
-        "If the laws of my state or Tribal government require it, I agree that the state or Tribal government may share information about my benefits for a qualifying program with the ACP Administrator. The information shared by the state or Tribal government will be used only to help find out if I can get an ACP benefit.",
-        `All the answers and agreements that I provided on this form are true and correct to the best of my knowledge. I know that willingly giving false or fraudulent information to get ACP benefits is punishable by law and can result in fines, jail time, de-enrollment, or being barred from the program.`,
-        <strong>I hereby certify that I have thoroughly read and agree to this disclosure.</strong>,
+        `I hereby consent to enroll with ${companyName}, Inc for the selected services under the following terms and conditions: `,
+        `${companyName}, Inc agrees to provide the selected equipment and services to the customer at the rates discussed with the custome`,
+        `The service provided is post-paid, and the customer agrees to pay the monthly bill before the end of each service month.`,
+        `The customer agrees to switch their home phone or cell phone services to ${companyName}, Inc from their current service provider.`,
+       `${companyName}, Inc will make reasonable efforts to ensure that the customer retains their existing phone number. In cases where number portability is not possible, the customer will be notified`
+,
+        `If the customer chooses not to utilize the selected services and equipment, without encountering any technical issues, the customer agrees to pay the specified monthly bill, including taxes.`,
+        `The customer can choose any desired date for the monthly bill within the days provided by ${companyName}, Inc for the due date. In the event that the customer is unable to make the monthly payment on time, late fees, if applicable, will be applied to the bill.`,
+        `By enrolling with ${companyName}, Inc., the customer consents to receive communications, including bills, notices, and updates, electronically.`,
+        `${companyName}, Inc reserves the right to terminate the service in the event of non-payment or violation of the terms and conditions .`,
+        `${companyName}, Inc will take reasonable measures to protect customer information and maintain data security.`,
+        `${companyName}, Inc will provide customer support to the customer for any service-related queries or technical issues.`,
+        `This agreement shall be governed by and construed in accordance with the laws of the applicable jurisdiction.`,
+        <strong>I hereby certify that I have thoroughly read and agree to this disclosure.</strong>
+      
     ];
     return (
         <>
@@ -150,13 +146,13 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                             </div>
                         ))}
                     </div>
-                    <div>
+                    {/*<div>
                         <h3>Terms and Conditions</h3>
                         <div className="field-checkbox">
                             <Checkbox inputId="checkbox13" onChange={() => handleCheckBox(13)} checked={formik.values.checkbox[13]} />
                             <label>By signing the FCC application, I agree to accept the Terms & Conditions.</label>
                         </div>
-                    </div>
+                    </div>*/}
                     <div className="mt-5">
                         <p>Request the user for additional documents</p>
                         <div className="flex ">
