@@ -84,6 +84,7 @@ export default function Post_service_availbilty() {
           localStorage.removeItem("agreeData");
           localStorage.removeItem("programmeId");
           localStorage.removeItem("fromIncomplete")
+          localStorage.removeItem("productData");
           navigate("/post-enrollment")
         }
       } catch (error) {

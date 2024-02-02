@@ -180,13 +180,13 @@
 //             reportType: formik.values.reportType,
 //             startDate: formattedStartDate,
 //         };
-//         console.log("data to send is", dataToSend);
+//        
 //         setIsLoading(true);
 //         try {
 //             const response = await Axios.post(`${BASE_URL}/api/user/customerHistory`, dataToSend);
 //             if (response?.status === 200 || response?.status === 201) {
 //                 setHistoryData(response?.data?.data);
-//                 console.log("Data is", response?.data?.data);
+//                
 //             }
 //         } catch (error) {
 //             toast.error(error?.response?.data?.msg);
@@ -451,10 +451,12 @@ import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import { clippingParents } from "@popperjs/core";
+import Axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
-    console.log(localStorage.getItem("simdiscount"));
-    console.log(localStorage.getItem("simplan"));
-    console.log(localStorage.getItem("deviceplan"));
+   
     const [inventory, setInventory] = useState();
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -462,9 +464,8 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
     const [historyData, setHistoryData] = useState();
     //Handle Back
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
-    let toWordsBack = JSON.parse(localStorage.getItem("toWordsBack"))
-    console.log("state is",toWordsBack)
- 
+  
+   
     const validationSchema = Yup.object().shape({
         billId: Yup.string().required("Product is required"),
      //   paymentMode: Yup.string().required("Payment Mode are required"),
@@ -473,7 +474,7 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
         validationSchema: validationSchema,
         initialValues: {
             plan: "",
-            billId: "",
+            billId: [],
             paymentMode: "",
             discount: [],
             additional: [],
@@ -481,8 +482,28 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
             customerid: _id,
         },
         onSubmit: async (values, actions) => {
+
+            const dataToSend={
+                customerId:_id,
+                selectPlan:formik.values.plan,
+                selectProduct:formik.values.billId,
+                totalAmount:formik.values.totalamount,
+                paymentMethod:formik.values.paymentMode
+            }
             if(formik.values.paymentMode=="skip"){
-                handleNext();
+                try {
+                    const response =await Axios.post(`${BASE_URL}/api/user/paymentdetail`,dataToSend)
+                   
+                    if(response?.status===201 || response?.status===200){
+                      
+                        localStorage.setItem("productData", JSON.stringify(response.data?.data));       
+                                         handleNext();
+                    }
+                } catch (error) {
+                    toast.error(error?.response?.data?.msg)
+                }
+
+              
                
             }
             if (localStorage.getItem("paymentstatus")) {
@@ -506,15 +527,22 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
             formik.setFieldValue("discount", paymentInfo.discount);
             formik.setFieldValue("totalamount", paymentInfo.totalAmount);
         }
-       else if (toWordsBack && toWordsBack==true) {
-            // formik.setFieldValue("billId", paymentInfo.billId);
-            // formik.setFieldValue("plan", paymentInfo.plan);
-            // formik.setFieldValue("additionalFeature", paymentInfo.additionalFeature);
-            // formik.setFieldValue("discount", paymentInfo.discount);
-            // formik.setFieldValue("totalamount", paymentInfo.totalAmount);
-            console.log("here i am")
-        }
-    }, []);
+    }, []);  
+    const productData = localStorage.getItem("productData");
+    const parseproductData = JSON.parse(productData);
+
+    useEffect(()=>{
+if(parseproductData){
+    console.log("Product is",parseproductData.selectProduct)
+    console.log("plan is",parseproductData.plan.name)
+    formik.setFieldValue("billId", parseproductData.selectProduct);
+    formik.setFieldValue("plan", parseproductData?.plan.name);
+    formik.setFieldValue("additionalFeature", parseproductData.additionalFeature);
+   
+    formik.setFieldValue("totalamount", parseproductData.totalAmount);
+    formik.setFieldValue("paymentMode",parseproductData?.paymentMethod)
+}
+    },[])
     const optionsForPayment = [
         { label: "Select ", value: "" },
         { label: "Credit/Debit card", value: "card" },
@@ -532,6 +560,7 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
     }
     return (
         <form onSubmit={formik.handleSubmit}>
+        <ToastContainer/>
             <div className="card">
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
                     <div>
