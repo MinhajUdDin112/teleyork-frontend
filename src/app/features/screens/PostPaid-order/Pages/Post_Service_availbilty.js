@@ -125,6 +125,7 @@ export default function Post_service_availbilty() {
             {formik.touched.zipCode && formik.errors.zipCode ? (
               <p className="mt-0" style={{ color: "red" }}>
                 {formik.errors.zipCode}
+              
               </p>
             ) : null}
             {errorMessage && (
@@ -137,9 +138,7 @@ export default function Post_service_availbilty() {
                 type="submit"
                 className="col-12"
                 disabled={isLoading || !isCreate}
-              />
-            
-
+              /> 
           </form>
         </div>
       </div>

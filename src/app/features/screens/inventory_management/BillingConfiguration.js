@@ -32,7 +32,7 @@ const BillingConfiguration = () => {
             oneTimeCharge: "",
             monthlyCharge: [],
             dueDate: "",
-            paymentMethod: "",
+            paymentMethod: [],
             selectdiscount: [],
             discountname: "",
             amount: "",
@@ -324,17 +324,24 @@ const BillingConfiguration = () => {
 
                             <div className="mt-3 field col-12 md:col-3  ">
                                 <label className="field_label mb-2 text-md">Payment Method</label>
-                                <Dropdown
-                                    className="w-21rem"
-                                    id="paymentMethod"
-                                    options={optionsForPayment}
+                                
+
+<MultiSelect
+                                   className="w-21rem"
+                                   id="paymentMethod"
+                                   options={optionsForPayment}
+                                    display="chip"
+                             
                                     value={formik.values.paymentMethod}
                                     onChange={(e) => {
                                         formik.setFieldValue("paymentMethod", e.value);
                                         formik.handleChange(e);
                                     }}
-                                    onBlur={formik.handleBlur}
+                                 
+                                  
+                                   
                                 />
+                                
                                 {formik.touched.paymentMethod && formik.errors.paymentMethod ? (
                                     <p className="mt-2 ml-2" style={{ color: "red" }}>
                                         {formik.errors.paymentMethod}
@@ -441,6 +448,9 @@ const BillingConfiguration = () => {
                     <Column header="Monthly Charges" body={(rowData) => rowData?.monthlyCharge?.map(mc => mc.name).join(', ')} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Bill Creation Date" field="BillCreationDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Due Date" field="dueDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Subsequent Bill Create Date" field="subsequentBillCreateDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Late Fee   " field="latefeeCharge" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header=" Apply Late Fee " field="applyLateFee" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column
                         header="Feature"
                         body={(rowData) =>
