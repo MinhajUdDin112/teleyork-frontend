@@ -63,6 +63,7 @@ const Select = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         const dataToSend = { csr, userId };
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/termsAndConditions`, dataToSend);
+            console.log("previous response is",response)
             if(response?.status===201 || response?.status===200){
                localStorage.setItem("agreeData",JSON.stringify(response?.data))
                setIsBack(isBack+1);
