@@ -21,7 +21,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     //check that user come from incomplete or not
     const fromIncompl = localStorage.getItem("comingfromincomplete");
     const parsefromIncompl = JSON.parse(fromIncompl);
-
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
@@ -73,7 +72,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < simalladditional?.length; k++) {
                 if (additionallocal[i] === simalladditional[k].value) {
-                    additional += `${simalladditional[k].name}`;
+                    additional += `${simalladditional[k].name},`;
                 }
             }
         }

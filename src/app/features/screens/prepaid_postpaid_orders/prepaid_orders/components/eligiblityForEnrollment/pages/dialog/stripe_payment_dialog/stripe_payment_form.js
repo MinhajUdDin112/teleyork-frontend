@@ -51,8 +51,7 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex,s
              Axios.post(`${BASE_URL}/api/web/invoices/invoices`,dataToSend).then((response)=>{ 
                localStorage.setItem("paymentallinfo",JSON.stringify(response.data))     
                
-        setPaymentDialogVisibility(false) 
-               setActiveIndex(3)
+               setActiveIndex(3) 
              }).catch(err=>{ 
                  
              })
