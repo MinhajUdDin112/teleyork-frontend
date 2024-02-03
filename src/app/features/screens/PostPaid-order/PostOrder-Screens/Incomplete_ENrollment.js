@@ -155,6 +155,7 @@ const InComplete_Enrollments = () => {
                 localStorage.removeItem("basicData");
                 localStorage.removeItem("address");
                 localStorage.removeItem("programmeId");
+                localStorage.removeItem("productData");
             }
         } catch (error) {
             toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);

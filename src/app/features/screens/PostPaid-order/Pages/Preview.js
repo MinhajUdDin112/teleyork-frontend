@@ -5,6 +5,7 @@ import Preview_Final_Component from './Preview_Final_Component'
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react"; 
+import { ColumnGroup } from "primereact/columngroup";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
@@ -13,10 +14,16 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
    const [checked, setChecked] = useState(false)
    const [fromIncomplete, setFromIncomplete] = useState(false);
    const [goBack, setGoBack] = useState(false);
+
     //get preview  information from local storage
     const previewsRes = localStorage.getItem("address");
     const parsepreviewsRes = JSON.parse(previewsRes);
     const previewInfo = parsepreviewsRes?.data;
+
+    const productData = localStorage.getItem("productData");
+    const parseproductData = JSON.parse(productData);
+
+    console.log("Product data is",parseproductData)
 
     const zipRes = localStorage.getItem("zipData");
     
@@ -60,11 +67,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
        
        }
       }, [])
-
-      useEffect(()=>{
-        
-localStorage.setItem("toWordsBack",goBack)
-      },[goBack])
 
    const handleSign=()=>{
     setChecked(true);
@@ -119,11 +121,11 @@ localStorage.setItem("toWordsBack",goBack)
                                 </div>
                                 <div className="flex  pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Product:</p>
-                                    <p className="w-6">Nil</p>
+                                    <p className="w-6">{parseproductData?.selectProduct}</p>
                                 </div>
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Price:</p>
-                                    <p className="w-6">Nil</p>
+                                    <p className="w-6">{parseproductData?.totalAmount}</p>
                                 </div>
                              
                             </div>
@@ -151,10 +153,16 @@ localStorage.setItem("toWordsBack",goBack)
                                     <p className="w-6">{previewInfo?.email}</p>
                                 </div>
                                 <div className="flex pt-2 border-bottom-2">
-                                    <p className="w-6 ml-4">Plan:</p>
-                                    <p className="w-6">Nil</p>
+                                    <p className="w-6 ml-4">Plan:</p>{
+                                        parseproductData?.plan ?  <p className="w-6">{parseproductData?.plan.name}</p>:""
+                                    }
+
+                                   
                                 </div>
-                               
+                                <div className="flex pt-2 border-bottom-2">
+                                    <p className="w-6 ml-4">Payment Method:</p>
+                                    <p className="w-6">{parseproductData?.paymentMethod}</p>
+                                </div>
                               
                             </div>
                         </div>

@@ -21,6 +21,7 @@ import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const All_Enrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
@@ -54,7 +55,7 @@ const All_Enrollments = () => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [checkRemarks, setCheckRemarks] = useState();
     const [selectedIdsForApprove, setSelectedIdsForApprove] = useState()
-
+    
     // const rowExpansionTemplate = (data) => {
     //     return (
     //         <div>
@@ -147,10 +148,7 @@ const All_Enrollments = () => {
                             })
                             .replace(/\//g, "-"),
                         createdTo: item.createdAt,
-                    }));
-    
-                   
-    
+                    }));   
                     setAllEnrollments(updatedData);
                 }
                 setIsLoading(false);
@@ -198,6 +196,7 @@ const All_Enrollments = () => {
                     localStorage.setItem("basicData", JSON.stringify(response.data));
                     localStorage.setItem("address", JSON.stringify(response.data));
                     localStorage.setItem("programmeId", JSON.stringify(response.data));
+                    localStorage.setItem("productData", JSON.stringify(response.data?.data));
                     let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
                     if (storedData) {
                         storedData = false; 
@@ -746,9 +745,9 @@ const All_Enrollments = () => {
         </span>
     )}
 />
-<Column field="" header="Product" />
-<Column field="" header="Plan" />
-<Column field="" header="Price" />
+<Column field="selectProduct" header="Product" />
+<Column field="plan.name" header="Plan" />
+<Column field="totalAmount" header="Price" />
 
 
                             {toCapital == "CSR" || toCapital == "CS" ||toCapital == "TEAM LEAD" ||toCapital == "CS MANAGER" ? (
