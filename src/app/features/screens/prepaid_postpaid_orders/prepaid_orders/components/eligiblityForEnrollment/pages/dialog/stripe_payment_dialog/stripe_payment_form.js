@@ -1,14 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import "./style/stripe_payment_form.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"; 
 import Axios from "axios"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function PaymentStripeForm({ clientSecret,object,setActiveIndex,setPaymentDialogVisibility}) {
-    const stripe = useStripe();
+    const stripe = useStripe(); 
+    const [disableSubmit,setDisableSubmit]=useState(false)
     const toast = useRef(null);  
     const elements = useElements();
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event) => { 
+        setDisableSubmit(true)
         event.preventDefault(); 
 
         if (!stripe || !elements) {
@@ -21,7 +23,8 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex,s
         });
 
         if (error) { 
-            localStorage.setItem("paymentstatus","pending") 
+            localStorage.setItem("paymentstatus","pending")    
+             setDisableSubmit(false)
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
         } else { 
             console.log(paymentIntent.id)
@@ -86,7 +89,7 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex,s
                         cardElementOptions
                     }
                 />
-                <button className="submit-button">Submit</button>
+                <button disabled={disableSubmit}  className="submit-button">Submit</button>
             </form>
         </>
     );
