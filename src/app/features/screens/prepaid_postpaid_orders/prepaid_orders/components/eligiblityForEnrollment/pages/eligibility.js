@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import Agree from "../Eligibilty_com/Agree";
 const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
-    const handleNext = () => {
-        setActiveIndex(2);
+    const handleNext = () => {  
+        if(localStorage.getItem("comingforedit")){
+        setActiveIndex(3); 
+        } 
+        else{ 
+            setActiveIndex(2)
+        }
     };
     const handleBack = () => {
         setActiveIndex(0);

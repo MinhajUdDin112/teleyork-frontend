@@ -7,11 +7,12 @@ export default function MainPrepaidOrders(){
      const [zipVerified,setZipVerified]=useState(false)
       useEffect(()=>{ 
       let  fromIncomplete=localStorage.getItem("comingfromincomplete")
-         if(fromIncomplete){ 
+         if(fromIncomplete || localStorage.getItem("comingforedit")){ 
           setZipVerified(true)
           
          } 
-         return ()=>{ 
+         return ()=>{    
+          localStorage.removeItem("comingforedit")
           localStorage.removeItem("comingfromincomplete") 
           localStorage.removeItem("paymentallinfo")
           localStorage.removeItem("prepaidbasicData");
@@ -46,7 +47,8 @@ export default function MainPrepaidOrders(){
           localStorage.removeItem("simplan"); 
           localStorage.removeItem("simpricing"); 
          }
-      },[])
+      },[]) 
+      
      return (   
     <>  
     { 

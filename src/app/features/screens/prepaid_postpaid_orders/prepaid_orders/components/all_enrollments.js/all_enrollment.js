@@ -194,20 +194,13 @@ const PrepaidAllEnrollments = () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
                 if (response?.status === 201 || response?.status === 200) {
-                    localStorage.removeItem("zipData"); // Use removeItem instead of clearItem
-                    localStorage.setItem("basicData", JSON.stringify(response.data));
-                    localStorage.setItem("address", JSON.stringify(response.data));
-                    localStorage.setItem("programmeId", JSON.stringify(response.data));
-                    let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
-                    if (storedData) {
-                        storedData = false; 
-                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
-                    } else {
-                         storedData = false;
-                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
-                    }
-                    navigate("/enrollment");
-                    setisButtonLoading(false);
+                    localStorage.setItem("comingforedit",true)
+                   // localStorage.setItem("comingfromincomplete",true)
+                    localStorage.setItem("prepaidbasicData", JSON.stringify(response.data));
+                    localStorage.setItem("prepaidaddress", JSON.stringify(response.data));
+                    navigate("/prepaid-newenrollment");
+                    setisButtonLoading(false); 
+
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

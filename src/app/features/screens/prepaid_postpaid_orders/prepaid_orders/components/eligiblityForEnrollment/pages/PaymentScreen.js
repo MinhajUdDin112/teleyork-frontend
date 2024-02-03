@@ -279,7 +279,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     </div>
                     {formik.values.paymentMode == "card" ? (
                         <>
-                            <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
+                            <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} setPaymentDialogVisibility={setPaymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
                                 <PaymentStripModule amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
                             </Dialog>
                         </>
