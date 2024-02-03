@@ -8,10 +8,11 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import { loginAction } from "../../../store/auth/AuthAction";
 import { useState } from "react";
 import Axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-
-export default function LoginScreen() {
+export default function LoginScreen() { 
+    
+   
     const dispatch = useDispatch();
 const [liveURL, setLiveURL] = useState()
     const error = useSelector((state) => state.login);
@@ -36,7 +37,7 @@ const [liveURL, setLiveURL] = useState()
     //get url
     useEffect( () => {
         var currentURL;
-        var modifiedURL;
+        var modifiedURL; 
           currentURL = window.location.href;
         // currentURL = "http://dev-ijwireless.teleyork.com/#/login";
         if (currentURL.includes("dev-")) {

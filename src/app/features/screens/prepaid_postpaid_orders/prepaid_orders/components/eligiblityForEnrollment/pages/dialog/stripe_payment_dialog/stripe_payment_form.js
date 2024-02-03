@@ -4,7 +4,7 @@ import "./style/stripe_payment_form.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"; 
 import Axios from "axios"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripeForm({ clientSecret,object,setActiveIndex}) {
+export default function PaymentStripeForm({ clientSecret,object,setActiveIndex,setPaymentDialogVisibility}) {
     const stripe = useStripe();
     const toast = useRef(null);  
     const elements = useElements();
@@ -49,7 +49,9 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex})
              console.log("Data To Send Is",dataToSend)  
              
              Axios.post(`${BASE_URL}/api/web/invoices/invoices`,dataToSend).then((response)=>{ 
-               localStorage.setItem("paymentallinfo",JSON.stringify(response.data)) 
+               localStorage.setItem("paymentallinfo",JSON.stringify(response.data))     
+               
+        setPaymentDialogVisibility(false) 
                setActiveIndex(3)
              }).catch(err=>{ 
                  
@@ -57,15 +59,33 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex})
          }
             toast.current.show({ severity: "success", summary: "Payment Processed", detail: "Payment has been successfully processed" });
         }
-    };
+    }; 
+    const cardElementOptions = { 
+        
+        hidePostalCode: true, 
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            '::placeholder': {
+              color: '#aab7c4',
+            },
+          },
+          invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a',
+          },
+        },
+      };
     return (
         <>
             <Toast ref={toast} />
             <form onSubmit={handleSubmit}>
                 <CardElement
-                    options={{
-                        hidePostalCode: true,
-                    }}
+                    options={ 
+                        cardElementOptions
+                    }
                 />
                 <button className="submit-button">Submit</button>
             </form>

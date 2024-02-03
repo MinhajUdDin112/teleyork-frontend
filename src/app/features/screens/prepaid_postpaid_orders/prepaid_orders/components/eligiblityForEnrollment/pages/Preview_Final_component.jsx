@@ -15,10 +15,10 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("prepaidprogrammeId");
         localStorage.removeItem("paymentmethod");
         localStorage.removeItem("paymentdetails"); 
-        localStorage.removeItem("comingfromincomplete")
+        localStorage.removeItem("comingfromincomplete") 
+        localStorage.removeItem("comingforedit")
     };
-    const movepageToAll = () => {
-        navigate("/prepaid-allenrollment");
+    const movepageToAll = () => { 
         localStorage.removeItem("prepaidbasicData");
         localStorage.removeItem("prepaidaddress");
         localStorage.removeItem("prepaidzipData");
@@ -26,7 +26,10 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("prepaidprogrammeId");
         localStorage.removeItem("paymentmethod");
         localStorage.removeItem("paymentdetails"); 
-        localStorage.removeItem("comingfromincomplete")
+        localStorage.removeItem("comingfromincomplete")  
+        localStorage.removeItem("comingforedit")
+        navigate("/prepaid-allenrollment");
+        
     };
     return (
         <>
