@@ -226,7 +226,7 @@ const All_Enrollments = () => {
         const dataToSend = { approvedBy, enrolmentId, approved };
        
             try {
-                const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                const response = await Axios.patch(`${BASE_URL}/api/user/prePostapproval`, dataToSend);
                 if (response?.status === 201 || response?.status === 200) {
                     toast.success("Approved");
                     setisButtonLoading(false);
@@ -256,7 +256,7 @@ const All_Enrollments = () => {
             else{
               
                 try {
-                    const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                    const response = await Axios.patch(`${BASE_URL}/api/user/prePostapproval`, dataToSend);
                     if (response?.status === 201 || response?.status === 200) {
                         toast.success("Approved");
                         setisButtonLoading(false);
@@ -388,7 +388,7 @@ const All_Enrollments = () => {
                 approved: true,
             };
             try {
-                const response = await Axios.patch(`${BASE_URL}/api/user/batchApproval`, dataToSend);
+                const response = await Axios.patch(`${BASE_URL}/api/user/prePostapproval`, dataToSend);
                 if (response?.status == "200" || response?.status == "201") {
                     toast.success("Approved");
                     setisButtonLoading(false);
@@ -416,7 +416,7 @@ const All_Enrollments = () => {
                 approved: true,
             };
             try {
-                const response = await Axios.patch(`${BASE_URL}/api/user/batchApproval`, dataToSend);
+                const response = await Axios.patch(`${BASE_URL}/api/user/prePostapproval`, dataToSend);
                 if (response?.status == "200" || response?.status == "201") {
                     toast.success("Approved");
                     setisButtonLoading(false);

@@ -449,8 +449,9 @@ const BillingConfiguration = () => {
                     <Column header="Bill Creation Date" field="BillCreationDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Due Date" field="dueDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Subsequent Bill Create Date" field="subsequentBillCreateDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Late Fee   " field="latefeeCharge" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header=" Apply Late Fee " field="applyLateFee" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Late Fee   " field="Late Fee"     body={(rowData) => `$${rowData.latefeeCharge}`}headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header=" Apply Late Fee " field="Apply Late Fee"  body={(rowData) => `after ${rowData.applyLateFee} days from due date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                   
                     <Column
                         header="Feature"
                         body={(rowData) =>
@@ -459,8 +460,7 @@ const BillingConfiguration = () => {
                                 .join(', ')
                         }
                         headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
-                    />
-
+                    />  
                     <Column
                         header="Discount"
                         body={(rowData) =>
@@ -470,9 +470,8 @@ const BillingConfiguration = () => {
                         }
                         headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
                     />
-
-                    <Column header="Payment Method" field="paymentMethod" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    {/* <Column header="Actions" body={actionTemplate} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} /> */}
+                    <Column header="Payment Method" field="paymentMethod" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}/>       
+                    
                 </DataTable>
             </div>
 
