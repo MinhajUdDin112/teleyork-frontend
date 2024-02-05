@@ -230,6 +230,19 @@ const All_Enrollments = () => {
                 if (response?.status === 201 || response?.status === 200) {
                     toast.success("Approved");
                     setisButtonLoading(false);
+                    getAllEnrollments();
+
+                    const dataToSend={
+                        orderNumber:rowData?.enrollmentId,
+                    }
+                    try {
+                        const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
+                        if(response?.status==200 || response?.status==201){
+                            
+                        }
+                    } catch (error) {
+                        toast.error(error?.response?.data?.msg)
+                    }
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -260,6 +273,19 @@ const All_Enrollments = () => {
                     if (response?.status === 201 || response?.status === 200) {
                         toast.success("Approved");
                         setisButtonLoading(false);
+                        getAllEnrollments();
+
+                        const dataToSend={
+                            orderNumber:rowData?.enrollmentId,
+                        }
+                        try {
+                            const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
+                            if(response?.status==200 || response?.status==201){
+                                
+                            }
+                        } catch (error) {
+                            toast.error(error?.response?.data?.msg)
+                        }
                     }
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
@@ -377,7 +403,7 @@ const All_Enrollments = () => {
         }
     };
 
-    const HnadleAllApprove = async () => {
+    const HnadleAllApprove = async (rowData) => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = allEnrollments.map((enrollment) => enrollment._id);
@@ -393,6 +419,17 @@ const All_Enrollments = () => {
                     toast.success("Approved");
                     setisButtonLoading(false);
                     getAllEnrollments();
+                    const dataToSend={
+                        orderNumber:rowData?.enrollmentId,
+                    }
+                    try {
+                        const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
+                        if(response?.status==200 || response?.status==201){
+                            
+                        }
+                    } catch (error) {
+                        toast.error(error?.response?.data?.msg)
+                    }
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -405,7 +442,7 @@ const All_Enrollments = () => {
         }
     };
 
-    const handleApproveSelected = async () => {
+    const handleApproveSelected = async rowData => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
@@ -421,6 +458,17 @@ const All_Enrollments = () => {
                     toast.success("Approved");
                     setisButtonLoading(false);
                     getAllEnrollments();
+                    const dataToSend={
+                        orderNumber:rowData?.enrollmentId,
+                    }
+                    try {
+                        const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
+                        if(response?.status==200 || response?.status==201){
+                            
+                        }
+                    } catch (error) {
+                        toast.error(error?.response?.data?.msg)
+                    }
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

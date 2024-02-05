@@ -105,6 +105,7 @@ import ApprovedEnrollments from "./app/features/screens/PostPaid-order/PostOrder
 import Provisioningqueue from "./app/features/screens/PostPaid-order/PostOrder-Screens/Provising_Queue";
 import Upload_Bulk from "./app/features/screens/PostPaid-order/PostOrder-Screens/Bulk_Upload";
 import PostPersonalInfo from "./app/features/screens/PostPaid-order/PersonalInfo_com/PersonalInfo";
+import Post_Dispatch_Insight from "./app/features/screens/PostPaid-order/PostOrder-Screens/Post_Dispatch_Insights";
 import PrepaidRejectedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/rejected_enrollment/rejected_enrollment";
 import PrepaidApproved_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/approved_enrollment/approved_enrollment";
 const App = () => { 
@@ -439,8 +440,7 @@ const App = () => {
                                     <Route exact path="postpaid-incomplete" element={isPermitted("/postpaid-incomplete") ? <Incompleted_Enrollment /> : <Dashboard />} />
                                     <Route exact path="postpaid-rejectedenrollment" element={isPermitted("/postpaid-rejectedenrollment") ? <Rejected_Enrollments /> : <Dashboard />} />
                                     <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments/> : <Dashboard />} />
-                                    {/* <Route exact path="postpaid-provisingenrollment" element={isPermitted("/postpaid-provisingenrollment") ? <Provisioningqueue/> : <Dashboard />} />
-                                    <Route exact path="postpaid-bulkenrollment" element={isPermitted("/postpaid-bulkenrollment") ? <Upload_Bulk/> : <Dashboard />} /> */}
+                                    <Route exact path="postpaid-dispatchinsight" element={isPermitted("/postpaid-dispatchinsight") ? <Post_Dispatch_Insight/> : <Dashboard />} />
                                     <Route path="/Postpersonalinfo" element={<PostPersonalInfo/>} />
 
                                 </Routes>
