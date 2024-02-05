@@ -64,7 +64,7 @@ const BillingConfiguration = () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/billing/billconfig`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
-                    toast.success("Bill Configed Successfully")
+                    toast.success("Bill Configured Successfully")
                     getConfigData();
                     actions.resetForm();
                 }
@@ -307,7 +307,7 @@ const BillingConfiguration = () => {
                             </div>
                             <div className="field col-12 md:col-3 mt-3">
                                 <label className="field_label text-md">Subsequent Bill Create Date </label>
-                                <InputText id="subsequentBillCreateDate" placeholder="No of days From Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                <InputText id="subsequentBillCreateDate" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
                             <div className="field col-12 md:col-3 mt-3">
                                 <label className="field_label text-md">Due Date</label>
@@ -393,7 +393,7 @@ const BillingConfiguration = () => {
                                 <div className="  mt-2 font-bold text-lg">Discount:</div>
                                 <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
                                     <div className="field col-12 md:col-3">
-                                        <label className="field_label mb-2 text-lg">Nmae</label>
+                                        <label className="field_label mb-2 text-lg">Name</label>
                                         <InputText id="discountname" value={formik.values.discountname} onChange={formik.handleChange} />
                                     </div>
                                     <div className="field col-12 md:col-3">
@@ -412,7 +412,7 @@ const BillingConfiguration = () => {
                                 <div className="  mt-2 font-bold text-lg">Feature:</div>
                                 <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
                                     <div className="field col-12 md:col-3">
-                                        <label className="field_label mb-2 text-lg">Nmae</label>
+                                        <label className="field_label mb-2 text-lg">Name</label>
                                         <InputText id="featureName" value={formik.values.featureName} onChange={formik.handleChange} />
                                     </div>
                                     <div className="field col-12 md:col-3">
