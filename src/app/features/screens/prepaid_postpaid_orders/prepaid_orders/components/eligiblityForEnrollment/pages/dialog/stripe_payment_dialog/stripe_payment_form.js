@@ -1,14 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import "./style/stripe_payment_form.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"; 
 import Axios from "axios"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripeForm({ clientSecret,object,setActiveIndex}) {
-    const stripe = useStripe();
+export default function PaymentStripeForm({ clientSecret,object,setActiveIndex,setPaymentDialogVisibility}) {
+    const stripe = useStripe(); 
+    const [disableSubmit,setDisableSubmit]=useState(false)
     const toast = useRef(null);  
     const elements = useElements();
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event) => { 
+        setDisableSubmit(true)
         event.preventDefault(); 
 
         if (!stripe || !elements) {
@@ -21,7 +23,8 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex})
         });
 
         if (error) { 
-            localStorage.setItem("paymentstatus","pending") 
+            localStorage.setItem("paymentstatus","pending")    
+             setDisableSubmit(false)
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
         } else { 
             console.log(paymentIntent.id)
@@ -49,25 +52,44 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex})
              console.log("Data To Send Is",dataToSend)  
              
              Axios.post(`${BASE_URL}/api/web/invoices/invoices`,dataToSend).then((response)=>{ 
-               localStorage.setItem("paymentallinfo",JSON.stringify(response.data)) 
-               setActiveIndex(3)
+               localStorage.setItem("paymentallinfo",JSON.stringify(response.data))     
+               
+               setActiveIndex(3) 
              }).catch(err=>{ 
                  
              })
          }
             toast.current.show({ severity: "success", summary: "Payment Processed", detail: "Payment has been successfully processed" });
         }
-    };
+    }; 
+    const cardElementOptions = { 
+        
+        hidePostalCode: true, 
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            '::placeholder': {
+              color: '#aab7c4',
+            },
+          },
+          invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a',
+          },
+        },
+      };
     return (
         <>
             <Toast ref={toast} />
             <form onSubmit={handleSubmit}>
                 <CardElement
-                    options={{
-                        hidePostalCode: true,
-                    }}
+                    options={ 
+                        cardElementOptions
+                    }
                 />
-                <button className="submit-button">Submit</button>
+                <button disabled={disableSubmit}  className="submit-button">Submit</button>
             </form>
         </>
     );

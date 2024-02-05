@@ -106,7 +106,10 @@ import Provisioningqueue from "./app/features/screens/PostPaid-order/PostOrder-S
 import Upload_Bulk from "./app/features/screens/PostPaid-order/PostOrder-Screens/Bulk_Upload";
 import PostPersonalInfo from "./app/features/screens/PostPaid-order/PersonalInfo_com/PersonalInfo";
 import Post_Dispatch_Insight from "./app/features/screens/PostPaid-order/PostOrder-Screens/Post_Dispatch_Insights";
-const App = () => {
+import PrepaidRejectedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/rejected_enrollment/rejected_enrollment";
+import PrepaidApproved_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/approved_enrollment/approved_enrollment";
+const App = () => { 
+   // cleanLocalStorage()
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
     const [dynamicMenu, setDynamicMenu] = useState([]);
@@ -304,7 +307,8 @@ const App = () => {
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
-    };
+    }; 
+   
 
     return (
         <>
@@ -379,8 +383,8 @@ const App = () => {
                                     <Route path="/pendingeventorder" element={isPermitted("/pendingeventorder") ? <PendingEventOrder /> : <Dashboard />} />
                                     <Route path="/withoutproofenrollments" element={isPermitted("/withoutproofenrollments") ? <WithoutProofEnrollments /> : <Dashboard />} />
                                     <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
-                                   
-                                  
+                                    <Route path="/prepaid-rejectedenrollment" element={isPermitted("/prepaid-rejectedenrollment") ? <PrepaidRejectedEnrollments /> : <Dashboard />} />
+                                    <Route path="/prepaid-approvedenrollment" element={isPermitted("/prepaid-approvedenrollment") ? <PrepaidApproved_Enrollments /> : <Dashboard />} />
                                   
                                     <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
                                    <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />

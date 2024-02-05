@@ -22,7 +22,10 @@ export const menuNavigation = [
                 items: [
                     { label: "New Enrollment", icon: "", to: "/prepaid-newenrollment" }, 
                     { label: "Incomplete Enrollment", icon: "", to: "/prepaid-incompleteenrollment" }, 
-                    { label:"All Enrollment",icon: "", to: "/prepaid-allenrollment"}
+                    { label:"All Enrollment",icon: "", to: "/prepaid-allenrollment"}, 
+                    { label:"Rejected Enrollment",icon: "", to: "/prepaid-rejectedenrollment"},
+                    { label:"Approved Enrollment",icon: "", to: "/prepaid-approvedenrollment"}
+                   
                  /*   { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
                     {label:  "Provisioning Queue", icon: "", to: "/provisioning-queue" },

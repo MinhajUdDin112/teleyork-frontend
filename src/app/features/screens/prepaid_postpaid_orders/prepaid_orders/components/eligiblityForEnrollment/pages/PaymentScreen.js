@@ -50,7 +50,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         },
     });
     useEffect(() => {
-        if (paymentInfo) {
+        if (paymentInfo) {  
+             setPaymentDialogVisibility(false)
             formik.setFieldValue("billId", paymentInfo.billId);
             formik.setFieldValue("plan", paymentInfo.plan);
             formik.setFieldValue("additionalFeature", paymentInfo.additionalFeature);
@@ -277,9 +278,9 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                         />
                         {getFormErrorMessage("paymentMode")}
                     </div>
-                    {formik.values.paymentMode == "card" ? (
+                    {formik.values.paymentMode == "card" && (! (localStorage.getItem("paymentstatus") === "paid")) ? (
                         <>
-                            <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
+                            <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} setPaymentDialogVisibility={setPaymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
                                 <PaymentStripModule amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
                             </Dialog>
                         </>
