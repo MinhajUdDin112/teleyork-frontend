@@ -32,7 +32,7 @@ const BillingConfiguration = () => {
             oneTimeCharge: "",
             monthlyCharge: [],
             dueDate: "",
-            paymentMethod: "",
+            paymentMethod: [],
             selectdiscount: [],
             discountname: "",
             amount: "",
@@ -64,7 +64,7 @@ const BillingConfiguration = () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/billing/billconfig`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
-                    toast.success("Bill Configed Successfully")
+                    toast.success("Bill Configured Successfully")
                     getConfigData();
                     actions.resetForm();
                 }
@@ -307,7 +307,7 @@ const BillingConfiguration = () => {
                             </div>
                             <div className="field col-12 md:col-3 mt-3">
                                 <label className="field_label text-md">Subsequent Bill Create Date </label>
-                                <InputText id="subsequentBillCreateDate" placeholder="No of days From Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                <InputText id="subsequentBillCreateDate" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
                             <div className="field col-12 md:col-3 mt-3">
                                 <label className="field_label text-md">Due Date</label>
@@ -324,17 +324,24 @@ const BillingConfiguration = () => {
 
                             <div className="mt-3 field col-12 md:col-3  ">
                                 <label className="field_label mb-2 text-md">Payment Method</label>
-                                <Dropdown
-                                    className="w-21rem"
-                                    id="paymentMethod"
-                                    options={optionsForPayment}
+                                
+
+<MultiSelect
+                                   className="w-21rem"
+                                   id="paymentMethod"
+                                   options={optionsForPayment}
+                                    display="chip"
+                             
                                     value={formik.values.paymentMethod}
                                     onChange={(e) => {
                                         formik.setFieldValue("paymentMethod", e.value);
                                         formik.handleChange(e);
                                     }}
-                                    onBlur={formik.handleBlur}
+                                 
+                                  
+                                   
                                 />
+                                
                                 {formik.touched.paymentMethod && formik.errors.paymentMethod ? (
                                     <p className="mt-2 ml-2" style={{ color: "red" }}>
                                         {formik.errors.paymentMethod}
@@ -386,7 +393,7 @@ const BillingConfiguration = () => {
                                 <div className="  mt-2 font-bold text-lg">Discount:</div>
                                 <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
                                     <div className="field col-12 md:col-3">
-                                        <label className="field_label mb-2 text-lg">Nmae</label>
+                                        <label className="field_label mb-2 text-lg">Name</label>
                                         <InputText id="discountname" value={formik.values.discountname} onChange={formik.handleChange} />
                                     </div>
                                     <div className="field col-12 md:col-3">
@@ -405,7 +412,7 @@ const BillingConfiguration = () => {
                                 <div className="  mt-2 font-bold text-lg">Feature:</div>
                                 <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
                                     <div className="field col-12 md:col-3">
-                                        <label className="field_label mb-2 text-lg">Nmae</label>
+                                        <label className="field_label mb-2 text-lg">Name</label>
                                         <InputText id="featureName" value={formik.values.featureName} onChange={formik.handleChange} />
                                     </div>
                                     <div className="field col-12 md:col-3">
@@ -441,6 +448,10 @@ const BillingConfiguration = () => {
                     <Column header="Monthly Charges" body={(rowData) => rowData?.monthlyCharge?.map(mc => mc.name).join(', ')} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Bill Creation Date" field="BillCreationDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Due Date" field="dueDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Subsequent Bill Create Date" field="subsequentBillCreateDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Late Fee   " field="Late Fee"     body={(rowData) => `$${rowData.latefeeCharge}`}headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header=" Apply Late Fee " field="Apply Late Fee"  body={(rowData) => `after ${rowData.applyLateFee} days from due date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                   
                     <Column
                         header="Feature"
                         body={(rowData) =>
@@ -449,8 +460,7 @@ const BillingConfiguration = () => {
                                 .join(', ')
                         }
                         headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
-                    />
-
+                    />  
                     <Column
                         header="Discount"
                         body={(rowData) =>
@@ -460,9 +470,8 @@ const BillingConfiguration = () => {
                         }
                         headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
                     />
-
-                    <Column header="Payment Method" field="paymentMethod" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    {/* <Column header="Actions" body={actionTemplate} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} /> */}
+                    <Column header="Payment Method" field="paymentMethod" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}/>       
+                    
                 </DataTable>
             </div>
 

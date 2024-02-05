@@ -21,7 +21,7 @@ export default function Post_enrollment_Flow() {
       const parsefromIncompl = JSON.parse(fromIncompl);
 
       useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/billing/plans?inventoryType=SimCard,Wireless Device&billingmodel=Prepaid`)
+        Axios.get(`${BASE_URL}/api/web/billing/plans?inventoryType=SimCard,Wireless Device&billingmodel=Postpaid`)
             .then((response) => {
                 let inventoryType = []; 
                 for (let i = 0; i < response.data.data.length; i++) {
