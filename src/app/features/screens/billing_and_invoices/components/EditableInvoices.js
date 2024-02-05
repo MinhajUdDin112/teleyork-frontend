@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 const EditabaleInvoices = ({ setPaymentModal }) => {
     return (
         <>
-            <div className="card p-2 mx-4">
+            <div className="">
                 <div className="flex flex-wrap m-4 mt-3 p-2">
                     <Button icon="pi pi-fw pi-pencil" label="Invoices (PC72)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary " />
                     <Button icon="pi pi-fw pi-pencil" label="Payments (PC463)" className=" text-sm border-round mr-2 mb-2 p-button-outlined p-button-secondary" onClick={() => setPaymentModal(true)} />

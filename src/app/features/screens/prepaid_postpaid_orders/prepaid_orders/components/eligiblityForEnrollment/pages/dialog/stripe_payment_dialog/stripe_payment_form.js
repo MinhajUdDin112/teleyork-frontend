@@ -46,7 +46,8 @@ export default function PaymentStripeForm({ clientSecret,object,setActiveIndex,s
                 additionalFeature:object.additional,
                  billId:object.billId,  
                  stripeId:localStorage.getItem("stripeId"), 
-                 status:localStorage.getItem("paymentstatus"), 
+                 status:localStorage.getItem("paymentstatus"),  
+                 type:object.type,
                  billingPeriod:"onActivation"
              }; 
              console.log("Data To Send Is",dataToSend)  
