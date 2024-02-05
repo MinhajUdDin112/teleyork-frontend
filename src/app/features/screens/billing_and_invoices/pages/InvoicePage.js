@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import PlanInfo from "../components/PlanInfo";
+import React, { useEffect, useState } from "react";
+import PlanInfo from "../components/PrepaidPlanInfo";
 import InvoiceTypes from "../components/InvoiceTypes";
 import EditabaleInvoices from "../components/EditableInvoices";
 import InvoiceTable from "../components/InvoiceTable";
@@ -17,10 +17,16 @@ import AddWalletModal from "../components/modals/AddWalletModal";
 import PaymentModal from "../components/modals/PaymentModal";
 import PaymentDetailModal from "../components/modals/PaymentDetailModal";
 import BillingNavbar from "../components/BillingNavbar";
-
-const InvoicePage = () => {
+import Axios from "axios"; 
+import { Card } from "primereact/card";
+const BASE_URL = process.env.REACT_APP_BASE_URL; 
+const selectedid = localStorage.getItem("selectedId");
+const parseselectedid = JSON.parse(selectedid);
+const InvoicePage = () => { 
     const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
-    const [nsfModal, setNsfModal] = useState(false);
+    const [nsfModal, setNsfModal] = useState(false);  
+    const [accountType,setAccountType]=useState("")   
+    const [invoices,setInvoices]=useState([])
     const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
     const [misMatchInvoiceModal, setMisMatchInvoiceModal] = useState(false);
     const [ebillModal, setEbillModal] = useState(false);
@@ -30,30 +36,52 @@ const InvoicePage = () => {
     const [discountCreditModal, setDiscountCreditModal] = useState(false);
     const [adjustWalletModal, setAdjustWalletModal] = useState(false);
     const [addWalletModal, setAddWalletModal] = useState(false);
-    const [paymentModal, setPaymentModal] = useState(false);
+    const [paymentModal, setPaymentModal] = useState(false); 
+    const [currentPlan,setCurrentPlan]=useState([])
     const [paymentDetailModal, setPaymentDetailModal] = useState(false);
+ useEffect(async ()=>{   
+    let userid=""
+ Axios.get(
+        `${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`
+      ).then(res=>{ 
+        userid=res?.data?.data?._id 
+      setAccountType(res?.data?.data?.accountType);      
+       
+        Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${userid}`).then(responseinvoice=>{ 
+            console.log("response for plan",responseinvoice) 
+             setCurrentPlan(responseinvoice?.data?.data?.invoice)  
+              setInvoices(responseinvoice?.data?.data?.invoice)
+           }).catch(err=>{ 
+           console.log("err",err)
+           })
+      }).catch(err=>{ 
 
+      })
+ 
+ },[])
     return (
-        <>
-         <BillingNavbar />
-            <div className="card p-0 bg-pink-50">
+        <Card>
+         <BillingNavbar />    
+
+            <div className=" p-0 m-3 card">
                
-                <div className="card border-noround p-3  mx-4 mt-3">
+                <div className=" border-round p-3  mx-4 mt-0">
                     <p className="font-bold text-xl ">Invoices</p>
                 </div>
-                <PlanInfo />
-                <InvoiceTypes
-                    setNsfModal={setNsfModal}
-                    setAdHocInvoiceModal={setAdHocInvoiceModal}
-                    setMisMatchInvoiceModal={setMisMatchInvoiceModal}
-                    setEbillModal={setEbillModal}
-                    setMisMatchBillModal={setMisMatchBillModal}
-                    setAdjustBalanceModal={setAdjustBalanceModal}
-                    setPayInvoiceModal={setPayInvoiceModal}
-                    setDiscountCreditModal={setDiscountCreditModal}
-                    setAdjustWalletModal={setAdjustWalletModal}
-                    setAddWalletModal={setAddWalletModal}
-                />
+                <PlanInfo currentPlan={currentPlan} />
+                <InvoiceTypes    
+                accountType={accountType} 
+                setNsfModal={setNsfModal}
+                setAdHocInvoiceModal={setAdHocInvoiceModal}
+                setMisMatchInvoiceModal={setMisMatchInvoiceModal}
+                setEbillModal={setEbillModal}
+                setMisMatchBillModal={setMisMatchBillModal}
+                setAdjustBalanceModal={setAdjustBalanceModal}
+                setPayInvoiceModal={setPayInvoiceModal}
+                setDiscountCreditModal={setDiscountCreditModal}
+                setAdjustWalletModal={setAdjustWalletModal}
+                setAddWalletModal={setAddWalletModal}
+            />
                 <EditabaleInvoices setPaymentModal={setPaymentModal} />
                 <div>
                     <DetailedTransactionModal detailedTransactionModal={detailedTransactionModal} setDetailedTransactionModal={setDetailedTransactionModal} />
@@ -79,9 +107,9 @@ const InvoicePage = () => {
                     </p>
                 </div>
                 <br />
-                <InvoiceTable className="mb-3" setDetailedTransactionModal={setDetailedTransactionModal} />
+                <InvoiceTable className="mb-3" invoiceData={invoices} setDetailedTransactionModal={setDetailedTransactionModal} />
             </div>
-        </>
+        </Card>
     );
 };
 

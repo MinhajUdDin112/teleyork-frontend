@@ -85,7 +85,7 @@ const AllEnrollments = () => {
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
-
+   
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -470,8 +470,8 @@ const AllEnrollments = () => {
 
     const actionTemplate = (rowData) => {
         return (
-            <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
+            <div>  
+              <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
                 <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1"  text raised disabled={isButtonLoading} />
             </div>

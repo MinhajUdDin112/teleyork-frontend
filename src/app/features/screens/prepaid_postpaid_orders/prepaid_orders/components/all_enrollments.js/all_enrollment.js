@@ -3,7 +3,7 @@ import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import Axios from "axios";
+import Axios from "axios";  
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,7 +21,7 @@ import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
 import DialogeForApprove from "./dialogs/DialogeForApprove";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PrepaidAllEnrollments = () => {  
+const PrepaidAllEnrollments = () => {   
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -433,9 +433,15 @@ const PrepaidAllEnrollments = () => {
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
                 <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1"  text raised disabled={isButtonLoading} />
+                 
             </div>
         );
+    };   
+    const handleEnrollmentBill = (rowData) => {
+        navigate("/invoice", { state: { selectedId: rowData._id } });
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
+    
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
@@ -445,7 +451,9 @@ const PrepaidAllEnrollments = () => {
                     <Button label="Add Remarks"  onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
-                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
+                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />  
+                <Button label="Billing" onClick={() => handleEnrollmentBill(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
+                
                 <Button label="Approve"   onClick={() =>{  
                     if(!rowData.QualityRemarks){
                         toast.error("Please Add Remarks")

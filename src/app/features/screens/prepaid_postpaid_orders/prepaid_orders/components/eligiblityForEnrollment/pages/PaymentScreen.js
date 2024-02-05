@@ -35,7 +35,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             discount: [],
             additional: [],
             totalamount: "",
-            customerid: _id,
+            customerid: _id,  
+             type:"Sign Up "
         },
         onSubmit: async (values, actions) => {
             if (localStorage.getItem("paymentstatus")) {
@@ -151,7 +152,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     placeholder="Select Plan"
                                     id="plan"
                                     optionLabel="name"
-                                    options={formik.values.product === "Wireless Device" ? JSON.parse(localStorage.getItem("deviceplan")) : []}
+                                    options={ JSON.parse(localStorage.getItem("deviceplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
                                         formik.setFieldValue("plan", e.value);
@@ -212,7 +213,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     placeholder="Select Additional Feature"
                                     id="additional"
                                     optionLabel="name"
-                                    options={formik.values.product === "Wireless Device" && JSON.parse(localStorage.getItem("deviceadditional")).length > 0 ? JSON.parse(localStorage.getItem("deviceadditional")) : []}
+                                    options={JSON.parse(localStorage.getItem("deviceadditional"))}
                                     value={formik.values.additional}
                                     onChange={(e) => {
                                         let additional = formik.values.additional;
