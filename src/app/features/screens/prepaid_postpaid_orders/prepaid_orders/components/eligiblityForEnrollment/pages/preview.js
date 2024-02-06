@@ -5,7 +5,6 @@ import Preview_Final_component from "./Preview_Final_component";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react";
-import { CardCvcElement } from "@stripe/react-stripe-js";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
@@ -39,7 +38,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         } catch (error) {
             toast.error(error?.response?.data?.msg);
             setIsLoading(false);
-        } 
+        }
         setShowFinalComponent(true);
         setFromIncomplete(false);
         localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
@@ -59,16 +58,17 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     for (let i = 0; i < inventoryType?.length; i++) {
         if (paymentInfo?.billId === inventoryType[i].value) {
             inventory = inventoryType[i].label;
+
             break;
         }
     }
     if (inventory === "Sim Card") {
         let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
-        let simalladditional = JSON.parse(localStorage.getItem("simadditional")); 
-        console.log("SIM ALL Additional",simalladditional)
-        let additionallocal = JSON.parse(localStorage.getItem("simadditionalfeaturearray")); 
-        
-        console.log("SIM Feature Additional",additionallocal)
+        let simalladditional = JSON.parse(localStorage.getItem("simadditional"));
+        console.log("SIM ALL Additional", simalladditional);
+        let additionallocal = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
+
+        console.log("SIM Feature Additional", additionallocal);
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < simalladditional?.length; k++) {
                 if (additionallocal[i] === simalladditional[k].value) {
@@ -151,12 +151,21 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Discounts:</p>
-                                    <p className="w-6">{discount}</p>
+                                    <p className="w-6">
+                                        {" "}
+                                        {paymentInfo?.discount.map((item) => (
+                                            <div>
+                                                <p className="inline">
+                                                    {item.name}:{item.amount}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </p>
                                 </div>
 
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">One Time Charges:</p>
-                                    <p className="w-6">{paymentInfo?.totalAmount}</p>
+                                    <p className="w-6">{paymentInfo?.invoiceOneTimeCharges}</p>
                                 </div>
                             </div>
                             <div className="border-2 w-5 ">
@@ -177,21 +186,27 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <p className="w-6 ml-4">SSN:</p>
                                     <p className="w-6">{previewInfo?.SSN}</p>
                                 </div>
-
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Email:</p>
                                     <p className="w-6">{previewInfo?.email}</p>
                                 </div>
 
-                                <div className="flex border-bottom-2 pt-2">
+                              {/*  <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Inventory:</p>
-                                    <p className="w-6">{inventory}</p>  
-                                    </div>
-                                    <div className="flex  pt-2">
-                                        <p className="w-6 ml-4">Additional Feature:</p>
-                                        <p className="w-6">{additional}</p>
-                                    </div>
-                                
+                                    <p className="w-6">{inventory}</p>
+                                </div>     */}
+                                <div className="flex  pt-2">
+                                    <p className="w-6 ml-4">Additional Feature:</p>
+                                    <p className="w-6">
+                                        {paymentInfo?.additionalCharges.map((item) => (
+                                            <div>
+                                                <p className="inline">
+                                                    {item.name}:{item.amount}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </p>
+                                </div>
                             </div>
                         </div>
 

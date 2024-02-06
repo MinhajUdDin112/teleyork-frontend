@@ -136,7 +136,7 @@ export default function EnrollmentFlowPage() {
             },
         },
         {
-            label: "Eligiblity",
+            label: "Consent",
             command: (event) => {
                 toast.current.show({ severity: "info", summary: "Seat Selection", detail: event.item.label });
                 setActiveIndex(1);
