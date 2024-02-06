@@ -6,7 +6,7 @@ import { Toast } from "primereact/toast";
 import React, { useState,useRef } from "react";
 import { TransferException, statusOption ,connection} from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function ChangeCustomerStatus({ cpData }) {  
+export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus }) {  
      //For Showing Toast Message
     const toast = useRef(null);
     const loginRes = localStorage.getItem("userData");
@@ -24,7 +24,71 @@ export default function ChangeCustomerStatus({ cpData }) {
     //Options For Connection Type
     const connectionTypeOption=connection
     function UpdateStatus() {
-        if (statusTo === "disconnect") {
+        if (statusTo === "printed") {
+            const dataToSend={
+                customerId:cpData?._id,
+                status:statusTo,
+            }
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                .then(() => { 
+                    setChangeCustomerStatus(false)
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                                 
+                })
+                .catch((err) => { 
+                    toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
+                                 
+                });
+        }
+      else  if (statusTo === "preShipment") {
+            const dataToSend={
+                customerId:cpData?._id,
+                status:statusTo,
+            }
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                .then(() => { 
+                    setChangeCustomerStatus(false)
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                                 
+                })
+                .catch((err) => { 
+                    toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
+                                 
+                });
+        }
+        else  if (statusTo === "intransit") {
+            const dataToSend={
+                customerId:cpData?._id,
+                status:statusTo,
+            }
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                .then(() => {
+                    setChangeCustomerStatus(false)
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                                 
+                })
+                .catch((err) => { 
+                    toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
+                                 
+                });
+        }
+        else  if (statusTo === "dilevered") {
+            const dataToSend={
+                customerId:cpData?._id,
+                status:statusTo,
+            }
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                .then(() => { 
+                    setChangeCustomerStatus(false)
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                                 
+                })
+                .catch((err) => { 
+                    toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
+                                 
+                });
+        }
+     else   if (statusTo === "disconnect") {
             Axios.post(`${BASE_URL}/api/user/disconnectMdnByPwg`, { enrollmentId: cpData?._id })
                 .then(() => { 
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Disconnected" });
@@ -59,7 +123,9 @@ export default function ChangeCustomerStatus({ cpData }) {
             } else {
                 setExceptionError(true);
             }
-        } else if (statusTo === "suspend") { 
+        }
+      
+         else if (statusTo === "suspend") { 
 
         } else if (statusTo === "restore") {
         } else {

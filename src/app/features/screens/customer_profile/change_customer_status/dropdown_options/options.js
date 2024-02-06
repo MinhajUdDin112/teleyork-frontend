@@ -19,8 +19,20 @@ const TransferException = [
 const statusOption = [
     { label: "Select Status", value: "" },
     {
-        label: "Disconnect",
-        value: "disconnect",
+        label: "Label Printed",
+        value: "printed",
+    },
+    {
+        label: "Pre-Shipment",
+        value: "preShipment",
+    },
+    {
+        label: "In-Transit",
+        value: "intransit",
+    },
+    {
+        label: "Dilevered",
+        value: "dilevered",
     },
     {
         label: "Reconnect",

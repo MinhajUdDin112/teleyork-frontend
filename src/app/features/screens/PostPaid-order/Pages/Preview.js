@@ -72,6 +72,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
    const handleSign=()=>{
     setChecked(true);
    }
+   console.log("product is",parseproductData?.selectProduct)
     return (
         <>
         <ToastContainer/>
@@ -122,7 +123,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                 </div>
                                 <div className="flex  pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Product:</p>
-                                    <p className="w-6">{parseproductData?.selectProduct}</p>
+                                    <p className="w-6">{parseproductData?.selectProduct[0].toUpperCase()}</p>
                                 </div>
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Price:</p>
