@@ -63,7 +63,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
           </svg>
         ),
       },
-    {/*  {
+      {
         label: `MDN:${cpData?.phoneNumber === undefined ? "NIL" : cpData?.phoneNumber}`,
       }, 
        
@@ -90,7 +90,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
           </svg>
         ),
         command: () => handleWalletClick(),
-      }*/},
+      },
       {
         label:
           accountType === "ACP"
@@ -150,7 +150,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
             </span>
           );
         }}
-        className="mt-1 card border-none menubar border-noround  text-xl font-semibold mx-0 bg-white mx-0 pt-2 pb-2"
+        className="m-1  card border-none menubar border-noround  text-xl font-semibold mx-0 bg-white mx-0 pt-4 pb-4"
       />
     </div>
   );

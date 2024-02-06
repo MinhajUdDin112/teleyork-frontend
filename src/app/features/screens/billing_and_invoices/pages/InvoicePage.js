@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PlanInfo from "../components/PrepaidPlanInfo";
-import InvoiceTypes from "../components/InvoiceTypes";
-import EditabaleInvoices from "../components/EditableInvoices";
+import InvoiceTypes from "../components/InvoiceTypes"; 
 import InvoiceTable from "../components/InvoiceTable";
 import DetailedTransactionModal from "../components/modals/DetailedTransactionModal";
 import NsfModal from "../components/modals/NsfModal";
 import AdHocModal from "../components/modals/AdHocModal";
 import MismatchInvoiceModal from "../components/modals/MismatchInvoiceModal";
-import EbillModal from "../components/modals/EbillModal";
+import EbillModal from "../components/modals/EbillModal"; 
 import MismatchBillModal from "../components/modals/MismatchBillModal";
 import AdjustBalanceModal from "../components/modals/AdjustBalanceModal";
 import PayInvoiceModal from "../components/modals/PayInvoiceModal";
@@ -19,6 +18,7 @@ import PaymentDetailModal from "../components/modals/PaymentDetailModal";
 import BillingNavbar from "../components/BillingNavbar";
 import Axios from "axios"; 
 import { Card } from "primereact/card";
+import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";
 const BASE_URL = process.env.REACT_APP_BASE_URL; 
 const selectedid = localStorage.getItem("selectedId");
 const parseselectedid = JSON.parse(selectedid);
@@ -82,7 +82,8 @@ const InvoicePage = () => {
                 setAdjustWalletModal={setAdjustWalletModal}
                 setAddWalletModal={setAddWalletModal}
             />
-                <EditabaleInvoices setPaymentModal={setPaymentModal} />
+              {/*  <Prepaid setPaymentModal={setPaymentModal} />*/} 
+                <PrepaidEditabaleInvoices  setPaymentModal={setPaymentModal} />
                 <div>
                     <DetailedTransactionModal detailedTransactionModal={detailedTransactionModal} setDetailedTransactionModal={setDetailedTransactionModal} />
                     <NsfModal nsfModal={nsfModal} setNsfModal={setNsfModal} />
