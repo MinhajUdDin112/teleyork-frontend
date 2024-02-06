@@ -24,8 +24,9 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
   
    
     const validationSchema = Yup.object().shape({
-        billId: Yup.string().required("Product is required"),
-     //   paymentMode: Yup.string().required("Payment Mode are required"),
+//billId: Yup.string().required("Product is required"),
+        paymentMode: Yup.string().required("Payment Mode are required"),
+        plan: Yup.string().required("Please Select it first"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -37,6 +38,7 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
             additional: [],
             totalamount: "",
             customerid: _id,
+            type:"Sign Up "
         },
         onSubmit: async (values, actions) => {
 
@@ -65,7 +67,7 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
             }
             if (localStorage.getItem("paymentstatus")) {
                 if (localStorage.getItem("paymentstatus") === "paid") {
-                    // setActiveIndex(3);
+                   
                     handleNext();
                    
                 } else {
@@ -76,30 +78,10 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
             }
         },
     });
-    useEffect(() => {
-        if (paymentInfo) {
-            formik.setFieldValue("billId", paymentInfo.billId);
-            formik.setFieldValue("plan", paymentInfo.plan);
-            formik.setFieldValue("additionalFeature", paymentInfo.additionalFeature);
-            formik.setFieldValue("discount", paymentInfo.discount);
-            formik.setFieldValue("totalamount", paymentInfo.totalAmount);
-        }
-    }, []);  
-    const productData = localStorage.getItem("productData");
-    const parseproductData = JSON.parse(productData);
-
-    useEffect(()=>{
-if(parseproductData){
-    console.log("Product is",parseproductData.selectProduct)
-    console.log("plan is",parseproductData.plan.name)
-    formik.setFieldValue("billId", parseproductData.selectProduct);
-    formik.setFieldValue("plan", parseproductData?.plan.name);
-    formik.setFieldValue("additionalFeature", parseproductData.additionalFeature);
    
-    formik.setFieldValue("totalamount", parseproductData.totalAmount);
-    formik.setFieldValue("paymentMode",parseproductData?.paymentMethod)
-}
-    },[])
+   
+
+   
     const optionsForPayment = [
         { label: "Select ", value: "" },
         { label: "Credit/Debit card", value: "card" },
@@ -112,9 +94,7 @@ if(parseproductData){
         return isFormFieldValid(name) && <small className="p-error block">{formik.errors[name]}</small>;
     };
 
-    const goNext=()=>{
-    
-    }
+   
     return (
         <form onSubmit={formik.handleSubmit}>
         <ToastContainer/>
@@ -132,46 +112,48 @@ if(parseproductData){
                     <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                 </div>
                 <div className="flex flex-wrap flex-row justify-content-around">
-                    <div className="mt-2">
-                        <label className="block">Select Product</label>
-                        <Dropdown
-                            disabled={paymentInfo ? true : false}
-                            className="field-width mt-2"
-                            value={formik.values.billId}
-                            onChange={(e) => {
-                                formik.setFieldValue("billId", e.value);
-                                let inventory;
-                                let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
-                                for (let i = 0; i < inventoryType.length; i++) {
-                                    if (e.value === inventoryType[i].value) {
-                                        inventory = inventoryType[i].label;
-                                        break;
-                                    }
-                                }
-                                setInventory(inventory);
-                                if (inventory === "Sim Card") {
-                                    formik.setFieldValue("discount", JSON.parse(localStorage.getItem("simdiscountobjectarray")));
-                                    let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
-                                    let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
-                                    let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
-                                    formik.setFieldValue("totalamount", amountafterdiscount);
-                                } else if (inventory === "Wireless Device") {
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
-                                    formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
-                                    let oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing")).oneTimeCharge;
-                                    let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("deviceadditionaltotal")));
-                                    let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
-                                    formik.setFieldValue("totalamount", amountafterdiscount);
-                                }
-                                formik.handleChange(e);
-                            }}
-                            options={JSON.parse(localStorage.getItem("inventoryType"))}
-                            placeholder="Select Inventory"
-                        />
-                        {getFormErrorMessage("billId")}
-                    </div>
+                <div className="mt-2">
+    <label className="block">Select Product</label>
+    <Dropdown
+        disabled={paymentInfo ? true : false}
+        className="field-width mt-2"
+        value={formik.values.billId}
+        onChange={(e) => {
+            formik.setFieldValue("billId", e.value);
+            let inventory;
+            let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
+            for (let i = 0; i < inventoryType.length; i++) {
+                if (e.value === inventoryType[i].value) {
+                    inventory = inventoryType[i].label;
+                    break;
+                }
+            }
+            setInventory(inventory);
+            if (inventory === "Sim Card") {
+                formik.setFieldValue("discount", JSON.parse(localStorage.getItem("simdiscountobjectarray")));
+                let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
+                let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
+                let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
+                formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
+                formik.setFieldValue("totalamount", amountafterdiscount);
+            } else if (inventory === "Wireless Device") {
+                formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
+                formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
+                formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
+                let oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing")).oneTimeCharge;
+                let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("deviceadditionaltotal")));
+                let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
+                formik.setFieldValue("totalamount", amountafterdiscount);
+            }
+            formik.handleChange(e);
+        }}
+        options={JSON.parse(localStorage.getItem("inventoryType"))}
+        placeholder="Select Inventory"
+    />
+                                    {getFormErrorMessage("plan")}
+ {/* Add this line to display validation error */}
+</div>
+
                     <div className="mt-2">
                         <label className="block">Select Plan</label>
                         {inventory === "Sim Card" ? (
@@ -199,7 +181,7 @@ if(parseproductData){
                                     placeholder="Select Plan"
                                     id="plan"
                                     optionLabel="name"
-                                    options={formik.values.product === "Wireless Device" ? JSON.parse(localStorage.getItem("deviceplan")) : []}
+                                    options={ JSON.parse(localStorage.getItem("deviceplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
                                         formik.setFieldValue("plan", e.value);
@@ -260,7 +242,7 @@ if(parseproductData){
                                     placeholder="Select Additional Feature"
                                     id="additional"
                                     optionLabel="name"
-                                    options={formik.values.product === "Wireless Device" && JSON.parse(localStorage.getItem("deviceadditional")).length > 0 ? JSON.parse(localStorage.getItem("deviceadditional")) : []}
+                                    options={JSON.parse(localStorage.getItem("deviceadditional"))}
                                     value={formik.values.additional}
                                     onChange={(e) => {
                                         let additional = formik.values.additional;
@@ -319,8 +301,7 @@ if(parseproductData){
                             onChange={(e) => {
                                 formik.setFieldValue("paymentMode", e.value);
                                 formik.handleChange(e);
-                                 if (e.value === "skip") {
-                                        goNext()                 }
+                                
                             }}
                         />
                         {getFormErrorMessage("paymentMode")}
