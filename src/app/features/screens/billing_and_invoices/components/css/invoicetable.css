@@ -1,0 +1,10 @@
+.paid-invoice{ 
+    background-color: rgb(99, 102, 241) !important;  
+    color:white !important;
+     
+ } 
+ .unpaid-invoice{ 
+   background-color: red !important; 
+   color:white !important;
+    
+}
