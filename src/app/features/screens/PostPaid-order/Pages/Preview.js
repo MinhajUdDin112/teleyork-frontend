@@ -23,7 +23,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const productData = localStorage.getItem("productData");
     const parseproductData = JSON.parse(productData);
 
-    console.log("Product data is",parseproductData)
+   
 
     const zipRes = localStorage.getItem("zipData");
     
@@ -51,8 +51,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
          setIsLoading(false);
         }
         setShowFinalComponent(true);
-        setFromIncomplete(false)
-        localStorage.setItem("fromIncomplete", JSON.stringify(fromIncomplete))
+        // setFromIncomplete(false)
+        // localStorage.setItem("fromIncomplete", JSON.stringify(fromIncomplete))
 
       };
 
@@ -60,11 +60,12 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
        
        if(!zipRes && parsefromIncompl==false){
         setIsChecked(true )
+      
        
        }
        else if(!zipRes && parsefromIncompl==true){
         setIsChecked(false )
-       
+        console.log("here")
        }
       }, [])
 

@@ -72,7 +72,7 @@ export default function Post_enrollment_Flow() {
                          //SIM Plans
                         localStorage.setItem("simplan", JSON.stringify(plans));
                     } else if (response.data.data[i].inventoryType === "Wireless Device") {   
-                         console.log("invenoty type is Device ")
+                    
                         let obj = { label: "Wireless Device", value:response.data.data[i]._id };
                         inventoryType.push(obj);
                         for (let k = 0; k < response.data.data[i].monthlyCharge.length; k++) {
