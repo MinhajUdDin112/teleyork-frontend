@@ -37,6 +37,7 @@ const Agree = ({handleNext,handleBack, enrollment_id, _id, csr }) => {
             additional: [],
             totalamount: "",
             customerid: _id,
+            type:"Sign Up "
         },
         onSubmit: async (values, actions) => {
 
@@ -199,7 +200,7 @@ if(parseproductData){
                                     placeholder="Select Plan"
                                     id="plan"
                                     optionLabel="name"
-                                    options={formik.values.product === "Wireless Device" ? JSON.parse(localStorage.getItem("deviceplan")) : []}
+                                    options={ JSON.parse(localStorage.getItem("deviceplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
                                         formik.setFieldValue("plan", e.value);
@@ -260,7 +261,7 @@ if(parseproductData){
                                     placeholder="Select Additional Feature"
                                     id="additional"
                                     optionLabel="name"
-                                    options={formik.values.product === "Wireless Device" && JSON.parse(localStorage.getItem("deviceadditional")).length > 0 ? JSON.parse(localStorage.getItem("deviceadditional")) : []}
+                                    options={JSON.parse(localStorage.getItem("deviceadditional"))}
                                     value={formik.values.additional}
                                     onChange={(e) => {
                                         let additional = formik.values.additional;
