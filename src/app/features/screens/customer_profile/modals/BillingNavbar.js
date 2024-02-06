@@ -20,7 +20,6 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
       );
       setCpData(res?.data?.data || []);
       setAccountType(res?.data?.data?.accountType);
-      console.log("Account type is", accountType);
     } catch (error) {
       // Handle error
     }
@@ -28,7 +27,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
 
   useEffect(() => {
     getCustomerProfileData();
-  }, [cpData]);
+  }, []);
 
   function handleWalletClick() {
     setOpenDialogeForWallet(true);

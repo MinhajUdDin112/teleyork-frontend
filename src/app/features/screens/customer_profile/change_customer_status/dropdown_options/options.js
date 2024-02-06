@@ -31,6 +31,10 @@ const statusOption = [
         value: "intransit",
     },
     {
+        label: "Active",
+        value: "active",
+    },
+    {
         label: "Dilevered",
         value: "dilevered",
     },

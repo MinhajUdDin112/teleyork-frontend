@@ -23,6 +23,7 @@ import { Dropdown } from "primereact/dropdown";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const All_Enrollments = () => {
+    const [cpData, setCpData] = useState([]);
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -249,9 +250,7 @@ const All_Enrollments = () => {
                         try {
                             const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
-                                console.log(
-                                    "Label created response is", response?.data
-                                )
+                               
                             }
                         } catch (error) {
                             toast.error(error?.response?.data?.msg)
@@ -269,13 +268,24 @@ const All_Enrollments = () => {
 
     };
 
+   
+
     const approveRowByTl = async (rowData) => {
         setisButtonLoading(true);
         const approvedBy = parseLoginRes?._id;
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-
+        const getCustomerProfileData = async () => {
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
+                if (res?.status == 200 || res?.status == 201) {
+                    setCpData(res?.data?.paymentDetails|| []);
+                    console.log("cp data is", res?.data?.paymentDetails);
+                }
+            } catch (error) { }
+        };
+        getCustomerProfileData();
         setCheckRemarks(rowData?.QualityRemarks)
 
         if (rowData?.QualityRemarks) {
@@ -299,7 +309,7 @@ const All_Enrollments = () => {
                             const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
                           const  orderId= response?.data?.data?.orderId;
-                          console.log("order id is",orderId)
+                         
                                 const dataToSend = {
                                     userId: parseLoginRes?._id,
                                     testLabel: "true",
@@ -308,9 +318,43 @@ const All_Enrollments = () => {
                                 try {
                                     const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                     if (response?.status == 200 || response?.status == 201) {
-                                        console.log(
-                                            "Label created response is", response?.data
-                                        )
+                                        
+                                  
+                                            console.log("plan charges is",cpData)
+                                        const dataToSend = {            
+                                                customerId:enrolmentId,  
+                                                invoiceType:"Sign Up",
+                                                totalAmount:cpData.totalamount,  
+                                                additionalCharges:cpData?.additionalFeature, 
+                                                discount:cpData?.discounts,  
+                                                amountPaid:"0", 
+                                                invoiceDueDate:cpData?.dueDate, 
+                                                lateFee:cpData?.applyLateFee, 
+                                                 invoiceOneTimeCharges:cpData?.oneTimeCharge,  
+                                                 invoiceStatus:"Pending",  
+                                                  planId:cpData?.planId,
+                                                planName:cpData?.planName, 
+                                                   planCharges:cpData?.planCharges,   
+                                                  chargingType:"monthly",
+                                                   invoicePaymentMethod:"Skip",  
+                                                   printSetting:"Both",
+                                                   billingPeriod:{ 
+                                                    from:"onActivation", 
+                                                    to:"onActivation"
+                                                   }              
+                                             }; 
+                                             console.log("generate invoice data to send is",dataToSend)
+                                            try {
+                                                const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`,dataToSend)
+                                                if(response?.status==200 || response?.status==201){
+                                                    console.log("device genereted",response?.data?.data)
+                                                    toast.error("Device Generated")
+                                                }
+                                               } catch (error) {
+                                                toast.error(error?.response?.data?.message)
+                                               }
+                                       
+
                                     }
                                 } catch (error) {
                                     toast.error(error?.response?.data?.msg)
