@@ -28,7 +28,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
 
   useEffect(() => {
     getCustomerProfileData();
-  }, []);
+  }, [cpData]);
 
   function handleWalletClick() {
     setOpenDialogeForWallet(true);
@@ -36,8 +36,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
 
   var items;
   if (accountType === null) {
-    console.log("here outside");
-    // Render loading or placeholder if accountType is not available yet
+   
     return <div>Loading...</div>;
   } else {
     items = [
@@ -103,6 +102,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
       },
     ];
   }
+  
 
   return (
     <div className="menubar-styling">

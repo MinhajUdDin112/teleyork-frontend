@@ -191,7 +191,7 @@ const CustomerProfile = () => {
                     <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
                 <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
-                    <ChangeCustomerStatus cpData={cpData} />
+                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
                 </Dialog>
 
                 <div className="pt-3">
