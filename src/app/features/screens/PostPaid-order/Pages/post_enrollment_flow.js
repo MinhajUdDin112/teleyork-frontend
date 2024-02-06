@@ -23,6 +23,7 @@ export default function Post_enrollment_Flow() {
       useEffect(() => {
         Axios.get(`${BASE_URL}/api/web/billing/plans?inventoryType=SimCard,Wireless Device&billingmodel=Postpaid`)
             .then((response) => {
+                console.log("response is",response)
                 let inventoryType = []; 
                 for (let i = 0; i < response.data.data.length; i++) {
                     let plans = [];

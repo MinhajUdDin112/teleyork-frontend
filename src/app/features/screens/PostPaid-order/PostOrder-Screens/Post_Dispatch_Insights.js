@@ -17,8 +17,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Post_Dispatch_Insight = () => {
 
-    const [selectedEnrollments, setSelectedEnrollments] = useState(null);
-    const [rowClick, setRowClick] = useState(true);
+    const [isstatus, setisstatus] = useState();
     const [allCompletedEnrollments, setAllCompletedEnrollments] = useState([]);
     const [isLoading, setIsLoading] = useState();
     const [isSearch, setIsSearch] = useState(false);
@@ -33,20 +32,23 @@ const Post_Dispatch_Insight = () => {
     // Get role name  from login response
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
-    
 
-    useEffect(async()=>{
-        try {
-            const response = await Axios.get(`${BASE_URL}/api/user/dispatchInsight?userId=${parseLoginRes?._id}&accountType=Postpaid`);
-            if (response?.status === 200 || response?.status === 201) {
-                setHistoryData(response?.data?.data);
-                console.log("Data is", response?.data?.data)
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/user/dispatchInsight?userId=${parseLoginRes?._id}&accountType=Postpaid`);
+                if (response?.status === 200 || response?.status === 201) {
+                    setHistoryData(response?.data?.data);
+                    console.log("Data is", response?.data?.data)
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-            setIsLoading(false);
-        }
-    },[])
+        })();
+    }, []);
+
     const navigate = useNavigate();
 
     const formik = useFormik({
@@ -128,7 +130,7 @@ const Post_Dispatch_Insight = () => {
                     </div>
                     <hr className="w-50% color-black"></hr>
                     <div className="flex justify-content-between mt-5">
-                        <div className="card text-center cursor-pointer" onClick={showData}>
+                        <div className="card text-center cursor-pointer" onClick={() => { setisstatus("totall") }}>
                             <h4>
                                 Label Created
                             </h4>
@@ -136,15 +138,16 @@ const Post_Dispatch_Insight = () => {
                                 {historyData?.totalCount}
                             </h3>
                         </div>
-                        <div className="card text-center cursor-pointer" onClick={showData}>
+                        <div className="card text-center cursor-pointer" onClick={() => { setisstatus("Printed") }}>
                             <h4>
                                 Label Printed
                             </h4>
+
                             <h3>
-                            {historyData?.statusCounts?.printed}
+                                {historyData?.statusCounts?.labelPrinted}
                             </h3>
                         </div>
-                        <div className="card text-center cursor-pointer" onClick={showData}>
+                        <div className="card text-center cursor-pointer" onClick={() => { setisstatus("Shipment") }}>
                             <h4>
                                 Pre-Shipment
                             </h4>
@@ -152,20 +155,21 @@ const Post_Dispatch_Insight = () => {
                                 {historyData?.statusCounts?.preShipment}
                             </h3>
                         </div>
-                        <div className="card text-center cursor-pointer" onClick={showData}>
+                        <div className="card text-center cursor-pointer" onClick={() => { setisstatus("Transit") }}>
                             <h4>
                                 In-Transit
                             </h4>
                             <h3>
-                            {historyData?.statusCounts?.intransit}
+                                {historyData?.statusCounts?.inTransit}
                             </h3>
                         </div>
-                        <div className="card text-center cursor-pointer" onClick={showData}>
+                        <div className="card text-center cursor-pointer" onClick={() => { setisstatus("Dilevered") }}>
                             <h4>
                                 Dilevered
                             </h4>
                             <h3>
-                                {historyData?.statusCounts?.dilevered}
+                                {historyData?.statusCounts?.delivered
+                                }
                             </h3>
                         </div>
                     </div>
@@ -174,79 +178,391 @@ const Post_Dispatch_Insight = () => {
                         <h3 className="mb-3">
                             Dispatch Insights
                         </h3>
-                        {/* <DataTable value={historyData} stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
+                        {
+                            isstatus == "totall" ? <>
+                                <DataTable value={historyData?.enrollments
+                                } stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
 
-                            <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
 
-                            <Column header="Enrollment ID" field="enrollmentId" body={(rowData) => (
-                                <button style={{ border: 'none', backgroundColor: 'white', cursor: 'pointer' }} onClick={() => handleEnrollmentIdClick(rowData)}>
-                                    {rowData.enrollmentId}
-                                </button>
-                            )}></Column>
-                            <Column header="Enrollment Type" field="enrollment"></Column>
+                                    <Column header="Enrollment ID" field="enrollmentId" body={(rowData) => (
+                                        <button style={{ border: 'none', backgroundColor: 'white', cursor: 'pointer' }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                            {rowData.enrollmentId}
+                                        </button>
+                                    )}></Column>
 
-                            <Column header="Name" field="name"></Column>
-                            <Column header="Address" field="address1"></Column>
-                            <Column header="City" field="city"></Column>
-                            <Column header="State" field="state"></Column>
-                            <Column header="Zip" field="zip"></Column>
-                            <Column field="contact" header="Telephone Number" />
-                            <Column
-                                field="DOB"
-                                header="DOB"
-                                body={(rowData) =>
-                                    new Date(rowData.DOB)
-                                        .toLocaleDateString("en-US", {
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                        })
-                                        .replace(/\//g, "-")
-                                }
-                            />
-                            <Column field="createdBy.name" header="Created By" />
-                            {
-                                toCapital.includes("CSR") ? "" :
-                                    <Column field="approvedBy.name" header="Approved By" />
 
-                            }
-                            {
-                                toCapital.includes("CSR") ? "" : <Column
-                                    field="Approved At"
-                                    header="Approved At"
-                                    body={(rowData) =>
-                                        new Date(rowData.approvedAt)
-                                            .toLocaleDateString("en-US", {
-                                                month: "2-digit",
-                                                day: "2-digit",
-                                                year: "numeric",
-                                            })
-                                            .replace(/\//g, "-")
+                                    <Column header="Name" field="firstName"></Column>
+                                    <Column header="Address" field="address1"></Column>
+                                    <Column header="City" field="city"></Column>
+                                    <Column header="State" field="state"></Column>
+                                    <Column header="Zip" field="zip"></Column>
+                                    <Column field="contact" header="Telephone Number" />
+                                    <Column
+                                        field="DOB"
+                                        header="DOB"
+                                        body={(rowData) =>
+                                            new Date(rowData.DOB)
+                                                .toLocaleDateString("en-US", {
+                                                    month: "2-digit",
+                                                    day: "2-digit",
+                                                    year: "numeric",
+                                                })
+                                                .replace(/\//g, "-")
+                                        }
+                                    />
+                                    <Column field="createdBy.name" header="Created By" />
+                                    {
+                                        toCapital.includes("CSR") ? "" :
+                                            <Column field="approvedBy.name" header="Approved By" />
+
                                     }
-                                />
-                            }
+                                    {
+                                        toCapital.includes("CSR") ? "" : <Column
+                                            field="Approved At"
+                                            header="Approved At"
+                                            body={(rowData) =>
+                                                new Date(rowData.approvedAt)
+                                                    .toLocaleDateString("en-US", {
+                                                        month: "2-digit",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })
+                                                    .replace(/\//g, "-")
+                                            }
+                                        />
+                                    }
 
-                            <Column />
-                            <Column
-    field="Phase"
-    header="Phase"
-    body={(rowData) => (
-        <span>
-            {rowData.assignedToUser.map((user) => (
-                <span key={user?.department?.department}>
-                    {user?.department?.department}
-                </span>
-            ))}
-        </span>
-    )}
-/>
+                                    <Column />
+                                    <Column
+                                        field="Phase"
+                                        header="Phase"
+                                        body={(rowData) => (
+                                            <span>
+                                                {rowData.assignedToUser.map((user) => (
+                                                    <span key={user?.department?.department}>
+                                                        {user?.department?.department}
+                                                    </span>
+                                                ))}
+                                            </span>
+                                        )}
+                                    />
 
 
 
 
 
-                        </DataTable> */}
-                        {/* {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null} */}
+                                </DataTable>
+                                {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+                            </>
+                                : isstatus == "Printed" ? <>
+                                    <DataTable value={historyData?.enrollmentsByStatus?.labelPrinted
+
+                                    } stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
+
+                                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+
+                                        <Column header="Enrollment ID" field="enrollmentId" body={(rowData) => (
+                                            <button style={{ border: 'none', backgroundColor: 'white', cursor: 'pointer' }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                                {rowData.enrollmentId}
+                                            </button>
+                                        )}></Column>
+
+
+                                        <Column header="Name" field="firstName"></Column>
+                                        <Column header="Address" field="address1"></Column>
+                                        <Column header="City" field="city"></Column>
+                                        <Column header="State" field="state"></Column>
+                                        <Column header="Zip" field="zip"></Column>
+                                        <Column field="contact" header="Telephone Number" />
+                                        <Column
+                                            field="DOB"
+                                            header="DOB"
+                                            body={(rowData) =>
+                                                new Date(rowData.DOB)
+                                                    .toLocaleDateString("en-US", {
+                                                        month: "2-digit",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })
+                                                    .replace(/\//g, "-")
+                                            }
+                                        />
+                                        <Column field="createdBy.name" header="Created By" />
+                                        {
+                                            toCapital.includes("CSR") ? "" :
+                                                <Column field="approvedBy.name" header="Approved By" />
+
+                                        }
+                                        {
+                                            toCapital.includes("CSR") ? "" : <Column
+                                                field="Approved At"
+                                                header="Approved At"
+                                                body={(rowData) =>
+                                                    new Date(rowData.approvedAt)
+                                                        .toLocaleDateString("en-US", {
+                                                            month: "2-digit",
+                                                            day: "2-digit",
+                                                            year: "numeric",
+                                                        })
+                                                        .replace(/\//g, "-")
+                                                }
+                                            />
+                                        }
+
+                                        <Column />
+                                        <Column
+                                            field="Phase"
+                                            header="Phase"
+                                            body={(rowData) => (
+                                                <span>
+                                                    {rowData.assignedToUser.map((user) => (
+                                                        <span key={user?.department?.department}>
+                                                            {user?.department?.department}
+                                                        </span>
+                                                    ))}
+                                                </span>
+                                            )}
+                                        />
+
+
+
+
+
+                                    </DataTable>
+                                    {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+                                </>
+                                    : isstatus == "Shipment" ? <>
+
+                                        <DataTable value={historyData?.enrollmentsByStatus?.
+preShipment
+
+                                        } stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
+
+                                            <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+
+                                            <Column header="Enrollment ID" field="enrollmentId" body={(rowData) => (
+                                                <button style={{ border: 'none', backgroundColor: 'white', cursor: 'pointer' }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                                    {rowData.enrollmentId}
+                                                </button>
+                                            )}></Column>
+
+
+                                            <Column header="Name" field="firstName"></Column>
+                                            <Column header="Address" field="address1"></Column>
+                                            <Column header="City" field="city"></Column>
+                                            <Column header="State" field="state"></Column>
+                                            <Column header="Zip" field="zip"></Column>
+                                            <Column field="contact" header="Telephone Number" />
+                                            <Column
+                                                field="DOB"
+                                                header="DOB"
+                                                body={(rowData) =>
+                                                    new Date(rowData.DOB)
+                                                        .toLocaleDateString("en-US", {
+                                                            month: "2-digit",
+                                                            day: "2-digit",
+                                                            year: "numeric",
+                                                        })
+                                                        .replace(/\//g, "-")
+                                                }
+                                            />
+                                            <Column field="createdBy.name" header="Created By" />
+                                            {
+                                                toCapital.includes("CSR") ? "" :
+                                                    <Column field="approvedBy.name" header="Approved By" />
+
+                                            }
+                                            {
+                                                toCapital.includes("CSR") ? "" : <Column
+                                                    field="Approved At"
+                                                    header="Approved At"
+                                                    body={(rowData) =>
+                                                        new Date(rowData.approvedAt)
+                                                            .toLocaleDateString("en-US", {
+                                                                month: "2-digit",
+                                                                day: "2-digit",
+                                                                year: "numeric",
+                                                            })
+                                                            .replace(/\//g, "-")
+                                                    }
+                                                />
+                                            }
+
+                                            <Column />
+                                            <Column
+                                                field="Phase"
+                                                header="Phase"
+                                                body={(rowData) => (
+                                                    <span>
+                                                        {rowData.assignedToUser.map((user) => (
+                                                            <span key={user?.department?.department}>
+                                                                {user?.department?.department}
+                                                            </span>
+                                                        ))}
+                                                    </span>
+                                                )}
+                                            />
+
+
+
+
+
+                                        </DataTable>
+                                        {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}</>
+                                        : isstatus == "Transit" ? <> <DataTable value={historyData?.enrollmentsByStatus?.inTransit
+
+                                        } stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
+
+                                            <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+
+                                            <Column header="Enrollment ID" field="enrollmentId" body={(rowData) => (
+                                                <button style={{ border: 'none', backgroundColor: 'white', cursor: 'pointer' }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                                    {rowData.enrollmentId}
+                                                </button>
+                                            )}></Column>
+
+
+                                            <Column header="Name" field="firstName"></Column>
+                                            <Column header="Address" field="address1"></Column>
+                                            <Column header="City" field="city"></Column>
+                                            <Column header="State" field="state"></Column>
+                                            <Column header="Zip" field="zip"></Column>
+                                            <Column field="contact" header="Telephone Number" />
+                                            <Column
+                                                field="DOB"
+                                                header="DOB"
+                                                body={(rowData) =>
+                                                    new Date(rowData.DOB)
+                                                        .toLocaleDateString("en-US", {
+                                                            month: "2-digit",
+                                                            day: "2-digit",
+                                                            year: "numeric",
+                                                        })
+                                                        .replace(/\//g, "-")
+                                                }
+                                            />
+                                            <Column field="createdBy.name" header="Created By" />
+                                            {
+                                                toCapital.includes("CSR") ? "" :
+                                                    <Column field="approvedBy.name" header="Approved By" />
+
+                                            }
+                                            {
+                                                toCapital.includes("CSR") ? "" : <Column
+                                                    field="Approved At"
+                                                    header="Approved At"
+                                                    body={(rowData) =>
+                                                        new Date(rowData.approvedAt)
+                                                            .toLocaleDateString("en-US", {
+                                                                month: "2-digit",
+                                                                day: "2-digit",
+                                                                year: "numeric",
+                                                            })
+                                                            .replace(/\//g, "-")
+                                                    }
+                                                />
+                                            }
+
+                                            <Column />
+                                            <Column
+                                                field="Phase"
+                                                header="Phase"
+                                                body={(rowData) => (
+                                                    <span>
+                                                        {rowData.assignedToUser.map((user) => (
+                                                            <span key={user?.department?.department}>
+                                                                {user?.department?.department}
+                                                            </span>
+                                                        ))}
+                                                    </span>
+                                                )}
+                                            />
+
+
+
+
+
+                                        </DataTable>
+                                            {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}</>
+                                            : isstatus == "Dilevered" ? <> <DataTable value={historyData?.enrollmentsByStatus?.delivered
+                                            } stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
+
+                                                <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+
+                                                <Column header="Enrollment ID" field="enrollmentId" body={(rowData) => (
+                                                    <button style={{ border: 'none', backgroundColor: 'white', cursor: 'pointer' }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                                        {rowData.enrollmentId}
+                                                    </button>
+                                                )}></Column>
+
+
+                                                <Column header="Name" field="firstName"></Column>
+                                                <Column header="Address" field="address1"></Column>
+                                                <Column header="City" field="city"></Column>
+                                                <Column header="State" field="state"></Column>
+                                                <Column header="Zip" field="zip"></Column>
+                                                <Column field="contact" header="Telephone Number" />
+                                                <Column
+                                                    field="DOB"
+                                                    header="DOB"
+                                                    body={(rowData) =>
+                                                        new Date(rowData.DOB)
+                                                            .toLocaleDateString("en-US", {
+                                                                month: "2-digit",
+                                                                day: "2-digit",
+                                                                year: "numeric",
+                                                            })
+                                                            .replace(/\//g, "-")
+                                                    }
+                                                />
+                                                <Column field="createdBy.name" header="Created By" />
+                                                {
+                                                    toCapital.includes("CSR") ? "" :
+                                                        <Column field="approvedBy.name" header="Approved By" />
+
+                                                }
+                                                {
+                                                    toCapital.includes("CSR") ? "" : <Column
+                                                        field="Approved At"
+                                                        header="Approved At"
+                                                        body={(rowData) =>
+                                                            new Date(rowData.approvedAt)
+                                                                .toLocaleDateString("en-US", {
+                                                                    month: "2-digit",
+                                                                    day: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")
+                                                        }
+                                                    />
+                                                }
+
+                                                <Column />
+                                                <Column
+                                                    field="Phase"
+                                                    header="Phase"
+                                                    body={(rowData) => (
+                                                        <span>
+                                                            {rowData.assignedToUser.map((user) => (
+                                                                <span key={user?.department?.department}>
+                                                                    {user?.department?.department}
+                                                                </span>
+                                                            ))}
+                                                        </span>
+                                                    )}
+                                                />
+
+
+
+
+
+                                            </DataTable>
+                                                {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}</>
+                                                : ""
+                        }
+
+
 
                     </div>
                 </div>
