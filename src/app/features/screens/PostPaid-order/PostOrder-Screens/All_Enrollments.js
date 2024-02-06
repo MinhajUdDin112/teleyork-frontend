@@ -239,11 +239,13 @@ const All_Enrollments = () => {
                 try {
                     const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                     if (response?.status == 200 || response?.status == 201) {
-                        const dataToSend = {
-                            userId: parseLoginRes?._id,
-                            orderId: response?.data?.orderId,
-                            testLabel: "true"
-                        }
+                        const  orderId= response?.data?.data?.orderId;
+                          console.log("order id is",orderId)
+                                const dataToSend = {
+                                    userId: parseLoginRes?._id,
+                                    testLabel: "true",
+                                    orderId:orderId
+                                }
                         try {
                             const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
@@ -296,10 +298,12 @@ const All_Enrollments = () => {
                         try {
                             const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
+                          const  orderId= response?.data?.data?.orderId;
+                          console.log("order id is",orderId)
                                 const dataToSend = {
                                     userId: parseLoginRes?._id,
-                                    orderId: response?.data?.orderId,
-                                    testLabel: "true"
+                                    testLabel: "true",
+                                    orderId:orderId
                                 }
                                 try {
                                     const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
@@ -454,11 +458,13 @@ const All_Enrollments = () => {
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                         if (response?.status == 200 || response?.status == 201) {
-                            const dataToSend = {
-                                userId: parseLoginRes?._id,
-                                orderId: response?.data?.orderId,
-                                testLabel: "true"
-                            }
+                            const  orderId= response?.data?.data?.orderId;
+                            console.log("order id is",orderId)
+                                  const dataToSend = {
+                                      userId: parseLoginRes?._id,
+                                      testLabel: "true",
+                                      orderId:orderId
+                                  }
                             try {
                                 const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                 if (response?.status == 200 || response?.status == 201) {
@@ -507,11 +513,13 @@ const All_Enrollments = () => {
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                         if (response?.status == 200 || response?.status == 201) {
-                            const dataToSend = {
-                                userId: parseLoginRes?._id,
-                                orderId: response?.data?.orderId,
-                                testLabel: "true"
-                            }
+                            const  orderId= response?.data?.data?.orderId;
+                            console.log("order id is",orderId)
+                                  const dataToSend = {
+                                      userId: parseLoginRes?._id,
+                                      testLabel: "true",
+                                      orderId:orderId
+                                  }
                             try {
                                 const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                 if (response?.status == 200 || response?.status == 201) {

@@ -127,6 +127,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Price:</p>
                                     <p className="w-6">{parseproductData?.totalAmount}</p>
+
                                 </div>
                              
                             </div>
@@ -151,18 +152,19 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                               
                                 <div className="flex pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Email:</p>
-                                    <p className="w-6">{previewInfo?.email}</p>
+                                    <p className="w-6">{previewInfo?.email.toUpperCase()}</p>
                                 </div>
                                 <div className="flex pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Plan:</p>{
-                                        parseproductData?.plan ?  <p className="w-6">{parseproductData?.plan.name}</p>:""
+                                        parseproductData?.plan ?  <p className="w-6">{parseproductData?.plan.name.toUpperCase()}</p>:""
                                     }
 
                                    
                                 </div>
                                 <div className="flex pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Payment Method:</p>
-                                    <p className="w-6">{parseproductData?.paymentMethod}</p>
+                                    <p className="w-6">{parseproductData?.paymentMethod.toUpperCase()}</p>
+
                                 </div>
                               
                             </div>
