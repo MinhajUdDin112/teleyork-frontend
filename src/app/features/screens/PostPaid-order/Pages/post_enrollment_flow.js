@@ -71,7 +71,8 @@ export default function Post_enrollment_Flow() {
                         localStorage.setItem("simpricing", JSON.stringify(response.data.data[i]));
                          //SIM Plans
                         localStorage.setItem("simplan", JSON.stringify(plans));
-                    } else if (response.data.data[i].inventoryType === "Wireless Device") {
+                    } else if (response.data.data[i].inventoryType === "Wireless Device") {   
+                         console.log("invenoty type is Device ")
                         let obj = { label: "Wireless Device", value:response.data.data[i]._id };
                         inventoryType.push(obj);
                         for (let k = 0; k < response.data.data[i].monthlyCharge.length; k++) {
@@ -81,7 +82,7 @@ export default function Post_enrollment_Flow() {
                             };
                             plans.push(obj);
                         }
-                        for (let z = 0; z < response.data.data[i].additionalFeature; z++) {
+                        for (let z = 0; z < response.data.data[i].additionalFeature.length; z++) {
                             let obj = {
                                 name: response.data.data[i].additionalFeature[z].featureName,
                                 value: response.data.data[i].additionalFeature[z]._id,
@@ -89,11 +90,10 @@ export default function Post_enrollment_Flow() {
                             additionaltotal+=parseFloat(response.data.data[i].additionalFeature[z].featureAmount) 
                              additionalfeaturearray.push(response.data.data[i].additionalFeature[z]._id.toString())
                             additionalfeature.push(obj);
-                            additionalfeature.push(obj);
                         }
-                        for (let y = 0; y < response.data.data[i].selectdiscount; y++) {
-                            discountobjectarray.push(response.data.data[i].additionalFeature[y]._id.toString());
-                            totaldiscounts +=parseFloat(parseFloat(response.data.data[i].selectdiscounts[y].amount))
+                        for (let y = 0; y < response.data.data[i].selectdiscount.length; y++) {
+                            discountobjectarray.push(response.data.data[i].selectdiscount[y]._id.toString());
+                            totaldiscounts +=parseFloat(parseFloat(response.data.data[i].selectdiscount[y].amount))
                         } 
                         //Device Features 
                               // additional feature value and name 
@@ -176,7 +176,7 @@ let items;
     else if(!zipRes && parsefromIncompl==true){
         pages = [
             Personal_info_page({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
-           // Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
+            Eligibility({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
             //plan({ setActiveIndex: setActiveIndex, enrollment_id: enrollment_id, _id: _id, csr: csr }),
             Preview({ setActiveIndex: setActiveIndex, enrollment_id: enrollmentid, _id: id, csr: csr }),
         ];
