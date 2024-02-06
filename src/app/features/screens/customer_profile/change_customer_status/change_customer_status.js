@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast"; 
+
 import React, { useState,useRef } from "react";
 import { TransferException, statusOption ,connection} from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -23,7 +24,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
     const statusOptions =statusOption
     //Options For Connection Type
     const connectionTypeOption=connection
-    function UpdateStatus() {
+    const UpdateStatus = async()=> {
         if (statusTo === "printed") {
             const dataToSend={
                 customerId:cpData?._id,
@@ -72,13 +73,13 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                                  
                 });
         }
-        else  if (statusTo === "dilevered") {
+        else  if (statusTo === "intransit") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,
             }
             Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
-                .then(() => { 
+                .then(() => {
                     setChangeCustomerStatus(false)
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                                  
@@ -87,6 +88,24 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                     toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
                                  
                 });
+        }
+        else  if (statusTo === "active") {
+            const dataToSend={
+                enrollmentId:cpData?._id,
+                userId:parseLoginRes?._id        
+            }
+            try {
+                const response= await  Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend)
+                if(response?.status==200 || response?.status==201){
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                }
+            }  catch (error) {
+                toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+            }
+            
+          
+           
+        
         }
      else   if (statusTo === "disconnect") {
             Axios.post(`${BASE_URL}/api/user/disconnectMdnByPwg`, { enrollmentId: cpData?._id })
@@ -98,6 +117,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                     toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
                                  
                 });
+                
         } else if (statusTo === "reconnect") {
             Axios.post(`${BASE_URL}/api/user/reConnectMdnByPwg`, { enrollmentId: cpData?._id, planId: cpData?.plan?.planId, zip: cpData?.zip, esn: cpData?.esn })
                 .then(() => { 
@@ -133,6 +153,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
     }
     return (
         <div className="flex flex-wrap flex-row justify-content-around ">
+           
             <div>
                 <label className="block mt-4">Change Account Status To:</label>
                 <Dropdown
