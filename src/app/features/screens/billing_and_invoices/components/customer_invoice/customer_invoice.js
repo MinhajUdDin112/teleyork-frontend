@@ -1,44 +1,48 @@
 import { Button } from "primereact/button";
 import html2canvas from "html2canvas";
-import "./css/customer_invoice.css";
+import "./css/customer_invoice.css"; 
+import { useRef } from "react"; 
 import jsPDF from "jspdf"; 
 import { ProgressSpinner } from 'primereact/progressspinner';
 import React, { useEffect } from "react";
 {
     /* pdf.internal.pageSize*/
 }  
-const downloadinvoice=async () => {
-    {
-        /*  const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
-    let a = document.createElement("a");
-    a.href = imgData;
-    a.download = true;
-a.click(); */
-    }
-    document.querySelector(".progress").style.display = "block";
-    document.querySelector(".downloadtemp").style.width = "1033px";
-    html2canvas(document.querySelector(".downloadtemp"), { scale: 2 }).then((canvas) => {
-        const pdf = new jsPDF();
-        pdf.setFont("arial");
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
-        pdf.save("converted.pdf");
-        document.querySelector(".downloadtemp").style.width = "100%"; 
-        document.querySelector(".progress").style.display = "none";
-    });
-}
+
 export default function CustomerInvoice({userDetails,invoiceData}) {
+    let downloadbuttonref=useRef()
     console.log(invoiceData) 
      console.log(userDetails) 
-      useEffect(()=>{ 
-        let event=new Event("click") 
-         let query=document.querySelector(".download-invoice") 
-          query.dispatchEvent(event)    
-      })
+      useEffect(()=>{   
+         if(invoiceData !== undefined){
+       downloadbuttonref.current.click() 
+         }  
+      })  
+      const downloadinvoice=async () => {
+        {
+            /*  const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
+        let a = document.createElement("a");
+        a.href = imgData;
+        a.download = true;
+    a.click(); */
+        }
+        document.querySelector(".progress").style.display = "block";
+        document.querySelector(".downloadtemp").style.width = "1033px";
+        html2canvas(document.querySelector(".downloadtemp"), { scale: 2 }).then((canvas) => {
+            const pdf = new jsPDF();
+            pdf.setFont("arial");
+            pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
+            pdf.save("converted.pdf");
+            document.querySelector(".downloadtemp").style.width = "100%"; 
+            document.querySelector(".progress").style.display = "none";
+        });
+    }
     return (
         <div> 
              
-            <Button
+            <Button 
+                 ref={downloadbuttonref}
                 className="download-invoice"
                 label="Download Invoice"
                 onClick={downloadinvoice}

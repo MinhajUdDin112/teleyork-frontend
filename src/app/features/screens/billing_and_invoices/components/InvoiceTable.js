@@ -2,11 +2,13 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";  
-import {useState} from "react"
+import {useState} from "react" 
+
 import CustomerInvoice from "./customer_invoice/customer_invoice"
 import "./css/invoicetable.css";  
 const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) => {
-    const cardData = invoiceData;  
+    const cardData = invoiceData;   
+   
     const [singleInvoiceData,setInvoiceData]=useState()
     const handleCellClick = () => {
         setDetailedTransactionModal(true);
