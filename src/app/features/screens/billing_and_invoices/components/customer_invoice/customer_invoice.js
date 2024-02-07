@@ -1,58 +1,51 @@
+
 import { Button } from "primereact/button";
 import html2canvas from "html2canvas";
 import "./css/customer_invoice.css"; 
-import { useRef } from "react"; 
+import { useRef, useEffect } from "react"; 
 import jsPDF from "jspdf"; 
 import { ProgressSpinner } from 'primereact/progressspinner';
-import React, { useEffect } from "react";
-{
-    /* pdf.internal.pageSize*/
-}  
+import React, { useState } from "react";
 
-export default function CustomerInvoice({userDetails,invoiceData}) {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-    console.log("Invoice data is",invoiceData)
-    let downloadbuttonref=useRef()
-    console.log(invoiceData) 
-     console.log(userDetails) 
-      useEffect(()=>{   
-         if(invoiceData !== undefined){
-       downloadbuttonref.current.click() 
-         }  
-      })  
-      const downloadinvoice=async () => {
-        {
-            /*  const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 2 });
-        const imgData = canvas.toDataURL("image/png");
-        let a = document.createElement("a");
-        a.href = imgData;
-        a.download = true;
-    a.click(); */
+export default function CustomerInvoice({ userDetails, invoiceData }) {
+    const [isLoading, setIsLoading] = useState(false);
+    const downloadButtonRef = useRef();
+console.log("user detail is",userDetails)
+    useEffect(() => {
+        if (invoiceData !== undefined && invoiceData !== null) {
+            downloadButtonRef.current.click();
         }
-        document.querySelector(".progress").style.display = "block";
-        document.querySelector(".downloadtemp").style.width = "1033px";
+    }, [invoiceData]);
+    console.log("invoice detail is",invoiceData)
+
+    const downloadInvoice = () => {
+        setIsLoading(true);
         html2canvas(document.querySelector(".downloadtemp"), { scale: 2 }).then((canvas) => {
             const pdf = new jsPDF();
             pdf.setFont("arial");
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
             pdf.save("converted.pdf");
-            document.querySelector(".downloadtemp").style.width = "100%"; 
-            document.querySelector(".progress").style.display = "none";
+            setIsLoading(false);
         });
-    }
+    };
+
     return (
-        <div> 
-             
+        <div>
             <Button 
-                 ref={downloadbuttonref}
+                ref={downloadButtonRef}
                 className="download-invoice"
                 label="Download Invoice"
-                onClick={downloadinvoice}
-            ></Button>  
-            
-            <div className="progress">
-                <ProgressSpinner  className="spinner"/>
-            </div>
+                onClick={downloadInvoice}
+            ></Button>
+
+            {isLoading && (
+                <div className="progress">
+                    <ProgressSpinner className="spinner"/>
+                </div>
+            )}
+
             <div className="flex flex-wrap justify-content-around  downloadtemp">
                 <div className="flex flex-column ">
                 <div >
@@ -89,9 +82,13 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                                 <p>Invoice Date</p>
                                 <p>{invoiceData?.createdAt}</p>
                             </div>
+                            <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
+                                <p>Billing Period</p>
+                                <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} ` }</p>
+                            </div>
                             <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                 <p>Total Amount Due</p>
-                                <p>${invoiceData?.totalAmount}</p>
+                                <p>${invoiceData?.netPrice}</p>
                             </div>
                             <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
@@ -153,8 +150,12 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     <div >
                     <h5 className="font-bold line2">CURRENT SERVICES</h5>
                     <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
-                        <p>Current Activity Charges</p>
-                        <p>$30.30</p>
+                        <p>Totall Recurring Charges</p>
+                        <p>${invoiceData?.netPrice}</p>
+                    </div>
+                    <div className="pl-2  flex flex-wrap justify-content-between ">
+                        <p>One Time Charge</p>
+                        <p>${userDetails?.invoiceOneTimeCharges}</p>
                     </div>
                     <div className="pl-2  flex flex-wrap justify-content-between ">
                         <p>Taxes and Surcharges</p>
@@ -164,8 +165,8 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                    
                     <div className="topline"></div>
                     <div className=" flex justify-content-between blnc-due line">
-                        <h5 className="inline font-bold mt-2">BALANCE DUE</h5>
-                        <h5 className="inline font-bold">{invoiceData?.totalAmount}</h5>
+                        <h5 className="inline font-bold mt-2">AMOUNT DUE</h5>
+                        <h5 className="inline font-bold">{invoiceData?.netPrice}</h5>    
                     </div>
                    
                 </div>
@@ -188,7 +189,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                         <tbody>
                             <tr>
                               
-                                <td>{invoiceData?.productName}</td>  
+                                <td>{userDetails?.selectProduct}</td>  
 
                                 <td>{userDetails?.invoiceOneTimeCharges
 }</td>
@@ -214,25 +215,36 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
 
                               <td>${userDetails?.currentPlan?.planCharges}</td>
                           </tr>
-                            <tr>
-                              
-                                <td>{userDetails?.currentPlan?.additionalCharges.name}</td>
-                               
+                          <tr>
+    <td>
+        {userDetails?.currentPlan.additionalCharges.map((charge, index) => (
+            <div key={index}>{charge.name}</div>
+        ))}
+    </td>
+    <td>
+        {userDetails?.currentPlan.additionalCharges.map((charge, index) => (
+            <div key={index}>${charge.amount}</div>
+        ))}
+    </td>
+</tr>
+<tr>
+    <td>
+        {userDetails?.currentPlan.discount.map((discount, index) => (
+            <div key={index}>{discount.name}</div>
+        ))}
+    </td>
+    <td>
+        {userDetails?.currentPlan.discount.map((discount, index) => (
+            <div key={index}>-${discount.amount}</div>
+        ))}
+    </td>
+</tr>
 
-                                <td>${userDetails?.currentPlan?.additionalCharges.amount}</td>
-                            </tr>
-                            <tr>
-                              
-                                <td>{userDetails?.currentPlan?.discount.name}</td>
-                                
-
-                                <td>${userDetails?.currentPlan?.discount.amount}</td>
-                            </tr>
                         </tbody>
                     </table>
                     <div className="flex font-bold flex-row flex-wrap justify-content-between">
                         <p>Total Recurring Charges</p>
-                        <p>30</p>
+                        <p>${invoiceData?.netPrice}</p>
                     </div>
                     <div className="topline"></div>
                     <h6 className="font-bold">Regulatory Taxes and Surcharges: </h6>
