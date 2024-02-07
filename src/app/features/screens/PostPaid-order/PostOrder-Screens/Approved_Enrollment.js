@@ -170,6 +170,7 @@ const ApprovedEnrollments = () => {
     };
     
      const handleEnrollmentBill = (rowData) => {
+    
         navigate("/invoice", { state: { selectedId: rowData._id } });
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };

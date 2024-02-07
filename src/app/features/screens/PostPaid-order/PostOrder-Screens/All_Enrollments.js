@@ -398,7 +398,7 @@ const All_Enrollments = () => {
                                                         const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
                                                         if(response?.status == 200 || response?.status == 201){
                                                             console.log("device generated", response?.data?.data);
-                                                            toast.success("Device Generated");
+                                                            toast.success("Invoice Generated");
                                                         }
                                                     } catch (error) {
                                                         toast.error(error?.response?.data?.message);

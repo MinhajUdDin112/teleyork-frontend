@@ -12,7 +12,9 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function CustomerInvoice({ userDetails, invoiceData }) {
     const [isLoading, setIsLoading] = useState(false);
     const downloadButtonRef = useRef();
+    
 console.log("user detail is",userDetails)
+
     useEffect(() => {
         if (invoiceData !== undefined && invoiceData !== null) {
             downloadButtonRef.current.click();
