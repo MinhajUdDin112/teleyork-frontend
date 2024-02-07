@@ -2,6 +2,10 @@
     width: 100%;
     border-bottom: dashed black 4px;
 }
+.downloadtemp{ 
+     position: fixed; 
+     z-index: -1;
+}
 .companyinfo,
 .recurring-charges {
     width: 500px;
@@ -158,4 +162,7 @@
 }
 .linetop{
 margin-top: -5px;
+}
+.download-invoice{ 
+     opacity: 0;
 }

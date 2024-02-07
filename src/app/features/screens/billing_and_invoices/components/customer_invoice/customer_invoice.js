@@ -1,39 +1,51 @@
 import { Button } from "primereact/button";
 import html2canvas from "html2canvas";
-import "./css/customer_invoice.css";
+import "./css/customer_invoice.css"; 
+import { useRef } from "react"; 
 import jsPDF from "jspdf"; 
 import { ProgressSpinner } from 'primereact/progressspinner';
-import React from "react";
+import React, { useEffect } from "react";
 {
     /* pdf.internal.pageSize*/
-}
-export default function CustomerInvoice() {
+}  
+
+export default function CustomerInvoice({userDetails,invoiceData}) {
+    let downloadbuttonref=useRef()
+    console.log(invoiceData) 
+     console.log(userDetails) 
+      useEffect(()=>{   
+         if(invoiceData !== undefined){
+       downloadbuttonref.current.click() 
+         }  
+      })  
+      const downloadinvoice=async () => {
+        {
+            /*  const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
+        let a = document.createElement("a");
+        a.href = imgData;
+        a.download = true;
+    a.click(); */
+        }
+        document.querySelector(".progress").style.display = "block";
+        document.querySelector(".downloadtemp").style.width = "1033px";
+        html2canvas(document.querySelector(".downloadtemp"), { scale: 2 }).then((canvas) => {
+            const pdf = new jsPDF();
+            pdf.setFont("arial");
+            pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
+            pdf.save("converted.pdf");
+            document.querySelector(".downloadtemp").style.width = "100%"; 
+            document.querySelector(".progress").style.display = "none";
+        });
+    }
     return (
         <div> 
              
-            <Button
+            <Button 
+                 ref={downloadbuttonref}
                 className="download-invoice"
                 label="Download Invoice"
-                onClick={async () => {
-                    {
-                        /*  const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 2 });
-                    const imgData = canvas.toDataURL("image/png");
-                    let a = document.createElement("a");
-                    a.href = imgData;
-                    a.download = true;
-                a.click(); */
-                    }
-                    document.querySelector(".progress").style.display = "block";
-                    document.querySelector(".downloadtemp").style.width = "1033px";
-                    html2canvas(document.querySelector(".downloadtemp"), { scale: 2 }).then((canvas) => {
-                        const pdf = new jsPDF();
-                        pdf.setFont("arial");
-                        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
-                        pdf.save("converted.pdf");
-                        document.querySelector(".downloadtemp").style.width = "100%"; 
-                        document.querySelector(".progress").style.display = "none";
-                    });
-                }}
+                onClick={downloadinvoice}
             ></Button>  
             
             <div className="progress">
@@ -47,9 +59,9 @@ export default function CustomerInvoice() {
                     </div>   
 
                     <div className="customer-info mt-3 line1">     
-                     <p className="font-semibold line3">Hamza Akram</p> 
+                     <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p> 
                      <p className="font-semibold line3">3042828588</p> 
-                     <p className="font-semibold line3">UAAR Iqball Boys Hostel Behind Allama Iqball<br></br> Park Shamsabad Rawalpindi</p>
+                     <p className="font-semibold line3">{userDetails?.address1}</p>
                      </div>
                 </div>
               
@@ -69,7 +81,7 @@ export default function CustomerInvoice() {
                             </div>
                             <div className="pl-2  flex remittancesec flex-wrap justify-content-between">
                                 <p>Invoice No</p>
-                                <p> 1052</p>
+                                <p>{invoiceData?.invoiceNo}</p>
                             </div>
                             <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
                                 <p>Invoice Date</p>
@@ -81,11 +93,11 @@ export default function CustomerInvoice() {
                             </div>
                             <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
-                                <p>01/06/23</p>
+                                <p>{invoiceData?.invoiceDueDate}</p>
                             </div>
                             <div className=" pl-2   flex flex-wrap justify-content-between">
                                 <p>Amount paid</p>
-                                <div className="amount-paid"></div>
+                                <div className="amount-paid">${invoiceData?.amountPaid}</div>
                             </div>
                         </div>
                         <p className="text-center">
@@ -108,7 +120,7 @@ export default function CustomerInvoice() {
                     </div>
                     <div className="pl-2 w-full   flex flex-wrap justify-content-between line">
                         <p>Customer Name</p>
-                        <p>TEST TEST</p>
+                        <p>{userDetails?.firstName} {userDetails?.lastName}</p>
                     </div>
                     <div className="pl-2  flex flex-wrap justify-content-between line">
                         <p>Invoice Date</p>
@@ -116,12 +128,12 @@ export default function CustomerInvoice() {
                     </div>
                     <div className=" pl-2  flex flex-wrap justify-content-between line">
                         <p>Invoice Number</p>
-                        <p>1052</p>
+                        <p>{invoiceData?.invoiceNo}</p>
                     </div>
                     <div className=" pl-2  flex flex-wrap justify-content-between line">
 
                         <p className="line">Due Date</p>
-                        <p>01/06/23</p>
+                        <p>{invoiceData?.invoiceDueDate}</p>
                     </div>
                     <h5 className="font-bold line2">ACCOUNT DETAILS</h5>
                     <div className="pl-2 w-full mt-2  flex flex-wrap justify-content-between line">

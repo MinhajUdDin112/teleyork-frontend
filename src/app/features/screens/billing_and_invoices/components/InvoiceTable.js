@@ -1,10 +1,15 @@
 import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import "./css/invoicetable.css";
-const InvoiceTable = ({ setDetailedTransactionModal, invoiceData }) => {
-    const cardData = invoiceData;
+import { Button } from "primereact/button";  
+import {useState} from "react" 
+
+import CustomerInvoice from "./customer_invoice/customer_invoice"
+import "./css/invoicetable.css";  
+const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) => {
+    const cardData = invoiceData;   
+   
+    const [singleInvoiceData,setInvoiceData]=useState()
     const handleCellClick = () => {
         setDetailedTransactionModal(true);
     };
@@ -121,15 +126,21 @@ const InvoiceTable = ({ setDetailedTransactionModal, invoiceData }) => {
 
                 <Column
                     field="Invoice_Pdf"
-                    body={
-                        <Button className="bg-green-700  pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                    body={ 
+                          (rowData)=>{ 
+                            return (
+                        <Button className="bg-green-700  pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => {setInvoiceData(rowData)}}>
                             Download{" "}
-                        </Button>
+                        </Button>  
+                            )
+                          }
                     }
                     header="Invoice Pdf"
                     style={{ minWidth: "250px" }}
-                />
-            </DataTable>
+                /> 
+                
+            </DataTable>  
+           <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} />
         </div>
     );
 };

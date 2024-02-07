@@ -17,11 +17,11 @@ import PaymentModal from "../components/modals/PaymentModal";
 import PaymentDetailModal from "../components/modals/PaymentDetailModal";
 import BillingNavbar from "../components/BillingNavbar";
 import Axios from "axios"; 
-import { Card } from "primereact/card";
+import { Card } from "primereact/card"; 
 import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";
 const BASE_URL = process.env.REACT_APP_BASE_URL; 
 const selectedid = localStorage.getItem("selectedId");
-const parseselectedid = JSON.parse(selectedid);
+const parseselectedid = JSON.parse(selectedid);  
 const InvoicePage = () => { 
     const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
     const [nsfModal, setNsfModal] = useState(false);  
@@ -37,14 +37,17 @@ const InvoicePage = () => {
     const [adjustWalletModal, setAdjustWalletModal] = useState(false);
     const [addWalletModal, setAddWalletModal] = useState(false);
     const [paymentModal, setPaymentModal] = useState(false); 
-    const [currentPlan,setCurrentPlan]=useState([])
+    const [currentPlan,setCurrentPlan]=useState([])   
     const [paymentDetailModal, setPaymentDetailModal] = useState(false);
- useEffect(async ()=>{   
-    let userid=""
- Axios.get(
+     const [userDetails,setUserDetails]=useState()
+    useEffect(async ()=>{   
+    let userid="" 
+     
+ Axios.get( 
         `${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`
       ).then(res=>{ 
-        userid=res?.data?.data?._id 
+        userid=res?.data?.data?._id  
+        setUserDetails(res?.data?.data)
       setAccountType(res?.data?.data?.accountType);      
        
         Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${userid}`).then(responseinvoice=>{ 
@@ -108,7 +111,8 @@ const InvoicePage = () => {
                     </p>
                 </div>
                 <br />
-                <InvoiceTable className="mb-3" invoiceData={invoices} setDetailedTransactionModal={setDetailedTransactionModal} />
+                <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} setDetailedTransactionModal={setDetailedTransactionModal} />
+                
             </div>
         </Card>
     );
