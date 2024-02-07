@@ -74,8 +74,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
 
                     if (response?.status === 201 || response?.status === 200) {
-                        console.log( "data is", response?.data  )
-                        localStorage.setItem("productData ", JSON.stringify(response?.data));
+                        console.log( "data is", response?.data?.data)
+                        localStorage.setItem("productData", JSON.stringify(response?.data?.data));
                         handleNext();
                     }
                 } catch (error) {
