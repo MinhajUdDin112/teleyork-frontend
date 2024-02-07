@@ -20,7 +20,6 @@ import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
-import CustomerInvoice from "./customer_invoice/customer_invoice";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -706,9 +705,11 @@ const CustomerProfile = () => {
                     </div>
                 </div>
             </div>
-            <div>
+            { 
+             /*<div>
                 <CustomerInvoice />
-            </div>
+            </div>   
+             */}
         </div>
     );
 };

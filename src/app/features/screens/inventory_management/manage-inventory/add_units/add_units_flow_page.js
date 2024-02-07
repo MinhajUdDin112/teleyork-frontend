@@ -137,27 +137,27 @@ const AddUnits = ({ setActiveComponent }) => {
                 ): formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
                     <SIMBulkUploadAddPreActivatedProvision permissions={{isCreate:isCreate}}/>
                 ) : undefined
-            ) : formik.values.unit === "Tablet" ? (
-                formik.values.upload === "Bulk" && formik.values.provision === "add_stock" ? (
-                    <TabletBulkUploadAddProvision permissions={{isCreate:isCreate}}/>
+            ) : formik.values.unit === "Tablet" || formik.values.unit === "Wireless device" ? (
+                formik.values.upload === "Bulk"  && formik.values.provision === "add_stock" ? (
+                    <TabletBulkUploadAddProvision unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ? (
-                    <TabletBulkUploadAddActivateProvision permissions={{isCreate:isCreate}} />
+                    <TabletBulkUploadAddActivateProvision unit={formik.values.unit} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <TabletBulkUploadAddAndAssignNonActivateProvision  permissions={{isCreate:isCreate}}/>
-                ) : formik.values.upload === "Bulk" && formik.values.provision === "reprovision" ? (
-                    <TabletBulkUploadReprovision  permissions={{isCreate:isCreate}}/>
+                    <TabletBulkUploadAddAndAssignNonActivateProvision unit={formik.values.unit}  permissions={{isCreate:isCreate}}/>
+                ) : formik.values.upload === "Bulk"  && formik.values.provision === "reprovision" ? (
+                    <TabletBulkUploadReprovision  unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
                     <TabletBulkUploadAddPreActivatedProvision  permissions={{isCreate:isCreate}}/>
-                ) : formik.values.upload === "Single" && formik.values.provision === "add_stock" ? (
-                    <TabletSingleUploadAddProvision permissions={{isCreate:isCreate}} />
+                ) : formik.values.upload === "Single"  && formik.values.provision === "add_stock" ? (
+                    <TabletSingleUploadAddProvision unit={formik.values.unit} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_and_activated" ? (
-                    <TabletSingleUploadAddActivateProvision permissions={{isCreate:isCreate}} />
+                    <TabletSingleUploadAddActivateProvision unit={formik.values.unit} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <TabletSingleUploadAddAndAssignNonActivateProvision permissions={{isCreate:isCreate}} />
+                    <TabletSingleUploadAddAndAssignNonActivateProvision  unit={formik.values.unit} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Single" && formik.values.provision === "reprovision" ? (
-                    <TabletSingleUploadReprovision permissions={{isCreate:isCreate}}/>
+                    <TabletSingleUploadReprovision unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_pre_activated" ? (
-                    <TabletSingleUploadAddPreActivatedProvision  permissions={{isCreate:isCreate}}/>
+                    <TabletSingleUploadAddPreActivatedProvision  unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
                 ) :undefined
             ) : undefined}
         </>
