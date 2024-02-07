@@ -174,7 +174,9 @@ let productName;
                                 </div>
                                 <div className="flex  pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Product:</p>
-                                    <p className="w-6">{productName}</p>
+                                    <p className="w-6">{parseproductData?.
+selectProduct.toUpperCase()
+}</p>
                                 </div>
                                  <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Price:</p>

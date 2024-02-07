@@ -54,6 +54,9 @@ const InvoicePage = () => {
             console.log("response for plan",responseinvoice) 
              setCurrentPlan(responseinvoice?.data?.data?.invoice)  
               setInvoices(responseinvoice?.data?.data?.invoice)
+              localStorage.setItem("invoiceData", JSON.stringify(responseinvoice?.data?.data?.invoice));
+
+            
            }).catch(err=>{ 
            console.log("err",err)
            })
