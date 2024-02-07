@@ -60,7 +60,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
 
                     <div className="customer-info mt-3 line1">     
                      <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p> 
-                     <p className="font-semibold line3">3042828588</p> 
+                     <p className="font-semibold line3">{userDetails?.contact}</p> 
                      <p className="font-semibold line3">{userDetails?.address1}</p>
                      </div>
                 </div>
@@ -77,7 +77,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                         <div className="remittance-wrapper">
                             <div className="pl-2 w-full remittancesec  flex flex-wrap justify-content-between">
                                 <p>Account No</p>
-                                <p> 212121</p>
+                                <p>{userDetails?.accountId}</p>
                             </div>
                             <div className="pl-2  flex remittancesec flex-wrap justify-content-between">
                                 <p>Invoice No</p>
@@ -89,7 +89,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                             </div>
                             <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                 <p>Total Amount Due</p>
-                                <p>$42</p>
+                                <p>${invoiceData?.totalAmount}</p>
                             </div>
                             <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
@@ -116,7 +116,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     <h4 className="text-center font-bold line2">ACCOUNT SUMMARY</h4>
                     <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                         <p>Account No</p>
-                        <p> 212121</p>
+                        <p> {userDetails?.accountId}</p>
                     </div>
                     <div className="pl-2 w-full   flex flex-wrap justify-content-between line">
                         <p>Customer Name</p>
@@ -163,7 +163,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     <div className="topline"></div>
                     <div className=" flex justify-content-between blnc-due line">
                         <h5 className="inline font-bold mt-2">BALANCE DUE</h5>
-                        <h5 className="inline font-bold">$42</h5>
+                        <h5 className="inline font-bold">{invoiceData?.totalAmount}</h5>
                     </div>
                    
                 </div>

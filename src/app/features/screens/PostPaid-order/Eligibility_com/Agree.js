@@ -64,6 +64,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 planName: planName,
                 chargingType: "Monthly",
                 printSetting: "Both",
+                productName:"",
 
                 selectProduct: formik.values.billId,
 
@@ -112,6 +113,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     let planCharges = ""
     if (formik.values.plan === simpricing._id) {
         dueDate = simpricing.dueDate
+        console.log("sim due date is",simpricing.dueDate)
         oneTimeCharge = simpricing.oneTimeCharge
         applyLateFee = simpricing.applyLateFee
         for (let i = 0; i < simpricing.selectdiscount.length; i++) {
@@ -146,6 +148,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     }
     else {
         dueDate = devicepricing.dueDate
+        console.log("plan due date is",simpricing.dueDate)
         applyLateFee = devicepricing.applyLateFee
         oneTimeCharge = devicepricing.oneTimeCharge
         for (let i = 0; i < devicepricing.selectdiscount.length; i++) {
@@ -232,6 +235,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
                                     formik.setFieldValue("totalamount", amountafterdiscount);
+                                 // Inside the inventory selection handler
+                                 formik.setFieldValue("productName","SIM CARD")
+
                                 } else if (inventory === "Wireless Device") {
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
