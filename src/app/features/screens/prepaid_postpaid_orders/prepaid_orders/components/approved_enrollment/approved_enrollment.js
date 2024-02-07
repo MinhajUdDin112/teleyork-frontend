@@ -9,6 +9,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"; 
 import { FilterMatchMode} from 'primereact/api'
+import { Button } from "primereact/button";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 
 const PrepaidApproved_Enrollments = () => {
@@ -162,8 +163,16 @@ const PrepaidApproved_Enrollments = () => {
     </div>
     </div>)
        }
-     
-
+       const actionTemplateForPR = (rowData) => {
+        return (
+            <Button label="Billing" onClick={() => handleEnrollmentBill(rowData)} text raised className="pt-1 pb-1" />
+        );
+    };
+    
+     const handleEnrollmentBill = (rowData) => {
+        navigate("/invoice", { state: { selectedId: rowData._id } });
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
+    };
   return (
    <>
    
@@ -246,6 +255,7 @@ const PrepaidApproved_Enrollments = () => {
         </span>
     )}
 />
+<Column header="Actions" body={actionTemplateForPR}></Column>
 
 
 
