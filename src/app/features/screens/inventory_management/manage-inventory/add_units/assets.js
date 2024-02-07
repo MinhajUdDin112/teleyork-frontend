@@ -58,7 +58,8 @@ const BYOD = [
 const unit = [
     { label: "SIM", value: "SIM" },
     { label: "Tablet", value: "Tablet" },
-    { label: "Cell Phone", value: "Cell Phone" },
+    { label: "Cell Phone", value: "Cell Phone" },  
+     {label:"Wireless Device",value:"Wireless device"}
 ];
 const type = [
     { label: "Single Unit", value: "Single" },

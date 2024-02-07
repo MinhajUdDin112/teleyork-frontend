@@ -10,7 +10,7 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import InfoForUsers from "./InfoForUsers/info_for_users"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function TabletBulkUploadAddStock({permissions}) {
+export default function TabletBulkUploadAddStock({unit,permissions}) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -87,7 +87,7 @@ export default function TabletBulkUploadAddStock({permissions}) {
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: "Tablet",
+            unitType:unit,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add Stock",
         },

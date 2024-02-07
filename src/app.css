@@ -1,13 +1,6 @@
 .custom-icon {
-    font-size: 4rem ; /* Adjust the size as needed */
+    font-size: 4rem ; 
   }
- 
-  /* .p-button-label{
-    display: none
-  } */
-  
-   /* Custom Css */
-
 .field_label {
     display: block !important;
 }
