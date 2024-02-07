@@ -250,7 +250,57 @@ const All_Enrollments = () => {
                         try {
                             const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
-                               
+                                if (response?.status == 200 || response?.status == 201) {
+                                        
+                                    const getCustomerProfileData = async () => {
+                                        try {
+                                            const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
+                                            if (res?.status == 200 || res?.status == 201) {
+                                                setCpData(res?.data?.paymentDetails|| []);
+                                                console.log("cp data is", res?.data?.paymentDetails);
+                                        
+                                                // Move the following code inside this try block
+                                                console.log("plan charges is", res?.data?.paymentDetails);
+                                                const dataToSend = {
+                                                    customerId: enrolmentId,
+                                                    invoiceType: "Sign Up",
+                                                    totalAmount: res?.data?.paymentDetails?.totalAmount,
+                                                    additionalCharges: res?.data?.paymentDetails?.additionalCharges,
+                                                    discount: res?.data?.paymentDetails?.discount,
+                                                    amountPaid: "0",
+                                                    invoiceDueDate: res?.data?.paymentDetails?.invoiceDueDate,
+                                                    lateFee: res?.data?.paymentDetails?.lateFee,
+                                                    invoiceOneTimeCharges: res?.data?.paymentDetails?.invoiceOneTimeCharges,
+                                                    invoiceStatus: "Pending",
+                                                    planId: res?.data?.paymentDetails?.planId,
+                                                    planName: res?.data?.paymentDetails?.planName,
+                                                    planCharges: res?.data?.paymentDetails?.planCharges,
+                                                    chargingType: "monthly",
+                                                    invoicePaymentMethod: "Skip",
+                                                    printSetting: "Both",
+                                                    billingPeriod: {
+                                                        from: "onActivation",
+                                                        to: "onActivation"
+                                                    }
+                                                };
+                                                console.log("generate invoice data to send is", dataToSend);
+                                                try {
+                                                    const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
+                                                    if(response?.status == 200 || response?.status == 201){
+                                                        console.log("device generated", response?.data?.data);
+                                                        toast.success("Device Generated");
+                                                    }
+                                                } catch (error) {
+                                                    toast.error(error?.response?.data?.message);
+                                                }
+                                            }
+                                        } catch (error) { }
+                                        
+                                    }
+                                
+                                    getCustomerProfileData();
+
+                                }
                             }
                         } catch (error) {
                             toast.error(error?.response?.data?.msg)
