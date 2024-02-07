@@ -24,7 +24,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     };
     const validationSchema = Yup.object().shape({
         billId: Yup.string().required("Product is required"),
-        paymentMode: Yup.string().required("Payment Mode are required"),
+        paymentMode: Yup.string().required("Payment Mode are required"), 
+        plan: Yup.string().required("Payment Mode are required"), 
     });
     const formik = useFormik({
         validationSchema: validationSchema,
