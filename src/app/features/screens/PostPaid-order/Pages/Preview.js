@@ -22,6 +22,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
 
     const productData = localStorage.getItem("productData");
     const parseproductData = JSON.parse(productData);
+    let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
 
    
 
@@ -68,11 +69,61 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
         console.log("here")
        }
       }, [])
+let productName;
+      let inventory;
+    let discount = "";
+    let additional = "";
+    let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
+    console.log("inventory is",inventoryType)
+    for (let i = 0; i < inventoryType?.length; i++) {
+        if (paymentInfo?.billId === inventoryType[i].value) {
+            inventory = inventoryType[i].label;
+            inventory = inventoryType[i].label;
+
+            break;
+        }
+    }
+    if (inventory === "Sim Card") {
+        productName="SIM CARD"
+        console.log("product is",productName)
+        let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
+        let simalladditional = JSON.parse(localStorage.getItem("simadditional"));
+        console.log("SIM ALL Additional", simalladditional);
+        let additionallocal = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
+
+        console.log("SIM Feature Additional", additionallocal);
+        for (let i = 0; i < additionallocal?.length; i++) {
+            for (let k = 0; k < simalladditional?.length; k++) {
+                if (additionallocal[i] === simalladditional[k].value) {
+                    additional += `${simalladditional[k].name},`;
+                }
+            }
+        }
+        for (let i = 0; i < selecteddiscount?.length; i++) {
+            discount += `${selecteddiscount[i].discountname},`;
+        }
+    } else if (inventory === "Wireless Device") {
+        productName="WIRELESS DEVICE"
+        console.log("product is",productName)
+        let selecteddiscount = JSON.parse(localStorage.getItem("devicepricing"))?.selectdiscount;
+        let devicealladditional = JSON.parse(localStorage.getItem("deviceadditional"));
+        let additionallocal = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"));
+        for (let i = 0; i < additionallocal?.length; i++) {
+            for (let k = 0; k < devicealladditional?.length; k++) {
+                if (additionallocal[i] === devicealladditional[k].value) {
+                    additional += `${devicealladditional[k].name}`;
+                }
+            }
+        }
+        for (let i = 0; i < selecteddiscount?.length; i++) {
+            discount += `${selecteddiscount[i].discountname},`;
+        }
+    }
 
    const handleSign=()=>{
     setChecked(true);
    }
-    console.log("product is",parseproductData?.selectProduct)
+    
     return (
         <>
         <ToastContainer/>
@@ -121,10 +172,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                     <p className="w-6 ml-4">Telephone:</p>
                                     <p className="w-6">{previewInfo?.contact}</p>
                                 </div>
-                                {/* <div className="flex  pt-2 border-bottom-2">
+                                <div className="flex  pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Product:</p>
-                                    <p className="w-6">{parseproductData?.selectProduct[0].toUpperCase()}</p>
-                                </div> */}
+                                    <p className="w-6">{productName}</p>
+                                </div>
                                  <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Price:</p>
                                     <p className="w-6">{parseproductData?.totalAmount}</p>

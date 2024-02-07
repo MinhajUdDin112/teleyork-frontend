@@ -46,14 +46,6 @@ const statusOption = [
         label: "Suspend",
         value: "suspend",
     },
-    {
-        label: "Transfer-In",
-        value: "transfer-in",
-    },
-    {
-        label: "Restore",
-        value: "restore",
-    },
 ];
 const connection = [
     {

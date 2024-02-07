@@ -10,6 +10,8 @@ import React, { useEffect } from "react";
 }  
 
 export default function CustomerInvoice({userDetails,invoiceData}) {
+
+    console.log("Invoice data is",invoiceData)
     let downloadbuttonref=useRef()
     console.log(invoiceData) 
      console.log(userDetails) 
@@ -60,7 +62,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
 
                     <div className="customer-info mt-3 line1">     
                      <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p> 
-                     <p className="font-semibold line3">3042828588</p> 
+                     <p className="font-semibold line3">{userDetails?.contact}</p> 
                      <p className="font-semibold line3">{userDetails?.address1}</p>
                      </div>
                 </div>
@@ -77,7 +79,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                         <div className="remittance-wrapper">
                             <div className="pl-2 w-full remittancesec  flex flex-wrap justify-content-between">
                                 <p>Account No</p>
-                                <p> 212121</p>
+                                <p>{userDetails?.accountId}</p>
                             </div>
                             <div className="pl-2  flex remittancesec flex-wrap justify-content-between">
                                 <p>Invoice No</p>
@@ -85,11 +87,11 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                             </div>
                             <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
                                 <p>Invoice Date</p>
-                                <p>01/06/23</p>
+                                <p>{invoiceData?.createdAt}</p>
                             </div>
                             <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                 <p>Total Amount Due</p>
-                                <p>$42</p>
+                                <p>${invoiceData?.totalAmount}</p>
                             </div>
                             <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
@@ -116,7 +118,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     <h4 className="text-center font-bold line2">ACCOUNT SUMMARY</h4>
                     <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                         <p>Account No</p>
-                        <p> 212121</p>
+                        <p> {userDetails?.accountId}</p>
                     </div>
                     <div className="pl-2 w-full   flex flex-wrap justify-content-between line">
                         <p>Customer Name</p>
@@ -124,7 +126,7 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     </div>
                     <div className="pl-2  flex flex-wrap justify-content-between line">
                         <p>Invoice Date</p>
-                        <p>01/06/23</p>
+                        <p>{invoiceData?.createdAt}</p>
                     </div>
                     <div className=" pl-2  flex flex-wrap justify-content-between line">
                         <p>Invoice Number</p>
@@ -156,14 +158,14 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     </div>
                     <div className="pl-2  flex flex-wrap justify-content-between ">
                         <p>Taxes and Surcharges</p>
-                        <p>$12.19</p>
+                        <p>$0.00</p>
                     </div>
                     </div>
                    
                     <div className="topline"></div>
                     <div className=" flex justify-content-between blnc-due line">
                         <h5 className="inline font-bold mt-2">BALANCE DUE</h5>
-                        <h5 className="inline font-bold">$42</h5>
+                        <h5 className="inline font-bold">{invoiceData?.totalAmount}</h5>
                     </div>
                    
                 </div>
@@ -177,27 +179,21 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     <table>
                         <thead>
                             <tr>
-                                <td>Billed Number</td>
+                               
                                 <td>Description</td>
-                                <td>Period</td>
+                               
                                 <td>Amount</td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>(134) 577-6543</td>
-                                <td>TEST T-10GB Plan</td>
-                                <td>01/06/2023 to 02/05/2023</td>
+                              
+                                <td>{invoiceData?.productName}</td>  
 
-                                <td>28.49$</td>
+                                <td>{userDetails?.invoiceOneTimeCharges
+}</td>
                             </tr>
-                            <tr>
-                                <td>(134) 577-6543</td>
-                                <td>TEST T-10GB Plan</td>
-                                <td>01/06/2023 to 02/05/2023</td>
-
-                                <td>28.49$</td>
-                            </tr>
+                           
                         </tbody>
                     </table>
                     <h6 className="text-left font-bold mt-3">Recurring Charges:</h6>
@@ -205,26 +201,32 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                     <table>
                         <thead>
                             <tr>
-                                <td>Billed Number</td>
                                 <td>Description</td>
-                                <td>Period</td>
                                 <td>Amount</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>(134) 577-6543</td>
-                                <td>TEST T-10GB Plan</td>
-                                <td>01/06/2023 to 02/05/2023</td>
+                        <tr>
+                              
+                              <td>{userDetails?.currentPlan?.planName
+}</td>
+                             
 
-                                <td>28.49$</td>
+                              <td>${userDetails?.currentPlan?.planCharges}</td>
+                          </tr>
+                            <tr>
+                              
+                                <td>{userDetails?.currentPlan?.additionalCharges.name}</td>
+                               
+
+                                <td>${userDetails?.currentPlan?.additionalCharges.amount}</td>
                             </tr>
                             <tr>
-                                <td>(134) 577-6543</td>
-                                <td>TEST T-10GB Plan</td>
-                                <td>01/06/2023 to 02/05/2023</td>
+                              
+                                <td>{userDetails?.currentPlan?.discount.name}</td>
+                                
 
-                                <td>28.49$</td>
+                                <td>${userDetails?.currentPlan?.discount.amount}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -249,35 +251,35 @@ export default function CustomerInvoice({userDetails,invoiceData}) {
                             </tr>
                             <tr>
                                 <td> Dallad Mta</td>
-                                <td>0.02</td>
+                                <td>0.00</td>
                             </tr>
                             <tr>
                                 <td>Fedral Cost Recovery Charge </td>
-                                <td>0.02</td>
+                                <td>0.00</td>
                             </tr>
                             <tr>
                                 <td>Fedral Cost Recovery Fee </td>
-                                <td>0.02</td>
+                                <td>0.00</td>
                             </tr>
                             <tr>
                                 <td>Fedral Excise Tax </td>
-                                <td>0.07</td>
+                                <td>0.00</td>
                             </tr>
                             <tr>
                                 <td>Fedral Universal Service Fee </td>
-                                <td>3.45</td>
+                                <td>0.00</td>
                             </tr>
                             <tr>
                                 <td>State Sales Tax </td>
-                                <td>0.14</td>
+                                <td>0.00</td>
                             </tr>
                             <tr>
                                 <td>TX Universal Service </td>
-                                <td>8.17</td>
+                                <td>0.00</td>
                             </tr>
                             <tr className="font-bold">
                                 <td>Total Regulatory Taxes and Surcharges </td>
-                                <td>8.17</td>
+                                <td>0.00</td>
                             </tr>
                         </tbody>
                     </table>
