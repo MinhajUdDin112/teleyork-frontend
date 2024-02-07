@@ -86,6 +86,7 @@ const CustomerProfile = () => {
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
                 console.log("cp data is", res?.data?.data);
+               ;
             }
         } catch (error) { }
     };
@@ -174,6 +175,21 @@ const CustomerProfile = () => {
             setIsShow(true)
         }
     }
+    const downloadLabel = () => {
+        const path = cpData?.label;
+        console.log("Path is", path);
+        const trimmedPath = path.replace(/^uploads\//, "");
+        const fileUrl = `http://dev-api.teleyork.com/${trimmedPath}`;
+    
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.setAttribute("target", "_blank"); // Open in new tab
+        link.setAttribute("download", ""); // Indicate that the file should be downloaded
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+    
     return (
         <div className="card">
             <ToastContainer />
@@ -190,15 +206,22 @@ const CustomerProfile = () => {
                     <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
                 <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
-                    <ChangeCustomerStatus cpData={cpData} />
+                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
                 </Dialog>
 
                 <div className="pt-3">
+                    {
+                        cpData?.label ? <> <div className="ml-5">
+                        <Button label="Download Label" onClick={downloadLabel}/>
+                    </div></>:""
+                    }
+               
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
                                 <div className="card h-full flex flex-column overflow-x">
                                     <div className="flex justify-content-between">
+                                        
                                         <div className="text-900 font-medium text-lg p-3">Customer Information </div>
                                         <div>
 {

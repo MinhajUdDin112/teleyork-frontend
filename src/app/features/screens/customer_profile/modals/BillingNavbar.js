@@ -20,7 +20,6 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
       );
       setCpData(res?.data?.data || []);
       setAccountType(res?.data?.data?.accountType);
-      console.log("Account type is", accountType);
     } catch (error) {
       // Handle error
     }
@@ -36,8 +35,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
 
   var items;
   if (accountType === null) {
-    console.log("here outside");
-    // Render loading or placeholder if accountType is not available yet
+   
     return <div>Loading...</div>;
   } else {
     items = [
@@ -103,6 +101,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
       },
     ];
   }
+  
 
   return (
     <div className="menubar-styling">

@@ -20,8 +20,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const parsepreviewsRes = JSON.parse(previewsRes);
     const previewInfo = parsepreviewsRes?.data;
 
-    const productData = localStorage.getItem("productData");
-    const parseproductData = JSON.parse(productData);
+    // const productData = localStorage.getItem("productData");
+    // const parseproductData = JSON.parse(productData);
 
    
 
@@ -72,6 +72,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
    const handleSign=()=>{
     setChecked(true);
    }
+//    console.log("product is",parseproductData?.selectProduct)
     return (
         <>
         <ToastContainer/>
@@ -120,15 +121,15 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                     <p className="w-6 ml-4">Telephone:</p>
                                     <p className="w-6">{previewInfo?.contact}</p>
                                 </div>
-                                <div className="flex  pt-2 border-bottom-2">
+                                {/* <div className="flex  pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Product:</p>
-                                    <p className="w-6">{parseproductData?.selectProduct}</p>
-                                </div>
-                                <div className="flex  pt-2">
+                                    <p className="w-6">{parseproductData?.selectProduct[0].toUpperCase()}</p>
+                                </div> */}
+                                {/* <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Price:</p>
                                     <p className="w-6">{parseproductData?.totalAmount}</p>
 
-                                </div>
+                                </div> */}
                              
                             </div>
                             <div className="border-2 w-5 ">
@@ -154,18 +155,21 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
                                     <p className="w-6 ml-4">Email:</p>
                                     <p className="w-6">{previewInfo?.email.toUpperCase()}</p>
                                 </div>
-                                <div className="flex pt-2 border-bottom-2">
+                                {/* <div className="flex pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Plan:</p>{
-                                        parseproductData?.plan ?  <p className="w-6">{parseproductData?.plan.name.toUpperCase()}</p>:""
+                                        parseproductData?.plan ?  <p className="w-6">{parseproductData?.currentPlan
+?.
+planName
+                                        }</p>:""
                                     }
 
                                    
-                                </div>
-                                <div className="flex pt-2 border-bottom-2">
+                                </div> */}
+                                {/* <div className="flex pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Payment Method:</p>
-                                    <p className="w-6">{parseproductData?.paymentMethod.toUpperCase()}</p>
+                                    <p className="w-6">{parseproductData?.paymentMethod}</p>
 
-                                </div>
+                                </div> */}
                               
                             </div>
                         </div>
