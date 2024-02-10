@@ -42,10 +42,11 @@ const InvoicePage = () => {
      const [userDetails,setUserDetails]=useState()
 
      const location = useLocation();
-     const selectedId = location.state && location.state.selectedId;
+     const selectedId = location?.state && location?.state?.selectedId;
+
     useEffect(async ()=>{   
     let userid="" 
-     
+     console.log("called and user id is",selectedId)
  Axios.get( 
         `${BASE_URL}/api/user/userDetails?userId=${selectedId}`
       ).then(res=>{ 
@@ -54,7 +55,7 @@ const InvoicePage = () => {
       setAccountType(res?.data?.data?.accountType);      
        
         Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${selectedId}`).then(responseinvoice=>{ 
-            console.log("response for plan",responseinvoice) 
+          
              setCurrentPlan(responseinvoice?.data?.data?.invoice)  
               setInvoices(responseinvoice?.data?.data?.invoice)
               localStorage.setItem("invoiceData", JSON.stringify(responseinvoice?.data?.data?.invoice));
@@ -67,7 +68,7 @@ const InvoicePage = () => {
 
       })
  
- },[])
+ },[selectedId])
     return (
         <Card>
          <BillingNavbar />    

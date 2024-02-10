@@ -112,34 +112,34 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     let planId = ""
     let planCharges = ""
     if (formik.values.plan === simpricing?._id) {
-        dueDate = simpricing.dueDate
-        console.log("sim due date is",simpricing.dueDate)
-        oneTimeCharge = simpricing.oneTimeCharge
-        applyLateFee = simpricing.applyLateFee
-        for (let i = 0; i < simpricing.selectdiscount.length; i++) {
+        dueDate = simpricing?.dueDate
+        console.log("sim due date is",simpricing?.dueDate)
+        oneTimeCharge = simpricing?.oneTimeCharge
+        applyLateFee = simpricing?.applyLateFee
+        for (let i = 0; i < simpricing?.selectdiscount?.length; i++) {
             let obj = {
-                name: simpricing.selectdiscount[i].discountname,
-                amount: simpricing.selectdiscount[i].amount,
+                name: simpricing?.selectdiscount[i]?.discountname,
+                amount: simpricing?.selectdiscount[i]?.amount,
 
             }
             discounts.push(obj)
 
         }
         for (let i = 0; i < simpricing.monthlyCharge.length; i++) {
-            if (formik.values.billId === simpricing.monthlyCharge[i]._id) {
-                planName = simpricing.monthlyCharge[i].name
-                planCharges = simpricing.monthlyCharge[i].price;
-                planId = simpricing.monthlyCharge[i]._id;
+            if (formik.values.billId === simpricing?.monthlyCharge[i]?._id) {
+                planName = simpricing?.monthlyCharge[i]?.name
+                planCharges = simpricing?.monthlyCharge[i]?.price;
+                planId = simpricing?.monthlyCharge[i]?._id;
             }
         }
         let simadditional = JSON.parse(localStorage.getItem("simadditionalfeaturearray"))
-        for (let k = 0; k < simadditional.length; k++) {
-            for (let i = 0; i < simpricing.additionalFeature.length; i++) {
+        for (let k = 0; k < simadditional?.length; k++) {
+            for (let i = 0; i < simpricing?.additionalFeature?.length; i++) {
 
-                if (simpricing.additionalFeature[i].featureName._id === simpricing.additionalFeature[i]._id) {
+                if (simpricing?.additionalFeature[i]?.featureName?._id === simpricing?.additionalFeature[i]?._id) {
                     let obj = {
-                        name: simpricing.additionalFeature[i].featureName,
-                        amount: simpricing.additionalFeature[i].featureAmount,
+                        name: simpricing?.additionalFeature[i]?.featureName,
+                        amount: simpricing?.additionalFeature[i]?.featureAmount,
                     }
                     additionalFeature.push(obj)
                 }
@@ -153,23 +153,24 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         oneTimeCharge = devicepricing?.oneTimeCharge
         for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) {
             let obj = {
-                name: devicepricing?.selectdiscount[i].discountname,
-                amount: devicepricing?.selectdiscount[i].amount,
+                name: devicepricing?.selectdiscount[i]?.discountname,
+                amount: devicepricing?.selectdiscount[i]?.amount,
             }
             discounts.push(obj)
         }
         for (let i = 0; i < devicepricing?.monthlyCharge?.length; i++) {
-            if (formik.values.plan === devicepricing?.monthlyCharge[i]._id) {
-                planName = devicepricing?.monthlyCharge[i].name
-                planCharges = devicepricing?.monthlyCharge[i].price;
+            if (formik.values.plan === devicepricing?.monthlyCharge[i]?._id) {
+                planName = devicepricing?.monthlyCharge[i]?.name
+                planCharges = devicepricing?.monthlyCharge[i]?.price;
 
-                planId = devicepricing?.monthlyCharge[i]._id;
+                planId = devicepricing?.monthlyCharge[i]?._id;
             }
         }
         let deviceadditional = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"))
-        for (let k = 0; k < deviceadditional.length; k++) {
+      
+        for (let k = 0; k < deviceadditional?.length; k++) {
             for (let i = 0; i < devicepricing?.additionalFeature?.length; i++) {
-                if (deviceadditional[k] === devicepricing?.additionalFeature[i]._id) {
+                if (deviceadditional[k] === devicepricing?.additionalFeature[i]?._id) {
                     let obj = {
                         name: devicepricing?.additionalFeature[i]?.featureName,
                         amount: devicepricing?.additionalFeature[i]?.featureAmount,
