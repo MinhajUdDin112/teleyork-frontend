@@ -13,14 +13,12 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
     const [isLoading, setIsLoading] = useState(false);
     const downloadButtonRef = useRef();
     
-console.log("user detail is",userDetails)
 
     useEffect(() => {
         if (invoiceData !== undefined && invoiceData !== null) {
             downloadButtonRef.current.click();
         }
     }, [invoiceData]);
-    console.log("invoice detail is",invoiceData)
 
     const downloadInvoice = () => {
         setIsLoading(true);
