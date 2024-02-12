@@ -1,10 +1,10 @@
 .dashed-line {
     width: 100%;
-    border-bottom: dashed black 4px;
+    border-bottom: dashed black 1px;
 }
 .downloadtemp{ 
-     position: fixed; 
-     z-index: -1;
+    position: fixed; 
+    z-index: -1;
 }
 .companyinfo,
 .recurring-charges {
@@ -19,32 +19,33 @@
     color: #200a40;
 }
 .remittancehead {
-    margin-top: 2px;
+    margin-top: 0px;
     color: #4655a5;
     font-size: 18px;
 }
 .remittancesec {
-    margin-top: -10px;
+    margin-top: -18px;
 }
 
 .topline {
-    border-top: solid #a95aa3 7px;
+    border-top: solid #a95aa3 4px;
 }
 .bottomline {
     margin-top: -15px;
-    border-top: solid #a95aa3 4px;
+    border-top: solid #a95aa3 1px;
 }
 .remittancebottom {
-    border-top: solid #a95aa3 4px;
+    border-top: solid #a95aa3 2px;
 }
 .remittance-wrapper {
     padding-top: 20px;
 }
 .amount-paid {
-    border-bottom: solid grey 3px;
+    border-bottom: solid grey 1px;
     width: 150px;
-    height: 40px;
-    margin-top: -20px;
+    height: 20px; 
+    text-align: right;
+    margin-top: 0px;
 }
 .recurring-charges table {
     width: 100%;
@@ -66,11 +67,11 @@
     border-bottom: solid black 2px;
 }
 .recurring-charges .topline {
-    border-top: solid black 3px;
+    border-top: solid black 1.5px;
     margin-top: 6px;
 }
 .recurring-charges .bottomline {
-    border-top: solid black 3px;
+    border-top: solid black 1.5px;
     margin-top: -12px;
 }
 .total-charges {
@@ -93,7 +94,7 @@
     border-bottom: none;
 }
 .account-summary .topline {
-    border: solid black 1px;
+    border-top: solid black 1.5px;
 }
 .account-summary .bottomline {
     border: solid black 1px;
@@ -116,13 +117,13 @@
 .center-line hr {
     width: 2px;
     height: 100%;
-    border-left: solid black 3px;
+    border-left: solid black 1.5px;
 }  
 .center-linetop{ 
     opacity: 0; 
     width: 2px;
     height: 100%;
-    border-left: solid black 3px;
+    border-left: solid black 1.5px;
 }
 .progress{ 
     width:100vw; 
@@ -154,9 +155,7 @@
 .line{
     margin-bottom: -15px;
 }
-.line2{
-    margin-bottom: -5px;
-}
+
 .line3{
     margin-bottom: -1px;
 }

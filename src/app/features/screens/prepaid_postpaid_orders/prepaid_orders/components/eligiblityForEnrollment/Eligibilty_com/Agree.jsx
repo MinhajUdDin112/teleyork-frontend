@@ -34,7 +34,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: initialValues,
-        onSubmit: async (values, actions) => {
+        onSubmit: async (values, actions) => {  
             postdata();
         },
     });

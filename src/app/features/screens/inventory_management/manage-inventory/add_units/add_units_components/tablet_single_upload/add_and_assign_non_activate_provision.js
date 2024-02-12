@@ -77,7 +77,7 @@ export default function TabletSingleUploadAddAndAssignNonActivateProvision({unit
             })
             .catch(() => {
             });
-            Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.compony}&device=tablet`)
+            Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.compony}&device=Wireless device`)
         .then((res) => {     
            
             let Makeholder = [];
