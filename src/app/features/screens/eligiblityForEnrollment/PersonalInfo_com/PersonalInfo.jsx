@@ -357,6 +357,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 if (formik.values.contact.length > 9) {
                     const data = {
                         contact: formik.values.contact,
+                        accountType:"Prepaid"
                     };
 
                     try {
