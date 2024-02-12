@@ -2,14 +2,16 @@ import React, { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import "./style/stripe_payment_form.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import Axios from "axios";
+import Axios from "axios"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripeForm({ clientSecret, object, setActiveIndex, setPaymentDialogVisibility }) {
+export default function PaymentStripeForm({ clientSecret, object, setActiveIndex, setPaymentDialogVisibility }) { 
+    const submitbuttonref=useRef(null)
     const stripe = useStripe();
     const [disableSubmit, setDisableSubmit] = useState(false);
     const toast = useRef(null);
     const elements = useElements();
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event) => { 
+         submitbuttonref.current.style.opacity="0.5"
         setDisableSubmit(true);
         event.preventDefault();
 
@@ -23,7 +25,9 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
         });
 
         if (error) {
-            localStorage.setItem("paymentstatus", "pending");
+            localStorage.setItem("paymentstatus", "pending");  
+            
+         submitbuttonref.current.style.opacity="1"
             setDisableSubmit(false);
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
         } else {
@@ -42,10 +46,10 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                 let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));
                 let simpricing = JSON.parse(localStorage.getItem("simpricing"));
                 let dueDate = "";
-                let applyLateFee  = "";
+                let applyLateFee = "";
                 let oneTimeCharge = "";
                 let planName = "";
-                let planId   =   "";
+                let planId = "";
                 let planCharges = "";
                 if (object?.plan === simpricing?._id) {
                     dueDate = simpricing?.dueDate;
@@ -184,7 +188,7 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
             <Toast ref={toast} />
             <form onSubmit={handleSubmit}>
                 <CardElement options={cardElementOptions} />
-                <button disabled={disableSubmit} className="submit-button">
+                <button style={{color:"white"}} ref={submitbuttonref} disabled={disableSubmit} className="submit-button">
                     Submit
                 </button>
             </form>

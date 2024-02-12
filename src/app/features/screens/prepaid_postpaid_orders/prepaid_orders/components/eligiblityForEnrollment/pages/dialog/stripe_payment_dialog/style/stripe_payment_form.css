@@ -6,8 +6,10 @@
    transform: translate(-50%); 
    padding: 10px; 
    font-size: 14px;
+   color:white;
    border-radius: 5px; 
-   cursor: pointer;
+   cursor: pointer; 
+   background-color: royalblue; 
 } 
 .stripe-dialog-width{ 
   width:50vw; 

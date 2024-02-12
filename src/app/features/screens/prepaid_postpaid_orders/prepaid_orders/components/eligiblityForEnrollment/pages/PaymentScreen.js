@@ -65,7 +65,6 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         { label: "Select ", value: "" },
         { label: "Credit/Debit card", value: "card" },
     ];
-
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error block">{formik.errors[name]}</small>;
