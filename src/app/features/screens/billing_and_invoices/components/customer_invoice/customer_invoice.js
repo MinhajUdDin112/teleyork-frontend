@@ -179,9 +179,9 @@ pdf.setFont("Roboto-Black-normal");
                 </div>
                 <div className="recurring-charges mt-4">
                    
-                    <h6 className="text-left font-bold">One time Charges</h6>
+                    <h6 className="text-left font-bold ">One time Charges</h6>
                     <div className="bottomline"></div>
-                    <table>
+                    <table className="onetimecharges">
                         <thead>
                             <tr>
                                
