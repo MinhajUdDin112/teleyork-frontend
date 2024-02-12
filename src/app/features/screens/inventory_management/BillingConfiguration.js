@@ -101,8 +101,8 @@ const BillingConfiguration = () => {
         { label: "Skip Payment", value: "Skip Payment" },
     ];
     const optionsForCreation = [
-        { label: "On Activation", value: "onActivation" },
-        { label: "After QA Approval ", value: "onQAApprove" }];
+        { label: "On Activation", value: "On Activation" },
+        { label: "After QA Approval ", value: "On QA Approve" }];
 
     function showDiscount() {
         setNewDiscount(true);
@@ -446,11 +446,11 @@ const BillingConfiguration = () => {
                     />
 
                     <Column header="Monthly Charges" body={(rowData) => rowData?.monthlyCharge?.map(mc => mc.name).join(', ')} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Bill Creation Date" field="BillCreationDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Due Date" field="dueDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Subsequent Bill Create Date" field="subsequentBillCreateDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Bill Create Date" field="BillCreationDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Due Date" field="Due Date" body={(rowData)=>`${rowData?.dueDate} Days from Bill Create Date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Days from First Bill Create Date" field="subsequentBillCreateDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Late Fee   " field="Late Fee"     body={(rowData) => `$${rowData.latefeeCharge}`}headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header=" Apply Late Fee " field="Apply Late Fee"  body={(rowData) => `after ${rowData.applyLateFee} days from due date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header=" Apply Late Fee " field="Apply Late Fee"  body={(rowData) => `After ${rowData.applyLateFee} Days from Due Date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                    
                     <Column
                         header="Feature"
@@ -470,7 +470,18 @@ const BillingConfiguration = () => {
                         }
                         headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
                     />
-                    <Column header="Payment Method" field="paymentMethod" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}/>       
+                  <Column 
+    header="Payment Method" 
+    field="paymentMethod" 
+    headerStyle={{ 
+        color: "white", 
+        backgroundColor: "#81AEB9", 
+        fontWeight: "normal", 
+        fontSize: "large" 
+    }}
+    body={(rowData) => rowData.paymentMethod.join(', ')} 
+/>
+
                     
                 </DataTable>
             </div>

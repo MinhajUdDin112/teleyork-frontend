@@ -44,6 +44,9 @@ export const AppTopbar = (props) => {
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+    const capitalCompanyName = parseLoginRes?.companyName.toUpperCase();
+  
+
     const handleLogout = () => {
         props.setSearchValue("");
         props.setSearchByValueClick(false);
@@ -100,7 +103,9 @@ export const AppTopbar = (props) => {
                     e.stopPropagation();
                 }}
             >
-                <Link
+                {
+                    capitalCompanyName.includes("IJ") ?  
+                    <Link
                     to="/"
                     className="layout-topbar-logo insidetopbarlogo"
                     onClick={(e) => {
@@ -112,7 +117,25 @@ export const AppTopbar = (props) => {
                 >
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+                    
                 </Link>
+                : capitalCompanyName.includes("ZISFONE")?
+                <Link
+                to="/"
+                className="layout-topbar-logo insidetopbarlogo"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    props.setSearchBy(null);
+
+                    props.setSearchByValueClick(false);
+                }}
+            >
+                <img className="w-10rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
+                
+            </Link>:""
+                }
+
+             
 
                 <button type="button" className="p-link  layout-menu-button layout-topbar-button" onClick={props.onToggleMenuClick}>
                     <i className="pi pi-bars" />
