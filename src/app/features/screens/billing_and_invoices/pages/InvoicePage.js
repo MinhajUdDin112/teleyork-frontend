@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PlanInfo from "../components/PrepaidPlanInfo";
+import InvoiceTable from "../components/InvoiceTable"; 
+/*
 import InvoiceTypes from "../components/InvoiceTypes"; 
-import InvoiceTable from "../components/InvoiceTable";
 import DetailedTransactionModal from "../components/modals/DetailedTransactionModal";
 import NsfModal from "../components/modals/NsfModal";
 import AdHocModal from "../components/modals/AdHocModal";
@@ -14,7 +15,9 @@ import DiscountCreditModal from "../components/modals/DiscountCreditModal";
 import AdjustWalletModal from "../components/modals/AdjustWalletModal";
 import AddWalletModal from "../components/modals/AddWalletModal";
 import PaymentModal from "../components/modals/PaymentModal";
-import PaymentDetailModal from "../components/modals/PaymentDetailModal";
+import PaymentDetailModal from "../components/modals/PaymentDetailModal"; 
+
+import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";*/
 import BillingNavbar from "../components/BillingNavbar";
 import Axios from "axios"; 
 import { Card } from "primereact/card"; 
@@ -23,22 +26,23 @@ import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";
 const BASE_URL = process.env.REACT_APP_BASE_URL; 
 
 const InvoicePage = () => { 
-    const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
-    const [nsfModal, setNsfModal] = useState(false);  
+    //const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
+   // const [nsfModal, setNsfModal] = useState(false);  
     const [accountType,setAccountType]=useState("")   
     const [invoices,setInvoices]=useState([])
-    const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
-    const [misMatchInvoiceModal, setMisMatchInvoiceModal] = useState(false);
-    const [ebillModal, setEbillModal] = useState(false);
-    const [misMatchBillModal, setMisMatchBillModal] = useState(false);
-    const [adjustBalanceModal, setAdjustBalanceModal] = useState(false);
-    const [payInvoiceModal, setPayInvoiceModal] = useState(false);
-    const [discountCreditModal, setDiscountCreditModal] = useState(false);
-    const [adjustWalletModal, setAdjustWalletModal] = useState(false);
-    const [addWalletModal, setAddWalletModal] = useState(false);
-    const [paymentModal, setPaymentModal] = useState(false); 
+   // const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
+   // const [misMatchInvoiceModal, setMisMatchInvoiceModal] = useState(false);
+    //const [ebillModal, setEbillModal] = useState(false);
+    //const [misMatchBillModal, setMisMatchBillModal] = useState(false);
+   // const [adjustBalanceModal, setAdjustBalanceModal] = useState(false);
+   // const [payInvoiceModal, setPayInvoiceModal] = useState(false);
+  //  const [discountCreditModal, setDiscountCreditModal] = useState(false);
+   // const [adjustWalletModal, setAdjustWalletModal] = useState(false); 
+   /*setDetailedTransactionModal={setDetailedTransactionModal} */
+   // const [addWalletModal, setAddWalletModal] = useState(false);
+   // const [paymentModal, setPaymentModal] = useState(false); 
     const [currentPlan,setCurrentPlan]=useState([])   
-    const [paymentDetailModal, setPaymentDetailModal] = useState(false);
+    //const [paymentDetailModal, setPaymentDetailModal] = useState(false);
      const [userDetails,setUserDetails]=useState()
 
      const location = useLocation();
@@ -70,15 +74,30 @@ const InvoicePage = () => {
  
  },[selectedId])
     return (
-        <Card>
-         <BillingNavbar />    
+        <Card>   
+                 <BillingNavbar />   
+                 <div className=" p-0 m-3 card">  
+                 <PlanInfo currentPlan={currentPlan} />    
+                 <div className="mx-4">
+                    <p className="m-0 text-xs font-bold" style={{ color: "red" }}>
+                        •Row in red color are unpaid invoices
+                    </p>
+                    <p className="text-xs font-bold" style={{ color: "blue" }}>
+                        •Row in blue color are paid invoices
+                    </p>
+                </div>   
+                <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} />
+                
+                  </div>
+            {/*
+    
 
             <div className=" p-0 m-3 card">
                
                 <div className=" border-round p-3  mx-4 mt-0">
                     <p className="font-bold text-xl ">Invoices</p>
                 </div>
-                <PlanInfo currentPlan={currentPlan} />
+                
                 <InvoiceTypes    
                 accountType={accountType} 
                 setNsfModal={setNsfModal}
@@ -91,10 +110,10 @@ const InvoicePage = () => {
                 setDiscountCreditModal={setDiscountCreditModal}
                 setAdjustWalletModal={setAdjustWalletModal}
                 setAddWalletModal={setAddWalletModal}
-            />
-              {/*  <Prepaid setPaymentModal={setPaymentModal} />*/} 
+            />  
+                <Prepaid setPaymentModal={setPaymentModal} />
                 <PrepaidEditabaleInvoices  setPaymentModal={setPaymentModal} />
-                <div>
+               <div>
                     <DetailedTransactionModal detailedTransactionModal={detailedTransactionModal} setDetailedTransactionModal={setDetailedTransactionModal} />
                     <NsfModal nsfModal={nsfModal} setNsfModal={setNsfModal} />
                     <AdHocModal adHocInvoiceModal={adHocInvoiceModal} setAdHocInvoiceModal={setAdHocInvoiceModal} />
@@ -108,7 +127,7 @@ const InvoicePage = () => {
                     <AddWalletModal addWalletModal={addWalletModal} setAddWalletModal={setAddWalletModal} />
                     <PaymentModal paymentModal={paymentModal} setPaymentModal={setPaymentModal} setPaymentDetailModal={setPaymentDetailModal} />
                     <PaymentDetailModal paymentDetailModal={paymentDetailModal} setPaymentDetailModal={setPaymentDetailModal} />
-                </div>
+                </div> 
                 <div className="mx-4">
                     <p className="m-0 text-xs font-bold" style={{ color: "red" }}>
                         •Row in red color are unpaid invoices
@@ -120,7 +139,9 @@ const InvoicePage = () => {
                 <br />
                 <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} setDetailedTransactionModal={setDetailedTransactionModal} />
                 
-            </div>
+            </div>   
+    */}  
+       
         </Card>
     );
 };

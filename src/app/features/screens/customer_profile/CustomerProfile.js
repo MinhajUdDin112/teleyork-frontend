@@ -121,17 +121,16 @@ const CustomerProfile = () => {
         setAddNewType(true);
     };
     const options = [
-        { label: "Priority ", value: "" },
-        { label: "Highest", value: "highest" },
-        { label: "High ", value: "high" },
-        { label: "Medium", value: "medium" },
-        { label: "Low ", value: "low" },
-        { label: "Lowest ", value: "lowest" },
+        { label: "Priority",value: ""},
+        { label: "Highest", value: "highest"},
+        { label: "High", value: "high"},
+        { label: "Medium", value: "medium"},
+        { label: "Low", value: "low"},
+        { label: "Lowest", value: "lowest" },
     ];
     function convertDateToRequiredFormat(inputDate) {
         // Create a new Date object from the input string
         var originalDate = new Date(inputDate);
-
         // Extract the components of the date
         var year = originalDate.getFullYear();
         var month = ("0" + (originalDate.getMonth() + 1)).slice(-2);
