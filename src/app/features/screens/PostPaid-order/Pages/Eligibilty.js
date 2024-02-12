@@ -96,37 +96,29 @@ const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const zipRes = localStorage.getItem("zipData");
 
     const handleNext = () => {
-        if (zipRes) {
+     
             if (currentComponent < 2) {
+
                 setCurrentComponent((prev) => {
                     return prev + 1;
                 });
             } else {
                 setActiveIndex(2);
             }
-        } else if(!zipRes) {
-            if (currentComponent < 2) {
-                setCurrentComponent((prev) => {
-                    return prev + 1;
-                });
-            } else {
-                setActiveIndex(2);
-            }
-        }
     };
 
+    
+
     const handleBack = () => {
-        if (zipRes) {
+       
             if (currentComponent >= 2) {
                 setCurrentComponent((prev) => {
                     return prev - 1;
                 });
             } else {
-                setActiveIndex(0);
+                setActiveIndex(0); 
             }
-        } else {
-            setActiveIndex(0);
-        }
+        
     };
 
     let render;

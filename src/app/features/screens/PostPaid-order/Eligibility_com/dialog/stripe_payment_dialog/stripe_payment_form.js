@@ -26,33 +26,16 @@ export default function PaymentStripeForm({ clientSecret,object,handleNext}) {
         } else { 
           
              localStorage.setItem("paymentstatus","paid")  
-
+           
              localStorage.setItem("stripeId",paymentIntent.id) 
            
              //setActiveIndex(3); 
              let paymentproceed=localStorage.getItem("paymentstatus")   
        
              if(paymentproceed === "paid"){  
-                 let plan=[] 
-                 plan.push(object.plan)
-             let dataToSend = { 
-                customerid:object.customerid, 
-                plan:plan, 
-                totalAmount:object.totalamount,  
-                discount:object.discount, 
-                additionalFeature:object.additional,
-                 billId:object.billId,  
-                 stripeId:localStorage.getItem("stripeId"), 
-                 status:localStorage.getItem("paymentstatus"), 
-                 billingPeriod:"onActivation"
-             }; 
-             
-             Axios.post(`${BASE_URL}/api/web/invoices/invoices`,dataToSend).then((response)=>{ 
-               localStorage.setItem("paymentallinfo",JSON.stringify(response.data)) 
-               handleNext();
-             }).catch(err=>{ 
-                 
-             })
+                handleNext();
+                console.log("payment paid")
+           
          }
             toast.current.show({ severity: "success", summary: "Payment Processed", detail: "Payment has been successfully processed" });
         }
