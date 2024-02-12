@@ -657,7 +657,7 @@ const All_Enrollments = () => {
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
-                {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ? (
+                {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") || parseLoginRes?.companyName.includes("ZISFONE") || parseLoginRes?.companyName.includes("zisfone") ? (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 ) : (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
