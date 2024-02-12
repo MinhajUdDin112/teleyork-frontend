@@ -91,6 +91,8 @@ const All_Enrollments = () => {
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
+     const companyName = parseLoginRes?.companyName;
+    
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName.toUpperCase();
 
@@ -657,7 +659,7 @@ const All_Enrollments = () => {
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
-                {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") || parseLoginRes?.companyName.includes("ZISFONE") || parseLoginRes?.companyName.includes("zisfone") ? (
+                {companyName.includes("IJ") || companyName.includes("ij") || companyName.includes("ZISFONE") || companyName.includes("Zisfone") ? (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 ) : (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
