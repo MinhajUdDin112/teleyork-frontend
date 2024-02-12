@@ -33,7 +33,16 @@ const Select = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             (value) => value.some((val) => val === true)
         ),
     });
-    
+
+    const handleButton = () => {
+        // Check if any checkbox is unchecked
+        const isAnyCheckboxUnchecked = formik.values.checkbox.some((isChecked) => !isChecked);
+        // Disable the "Continue" button if any checkbox is unchecked
+        if (isAnyCheckboxUnchecked) {
+            toast.error("Please select all checkboxes before continuing.");
+            return;
+        }
+    };
 
     const initialValues = {
         checkAll: "",
@@ -125,9 +134,7 @@ const Select = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         toast.warn("Error: A Yes is required on ACP Benefit Transfer");
     }
 
-    const handleButton = () => {
-        setButtonClicked(true);
-    };
+   
 
     const checkBoxLabels = [
         `I hereby consent to enroll with ${companyName}, Inc for the selected services under the following terms and conditions: `,
@@ -152,7 +159,13 @@ const Select = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 <ToastContainer />
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="button" onClick={handleBack} />
-                    <Button label="Continue" type="submit"  disabled={ACPtransfer} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}  />
+                    <Button
+                        label="Continue"
+                        type="submit"
+                        disabled={ buttonClicked || formik.errors.checkbox || formik.values.checkbox.some((isChecked) => !isChecked)}
+                        icon={isLoading ? "pi pi-spin pi-spinner" : ""}
+                        onClick={handleButton}
+                    />
                 </div>
                 <div>
                 <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>

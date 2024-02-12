@@ -250,7 +250,57 @@ const All_Enrollments = () => {
                         try {
                             const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
-                               
+                                if (response?.status == 200 || response?.status == 201) {
+                                        
+                                    const getCustomerProfileData = async () => {
+                                        try {
+                                            const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
+                                            if (res?.status == 200 || res?.status == 201) {
+                                                setCpData(res?.data?.paymentDetails|| []);
+                                                console.log("cp data is", res?.data?.paymentDetails);
+                                        
+                                                // Move the following code inside this try block
+                                                console.log("plan charges is", res?.data?.paymentDetails);
+                                                const dataToSend = {
+                                                    customerId: enrolmentId,
+                                                    invoiceType: "Sign Up",
+                                                    totalAmount: res?.data?.paymentDetails?.totalAmount,
+                                                    additionalCharges: res?.data?.paymentDetails?.additionalCharges,
+                                                    discount: res?.data?.paymentDetails?.discount,
+                                                    amountPaid: "0",
+                                                    invoiceDueDate: res?.data?.paymentDetails?.invoiceDueDate,
+                                                    lateFee: res?.data?.paymentDetails?.lateFee,
+                                                    invoiceOneTimeCharges: res?.data?.paymentDetails?.invoiceOneTimeCharges,
+                                                    invoiceStatus: "Pending",
+                                                    planId: res?.data?.paymentDetails?.planId,
+                                                    planName: res?.data?.paymentDetails?.planName,
+                                                    planCharges: res?.data?.paymentDetails?.planCharges,
+                                                    chargingType: "monthly",
+                                                    invoicePaymentMethod: "Skip",
+                                                    printSetting: "Both",
+                                                    billingPeriod: {
+                                                        from: "onActivation",
+                                                        to: "onActivation"
+                                                    }
+                                                };
+                                                console.log("generate invoice data to send is", dataToSend);
+                                                try {
+                                                    const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
+                                                    if(response?.status == 200 || response?.status == 201){
+                                                        console.log("device generated", response?.data?.data);
+                                                        toast.success("Device Generated");
+                                                    }
+                                                } catch (error) {
+                                                    toast.error(error?.response?.data?.message);
+                                                }
+                                            }
+                                        } catch (error) { }
+                                        
+                                    }
+                                
+                                    getCustomerProfileData();
+
+                                }
                             }
                         } catch (error) {
                             toast.error(error?.response?.data?.msg)
@@ -276,16 +326,7 @@ const All_Enrollments = () => {
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-        const getCustomerProfileData = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
-                if (res?.status == 200 || res?.status == 201) {
-                    setCpData(res?.data?.paymentDetails|| []);
-                    console.log("cp data is", res?.data?.paymentDetails);
-                }
-            } catch (error) { }
-        };
-        getCustomerProfileData();
+      
         setCheckRemarks(rowData?.QualityRemarks)
 
         if (rowData?.QualityRemarks) {
@@ -316,44 +357,58 @@ const All_Enrollments = () => {
                                     orderId:orderId
                                 }
                                 try {
+
+
                                     const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                     if (response?.status == 200 || response?.status == 201) {
                                         
-                                  
-                                            console.log("plan charges is",cpData)
-                                        const dataToSend = {            
-                                                customerId:enrolmentId,  
-                                                invoiceType:"Sign Up",
-                                                totalAmount:cpData.totalamount,  
-                                                additionalCharges:cpData?.additionalFeature, 
-                                                discount:cpData?.discounts,  
-                                                amountPaid:"0", 
-                                                invoiceDueDate:cpData?.dueDate, 
-                                                lateFee:cpData?.applyLateFee, 
-                                                 invoiceOneTimeCharges:cpData?.oneTimeCharge,  
-                                                 invoiceStatus:"Pending",  
-                                                  planId:cpData?.planId,
-                                                planName:cpData?.planName, 
-                                                   planCharges:cpData?.planCharges,   
-                                                  chargingType:"monthly",
-                                                   invoicePaymentMethod:"Skip",  
-                                                   printSetting:"Both",
-                                                   billingPeriod:{ 
-                                                    from:"onActivation", 
-                                                    to:"onActivation"
-                                                   }              
-                                             }; 
-                                             console.log("generate invoice data to send is",dataToSend)
+                                        const getCustomerProfileData = async () => {
                                             try {
-                                                const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`,dataToSend)
-                                                if(response?.status==200 || response?.status==201){
-                                                    console.log("device genereted",response?.data?.data)
-                                                    toast.error("Device Generated")
+                                                const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
+                                                if (res?.status == 200 || res?.status == 201) {
+                                                    setCpData(res?.data?.paymentDetails|| []);
+                                                    console.log("cp data is", res?.data?.paymentDetails);
+                                            
+                                                    // Move the following code inside this try block
+                                                    console.log("plan charges is", res?.data?.paymentDetails);
+                                                    const dataToSend = {
+                                                        customerId: enrolmentId,
+                                                        invoiceType: "Sign Up",
+                                                        totalAmount: res?.data?.paymentDetails?.totalAmount,
+                                                        additionalCharges: res?.data?.paymentDetails?.additionalCharges,
+                                                        discount: res?.data?.paymentDetails?.discount,
+                                                        amountPaid: "0",
+                                                        invoiceDueDate: res?.data?.paymentDetails?.invoiceDueDate,
+                                                        lateFee: res?.data?.paymentDetails?.lateFee,
+                                                        invoiceOneTimeCharges: res?.data?.paymentDetails?.invoiceOneTimeCharges,
+                                                        invoiceStatus: "Pending",
+                                                        planId: res?.data?.paymentDetails?.planId,
+                                                        planName: res?.data?.paymentDetails?.planName,
+                                                        planCharges: res?.data?.paymentDetails?.planCharges,
+                                                        chargingType: "monthly",
+                                                        invoicePaymentMethod: "Skip",
+                                                        printSetting: "Both",
+                                                        billingPeriod: {
+                                                            from: "onActivation",
+                                                            to: "onActivation"
+                                                        }
+                                                    };
+                                                    console.log("generate invoice data to send is", dataToSend);
+                                                    try {
+                                                        const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
+                                                        if(response?.status == 200 || response?.status == 201){
+                                                            console.log("device generated", response?.data?.data);
+                                                            toast.success("Invoice Generated");
+                                                        }
+                                                    } catch (error) {
+                                                        toast.error(error?.response?.data?.message);
+                                                    }
                                                 }
-                                               } catch (error) {
-                                                toast.error(error?.response?.data?.message)
-                                               }
-                                       
+                                            } catch (error) { }
+                                            
+                                        }
+                                    
+                                        getCustomerProfileData();
 
                                     }
                                 } catch (error) {

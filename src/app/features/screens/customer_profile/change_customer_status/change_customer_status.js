@@ -89,7 +89,27 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                                  
                 });
         }
-        else  if (statusTo === "active") {
+
+        else  if (statusTo === "active" && connectionType=="Non Electronically") {
+            const dataToSend={
+                customerId:cpData?._id,
+                status:statusTo,
+            }
+            try {
+                const response= await  Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                if(response?.status==200 || response?.status==201){
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                }
+            }  catch (error) {
+                toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+            }
+            
+          console.log("here")
+           
+        
+        }
+
+        else  if (statusTo === "active" && connectionType=="Electronically") {
             const dataToSend={
                 enrollmentId:cpData?._id,
                 userId:parseLoginRes?._id        
@@ -149,6 +169,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
 
         } else if (statusTo === "restore") {
         } else {
+            toast.current.show({ severity: "error", summary: "Customer Status", detail: "Please Select Status OR Type" });
         }
     }
     return (

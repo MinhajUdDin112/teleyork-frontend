@@ -21,9 +21,10 @@ import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";*/
 import BillingNavbar from "../components/BillingNavbar";
 import Axios from "axios"; 
 import { Card } from "primereact/card"; 
+import { useLocation } from 'react-router-dom';
+import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";
 const BASE_URL = process.env.REACT_APP_BASE_URL; 
-const selectedid = localStorage.getItem("selectedId");
-const parseselectedid = JSON.parse(selectedid);  
+
 const InvoicePage = () => { 
     //const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
    // const [nsfModal, setNsfModal] = useState(false);  
@@ -43,20 +44,27 @@ const InvoicePage = () => {
     const [currentPlan,setCurrentPlan]=useState([])   
     //const [paymentDetailModal, setPaymentDetailModal] = useState(false);
      const [userDetails,setUserDetails]=useState()
+
+     const location = useLocation();
+     const selectedId = location?.state && location?.state?.selectedId;
+
     useEffect(async ()=>{   
     let userid="" 
-     
+     console.log("called and user id is",selectedId)
  Axios.get( 
-        `${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`
+        `${BASE_URL}/api/user/userDetails?userId=${selectedId}`
       ).then(res=>{ 
         userid=res?.data?.data?._id  
         setUserDetails(res?.data?.data)
       setAccountType(res?.data?.data?.accountType);      
        
-        Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${userid}`).then(responseinvoice=>{ 
-            console.log("response for plan",responseinvoice) 
+        Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${selectedId}`).then(responseinvoice=>{ 
+          
              setCurrentPlan(responseinvoice?.data?.data?.invoice)  
               setInvoices(responseinvoice?.data?.data?.invoice)
+              localStorage.setItem("invoiceData", JSON.stringify(responseinvoice?.data?.data?.invoice));
+
+            
            }).catch(err=>{ 
            console.log("err",err)
            })
@@ -64,7 +72,7 @@ const InvoicePage = () => {
 
       })
  
- },[])
+ },[selectedId])
     return (
         <Card>   
                  <BillingNavbar />   
