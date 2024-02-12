@@ -2,14 +2,16 @@ import React, { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import "./style/stripe_payment_form.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import Axios from "axios";
+import Axios from "axios"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripeForm({ clientSecret, object, setActiveIndex, setPaymentDialogVisibility }) {
+export default function PaymentStripeForm({ clientSecret, object, setActiveIndex, setPaymentDialogVisibility }) { 
+    const submitbuttonref=useRef(null)
     const stripe = useStripe();
     const [disableSubmit, setDisableSubmit] = useState(false);
     const toast = useRef(null);
     const elements = useElements();
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event) => { 
+         submitbuttonref.current.style.opacity="0.5"
         setDisableSubmit(true);
         event.preventDefault();
 
@@ -23,7 +25,9 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
         });
 
         if (error) {
-            localStorage.setItem("paymentstatus", "pending");
+            localStorage.setItem("paymentstatus", "pending");  
+            
+         submitbuttonref.current.style.opacity="1"
             setDisableSubmit(false);
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
         } else {
@@ -47,62 +51,62 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                 let planName = "";
                 let planId = "";
                 let planCharges = "";
-                if (object.plan === simpricing._id) {
-                    dueDate = simpricing.dueDate;
-                    oneTimeCharge = simpricing.oneTimeCharge;
-                    applyLateFee = simpricing.applyLateFee;
-                    for (let i = 0; i < simpricing.selectdiscount.length; i++) {
+                if (object?.plan === simpricing?._id) {
+                    dueDate = simpricing?.dueDate;
+                    oneTimeCharge = simpricing?.oneTimeCharge;
+                    applyLateFee = simpricing?.applyLateFee;
+                    for (let i = 0; i < simpricing?.selectdiscount?.length; i++) {
                         let obj = {
-                            name: simpricing.selectdiscount[i].discountname,
-                            amount: simpricing.selectdiscount[i].amount,
+                            name: simpricing.selectdiscount[i]?.discountname,
+                            amount: simpricing.selectdiscount[i]?.amount,
                         };
                         discounts.push(obj);
                     }
-                    for (let i = 0; i < simpricing.monthlyCharge.length; i++) {
-                        if (object.billId === simpricing.monthlyCharge[i]._id) {
-                            planName = simpricing.monthlyCharge[i].name;
-                            planCharges = simpricing.monthlyCharge[i].price;
-                            planId = simpricing.monthlyCharge[i]._id;
+                    for (let i = 0; i < simpricing?.monthlyCharge?.length; i++) {
+                        if (object?.billId === simpricing?.monthlyCharge[i]?._id) {
+                            planName = simpricing?.monthlyCharge[i]?.name;
+                            planCharges = simpricing?.monthlyCharge[i]?.price;
+                            planId = simpricing?.monthlyCharge[i]?._id;
                         }
                     }
                     let simadditional = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
-                    for (let k = 0; k < simadditional.length; k++) {
-                        for (let i = 0; i < simpricing.additionalFeature.length; i++) {
-                            if (simpricing.additionalFeature[i].featureName._id === simpricing.additionalFeature[i]._id) {
+                    for (let k = 0; k < simadditional?.length; k++) {
+                        for (let i = 0; i < simpricing?.additionalFeature?.length; i++) {
+                            if (simpricing?.additionalFeature[i]?.featureName?._id === simpricing?.additionalFeature[i]?._id) {
                                 let obj = {
-                                    name: simpricing.additionalFeature[i].featureName,
-                                    amount: simpricing.additionalFeature[i].featureAmount,
+                                    name: simpricing?.additionalFeature[i]?.featureName,
+                                    amount: simpricing?.additionalFeature[i]?.featureAmount,
                                 };
                                 additionalFeature.push(obj);
                             }
                         }
                     }
                 } else {
-                    dueDate = devicepricing.dueDate;
-                    applyLateFee = devicepricing.applyLateFee;
-                    oneTimeCharge = devicepricing.oneTimeCharge;
-                    for (let i = 0; i < devicepricing.selectdiscount.length; i++) {
+                    dueDate = devicepricing?.dueDate;
+                    applyLateFee = devicepricing?.applyLateFee;
+                    oneTimeCharge = devicepricing?.oneTimeCharge;
+                    for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) {
                         let obj = {
-                            name: devicepricing.selectdiscount[i].discountname,
-                            amount: devicepricing.selectdiscount[i].amount,
+                            name: devicepricing?.selectdiscount[i]?.discountname,
+                            amount: devicepricing?.selectdiscount[i]?.amount,
                         };
                         discounts.push(obj);
                     }
-                    for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
-                        if (object.plan === devicepricing.monthlyCharge[i]._id) {
-                            planName = devicepricing.monthlyCharge[i].name;
-                            planCharges = devicepricing.monthlyCharge[i].price;
+                    for (let i = 0; i < devicepricing?.monthlyCharge?.length; i++) {
+                        if (object.plan === devicepricing?.monthlyCharge[i]?._id) {
+                            planName = devicepricing?.monthlyCharge[i]?.name;
+                            planCharges = devicepricing?.monthlyCharge[i]?.price;
 
-                            planId = devicepricing.monthlyCharge[i]._id;
+                            planId = devicepricing?.monthlyCharge[i]?._id;
                         }
                     }
                     let deviceadditional = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"));
-                    for (let k = 0; k < deviceadditional.length; k++) {
-                        for (let i = 0; i < devicepricing.additionalFeature.length; i++) {
-                            if (deviceadditional[k] === devicepricing.additionalFeature[i]._id) {
+                    for (let k = 0; k < deviceadditional?.length; k++) {
+                        for (let i = 0; i < devicepricing?.additionalFeature?.length; i++) {
+                            if (deviceadditional[k] === devicepricing?.additionalFeature[i]?._id) {
                                 let obj = {
-                                    name: devicepricing.additionalFeature[i].featureName,
-                                    amount: devicepricing.additionalFeature[i].featureAmount,
+                                    name: devicepricing?.additionalFeature[i]?.featureName,
+                                    amount: devicepricing?.additionalFeature[i]?.featureAmount,
                                 };
                                 additionalFeature.push(obj);
                             }
@@ -110,7 +114,7 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                     }
                 }
                 let plan = [];
-                plan.push(object.plan);
+                plan.push(object?.plan);
                 let dataToSend = {
                     stripeId: paymentIntent.id,
                     customerId: object.customerid,
@@ -184,7 +188,7 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
             <Toast ref={toast} />
             <form onSubmit={handleSubmit}>
                 <CardElement options={cardElementOptions} />
-                <button disabled={disableSubmit} className="submit-button">
+                <button style={{color:"white"}} ref={submitbuttonref} disabled={disableSubmit} className="submit-button">
                     Submit
                 </button>
             </form>

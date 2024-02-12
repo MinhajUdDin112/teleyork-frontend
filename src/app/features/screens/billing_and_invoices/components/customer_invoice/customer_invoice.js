@@ -21,11 +21,15 @@ console.log("user detail is ",userDetails)
         }
     }, [invoiceData]);
 
-    const downloadInvoice = () => {
-        setIsLoading(true);
-        html2canvas(document.querySelector(".downloadtemp"), { scale: 2 }).then((canvas) => {
+    const downloadInvoice = () => {    
+
+        setIsLoading(true); 
+        document.querySelector(".downloadtemp").style.width="1050px"
+        html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5}).then((canvas) => {
             const pdf = new jsPDF();
-            pdf.setFont("arial");
+           // pdf.setFont("Roboto");    
+        
+pdf.setFont("Roboto-Black-normal");
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
             pdf.save("converted.pdf");
             setIsLoading(false);
@@ -50,10 +54,10 @@ console.log("user detail is ",userDetails)
 
             <div className="flex flex-wrap justify-content-around  downloadtemp">
                 <div className="flex flex-column ">
-                    <div >
-                        <img className="mb-0" src="/companyLogo2.png" height="80" width="200" />
-                        <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
-                    </div>
+                <div  className="ml-4">
+                    <img className="mb-0 mt-4 pt-4" src="/companyLogo2.png" height="80" width="200" />
+                    <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
+                    </div>   
 
                     <div className="customer-info mt-3 line1">
                         <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p>
@@ -130,7 +134,7 @@ console.log("user detail is ",userDetails)
                 </p>
                 <div className="dashed-line"></div>
                 <div className="account-summary mt-4 ">
-                    <h4 className="text-center font-bold line2">ACCOUNT SUMMARY</h4>
+                    <p className="text-center font-bold line2">ACCOUNT SUMMARY</p>
                     <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                         <p>Account No</p>
                         <p> {userDetails?.accountId}</p>
@@ -153,7 +157,7 @@ console.log("user detail is ",userDetails)
                         <p className="line">Due Date</p>
                         <p>{invoiceData?.invoiceDueDate}</p>
                     </div>
-                    <h5 className="font-bold line2">ACCOUNT DETAILS</h5>
+                    <p className="mt-4 pt-4 pl-1 font-bold ">ACCOUNT DETAILS</p>
                     <div className="pl-2 w-full mt-2  flex flex-wrap justify-content-between line">
                         <p>Previous Balance</p>
                         <p> $0.00</p>
@@ -167,6 +171,19 @@ console.log("user detail is ",userDetails)
                         <p>$0.00</p>
                     </div>
                     <div >
+                    <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
+                    <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
+                        <p>Totall Recurring Charges</p>
+                        <p>${invoiceData?.netPrice}</p>
+                    </div>
+                    <div className="pl-2  flex flex-wrap justify-content-between ">
+                        <p>One Time Charge</p>
+                        <p>${userDetails?.invoiceOneTimeCharges}</p>
+                    </div>
+                    <div className="pl-2  flex flex-wrap justify-content-between ">
+                        <p>Taxes and Surcharges</p>
+                        <p>$0.00</p>
+                    </div>
                         <h5 className="font-bold line2">CURRENT SERVICES</h5>
                         <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
                             <p>Totall Recurring Charges</p>
@@ -203,7 +220,7 @@ console.log("user detail is ",userDetails)
 
                     <h6 className="text-left font-bold">One time Charges</h6>
                     <div className="bottomline"></div>
-                    <table>
+                    <table className="onetimecharges">
                         <thead>
                             <tr>
 

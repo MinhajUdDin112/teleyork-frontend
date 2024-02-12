@@ -11,16 +11,12 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
     const [btnState, setBtnState] = useState(true);
     const [isBack, setIsBack] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
-
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
-    
     const enrollmentUserId = _id;
-
     const getAcpPrograms = async () => {
-        try {
+    try {
             const res = await Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`);
             setAcpPrograms(res?.data?.data || []);
         } catch (error) {
