@@ -21,6 +21,10 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
 
+    
+        const companyName = parseLoginRes?.companyName.toUpperCase(); 
+ 
+   
     // Get role name  from login response
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
@@ -68,7 +72,7 @@ const DialogForReject = ({ enrollmentId, CSRid, getAllEnrollments, checkType ,se
     };
 
     const checkcompany = () => {
-        if (parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") || parseLoginRes?.companyName.includes("Ij")) {
+        if (parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") || parseLoginRes?.companyName.includes("Ij") || companyName.includes("ZISFONE")) {
             if (toCapital.includes("PROVISION AGENT") || toCapital.includes("PROVISION MANAGER") || (toCapital.includes("QA ")  )) {
                 setcheckCompany(true);
             }
