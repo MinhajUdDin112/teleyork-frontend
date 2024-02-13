@@ -74,7 +74,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                                  
                 });
         }
-        else  if (statusTo === "intransit") {
+        else  if (statusTo === "dilevered") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,
