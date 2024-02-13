@@ -31,6 +31,11 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const zipCity = zipDataParsed?.data?.city;
     const zipState = zipDataParsed?.data?.state;
 
+     // Get role name  from login response
+     const loginRes = localStorage.getItem("userData");
+     const parseLoginRes = JSON.parse(loginRes);
+      const companyName = parseLoginRes?.companyName.toUpperCase(); 
+  console.log("Company name is ",companyName)
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
     });
@@ -43,7 +48,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             zip: "",
             city: "",
             state: "",
-
             isSameServiceAddress: true,
             isNotSameServiceAddress: false,
             isPoBoxAddress: false,
@@ -64,9 +68,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
               
                 address1: formik.values.address1,
                 address2: formik.values.address2,
-                zip: zipCode,
-                city: zipCity,
-                state: zipState,
+                zip: formik.values.zip,
+                city: formik.values.city,
+                state: formik.values.state,
                 isSameServiceAddress: formik.values.isSameServiceAddress,
                 isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
                 isPoBoxAddress: formik.values.isPoBoxAddress,
@@ -306,6 +310,35 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             }
         }
     };
+    const handleAddressChangeForZisFone = (e) => {
+        const address = e?.value?.structured_formatting?.secondary_text;
+        const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
+        const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
+
+        if (address) {
+            
+                const completeAddress = e?.value?.structured_formatting?.main_text;
+
+                const extractedAddress1 = completeAddress.match(pattern);
+
+                if (extractedAddress1) {
+                    const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
+
+                    formik.setFieldValue("address1", final);
+                } else {
+                    formik.setFieldValue("address1", completeAddress);
+                }
+                const match = completeAddress.match(regex);
+
+                var add2 = match ? match[0] : "";
+
+                if (add2) {
+                    add2 = add2.toUpperCase();
+                    formik.setFieldValue("address2", add2);
+                }
+            
+        }
+    };
 
     return (
         <>
@@ -344,7 +377,18 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         <p className="m-0">Address 2</p>
                         <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" autoComplete="new-password" />
                     </div>
-                    <div className=" mr-3 w-21rem  ">
+                    {
+                        companyName.includes("ZISFONE") ?   <div className=" mr-3 w-21rem  ">
+                        <p className="m-0">
+                            <code>Google Auto</code> Complete Address
+                        </p>
+                        <GooglePlacesAutocomplete
+                            apiKey="AIzaSyDa1KFekZkev2CAqrcrU_nYDe_1jC-PHA0"
+                            selectProps={{
+                                onChange: (e) => handleAddressChangeForZisFone(e),
+                            }}
+                        />
+                    </div> :  <div className=" mr-3 w-21rem  ">
                         <p className="m-0">
                             <code>Google Auto</code> Complete Address
                         </p>
@@ -355,25 +399,51 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                             }}
                         />
                     </div>
-
-                    <div className="mr-3 mb-3">
+                    }
+                  
+                    { companyName.includes("ZISFONE") ? 
+                        <div className="mr-3 mb-3">
+                        <p className="m-0">
+                            City <span style={{ color: "red" }}>*</span>
+                        </p>
+                        <InputText type="text" value={formik.values.city} onChange={formik.handleChange} name="city"  className="w-21rem" />
+                    </div>
+                    :  <div className="mr-3 mb-3">
                         <p className="m-0">
                             City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                         </p>
                         <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem disable-color" />
-                    </div>
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
-                        </p>
-                        <InputText type="text" value={formik.values.state} name="state" disabled className="w-21rem disable-color" />
-                    </div>
-                    <div className="mr-3 mb-3">
+                    </div>}
+                            {
+                                companyName.includes("ZISFONE") ?  <div className="mr-3 mb-3">
+                                <p className="m-0">
+                                    State <span style={{ color: "red" }}>*</span>
+                                </p>
+                                <InputText type="text" value={formik.values.state} name="state" className="w-21rem" onChange={formik.handleChange} />
+                            </div> :
+                                <div className="mr-3 mb-3">
+                                <p className="m-0">
+                                    State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                                </p>
+                                <InputText type="text" value={formik.values.state} name="state" disabled className="w-21rem disable-color" />
+                            </div>
+                            }
+
+                            {
+                                companyName.includes("ZISFONE") ? <div className="mr-3 mb-3">
+                                <p className="m-0">
+                                    Zip Code <span style={{ color: "red" }}>*</span>
+                                </p>
+                                <InputText value={formik.values.zip} name="zip"  className="w-21rem " onChange={formik.handleChange} />
+                            </div> : <div className="mr-3 mb-3">
                         <p className="m-0">
                             Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                         </p>
                         <InputText value={formik.values.zip} name="zip" disabled className="w-21rem disable-color" />
                     </div>
+                            }
+                  
+                   
                 </div>
 <div>
     Is your Billing Address?
@@ -414,19 +484,33 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                 <label className="field_label"> Address 2 </label>
                                 <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} autoComplete="new-password" />
                             </div>
-
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
-                                </label>
-                                <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color" />
-                            </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
-                                </label>
-                                <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
-                            </div>
+                        {
+                            companyName.includes("ZISFONE") ?   <div className="field col-12 md:col-3">
+                            <label className="field_label">
+                                City <span className="steric">*</span>
+                            </label>
+                            <InputText id="mailingCity" value={formik.values.mailingCity}    className="" />
+                        </div>:  <div className="field col-12 md:col-3">
+                            <label className="field_label">
+                                City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            </label>
+                            <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color" />
+                        </div>
+                        }
+                          {
+                            companyName.includes("ZISFONE") ?   <div className="field col-12 md:col-3">
+                            <label className="field_label">
+                                State <span className="steric">*</span>
+                            </label>
+                            <InputText id="mailingState" value={formik.values.mailingState} onChange={formik.handleChange}  className="" />
+                        </div> :   <div className="field col-12 md:col-3">
+                            <label className="field_label">
+                                State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            </label>
+                            <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
+                        </div>
+                          }
+                
                             <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     Zip Code <span className="steric">*</span>
@@ -447,14 +531,29 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                 <InputText id="PoBoxAddress" value={formik.values.PoBoxAddress} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("PoBoxAddress") }, "input_text")} keyfilter={/^[0-9]*$/} autoComplete="new-password" />
                                 {getFormErrorMessage("PoBoxAddress")}
                             </div>
-
-                            <div className="field col-12 md:col-3">
+                        {
+                            companyName.includes("ZISFONE") ?  <div className="field col-12 md:col-3">
+                            <label className="field_label">
+                                City <span className="steric">*</span>
+                            </label>
+                            <InputText id="poBoxCity" value={formik.values.poBoxCity} onChange={formik.handleChange}  />
+                        </div> :  <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
                                 <InputText id="poBoxCity" value={formik.values.poBoxCity} className="disable-color" disabled />
                             </div>
-                            <div className="field col-12 md:col-3">
+                        }
+
+                        {
+                            companyName.includes("ZISFONE")?  <div className="field col-12 md:col-3">
+                            <label className="field_label">
+                                <p>
+                                    State <span className="steric">*</span>
+                                </p>
+                            </label>
+                            <InputText id="poBoxState" value={formik.values.poBoxState} onChange={formik.handleChange}  />
+                        </div> :  <div className="field col-12 md:col-3">
                                 <label className="field_label">
                                     <p>
                                         State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
@@ -462,6 +561,9 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                 </label>
                                 <InputText id="poBoxState" value={formik.values.poBoxState} disabled className="disable-color" />
                             </div>
+                        }
+                           
+                          
                             <div className="field col-12 md:col-3 mb-1">
                                 <label className="field_label">
                                     Zip Code <span className="steric">*</span>

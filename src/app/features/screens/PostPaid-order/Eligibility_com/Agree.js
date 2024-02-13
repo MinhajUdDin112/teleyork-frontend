@@ -21,7 +21,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [historyData, setHistoryData] = useState();
     //Handle Back
     let paymentInfo = JSON.parse(localStorage.getItem("dataToSend"));
-    const paymentStatus=localStorage.getItem("paymentstatus")
+    const paymentStatus = localStorage.getItem("paymentstatus")
     let productData = JSON.parse(localStorage.getItem("productData"));
 
     const validationSchema = Yup.object().shape({
@@ -43,56 +43,54 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         },
         onSubmit: async (values, actions) => {
 
-            const dataToSend = {
-                invoiceType: "Sign Up",
-                customerId: _id,
-                planId: formik.values.plan,
-                planCharges: planCharges,
-                additionalCharges: additionalFeature,
-                discount: discounts,
-                totalAmount: formik.values.totalamount,
-                amountPaid: "0",
-                invoiceDueDate: dueDate,
-                billingPeriod: {
-                    from: "onActivation",
-                    to: "onActivation"
-                },
-                invoiceStatus: "pending",
 
-                paymentMethod: formik.values.paymentMode,
-                invoiceOneTimeCharges: oneTimeCharge,
-                lateFee: applyLateFee,
-                planName: planName,
-                chargingType: "Monthly",
-                printSetting: "Both",
-                productName:"",
-
-                selectProduct: formik.values.billId,
-
-            }
             if (formik.values.paymentMode == "skip") {
+                console.log("here outside function")
+                const dataToSend = {
+                    invoiceType: "Sign Up",
+                    customerId: _id,
+                    planId: formik.values.plan,
+                    planCharges: planCharges,
+                    additionalCharges: additionalFeature,
+                    discount: discounts,
+                    totalAmount: formik.values.totalamount,
+                    amountPaid: "0",
+                    invoiceDueDate: dueDate,
+                    billingPeriod: {
+                        from: "onActivation",
+                        to: "onActivation"
+                    },
+                    invoiceStatus: "pending",
+                    paymentMethod: "skip",
+                    invoiceOneTimeCharges: oneTimeCharge,
+                    lateFee: applyLateFee,
+                    planName: planName,
+                    chargingType: "Monthly",
+                    printSetting: "Both",
+                    productName: "",
+                    selectProduct: formik.values.billId,
+
+                }
                 try {
-                 
+
                     const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
 
                     if (response?.status === 201 || response?.status === 200) {
-                    
+                        console.log("here inside function")
                         localStorage.setItem("productData", JSON.stringify(response?.data?.data));
                         localStorage.setItem("dataToSend", JSON.stringify(dataToSend));
-
                         handleNext();
                     }
                 } catch (error) {
-                    toast.error(error?.response?.data?.msg) 
+                    toast.error(error?.response?.data?.msg)
                 }
 
+            }
 
-
-            } 
-            if (localStorage.getItem("paymentstatus")) {
-                if (localStorage.getItem("paymentstatus") === "paid") {
+          else  if (paymentStatus === "paid") {
                     handleNext();
-                } else {
+                } 
+                else {
                     setPaymentDialogVisibility(true);
                     const dataToSend = {
                         invoiceType: "Sign Up",
@@ -102,85 +100,39 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         additionalCharges: additionalFeature,
                         discount: discounts,
                         totalAmount: formik.values.totalamount,
-                        amountPaid:  formik.values.totalamount,
+                        amountPaid: formik.values.totalamount,
                         invoiceDueDate: dueDate,
                         billingPeriod: {
                             from: "onActivation",
                             to: "onActivation"
                         },
                         invoiceStatus: "paid",
-        
-                        paymentMethod: "Credit Card",
+                        paymentMethod: "Card",
                         invoiceOneTimeCharges: oneTimeCharge,
                         lateFee: applyLateFee,
                         planName: planName,
                         chargingType: "Monthly",
                         printSetting: "Both",
-                        productName:"",
-        
+                        productName: "",
                         selectProduct: formik.values.billId,
-        
+
                     }
                     try {
-                       
+
                         const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
-    
+
                         if (response?.status === 201 || response?.status === 200) {
                             localStorage.setItem("productData", JSON.stringify(response?.data?.data));
                             localStorage.setItem("dataToSend", JSON.stringify(dataToSend));
-                            
+
                         }
                     } catch (error) {
-                        toast.error(error?.response?.data?.msg) 
+                        toast.error(error?.response?.data?.msg)
                     }
-                    
 
-                }
-            } else {
-                setPaymentDialogVisibility(true);
-                const dataToSend = {
-                    invoiceType: "Sign Up",
-                    customerId: _id,
-                    planId: formik.values.plan,
-                    planCharges: planCharges,
-                    additionalCharges: additionalFeature,
-                    discount: discounts,
-                    totalAmount: formik.values.totalamount,
-                    amountPaid:  formik.values.totalamount,
-                    invoiceDueDate: dueDate,
-                    billingPeriod: {
-                        from: "onActivation",
-                        to: "onActivation"
-                    },
-                    invoiceStatus: "paid",
-    
-                    paymentMethod: "Credit Card",
 
-                    invoiceOneTimeCharges: oneTimeCharge,
-                    lateFee: applyLateFee,
-                    planName: planName,
-                    chargingType: "Monthly",
-                    printSetting: "Both",
-                    productName:"",
-    
-                    selectProduct: formik.values.billId,
-    
-                }
-                try {
-          
-                    const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
-
-                    if (response?.status === 201 || response?.status === 200) {
-                      
-                        localStorage.setItem("productData", JSON.stringify(response?.data?.data));
-                        localStorage.setItem("dataToSend", JSON.stringify(dataToSend));
-                       
-                    }
-                } catch (error) {
-                    toast.error(error?.response?.data?.msg) 
-                }
-               
-            }
+                
+            } 
         },
     });
 
@@ -197,7 +149,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     let planCharges = ""
     if (formik.values.plan === simpricing?._id) {
         dueDate = simpricing?.dueDate
-       
+
         oneTimeCharge = simpricing?.oneTimeCharge
         applyLateFee = simpricing?.applyLateFee
         for (let i = 0; i < simpricing?.selectdiscount?.length; i++) {
@@ -206,7 +158,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 amount: simpricing?.selectdiscount[i]?.amount,
 
             }
-            discounts.push(obj)  
+            discounts.push(obj)
 
         }
         for (let i = 0; i < simpricing?.monthlyCharge?.length; i++) {
@@ -232,7 +184,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     }
     else {
         dueDate = devicepricing?.dueDate
-     
+
         applyLateFee = devicepricing?.applyLateFee
         oneTimeCharge = devicepricing?.oneTimeCharge
         for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) {
@@ -251,7 +203,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             }
         }
         let deviceadditional = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"))
-      
+
         for (let k = 0; k < deviceadditional?.length; k++) {
             for (let i = 0; i < devicepricing?.additionalFeature?.length; i++) {
                 if (deviceadditional[k] === devicepricing?.additionalFeature[i]?._id) {
@@ -278,18 +230,18 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         return isFormFieldValid(name) && <small className="p-error block">{formik.errors[name]}</small>;
     };
     useEffect(() => {
-        if (paymentInfo && paymentInfo) {   
-             setPaymentDialogVisibility(false)
+        if (paymentInfo && paymentInfo) {
+            setPaymentDialogVisibility(false)
             formik.setFieldValue("billId", paymentInfo?.selectProduct);
             formik.setFieldValue("plan", paymentInfo?.planId);
             formik.setFieldValue("additionalFeature", paymentInfo?.additionalCharges);
             formik.setFieldValue("discount", paymentInfo?.discount);
             formik.setFieldValue("totalamount", paymentInfo?.totalAmount);
-            formik.setFieldValue("paymentMode",paymentInfo?.paymentMethod)
-          
+            formik.setFieldValue("paymentMode", paymentInfo?.paymentMethod)
+
         }
     }, []);
-   
+
     return (
         <form onSubmit={formik.handleSubmit}>
             <ToastContainer />
@@ -297,7 +249,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
                     <div>
                         <Button label="Back" type="button" onClick={handleBack} />
-                    </div> 
+                    </div>
                     <div className="fixed-button-container">
                         {" "}
                         <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
@@ -331,9 +283,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
                                     formik.setFieldValue("totalamount", amountafterdiscount);
-                                    formik.setFieldValue("plan","")
-                                 // Inside the inventory selection handler
-                                 formik.setFieldValue("productName","SIM CARD")
+                                    formik.setFieldValue("plan", "")
+                                    // Inside the inventory selection handler
+                                    formik.setFieldValue("productName", "SIM CARD")
 
                                 } else if (inventory === "Wireless Device") {
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
@@ -343,7 +295,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("deviceadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
                                     formik.setFieldValue("totalamount", amountafterdiscount);
-                                    formik.setFieldValue("plan","")
+                                    formik.setFieldValue("plan", "")
                                 }
                                 formik.handleChange(e);
                             }}
@@ -358,45 +310,45 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         <label className="block">Select Plan</label>
                         {inventory === "Sim Card" ? (
                             <>
-                                                        <>
-                                <Dropdown
-                                    disabled={paymentInfo && paymentInfo}
-                                    className="field-width mt-2"
-                                    id="plan"
-                                    placeholder="Select Plan"
-                                    optionLabel="name"
-                                    options={JSON.parse(localStorage.getItem("simplan"))}
-                                    value={formik.values.plan}
-                                    onChange={(e) => {
-                                   
+                                <>
+                                    <Dropdown
+                                        disabled={paymentInfo && paymentInfo}
+                                        className="field-width mt-2"
+                                        id="plan"
+                                        placeholder="Select Plan"
+                                        optionLabel="name"
+                                        options={JSON.parse(localStorage.getItem("simplan"))}
+                                        value={formik.values.plan}
+                                        onChange={(e) => {
 
-                                        if (formik.values.plan === "") {
-                                            let devicepricing = JSON.parse(localStorage.getItem("simpricing"));
-                                            for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
-                                                if (devicepricing.monthlyCharge[i]._id === e.value) {
-                                                    formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing.monthlyCharge[i].price).toString();
-                                                }
-                                            }
-                                            formik.setFieldValue("plan", e.value);
-                                            formik.handleChange(e);
-                                        } else {
-                                            let devicepricing = JSON.parse(localStorage.getItem("simpricing"));
-                                            for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
-                                                if (devicepricing.monthlyCharge[i]._id === e.value || devicepricing.monthlyCharge[i]._id === formik.values.plan) {
-                                                    if (devicepricing.monthlyCharge[i]._id === formik.values.plan) {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing.monthlyCharge[i].price).toString();
-                                                    } else {
+
+                                            if (formik.values.plan === "") {
+                                                let devicepricing = JSON.parse(localStorage.getItem("simpricing"));
+                                                for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
+                                                    if (devicepricing.monthlyCharge[i]._id === e.value) {
                                                         formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing.monthlyCharge[i].price).toString();
                                                     }
                                                 }
+                                                formik.setFieldValue("plan", e.value);
+                                                formik.handleChange(e);
+                                            } else {
+                                                let devicepricing = JSON.parse(localStorage.getItem("simpricing"));
+                                                for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
+                                                    if (devicepricing.monthlyCharge[i]._id === e.value || devicepricing.monthlyCharge[i]._id === formik.values.plan) {
+                                                        if (devicepricing.monthlyCharge[i]._id === formik.values.plan) {
+                                                            formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing.monthlyCharge[i].price).toString();
+                                                        } else {
+                                                            formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing.monthlyCharge[i].price).toString();
+                                                        }
+                                                    }
+                                                }
+                                                formik.setFieldValue("plan", e.value);
+                                                formik.handleChange(e);
                                             }
-                                            formik.setFieldValue("plan", e.value);
-                                            formik.handleChange(e);
-                                        }
-                                    }}
-                                />
-                                {getFormErrorMessage("plan")}
-                            </>
+                                        }}
+                                    />
+                                    {getFormErrorMessage("plan")}
+                                </>
                             </>
                         ) : (
                             <>
@@ -409,7 +361,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                     options={JSON.parse(localStorage.getItem("deviceplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
-                                      
+
 
                                         if (formik.values.plan === "") {
                                             let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));
@@ -445,7 +397,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         {inventory === "Sim Card" ? (
                             <>
                                 <MultiSelect
-                                   disabled={paymentInfo ? true : false}
+                                    disabled={paymentInfo ? true : false}
                                     className="field-width mt-2"
                                     id="additional"
                                     placeholder="Select Additional Feature"
@@ -485,7 +437,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         ) : (
                             <>
                                 <MultiSelect
-                            disabled={paymentInfo ? true : false}
+                                    disabled={paymentInfo ? true : false}
                                     className="field-width mt-2"
                                     placeholder="Select Additional Feature"
                                     id="additional"
@@ -541,7 +493,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     <div className="mt-2">
                         <label className="block">Select Payment Method</label>
                         <Dropdown
-                        disabled={paymentInfo ? true : false}
+                            disabled={paymentInfo ? true : false}
                             className="field-width mt-2"
                             id="paymentMode"
                             options={optionsForPayment}

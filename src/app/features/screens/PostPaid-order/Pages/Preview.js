@@ -228,7 +228,7 @@ planName.toUpperCase()
                                 </div> :
                                   <div className="flex pt-2 border-bottom-2">
                                   <p className="w-6 ml-4">Payment Method:</p>
-                                  <p className="w-6">Skip</p>
+                                  <p className="w-6">SKIP</p>
 
                               </div> 
                                 }

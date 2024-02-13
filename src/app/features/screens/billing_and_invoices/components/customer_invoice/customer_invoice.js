@@ -94,7 +94,7 @@ pdf.setFont("Roboto-Black-normal");
                                 <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} `}</p>
                             </div>
                             {userDetails && userDetails?.paymentMethod
- == "Credit Card" ?
+ == "Card" ?
  <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
  <p>Total Amount Due</p>
  <p>$0</p>
@@ -110,7 +110,7 @@ pdf.setFont("Roboto-Black-normal");
                                 <p>{invoiceData?.invoiceDueDate}</p>
                             </div>
                             {userDetails && userDetails?.paymentMethod
- == "Credit Card" ?
+ == "Card" ?
  <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
  <p>Amount Paid</p>
  <p>${invoiceData?.netPrice}</p>
@@ -201,7 +201,7 @@ pdf.setFont("Roboto-Black-normal");
 
                     <div className="topline"></div>
                     {userDetails && userDetails?.paymentMethod
- == "Credit Card" ?
+ == "Card" ?
  <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
  <p>Total Amount Due</p>
  <p>$0</p>
