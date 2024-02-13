@@ -165,7 +165,7 @@ const Post_Dispatch_Insight = () => {
                         </div>
                         <div className="card text-center cursor-pointer" onClick={() => { setisstatus("Dilevered") }}>
                             <h4>
-                                Dilevered
+                                Delivered
                             </h4>
                             <h3>
                                 {historyData?.statusCounts?.delivered
