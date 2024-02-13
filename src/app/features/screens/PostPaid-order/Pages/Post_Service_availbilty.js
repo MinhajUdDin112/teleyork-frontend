@@ -88,6 +88,7 @@ export default function Post_service_availbilty() {
           localStorage.removeItem("paymentstatus");
           localStorage.removeItem("paymentInfo")
           localStorage.removeItem("dataToSend")
+          localStorage.removeItem("checkEligiblity")
           navigate("/post-enrollment")
         }
       } catch (error) {
