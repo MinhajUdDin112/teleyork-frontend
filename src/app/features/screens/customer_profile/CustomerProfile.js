@@ -193,7 +193,7 @@ const CustomerProfile = () => {
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} />
+                <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog}/>
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
                 </Dialog>

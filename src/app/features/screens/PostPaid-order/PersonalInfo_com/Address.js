@@ -35,7 +35,6 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
       const companyName = parseLoginRes?.companyName.toUpperCase(); 
-  console.log("Company name is ",companyName)
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
     });
