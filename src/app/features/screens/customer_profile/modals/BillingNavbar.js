@@ -3,6 +3,7 @@ import { Menubar } from "primereact/menubar";
 import Axios from "axios";
 import DialogeForWallet from "../dialogs/DialogeForWallet";
 import { Dialog } from "primereact/dialog";
+import { useNavigate } from "react-router-dom";
 
 const BillingNavbar = ({ setChangeCustomerStatus, changeCustomerStatusDialog }) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -12,7 +13,7 @@ const BillingNavbar = ({ setChangeCustomerStatus, changeCustomerStatusDialog }) 
 
   const selectedid = localStorage.getItem("selectedId");
   const parseselectedid = JSON.parse(selectedid);
-
+const navigate = useNavigate();
   const getCustomerProfileData = async () => {
     try {
       const res = await Axios.get(
@@ -31,7 +32,11 @@ const BillingNavbar = ({ setChangeCustomerStatus, changeCustomerStatusDialog }) 
   function handleWalletClick() {
     setOpenDialogeForWallet(true);
   }
+  const goToProfile =()=>{
+   
+    navigate("/customer-profile", { state: { selectedId: parseselectedid } });
 
+  }
   var items;
   if (accountType === null) {
    
@@ -39,7 +44,7 @@ const BillingNavbar = ({ setChangeCustomerStatus, changeCustomerStatusDialog }) 
   } else {
     items = [
       {
-        label: `${cpData?.firstName} ${cpData?.lastName} (${cpData?.accountId})`,
+        label: `${cpData?.firstName} ${cpData?.lastName} (Account ID: ${cpData?.accountId})`,
         icon: (
           <svg
             className="custom-icon-user"
@@ -59,6 +64,7 @@ const BillingNavbar = ({ setChangeCustomerStatus, changeCustomerStatusDialog }) 
             </g>
           </svg>
         ),
+        command: () => goToProfile(),
       },
       {
         label: `MDN:${cpData?.phoneNumber === undefined ? "NIL" : cpData?.phoneNumber}`,
