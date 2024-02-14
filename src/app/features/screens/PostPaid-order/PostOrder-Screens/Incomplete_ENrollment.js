@@ -183,7 +183,8 @@ const InComplete_Enrollments = () => {
                     storedData = true;
                     localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
                 }
-
+localStorage.removeItem("paymentInfo")
+localStorage.removeItem("zipData")
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
                 // localStorage.setItem("programmeId", JSON.stringify(response.data));

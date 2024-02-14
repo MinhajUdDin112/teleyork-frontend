@@ -35,7 +35,7 @@ const statusOption = [
         value: "active",
     },
     {
-        label: "Dilevered",
+        label: "Delivered",
         value: "dilevered",
     },
     {

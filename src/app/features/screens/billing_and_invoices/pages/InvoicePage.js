@@ -18,11 +18,14 @@ import PaymentModal from "../components/modals/PaymentModal";
 import PaymentDetailModal from "../components/modals/PaymentDetailModal"; 
 
 import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";*/
-import BillingNavbar from "../components/BillingNavbar";
+import BillingNavbar from "../../customer_profile/modals/BillingNavbar";
 import Axios from "axios"; 
 import { Card } from "primereact/card"; 
 import { useLocation } from 'react-router-dom';
 import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";
+import ChangeCustomerStatus from "../../customer_profile/change_customer_status/change_customer_status"; 
+import { Dialog } from "primereact/dialog";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL; 
 
 const InvoicePage = () => { 
@@ -30,6 +33,7 @@ const InvoicePage = () => {
    // const [nsfModal, setNsfModal] = useState(false);  
     const [accountType,setAccountType]=useState("")   
     const [invoices,setInvoices]=useState([])
+    const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
    // const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
    // const [misMatchInvoiceModal, setMisMatchInvoiceModal] = useState(false);
     //const [ebillModal, setEbillModal] = useState(false);
@@ -44,11 +48,27 @@ const InvoicePage = () => {
     const [currentPlan,setCurrentPlan]=useState([])   
     //const [paymentDetailModal, setPaymentDetailModal] = useState(false);
      const [userDetails,setUserDetails]=useState()
+     const [cpData, setCpData] = useState([]);
 
      const location = useLocation();
      const selectedId = location?.state && location?.state?.selectedId;
 
+     const getCustomerProfileData = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
+            if (res?.status == 200 || res?.status == 201) {
+                setCpData(res?.data?.data || []);
+                console.log("cp data is", res?.data?.data);
+               ;
+            }
+        } catch (error) { }
+    };
+useEffect(()=>{
+    getCustomerProfileData();
+    console.log("inside ")
+},[])
     useEffect(async ()=>{   
+       
     let userid="" 
      console.log("called and user id is",selectedId)
  Axios.get( 
@@ -66,7 +86,7 @@ const InvoicePage = () => {
 
             
            }).catch(err=>{ 
-           console.log("err",err)
+      
            })
       }).catch(err=>{ 
 
@@ -75,7 +95,10 @@ const InvoicePage = () => {
  },[selectedId])
     return (
         <Card>   
-                 <BillingNavbar />   
+                   <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog}/>
+                   <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
+                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
+                </Dialog>
                  <div className=" p-0 m-3 card">  
                  <PlanInfo currentPlan={currentPlan} />    
                  <div className="mx-4">

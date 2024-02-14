@@ -24,7 +24,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
     const parseproductData = JSON.parse(productData);
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
 
-   
+    const paymentStatus=localStorage.getItem("paymentstatus")
 
     const zipRes = localStorage.getItem("zipData");
     
@@ -47,6 +47,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
         try {
           const response = await Axios.post(`${BASE_URL}/api/user/handOverEnrollment`, dataToSend);
           setIsLoading(false);
+          localStorage.removeItem("paymentstatus");
+          
         } catch (error) {
          toast.error(error?.response?.data?.msg)
          setIsLoading(false);
@@ -66,7 +68,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id ,csr}) => {
        }
        else if(!zipRes && parsefromIncompl==true){
         setIsChecked(false )
-        console.log("here")
        }
       }, [])
 let productName;
@@ -179,7 +180,7 @@ selectProduct.toUpperCase()
 }</p>
                                 </div>
                                  <div className="flex  pt-2">
-                                    <p className="w-6 ml-4">Price:</p>
+                                    <p className="w-6 ml-4">Amount:</p>
                                     <p className="w-6">{parseproductData?.totalAmount}</p>
 
                                 </div> 
@@ -218,11 +219,20 @@ planName.toUpperCase()
 
                                    
                                 </div> 
-                                <div className="flex pt-2 border-bottom-2">
+                                {
+                                    paymentStatus && paymentStatus==="paid" ? 
+                                    <div className="flex pt-2 border-bottom-2">
                                     <p className="w-6 ml-4">Payment Method:</p>
-                                    <p className="w-6">{parseproductData?.paymentMethod.toUpperCase()}</p>
+                                    <p className="w-6">CREDIT CARD</p>
 
-                                </div> 
+                                </div> :
+                                  <div className="flex pt-2 border-bottom-2">
+                                  <p className="w-6 ml-4">Payment Method:</p>
+                                  <p className="w-6">SKIP</p>
+
+                              </div> 
+                                }
+                              
                               
                             </div>
                         </div>

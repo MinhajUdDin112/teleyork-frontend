@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast"; 
 
-import React, { useState,useRef } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import { TransferException, statusOption ,connection} from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus }) {  
@@ -24,13 +24,14 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
     const statusOptions =statusOption
     //Options For Connection Type
     const connectionTypeOption=connection
+
     const UpdateStatus = async()=> {
         if (statusTo === "printed") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,
             }
-            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend) 
                 .then(() => { 
                     setChangeCustomerStatus(false)
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
@@ -73,7 +74,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                                  
                 });
         }
-        else  if (statusTo === "intransit") {
+        else  if (statusTo === "dilevered") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,
@@ -98,14 +99,12 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
             try {
                 const response= await  Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
                 if(response?.status==200 || response?.status==201){
+                    setChangeCustomerStatus(false)
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                 }
             }  catch (error) {
                 toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
             }
-            
-          console.log("here")
-           
         
         }
 
@@ -122,9 +121,6 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
             }  catch (error) {
                 toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
             }
-            
-          
-           
         
         }
      else   if (statusTo === "disconnect") {
@@ -172,6 +168,8 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
             toast.current.show({ severity: "error", summary: "Customer Status", detail: "Please Select Status OR Type" });
         }
     }
+   
+  
     return (
         <div className="flex flex-wrap flex-row justify-content-around ">
            
