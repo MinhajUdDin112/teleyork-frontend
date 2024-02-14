@@ -80,7 +80,7 @@ export const menuNavigation = [
                         label: "Billing and Invoice",
                         icon: "",
                         to: "/invoice",
-                    },
+                    },   
                     {
                         label: "Order History",
                         icon: "",
@@ -157,6 +157,11 @@ export const menuNavigation = [
                         label: "Billing Configuration",
                         icon: "",
                         to: "/billingconfiguration",
+                    },               
+                    { 
+                        label: "Plans Configurations",
+                        icon: "",
+                        to: "/plan-configurations",   
                     },
                     {
                         label: "Drop Ship Orders",
