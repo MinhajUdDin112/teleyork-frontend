@@ -119,7 +119,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                 }
             }  catch (error) {
-                toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+                toast.current.show({ severity: "error", summary: "Customer Status", detail: error?.response?.data?.msg || "Disconnection Failed" });
             }
         
         }

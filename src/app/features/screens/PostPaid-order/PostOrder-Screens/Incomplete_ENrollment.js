@@ -174,6 +174,9 @@ const InComplete_Enrollments = () => {
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
             if (response?.status === 201 || response?.status === 200) {
                 // Step 1: Retrieve existing data from localStorage
+                localStorage.removeItem("fromRejected")
+                localStorage.removeItem("productData")
+                localStorage.removeItem("dataToSend")
                 let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
 
                 if (storedData) {
