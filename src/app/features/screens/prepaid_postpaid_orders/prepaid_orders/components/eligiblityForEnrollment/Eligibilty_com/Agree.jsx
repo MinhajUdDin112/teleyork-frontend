@@ -122,7 +122,11 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 <ToastContainer />
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
                     <Button label="Back" type="button" onClick={handleBack} />
-                    <Button label="Continue" type="submit"  icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                    <Button label="Continue" type="submit"  
+                        disabled={ buttonClicked || formik.errors.checkbox || formik.values.checkbox.some((isChecked) => !isChecked)}
+                        icon={isLoading ? "pi pi-spin pi-spinner" : ""}
+                       
+                    />
                 </div>
                 <div>
                     <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>

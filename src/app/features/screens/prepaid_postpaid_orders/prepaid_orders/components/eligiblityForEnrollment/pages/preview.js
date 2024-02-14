@@ -18,7 +18,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const previewInfo = parsepreviewsRes?.data;
     const zipRes = localStorage.getItem("prepaidzipData");
     //check that user come from incomplete or not
-    const fromIncompl = localStorage.getItem("comingfromincomplete");
+    const fromIncompl = localStorage.getItem("comingfromincomplete"); 
+    
     const parsefromIncompl = JSON.parse(fromIncompl);
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
     const formatDate = (date) => {
@@ -156,7 +157,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         {paymentInfo?.discount.map((item) => (
                                             <div>
                                                 <p className="inline">
-                                                    {item.name}:{item.amount}
+                                                    {item.name}:  ${item.amount}
                                                 </p>
                                             </div>
                                         ))}
@@ -164,9 +165,13 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
 
                                 <div className="flex  pt-2">
-                                    <p className="w-6 ml-4">One Time Charges:</p>
-                                    <p className="w-6">{paymentInfo?.invoiceOneTimeCharges}</p>
-                                </div>
+                                    <p className="w-6 ml-4">One Time Charges:  </p>
+                                    <p className="w-6">${paymentInfo?.invoiceOneTimeCharges}</p>
+                                </div>  
+                                <div className="flex border-bottom-2 pt-2">
+                                    <p className="w-6 ml-4">Inventory: </p>
+                                    <p className="w-6">{inventory}</p>
+                                </div> 
                             </div>
                             <div className="border-2 w-5 ">
                                 <div className="flex border-bottom-2 pt-2">
@@ -190,6 +195,14 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <p className="w-6 ml-4">Email:</p>
                                     <p className="w-6">{previewInfo?.email}</p>
                                 </div>
+                                <div className="flex border-bottom-2 pt-2">
+                                    <p className="w-6 ml-4">Plan:</p>
+                                    <p className="w-6">{paymentInfo?.planName}</p>
+                                </div> 
+                                <div className="flex border-bottom-2 pt-2">
+                                    <p className="w-6 ml-4">Plan Charges:  </p>
+                                    <p className="w-6">${paymentInfo?.planCharges}</p>
+                                </div>  
 
                               {/*  <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Inventory:</p>
@@ -201,7 +214,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         {paymentInfo?.additionalCharges.map((item) => (
                                             <div>
                                                 <p className="inline">
-                                                    {item.name}:{item.amount}
+                                                    {item.name}  :${item.amount}
                                                 </p>
                                             </div>
                                         ))}

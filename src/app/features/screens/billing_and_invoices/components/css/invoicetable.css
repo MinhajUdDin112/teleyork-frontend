@@ -2,7 +2,10 @@
     background-color: rgb(99, 102, 241) !important;  
     color:white !important;
      
- } 
+ }  
+ .unpaid-invoice-red{ 
+   color:#DB1A43 !important;
+}
  .unpaid-invoice{ 
    background-color: red !important; 
    color:white !important;

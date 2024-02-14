@@ -108,6 +108,8 @@ import PostPersonalInfo from "./app/features/screens/PostPaid-order/PersonalInfo
 import Post_Dispatch_Insight from "./app/features/screens/PostPaid-order/PostOrder-Screens/Post_Dispatch_Insights";
 import PrepaidRejectedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/rejected_enrollment/rejected_enrollment";
 import PrepaidApproved_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/approved_enrollment/approved_enrollment";
+import PlansConfigurations from "./app/features/screens/plans_configurations/plan_configuration"; 
+import ListAllPlans from "./app/features/screens/plans_configurations/plan_list";
 const App = () => { 
    // cleanLocalStorage()
     const loginPerms = localStorage.getItem("permissions");
@@ -356,6 +358,7 @@ const App = () => {
                                     <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
+                                     <Route path="/plan-configurations" element={isPermitted("/plan-configurations") ? <ListAllPlans/> :<Dashboard/>}/>
                                      <Route path="/prepaid-newenrollment" element={isPermitted("/prepaid-newenrollment") ? <MainPrepaidOrders /> : <Dashboard />}/>
                                     <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />

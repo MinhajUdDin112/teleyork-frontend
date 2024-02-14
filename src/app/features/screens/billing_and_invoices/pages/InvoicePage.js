@@ -102,10 +102,10 @@ useEffect(()=>{
                  <div className=" p-0 m-3 card">  
                  <PlanInfo currentPlan={currentPlan} />    
                  <div className="mx-4">
-                    <p className="m-0 text-xs font-bold" style={{ color: "red" }}>
+                    <p className="m-0 text-xs font-bold " style={{color:"red"}}>
                         •Row in red color are unpaid invoices
                     </p>
-                    <p className="text-xs font-bold" style={{ color: "blue" }}>
+                    <p className="text-xs font-bold text-blue-400" >
                         •Row in blue color are paid invoices
                     </p>
                 </div>   
