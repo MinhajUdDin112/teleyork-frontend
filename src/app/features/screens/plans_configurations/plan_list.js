@@ -12,7 +12,7 @@ const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
 export default function ListAllPlans() {
     useEffect(() => {
-        Axios.post(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`)
+        Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`)
             .then((res) => {
                 setPlanList(res?.data?.data);
             })
@@ -29,11 +29,9 @@ export default function ListAllPlans() {
                     setAddPlanVisibility(true);
                 }}
                 className="text-center mr-0"
-                style={{ marginTop: "-14px", marginLeft: "90%", transform: "translate(-50%)", width: "150px" }}
-            >
-                {" "}
-                Add Plan{" "}
-            </Button>
+                style={{ marginTop: "-14px",textAlign:"center", marginLeft: "90%", transform: "translate(-50%)", width: "150px" }}
+          label="Add Plan" / >
+        
             <Dialog
                 header="Add Plan"
                 visible={addPlanVisibility}
@@ -45,7 +43,7 @@ export default function ListAllPlans() {
                 <PlansConfigurations data={rowData}/>
             </Dialog> 
             <Dialog
-                header="Add Plan"
+                header="Update Plan"
                 visible={editPlanVisibility}
                 style={{ width: "80vw" }}
                 onHide={() => {
@@ -62,7 +60,7 @@ export default function ListAllPlans() {
                 <Column header="Data Allowance" field="dataAllowance" />
                 <Column header="Voice Allowance" field="voiceAllowance" />
                 <Column header="Actions" body={(rowData)=>{ 
-                   return <Button label="Update" onClick={()=>{ setRowData(rowData)}} className=" p-button-primary mr-2 ml-2 pt-1 pb-1" text raised />;
+                   return <Button label="Update" onClick={()=>{ setRowData(rowData);setEditPlanVisibility(true)} } className=" p-button-primary mr-2 ml-2 pt-1 pb-1" text raised />;
                 }} field="Edit" />
             </DataTable>
         </Card>
