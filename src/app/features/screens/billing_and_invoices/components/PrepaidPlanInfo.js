@@ -36,10 +36,10 @@ const PlanInfo = () => {
 
                 setCurrentPlan(res.data.data.currentPlan);
             })
-            .catch((err) => {});  
-            return ()=>{ 
-                
-            }
+            .catch((err) => { 
+                return console.log(err)
+            });  
+             
     }, []);
     return (
         <div className=" ">

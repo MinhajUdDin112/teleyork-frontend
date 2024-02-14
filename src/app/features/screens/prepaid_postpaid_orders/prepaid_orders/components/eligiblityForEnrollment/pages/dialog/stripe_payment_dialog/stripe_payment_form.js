@@ -147,7 +147,7 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                         const data = {
                             serviceProvider: parseLoginRes?.compony,
                             userId: parseLoginRes?._id,
-                            customerId: object.customerid,
+                            customerId: object?.customerid,
                             noteType: "Sign Up Plan Activation",
                             note: "Sign Up Plan  Activated Successfully",
                             priority: "highest",

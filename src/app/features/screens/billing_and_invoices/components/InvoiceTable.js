@@ -16,19 +16,25 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
         if (rowData.invoiceStatus === "Paid") {
-            return "paid-invoice";
+            return "text-blue-400";
         } else {
-            return "unpaid-invoice"; // No class
+            return "unpaid-invoice-red"; // No class
         }
     };
     return (
         <div className="mx-4">
-            <DataTable value={cardData} rowClassName={rowClassName}>
+            <DataTable  
+              size="small" 
+              className="mt-4"
+              stripedRows
+              resizableColumns 
+      emptyMessage="No customers found."
+             value={cardData} rowClassName={rowClassName}>
                 <Column
                     InvoiceTable
                     field="invoiceNo"
                     header="Invoice No."
-                    style={{ minWidth: "250px" }}
+                    
                     body={(rowData) => (
                         <span style={{ cursor: "pointer" }} onClick={() => handleCellClick()}>
                             {rowData?.invoiceNo}
@@ -36,8 +42,8 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                     )}
                 />
 
-                <Column field="invoiceType" header="Invoice Type" style={{ minWidth: "250px" }} />
-                <Column field="invoiceOneTimeCharges" header="Invoice One Time Charges" style={{ minWidth: "250px" }} />
+                <Column field="invoiceType" header="Invoice Type"  />
+                <Column field="invoiceOneTimeCharges" header="Invoice One Time Charges"  />
                 <Column
                     field="additionalCharges"
                     header="Additional Charges"
@@ -59,7 +65,6 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                 <Column
                     field="discount"
                     header="Discounts"
-                    style={{ minWidth: "250px" }}
                     body={(rowData) => {
                         let discount = "";
                         for (let i = 0; i < rowData?.discount.length; i++) {
@@ -74,13 +79,13 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                         return <p>{discount}</p>;
                     }}
                 />
-                <Column field="planCharges" header="Plan Charges" style={{ minWidth: "250px" }} />
-                <Column field="totalAmount" header="Total Amount" style={{ minWidth: "250px" }} />
-                <Column field="amountPaid" header="Paid Amount" style={{ minWidth: "250px" }} />
-                <Column field="lateFee" header="Late Fee" style={{ minWidth: "250px" }} />
-                <Column field="invoiceDueDate" header="DueDate" style={{ minWidth: "250px" }} />
-                <Column field="invoiceStatus" header="Status" style={{ minWidth: "250px" }} />
-                <Column field="invoicePaymentMethod" header="Payment Method" style={{ minWidth: "250px" }} />
+                <Column field="planCharges" header="Plan Charges" />
+                <Column field="totalAmount" header="Total Amount"  />
+                <Column field="amountPaid" header="Paid Amount"  />
+                <Column field="lateFee" header="Late Fee"  />
+                <Column field="invoiceDueDate" header="DueDate"  />
+                <Column field="invoiceStatus" header="Status"  />
+                <Column field="invoicePaymentMethod" header="Payment Method"  />
                 <Column
                     field="BillingPeriod"
                     header="Billing Period"
@@ -96,32 +101,32 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                 <Column
                     field="Action"
                     body={
-                        <Button className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                        <Button className="bg-green-400 rounded-none pl-2 pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => setDetailedTransactionModal(true)}>
                             Void
                         </Button>
                     }
                     header="Download "
-                    style={{ minWidth: "250px" }}
+                    
                 />
                 <Column
                     field="Invoice Refund"
                     body={
-                        <Button className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                        <Button className="bg-green-400  pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => setDetailedTransactionModal(true)}>
                             Refund{" "}
                         </Button>
                     }
                     header="Invoice Refund"
-                    style={{ minWidth: "250px" }}
+                    
                 />
                 <Column
                     field="Invoice_Ebill"
                     body={
-                        <Button className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                        <Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => setDetailedTransactionModal(true)}>
                             Ebill{" "}
                         </Button>
                     }
                     header="Invoice EBill"
-                    style={{ minWidth: "250px" }}
+                    
                 />
 
                 <Column
@@ -129,14 +134,14 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                     body={ 
                           (rowData)=>{ 
                             return (
-                        <Button className="bg-green-700  pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => {setInvoiceData(rowData)}}>
+                        <Button className="bg-green-400   pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => {setInvoiceData(rowData)}}>
                             Download{" "}
                         </Button>  
                             )
                           }
                     }
                     header="Invoice Pdf"
-                    style={{ minWidth: "250px" }}
+                    
                 /> 
                 
             </DataTable>  

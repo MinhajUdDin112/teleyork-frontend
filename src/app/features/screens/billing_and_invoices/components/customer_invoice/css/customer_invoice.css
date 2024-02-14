@@ -1,7 +1,8 @@
 .dashed-line {
     width: 100%;
     border-bottom: dashed black 1px;
-}
+} 
+
 .downloadtemp{ 
     position: fixed; 
     z-index: -1;
