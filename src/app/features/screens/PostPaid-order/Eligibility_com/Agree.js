@@ -39,7 +39,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             additional: [],
             totalamount: "",
             customerid: _id,
-            type: "Sign Up "
+            type: "Sign Up ",
+            productName:"",
         },
         onSubmit: async (values, actions) => {
 
@@ -113,7 +114,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         planName: planName,
                         chargingType: "Monthly",
                         printSetting: "Both",
-                        productName: "",
+                        productName: formik.values.productName,
                         selectProduct: formik.values.billId,
 
                     }
@@ -296,6 +297,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
                                     formik.setFieldValue("totalamount", amountafterdiscount);
                                     formik.setFieldValue("plan", "")
+                                    formik.setFieldValue("productName", "WIRELESS Device")
+
                                 }
                                 formik.handleChange(e);
                             }}

@@ -3,13 +3,15 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";  
 import {useState} from "react" 
-
+import DialogeForAuthPayment from "./DialogeForAuthPayment";
 import CustomerInvoice from "./customer_invoice/customer_invoice"
 import "./css/invoicetable.css";  
+import { Dialog } from "primereact/dialog";
 const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) => {
     const cardData = invoiceData;   
    
     const [singleInvoiceData,setInvoiceData]=useState()
+    const [dialogeForAuthPayment,setdialogeForAuthPayment]=useState(false)
     const handleCellClick = () => {
         setDetailedTransactionModal(true);
     };
@@ -23,6 +25,9 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
     };
     return (
         <div className="mx-4">
+             <Dialog header={"Payment"} visible={dialogeForAuthPayment} style={{ width: "50vw" }} onHide={() => setdialogeForAuthPayment(false)}>
+                        <DialogeForAuthPayment  setdialogeForAuthPayment={setdialogeForAuthPayment} userDetails={userDetails} invoiceData={invoiceData}/>
+                    </Dialog>
             <DataTable value={cardData} rowClassName={rowClassName}>
                 <Column
                     InvoiceTable
@@ -85,12 +90,22 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                     field="BillingPeriod"
                     header="Billing Period"
                     body={(rowData) => {
-                        console.log(rowData.billingPeriod);
+                       
                         let billingperiod = "From :" + rowData.billingPeriod.from + "," + " To:" + rowData.billingPeriod.to;
 
                         return <p>{billingperiod}</p>;
                     }}
                     style={{ minWidth: "350px" }}
+                />
+                  <Column
+                    field="Action"
+                    body={
+                        <Button className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => setdialogeForAuthPayment(true)}>
+                            Payment
+                        </Button>
+                    }
+                    header="Payment"
+                    style={{ minWidth: "250px" }}
                 />
 
                 <Column

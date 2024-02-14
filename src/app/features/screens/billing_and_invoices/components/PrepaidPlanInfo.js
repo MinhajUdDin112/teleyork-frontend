@@ -38,7 +38,6 @@ const PlanInfo = () => {
             })
             .catch((err) => {});  
             return ()=>{ 
-                
             }
     }, []);
     return (
