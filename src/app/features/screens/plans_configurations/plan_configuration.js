@@ -65,7 +65,7 @@ const voiceAllowanceUnitOptions = [
 const textAllowanceUnitOptions = [
     {
         label: "SMS",
-        value: "sms",
+        value: "SMS",
     },
 ];
 const durationUnitOptions = [
@@ -111,7 +111,7 @@ export default function PlansConfigurations() {
         },
         validationSchema,
         onSubmit: (values) => {
-            Axios.post(`${BASE_URL}/api/web/plan`, { values })
+            Axios.post(`${BASE_URL}/api/web/plan`, formik.values )
                 .then(() => {
                     toast.current.show({ severity: "success", summary: "Plan Submission", detail: "Plan Added Successfully" });
                 })
@@ -121,8 +121,7 @@ export default function PlansConfigurations() {
         },
     });
     return (
-        <Card>
-            <h4 className="p-4 pt-1 pl-1  text-[grey]">Plan Configuration</h4>
+        <div>
             <div>
                 <form onSubmit={formik.handleSubmit} className="flex flex-wrap  flex-row justify-content-around">
                     <div className="mt-2">
@@ -237,6 +236,6 @@ export default function PlansConfigurations() {
                 </form>
             </div>
             <Toast ref={toast} />
-        </Card>
+        </div>
     );
 }

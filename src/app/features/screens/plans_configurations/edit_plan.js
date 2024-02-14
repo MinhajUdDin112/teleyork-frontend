@@ -122,7 +122,6 @@ export default function EditPlan({data}) {
     });
     return (
         <Card>
-            <h4 className="p-4 pt-1 pl-1  text-[grey]">Plan Configuration</h4>
             <div>
                 <form onSubmit={formik.handleSubmit} className="flex flex-wrap  flex-row justify-content-around">
                     <div className="mt-2">
@@ -232,7 +231,7 @@ export default function EditPlan({data}) {
                         {formik.touched.price && formik.errors.price ? <p className="mt-2 ml-1 star">{formik.errors.price}</p> : null}
                     </div>
                     <div className="mt-4 pt-2 ">
-                        <Button className="field-width" label="Add Plan" type="Submit" />
+                        <Button className="field-width" label="Update Plan" type="Submit" />
                     </div>
                 </form>
             </div>
