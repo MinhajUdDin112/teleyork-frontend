@@ -14,13 +14,13 @@ import { tr } from "date-fns/locale";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const DialogeForAuthPayment = ({ userDetails , invoiceData }) => {
+const DialogeForAuthPayment = ({ userDetails , invoiceData, setdialogeForAuthPayment , onAPISuccess }) => {
 
-
+console.log("invoice data in auth payment is",invoiceData)
     const [authRes, setAuthRes] = useState();
 
-    const selectedid = localStorage.getItem("selectedId");
-    const parseselectedid = JSON.parse(selectedid);
+   
+const remainingaAmount= invoiceData[0]?.netPrice-invoiceData[0]?.amountPaid
 
     const validationSchema = Yup.object().shape({
         cardNumber: Yup.string().required("Please Enter Card Number"),
@@ -36,9 +36,9 @@ const DialogeForAuthPayment = ({ userDetails , invoiceData }) => {
             cardNumber: "",
             cardCode: "",
             expirationDate: "",
-            amount: userDetails?.totalAmount
-
+            amount:remainingaAmount
         },
+    
         onSubmit: async (values, actions) => {
             const dataToSend = {
                 totalAmount: formik.values.totalAmount,
@@ -50,24 +50,26 @@ const DialogeForAuthPayment = ({ userDetails , invoiceData }) => {
                 const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);
                 if (response?.data?.messages?.resultCode == "Ok" || response?.data?.messages?.resultCode == "OK") {
                     setAuthRes(response?.data?.transactionResponse)
+                    setdialogeForAuthPayment(false);
                     toast.success("Successfully Paid")
                     const dataToSend = {
                         totalAmount: userDetails?.totalAmount,
                         amountPaid: formik.values.totalAmount,
                         invoiceStatus: "Paid",
-                        transId: authRes?.transId,
-                        networkTransId: authRes?.networkTransId
+                        transId: response?.data?.transactionResponse?.transId,
+                        networkTransId: response?.data?.transactionResponse?.networkTransId
+                      
                     }
-                    console.log(response?.data?.transactionResponse)
                     try {
-                        const response = await Axios.post(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceData?._id}`, dataToSend);
+                        const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceData[0]?._id}`, dataToSend);
 
                         if (response?.status == "200" || response?.status == "201") { 
-                   console.log("invoice update successfull")
+                            toast.success("Invoice Update Successfully")
+                            onAPISuccess(true);
                         }
 
                     } catch (error) {
-toast.error("Update Invoice error is",error?.response?.data?.msg)
+toast.error("Update Invoice error is" + error?.response?.data?.msg)
                     }
                 }
                 else {

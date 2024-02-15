@@ -36,7 +36,7 @@ const statusOption = [
     },
     {
         label: "Delivered",
-        value: "dilevered",
+        value: "delivered",
     },
     {
         label: "Reconnect",
