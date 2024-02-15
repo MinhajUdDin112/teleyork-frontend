@@ -261,9 +261,6 @@ const All_Enrollments = () => {
                                             if (res?.status == 200 || res?.status == 201) {
                                                 setCpData(res?.data?.paymentDetails|| []);
                                                 console.log("cp data is", res?.data?.paymentDetails);
-                                        
-                                                // Move the following code inside this try block
-                                                console.log("plan charges is", res?.data?.paymentDetails);
                                                 const dataToSend = {
                                                     customerId: enrolmentId,
                                                     invoiceType: "Sign Up",

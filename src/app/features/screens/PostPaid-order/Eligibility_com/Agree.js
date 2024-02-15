@@ -46,7 +46,6 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
 
             if (formik.values.paymentMode == "skip") {
-                console.log("here outside function")
                 const dataToSend = {
                     invoiceType: "Sign Up",
                     customerId: _id,
@@ -77,7 +76,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
 
                     if (response?.status === 201 || response?.status === 200) {
-                        console.log("here inside function")
+                       
                         localStorage.setItem("productData", JSON.stringify(response?.data?.data));
                         localStorage.setItem("dataToSend", JSON.stringify(dataToSend));
                         handleNext();
