@@ -53,7 +53,10 @@ const InvoicePage = () => {
     const location = useLocation();
     const selectedId = location?.state && location?.state?.selectedId;
 
-
+    const handleAPISuccess = (responseData) => {
+        // Update data in main page state
+        window.location.reload();
+      };
     const getUserDetail = async () => {
 
         try {
@@ -93,14 +96,14 @@ const InvoicePage = () => {
             <div className=" p-0 m-3 card">
                 {/* <PlanInfo  /> */}
                 <div className="mx-4">
-                    <p className="m-0 text-xs font-bold " style={{ color: "red" }}>
+                    <p className="m-0 text-lg font-bold " style={{ color: "red" }}>
                         •Row in red color are unpaid invoices
                     </p>
-                    <p className="text-xs font-bold text-blue-400" >
+                    <p className="text-lg mt-2 font-bold text-blue-400" >
                         •Row in blue color are paid invoices
                     </p>
                 </div>
-                <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} />
+                <InvoiceTable onAPISuccess={handleAPISuccess} userDetails={userDetails} className="mb-3" invoiceData={invoices} />
 
             </div>
             {/*

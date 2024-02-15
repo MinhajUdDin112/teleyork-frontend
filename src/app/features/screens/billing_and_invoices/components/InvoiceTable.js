@@ -8,9 +8,9 @@ import CustomerInvoice from "./customer_invoice/customer_invoice"
 import "./css/invoicetable.css";  
 import { Dialog } from "primereact/dialog";
 
-const InvoiceTable = ({userDetails, invoiceData }) => {
+const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
     const cardData = invoiceData;   
-    console.log("invoice data in table =screen",invoiceData)
+   
     const [singleInvoiceData,setInvoiceData]=useState()
     const [dialogeForAuthPayment,setdialogeForAuthPayment]=useState(false)
    
@@ -22,10 +22,20 @@ const InvoiceTable = ({userDetails, invoiceData }) => {
             return "unpaid-invoice-red"; // No class
         }
     };
+
+      // Get role name  from login response
+      const loginRes = localStorage.getItem("userData");
+      const parseLoginRes = JSON.parse(loginRes);
+       const companyName = parseLoginRes?.companyName;
+        // const companyNameToCapital = companyName.toUpperCase();
+        const companyNameToCapital = "ZISFONE LLC";
+     
+
     return (
         <div className="mx-4">
+          
              <Dialog header={"Payment"} visible={dialogeForAuthPayment} style={{ width: "50vw" }} onHide={() => setdialogeForAuthPayment(false)}>
-                        <DialogeForAuthPayment  setdialogeForAuthPayment={setdialogeForAuthPayment} userDetails={userDetails} invoiceData={invoiceData}/>
+                        <DialogeForAuthPayment onAPISuccess ={onAPISuccess }  setdialogeForAuthPayment={setdialogeForAuthPayment} userDetails={userDetails} invoiceData={invoiceData}/>
                     </Dialog>
           
             <DataTable  
@@ -65,7 +75,7 @@ const InvoiceTable = ({userDetails, invoiceData }) => {
                         }
                         return <p>{additional}</p>;
                     }}
-                    style={{ minWidth: "350px" }}
+                  
                 />
                 <Column
                     field="discount"
@@ -102,7 +112,7 @@ const InvoiceTable = ({userDetails, invoiceData }) => {
                     }}
                     style={{ minWidth: "350px" }}
                 />
-                  <Column
+              {  companyNameToCapital.includes("ZISFONE") ?  <Column
                     field="Action"
                     body={
                         <Button className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => setdialogeForAuthPayment(true)}>
@@ -111,7 +121,8 @@ const InvoiceTable = ({userDetails, invoiceData }) => {
                     }
                     header="Payment"
                     style={{ minWidth: "250px" }}
-                />
+                />:""}
+                 
 
                 <Column
                     field="Action"
@@ -160,7 +171,7 @@ const InvoiceTable = ({userDetails, invoiceData }) => {
                 /> 
                 
             </DataTable>  
-           <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} />
+           <CustomerInvoice  userDetails={userDetails} invoiceData={singleInvoiceData} />
         </div>
     );
 };
