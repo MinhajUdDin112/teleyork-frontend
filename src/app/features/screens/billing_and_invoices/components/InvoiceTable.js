@@ -7,14 +7,13 @@ import DialogeForAuthPayment from "./DialogeForAuthPayment";
 import CustomerInvoice from "./customer_invoice/customer_invoice"
 import "./css/invoicetable.css";  
 import { Dialog } from "primereact/dialog";
-const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) => {
+
+const InvoiceTable = ({userDetails, invoiceData }) => {
     const cardData = invoiceData;   
-   
+    console.log("invoice data in table =screen",invoiceData)
     const [singleInvoiceData,setInvoiceData]=useState()
     const [dialogeForAuthPayment,setdialogeForAuthPayment]=useState(false)
-    const handleCellClick = () => {
-        setDetailedTransactionModal(true);
-    };
+   
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
         if (rowData.invoiceStatus === "Paid") {
@@ -34,7 +33,7 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
               className="mt-4"
               stripedRows
               resizableColumns 
-      emptyMessage="No customers found."
+              emptyMessage="No Invoice found."
              value={cardData} rowClassName={rowClassName}>
                 <Column
                     InvoiceTable
@@ -42,7 +41,7 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                     header="Invoice No."
                     
                     body={(rowData) => (
-                        <span style={{ cursor: "pointer" }} onClick={() => handleCellClick()}>
+                        <span style={{ cursor: "pointer" }} >
                             {rowData?.invoiceNo}
                         </span>
                     )}
@@ -117,7 +116,7 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                 <Column
                     field="Action"
                     body={
-                        <Button className="bg-green-400 rounded-none pl-2 pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                        <Button className="bg-green-400 rounded-none pl-2 pr-2 pt-2 pl-3 pr-3  pb-2 border-none" >
                             Void
                         </Button>
                     }
@@ -127,7 +126,7 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                 <Column
                     field="Invoice Refund"
                     body={
-                        <Button className="bg-green-400  pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                        <Button className="bg-green-400  pr-2 pt-2 pl-3 pr-3  pb-2 border-none" >
                             Refund{" "}
                         </Button>
                     }
@@ -137,7 +136,7 @@ const InvoiceTable = ({ setDetailedTransactionModal,userDetails, invoiceData }) 
                 <Column
                     field="Invoice_Ebill"
                     body={
-                        <Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => setDetailedTransactionModal(true)}>
+                        <Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3  pb-2 border-none" >
                             Ebill{" "}
                         </Button>
                     }

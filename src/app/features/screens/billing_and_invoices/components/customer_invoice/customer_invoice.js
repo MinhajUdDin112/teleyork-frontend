@@ -13,7 +13,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function CustomerInvoice({ userDetails, invoiceData }) {
     const [isLoading, setIsLoading] = useState(false);
     const downloadButtonRef = useRef();
-console.log("user detail is ",userDetails)
+
 
     useEffect(() => {
         if (invoiceData !== undefined && invoiceData !== null) {
@@ -36,7 +36,7 @@ pdf.setFont("Roboto-Black-normal");
         });
     };
 
-    console.log( "invoice data",invoiceData )
+   
     return (
         <div>
             <Button
@@ -178,7 +178,7 @@ pdf.setFont("Roboto-Black-normal");
                     </div>
                     <div className="pl-2  flex flex-wrap justify-content-between ">
                         <p>One Time Charge</p>
-                        <p>${userDetails?.invoiceOneTimeCharges}</p>
+                        <p>${invoiceData?.invoiceOneTimeCharges}</p>
                     </div>
                     <div className="pl-2  flex flex-wrap justify-content-between ">
                         <p>Taxes and Surcharges</p>
@@ -191,7 +191,7 @@ pdf.setFont("Roboto-Black-normal");
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>One Time Charge</p>
-                            <p>${userDetails?.invoiceOneTimeCharges}</p>
+                            <p>${invoiceData?.invoiceOneTimeCharges}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>Taxes and Surcharges</p>
@@ -234,7 +234,7 @@ pdf.setFont("Roboto-Black-normal");
 
                                 <td>{userDetails?.selectProduct}</td>
 
-                                <td>{userDetails?.invoiceOneTimeCharges
+                                <td>{invoiceData?.invoiceOneTimeCharges
                                 }</td>
                             </tr>
 
