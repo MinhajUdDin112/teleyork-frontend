@@ -40,8 +40,10 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-     const companyName = parseLoginRes?.companyName;
-     const companyNameToCapital = companyName.toUpperCase();
+    const companyName = parseLoginRes?.companyName;
+    const companyNameToCapital = companyName.toUpperCase();
+
+  
      
 
     return (
@@ -61,14 +63,14 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
             )}
 
             <div className="flex flex-wrap justify-content-around  downloadtemp">
-                <div className="flex flex-column ">
+                <div className="flex flex-column mb-5">
                     {companyNameToCapital.includes("ZISFONE") ? 
                     <div className="ml-4">
-                    <img className="mb-0 mt-4 pt-4" src="/zisfonelogo.png" height="80" width="200" />
-                    <h6 className="mt-0">170 Old Country Road, Suite 303, Mineola, NY, 11501</h6>
+                    <img className="mb-0  pt-4" src="/Talkdaily.png" height="50" width="170" />
+                    <h6 className="mt-0">1225 Franklin Ave, Suite 325 Garden City, NY 11530</h6>
                 </div>
                     :  <div className="ml-4">
-                        <img className="mb-0 mt-4 pt-4" src="/companyLogo2.png" height="80" width="200" />
+                        <img className="mb-0  pt-4" src="/companyLogo2.png" height="80" width="200" />
                         <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
                     </div>}
                    
@@ -138,7 +140,7 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                         </div>
                        
                         <p className="text-center">
-                            Please make checks payable to:<span className="company">{companyName}</span>
+                            Please make checks payable to:<span className="company">{companyNameToCapital.includes("ZISFONE") ? "Talkdaily, Inc" :" IJ Wireless"}</span>
                         </p>
 
                         <div className="remittancebottom"></div>

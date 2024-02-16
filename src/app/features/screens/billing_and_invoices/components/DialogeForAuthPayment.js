@@ -51,7 +51,7 @@ const remainingaAmount= invoiceData[0]?.dueAmount
                 const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);
                 if (response?.data?.messages?.resultCode == "Ok" || response?.data?.messages?.resultCode == "OK") {
                     setAuthRes(response?.data?.transactionResponse)
-                    setdialogeForAuthPayment(false);
+                    // setdialogeForAuthPayment(false);
                     toast.success("Successfully Paid")
                   
                     const dataToSend = {
