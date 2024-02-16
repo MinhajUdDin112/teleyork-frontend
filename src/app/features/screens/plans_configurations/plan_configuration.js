@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
     voiceAllowance: Yup.number().integer("Please enter a valid integer").required("Voice Allowance Is Required"),
     textAllowance: Yup.number().integer("Please enter a valid integer").required("Text Allowance Is Required"),
     duration: Yup.number().integer("Please enter a valid integer").required("Duration Is Required"),
-    price: Yup.number().integer("Please enter a valid integer").required("Price Is Required"),
+    price:Yup.number().required("Price Is Required"),
     planId: Yup.string().required("Plan Id Is Required"),
     type: Yup.string().required("Plan Type Is Required"),
     dataAllowanceUnit: Yup.string().required("Data Allowance Unit Is Required"),
@@ -202,13 +202,7 @@ export default function PlansConfigurations() {
                         {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
                     </div>
 
-                    <div className="mt-2">
-                        <label className="block">
-                            Text Allowance <span className="star">*</span>
-                        </label>
-                        <InputText keyfilter="int" className="field-width mt-2" name="textAllowance" value={formik.values.textAllowance} onChange={formik.handleChange} />
-                        {formik.touched.textAllowance && formik.errors.textAllowance ? <p className="mt-2 ml-1 star">{formik.errors.textAllowance}</p> : null}
-                    </div>
+                  
                     <div className="mt-2">
                         <label className="block">
                             Duration <span className="star">*</span>
@@ -227,7 +221,7 @@ export default function PlansConfigurations() {
                         <label className="block">
                             Price <span className="star">*</span>
                         </label>
-                        <InputText keyfilter="int" className="field-width mt-2" name="price" value={formik.values.price} onChange={formik.handleChange} />
+                        <InputText keyfilter="num" className="field-width mt-2" name="price" value={formik.values.price} onChange={formik.handleChange} />
                         {formik.touched.price && formik.errors.price ? <p className="mt-2 ml-1 star">{formik.errors.price}</p> : null}
                     </div>
                     <div className="mt-4 pt-2 ">

@@ -19,8 +19,7 @@ const validationSchema = Yup.object().shape({
     voiceAllowance: Yup.number().integer("Please enter a valid integer").required("Voice Allowance Is Required"),
     textAllowance: Yup.number().integer("Please enter a valid integer").required("Text Allowance Is Required"),
     duration: Yup.number().integer("Please enter a valid integer").required("Duration Is Required"),
-    price: Yup.number().integer("Please enter a valid integer").required("Price Is Required"),
-    planId: Yup.string().required("Plan Id Is Required"),
+    price: Yup.number().required("Price Is Required"),
     type: Yup.string().required("Plan Type Is Required"),
     dataAllowanceUnit: Yup.string().required("Data Allowance Unit Is Required"),
 
@@ -85,46 +84,46 @@ const inventoryType = [
     },
 ];
 
-export default function EditPlan({data}) {
+export default function EditPlan({ data }) {
     const toast = useRef(null);
     const formik = useFormik({
         initialValues: {
-            name: "",
-            createdBy: parseLoginRes?._id,
+            name: data.name,
+            updatedBy: parseLoginRes?._id,
             serviceProvider: parseLoginRes?.compony,
-            description: "",
-            type: "",
-            dataAllowance: null,
-            voiceAllowance: null,
-            textAllowance: null,
-            duration: null,
-            price: "",
-            planId: "",
-            dataAllowanceUnit: "",
-            voiceAllowanceUnit: "",
-            textAllowanceUnit: "",
-            durationUnit: "",
+            description: data.description,
+            type: data.type,
+            dataAllowance: data.dataAllowance,
+            voiceAllowance: data.voiceAllowance,
+            textAllowance: data.textAllowance,
+            duration: data.duration,
+            price: data.price,
+            planId: data._id,
+            dataAllowanceUnit: data.dataAllowanceUnit,
+            voiceAllowanceUnit: data.voiceAllowanceUnit,
+            textAllowanceUnit: "SMS",
+            durationUnit: data.durationUnit,
             additionalFeatures: ["calls", "minutes"],
             termsAndConditions: "no termsAndConditions",
             restrictions: ["no restriction"],
-            inventoryType: "",
+            inventoryType: data.inventoryType,
         },
         validationSchema,
         onSubmit: (values) => {
-            Axios.post(`${BASE_URL}/api/web/plan`, { values })
+            Axios.patch(`${BASE_URL}/api/web/plan`, formik.values)
                 .then(() => {
-                    toast.current.show({ severity: "success", summary: "Plan Submission", detail: "Plan Added Successfully" });
+                    toast.current.show({ severity: "success", summary: "Plan Updation", detail: "Plan Updated Successfully" });
                 })
                 .catch((err) => {
-                    toast.current.show({ severity: "error", summary: "Plan Submission", detail: "Plan Addition Failed" });
+                    toast.current.show({ severity: "error", summary: "Plan Updation", detail: "Plan Updation Failed" });
                 });
         },
     });
     return (
-        <Card>
+        <Card className="pt-0">
             <div>
                 <form onSubmit={formik.handleSubmit} className="flex flex-wrap  flex-row justify-content-around">
-                    <div className="mt-2">
+                    <div className="mt-0">
                         <label className="block">
                             Name <span className="star">*</span>
                         </label>
@@ -138,13 +137,7 @@ export default function EditPlan({data}) {
                         <InputText className="field-width mt-2" name="description" value={formik.values.description} onChange={formik.handleChange} />
                         {formik.touched.description && formik.errors.description ? <p className="mt-2 ml-1 star">{formik.errors.description}</p> : null}
                     </div>
-                    <div className="mt-2">
-                        <label className="block">
-                            planId <span className="star">*</span>
-                        </label>
-                        <InputText className="field-width mt-2" name="planId" value={formik.values.planId} onChange={formik.handleChange} />
-                        {formik.touched.planId && formik.errors.planId ? <p className="mt-2 ml-1 star">{formik.errors.planId}</p> : null}
-                    </div>
+
                     <div className="mt-2">
                         <label className="block">
                             Data Allowance <span className="star">*</span>
@@ -202,13 +195,7 @@ export default function EditPlan({data}) {
                         {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
                     </div>
 
-                    <div className="mt-2">
-                        <label className="block">
-                            Text Allowance <span className="star">*</span>
-                        </label>
-                        <InputText keyfilter="int" className="field-width mt-2" name="textAllowance" value={formik.values.textAllowance} onChange={formik.handleChange} />
-                        {formik.touched.textAllowance && formik.errors.textAllowance ? <p className="mt-2 ml-1 star">{formik.errors.textAllowance}</p> : null}
-                    </div>
+                 
                     <div className="mt-2">
                         <label className="block">
                             Duration <span className="star">*</span>
@@ -227,7 +214,7 @@ export default function EditPlan({data}) {
                         <label className="block">
                             Price <span className="star">*</span>
                         </label>
-                        <InputText keyfilter="int" className="field-width mt-2" name="price" value={formik.values.price} onChange={formik.handleChange} />
+                        <InputText keyfilter="num" className="field-width mt-2" name="price" value={formik.values.price} onChange={formik.handleChange} />
                         {formik.touched.price && formik.errors.price ? <p className="mt-2 ml-1 star">{formik.errors.price}</p> : null}
                     </div>
                     <div className="mt-4 pt-2 ">
