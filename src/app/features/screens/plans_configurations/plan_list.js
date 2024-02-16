@@ -23,14 +23,14 @@ export default function ListAllPlans() {
     const [editPlanVisibility,setEditPlanVisibility]=useState(false)
     const [addPlanVisibility, setAddPlanVisibility] = useState(false);
     return (
-        <Card>
+        <Card className="overflow-hidden">
             <Button
                 onClick={() => {
                     setAddPlanVisibility(true);
                 }}
                 className="text-center mr-0"
                 style={{ marginTop: "-14px",textAlign:"center", marginLeft: "90%", transform: "translate(-50%)", width: "150px" }}
-          label="Add Plan" / >
+          label="Add Plan" />
         
             <Dialog
                 header="Add Plan"
@@ -44,7 +44,8 @@ export default function ListAllPlans() {
             </Dialog> 
             <Dialog
                 header="Update Plan"
-                visible={editPlanVisibility}
+                visible={editPlanVisibility} 
+                className="pt-0"
                 style={{ width: "80vw" }}
                 onHide={() => {
                     setEditPlanVisibility(false);
