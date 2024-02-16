@@ -10,17 +10,20 @@ import { Button } from "primereact/button";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-export default function ListAllPlans() {
-    useEffect(() => {
+export default function ListAllPlans() { 
+    
+    const [editPlanVisibility,setEditPlanVisibility]=useState(false)
+    useEffect(() => { 
+         if(editPlanVisibility === false){
         Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`)
             .then((res) => {
                 setPlanList(res?.data?.data);
             })
-            .catch((err) => {});
-    }, []);
+            .catch((err) => {}); 
+        }
+    }, [editPlanVisibility]);
     const [planList, setPlanList] = useState([]); 
     const [rowData,setRowData]=useState(null)
-    const [editPlanVisibility,setEditPlanVisibility]=useState(false)
     const [addPlanVisibility, setAddPlanVisibility] = useState(false);
     return (
         <Card className="overflow-hidden">
