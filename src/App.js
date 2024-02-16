@@ -8,6 +8,7 @@ import MainPrepaidOrders from "./app/features/screens/prepaid_postpaid_orders/pr
 import ShippingQueue from "./app/features/screens/inventory_management/shipping_queue/shipping_queue";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
+import PostpaidEvaluatedEnrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Evaluated_Enrollments";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import ClearDeviceReportFlowPage from "./app/features/screens/inventory_management/bulk_processes/clear_device_report/clear_esn_report_flow_page";
 import PrimeReact from "primereact/api";
@@ -110,6 +111,7 @@ import PrepaidRejectedEnrollments from "./app/features/screens/prepaid_postpaid_
 import PrepaidApproved_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/approved_enrollment/approved_enrollment";
 import PlansConfigurations from "./app/features/screens/plans_configurations/plan_configuration"; 
 import ListAllPlans from "./app/features/screens/plans_configurations/plan_list";
+import PrepaidEvaluatedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/evaluated_enrollments/Evaluated_Enrollments";
 const App = () => { 
    // cleanLocalStorage()
     const loginPerms = localStorage.getItem("permissions");
@@ -371,6 +373,9 @@ const App = () => {
                                     <Route path="/companyacpprograms" element={isPermitted("/companyacpprograms") ? <AcpProgramsFlowPage /> : <Dashboard />} />
                                     <Route path="/newenrolment" element={isPermitted("/newenrolment") ? <ServiceAvailablityPage /> : <Dashboard />} />
                                     {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
+                                      <Route path="/postpaid-evaluatedenrollments" element={isPermitted("/postpaid-evaluatedenrollments") ? <PostpaidEvaluatedEnrollments /> : <Dashboard />} />
+                                      <Route path="/prepaidpaid-evaluatedenrollments" element={isPermitted("/prepaid-evaluatedenrollments") ? <PrepaidEvaluatedEnrollments /> : <Dashboard />} />
+                                  
                                     <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                     <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                     <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
