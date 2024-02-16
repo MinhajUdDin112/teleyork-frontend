@@ -74,7 +74,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                                  
                 });
         }
-        else  if (statusTo === "dilevered") {
+        else  if (statusTo === "delivered") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,
@@ -98,7 +98,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
             }
             try {
                 const response= await  Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
-                if(response?.status==200 || response?.status==201){
+                if(response?.status=="200" || response?.status=="201"){
                     setChangeCustomerStatus(false)
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                 }
@@ -115,11 +115,13 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
             }
             try {
                 const response= await  Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend)
-                if(response?.status==200 || response?.status==201){
-                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                console.log("status response is",response)
+                if(response?.status===200 || response?.status===201){
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
                 }
             }  catch (error) {
-                toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+                console.log("error is",error)
+                toast.current.show({ severity: "error", summary: "Customer Status", detail: error?.response?.data?.msg || error });
             }
         
         }

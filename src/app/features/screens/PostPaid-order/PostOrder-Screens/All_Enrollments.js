@@ -179,6 +179,7 @@ const All_Enrollments = () => {
                 const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
                 if (response?.status === 201 || response?.status === 200) {
                     localStorage.removeItem("zip");
+                    localStorage.removeItem("fromRejected")
                     localStorage.setItem("initialInformation", JSON.stringify(response.data));
                     localStorage.setItem("homeAddress", JSON.stringify(response.data));
                     localStorage.setItem("selectProgram", JSON.stringify(response.data));
@@ -260,9 +261,6 @@ const All_Enrollments = () => {
                                             if (res?.status == 200 || res?.status == 201) {
                                                 setCpData(res?.data?.paymentDetails|| []);
                                                 console.log("cp data is", res?.data?.paymentDetails);
-                                        
-                                                // Move the following code inside this try block
-                                                console.log("plan charges is", res?.data?.paymentDetails);
                                                 const dataToSend = {
                                                     customerId: enrolmentId,
                                                     invoiceType: "Sign Up",
@@ -341,8 +339,8 @@ const All_Enrollments = () => {
                 try {
                     const response = await Axios.patch(`${BASE_URL}/api/user/prePostapproval`, dataToSend);
                     if (response?.status === 201 || response?.status === 200) {
-                        toast.success("Approved");
-                        setisButtonLoading(false);
+                       
+                     
                         getAllEnrollments();
 
                         const dataToSend = {
@@ -399,10 +397,11 @@ const All_Enrollments = () => {
                                                     try {
                                                         const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
                                                         if(response?.status == 200 || response?.status == 201){
-                                                            console.log("device generated", response?.data?.data);
-                                                            toast.success("Invoice Generated");
+                                                            setisButtonLoading(false);
+                                                            toast.success("Approved and Invoice Generated");
                                                         }
                                                     } catch (error) {
+                                                        toast.error("Approved but Invoice is not generate")
                                                         toast.error(error?.response?.data?.message);
                                                     }
                                                 }

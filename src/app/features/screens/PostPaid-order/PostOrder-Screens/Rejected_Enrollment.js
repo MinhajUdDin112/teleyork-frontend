@@ -179,7 +179,8 @@ const Rejected_Enrollments = () => {
             if (response?.status === 201 || response?.status === 200) {
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
-                localStorage.setItem("programmeId", JSON.stringify(response.data));
+                const storeData=true;
+                localStorage.setItem("fromRejected", JSON.stringify(storeData));
                 let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
                 if (storedData) {
                     storedData = false;

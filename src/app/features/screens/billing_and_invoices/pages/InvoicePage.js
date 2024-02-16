@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PlanInfo from "../components/PrepaidPlanInfo";
-import InvoiceTable from "../components/InvoiceTable"; 
+import InvoiceTable from "../components/InvoiceTable";
 /*
 import InvoiceTypes from "../components/InvoiceTypes"; 
 import DetailedTransactionModal from "../components/modals/DetailedTransactionModal";
@@ -19,99 +19,93 @@ import PaymentDetailModal from "../components/modals/PaymentDetailModal";
 
 import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";*/
 import BillingNavbar from "../../customer_profile/modals/BillingNavbar";
-import Axios from "axios"; 
-import { Card } from "primereact/card"; 
-import { useLocation } from 'react-router-dom';
+import Axios from "axios";
+import { Card } from "primereact/card";
+import { Await, useLocation } from 'react-router-dom';
 import PrepaidEditabaleInvoices from "../components/PrePaidEditableInvoices";
-import ChangeCustomerStatus from "../../customer_profile/change_customer_status/change_customer_status"; 
+import ChangeCustomerStatus from "../../customer_profile/change_customer_status/change_customer_status";
 import { Dialog } from "primereact/dialog";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL; 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const InvoicePage = () => { 
+const InvoicePage = () => {
     //const [detailedTransactionModal, setDetailedTransactionModal] = useState(false);
-   // const [nsfModal, setNsfModal] = useState(false);  
-    const [accountType,setAccountType]=useState("")   
-    const [invoices,setInvoices]=useState([])
+    // const [nsfModal, setNsfModal] = useState(false);  
+    const [accountType, setAccountType] = useState("")
+    const [invoices, setInvoices] = useState([])
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
-   // const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
-   // const [misMatchInvoiceModal, setMisMatchInvoiceModal] = useState(false);
+    // const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
+    // const [misMatchInvoiceModal, setMisMatchInvoiceModal] = useState(false);
     //const [ebillModal, setEbillModal] = useState(false);
     //const [misMatchBillModal, setMisMatchBillModal] = useState(false);
-   // const [adjustBalanceModal, setAdjustBalanceModal] = useState(false);
-   // const [payInvoiceModal, setPayInvoiceModal] = useState(false);
-  //  const [discountCreditModal, setDiscountCreditModal] = useState(false);
-   // const [adjustWalletModal, setAdjustWalletModal] = useState(false); 
-   /*setDetailedTransactionModal={setDetailedTransactionModal} */
-   // const [addWalletModal, setAddWalletModal] = useState(false);
-   // const [paymentModal, setPaymentModal] = useState(false); 
-    const [currentPlan,setCurrentPlan]=useState([])   
+    // const [adjustBalanceModal, setAdjustBalanceModal] = useState(false);
+    // const [payInvoiceModal, setPayInvoiceModal] = useState(false);
+    //  const [discountCreditModal, setDiscountCreditModal] = useState(false);
+    // const [adjustWalletModal, setAdjustWalletModal] = useState(false); 
+    /*setDetailedTransactionModal={setDetailedTransactionModal} */
+    // const [addWalletModal, setAddWalletModal] = useState(false);
+    // const [paymentModal, setPaymentModal] = useState(false); 
+    const [currentPlan, setCurrentPlan] = useState([])
     //const [paymentDetailModal, setPaymentDetailModal] = useState(false);
-     const [userDetails,setUserDetails]=useState()
-     const [cpData, setCpData] = useState([]);
+    const [userDetails, setUserDetails] = useState()
+    const [cpData, setCpData] = useState([]);
 
-     const location = useLocation();
-     const selectedId = location?.state && location?.state?.selectedId;
+    const location = useLocation();
+    const selectedId = location?.state && location?.state?.selectedId;
 
-     const getCustomerProfileData = async () => {
+    const handleAPISuccess = (responseData) => {
+        // Update data in main page state
+        window.location.reload();
+      };
+    const getUserDetail = async () => {
+
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
-            if (res?.status == 200 || res?.status == 201) {
-                setCpData(res?.data?.data || []);
-                console.log("cp data is", res?.data?.data);
-               ;
+            const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`)
+            if (response?.status == "200" || response?.status == "201") {
+                setCpData(response?.data?.data || []);
+                setUserDetails(response?.data?.data)
+                setAccountType(response?.data?.data?.accountType);
             }
-        } catch (error) { }
-    };
-useEffect(()=>{
-    getCustomerProfileData();
-    console.log("inside ")
-},[])
-    useEffect(async ()=>{   
-       
-    let userid="" 
-     console.log("called and user id is",selectedId)
- Axios.get( 
-        `${BASE_URL}/api/user/userDetails?userId=${selectedId}`
-      ).then(res=>{ 
-        userid=res?.data?.data?._id  
-        setUserDetails(res?.data?.data)
-      setAccountType(res?.data?.data?.accountType);      
-       
-        Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${selectedId}`).then(responseinvoice=>{ 
-          
-             setCurrentPlan(responseinvoice?.data?.data?.invoice)  
-              setInvoices(responseinvoice?.data?.data?.invoice)
-              localStorage.setItem("invoiceData", JSON.stringify(responseinvoice?.data?.data?.invoice));
 
-            
-           }).catch(err=>{ 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getInvoice = async () => {
+        const resp = await Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${selectedId}`)
+        if (resp?.status == "200" || resp?.status == "201") {
+            setCurrentPlan(resp?.data?.data?.invoice)
+            setInvoices(resp?.data?.data?.invoice)
+            localStorage.setItem("invoiceData", JSON.stringify(resp?.data?.data?.invoice));
+           
+        }
+    }
+    useEffect(() => {
       
-           })
-      }).catch(err=>{ 
+        getUserDetail();
+        getInvoice()
+    }, [selectedId])
 
-      })
- 
- },[selectedId])
     return (
-        <Card>   
-                   <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog}/>
-                   <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
-                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
-                </Dialog>
-                 <div className=" p-0 m-3 card">  
-                 <PlanInfo currentPlan={currentPlan} />    
-                 <div className="mx-4">
-                    <p className="m-0 text-xs font-bold " style={{color:"red"}}>
+        <Card>
+            <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
+            <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
+                <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
+            </Dialog>
+            <div className=" p-0 m-3 card">
+                {/* <PlanInfo  /> */}
+                <div className="mx-4">
+                    <p className="m-0 text-lg font-bold " style={{ color: "red" }}>
                         •Row in red color are unpaid invoices
                     </p>
-                    <p className="text-xs font-bold text-blue-400" >
+                    <p className="text-lg mt-2 font-bold text-blue-400" >
                         •Row in blue color are paid invoices
                     </p>
-                </div>   
-                <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} />
-                
-                  </div>
+                </div>
+                <InvoiceTable onAPISuccess={handleAPISuccess} userDetails={userDetails} className="mb-3" invoiceData={invoices} />
+
+            </div>
             {/*
     
 
@@ -163,8 +157,8 @@ useEffect(()=>{
                 <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} setDetailedTransactionModal={setDetailedTransactionModal} />
                 
             </div>   
-    */}  
-       
+    */}
+
         </Card>
     );
 };

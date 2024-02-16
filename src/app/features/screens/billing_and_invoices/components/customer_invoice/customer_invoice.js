@@ -13,7 +13,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function CustomerInvoice({ userDetails, invoiceData }) {
     const [isLoading, setIsLoading] = useState(false);
     const downloadButtonRef = useRef();
-console.log("user detail is ",userDetails)
+
 
     useEffect(() => {
         if (invoiceData !== undefined && invoiceData !== null) {
@@ -21,22 +21,22 @@ console.log("user detail is ",userDetails)
         }
     }, [invoiceData]);
 
-    const downloadInvoice = () => {    
+    const downloadInvoice = () => {
 
-        setIsLoading(true); 
-        document.querySelector(".downloadtemp").style.width="1050px"
-        html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5}).then((canvas) => {
+        setIsLoading(true);
+        document.querySelector(".downloadtemp").style.width = "1050px"
+        html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 }).then((canvas) => {
             const pdf = new jsPDF();
-           // pdf.setFont("Roboto");    
-        
-pdf.setFont("Roboto-Black-normal");
+            // pdf.setFont("Roboto");    
+
+            pdf.setFont("Roboto-Black-normal");
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
             pdf.save("converted.pdf");
             setIsLoading(false);
         });
     };
 
-    console.log( "invoice data",invoiceData )
+
     return (
         <div>
             <Button
@@ -54,10 +54,10 @@ pdf.setFont("Roboto-Black-normal");
 
             <div className="flex flex-wrap justify-content-around  downloadtemp">
                 <div className="flex flex-column ">
-                <div  className="ml-4">
-                    <img className="mb-0 mt-4 pt-4" src="/companyLogo2.png" height="80" width="200" />
-                    <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
-                    </div>   
+                    <div className="ml-4">
+                        <img className="mb-0 mt-4 pt-4" src="/companyLogo2.png" height="80" width="200" />
+                        <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
+                    </div>
 
                     <div className="customer-info mt-3 line1">
                         <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p>
@@ -94,32 +94,33 @@ pdf.setFont("Roboto-Black-normal");
                                 <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} `}</p>
                             </div>
                             {userDetails && userDetails?.paymentMethod
- == "Card" ?
- <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
- <p>Total Amount Due</p>
- <p>$0</p>
-</div> :
-                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                 <p>Total Amount Due</p>
-                                 <p>${invoiceData?.netPrice}</p>
-                             </div>
-                               }
+                                == "Card" ?
+                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                                    <p>Amount Paid</p>
+                                    <p>${invoiceData?.amountPaid}</p>
+                                </div> :
+                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                                    <p>Amount Paid</p>
+                                    <p>${invoiceData?.amountPaid}</p>
+                                </div>
+                            }
+                            {userDetails && userDetails?.paymentMethod
+                                == "Card" ?
+                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                                    <p>Total Amount Due</p>
+                                    <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                                </div> :
+                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                                    <p>Total Amount Due</p>
+                                    <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                                </div>
+                            }
 
                             <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
                                 <p>{invoiceData?.invoiceDueDate}</p>
                             </div>
-                            {userDetails && userDetails?.paymentMethod
- == "Card" ?
- <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
- <p>Amount Paid</p>
- <p>${invoiceData?.netPrice}</p>
-</div> :
-                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                 <p>Amount Paid</p>
-                                 <p>$0</p>
-                             </div>
-                               }
+                           
                         </div>
                         <p className="text-center">
                             Please make checks payable to:<span className="company"> IJWIRELESS</span>
@@ -144,9 +145,9 @@ pdf.setFont("Roboto-Black-normal");
                         <p>{userDetails?.firstName} {userDetails?.lastName}</p>
                     </div>
                     <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
-                                <p>Invoice Date</p>
-                                <p>{invoiceData?.createdAt}</p>
-                            </div>
+                        <p>Invoice Date</p>
+                        <p>{invoiceData?.createdAt}</p>
+                    </div>
 
                     <div className=" pl-2  flex flex-wrap justify-content-between line">
                         <p>Invoice Number</p>
@@ -171,27 +172,28 @@ pdf.setFont("Roboto-Black-normal");
                         <p>$0.00</p>
                     </div>
                     <div >
-                    <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
-                    <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
-                        <p>Totall Recurring Charges</p>
-                        <p>${invoiceData?.netPrice}</p>
-                    </div>
-                    <div className="pl-2  flex flex-wrap justify-content-between ">
-                        <p>One Time Charge</p>
-                        <p>${userDetails?.invoiceOneTimeCharges}</p>
-                    </div>
-                    <div className="pl-2  flex flex-wrap justify-content-between ">
-                        <p>Taxes and Surcharges</p>
-                        <p>$0.00</p>
-                    </div>
+                        <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
+                        <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
+                            <p>Total Recurring Charges</p>
+                            <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                        </div>
+
+                        <div className="pl-2  flex flex-wrap justify-content-between ">
+                            <p>One Time Charge</p>
+                            <p>${invoiceData?.invoiceOneTimeCharges}</p>
+                        </div>
+                        <div className="pl-2  flex flex-wrap justify-content-between ">
+                            <p>Taxes and Surcharges</p>
+                            <p>$0.00</p>
+                        </div>
                         <h5 className="font-bold line2">CURRENT SERVICES</h5>
                         <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
                             <p>Totall Recurring Charges</p>
-                            <p>${invoiceData?.netPrice}</p>
+                            <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>One Time Charge</p>
-                            <p>${userDetails?.invoiceOneTimeCharges}</p>
+                            <p>${invoiceData?.invoiceOneTimeCharges}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>Taxes and Surcharges</p>
@@ -201,16 +203,16 @@ pdf.setFont("Roboto-Black-normal");
 
                     <div className="topline"></div>
                     {userDetails && userDetails?.paymentMethod
- == "Card" ?
- <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
- <p>Total Amount Due</p>
- <p>$0</p>
-</div> :
-                                 <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                 <p>Total Amount Due</p>
-                                 <p>${invoiceData?.netPrice}</p>
-                             </div>
-                               }
+                        == "Card" ?
+                        <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                            <p>Total Amount Due</p>
+                            <p>$0</p>
+                        </div> :
+                        <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                            <p>Total Amount Due</p>
+                            <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                        </div>
+                    }
 
                 </div>
                 <div className="center-line">
@@ -234,7 +236,7 @@ pdf.setFont("Roboto-Black-normal");
 
                                 <td>{userDetails?.selectProduct}</td>
 
-                                <td>{userDetails?.invoiceOneTimeCharges
+                                <td>{invoiceData?.invoiceOneTimeCharges
                                 }</td>
                             </tr>
 
@@ -287,7 +289,7 @@ pdf.setFont("Roboto-Black-normal");
                     </table>
                     <div className="flex font-bold flex-row flex-wrap justify-content-between">
                         <p>Total Recurring Charges</p>
-                        <p>${invoiceData?.netPrice}</p>
+                        <p>${invoiceData?.netPrice }</p>
                     </div>
                     <div className="topline"></div>
                     <h6 className="font-bold">Regulatory Taxes and Surcharges: </h6>
