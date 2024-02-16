@@ -16,11 +16,11 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const DialogeForAuthPayment = ({ userDetails , invoiceData, setdialogeForAuthPayment , onAPISuccess }) => {
 
-console.log("invoice data in auth payment is",invoiceData)
+
     const [authRes, setAuthRes] = useState();
 
    
-const remainingaAmount= invoiceData[0]?.netPrice-invoiceData[0]?.amountPaid
+const remainingaAmount= invoiceData[0]?.dueAmount
 
     const validationSchema = Yup.object().shape({
         cardNumber: Yup.string().required("Please Enter Card Number"),
@@ -36,7 +36,8 @@ const remainingaAmount= invoiceData[0]?.netPrice-invoiceData[0]?.amountPaid
             cardNumber: "",
             cardCode: "",
             expirationDate: "",
-            amount:remainingaAmount
+            amount: remainingaAmount,
+            invoiceStatus: "", // Initialize invoiceStatus field
         },
     
         onSubmit: async (values, actions) => {
@@ -52,24 +53,27 @@ const remainingaAmount= invoiceData[0]?.netPrice-invoiceData[0]?.amountPaid
                     setAuthRes(response?.data?.transactionResponse)
                     setdialogeForAuthPayment(false);
                     toast.success("Successfully Paid")
+                  
                     const dataToSend = {
                         totalAmount: userDetails?.totalAmount,
-                        amountPaid: formik.values.totalAmount,
+                        amountPaid: formik.values.totalAmount ,        
                         invoiceStatus: "Paid",
+                        invoicePaymentMethod:"Credit Card",
                         transId: response?.data?.transactionResponse?.transId,
                         networkTransId: response?.data?.transactionResponse?.networkTransId
                       
                     }
+                 
                     try {
                         const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceData[0]?._id}`, dataToSend);
 
                         if (response?.status == "200" || response?.status == "201") { 
                             toast.success("Invoice Update Successfully")
-                            onAPISuccess(true);
+                             onAPISuccess(true);
                         }
 
                     } catch (error) {
-toast.error("Update Invoice error is" + error?.response?.data?.msg)
+                   toast.error("Update Invoice error is" + error?.response?.data?.msg)
                     }
                 }
                 else {

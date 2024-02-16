@@ -28,6 +28,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
     const zipRes = localStorage.getItem("zipData");
 
+    const loginRes = JSON.parse(localStorage.getItem("userData"));
+    const companyName = loginRes?.companyName;
+ 
+  
+
     //check that user come from incomplete or not 
     const fromIncompl = localStorage.getItem("fromIncomplete");
     const parsefromIncompl = JSON.parse(fromIncompl);
@@ -84,7 +89,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     let discount = "";
     let additional = "";
     let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
-    console.log("inventory is", inventoryType)
+    
     for (let i = 0; i < inventoryType?.length; i++) {
         if (paymentInfo?.billId === inventoryType[i].value) {
             inventory = inventoryType[i].label;
@@ -98,10 +103,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
         let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
         let simalladditional = JSON.parse(localStorage.getItem("simadditional"));
-        console.log("SIM ALL Additional", simalladditional);
+      
         let additionallocal = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
 
-        console.log("SIM Feature Additional", additionallocal);
+      
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < simalladditional?.length; k++) {
                 if (additionallocal[i] === simalladditional[k].value) {
@@ -284,7 +289,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             zipRes ? <div className="flex">
                                 <Checkbox inputId="cb1" value="New York" checked={isChecked} onClick={handleSign} onChange={(e) => setIsChecked(e.checked)}></Checkbox>
                                 <label htmlFor="cb1" className="p-checkbox-label mx-2">
-                                    <p>I further consent to receive calls, emails and/or text messages that may deliver auto-dialed or pre-recorded messages from IJ Wireless, Inc or its duly appointed agent, either using my telephone number assigned by IJ Wireless, Inc or provided by me herein or later. I understand this is not a condition of purchase.
+                                    <p>I further consent to receive calls, emails and/or text messages that may deliver auto-dialed or pre-recorded messages from {companyName}, Inc or its duly appointed agent, either using my telephone number assigned by {companyName}, Inc or provided by me herein or later. I understand this is not a condition of purchase.
                                     </p>
                                     <p>
                                         I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined in this form and any related documents.
@@ -298,7 +303,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <div className="flex">
                                         <Checkbox inputId="cb1" value="New York" checked={isChecked} onClick={handleSign} onChange={(e) => setIsChecked(e.checked)}></Checkbox>
                                         <label htmlFor="cb1" className="p-checkbox-label mx-2">
-                                            <p>I further consent to receive calls, emails and/or text messages that may deliver auto-dialed or pre-recorded messages from IJ Wireless, Inc or its duly appointed agent, either using my telephone number assigned by IJ Wireless, Inc or provided by me herein or later. I understand this is not a condition of purchase.
+                                            <p>I further consent to receive calls, emails and/or text messages that may deliver auto-dialed or pre-recorded messages from {companyName}, Inc or its duly appointed agent, either using my telephone number assigned by {companyName}, Inc or provided by me herein or later. I understand this is not a condition of purchase.
                                             </p>
                                             <p>
                                                 I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined in this form and any related documents.

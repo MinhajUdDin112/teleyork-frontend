@@ -16,6 +16,7 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
 
 
     useEffect(() => {
+        console.log("invoice data in invoice screen is",invoiceData)
         if (invoiceData !== undefined && invoiceData !== null) {
             downloadButtonRef.current.click();
         }
@@ -36,13 +37,20 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
         });
     };
 
+    // Get role name  from login response
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+     const companyName = parseLoginRes?.companyName;
+     const companyNameToCapital = companyName.toUpperCase();
+     
 
     return (
         <div>
             <Button
+            
                 ref={downloadButtonRef}
                 className="download-invoice"
-                label="Download Invoice"
+                label=""
                 onClick={downloadInvoice}
             ></Button>
 
@@ -54,10 +62,16 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
 
             <div className="flex flex-wrap justify-content-around  downloadtemp">
                 <div className="flex flex-column ">
+                    {companyNameToCapital.includes("ZISFONE") ? 
                     <div className="ml-4">
+                    <img className="mb-0 mt-4 pt-4" src="/zisfonelogo.png" height="80" width="200" />
+                    <h6 className="mt-0">170 Old Country Road, Suite 303, Mineola, NY, 11501</h6>
+                </div>
+                    :  <div className="ml-4">
                         <img className="mb-0 mt-4 pt-4" src="/companyLogo2.png" height="80" width="200" />
                         <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
-                    </div>
+                    </div>}
+                   
 
                     <div className="customer-info mt-3 line1">
                         <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p>
@@ -108,11 +122,11 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                                 == "Card" ?
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                                    <p>${invoiceData?.dueAmount}</p>
                                 </div> :
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                                    <p>${invoiceData?.dueAmount}</p>
                                 </div>
                             }
 
@@ -122,8 +136,9 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                             </div>
                            
                         </div>
+                       
                         <p className="text-center">
-                            Please make checks payable to:<span className="company"> IJWIRELESS</span>
+                            Please make checks payable to:<span className="company">{companyName}</span>
                         </p>
 
                         <div className="remittancebottom"></div>
@@ -175,7 +190,7 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                         <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
                         <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
                             <p>Total Recurring Charges</p>
-                            <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                            <p>${invoiceData?.netPrice }</p>
                         </div>
 
                         <div className="pl-2  flex flex-wrap justify-content-between ">
@@ -189,7 +204,7 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                         <h5 className="font-bold line2">CURRENT SERVICES</h5>
                         <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
                             <p>Totall Recurring Charges</p>
-                            <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                            <p>${invoiceData?.netPrice}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>One Time Charge</p>
@@ -202,17 +217,11 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                     </div>
 
                     <div className="topline"></div>
-                    {userDetails && userDetails?.paymentMethod
-                        == "Card" ?
                         <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                             <p>Total Amount Due</p>
-                            <p>$0</p>
-                        </div> :
-                        <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                            <p>Total Amount Due</p>
-                            <p>${invoiceData ? invoiceData.netPrice - invoiceData.amountPaid : 0}</p>
+                            <p>${invoiceData?.dueAmount}</p>
                         </div>
-                    }
+                    
 
                 </div>
                 <div className="center-line">
