@@ -29,6 +29,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
       const parseLoginRes = JSON.parse(loginRes);
        const companyName = parseLoginRes?.companyName;
      const companyNameToCapital = companyName.toUpperCase();
+     
        
      
 
