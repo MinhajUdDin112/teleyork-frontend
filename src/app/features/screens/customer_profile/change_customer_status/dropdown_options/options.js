@@ -35,6 +35,10 @@ const statusOption = [
         value: "active",
     },
     {
+        label: "Evaluation",
+        value: "evaluation",
+    },
+    {
         label: "Delivered",
         value: "delivered",
     },
