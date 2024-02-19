@@ -142,9 +142,8 @@
     transform: translate(-50%,-50%);
 } 
 .download-invoice{ 
-    position: absolute; 
-    right:62px; 
-    margin-top:-40px;
+
+    margin-top:60px; 
 }
 .downloadtemp{ 
     margin-top: 40px; 

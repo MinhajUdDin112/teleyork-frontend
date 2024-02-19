@@ -18,7 +18,8 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
         // Example condition: apply different classes based on status
         if (rowData.invoiceStatus === "Paid") {
             return "text-blue-400";
-        } else {
+        } 
+         else {
             return "unpaid-invoice-red"; // No class
         }
     };
@@ -27,8 +28,9 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
       const loginRes = localStorage.getItem("userData");
       const parseLoginRes = JSON.parse(loginRes);
        const companyName = parseLoginRes?.companyName;
-        // const companyNameToCapital = companyName.toUpperCase();
-        const companyNameToCapital = "ZISFONE LLC";
+     const companyNameToCapital = companyName.toUpperCase();
+     
+       
      
 
     return (
@@ -99,7 +101,18 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                 <Column field="amountPaid" header="Paid Amount"  />
                 <Column field="lateFee" header="Late Fee"  />
                 <Column field="invoiceDueDate" header="DueDate"  />
-                <Column field="invoiceStatus" header="Status"  />
+                <Column field="invoiceStatus" header="Status" body={(rowData)=>{
+                            if(rowData.amountPaid=="0"){
+return <p>Pending</p>
+                            }
+                            else if(rowData.amountPaid>"0" && rowData.dueAmount=="0"){
+                                return <p>Partially Paid</p>
+                            }
+                            else {
+                                return <p>Paid</p>
+                            }
+
+                }}  />
                 <Column field="invoicePaymentMethod" header="Payment Method"  />
                 <Column
                     field="BillingPeriod"
