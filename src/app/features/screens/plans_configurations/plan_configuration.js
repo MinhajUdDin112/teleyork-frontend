@@ -85,7 +85,7 @@ const inventoryType = [
     },
 ];
 
-export default function PlansConfigurations({setEditPlanVisibility}) {
+export default function PlansConfigurations({setAddPlanVisibility}) {
     const toast = useRef(null);
     const formik = useFormik({
         initialValues: {
@@ -114,7 +114,9 @@ export default function PlansConfigurations({setEditPlanVisibility}) {
             Axios.post(`${BASE_URL}/api/web/plan`, formik.values )
                 .then(() => {
                     toast.current.show({ severity: "success", summary: "Plan Submission", detail: "Plan Added Successfully" });
-                   setEditPlanVisibility(prev=>!prev)
+                    setTimeout(() => {
+                        setAddPlanVisibility(false);
+                    }, 1000);
                 })
                 .catch((err) => {
                     toast.current.show({ severity: "error", summary: "Plan Submission", detail: "Plan Addition Failed" });
