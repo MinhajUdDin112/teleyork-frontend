@@ -49,7 +49,7 @@ import EligibilityProofUpload from "./app/features/screens/customer_services/Eli
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
 import PurchaseHistory from "./app/features/screens/customer_services/PurchaseHistory";
 import CustomerHistory from "./app/features/screens/customer_services/CustomerHistory";
-import SmsNotification from "./app/features/screens/sms_notification/Upload"; 
+import SmsNotification from "./app/features/screens/sms_notification/Upload";
 import Upload from "./app/features/screens/sms_notification/Upload";
 import Sent from "./app/features/screens/sms_notification/Sent";
 import Draft from "./app/features/screens/sms_notification/Draft";
@@ -65,7 +65,7 @@ import ManageTemplate from "./app/features/screens/sms_notification/ManageTempla
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
 import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
 import Dashboard from "./app/features/screens/dashboard/Dashboard";
-import LoginScreen from "./app/features/screens/auth/login_screen";  
+import LoginScreen from "./app/features/screens/auth/login_screen";
 import { menuNavigation } from "./navigation";
 import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole";
 import CreateUser from "./app/features/screens/user_management/CreateUser";
@@ -91,17 +91,17 @@ import Approved_Enrollments from "./app/features/screens/lifeline_orders/Approve
 import ViewFiles from "./app/features/screens/customer_services/ViewFiles";
 import Searchall from "./app/features/screens/search_customer/search_all/search_all";
 import BillingConfiguration from "./app/features/screens/inventory_management/BillingConfiguration";
-import CustomerUsage from "./app/features/screens/customer_services/CustomerUsage" 
+import CustomerUsage from "./app/features/screens/customer_services/CustomerUsage";
 import PrepaidInCompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/incomplete_enrollments.js/incomplete";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
 import PrepaidAllEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_enrollments.js/all_enrollment";
 import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
 import Post_service_availbilty from "./app/features/screens/PostPaid-order/Pages/Post_Service_availbilty";
 import Post_enrollment_Flow from "./app/features/screens/PostPaid-order/Pages/post_enrollment_flow";
-import Completed_Enrollments from"./app/features/screens/PostPaid-order/PostOrder-Screens/Completed_enrollment";
-import All_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/All_Enrollments"
-import Incompleted_Enrollment from "./app/features/screens/PostPaid-order/PostOrder-Screens/Incomplete_ENrollment"
-import Rejected_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Rejected_Enrollment"
+import Completed_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Completed_enrollment";
+import All_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/All_Enrollments";
+import Incompleted_Enrollment from "./app/features/screens/PostPaid-order/PostOrder-Screens/Incomplete_ENrollment";
+import Rejected_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Rejected_Enrollment";
 import ApprovedEnrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Approved_Enrollment";
 import Provisioningqueue from "./app/features/screens/PostPaid-order/PostOrder-Screens/Provising_Queue";
 import Upload_Bulk from "./app/features/screens/PostPaid-order/PostOrder-Screens/Bulk_Upload";
@@ -109,11 +109,11 @@ import PostPersonalInfo from "./app/features/screens/PostPaid-order/PersonalInfo
 import Post_Dispatch_Insight from "./app/features/screens/PostPaid-order/PostOrder-Screens/Post_Dispatch_Insights";
 import PrepaidRejectedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/rejected_enrollment/rejected_enrollment";
 import PrepaidApproved_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/approved_enrollment/approved_enrollment";
-import PlansConfigurations from "./app/features/screens/plans_configurations/plan_configuration"; 
+import PlansConfigurations from "./app/features/screens/plans_configurations/plan_configuration";
 import ListAllPlans from "./app/features/screens/plans_configurations/plan_list";
 import PrepaidEvaluatedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/evaluated_enrollments/Evaluated_Enrollments";
-const App = () => { 
-   // cleanLocalStorage()
+const App = () => {
+    // cleanLocalStorage()
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
     const [dynamicMenu, setDynamicMenu] = useState([]);
@@ -311,8 +311,7 @@ const App = () => {
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
-    }; 
-   
+    };
 
     return (
         <>
@@ -324,8 +323,8 @@ const App = () => {
                         searchValue={searchValue}
                         setSearchBy={setSearchBy}
                         setSearchByValueClick={setSearchByValueClick}
-                        setSearchValue={setSearchValue}    
-                        searchByValueClick={searchByValueClick} 
+                        setSearchValue={setSearchValue}
+                        searchByValueClick={searchByValueClick}
                         setCallSearchApi={setCallSearchApi}
                         onToggleMenuClick={onToggleMenuClick}
                         layoutColorMode={layoutColorMode}
@@ -343,9 +342,11 @@ const App = () => {
                                     <Searchall setSearchByValueClick={setSearchByValueClick} callSearchApi={callSearchApi} searchValue={searchValue} setSearchBy={setSearchBy} />
                                 ) : searchBy.code === "advance search" ? (
                                     <AdvanceSearch setSearchBy={setSearchBy} />
-                                ) :searchBy.code === "inventorysearch" ? (<h1> 
-                                     <InvenotorySearch/>
-                                </h1>):(
+                                ) : searchBy.code === "inventorysearch" ? (
+                                    <h1>
+                                        <InvenotorySearch />
+                                    </h1>
+                                ) : (
                                     <div className="card searchby flex flex-row flex-wrap justify-content-around align-items-center">
                                         <div>
                                             <h1 className="text-center w-full ">{searchBy.name}</h1>
@@ -360,8 +361,8 @@ const App = () => {
                                     <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
-                                     <Route path="/plan-configurations" element={isPermitted("/plan-configurations") ? <ListAllPlans/> :<Dashboard/>}/>
-                                     <Route path="/prepaid-newenrollment" element={isPermitted("/prepaid-newenrollment") ? <MainPrepaidOrders /> : <Dashboard />}/>
+                                    <Route path="/plan-configurations" element={isPermitted("/plan-configurations") ? <ListAllPlans /> : <Dashboard />} />
+                                    <Route path="/prepaid-newenrollment" element={isPermitted("/prepaid-newenrollment") ? <MainPrepaidOrders /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />
                                     <Route path="/emei-drawer" element={isPermitted("/emei-drawer") ? <ImeiDrawer /> : <Dashboard />} />
@@ -373,9 +374,9 @@ const App = () => {
                                     <Route path="/companyacpprograms" element={isPermitted("/companyacpprograms") ? <AcpProgramsFlowPage /> : <Dashboard />} />
                                     <Route path="/newenrolment" element={isPermitted("/newenrolment") ? <ServiceAvailablityPage /> : <Dashboard />} />
                                     {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
-                                      <Route path="/postpaid-evaluatedenrollments" element={isPermitted("/postpaid-evaluatedenrollments") ? <PostpaidEvaluatedEnrollments /> : <Dashboard />} />
-                                      <Route path="/prepaidpaid-evaluatedenrollments" element={isPermitted("/prepaid-evaluatedenrollments") ? <PrepaidEvaluatedEnrollments /> : <Dashboard />} />
-                                  
+                                    <Route path="/postpaid-evaluatedenrollments" element={isPermitted("/postpaid-evaluatedenrollments") ? <PostpaidEvaluatedEnrollments /> : <Dashboard />} />
+                                    <Route path="/prepaid-evaluatedenrollments" element={isPermitted("/prepaid-evaluatedenrollments") ? <PrepaidEvaluatedEnrollments /> : <Dashboard />} />
+
                                     <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                     <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                     <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
@@ -393,9 +394,9 @@ const App = () => {
                                     <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
                                     <Route path="/prepaid-rejectedenrollment" element={isPermitted("/prepaid-rejectedenrollment") ? <PrepaidRejectedEnrollments /> : <Dashboard />} />
                                     <Route path="/prepaid-approvedenrollment" element={isPermitted("/prepaid-approvedenrollment") ? <PrepaidApproved_Enrollments /> : <Dashboard />} />
-                                  
+
                                     <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
-                                   <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
+                                    <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
                                     <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />
                                     <Route path="/customerhistory" element={isPermitted("/customerhistory") ? <CustomerHistory /> : <Dashboard />} />
                                     <Route path="/agentstorelocator" element={isPermitted("/agentstorelocator") ? <AgentStoreLocator /> : <Dashboard />} />
@@ -437,7 +438,7 @@ const App = () => {
                                     <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                     <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                     {/* <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> */}
-                                     <Route exact path="/customer-profile" element={ <CustomerProfile /> } />
+                                    <Route exact path="/customer-profile" element={<CustomerProfile />} />
 
                                     <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
 
@@ -447,10 +448,9 @@ const App = () => {
                                     <Route exact path="postpaid-allenrollment" element={isPermitted("/postpaid-allenrollment") ? <All_Enrollments /> : <Dashboard />} />
                                     <Route exact path="postpaid-incomplete" element={isPermitted("/postpaid-incomplete") ? <Incompleted_Enrollment /> : <Dashboard />} />
                                     <Route exact path="postpaid-rejectedenrollment" element={isPermitted("/postpaid-rejectedenrollment") ? <Rejected_Enrollments /> : <Dashboard />} />
-                                    <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments/> : <Dashboard />} />
-                                    <Route exact path="postpaid-dispatchinsight" element={isPermitted("/postpaid-dispatchinsight") ? <Post_Dispatch_Insight/> : <Dashboard />} />
-                                    <Route path="/Postpersonalinfo" element={<PostPersonalInfo/>} />
-
+                                    <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments /> : <Dashboard />} />
+                                    <Route exact path="postpaid-dispatchinsight" element={isPermitted("/postpaid-dispatchinsight") ? <Post_Dispatch_Insight /> : <Dashboard />} />
+                                    <Route path="/Postpersonalinfo" element={<PostPersonalInfo />} />
                                 </Routes>
                             )}
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
