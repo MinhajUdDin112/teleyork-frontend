@@ -10,24 +10,22 @@ export const menuNavigation = [
                 label: "Acp Programs",
                 icon: "pi pi-fw pi-dollar",
                 to: "/companyacpprograms",
-            },        
-          
-
+            },
         ],
-    }, 
+    },
     {
         items: [
             {
                 label: "Prepaid Orders",
                 icon: "pi pi-fw pi-bookmark",
                 items: [
-                    { label: "New Enrollment", icon: "", to: "/prepaid-newenrollment" }, 
-                    { label: "Incomplete Enrollment", icon: "", to: "/prepaid-incompleteenrollment" }, 
-                    { label:"All Enrollment",icon: "", to: "/prepaid-allenrollment"}, 
-                    { label:"Rejected Enrollment",icon: "", to: "/prepaid-rejectedenrollment"},
-                    { label:"Approved Enrollment",icon: "", to: "/prepaid-approvedenrollment"}
-                   
-                 /*   { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
+                    { label: "New Enrollment", icon: "", to: "/prepaid-newenrollment" },
+                    { label: "Incomplete Enrollment", icon: "", to: "/prepaid-incompleteenrollment" },
+                    { label: "All Enrollment", icon: "", to: "/prepaid-allenrollment" },
+                    { label: "Rejected Enrollment", icon: "", to: "/prepaid-rejectedenrollment" },
+                    { label: "Approved Enrollment", icon: "", to: "/prepaid-approvedenrollment" },
+
+                    /*   { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
                     {label:  "Provisioning Queue", icon: "", to: "/provisioning-queue" },
                     { label: "Bulk Upload", icon: "", to: "/bulk-upload"},
@@ -52,8 +50,8 @@ export const menuNavigation = [
                     { label: "New Enrollment", icon: "", to: "/newenrolment" },
                     { label: "Self Enrollment", icon: "", to: "/selfenrollment" },
                     { label: "All Enrollments", icon: "", to: "/all-enrollments" },
-                    {label:  "Provisioning Queue", icon: "", to: "/provisioning-queue" },
-                    { label: "Bulk Upload", icon: "", to: "/bulk-upload"},
+                    { label: "Provisioning Queue", icon: "", to: "/provisioning-queue" },
+                    { label: "Bulk Upload", icon: "", to: "/bulk-upload" },
                     { label: "With Proof Enrollments", icon: "", to: "/withproofenrollments" },
                     { label: "Without Proof Enrollments", icon: "", to: "/withoutproofenrollments" },
                     { label: "Completed Enrollments", icon: "", to: "/completedenrollments" },
@@ -80,7 +78,7 @@ export const menuNavigation = [
                         label: "Billing and Invoice",
                         icon: "",
                         to: "/invoice",
-                    },   
+                    },
                     {
                         label: "Order History",
                         icon: "",
@@ -117,7 +115,7 @@ export const menuNavigation = [
                         icon: "",
                         to: "/recentsearches",
                     },
-                   
+
                     {
                         label: "Deactivate ESN",
                         icon: "",
@@ -157,23 +155,22 @@ export const menuNavigation = [
                         label: "Billing Configuration",
                         icon: "",
                         to: "/billingconfiguration",
-                    },               
-                    { 
+                    },
+                    {
                         label: "Plans Configurations",
                         icon: "",
-                        to: "/plan-configurations",   
+                        to: "/plan-configurations",
                     },
                     {
                         label: "Drop Ship Orders",
                         icon: "",
                         to: "/dropshiporders",
-                    },    
-                    { 
-                       label:"Shipping Queues",  
-                        icon:"", 
-                        to:"/shipping-queues"
-                    }  
-                   ,
+                    },
+                    {
+                        label: "Shipping Queues",
+                        icon: "",
+                        to: "/shipping-queues",
+                    },
                     {
                         label: "EMEI Drawer",
                         icon: "",
@@ -188,7 +185,7 @@ export const menuNavigation = [
                         label: "Inventory Report",
                         icon: "",
                         to: "/inventory-report",
-                    },  
+                    },
                     {
                         label: "Manage Model",
                         icon: "",
@@ -213,7 +210,7 @@ export const menuNavigation = [
                                 icon: "",
                                 to: "/bulkprocesses/bulk-deactivate-mdn",
                             },
-                    
+
                             {
                                 label: "Bulk Swap ESN/SIM",
                                 icon: "",

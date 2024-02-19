@@ -84,7 +84,7 @@ const inventoryType = [
     },
 ];
 
-export default function EditPlan({ data }) {
+export default function EditPlan({ data,setEditPlanVisibility }) {
     const toast = useRef(null);
     const formik = useFormik({
         initialValues: {
@@ -113,6 +113,7 @@ export default function EditPlan({ data }) {
             Axios.patch(`${BASE_URL}/api/web/plan`, formik.values)
                 .then(() => {
                     toast.current.show({ severity: "success", summary: "Plan Updation", detail: "Plan Updated Successfully" });
+                    setEditPlanVisibility(prev=>!prev)
                 })
                 .catch((err) => {
                     toast.current.show({ severity: "error", summary: "Plan Updation", detail: "Plan Updation Failed" });
