@@ -10,8 +10,8 @@ import InvoiceTypes from "../InvoiceTypes";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-export default function CustomerInvoice({ userDetails, invoiceData }) {
-    const [isLoading, setIsLoading] = useState(false);
+export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading }) {
+    // const [isLoading, setIsLoading] = useState(false);
     const downloadButtonRef = useRef();
 
 
@@ -56,11 +56,7 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                 onClick={downloadInvoice}
             ></Button>
 
-            {isLoading && (
-                <div className="progress">
-                    <ProgressSpinner className="spinner" />
-                </div>
-            )}
+            
 
             <div className="flex flex-wrap justify-content-around  downloadtemp">
                 <div className="flex flex-column mb-5">
@@ -78,7 +74,8 @@ export default function CustomerInvoice({ userDetails, invoiceData }) {
                     <div className="customer-info mt-3 line1">
                         <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p>
                         <p className="font-semibold line3">{userDetails?.contact}</p>
-                        <p className="font-semibold line3">{userDetails?.address1}</p>
+                        <p className="font-semibold line3">{userDetails?.address1 }{ userDetails?.address2}</p>
+                        <p className="font-semibold line3">{userDetails?.city }, { userDetails?.state}, { userDetails?.zip}</p>
                     </div>
                 </div>
 
