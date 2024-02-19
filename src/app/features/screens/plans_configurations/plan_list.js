@@ -43,7 +43,7 @@ export default function ListAllPlans() {
                     setAddPlanVisibility(false);
                 }}
             >
-                <PlansConfigurations data={rowData}/>
+                <PlansConfigurations data={rowData} setAddPlanVisibility={setAddPlanVisibility}/>
             </Dialog> 
             <Dialog
                 header="Update Plan"
@@ -54,7 +54,7 @@ export default function ListAllPlans() {
                     setEditPlanVisibility(false);
                 }}
             >
-                <EditPlan data={rowData}/>
+                <EditPlan data={rowData} setEditPlanVisibility={setEditPlanVisibility}/>
             </Dialog>
             <DataTable value={planList} size="small" stripedRows resizableColumns emptyMessage="No Plan found." style={{ marginTop: "44px" }}>
                 <Column header="Name" field="name" />
