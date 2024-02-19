@@ -43,7 +43,7 @@ export default function ListAllPlans() {
                     setAddPlanVisibility(false);
                 }}
             >
-                <PlansConfigurations data={rowData} setEditPlanVisibility={setEditPlanVisibility}/>
+                <PlansConfigurations data={rowData} setAddPlanVisibility={setAddPlanVisibility}/>
             </Dialog> 
             <Dialog
                 header="Update Plan"
