@@ -8,7 +8,7 @@ export default function CDMAProvisionedStockReport() {
       };
     return (
         <>  
-        <img src={require('../assets/images/cdma.jpg')} style={{display:"inline-block",width:"50px",height:"auto"}}/>  
+        <img src={require('../assets/images/cdma.jpg')} alt="img" style={{display:"inline-block",width:"50px",height:"auto"}}/>  
              
             <h5  style={{display:"inline-block",position:"absolute",marginTop:"12px"}}>CDMA Service</h5>
             {Object.keys(provisionedcdmareport).map((item) => (

@@ -23,7 +23,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [isDifferent, setIsDifferent] = useState();
     const [isPoBox, setIsPoBox] = useState();
     const [isLoading, setIsLoading] = useState(false);
-    const [autoCompleteAddress, setAutoCompleteAddress] = useState(null);
+ 
 
     const zipDataLs = localStorage.getItem("basicData");
     const zipDataParsed = JSON.parse(zipDataLs);
@@ -34,7 +34,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
      // Get role name  from login response
      const loginRes = localStorage.getItem("userData");
      const parseLoginRes = JSON.parse(loginRes);
-      const companyName = parseLoginRes?.companyName.toUpperCase(); 
+     
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
     });

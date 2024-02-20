@@ -8,7 +8,7 @@ export default function TabletProvisionedStockReport() {
       };
     return (
         <>  
-        <img src='/images/inventory_dashboard/tablet.svg' style={{display:"inline-block",width:"35px",height:"auto"}}/>  
+        <img src='/images/inventory_dashboard/tablet.svg' alt="img" style={{display:"inline-block",width:"35px",height:"auto"}}/>  
              
             <h5  style={{display:"inline-block",position:"absolute",marginTop:"7px"}}>Tablet Service</h5>
             {Object.keys(provisionedcdmareport).map((item) => (
