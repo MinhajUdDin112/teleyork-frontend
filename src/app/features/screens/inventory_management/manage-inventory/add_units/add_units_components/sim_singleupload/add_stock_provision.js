@@ -23,7 +23,7 @@ export default function SIMSingleUploadAddProvision({ permissions }) {
     const [Model, setModel] = useState(null);
     useEffect(() => {
         if (department === null) {
-            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
+            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
@@ -111,7 +111,7 @@ export default function SIMSingleUploadAddProvision({ permissions }) {
     });
     function handlesubmit(actions) {
         let obj = formik.values;
-        obj.serviceProvider = parseLoginRes.compony;
+        obj.serviceProvider = parseLoginRes.company;
         if (Object.keys(formik.errors).length === 0) {
             Axios.post(`${BASE_URL}/api/web/simInventory/SimAddStock`, obj)
                 .then((res) => {

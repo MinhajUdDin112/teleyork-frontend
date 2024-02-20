@@ -140,6 +140,9 @@ const App = () => {
     let menuClick = false;
     let mobileTopbarMenuClick = false;
     const { user } = useSelector((state) => state.login);
+//get selected id from local storage 
+const selectedid = localStorage.getItem("selectedId");
+const parseselectedid = JSON.parse(selectedid);
     //MobileMenu When ACTIVE
     useEffect(() => {
         if (mobileMenuActive) {
@@ -381,7 +384,11 @@ const App = () => {
                                     <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                     <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                     <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
-                                    <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
+
+                                    {
+                                        parseselectedid ? <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> :  <Route path="/invoice" element={<Dashboard permittedRoutes={permittedRoutes} />} /> 
+                                    }
+                                   
                                     <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
                                     <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
                                     <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
@@ -438,8 +445,9 @@ const App = () => {
                                     <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />
                                     <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                     <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                    {/* <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> */}
-                                    <Route exact path="/customer-profile" element={<CustomerProfile />} />
+                                    {parseselectedid ?   <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> :    <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />     }
+                                  
+                                    {/* <Route exact path="/customer-profile" element={<CustomerProfile />} /> */}
 
                                     <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
 

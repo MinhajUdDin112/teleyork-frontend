@@ -202,7 +202,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </div>
                         <h5 className="font-bold line2">CURRENT SERVICES</h5>
                         <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
-                            <p>Totall Recurring Charges</p>
+                            <p>Total Recurring Charges</p>
                             <p>${invoiceData?.netPrice}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">

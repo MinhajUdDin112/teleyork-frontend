@@ -33,7 +33,7 @@ const CreateDepartment = () => {
         const response = await Axios.post(`${BASE_URL}/api/deparments/addDeparment`, {
           department: values.department,
           status: values.status, // true for active, false for inactive
-          company: parseLoginRes?.compony,
+          company: parseLoginRes?.company,
         });
         if (response?.status === 200 || response?.status === 201) {
           navigate('/manage-department');

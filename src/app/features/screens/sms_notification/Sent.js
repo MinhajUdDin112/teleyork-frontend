@@ -24,7 +24,7 @@ const Sent = () => {
     const parseLoginRes = JSON.parse(loginRes);
     
 
-    const companyId = parseLoginRes?.compony
+    const companyId = parseLoginRes?.company
 
     const dispatch = useDispatch();
     const { getSentAllTemplate, getSentAllTemplateLoading } = useSelector((state) => state.notification);

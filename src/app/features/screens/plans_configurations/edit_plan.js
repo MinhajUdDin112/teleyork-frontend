@@ -91,7 +91,7 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
         initialValues: {
             name: data.name,
             updatedBy: parseLoginRes?._id,
-            serviceProvider: parseLoginRes?.compony,
+            serviceProvider: parseLoginRes?.company,
             description: data.description,
             type: data.type,
             dataAllowance: data.dataAllowance,

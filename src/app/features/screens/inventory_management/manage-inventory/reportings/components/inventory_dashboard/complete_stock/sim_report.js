@@ -8,7 +8,7 @@ export default function SIMCompleteStockReport(){
       };
     return( 
         <>  
-           <img src={require('../assets/images/sim.jpg')} style={{display:"inline-block",width:"50px",height:"auto"}}/>  
+           <img src={require('../assets/images/sim.jpg')} alt="img" style={{display:"inline-block",width:"50px",height:"auto"}}/>  
              
             <h5 style={{width:"50px",display:"inline-block",position:"absolute",marginTop:"12px"}}>SIMService</h5>  
             {  Object.keys(completedsimreport).map(item=>( 

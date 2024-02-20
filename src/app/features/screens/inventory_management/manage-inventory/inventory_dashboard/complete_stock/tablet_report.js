@@ -34,15 +34,15 @@ export default function TabletCompleteStockReport(){
         setCompleteReportVisibility(true);
     }
     useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/tabletInventory?serviceProvider=${parseLoginRes.compony}`)
+        Axios.get(`${BASE_URL}/api/web/tabletInventory?serviceProvider=${parseLoginRes.company}`)
             .then((resstock) => {
                 let obj = {
                     Stock: resstock.data.data.length,
                 };
-                Axios.get(`${BASE_URL}/api/web/tabletInventory/available?serviceProvider=${parseLoginRes.compony}`)
+                Axios.get(`${BASE_URL}/api/web/tabletInventory/available?serviceProvider=${parseLoginRes.company}`)
                     .then((resfree) => {
                         obj.Free = resfree.data.data.length;
-                        Axios.get(`${BASE_URL}/api/web/tabletInventory/inUse?serviceProvider=${parseLoginRes.compony}`)
+                        Axios.get(`${BASE_URL}/api/web/tabletInventory/inUse?serviceProvider=${parseLoginRes.company}`)
                             .then((resinuse) => {
                                 obj.Used = resinuse.data.data.length;
                                 setCompletedTabletReport(obj);
@@ -57,7 +57,7 @@ export default function TabletCompleteStockReport(){
             .catch((error) => {});
     }, []);
     return( 
-        <div>    <img src="/images/inventory_dashboard/tablet.svg" style={{display:"inline-block",width:"35px",height:"auto"}}/>  
+        <div>    <img src="/images/inventory_dashboard/tablet.svg" alt="img" style={{display:"inline-block",width:"35px",height:"auto"}}/>  
              
             <h5 style={{display:"inline-block",position:"absolute",marginTop:"7px"}}>Tablet Service</h5>
           {  Object.keys(completedtabletreport).map(item=>( 

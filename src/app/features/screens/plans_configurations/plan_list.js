@@ -18,7 +18,7 @@ export default function ListAllPlans() {
     const [editPlanVisibility,setEditPlanVisibility]=useState(false)
     useEffect(() => { 
          if(editPlanVisibility === false){
-        Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`)
+        Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`)
             .then((res) => {
                 setPlanList(res?.data?.data);
             })

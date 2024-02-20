@@ -64,7 +64,7 @@ const ShowDraftAll = () => {
     const parseLoginRes = JSON.parse(loginRes);
 
 
-    const companyId = parseLoginRes?.compony
+    const companyId = parseLoginRes?.company
         
        
     useEffect(() => {
@@ -96,7 +96,7 @@ const ShowDraftAll = () => {
         let body = {
             userId: parseLoginRes?._id,
             templateId: id,
-            company: parseLoginRes?.compony,
+            company: parseLoginRes?.company,
         };
         dispatch(submitTemplateAction(body));
     };
@@ -105,7 +105,7 @@ const ShowDraftAll = () => {
     };
 
     const getDraftById = async () => {
-        const response = await Axios.get(`${BASE_URL}/api/sms/draft?templateId=${id}&compony=${companyId}`);
+        const response = await Axios.get(`${BASE_URL}/api/sms/draft?templateId=${id}&company=${companyId}`);
         setDraftByIdRes(response?.data?.data)
 
         

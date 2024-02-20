@@ -7,7 +7,7 @@ import { Toast } from "primereact/toast";
 import React, { useState,useRef, useEffect } from "react";
 import { TransferException, statusOption ,connection} from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus }) {  
+export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus,setRefersh }) {  
     const [isLoading, setIsLoading] = useState(false)
      //For Showing Toast Message
     const toast = useRef(null);
@@ -133,9 +133,10 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
             try {
                  setIsLoading(true)
                 const response= await  Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend)
-               
+                setRefersh(true)
                 if(response?.status===200 || response?.status===201){
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
+                    setRefersh(true)
                 }
                 setIsLoading(false)
             }  catch (error) {
@@ -241,7 +242,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                 />
             </div>
             <div className="align-self-center mt-4">
-                <Button onClick={UpdateStatus} label="Update Status " className="field-width mt-4"  disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                <Button onClick={UpdateStatus } label="Update Status " className="field-width mt-4"  disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}  />
             </div>  
             <Toast ref={toast}/>
         </div>

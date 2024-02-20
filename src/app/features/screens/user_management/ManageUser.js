@@ -48,7 +48,7 @@ const ManageUser = () => {
 
     const getAllUsers = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/user/all?compony=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${BASE_URL}/api/web/user/all?company=${parseLoginRes?.company}`);
 
             setAllUsers(res?.data?.data || []);
         } catch (error) {

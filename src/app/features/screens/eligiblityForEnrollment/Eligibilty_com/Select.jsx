@@ -17,7 +17,7 @@ const Select = ({ handleNext, handleBack,enrollment_id, _id ,csr}) => {
     const enrollmentUserId = _id;
     const getAcpPrograms = async () => {
     try {
-            const res = await Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.company}`);
             setAcpPrograms(res?.data?.data || []);
         } catch (error) {
             toast.error(`Error fetching module data : + ${error?.response?.data?.msg}`);

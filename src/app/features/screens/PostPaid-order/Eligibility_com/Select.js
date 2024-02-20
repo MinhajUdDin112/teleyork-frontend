@@ -117,18 +117,7 @@ const Select = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         formik.setFieldValue("checkbox", newCheckBoxes);
     };
 
-    const handleAddress = (e) => {
-        if (e.value === "temp") {
-            setACPtransfer(false);
-            setTempAdd(true);
-            setPermaAdd(false);
-        } else if (e.value === "permanent") {
-            setACPtransfer(true);
-            setTempAdd(false);
-            setPermaAdd(true);
-        }
-        formik.values.isTemporaryAddress = e.value === "temp";
-    };
+    
 
     if (ACPtransfer) {
         toast.warn("Error: A Yes is required on ACP Benefit Transfer");

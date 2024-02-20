@@ -26,7 +26,7 @@ export default function CellPhoneSingleUpload({ permissions }) {
     const [selectedMakeId, setSelectedMakeId] = useState(null);
     useEffect(() => {
         if (department === null) {
-            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
+            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
                     console.log(res.data.data);
                     let departmentholder = [];
@@ -71,7 +71,7 @@ export default function CellPhoneSingleUpload({ permissions }) {
                 setCarrier(carrierholder);
             })
             .catch(() => {});
-        Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.compony}&device=phone`)
+        Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.company}&device=phone`)
             .then((res) => {
                 let Makeholder = [];
                 for (let i = 0; i < res.data.data.length; i++) {
@@ -134,9 +134,9 @@ export default function CellPhoneSingleUpload({ permissions }) {
     });
     function handlesubmit(actions) {
         let obj = formik.values;
-        obj.serviceProvider = parseLoginRes.compony;
+        obj.serviceProvider = parseLoginRes.company;
         if (Object.keys(formik.errors).length === 0) {
-            //formik.values.serviceProvider = parseLoginRes?.compony;
+            //formik.values.serviceProvider = parseLoginRes?.company;
 
             Axios.post(`${BASE_URL}/api/web/phoneInventory/phoneAddStock`, obj)
                 .then((res) => {

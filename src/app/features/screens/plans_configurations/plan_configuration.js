@@ -91,7 +91,7 @@ export default function PlansConfigurations({setAddPlanVisibility}) {
         initialValues: {
             name: "",
             createdBy: parseLoginRes?._id,
-            serviceProvider: parseLoginRes?.compony,
+            serviceProvider: parseLoginRes?.company,
             description: "",
             type: "",
             dataAllowance: null,
