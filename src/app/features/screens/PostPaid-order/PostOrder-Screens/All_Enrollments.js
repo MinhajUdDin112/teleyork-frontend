@@ -933,7 +933,7 @@ const All_Enrollments = () => {
                                 )}
                             />
                             <Column field="selectProduct" header="Product" />
-                            <Column field="plan.name" header="Plan" />
+                            <Column field="currentPlan.planName" header="Plan" />
                             <Column field="totalAmount" header="Price" />
 
 

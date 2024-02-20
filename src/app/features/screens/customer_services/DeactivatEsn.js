@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { classNames } from "primereact/utils";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const DeactivatEsn = () => {
-const [isLoading, setIsLoading] = useState(false)
+
     
     const validationSchema = Yup.object().shape({
         remarks: Yup.string().required("This is Required"),
@@ -23,7 +23,7 @@ const [isLoading, setIsLoading] = useState(false)
      onSubmit: async (values, actions) => {
          
         const dataToSend = { ...values };
-        setIsLoading(true);
+      
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
             if (response?.status === 200 || response?.status === 201) {
@@ -32,7 +32,7 @@ const [isLoading, setIsLoading] = useState(false)
         } catch (error) {
 
             toast.error("APi is required");
-            setIsLoading(false);
+           
         }
     },
 

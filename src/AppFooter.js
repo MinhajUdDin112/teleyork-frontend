@@ -8,7 +8,7 @@ export const AppFooter = (props) => {
          <div>
                 <a href="https://teleyork.com" target="_blank" rel="noopener noreferrer">
                 
-                  <img src="/FooterLogo/CompanyLogo.png"/>
+                  <img src="/FooterLogo/CompanyLogo.png" alt='logo'/>
                 </a> 
                  </div>
            
