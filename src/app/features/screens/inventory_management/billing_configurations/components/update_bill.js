@@ -9,7 +9,7 @@ import Axios from "axios";
 import { Dialog } from "primereact/dialog";
 import AddNewFeature from "./components/add_newfeature";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh}) {
+export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh }) {
     console.log(rowData);
     //const toast=Toast
     const [newDiscount, setNewDiscount] = useState(false);
@@ -22,7 +22,6 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
         // validationSchema: validationSchema,
         initialValues: {
             billingmodel: rowData.billingmodel,
-            inventoryType: rowData.inventoryType,
             oneTimeCharge: rowData.oneTimeCharge,
             monthlyCharge: rowData.monthlyCharge,
             dueDate: rowData.dueDate,
@@ -50,7 +49,7 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
                 paymentMethod.push(formik.values.paymentMethod[i]._id);
             }
             const dataToSend = {
-                ServiceProvider: parseLoginRes?.compony,
+                ServiceProvider: parseLoginRes?.company,
                 oneTimeCharge: formik.values.oneTimeCharge,
                 monthlyCharge: formik.values.monthlyCharge,
                 dueDate: formik.values.dueDate,
@@ -68,10 +67,10 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
                 const response = await Axios.put(`${BASE_URL}/api/web/billing/billconfig?id=${rowData._id}`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Bill Updated Successfully");
-                   
+
                     setTimeout(() => {
-                        setUpdatePlanVisibility(false); 
-                        setRefresh(prev=>!prev)
+                        setUpdatePlanVisibility(false);
+                        setRefresh((prev) => !prev);
                     }, 1000);
                 }
             } catch (error) {
@@ -81,7 +80,7 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
     });
     const addDiscount = async () => {
         const dataToSend = {
-            ServiceProvider: parseLoginRes?.compony,
+            ServiceProvider: parseLoginRes?.company,
             discountname: formik.values.discountname,
             amount: formik.values.amount,
         };
@@ -91,8 +90,7 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
             if (response?.status == 200 || response?.status == 201) {
                 setNewDiscount(false);
                 getDiscount();
-                toast.success("Discount added successfully"); 
-                
+                toast.success("Discount added successfully");
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
@@ -150,54 +148,15 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
             toast.error(error?.response?.data?.msg);
         }
     };
-   
+
     useEffect(() => {
         getDiscount();
-    
+
         getFeature();
     }, []);
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className=" flex flex-wrap flex-row justify-content-around">
-                <div className="mt-3 field-width ">
-                    <label className="field_label mb-2 text-md">Billing Model</label>
-                    <Dropdown
-                        className="w-full"
-                        id="billingmodel"
-                        options={optionsForBillingmodel}
-                        value={formik.values.billingmodel}
-                        onChange={(e) => {
-                            formik.setFieldValue("billingmodel", e.value);
-                            formik.handleChange(e);
-                        }}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.billingmodel && formik.errors.billingmodel ? (
-                        <p className="mt-2 ml-2" style={{ color: "red" }}>
-                            {formik.errors.billingmodel}
-                        </p>
-                    ) : null}
-                </div>
-                <div className="mt-3 field-width  ">
-                    <label className="field_label mb-2 text-md">Inventory Type</label>
-                    <Dropdown
-                        className="w-full"
-                        id="inventoryType"
-                        options={optionsForInventoryType}
-                        value={formik.values.inventoryType}
-                        onChange={(e) => {
-                            formik.setFieldValue("inventoryType", e.value);
-                            formik.handleChange(e);
-                        }}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.inventoryType && formik.errors.inventoryType ? (
-                        <p className="mt-2 ml-2" style={{ color: "red" }}>
-                            {formik.errors.inventoryType}
-                        </p>
-                    ) : null}
-                </div>
-
                 <div className="field-width mt-3">
                     <label className="field_label text-md">One Time Charges</label>
                     <InputText id="oneTimeCharge" className="w-full" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
@@ -327,8 +286,7 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
                 ""
             )}
 
-            <div className="flex flex-wrap justify-content-center mt-4 w-full "> 
-                 
+            <div className="flex flex-wrap justify-content-center mt-4 w-full ">
                 <Button label="Submit" className="field-width" type="Submit" />
             </div>
             <Dialog
@@ -339,7 +297,7 @@ export default function UpdateBill({ rowData ,setUpdatePlanVisibility,setRefresh
                     setNewFeature(false);
                 }}
             >
-                <AddNewFeature formik={formik.values} setNewFeature={setNewFeature} getFeature={getFeature} compony={parseLoginRes?.compony} />
+                <AddNewFeature formik={formik.values} setNewFeature={setNewFeature} getFeature={getFeature} company={parseLoginRes?.company} />
             </Dialog>
         </form>
     );

@@ -76,7 +76,7 @@ export default function ListAllPlans() {
                            
                         Axios.patch(`${BASE_URL}/api/web/plan/updateStatus`,{ 
                             updatedBy:parseLoginRes._id,
-                        serviceProvider:parseLoginRes.compony,
+                        serviceProvider:parseLoginRes.company,
                         id:rowData._id,
                         status:false   
                         }).then(res=>{ 

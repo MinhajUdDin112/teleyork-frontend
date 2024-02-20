@@ -6,17 +6,17 @@ import { useFormik } from "formik";
 import { Button } from "primereact/button";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function AddNewFeature(compony,setNewFeature,getFeature){  
+export default function AddNewFeature(company,setNewFeature,getFeature){  
       const formik=useFormik({ 
         initialValues:{ 
-             ServiceProvider:compony, 
+             ServiceProvider:company, 
              featureName:"", 
              featureAmount:""
         }
       })
     const addFeature = async () => {
         const dataToSend = {
-            ServiceProvider:compony,
+            ServiceProvider:company,
             featureName: formik.values.featureName,
             featureAmount: formik.values.featureAmount,
         };
