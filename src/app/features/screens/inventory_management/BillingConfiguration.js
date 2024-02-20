@@ -46,7 +46,7 @@ const BillingConfiguration = () => {
         },
         onSubmit: async (values, actions) => {
             const dataToSend = {
-                ServiceProvider: parseLoginRes?.compony,
+                ServiceProvider: parseLoginRes?.company,
                 billingmodel: formik.values.billingmodel,
                 inventoryType: formik.values.inventoryType,
                 oneTimeCharge: formik.values.oneTimeCharge,
@@ -152,7 +152,7 @@ const BillingConfiguration = () => {
 
     const addDiscount = async () => {
         const dataToSend = {
-            ServiceProvider: parseLoginRes?.compony,
+            ServiceProvider: parseLoginRes?.company,
             discountname: formik.values.discountname,
             amount: formik.values.amount,
         };
@@ -171,7 +171,7 @@ const BillingConfiguration = () => {
 
     const addFeature = async () => {
         const dataToSend = {
-            ServiceProvider: parseLoginRes?.compony,
+            ServiceProvider: parseLoginRes?.company,
             featureName: formik.values.featureName,
             featureAmount: formik.values.featureAmount,
         };
@@ -192,7 +192,7 @@ const BillingConfiguration = () => {
     useEffect(() => {
         const getPlan = async () => {
             try {
-                const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`);
+                const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`);
                 setAllPlan(res?.data?.data || []);
 
             } catch (error) {

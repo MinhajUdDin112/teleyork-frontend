@@ -145,7 +145,7 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                         const loginRes = localStorage.getItem("userData");
                         const parseLoginRes = JSON.parse(loginRes);
                         const data = {
-                            serviceProvider: parseLoginRes?.compony,
+                            serviceProvider: parseLoginRes?.company,
                             userId: parseLoginRes?._id,
                             customerId: object?.customerid,
                             noteType: "Sign Up Plan Activation",

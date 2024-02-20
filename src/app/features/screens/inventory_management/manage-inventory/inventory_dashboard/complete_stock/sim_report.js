@@ -34,15 +34,15 @@ export default function SIMCompleteStockReport() {
         setCompleteReportVisibility(true);
     }
     useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/simInventory?serviceProvider=${parseLoginRes.compony}`)
+        Axios.get(`${BASE_URL}/api/web/simInventory?serviceProvider=${parseLoginRes.company}`)
             .then((resstock) => {
                 let obj = {
                     Stock: resstock.data.data.length,
                 };
-                Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=${parseLoginRes.compony}`)
+                Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=${parseLoginRes.company}`)
                     .then((resfree) => {
                         obj.Free = resfree.data.data.length;
-                        Axios.get(`${BASE_URL}/api/web/simInventory/inUse?serviceProvider=${parseLoginRes.compony}`)
+                        Axios.get(`${BASE_URL}/api/web/simInventory/inUse?serviceProvider=${parseLoginRes.company}`)
                             .then((resinuse) => {
                                 obj.Used = resinuse.data.data.length;
                                 setCompletedSimReport(obj);

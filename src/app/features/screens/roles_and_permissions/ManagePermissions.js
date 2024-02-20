@@ -93,7 +93,7 @@ export default function ManagePermissions({ setRefresh }) {
 
     const getAllRoles = async () => {
         try {
-            const res = await Axios.get(`${process.env.REACT_APP_BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${process.env.REACT_APP_BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.company}`);
 
             if (res?.status === 200 || res?.status === 201) {
                 let rolesdata = res.data.data;

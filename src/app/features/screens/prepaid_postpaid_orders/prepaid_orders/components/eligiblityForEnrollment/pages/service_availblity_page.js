@@ -48,7 +48,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
             zipCode: "",
         },
         onSubmit: async (values, actions) => {
-            const serviceProvider = parseLoginRes?.compony;
+            const serviceProvider = parseLoginRes?.company;
             const department = parseLoginRes?.department;
             const csr = parseLoginRes?._id;
             const carrier = "6455532566d6fad6eac59e34";

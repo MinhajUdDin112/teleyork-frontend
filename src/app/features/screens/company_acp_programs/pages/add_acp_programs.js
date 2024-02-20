@@ -13,7 +13,7 @@ export default function AddAcpProgram() {
     const [acpprograms, setacpprograms] = useState(null);
     const [arrayofcode, setArrayOfCodes] = useState([]);
     if (acpprograms === null) {
-        Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`) //using dummy service provider
+        Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.company}`) //using dummy service provider
             .then((res) => {
                
                 let arr = [];
@@ -76,7 +76,7 @@ export default function AddAcpProgram() {
         let data = {
             name: formik.values.name,
             description: formik.values.description,
-            serviceProvider: parseLoginRes?.compony, //Both Service Provider and CreatedBY will be same according to APi
+            serviceProvider: parseLoginRes?.company, //Both Service Provider and CreatedBY will be same according to APi
             createdBy: parseLoginRes?._id,
             banner: formik.values.banner,
             code: inputValue,

@@ -78,7 +78,7 @@ export default function EsnSimSingleUpload({ permissions }) {
             .catch(() => {});
         //Getting Departments for DropDown and Setting it
         if (department === null) {
-            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
+            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {

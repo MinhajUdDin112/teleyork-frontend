@@ -35,7 +35,7 @@ export const DialogeForAddNewType = ({setNewNoteTypeAdded}) => {
         onSubmit: async (values) => {
             // Prepare the data to send to the server
             const data = {
-                serviceProvider:parseLoginRes?.compony,
+                serviceProvider:parseLoginRes?.company,
                 ...values,
             };
          

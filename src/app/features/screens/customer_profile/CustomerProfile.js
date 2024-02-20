@@ -59,7 +59,7 @@ const CustomerProfile = () => {
         onSubmit: async (values, actions) => {
             // Prepare the data to send to the server
             const data = {
-                serviceProvider: parseLoginRes?.compony,
+                serviceProvider: parseLoginRes?.company,
                 userId: parseLoginRes?._id,
                 customerId: selectedId,
                 ...values,
@@ -93,7 +93,7 @@ const CustomerProfile = () => {
 
     const getNotesType = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/noteType/all?serviceProvider=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${BASE_URL}/api/noteType/all?serviceProvider=${parseLoginRes?.company}`);
             setAllNotesTypes(res?.data?.data || []);
         } catch (error) {
             toast.error(error?.response?.data?.msg);
