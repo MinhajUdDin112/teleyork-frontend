@@ -245,7 +245,7 @@ const PostpaidEvaluatedEnrollments = () => {
                     const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                     if (response?.status == 200 || response?.status == 201) {
                         const  orderId= response?.data?.data?.orderId;
-                          console.log("order id is",orderId)
+                        
                                 const dataToSend = {
                                     userId: parseLoginRes?._id,
                                     testLabel: "true",
@@ -261,7 +261,7 @@ const PostpaidEvaluatedEnrollments = () => {
                                             const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
                                             if (res?.status == 200 || res?.status == 201) {
                                                 setCpData(res?.data?.paymentDetails|| []);
-                                                console.log("cp data is", res?.data?.paymentDetails);
+                                              
                                                 const dataToSend = {
                                                     customerId: enrolmentId,
                                                     invoiceType: "Sign Up",
@@ -284,11 +284,11 @@ const PostpaidEvaluatedEnrollments = () => {
                                                         to: "onActivation"
                                                     }
                                                 };
-                                                console.log("generate invoice data to send is", dataToSend);
+                                              
                                                 try {
                                                     const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
                                                     if(response?.status == 200 || response?.status == 201){
-                                                        console.log("device generated", response?.data?.data);
+                                                      
                                                         toast.success("Device Generated");
                                                     }
                                                 } catch (error) {
@@ -368,10 +368,10 @@ const PostpaidEvaluatedEnrollments = () => {
                                                 const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
                                                 if (res?.status == 200 || res?.status == 201) {
                                                     setCpData(res?.data?.paymentDetails|| []);
-                                                    console.log("cp data is", res?.data?.paymentDetails);
+                                                 
                                             
                                                     // Move the following code inside this try block
-                                                    console.log("plan charges is", res?.data?.paymentDetails);
+                                                   
                                                     const dataToSend = {
                                                         customerId: enrolmentId,
                                                         invoiceType: "Sign Up",
@@ -394,7 +394,7 @@ const PostpaidEvaluatedEnrollments = () => {
                                                             to: "onActivation"
                                                         }
                                                     };
-                                                    console.log("generate invoice data to send is", dataToSend);
+                                                  
                                                     try {
                                                         const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
                                                         if(response?.status == 200 || response?.status == 201){
@@ -560,7 +560,7 @@ const PostpaidEvaluatedEnrollments = () => {
                         const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                         if (response?.status == 200 || response?.status == 201) {
                             const  orderId= response?.data?.data?.orderId;
-                            console.log("order id is",orderId)
+                         
                                   const dataToSend = {
                                       userId: parseLoginRes?._id,
                                       testLabel: "true",
@@ -569,9 +569,7 @@ const PostpaidEvaluatedEnrollments = () => {
                             try {
                                 const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                 if (response?.status == 200 || response?.status == 201) {
-                                    console.log(
-                                        "Label created response is", response?.data
-                                    )
+                                 
                                 }
                             } catch (error) {
                                 toast.error(error?.response?.data?.msg)
@@ -615,7 +613,7 @@ const PostpaidEvaluatedEnrollments = () => {
                         const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                         if (response?.status == 200 || response?.status == 201) {
                             const  orderId= response?.data?.data?.orderId;
-                            console.log("order id is",orderId)
+                          
                                   const dataToSend = {
                                       userId: parseLoginRes?._id,
                                       testLabel: "true",
@@ -624,9 +622,7 @@ const PostpaidEvaluatedEnrollments = () => {
                             try {
                                 const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                 if (response?.status == 200 || response?.status == 201) {
-                                    console.log(
-                                        "Label created response is", response?.data
-                                    )
+                                   
                                 }
                             } catch (error) {
                                 toast.error(error?.response?.data?.msg)

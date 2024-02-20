@@ -19,7 +19,7 @@ export default function DepartmentWiseAgentRejectedByDateRange({ startDate, endD
                     let qaRejectedEnrollment;
                     let provisioningRejectedEnrollments;
                     if (role === "CSR" || role === "TEAM LEAD") {
-                        console.log("inside calculating ");
+                     
                         qaRejectedEnrollment = response.data.data.filter((enrollment) => {
                             return (
                                 DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate &&

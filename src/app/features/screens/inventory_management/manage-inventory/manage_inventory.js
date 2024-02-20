@@ -169,7 +169,7 @@ const Manage_inventory = () => {
                                 >
                                     <img
                                         src={inventory.imgsrc}
-                                        alt=" image-1"
+                                        alt=" img"
                                         style={{
                                             borderRadius: "6px 6px 0px 0px",
                                             height: "100%",

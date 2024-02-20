@@ -66,10 +66,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     if (inventory === "Sim Card") {
         let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
         let simalladditional = JSON.parse(localStorage.getItem("simadditional"));
-        console.log("SIM ALL Additional", simalladditional);
+      
         let additionallocal = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
 
-        console.log("SIM Feature Additional", additionallocal);
+      
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < simalladditional?.length; k++) {
                 if (additionallocal[i] === simalladditional[k].value) {

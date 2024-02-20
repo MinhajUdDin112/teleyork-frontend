@@ -109,14 +109,14 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     };
 
     // useEffect(() => {
-    //     console.log("mailing address ", formik.values.mailingAddress1);
+    //    
     //     if (isDifferent == "false") {
     //         formik.setFieldValue("mailingAddress1", formik.values.address1);
     //         formik.setFieldValue("mailingAddress2", formik.values.address2); // Corrected line
     //         formik.setFieldValue("mailingZip", zipCode);
     //         formik.setFieldValue("mailingCity", zipCity);
     //         formik.setFieldValue("mailingState", zipState);
-    //         console.log("mailing address ", formik.values.mailingAddress1);
+    //       
     //     }
     // }, []);
 

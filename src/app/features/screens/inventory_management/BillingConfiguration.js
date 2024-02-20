@@ -70,7 +70,7 @@ const BillingConfiguration = () => {
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
-                console.log("error is", error?.response?.data)
+              
             }
         },
     });
@@ -116,7 +116,7 @@ const BillingConfiguration = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/discount/getalldiscounts`);
             setAllDiscount(res?.data?.data || []);
-            console.log("discountdata  is", res?.data?.data)
+          
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
@@ -126,7 +126,7 @@ const BillingConfiguration = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/feature/getallfeatures`);
             setAllFeature(res?.data?.data || []);
-            console.log("data is", res?.data?.data)
+          
 
         } catch (error) {
             toast.error(error?.response?.data?.msg);
@@ -137,7 +137,7 @@ const BillingConfiguration = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/billing/getall`);
             setconfigData(res?.data?.data || []);
-            console.log("config data is", res?.data?.data)
+          
 
         } catch (error) {
             toast.error(error?.response?.data?.msg);

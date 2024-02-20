@@ -11,7 +11,7 @@ import ActivatedEnrollments from "./components/completed_enrollments";
 import NvsEnrollmentsStat from "./components/nvs_enrollments";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function EnrollmentByStates({permittedRoutes}){                
-  console.log(permittedRoutes)    
+    
   const loginRes = localStorage.getItem("userData");
   const parseLoginRes = JSON.parse(loginRes);  
   const userid=parseLoginRes._id   
@@ -48,7 +48,7 @@ export default function EnrollmentByStates({permittedRoutes}){
           }
        }   
         if(permittedRoutes !== undefined){  
-         console.log("not null")  
+        
         
        if(!permittedRoutes.includes("/approved-enrollments")){ 
          delete obj.approvedEnrollments

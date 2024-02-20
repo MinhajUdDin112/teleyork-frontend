@@ -130,7 +130,7 @@ const Completed_Enrollments = () => {
 
                 setAllCompletedEnrollments(res?.data?.data);  
 
-                console.log("All enrollment data is",res.data.data)
+              
                 setIsLoading(false);
             }
         } catch (error) {

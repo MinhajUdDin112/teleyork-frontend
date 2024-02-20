@@ -12,7 +12,6 @@ import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-console.log("parsse response is",parseLoginRes)
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name Is Required"),
     description: Yup.string().required("Description Is Required"),

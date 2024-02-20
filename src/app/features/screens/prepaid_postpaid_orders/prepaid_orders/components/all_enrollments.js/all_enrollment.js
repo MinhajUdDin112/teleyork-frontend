@@ -234,7 +234,7 @@ const PrepaidAllEnrollments = () => {
     };
 
     const approveRowByTl =async(rowData)=>{ 
-         console.log("row data is ",rowData)
+        
         setisButtonLoading(true);
         const approvedBy = parseLoginRes?._id;
         const enrolmentId = rowData?._id;
@@ -257,7 +257,7 @@ const PrepaidAllEnrollments = () => {
                     if (response?.status === 201 || response?.status === 200) {
                         toast.success("Approved"); 
                         Axios.post(`${BASE_URL}/api/web/order`, { orderNumber:rowData.enrollmentId}).then((response)=>{  
-                             console.log("createOrder Reponse is ",response) 
+                             
                           toast.success("Order Displaced Successfully")           
                           Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId:(response.data.data.orderId).toString(),userId:parseLoginRes._id, testLabel: true}).then(()=>{ 
                             toast.success("Label Successfully")           

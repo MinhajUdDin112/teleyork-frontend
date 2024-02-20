@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { getAllTemplateAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
+import { submitTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
 import ReactPaginate from "react-paginate";
 import TemplateSearchBar from "./TemplateSearchBar";
@@ -55,7 +55,7 @@ const Draft = () => {
     const [allDraft, setAllDraft] = useState([]);
     
     const dispatch = useDispatch();
-    const { getAllTemplate, getAllTemplateLoading, submitTemplate, submitTemplateLoading } = useSelector((state) => state.notification);
+    const {  getAllTemplateLoading } = useSelector((state) => state.notification);
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);

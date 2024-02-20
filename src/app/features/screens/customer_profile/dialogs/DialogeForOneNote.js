@@ -7,7 +7,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const DialogeForOneNote = ({enrollmentId,noteId,contact}) => {
  const [cpData, setCpData] = useState([]); 
 useEffect(() => {
-  console.log("one note is calling")
+ 
 const getOneNote= async()=>{
 try {
   const response = await Axios.get(`${BASE_URL}/api/web/notes/getOne?noteId=${noteId}`)

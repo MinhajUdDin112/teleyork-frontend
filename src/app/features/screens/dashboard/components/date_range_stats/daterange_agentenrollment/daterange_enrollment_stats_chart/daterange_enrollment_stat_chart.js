@@ -114,7 +114,7 @@ export default function DateRangeEnrollmentStatChart({ role, BASE_URL, userid, p
 
                         Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
                             .then((response3) => { 
-                                console.log("inside here")
+                               
                                 let endDateEnrollment = endDate;
                                 if (startDate !== null) {
                                     if (endDate === null) {

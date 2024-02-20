@@ -19,8 +19,7 @@ export const DialogeForAddNewType = ({setNewNoteTypeAdded}) => {
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    console.log(parseLoginRes)
-
+   
     // Validation Schema
     const validationSchema = Yup.object().shape({
         noteType: Yup.string().required("This is Required"),
@@ -39,7 +38,7 @@ export const DialogeForAddNewType = ({setNewNoteTypeAdded}) => {
                 serviceProvider:parseLoginRes?.compony,
                 ...values,
             };
-            console.log("data is ",data)
+         
             setisButtonLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/noteType/`, data);

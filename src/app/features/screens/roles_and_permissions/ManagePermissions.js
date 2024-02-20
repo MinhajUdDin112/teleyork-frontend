@@ -109,7 +109,7 @@ export default function ManagePermissions({ setRefresh }) {
                                 let subModuleID = rowData.permissions[i].subModule._id
 
                                 let arr = []
-                                console.log('arr', arr)
+                              
                                 for (let k = 0; k < rowData.permissions[i].actions.length; k++) {
                                     arr.push(rowData.permissions[i].actions[k]._id)
                                 }
@@ -120,7 +120,7 @@ export default function ManagePermissions({ setRefresh }) {
                                 }
                             }
                         }
-                        console.log('object', object)
+                      
                         setPermissionObject(object)
                     }
                 }

@@ -26,12 +26,11 @@ export default function RejectedEnrollments({ role, BASE_URL, userid }) {
                             return DateTime.fromFormat(enrollment.rejectedAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom;
                         });
                     } else {
-                        console.log("inside enrollment team lead");
-                        console.log(response.data.data);
+                      
                         enrollmentsInCurrentShift = response.data.data.filter((enrollment) => {
                             return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startCountFrom;
                         });
-                        console.log("enrollment in current Shift", enrollmentsInCurrentShift);
+                       
                     }
                     if (isMounted) {
                         setRejectedEnrollments(enrollmentsInCurrentShift.length);

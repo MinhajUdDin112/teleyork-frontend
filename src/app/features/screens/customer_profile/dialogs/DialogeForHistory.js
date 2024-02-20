@@ -9,7 +9,7 @@ const [isHistory, setIsHistory] = useState()
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
                 setIsHistory(res?.data?.data || []);
-                console.log("is History is",res?.data?.data)
+             
             }
         } catch (error) {}
     };
