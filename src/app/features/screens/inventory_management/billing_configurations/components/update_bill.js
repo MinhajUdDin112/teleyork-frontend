@@ -23,7 +23,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
         initialValues: {
             billingmodel: rowData.billingmodel,
             oneTimeCharge: rowData.oneTimeCharge,
-            monthlyCharge: rowData.monthlyCharge,
+            monthlyCharge: rowData.monthlyCharge, 
+            inventoryType:rowData.inventoryType,
             dueDate: rowData.dueDate,
             paymentMethod: rowData.paymentMethod,
             selectdiscount: rowData.selectdiscount,
@@ -153,14 +154,41 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
         getDiscount();
 
         getFeature();
-    }, []);
+    }, []); 
+    useEffect(()=>{  
+        if(formik.values.inventoryType !== ""){
+       Axios.get(`${BASE_URL}/api/web/plan/all?getByInventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res)=>{ 
+            
+           setAllPlan(res?.data?.data || []);
+        }) 
+       }
+   },[formik.values.inventoryType])
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className=" flex flex-wrap flex-row justify-content-around">
                 <div className="field-width mt-3">
                     <label className="field_label text-md">One Time Charges</label>
                     <InputText id="oneTimeCharge" className="w-full" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
+                </div> 
+                <div className="mt-3 field-width ">
+                                <label className="field_label mb-2 text-md">Inventory Type</label>
+                                <Dropdown
+                                    className="w-full"
+                                    id="inventoryType"
+                                    options={optionsForInventoryType}
+                                    value={formik.values.inventoryType}
+                                    onChange={(e) => {
+                                        formik.setFieldValue("inventoryType", e.value);
+                                        formik.handleChange(e);
+                                    }}
+                                    onBlur={formik.handleBlur}
+                                />
+                                {formik.touched.inventoryType && formik.errors.inventoryType ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.inventoryType}
+                                    </p>
+                                ) : null}
+                            </div>
 
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">Monthly Charges</label>
