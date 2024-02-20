@@ -57,29 +57,7 @@ const All_Enrollments = () => {
     const [checkRemarks, setCheckRemarks] = useState();
     const [selectedIdsForApprove, setSelectedIdsForApprove] = useState()
 
-    // const rowExpansionTemplate = (data) => {
-    //     return (
-    //         <div>
-    //             <DataTable value={[data]} stripedRows>
-    //                 <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
-    //                 <Column field="createdBy?.name" header="Created BY" />
-    //                 <Column field="plan.name" header="Plan Name" />
-    //                 <Column field="plan.price" header="Plan Price" />
-    //                 <Column field="Phonecost" header="Phone Cost" />
-    //                 <Column field="Amountpaid" header="Amount Paid by Customer" />
-    //                 <Column field="Postingdate" header="Posting Date" />
-    //                 <Column field="EsnNumber" header="ESN Number" />
-    //                 <Column field="contact" header="Telephone Number" />
-    //                 <Column field="Activationcall" header="Activation Call" />
-    //                 <Column field="Activationcalldatetime" header="Activation Call Date Time" />
-    //                 <Column field="status" header="Status" />
-    //                 <Column field="Handover" header="Handover Equipment" />
-    //                 <Column field="Enrolltype" header="Enroll Type" />
-    //                 <Column field="Reviewernote" header="Reviewer Note" />
-    //             </DataTable>
-    //         </div>
-    //     );
-    // };
+   
 
     const navigate = useNavigate();
 
@@ -367,7 +345,7 @@ const All_Enrollments = () => {
                                                 const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
                                                 if (res?.status == 200 || res?.status == 201) {
                                                     setCpData(res?.data?.paymentDetails|| []);
-                                                 
+                                             
                                             
                                                     // Move the following code inside this try block
                                                 

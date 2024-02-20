@@ -117,9 +117,8 @@ const CustomerProfile = () => {
     useEffect(() => {
         getNotesType();
     }, [newNoteTypeAdded]);
-    const handleDialogeForAddType = () => {
-        setAddNewType(true);
-    };
+
+   
     const options = [
         { label: "Priority",value: ""},
         { label: "Highest", value: "highest"},
@@ -348,6 +347,12 @@ const CustomerProfile = () => {
 
 
                                                     {isShow && isShow ? <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                </tr>
+                                                <tr>
+                                                    <td>Mother's Maiden Name</td>
+
+
+                                                    {isShow && isShow ? <td>{cpData?.maidenMotherName !== undefined ? cpData?.maidenMotherName : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
                                                 </tr>
 
                                                 <tr>
@@ -675,7 +680,8 @@ const CustomerProfile = () => {
                                 <span></span>
                             </div>
                             <hr className="m-0 mb-2" />
-                            <Button label="Add New Note type" icon="pi pi-plus" size="small" className="mt-2 mb-3" onClick={handleDialogeForAddType} />
+                            <Button label="Add New Note type" icon="pi pi-plus" size="small" className="mt-2 mb-3" 
+                            onClick={()=>setAddNewType(true)} />
 
                             <form onSubmit={formik.handleSubmit}>
                                 <div>
