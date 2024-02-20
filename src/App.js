@@ -354,10 +354,11 @@ const App = () => {
                                         </div>
                                     </div>
                                 )
-                            ) : (
+                            ) : ( <>
+                               { permittedRoutes.length !== 0 ?
                                 <Routes>
                                     <Route path="*" element={<NotFound />} />
-                                    {permittedRoutes.length !== 0 ? <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} /> : undefined}
+                                     <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} /> 
                                     <Route path="/shipping-queues" element={isPermitted("/shipping-queues") ? <ShippingQueue /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-device" element={isPermitted("/bulkprocesses") ? <ClearDeviceReportFlowPage /> : <Dashboard />} />
                                     <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
@@ -451,8 +452,9 @@ const App = () => {
                                     <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments /> : <Dashboard />} />
                                     <Route exact path="postpaid-dispatchinsight" element={isPermitted("/postpaid-dispatchinsight") ? <Post_Dispatch_Insight /> : <Dashboard />} />
                                     <Route path="/Postpersonalinfo" element={<PostPersonalInfo />} />
-                                </Routes>
-                            )}
+                                </Routes> :undefined}
+                            
+                            </>)}
                             {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
 

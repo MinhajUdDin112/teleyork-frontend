@@ -13,7 +13,8 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
 function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {       
-    let ref=useRef(null)
+    let ref=useRef(null) 
+    const [refresh,setRefresh]=useState(false)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     console.log(parseLoginRes);
@@ -124,11 +125,12 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
         
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions); 
+           
         },
     });
-    function handlesubmit() {
+    function handlesubmit(actions) {
         console.log(formik.errors);  
          let obj=formik.values; 
          obj.serviceProvider=parseLoginRes.compony 
@@ -139,14 +141,31 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({permissions}) {
                 .then((res) => {
                     console.log("Successfully done");  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Inventory Successfully Added"});
+                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Inventory Successfully Added"}); 
+                      
+                  formik.setFieldValue("carrier", "") 
+                  formik.setFieldValue("serviceProvider", parseLoginRes?.companyName) 
+                  formik.setFieldValue("agentType","") 
+                  formik.setFieldValue("AgentName","")  
+                  formik.setFieldValue("SimNumber","") 
+                    
+                  formik.setFieldValue("box","") 
+                    
+                  formik.setFieldValue("Model","") 
+                    
+                  formik.setFieldValue("unitType","sim")  
+                  formik.setFieldValue("Uploaded_by",parseLoginRes?._id,) 
+                  formik.setFieldValue("provisionType","Add And Assign Non Active")
+                   
+                    setRefresh(prev=>!prev)
                 })
                 .catch((error) => {  
                     console.log(error.response.data.msg)   
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     console.log("error occured");  
                     ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
-               
+                    
+                    
                 });  
                   
         }           
