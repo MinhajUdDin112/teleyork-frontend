@@ -92,7 +92,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus,se
                 });
         }
 
-        else  if (statusTo === "active" && connectionType=="Non Electronically") {
+        else  if (statusTo === "active" && connectionType=="Internally") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,
@@ -125,7 +125,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus,se
         
         }
 
-        else  if (statusTo === "active" && connectionType=="Electronically") {
+        else  if (statusTo === "active" && connectionType=="Externally") {
             const dataToSend={
                 enrollmentId:cpData?._id,
                 userId:parseLoginRes?._id        
