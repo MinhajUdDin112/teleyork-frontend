@@ -1,17 +1,17 @@
-import React, { useState,useEffect,useRef } from "react";
-import { useFormik } from "formik";  
-import * as Yup from "yup";  
-import Axios  from "axios";    
+import React, { useState, useEffect, useRef } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Axios from "axios";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
-import AddAgentDetail from "./Dialogs/add_agent_detail";  
-const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function SIMSingleUploadAddProvision({permissions}) {  
-    let ref=useRef(null)
+import AddAgentDetail from "./Dialogs/add_agent_detail";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+export default function SIMSingleUploadAddProvision({ permissions }) {
+    let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
@@ -25,7 +25,6 @@ export default function SIMSingleUploadAddProvision({permissions}) {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
                 .then((res) => {
-                    console.log(res.data.data);
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
@@ -36,9 +35,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                     setDepartment(departmentholder);
                     // Move this inside the promise callback
                 })
-                .catch(() => {
-                  
-                });
+                .catch(() => {});
         }
     }, []);
     useEffect(() => {
@@ -55,9 +52,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
 
                     setAgent(agentholder);
                 })
-                .catch(() => {
-                 
-                });
+                .catch(() => {});
         }
     }, [departmentselected]);
     useEffect(() => {
@@ -73,8 +68,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
 
                 setCarrier(carrierholder);
             })
-            .catch(() => {
-            });
+            .catch(() => {});
         Axios.get(`${BASE_URL}/api/simType/all`)
             .then((res) => {
                 let Modelholder = [];
@@ -87,8 +81,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
 
                 setModel(Modelholder);
             })
-            .catch(() => {
-            });
+            .catch(() => {});
     }, []);
     const formik = useFormik({
         validationSchema: Yup.object({
@@ -96,7 +89,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
             SimNumber: Yup.string().required("SIM Number Is require").min(18, "Sim Number must be at least 18 characters").max(19, "Sim Number must be at most 19 characters"),
             box: Yup.string().required("Box is required"),
             Model: Yup.string().required("Model is required"),
-        AgentName: Yup.string().required("Agent Name is required"),
+            AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
         initialValues: {
@@ -105,45 +98,50 @@ export default function SIMSingleUploadAddProvision({permissions}) {
             agentType: "",
             AgentName: "",
             SimNumber: "",
-            /* team: "",*/
             box: "",
             Model: "",
             unitType: "sim",
             Uploaded_by: parseLoginRes?._id,
-            provisionType: "Add Stock", 
-     
+            provisionType: "Add Stock",
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values, actions) => {
+            handlesubmit(actions);
         },
     });
-    function handlesubmit() {
-        console.log(formik.errors);  
-         let obj=formik.values; 
-         obj.serviceProvider=parseLoginRes.compony 
+    function handlesubmit(actions) {
+        let obj = formik.values;
+        obj.serviceProvider = parseLoginRes.compony;
         if (Object.keys(formik.errors).length === 0) {
-            //formik.values.serviceProvider = parseLoginRes?.compony;  
-            
             Axios.post(`${BASE_URL}/api/web/simInventory/SimAddStock`, obj)
                 .then((res) => {
-                    console.log("Successfully done");  
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    ref.current.show({ severity: "success", summary: "Inventory", detail: "Successfully Added" });
+                    formik.setFieldValue("carrier", "");
+                    formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                    formik.setFieldValue("agentType", "");
+                    formik.setFieldValue("AgentName", "");
+                    formik.setFieldValue("SimNumber", "");
+
+                    formik.setFieldValue("box", "");
+
+                    formik.setFieldValue("Model", "");
+
+                    formik.setFieldValue("unitType", "sim");
+                    formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                    formik.setFieldValue("provisionType", "Add Stock");
+                    actions.resetForm();
+                    setAgent([]);
                 })
-                .catch((error) => {     
-                      
-                    console.log(error.response.data.msg)   
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    console.log("error occured");  
-                    ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
-                });  
-                  
-        }           
+                .catch((error) => {
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    ref.current.show({ severity: "error", summary: "Inventory", detail: error.response.data.msg });
+                });
+        }
     }
     return (
         <>
-           <div>
+            <div>
                 <div className="flex flex-wrap mb-3 justify-content-around ">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -174,7 +172,7 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                         </p>
                         <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
-                  {/*  <div className="mr-3 mb-3 mt-3">
+                    {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Team <span style={{ color: "red" }}>* </span>
                         </p>
@@ -204,8 +202,8 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value); 
-                                formik.setFieldValue("AgentName","")
+                                formik.setFieldValue("agentType", e.value);
+                                formik.setFieldValue("AgentName", "");
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -243,16 +241,15 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                         <p className="m-0">
                             Model<span style={{ fontSize: "12px" }}>(MICRO/NANO/SIM)</span>
                             <span style={{ color: "red" }}>
-                                *   
-                                <Button style={{padding:"0px",backgroundColor:"transparent",border:"none", cursor: "pointer",}}    disabled={!(permissions.isCreate)} >
-                                <i
-                                    onClick={() => {
-                                        setAddSimModelDialogVisbility((prev) => !prev);
-                                    }} 
-                                 
-                                    className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i> 
+                                *
+                                <Button style={{ padding: "0px", backgroundColor: "transparent", border: "none", cursor: "pointer" }} disabled={!permissions.isCreate}>
+                                    <i
+                                        onClick={() => {
+                                            setAddSimModelDialogVisbility((prev) => !prev);
+                                        }}
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
                                 </Button>
                             </span>
                         </p>
@@ -277,13 +274,13 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                 </div>
                 <div className="flex flex-wrap justify-content-center align-item-center">
                     <Button
-                        label="Submit" 
+                        label="Submit"
                         className="field-width"
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()
-                        }}  
-                        disabled={!(permissions.isCreate)}
+                        }}
+                        disabled={!permissions.isCreate}
                     />
                 </div>
             </div>
@@ -302,8 +299,8 @@ export default function SIMSingleUploadAddProvision({permissions}) {
                 }}
             >
                 <AddAgentDetail agent={"Dummy"} />
-            </Dialog>   
-            <Toast ref={ref}/>
+            </Dialog>
+            <Toast ref={ref} />
         </>
     );
 }

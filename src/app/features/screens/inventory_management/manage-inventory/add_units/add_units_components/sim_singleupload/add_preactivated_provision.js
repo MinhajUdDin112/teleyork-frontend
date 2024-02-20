@@ -14,7 +14,6 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
     let ref=useRef(null)
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    console.log(parseLoginRes);
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
@@ -26,7 +25,6 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
                 .then((res) => {
-                    console.log(res.data.data);
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
@@ -34,12 +32,9 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
                         obj.value = res.data.data[i]._id;
                         departmentholder.push(obj);
                     }
-                    console.log("department holder is ", departmentholder);
                     setDepartment(departmentholder);
-                    console.log(department); // Move this inside the promise callback
-                })
+                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, []);
@@ -58,7 +53,6 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
                     setAgent(agentholder);
                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, [departmentselected]);
@@ -76,7 +70,6 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
                 setCarrier(carrierholder);
             })
             .catch(() => {
-                console.log("error");
             });
         Axios.get(`${BASE_URL}/api/simType/all`)
             .then((res) => {
@@ -91,10 +84,8 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
                 setModel(Modelholder);
             })
             .catch(() => {
-                console.log("error");
             });
     }, []);
-    console.log("department is ", department);
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
@@ -119,12 +110,11 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
    
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions);
         },
     });
-    function handlesubmit() {
-        console.log(formik.errors);  
+    function handlesubmit(actions) {
          let obj=formik.values; 
          obj.serviceProvider=parseLoginRes.compony 
         if (Object.keys(formik.errors).length === 0) {
@@ -132,16 +122,28 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions}) {
             
             Axios.post(`${BASE_URL}/api/web/simInventory/AddPreSimActivated`, obj)
                 .then((res) => {
-                    console.log("Successfully done");  
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
                     ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                    formik.setFieldValue("carrier", "");
+                    formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                    formik.setFieldValue("agentType", "");
+                    formik.setFieldValue("AgentName", "");
+                    formik.setFieldValue("SimNumber", "");
+
+                    formik.setFieldValue("box", "");
+
+                    formik.setFieldValue("Model", "");
+
+                    formik.setFieldValue("unitType", "sim");
+                    formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                    formik.setFieldValue("provisionType", "Add Pre-Activated");
+                    actions.resetForm();
+                    setAgent([]);
+                
                 })
                 .catch((error) => {  
-                    console.log(error.response.data.msg)   
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    console.log("error occured");  
+                    formik.values.serviceProvider = parseLoginRes?.companyName; 
                     ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
-                
                 });  
                   
         }           

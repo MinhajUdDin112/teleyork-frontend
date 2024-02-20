@@ -92,8 +92,8 @@ export default function CellPhoneBulkUpload({permissions}) {
             provisionType: "Add Stock",
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions);
         },
     });
     function ApiResponseShow({res}){   
@@ -160,7 +160,7 @@ export default function CellPhoneBulkUpload({permissions}) {
                </div>
             )
             }
-    function handlesubmit() {
+    function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("serviceProvider", parseLoginRes?.compony);
@@ -180,8 +180,20 @@ export default function CellPhoneBulkUpload({permissions}) {
                 },
             })
                 .then((res) => {
-                     ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
-                })
+                      ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                      formik.setFieldValue("carrier", ""); 
+                      formik.setFieldValue("file", "");
+                      formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                      formik.setFieldValue("agentType", "");
+                      formik.setFieldValue("AgentName", "");
+                      formik.setFieldValue("SimNumber", ""); 
+                      formik.setFieldValue("unitType", "Cell Phone");
+                      formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                      formik.setFieldValue("provisionType", "Cell Phone Bulk Upload");
+                      setAgent([]) 
+                      setFilename(null)
+                      actions.resetForm();
+                    })
                 .catch(() => {
                     ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed"  });
                 });

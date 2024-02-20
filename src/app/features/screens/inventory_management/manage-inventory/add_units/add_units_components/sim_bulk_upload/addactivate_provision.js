@@ -92,8 +92,8 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
             provisionType: "Bulk Add And Activate",
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions);
         },
     }); 
     function ApiResponseShow({res}){   
@@ -128,7 +128,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
            </div>
         )
         }
-    function handlesubmit() {
+    function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("serviceProvider", parseLoginRes?.compony);
@@ -149,7 +149,17 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                 })
                     .then((res) => {
                         ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
-                        formik.resetForm();
+                        formik.setFieldValue("file", "");
+                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                        formik.setFieldValue("agentType", "");
+                        formik.setFieldValue("AgentName", "");
+                        formik.setFieldValue("SimNumber", ""); 
+                        formik.setFieldValue("unitType", "sim");
+                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                        formik.setFieldValue("provisionType", "Bulk Add And Activate Sims");
+                       setAgent([]) 
+                       setFilename(null)
+                        actions.resetForm();
                     })
                     .catch((error) => {
                         if (error.response && error.response.data && error.response.data.msg) {
@@ -271,6 +281,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
                         ) : undefined}
                     </div>
                     <Button 
+                    style={{height:"40px"}}
                      className="field-width justify-content-center"
                         onClick={() => {
                             if (formik.values.file === "") {
