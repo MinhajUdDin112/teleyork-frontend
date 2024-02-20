@@ -99,7 +99,7 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
             textAllowance: data.textAllowance,
             duration: data.duration,
             price: data.price,
-            planId: data._id,
+            planId: data.planId,
             dataAllowanceUnit: data.dataAllowanceUnit,
             voiceAllowanceUnit: data.voiceAllowanceUnit,
             textAllowanceUnit: "SMS",
@@ -111,7 +111,7 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
         },
         validationSchema,
         onSubmit: (values) => {
-            Axios.patch(`${BASE_URL}/api/web/plan`, formik.values)
+            Axios.patch(`${BASE_URL}/api/web/plan?_id=${data._id}`, formik.values)
                 .then(() => {
                     toast.current.show({ severity: "success", summary: "Plan Updation", detail: "Plan Updated Successfully" });
                     setTimeout(() => {
