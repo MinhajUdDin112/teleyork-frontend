@@ -13,6 +13,7 @@ const BillingNavbar = ({ setChangeCustomerStatus, changeCustomerStatusDialog }) 
 
   const selectedid = localStorage.getItem("selectedId");
   const parseselectedid = JSON.parse(selectedid);
+
 const navigate = useNavigate();
   const getCustomerProfileData = async () => {
     try {
@@ -30,7 +31,8 @@ const navigate = useNavigate();
   }, [changeCustomerStatusDialog]);
 
   function handleWalletClick() {
-    setOpenDialogeForWallet(true);
+    console.log("id is",parseselectedid)
+    navigate("/invoice", { state: { selectedId: parseselectedid} });
   }
   const goToProfile =()=>{
    
@@ -70,7 +72,7 @@ const navigate = useNavigate();
         label: `MDN:${cpData?.phoneNumber === undefined ? "NIL" : cpData?.phoneNumber}`,
       },
       {
-        label: `Wallet Balance: $0`,
+        label: `Payments`,
         icon: (
           <svg
             className="custom-icon-plus"

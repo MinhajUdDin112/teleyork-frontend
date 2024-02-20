@@ -57,12 +57,12 @@ const connection = [
         value: "",
     },
     {
-        label: "Electronically",
-        value: "Electronically",
+        label: "Externally",
+        value: "Externally",
     },
     {
-        label: "Non Electronically",
-        value: "Non Electronically",
+        label: "Internally",
+        value: "Internally",
     },
 ];
 export { TransferException, statusOption, connection };

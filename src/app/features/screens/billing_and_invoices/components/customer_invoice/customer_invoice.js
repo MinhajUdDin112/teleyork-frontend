@@ -62,8 +62,8 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                 <div className="flex flex-column mb-5">
                     {companyNameToCapital.includes("ZISFONE") ? 
                     <div className="ml-4">
-                    <img className="mb-0  pt-4" src="/Talkdaily.png" height="50" width="170" />
-                    <h6 className="mt-0">1225 Franklin Ave, Suite 325 Garden City, NY 11530</h6>
+                    <img className="mb-0  pt-4" src="/zisfonelogo.png" height="50" width="170" />
+                    <h6 className="mt-0">170 Old Country Road, Suite 303, Mineola, NY, 11501</h6>
                 </div>
                     :  <div className="ml-4">
                         <img className="mb-0  pt-4" src="/companyLogo2.png" height="80" width="200" />
@@ -137,7 +137,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </div>
                        
                         <p className="text-center">
-                            Please make checks payable to:<span className="company">{companyNameToCapital.includes("ZISFONE") ? "Talkdaily, Inc" :" IJ Wireless"}</span>
+                            Please make checks payable to:<span className="company">{companyName}</span>
                         </p>
 
                         <div className="remittancebottom"></div>
