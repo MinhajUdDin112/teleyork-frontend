@@ -9,6 +9,7 @@ import { Button } from "primereact/button";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
+import { setRef } from "@fullcalendar/core";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
@@ -84,7 +85,7 @@ const inventoryType = [
     },
 ];
 
-export default function EditPlan({ data, setEditPlanVisibility }) {
+export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
     const toast = useRef(null);
     const formik = useFormik({
         initialValues: {
@@ -114,7 +115,8 @@ export default function EditPlan({ data, setEditPlanVisibility }) {
                 .then(() => {
                     toast.current.show({ severity: "success", summary: "Plan Updation", detail: "Plan Updated Successfully" });
                     setTimeout(() => {
-                        setEditPlanVisibility(false);
+                        setEditPlanVisibility(false); 
+                        setRefresh(prev=>!prev)
                     }, 1000);
                 })
                 .catch((err) => {
