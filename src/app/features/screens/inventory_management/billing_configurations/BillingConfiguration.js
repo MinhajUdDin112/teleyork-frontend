@@ -150,12 +150,19 @@ const BillingConfiguration = () => {
         }
     };
     useEffect(() => {
-
+        
         getDiscount();
         getConfigData();
         getFeature();
     }, [refresh]); 
-   
+    useEffect(()=>{  
+         if(formik.values.inventoryType !== ""){
+        Axios.get(`${BASE_URL}/api/web/plan/all?getByInventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res)=>{ 
+             
+            setAllPlan(res?.data?.data || []);
+         }) 
+        }
+    },[formik.values.inventoryType])
 
     const addDiscount = async () => {
         const dataToSend = {
@@ -196,7 +203,7 @@ const BillingConfiguration = () => {
     };
 
 
-    useEffect(() => {
+ {/*   useEffect(() => {
         const getPlan = async () => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`);
@@ -208,7 +215,7 @@ const BillingConfiguration = () => {
         };
         getPlan();
     }, []);
-
+*/}
 
     const handleGenrateInvoice = () => {
 
