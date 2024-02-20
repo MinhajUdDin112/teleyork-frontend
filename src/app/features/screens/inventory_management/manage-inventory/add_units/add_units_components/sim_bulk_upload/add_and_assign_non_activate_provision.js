@@ -94,8 +94,8 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
             provisionType: "Add And Assign Non Active",
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions);
         },
     }); 
     function ApiResponseShow({res}){   
@@ -130,15 +130,15 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
            </div>
         )
         }
-    function handlesubmit() {
+    function handlesubmit(actions) {
         const formData = new FormData();
-        formData.append("file", formik.values.file);
+        formData.append("file", formik.values.file); 
         formData.append("serviceProvider", parseLoginRes?.compony);
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
         formData.append("agentType", formik.values.agentType);
         formData.append("AgentName", formik.values.AgentName);
-        formData.append("unitType", formik.values.unitType);
+        formData.append("unitType", formik.values.unitType); 
         formData.append("provisionType", formik.values.provisionType);
         // Perform API call or other actions with the formData
 
@@ -151,9 +151,19 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                 },
             })
                 .then((res) => {
-                    
-                    ref.current.show({ severity: "success", summary: "Inventory", detail:<ApiResponseShow res={res}/> });
-                    formik.resetForm();
+                     ref.current.show({ severity: "success", summary: "Inventory", detail:<ApiResponseShow res={res}/> });
+                     formik.setFieldValue("carrier", ""); 
+                     formik.setFieldValue("file", "");
+                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                     formik.setFieldValue("agentType", "");
+                     formik.setFieldValue("AgentName", "");
+                     formik.setFieldValue("SimNumber", ""); 
+                     formik.setFieldValue("unitType", "sim");
+                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                     formik.setFieldValue("provisionType", "Bulk Add And Assign Non Active Sims");
+                    setAgent([]) 
+                    setFilename(null)
+                     actions.resetForm();
                 })
                 .catch((error) => {
                     if (error.response && error.response.data && error.response.data.msg) {
@@ -250,7 +260,8 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                     </div>
                 </div>
                 <div className="flex justify-content-around align-item-center ">
-                   <div> <Button  
+                   <div> <Button    
+                    
                      className="field-width justify-content-center"
                         onClick={() => {  
                             setFileError(false)
@@ -273,7 +284,8 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                     </p>  :undefined
 }
                     </div>
-                    <Button 
+                    <Button  
+                    style={{height:"40px"}}
                     className="field-width  justify-content-center" 
                   
                         onClick={() => {   

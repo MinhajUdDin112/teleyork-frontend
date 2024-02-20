@@ -39,7 +39,6 @@ export default function TabletSingleUploadAddProvision({unit,permissions}) {
               // Move this inside the promise callback
                 })
                 .catch(() => {
-                    console.log("error");
                 });
         }
     }, []);  
@@ -144,14 +143,13 @@ export default function TabletSingleUploadAddProvision({unit,permissions}) {
             make:""
         },
 
-        onSubmit: (e) => {
+        onSubmit: (values,actions) => {
         
-            handlesubmit();  
+            handlesubmit(actions);  
         
         },
     });
-    function handlesubmit() {
-        console.log(formik.errors);  
+    function handlesubmit(actions) { 
          let obj=formik.values; 
          obj.serviceProvider=parseLoginRes.compony 
         if (Object.keys(formik.errors).length === 0) {
@@ -159,8 +157,24 @@ export default function TabletSingleUploadAddProvision({unit,permissions}) {
             
             Axios.post(`${BASE_URL}/api/web/tabletInventory/tabletAddStock`, obj)
                 .then((res) => { 
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                   ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                   formik.setFieldValue("carrier", "");
+                   formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                   formik.setFieldValue("agentType", "");
+                   formik.setFieldValue("AgentName", "");
+                   formik.setFieldValue("Esn", "");
+                   formik.setFieldValue("box", "");
+                   formik.setFieldValue("Model", "");
+                   formik.setFieldValue("unitType", "Tablet"); 
+                   
+                   formik.setFieldValue("make", "");
+                   formik.setFieldValue("IMEI", "");
+                   formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                   formik.setFieldValue("provisionType", "Tablet Add Stock");
+                   actions.resetForm();  
+                   setSelectedMakeId(null)
+                   setModel([])
+                   setAgent([]);
                 })
                 .catch((error) => {  
                  

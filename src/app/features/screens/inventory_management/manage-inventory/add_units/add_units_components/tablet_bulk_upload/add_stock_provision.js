@@ -89,11 +89,11 @@ export default function TabletBulkUploadAddStock({unit,permissions}) {
             /*team:"",*/
             unitType:unit,
             Uploaded_by: parseLoginRes?._id,
-            provisionType: "Add Stock",
+            provisionType: "Add Tablet Stock",
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions);
         },
     }); 
     function ApiResponseShow({res}){   
@@ -128,7 +128,7 @@ export default function TabletBulkUploadAddStock({unit,permissions}) {
            </div>
         )
         }
-    function handlesubmit() {
+    function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("serviceProvider", parseLoginRes?.compony);
@@ -150,6 +150,18 @@ export default function TabletBulkUploadAddStock({unit,permissions}) {
             })
                 .then((res) => {
                    ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                   formik.setFieldValue("carrier", ""); 
+                   formik.setFieldValue("file", "");
+                   formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                   formik.setFieldValue("agentType", "");
+                   formik.setFieldValue("AgentName", "");
+                   formik.setFieldValue("SimNumber", ""); 
+                   formik.setFieldValue("unitType", unit);
+                   formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                   formik.setFieldValue("provisionType", "Bulk Add Tablet Stocks");
+                  setAgent([]) 
+                  setFilename(null)
+                   actions.resetForm();
                 })
                 .catch(() => {
                 ref.current.show({ severity: "error", summary: "Inventory", detail:"Bulk Upload Failed"});

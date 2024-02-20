@@ -89,11 +89,11 @@
                 /*team:"",*/
                 unitType: unit,
                 Uploaded_by: parseLoginRes?._id,
-                provisionType: "Add Pre Activate",
+                provisionType: "Add Pre Activate Tablet",
             },
     
-            onSubmit: (e) => {
-                handlesubmit();
+            onSubmit: (values,actions) => {
+                handlesubmit(actions);
             },
         });  
         function ApiResponseShow({res}){   
@@ -128,7 +128,7 @@
                </div>
             )
             }
-        function handlesubmit() {
+        function handlesubmit(actions) {
             const formData = new FormData();
             formData.append("file", formik.values.file);
             formData.append("serviceProvider", parseLoginRes?.compony);
@@ -149,6 +149,18 @@
                 })
                     .then((res) => {
                         ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                        formik.setFieldValue("carrier", ""); 
+                        formik.setFieldValue("file", "");
+                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                        formik.setFieldValue("agentType", "");
+                        formik.setFieldValue("AgentName", "");
+                        formik.setFieldValue("SimNumber", ""); 
+                        formik.setFieldValue("unitType", unit);
+                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                        formik.setFieldValue("provisionType", "Bulk Add PrecActive Tablets");
+                       setAgent([]) 
+                       setFilename(null)
+                        actions.resetForm();
                     })
                     .catch(() => {
                    ref.current.show({ severity: "error", summary: "Inventory", detail:"Bulk Upload Failed"});

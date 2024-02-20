@@ -28,7 +28,6 @@ export default function TabletSingleUploadAddPreActivatedProvision({unit,permiss
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
                 .then((res) => {
-                    console.log(res.data.data);
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
@@ -148,13 +147,13 @@ export default function TabletSingleUploadAddPreActivatedProvision({unit,permiss
             make:""
         },
 
-        onSubmit: (e) => {
+        onSubmit: (values,actions) => {
         
-            handlesubmit();  
+            handlesubmit(actions);  
         
         },
     });
-    function handlesubmit() {
+    function handlesubmit(actions) {
         console.log(formik.errors);  
          let obj=formik.values; 
          obj.serviceProvider=parseLoginRes.compony 
@@ -164,8 +163,24 @@ export default function TabletSingleUploadAddPreActivatedProvision({unit,permiss
             Axios.post(`${BASE_URL}/api/web/tabletInventory/AddPreActivated`, obj)
                 .then((res) => {
                    
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
                     ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                    formik.setFieldValue("carrier", "");
+                    formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                    formik.setFieldValue("agentType", "");
+                    formik.setFieldValue("AgentName", "");
+                    formik.setFieldValue("Esn", "");
+                    formik.setFieldValue("box", "");
+                    formik.setFieldValue("Model", "");
+                    formik.setFieldValue("unitType", "Tablet"); 
+                    
+                    formik.setFieldValue("make", "");
+                    formik.setFieldValue("IMEI", "");
+                    formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                    formik.setFieldValue("provisionType", "Tablet Add Pre-Activated");
+                    actions.resetForm();  
+                    setSelectedMakeId(null)
+                    setModel([])
+                    setAgent([]); 
                 })
                 .catch((error) => {  
                        

@@ -93,7 +93,7 @@ const Dashboard = ({ permittedRoutes }) => {
                     <Calendar
                         className=" calendar1 font-bold"
                         value={startDateValue}
-                        timeZone="America/New_York"
+                      
                         onChange={(e) => {
                             if (e.value !== null) {
                                 const parsedDate = DateTime.fromJSDate(new Date(e.value));
@@ -114,7 +114,6 @@ const Dashboard = ({ permittedRoutes }) => {
                     <Calendar
                         className="  calendar2 "
                         value={endDateValue}
-                        timeZone="America/New_York"
                         onChange={(e) => {
                             if (e.value !== null) {
                                 const parsedDate = DateTime.fromJSDate(new Date(e.value));
