@@ -8,8 +8,7 @@ import Axios from "axios";
 import * as Yup from "yup";  
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
-import { Button } from "primereact/button";
-import InfoForUsers from "./InfoForUsers/info_for_users";  
+import { Button } from "primereact/button";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function TabletBulkUploadAddAndAssignNonActivateProvision({unit,permissions}) {
     const ref = useRef(null);
@@ -93,7 +92,7 @@ export default function TabletBulkUploadAddAndAssignNonActivateProvision({unit,p
             provisionType: "Add And Assign Non Active",
         },
 
-        onSubmit: (e) => {
+        onSubmit: (values,actions) => {
             handlesubmit();
         },
     });   
@@ -129,7 +128,7 @@ export default function TabletBulkUploadAddAndAssignNonActivateProvision({unit,p
            </div>
         )
         }
-    function handlesubmit() {
+    function handlesubmit(actions) {
          const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("serviceProvider", parseLoginRes?.compony);
@@ -149,7 +148,19 @@ export default function TabletBulkUploadAddAndAssignNonActivateProvision({unit,p
                 },
             })
                 .then((res) => {
-               ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                    ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                    formik.setFieldValue("carrier", ""); 
+                    formik.setFieldValue("file", "");
+                    formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                    formik.setFieldValue("agentType", "");
+                    formik.setFieldValue("AgentName", "");
+                    formik.setFieldValue("SimNumber", ""); 
+                    formik.setFieldValue("unitType", "Tablet");
+                    formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                    formik.setFieldValue("provisionType", "Bulk Add And Assign Non Active Tablets");
+                   setAgent([]) 
+                   setFilename(null)
+                    actions.resetForm();
                 })
                 .catch(() => {
                 ref.current.show({ severity: "error", summary: "Inventory", detail:"Bulk Upload Failed"});

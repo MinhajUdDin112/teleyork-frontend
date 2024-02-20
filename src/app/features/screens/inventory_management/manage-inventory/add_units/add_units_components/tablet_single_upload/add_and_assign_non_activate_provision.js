@@ -141,28 +141,42 @@ export default function TabletSingleUploadAddAndAssignNonActivateProvision({unit
             make:""
         },
 
-        onSubmit: (e) => {
+        onSubmit: (values,actions) => {
         
-            handlesubmit();  
+            handlesubmit(actions);  
         
         },
     });
-    function handlesubmit() {
-        console.log(formik.errors);  
+    function handlesubmit(actions) {
          let obj=formik.values; 
          obj.serviceProvider=parseLoginRes.compony 
         if (Object.keys(formik.errors).length === 0) {
             //formik.values.serviceProvider = parseLoginRes?.compony;  
             
             Axios.post(`${BASE_URL}/api/web/tabletInventory/addAndAssignNonActivate`, obj)
-                .then((res) => {
-                    console.log("Successfully done");  
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
+                .then((res) => {  
                     ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                    formik.setFieldValue("carrier", "");
+                    formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                    formik.setFieldValue("agentType", "");
+                    formik.setFieldValue("AgentName", "");
+                    formik.setFieldValue("Esn", "");
+                    formik.setFieldValue("box", "");
+                    formik.setFieldValue("Model", "");
+                    formik.setFieldValue("unitType", "Tablet"); 
+                    
+                    formik.setFieldValue("make", "");
+                    formik.setFieldValue("IMEI", "");
+                    formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                    formik.setFieldValue("provisionType", "Tablet Add And Assign Non Active");
+                    actions.resetForm();  
+                    setSelectedMakeId(null)
+                    setModel([])
+                    setAgent([]);
                 })
                 .catch((error) => {    
                     formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    console.log("error occured");  
+                    
                     ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
                 });  
                   

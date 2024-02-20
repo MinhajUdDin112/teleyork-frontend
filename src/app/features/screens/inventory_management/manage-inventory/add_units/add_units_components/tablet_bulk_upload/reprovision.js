@@ -89,11 +89,11 @@ export default function TabletBulkUploadReprovision({unit,permissions}) {
             /*team:"",*/
             unitType: unit,
             Uploaded_by: parseLoginRes?._id,
-            provisionType: "Add Reprovision",
+            provisionType: "Tablet Reprovision",
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions);
         },
     });
     function ApiResponseShow({res}){   
@@ -128,7 +128,7 @@ export default function TabletBulkUploadReprovision({unit,permissions}) {
            </div>
         )
         }
-    function handlesubmit() {
+    function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("serviceProvider", parseLoginRes?.compony);
@@ -149,6 +149,18 @@ export default function TabletBulkUploadReprovision({unit,permissions}) {
                 })
                     .then((res) => {
                         ref.current.show({ severity: "success", summary: "Info", detail: <ApiResponseShow res={res}/> });
+                        formik.setFieldValue("carrier", ""); 
+                        formik.setFieldValue("file", "");
+                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                        formik.setFieldValue("agentType", "");
+                        formik.setFieldValue("AgentName", "");
+                        formik.setFieldValue("SimNumber", ""); 
+                        formik.setFieldValue("unitType", "sim");
+                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                        formik.setFieldValue("provisionType", "Bulk Add And Assign Non Active Sims");
+                       setAgent([]) 
+                       setFilename(null)
+                        actions.resetForm();
                     })
                     .catch(() => {
                          ref.current.show({ severity: "error", summary: "Info", detail:"Bulk Upload Failed" });

@@ -125,11 +125,11 @@ export default function TabletBulkUploadAddActivateProvision({unit,permissions})
             provisionType: "Add Activate",
         },
 
-        onSubmit: (e) => {
-            handlesubmit();
+        onSubmit: (values,actions) => {
+            handlesubmit(actions);
         },
     });
-    function handlesubmit() {
+    function handlesubmit(actions) {
          const formData = new FormData();
         formData.append("file", formik.values.file);
         formData.append("serviceProvider", parseLoginRes?.compony);
@@ -149,7 +149,19 @@ export default function TabletBulkUploadAddActivateProvision({unit,permissions})
                 },
             })
                 .then((res) => {
-                    ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                      ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
+                      formik.setFieldValue("carrier", ""); 
+                      formik.setFieldValue("file", "");
+                      formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                      formik.setFieldValue("agentType", "");
+                      formik.setFieldValue("AgentName", "");
+                      formik.setFieldValue("SimNumber", ""); 
+                      formik.setFieldValue("unitType", unit);
+                      formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                      formik.setFieldValue("provisionType", "Bulk Add And Activate Tablets");
+                      setAgent([]) 
+                      setFilename(null)
+                      actions.resetForm();
                 })
                 .catch(() => {
                   
