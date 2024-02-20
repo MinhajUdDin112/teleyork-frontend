@@ -20,17 +20,17 @@ let InventoryManagment = [
     {
         component: "AddUnits",
         title: "Add Units",
-        imgsrc: "/images/Inventory Module.png",
+        imgsrc: "/images/inventory/inventory_add.png",
     }, 
     {
         component: "UpdateInventory",
         title: "Update Inventory",
-        imgsrc: "/images/Inventory Module.png",
+        imgsrc: "/images/inventory/Update Inventory.png",
     },
     {
         component: "InventoryDashboard",
         title: "Inventory Dashboard",
-        imgsrc: "/images/Inventory Module.png",
+        imgsrc: "/images/inventory/icon-data-chart.png",
     },
    /* {
         component: "Reportings",
@@ -146,11 +146,9 @@ const Manage_inventory = () => {
             ) : activeComponent === "Equipment_And_Accessories_Request" ? (
                 <Equipment_And_Accessories_Request setActiveComponent={setActiveComponent} />
             ) : (
-                <>
-                  <div className="font-bold card " style={{ fontSize: "21px", color: "grey",  }}>
-                        Manage Inventory
-                    </div>
-                    <div className="flex justify-content-around flex-wrap pt-3 card"> 
+                <div>
+                     <h1 className="font-bold ml-5"> Manage Inventory</h1>
+                    <div className="flex justify-content-left flex-wrap pt-3 mt-4 "> 
                    
                         <>
                             {InventoryManagment.map((inventory) => (
@@ -159,10 +157,11 @@ const Manage_inventory = () => {
                                        
                                         backgroundColor: "#fff",
                                         marginBottom: "20px",
-                                        fontWeight:"900",
-                                        boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",cursor:"pointer"
+                                        fontWeight:"900", 
+                                        width:"300px",
+                                        cursor:"pointer"
                                     }} 
-                                    className="manage-inventory"
+                                    className="manage-inventory ml-5"
                                     onClick={() => {
                                     inventory.title === "Dropship Orders" ? navigate("/dropshiporders"):handleImageClick(inventory.component) 
                                     }}
@@ -173,8 +172,9 @@ const Manage_inventory = () => {
                                         style={{
                                             borderRadius: "6px 6px 0px 0px",
                                             height: "100%",
-                                            width: "100%",
-                                            objectFit: "contain",
+                                            width: "50%",
+                                            marginLeft:"50%" , 
+                                            transform:"translate(-50%)",
                                         }}
                                         // Set the active component when image 1 is clicked
                                     />
@@ -185,7 +185,7 @@ const Manage_inventory = () => {
                             ))}
                         </>
                     </div>
-                </>
+                </div>
             )}
         </Card>
     );
