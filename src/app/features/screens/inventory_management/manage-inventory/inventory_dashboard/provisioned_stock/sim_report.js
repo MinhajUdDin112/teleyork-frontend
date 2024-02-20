@@ -8,7 +8,7 @@ export default function SIMProvisionedStockReport() {
       };
     return (
         <>
-         <img src='/images/inventory_dashboard/sim.svg' style={{display:"inline-block",width:"40px",height:"auto"}}/>  
+         <img src='/images/inventory_dashboard/sim.svg' alt="img" style={{display:"inline-block",width:"40px",height:"auto"}}/>  
              
             <h5 style={{display:"inline-block",position:"absolute",marginTop:"12px"}}>SIM Service</h5>
             {Object.keys(provisionedsimreport).map((item) => (

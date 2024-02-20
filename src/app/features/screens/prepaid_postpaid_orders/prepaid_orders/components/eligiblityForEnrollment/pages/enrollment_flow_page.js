@@ -111,8 +111,7 @@ export default function EnrollmentFlowPage() {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const csr = parseLoginRes?._id;
-    // Get role name  from login response
-    const roleName = parseLoginRes?.role?.role;
+
    
     //     getting _id and enrollment id from local storage
     const zipRes = localStorage.getItem("prepaidzipData");

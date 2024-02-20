@@ -7,7 +7,7 @@ export default function DisplayAdvanceSearchApiResponse({ searchData, setSearchB
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
-    const toCapital = roleName.toUpperCase();
+   
     const handleEnrollmentIdClick = (rowData) => {
         setSearchBy(null);
         navigate("/customer-profile", { state: { selectedId: rowData._id } });

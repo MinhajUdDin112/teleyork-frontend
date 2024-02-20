@@ -112,6 +112,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             BenifitDOB: "",
             isACP: acp,
             salesChannel: "",
+            maidenMotherName:"",
         },
         onSubmit: async (values, actions) => {
             if (selectedDay === null || selectedYear === null || selectedMonth === null) {
@@ -148,7 +149,8 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     BenifitSSN: formik.values.BenifitSSN,
                     BenifitDOB: formik.values.BenifitDOB,
                     isACP: acp, 
-                    salesChannel:formik.values.salesChannel
+                    salesChannel:formik.values.salesChannel,
+                    maidenMotherName:formik.values.maidenMotherName
                 };
 
                 setIsLoading(true);
@@ -405,6 +407,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
             formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
             formik.setFieldValue("salesChannel",parsebasicResponse?.data?.salesChannel)
+            formik.setFieldValue("maidenMotherName",parsebasicResponse?.data?.maidenMotherName)
             //chnage state
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
@@ -413,10 +416,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         }
     }, []);
 
-    const handlePaste = (event) => {
-        event.preventDefault();
-        toast.warning("Pasting is not allowed in this field.");
-    };
+   
     //salesChannel Channel Options
     const salesChannelOptions = [
         {
@@ -548,6 +548,19 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         </label>
                         <InputText type="text" id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                         {getFormErrorMessage("SSN")}
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">
+                        Mother's Maiden Name 
+                        </label>
+                        <InputText
+                            id="maidenMotherName"
+                            value={formik.values.maidenMotherName}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            style={{ textTransform: "uppercase" }}
+                        />
+                        
                     </div>
 
                     <div className="field col-12 md:col-6">

@@ -349,6 +349,12 @@ const CustomerProfile = () => {
 
                                                     {isShow && isShow ? <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
                                                 </tr>
+                                                <tr>
+                                                    <td>Mother's Maiden Name</td>
+
+
+                                                    {isShow && isShow ? <td>{cpData?.maidenMotherName !== undefined ? cpData?.maidenMotherName : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                </tr>
 
                                                 <tr>
                                                     <td>Customer DOB</td>

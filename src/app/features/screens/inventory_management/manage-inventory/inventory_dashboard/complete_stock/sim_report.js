@@ -58,7 +58,7 @@ export default function SIMCompleteStockReport() {
     }, []);
     return (
         <>
-            <img src="/images/inventory_dashboard/sim.svg" style={{ display: "inline-block", width: "40px", height: "auto" }} />
+            <img src="/images/inventory_dashboard/sim.svg" alt="img" style={{ display: "inline-block", width: "40px", height: "auto" }} />
 
             <h5 style={{ width: "50px", display: "inline-block", position: "absolute", marginTop: "12px" }}>SIMService</h5>
             {Object.keys(completedsimreport).map((item) => (
