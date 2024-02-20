@@ -20,7 +20,7 @@ const statusOption = [
     { label: "Select Status", value: "" },
     {
         label: "Label Printed",
-        value: "printed",
+        value: "labelPrinted",
     },
     {
         label: "Pre-Shipment",
@@ -28,7 +28,7 @@ const statusOption = [
     },
     {
         label: "In-Transit",
-        value: "intransit",
+        value: "inTransit",
     },
     {
         label: "Active",

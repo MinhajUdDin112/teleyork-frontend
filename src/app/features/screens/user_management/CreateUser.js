@@ -92,8 +92,7 @@ const CreateUser = () => {
             navigate("/manage-user");
         },
     });
-    console.log("department value is", formik.values.department);
-    console.log("state is", checkDeprt);
+   
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {

@@ -278,7 +278,7 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                             value={formik.values.SimNumber}
                             name="SimNumber"
                             onChange={(e) => {
-                                console.log(formik.values);
+                              
                                 formik.setFieldValue("SimNumber", e.target.value);
                                 setSimNumberError(false);
                             }}

@@ -85,7 +85,7 @@ const CustomerProfile = () => {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
-                console.log("cp data is", res?.data?.data);
+              
                ;
             }
         } catch (error) { }
@@ -151,7 +151,7 @@ const CustomerProfile = () => {
     //For Showing SOCS Which is Comma Seperated array
     function showsocs(socarray) {
         if (socarray !== undefined) {
-            console.log(socarray);
+           
             var commaSeparatedString = "";
             for (let i = 0; i < socarray.length; i++) {
                 if (i === 0) {
@@ -176,7 +176,7 @@ const CustomerProfile = () => {
     }
     const downloadLabel = () => {
         const path = cpData?.label;
-        console.log("Path is", path);
+       
         const trimmedPath = path.replace(/^uploads\//, "");
         const fileUrl = `http://dev-api-zisfone.teleyork.com/${trimmedPath}`;
     

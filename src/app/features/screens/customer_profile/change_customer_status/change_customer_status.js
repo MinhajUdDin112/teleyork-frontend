@@ -27,7 +27,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
     const connectionTypeOption=connection
 
     const UpdateStatus = async()=> {
-        if (statusTo === "printed") {
+        if (statusTo === "labelPrinted") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,
@@ -59,7 +59,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                                  
                 });
         }
-        else  if (statusTo === "intransit") {
+        else  if (statusTo === "inTransit") {
             const dataToSend={
                 customerId:cpData?._id,
                 status:statusTo,

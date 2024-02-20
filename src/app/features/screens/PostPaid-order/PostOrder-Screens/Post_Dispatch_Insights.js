@@ -40,7 +40,7 @@ const Post_Dispatch_Insight = () => {
                 const response = await Axios.get(`${BASE_URL}/api/user/dispatchInsight?userId=${parseLoginRes?._id}&accountType=Postpaid`);
                 if (response?.status === 200 || response?.status === 201) {
                     setHistoryData(response?.data?.data);
-                    console.log("Data is", response?.data?.data)
+                    
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -72,13 +72,13 @@ const Post_Dispatch_Insight = () => {
                 startDate: formattedStartDate,
                 endDate: formattedEndDate,
             };
-            console.log("data to send is", dataToSend);
+          
             setIsLoading(true);
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/dispatchInsight?userId=${parseLoginRes?._id}&accountType=Postpaid&startDate=${formattedStartDate}T00:00:00&endDate=${formattedEndDate}T23:59:59`);
                 if (response?.status === 200 || response?.status === 201) {
                     setHistoryData(response?.data?.data);
-                    console.log("Data is", response?.data?.data)
+                    
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

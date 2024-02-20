@@ -32,7 +32,7 @@ export default function ViewFiles() {
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${parseselectedid}`);
           if(response?.status==200){
             setCustomerFile(response?.data?.data?.pdfPath)
-            console.log("customer data is",response?.data?.data?.pdfPath)
+          
           }
          
         } catch (error) {
@@ -52,7 +52,7 @@ export default function ViewFiles() {
             }
         } catch (error) {
            toast.error("Error of getting of All Files is" + error)
-           console.log("error of getting is",error)
+         
         }
     };
     useEffect(() => {
@@ -92,7 +92,7 @@ export default function ViewFiles() {
                  }
                    
                 } catch (error) {
-                    console.log("error is",error)
+                  
                     toast.error(error?.response?.data?.msg);
                     setIsLoading(true);
                 }
@@ -122,13 +122,13 @@ export default function ViewFiles() {
 if(customerFile){
     // const trimmedPath = customerFile.replace(/^uploads\//, '');  
     const fileUrl = `http://dev-api.teleyork.com/${customerFile}`;   
-    console.log("customer file path is",fileUrl)
+    
 }
    
     const downloadCustomerFile=()=>{
        // const trimmedPath = customerFile.replace(/^uploads\//, '');  
         const fileUrl = `http://dev-api.teleyork.com/${customerFile}`;   
-        console.log("customer file path is",fileUrl)
+      
         const link = document.createElement("a");
         link.href = fileUrl;
         link.setAttribute("download", ""); // Use an empty attribute to indicate that the file should be downloaded

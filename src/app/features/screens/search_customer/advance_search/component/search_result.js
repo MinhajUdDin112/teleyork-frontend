@@ -66,7 +66,7 @@ export default function DisplayAdvanceSearchApiResponse({ searchData, setSearchB
                     field="assignedToUser[0].name"
                     header="Phase"
                     body={(rowData) => {
-                        console.log("row data is ", rowData);
+                      
                         return (
                             <span>
                                 {/* {rowData.assignedToUser.map((user) => (

@@ -104,10 +104,10 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                 <Column field="lateFee" header="Late Fee"  />
                 <Column field="invoiceDueDate" header="DueDate"  />
                 <Column field="invoiceStatus" header="Status" body={(rowData)=>{
-                            if(rowData.amountPaid=="0"){
+                            if(rowData.amountPaid==="0"){
 return <p>Pending</p>
                             }
-                            else if(rowData.amountPaid>"0" && rowData.dueAmount=="0"){
+                            else if(rowData.amountPaid>"0" && rowData.dueAmount==="0"){
                                 return <p>Partially Paid</p>
                             }
                             else {

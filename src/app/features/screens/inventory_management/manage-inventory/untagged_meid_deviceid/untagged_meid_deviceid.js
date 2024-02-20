@@ -7,7 +7,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Card } from "primereact/card";
 export default function Untagged_MEID_DEVICEID({ setActiveComponent }) {
     function handleUntagged_MEID_DEVICEID_Submit() {
-        console.log("form will submit here");
+      
     }
     const formik = useFormik({
         initialValues: {

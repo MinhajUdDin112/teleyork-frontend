@@ -34,7 +34,7 @@ export default function PaymentStripeForm({ clientSecret,object,handleNext}) {
        
              if(paymentproceed === "paid"){  
                 handleNext();
-                console.log("payment paid")
+              
            
          }
             toast.current.show({ severity: "success", summary: "Payment Processed", detail: "Payment has been successfully processed" });

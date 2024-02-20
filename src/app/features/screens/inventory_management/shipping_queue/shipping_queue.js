@@ -7,7 +7,6 @@ import { paymentcompleted } from "./asset";
 import { DataTable } from 'primereact/datatable';  
 import {Dialog} from "primereact/dialog" 
 import {FileUpload} from "primereact/fileupload"
-import { Column } from 'primereact/column'; 
 import { useLocation } from "react-router-dom";   
 import { useFormik } from "formik"; 
 import { emptydistributor, employee, emptyemployee, emptyretailer, queuename, distributor, retailer, masteragent, status } from "./asset";
@@ -45,7 +44,7 @@ export default function ShippingQueue() {
     function onUpload(){ 
 
     }
-    const [searchresult,setSearchResult]=useState([])   
+   
     const [visibledialog,setVisibleDialog]=useState(false)
     oneMonthAgo.setMonth(oneMonthAgo.getMonth());
     const date = new Date();  
@@ -289,7 +288,7 @@ export default function ShippingQueue() {
                           <Button disabled={!isManage} label="Shipper Batch Report"  style={{marginTop:"25px",position:"absolute",right:"80px"}}/>  
                       </div>             
                       <div style={{marginTop:"99px"}}>   
-                         <h5>Search Result {searchresult.length}</h5>
+                         <h5>Search Result </h5>
                         <DataTable > 
                              </DataTable>   
                              </div>

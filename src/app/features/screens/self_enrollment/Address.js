@@ -114,12 +114,11 @@ const Address = () => {
     };
 
     useEffect(() => {
-        console.log("here out side")
+      
        
            
             formik.setFieldValue("isBillAddress", isBillAddress);
-            console.log("here in  side")
-            console.log("state is",isBillAddress)
+          
        
     }, [isBillAddress]);
     

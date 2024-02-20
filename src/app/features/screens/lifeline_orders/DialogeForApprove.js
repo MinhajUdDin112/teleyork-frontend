@@ -23,7 +23,7 @@ const [isButtonLoading, setisButtonLoading] = useState(false)
     const handleApproveSelected = async () => {
         setisButtonLoading(true);
            
-            console.log("selected row is",enrollmentIds)
+           
             const dataToSend = {
                 approvedBy: parseLoginRes?._id,
                 enrolmentIds: enrollmentIds,

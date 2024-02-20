@@ -60,7 +60,7 @@ export default function EnrollmentFlowPage() {
                          //SIM Plans
                         localStorage.setItem("simplan", JSON.stringify(plans));
                     } else if (response.data.data[i].inventoryType === "Wireless Device") {   
-                         console.log("invenoty type is Device ")
+                       
                         let obj = { label: "Wireless Device", value:response.data.data[i]._id };
                         inventoryType.push(obj);
                         for (let k = 0; k < response.data.data[i].monthlyCharge.length; k++) {
@@ -113,10 +113,8 @@ export default function EnrollmentFlowPage() {
     const csr = parseLoginRes?._id;
     // Get role name  from login response
     const roleName = parseLoginRes?.role?.role;
-    console.log(roleName);
-
+   
     //     getting _id and enrollment id from local storage
-
     const zipRes = localStorage.getItem("prepaidzipData");
     const parseZipRes = JSON.parse(zipRes);
     const enrollment_id = parseZipRes?.data?.enrollmentId;
