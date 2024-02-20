@@ -7,7 +7,7 @@ import { Card } from "primereact/card";
 import ClearDeviceData from "./clear_device_report";
 export default function ClearDevice({setPage}) {      
     function handleClearDeviceSubmit() {
-        console.log("form will submit here");
+        
     }
     const formik = useFormik({
         initialValues: {

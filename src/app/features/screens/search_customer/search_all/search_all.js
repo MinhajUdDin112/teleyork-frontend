@@ -21,7 +21,7 @@ export default function Searchall({ searchValue,callSearchApi, setSearchBy,setSe
         Axios.get(`${BASE_URL}/api/web/search/?query=${searchValue}&userId=${parseLoginRes._id}`)
             .then((response) => {    
                 if (typeof response.data.data === 'object' && !Array.isArray(response.data.data)) {
-                    console.log('It is an object'); 
+                 
                      let arr=[response.data.data] 
                      setSearchData(arr); 
                   }  

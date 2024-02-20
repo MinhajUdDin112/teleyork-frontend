@@ -26,10 +26,10 @@ const VerifyZip = () => {
             modifiedURL = modifiedURL.replace("/#/", "");
             if(modifiedURL.includes("login")){
                 modifiedURL = modifiedURL.replace("login", "");
-                console.log("modified url in login", modifiedURL);
+               
             }   else{
                 modifiedURL = modifiedURL.replace("selfenrollment", "");
-                console.log("modified url in self", modifiedURL);
+               
             }      
           
             
@@ -39,7 +39,7 @@ const VerifyZip = () => {
             modifiedURL = modifiedURL.replace("/#/", "");
             modifiedURL = modifiedURL.replace("login", "");
             modifiedURL = modifiedURL.replace("selfenrollment", "");
-            console.log("modified url with out dev", modifiedURL);
+          
           
         }
         const sendURl = async ()=>{

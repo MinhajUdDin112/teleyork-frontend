@@ -20,8 +20,7 @@ const NationalVerifier = () => {
     const cmpnyResString = localStorage.getItem("companyName");
     const cmpnyRes = cmpnyResString ? JSON.parse(cmpnyResString) : null;
     const companyName = cmpnyRes;
-    console.log("whole res is",cmpnyRes)
-    console.log("cmpny name is",companyName)
+  
 
 
     const handleNext = async () => {

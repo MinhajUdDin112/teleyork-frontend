@@ -16,7 +16,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
 
     useEffect(() => {
-        console.log("invoice data in invoice screen is",invoiceData)
+      
         if (invoiceData !== undefined && invoiceData !== null) {
             downloadButtonRef.current.click();
         }

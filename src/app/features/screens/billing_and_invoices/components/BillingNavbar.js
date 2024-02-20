@@ -20,7 +20,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
       );
       setCpData(res?.data?.data || []);
       setAccountType(res?.data?.data?.accountType);
-      console.log("Account type is", accountType);
+    
     } catch (error) {
       // Handle error
     }
@@ -36,7 +36,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
 
   var items;
   if (accountType === null) {
-    console.log("here outside");
+   
     // Render loading or placeholder if accountType is not available yet
     return <div>Loading...</div>;
   } else {
@@ -50,8 +50,8 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
               <circle cx="12" cy="6" r="4" fill="#1C274C"></circle>
               <path
@@ -77,8 +77,8 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
               <path
                 fill-rule="evenodd"

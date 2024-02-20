@@ -8,9 +8,7 @@ import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
-    console.log(localStorage.getItem("simdiscount"));
-    console.log(localStorage.getItem("simplan"));
-    console.log(localStorage.getItem("deviceplan"));
+   
     const [inventory, setInventory] = useState();
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -140,7 +138,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     options={JSON.parse(localStorage.getItem("simplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
-                                        console.log("formik values is", formik.values.plan);
+                                       
 
                                         if (formik.values.plan === "") {
                                             let devicepricing = JSON.parse(localStorage.getItem("simpricing"));
@@ -180,7 +178,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     options={JSON.parse(localStorage.getItem("deviceplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
-                                        console.log("formik values is", formik.values.plan);
+                                     
 
                                         if (formik.values.plan === "") {
                                             let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));

@@ -75,13 +75,13 @@ const PaymentScreen = () => {
                 reportType: formik.values.reportType,
                 startDate: formattedStartDate,
             };
-            console.log("data to send is", dataToSend);
+         
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/customerHistory`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
                     setHistoryData(response?.data?.data);
-                    console.log("Data is", response?.data?.data);
+                  
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

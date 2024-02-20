@@ -12,7 +12,7 @@ export default function PaymentStripModule({amount,object,handleNext}) {
    
   useEffect(()=>{  
     Axios.post(`${BASE_URL}/api/web/billing/paymentintent`,{amount:amount}).then((response)=>{ 
-      console.log(response.data.clientSecret)
+     
      setClientSecret(response.data.clientSecret)
 }).catch(err=>{ 
 

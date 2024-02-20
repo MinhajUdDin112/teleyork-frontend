@@ -9,7 +9,7 @@ import { Dropdown } from "primereact/dropdown";
 export default function DisplayAllNotesDialog({ notes }) { 
       const [globalFilterValue,setGlobalFilterValue]=useState(null) 
       const [noteFilterValue,setNoteFilterValue]=useState(null)
-    console.log("notes is ", notes);   
+     
     //Filter for Notes
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -86,12 +86,7 @@ export default function DisplayAllNotesDialog({ notes }) {
                     body={(rowData) => {
                       
                         let createdAt = new Date(rowData.createdAt);
-                        console.log(
-                            `${(createdAt.getMonth() + 1).toString().padStart(2, "0")}-${createdAt.getDate().toString().padStart(2, "0")}-${createdAt.getFullYear()} ${createdAt.getHours().toString().padStart(2, "0")}:${createdAt.getMinutes().toString().padStart(2, "0")}:${createdAt
-                                .getSeconds()
-                                .toString()
-                                .padStart(2, "0")}`
-                        );
+                      
                         return (
                             <span>{`${(createdAt.getMonth() + 1).toString().padStart(2, "0")}-${createdAt.getDate().toString().padStart(2, "0")}-${createdAt.getFullYear()} ${createdAt.getHours().toString().padStart(2, "0")}:${createdAt.getMinutes().toString().padStart(2, "0")}:${createdAt
                                 .getSeconds()

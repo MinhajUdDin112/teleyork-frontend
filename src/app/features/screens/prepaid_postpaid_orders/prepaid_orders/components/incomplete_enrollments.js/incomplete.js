@@ -172,7 +172,7 @@ const PrepaidInCompleteEnrollments = () => {
         setSelectedEnrollmentId(_id);
         try {
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
-               console.log("response is",response)
+             
              if (response?.status === 201 || response?.status === 200) {
             
                 localStorage.setItem("comingfromincomplete",true)

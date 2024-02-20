@@ -31,14 +31,14 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
             setDisableSubmit(false);
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
         } else {
-            console.log(paymentIntent.id);
+          
             localStorage.setItem("paymentstatus", "paid");
 
             localStorage.setItem("stripeId", paymentIntent.id);
-            console.log("inside payment submit");
+          
             //setActiveIndex(3);
             let paymentproceed = localStorage.getItem("paymentstatus");
-            console.log("customer id is", object.customerid);
+          
             if (paymentproceed === "paid") {
                 let additionalFeature = [];
                 let discounts = [];
@@ -138,7 +138,7 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                         to: "onActivation",
                     },
                 };
-                console.log("Data To Send Is", dataToSend);
+              
                 Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend)
                     .then((response) => {
                         localStorage.setItem("paymentallinfo", JSON.stringify(response.data));

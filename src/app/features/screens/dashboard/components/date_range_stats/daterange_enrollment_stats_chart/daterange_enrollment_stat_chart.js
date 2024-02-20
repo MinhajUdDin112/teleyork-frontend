@@ -97,7 +97,7 @@ export default function DateRangeEnrollmentStatChart({ role, BASE_URL, userid, p
                 .then((response) => {
                     if (response.data.data !== undefined) {
                         let enrollmentsInDateRange;
-                        if (role == "CSR" || role === "TEAM LEAD") {
+                        if (role === "CSR" || role === "TEAM LEAD") {
                             enrollmentsInDateRange = response.data.data.filter((enrollment) => {
                                 return DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() >= startDate && DateTime.fromFormat(enrollment.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() <= endDateEnrollment;
                             });
@@ -220,7 +220,7 @@ export default function DateRangeEnrollmentStatChart({ role, BASE_URL, userid, p
             });
         }
         return () => { 
-            console.log("return of chart is calling")
+          
             isMounted = false;
         }
     }, [startDate, endDate]);
