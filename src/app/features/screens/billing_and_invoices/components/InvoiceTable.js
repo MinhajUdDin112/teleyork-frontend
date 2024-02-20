@@ -10,7 +10,7 @@ import { Dialog } from "primereact/dialog";
 
 const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
     const cardData = invoiceData;   
-   
+    const [isLoading, setIsLoading] = useState(false)
     const [singleInvoiceData,setInvoiceData]=useState()
     const [dialogeForAuthPayment,setdialogeForAuthPayment]=useState(false)
    
@@ -29,6 +29,8 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
       const parseLoginRes = JSON.parse(loginRes);
        const companyName = parseLoginRes?.companyName;
      const companyNameToCapital = companyName.toUpperCase();
+
+
      
        
      
@@ -168,23 +170,19 @@ return <p>Pending</p>
                     
                 />
 
-                <Column
-                    field="Invoice_Pdf"
-                    body={ 
-                          (rowData)=>{ 
-                            return (
-                        <Button className="bg-green-400   pr-2 pt-2 pl-3 pr-3  pb-2 border-none" onClick={() => {setInvoiceData(rowData)}}>
-                            Download{" "}
-                        </Button>  
-                            )
-                          }
-                    }
-                    header="Invoice Pdf"
-                    
-                /> 
+<Column
+    field="Invoice_Pdf"
+    body={rowData => (
+        <Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2" onClick={() => {setInvoiceData(rowData)}} disabled={isLoading} icon={isLoading ? "pi pi-spin pi-spinner" : ""}>
+            Download
+        </Button>  
+    )}
+    header="Invoice Pdf"
+/>
+
                 
             </DataTable>  
-           <CustomerInvoice  userDetails={userDetails} invoiceData={singleInvoiceData} />
+           <CustomerInvoice  userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading}/>
         </div>
     );
 };

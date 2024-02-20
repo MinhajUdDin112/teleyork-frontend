@@ -295,14 +295,14 @@ const CustomerProfile = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    {isShow && isShow ? <td>{cpData?.malingAddress1 !== undefined || cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " " ? cpData?.malingAddress12 && cpData?.malingAddress : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? <td>{cpData?.malingAddress1 !== undefined || cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " " ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td> : <div className="mt-3"><h3>*****</h3></div>}
 
 
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
                                                     {isShow ? (
-                                                        <td>{cpData?.mailingCity && cpData?.mailingCity.trim() !== "" ? cpData?.mailingCity : "NIL"}</td>
+                                                        <td>{cpData?.mailingCity && cpData?.mailingCity.trim() !== "" ? cpData?.mailingCity : cpData?.city}</td>
                                                     ) : (
                                                         <td>
                                                             <div className="mt-3">
@@ -315,7 +315,7 @@ const CustomerProfile = () => {
                                                 <tr>
                                                     <td>Mailing State</td>
                                                     {isShow ? (
-                                                        <td>{cpData?.mailingState && cpData?.mailingState.trim() !== "" ? cpData?.mailingState : "NIL"}</td>
+                                                        <td>{cpData?.mailingState && cpData?.mailingState.trim() !== "" ? cpData?.mailingState : cpData?.state}</td>
                                                     ) : (
                                                         <td>
                                                             <div className="mt-3">
@@ -327,7 +327,7 @@ const CustomerProfile = () => {
                                                 <tr>
                                                     <td>Mailing Zip</td>
                                                     {isShow ? (
-                                                        <td>{cpData?.mailingZip && cpData?.mailingZip.trim() !== "" ? cpData?.mailingZip : "NIL"}</td>
+                                                        <td>{cpData?.mailingZip && cpData?.mailingZip.trim() !== "" ? cpData?.mailingZip : cpData?.zip}</td>
                                                     ) : (
                                                         <td>
                                                             <div className="mt-3">

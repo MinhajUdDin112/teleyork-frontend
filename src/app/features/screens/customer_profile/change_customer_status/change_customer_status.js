@@ -8,6 +8,7 @@ import React, { useState,useRef, useEffect } from "react";
 import { TransferException, statusOption ,connection} from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus }) {  
+    const [isLoading, setIsLoading] = useState(false)
      //For Showing Toast Message
     const toast = useRef(null);
     const loginRes = localStorage.getItem("userData");
@@ -107,6 +108,22 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
             }
         
         }
+        else  if (statusTo === "evaluation" ) {
+            const dataToSend={
+                customerId:cpData?._id,
+                status:statusTo,
+            }
+            try {
+                const response= await  Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                if(response?.status=="200" || response?.status=="201"){
+                    setChangeCustomerStatus(false)
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                }
+            }  catch (error) {
+                toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+            }
+        
+        }
 
         else  if (statusTo === "active" && connectionType=="Electronically") {
             const dataToSend={
@@ -114,17 +131,22 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                 userId:parseLoginRes?._id        
             }
             try {
+                 setIsLoading(true)
                 const response= await  Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend)
-                console.log("status response is",response)
+               
                 if(response?.status===200 || response?.status===201){
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
                 }
+                setIsLoading(false)
             }  catch (error) {
-                console.log("error is",error)
+                setIsLoading(false)
+    
                 toast.current.show({ severity: "error", summary: "Customer Status", detail: error?.response?.data?.msg || error });
             }
+            setIsLoading(false)
         
         }
+       
      else   if (statusTo === "disconnect") {
             Axios.post(`${BASE_URL}/api/user/disconnectMdnByPwg`, { enrollmentId: cpData?._id })
                 .then(() => { 
@@ -219,7 +241,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                 />
             </div>
             <div className="align-self-center mt-4">
-                <Button onClick={UpdateStatus} label="Update Status " className="field-width mt-4" />
+                <Button onClick={UpdateStatus} label="Update Status " className="field-width mt-4"  disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
             </div>  
             <Toast ref={toast}/>
         </div>
