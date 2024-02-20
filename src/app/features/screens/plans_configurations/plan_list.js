@@ -57,12 +57,15 @@ export default function ListAllPlans() {
                 <EditPlan data={rowData} setEditPlanVisibility={setEditPlanVisibility}/>
             </Dialog>
             <DataTable value={planList} size="small" stripedRows resizableColumns emptyMessage="No Plan found." style={{ marginTop: "44px" }}>
+                 <Column header="Plan ID" field="planId"/>
                 <Column header="Name" field="name" />
                 <Column header="Description" field="description" />
 
                 <Column header="Text Allowance" field="textAllowance" />
                 <Column header="Data Allowance" field="dataAllowance" />
-                <Column header="Voice Allowance" field="voiceAllowance" />
+                <Column header="Voice Allowance" field="voiceAllowance" /> 
+                 <Column header="Retail Price" field="price" />  
+                
                 <Column header="Actions" body={(rowData)=>{ 
                    return <Button label="Update" onClick={()=>{ setRowData(rowData);setEditPlanVisibility(true)} } className=" p-button-primary mr-2 ml-2 pt-1 pb-1" text raised />;
                 }} field="Edit" />
