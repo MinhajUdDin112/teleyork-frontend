@@ -24,7 +24,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
     const [fileerror,setFileError]=useState(false)
     useEffect(() => {
         if (department === null) {
-            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
+            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
@@ -133,7 +133,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
     function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file); 
-        formData.append("serviceProvider", parseLoginRes?.compony);
+        formData.append("serviceProvider", parseLoginRes?.company);
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
         formData.append("agentType", formik.values.agentType);
@@ -144,7 +144,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
 
         if (Object.keys(formik.errors).length === 0 ) {  
             if(formik.values.file !== ""){
-            formik.values.serviceProvider = parseLoginRes?.compony;
+            formik.values.serviceProvider = parseLoginRes?.company;
             Axios.post(`${BASE_URL}/api/web/simInventory/bulkAddAndAssignNonActivate`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",

@@ -97,7 +97,7 @@ export default function BasicDemo() {
     };
     const getAllRoles = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.company}`);
 
             if (res?.status === 200 || res?.status === 201) {
 

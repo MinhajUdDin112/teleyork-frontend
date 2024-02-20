@@ -27,7 +27,7 @@ const CreateTemplate = () => {
     const parseLoginRes = JSON.parse(loginRes);
     
     const loginData = loginResponse.loginData;
-    const companyId = loginData?.compony;
+    const companyId = loginData?.company;
 
     const type = [
         { label: "SMS", value: 0 },
@@ -60,7 +60,7 @@ const CreateTemplate = () => {
             const dataToSend = {
                 ...values,
                 createdBy,
-                company: parseLoginRes?.compony,
+                company: parseLoginRes?.company,
                 template: templateText,
                 // template: templateText.replace(/<[^>]*>|((?<= ) )/g, (match, group1) => {
                 //     if (group1) {

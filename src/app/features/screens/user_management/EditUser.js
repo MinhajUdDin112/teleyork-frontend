@@ -61,7 +61,7 @@ const EditUser = () => {
 
             // Prepare the data to send to the server
             const data = {
-                compony: parseLoginRes?.compony,
+                company: parseLoginRes?.company,
                 createdBy: parseLoginRes?.createdDate,
                 roleId: formik.values.role,
                 reportingTo: formik.values.reportingTo,
@@ -113,7 +113,7 @@ const EditUser = () => {
 
     const getRoles = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.compony}`);
+            const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.company}`);
            
             setAllRoles(res?.data?.data || []);     
         } catch (error) {
@@ -123,7 +123,7 @@ const EditUser = () => {
     useEffect(() => {
         const getDepartment = async () => {
             try {
-                const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.compony}`);
+                const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.company}`);
                 setAllDepartment(res?.data?.data || []);
             } catch (error) {
                 

@@ -52,7 +52,7 @@ const UpdateProgram = ({ setShowAcps, arrayofcodes, setShowEdit, selectedProgram
     function handleUpdateAcp() {
       
         let data = {
-            serviceProvider: parseLoginRes?.compony,
+            serviceProvider: parseLoginRes?.company,
             updatedBy: parseLoginRes?._id,
             acpId: selectedProgram._id,
             name: formik.values.name,

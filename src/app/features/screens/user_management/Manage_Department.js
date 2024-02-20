@@ -29,7 +29,7 @@ const ManageDepartment = () => {
   const loginRes = localStorage.getItem('userData');
   const parseLoginRes = JSON.parse(loginRes);
 
-  const companyId = parseLoginRes?.compony;
+  const companyId = parseLoginRes?.company;
 
 
   const actions = (rowData) => {

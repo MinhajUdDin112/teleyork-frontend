@@ -95,7 +95,7 @@ useEffect(() => {
       const getESN = async () => {
        
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/simInventory/getByUnitType?serviceProvider=${parseLoginRes?.compony}&UnitType=${formik.values.unitType}`);   
+            const res = await Axios.get(`${BASE_URL}/api/web/simInventory/getByUnitType?serviceProvider=${parseLoginRes?.company}&UnitType=${formik.values.unitType}`);   
             setAllESN(res?.data?.result || []); 
                
         } catch (error) {
@@ -112,7 +112,7 @@ useEffect(() => {
 useEffect(() => {
   const getPlan = async () => {
       try {
-          const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.compony}`);
+          const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`);
           setAllPlan(res?.data?.data || []);
          
       } catch (error) {

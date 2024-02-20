@@ -56,7 +56,7 @@ export default function ServiceAvailabilityPage() {
       zipCode: "",
     },
     onSubmit: async (values, actions) => {
-      const serviceProvider = parseLoginRes?.compony;
+      const serviceProvider = parseLoginRes?.company;
       const department = parseLoginRes?.department;
 
       const csr = parseLoginRes?._id;

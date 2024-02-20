@@ -43,7 +43,7 @@ const CreateRole = () => {
             const permissions = [];
             // Define the data object
             const data = {
-                serviceProvider: parseLoginRes?.compony,
+                serviceProvider: parseLoginRes?.company,
                 permissions: permissions,
                 role: formik.values.role,
                 description: formik.values.description,

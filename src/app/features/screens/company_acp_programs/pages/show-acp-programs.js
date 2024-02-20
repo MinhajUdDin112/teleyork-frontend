@@ -34,7 +34,7 @@ const ShowPrograms = ({ setEditAcp }) => {
         }
     }   
     if (showAcps === null) {
-        Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.compony}`) //using dummy service provider
+        Axios.get(`${BASE_URL}/api/web/acpPrograms/all?serviceProvider=${parseLoginRes?.company}`) //using dummy service provider
             .then((res) => {
                 
                 let arr=[]

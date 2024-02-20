@@ -26,7 +26,7 @@ export default function TabletSingleUploadAddPreActivatedProvision({unit,permiss
     const [selectedMakeId,setSelectedMakeId]=useState(null)
     useEffect(() => {
         if (department === null) {
-            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.compony}`)
+            Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
@@ -78,7 +78,7 @@ export default function TabletSingleUploadAddPreActivatedProvision({unit,permiss
             .catch(() => {
             
             });
-            Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.compony}&device=Wireless device`)
+            Axios.get(`${BASE_URL}/api/web/make/makes?company=${parseLoginRes.company}&device=Wireless device`)
             .then((res) => {     
                
                 let Makeholder = [];
@@ -156,9 +156,9 @@ export default function TabletSingleUploadAddPreActivatedProvision({unit,permiss
     function handlesubmit(actions) {
         console.log(formik.errors);  
          let obj=formik.values; 
-         obj.serviceProvider=parseLoginRes.compony 
+         obj.serviceProvider=parseLoginRes.company 
         if (Object.keys(formik.errors).length === 0) {
-            //formik.values.serviceProvider = parseLoginRes?.compony;  
+            //formik.values.serviceProvider = parseLoginRes?.company;  
             
             Axios.post(`${BASE_URL}/api/web/tabletInventory/AddPreActivated`, obj)
                 .then((res) => {
