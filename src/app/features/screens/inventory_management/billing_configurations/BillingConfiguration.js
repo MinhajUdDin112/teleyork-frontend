@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataTable } from "primereact/datatable";
-import { Formik, useFormik } from "formik";
-import * as Yup from "yup";
+import {  useFormik } from "formik"; 
+import { Toast } from "primereact/toast"; 
+
 import Axios from "axios";
 import { Dropdown } from "primereact/dropdown";
 import { Column } from "primereact/column";
@@ -12,12 +13,17 @@ import { InputText } from "primereact/inputtext";
 import "primeicons/primeicons.css";
 import { MultiSelect } from "primereact/multiselect";
 import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import UpdateBill from "./components/update_bill";
+import EditPlan from "../../plans_configurations/edit_plan";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-
-const BillingConfiguration = () => {
-    const [newDiscount, setNewDiscount] = useState(false);
+const BillingConfiguration = () => {  
+    const [refresh,setRefresh]=useState(false)
+    const toast2=useRef(null)
+    const [newDiscount, setNewDiscount] = useState(false); 
+    const [currentRow,setCurrentRow]=useState() 
+    const [updatePlanVisibility,setUpdatePlanVisibility]=useState(false)
     const [newFeature, setNewFeature] = useState(false);
-    const [selectedCities, setSelectedCities] = useState(null);
     const [allPlan, setAllPlan] = useState([]);
     const [allDiscount, setAllDiscount] = useState([]);
     const [allFeature, setAllFeature] = useState([]);
@@ -148,7 +154,8 @@ const BillingConfiguration = () => {
         getDiscount();
         getConfigData();
         getFeature();
-    }, []);
+    }, [refresh]); 
+   
 
     const addDiscount = async () => {
         const dataToSend = {
@@ -241,7 +248,7 @@ const BillingConfiguration = () => {
                                     </p>
                                 ) : null}
                             </div>
-
+                                <Toast ref={toast2}/>  
                             <div className="mt-3 field col-12 md:col-3  ">
                                 <label className="field_label mb-2 text-md">Inventory Type</label>
                                 <Dropdown
@@ -434,7 +441,12 @@ const BillingConfiguration = () => {
             </form>
 
             <div className="card">
-                <h3 className="font-bold">Configurations</h3>
+                <h3 className="font-bold">Configurations</h3>  
+                 <Dialog   visible={updatePlanVisibility} style={{ width: '80vw' }} header="Update Bill"  
+                        
+                  onHide={()=>{ setUpdatePlanVisibility(false)}}> 
+                  <UpdateBill  rowData={currentRow} setRefresh={setRefresh} setUpdatePlanVisibility={setUpdatePlanVisibility}/> 
+                   </Dialog> 
                 <DataTable value={configData} showGridlines resizableColumns columnResizeMode="fit">
                     <Column header="Billing Model" field="billingmodel" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Inventory Type" field="inventoryType" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
@@ -478,9 +490,30 @@ const BillingConfiguration = () => {
         backgroundColor: "#81AEB9", 
         fontWeight: "normal", 
         fontSize: "large" 
-    }}
+    }}   
     body={(rowData) => rowData.paymentMethod.join(', ')} 
-/>
+/>  
+<Column header="Actions"  headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}   body={(rowData)=>{ 
+     console.log("row data is ",rowData)
+     return(  
+        <>
+        <Button label="Update" onClick={()=>{  
+            setCurrentRow(rowData) 
+            setUpdatePlanVisibility(true)
+        }}/>   
+         <Button label="Delete" className="ml-4" onClick={()=>{ 
+              Axios.delete(`${BASE_URL}/api/web/billing/deletebillconfig?billId=${rowData._id}`).then(()=>{ 
+               
+                toast.success("Plan Deleted Successfully "); 
+                setRefresh(prev=>!prev)
+              }).catch(err=>{ 
+             
+                toast.error("Plan Deletion Failed");
+              })
+         }}/> 
+         </>
+     )
+}}></Column>
 
                     
                 </DataTable>
