@@ -219,7 +219,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
     const optionsForPayment = [
         { label: "Select ", value: "" },
-        { label: "Credit/Debit card", value: "card" },
+        // { label: "Credit/Debit card", value: "card" },
         { label: "Skip Payment", value: "skip" },
 
     ];
