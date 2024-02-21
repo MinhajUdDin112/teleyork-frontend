@@ -28,10 +28,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             dueDate: rowData.dueDate,
             paymentMethod: rowData.paymentMethod,
             selectdiscount: rowData.selectdiscount,
-
             BillCreationDate: rowData.BillCreationDate,
             additionalFeature: rowData.additionalFeature,
-
             latefeeCharge: rowData.latefeeCharge,
             applyLateFee: rowData.applyLateFee,
             subsequentBillCreateDate: rowData.subsequentBillCreateDate,
@@ -157,7 +155,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     }, []); 
     useEffect(()=>{  
         if(formik.values.inventoryType !== ""){
-       Axios.get(`${BASE_URL}/api/web/plan/all?getByInventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res)=>{ 
+       Axios.get(`${BASE_URL}/api/web/plan/all?getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res)=>{ 
             
            setAllPlan(res?.data?.data || []);
         }) 
@@ -259,10 +257,10 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                 </div>
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">
-                        Select Discount OR{" "}
-                        <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
+                        Select Discount
+                       {/* <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
                             Add Discount
-                        </span>{" "}
+                        </span>{" "} */}
                     </label>
                     <MultiSelect
                         id="selectdiscount"
@@ -277,10 +275,11 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                 </div>
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">
-                        Additional Feature OR{" "}
-                        <span onClick={showFeature} style={{ color: "blue", cursor: "pointer" }}>
+                        Additional Feature 
+                       {/* <span onClick={showFeature} style={{ color: "blue", cursor: "pointer" }}>
                             Add Feature
-                        </span>{" "}
+                        </span>{" "} 
+                         */}
                     </label>
                     <MultiSelect
                         id="additionalFeature"
