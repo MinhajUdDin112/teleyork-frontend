@@ -7,7 +7,7 @@ import { Toast } from "primereact/toast";
 import React, { useState,useRef, useEffect } from "react";
 import { TransferException, statusOption ,connection} from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus,setRefersh }) {  
+export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus }) {  
     const [isLoading, setIsLoading] = useState(false)
      //For Showing Toast Message
     const toast = useRef(null);
@@ -133,10 +133,10 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus,se
             try {
                  setIsLoading(true)
                 const response= await  Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend)
-                setRefersh(true)
+                
                 if(response?.status===200 || response?.status===201){
                     toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
-                    setRefersh(true)
+                    
                 }
                 setIsLoading(false)
             }  catch (error) {
