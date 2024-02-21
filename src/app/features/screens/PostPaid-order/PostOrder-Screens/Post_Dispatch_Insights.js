@@ -78,6 +78,7 @@ const Post_Dispatch_Insight = () => {
                 const response = await Axios.get(`${BASE_URL}/api/user/dispatchInsight?userId=${parseLoginRes?._id}&accountType=Postpaid&startDate=${formattedStartDate}T00:00:00&endDate=${formattedEndDate}T23:59:59`);
                 if (response?.status === 200 || response?.status === 201) {
                     setHistoryData(response?.data?.data);
+                  
                     
                 }
             } catch (error) {
@@ -192,7 +193,19 @@ const Post_Dispatch_Insight = () => {
                                     )}></Column>
 
 
-                                    <Column header="Name" field="firstName"></Column>
+<Column
+  header="Name"
+  body={(rowData) => (
+    <span>
+      {rowData.firstName && rowData.lastName
+        ? `${rowData.firstName.toUpperCase()} ${rowData.lastName.toUpperCase()}`
+        : rowData.firstName
+          ? rowData.firstName.toUpperCase()
+          : rowData.lastName.toUpperCase()}
+    </span>
+  )}
+></Column>
+
                                     <Column header="Address" field="address1"></Column>
                                     <Column header="City" field="city"></Column>
                                     <Column header="State" field="state"></Column>
@@ -269,7 +282,19 @@ const Post_Dispatch_Insight = () => {
                                         )}></Column>
 
 
-                                        <Column header="Name" field="firstName"></Column>
+<Column
+  header="Name"
+  body={(rowData) => (
+    <span>
+      {rowData.firstName && rowData.lastName
+        ? `${rowData.firstName.toUpperCase()} ${rowData.lastName.toUpperCase()}`
+        : rowData.firstName
+          ? rowData.firstName.toUpperCase()
+          : rowData.lastName.toUpperCase()}
+    </span>
+  )}
+></Column>
+
                                         <Column header="Address" field="address1"></Column>
                                         <Column header="City" field="city"></Column>
                                         <Column header="State" field="state"></Column>
@@ -348,7 +373,19 @@ preShipment
                                             )}></Column>
 
 
-                                            <Column header="Name" field="firstName"></Column>
+<Column
+  header="Name"
+  body={(rowData) => (
+    <span>
+      {rowData.firstName && rowData.lastName
+        ? `${rowData.firstName.toUpperCase()} ${rowData.lastName.toUpperCase()}`
+        : rowData.firstName
+          ? rowData.firstName.toUpperCase()
+          : rowData.lastName.toUpperCase()}
+    </span>
+  )}
+></Column>
+
                                             <Column header="Address" field="address1"></Column>
                                             <Column header="City" field="city"></Column>
                                             <Column header="State" field="state"></Column>
@@ -423,7 +460,19 @@ preShipment
                                             )}></Column>
 
 
-                                            <Column header="Name" field="firstName"></Column>
+<Column
+  header="Name"
+  body={(rowData) => (
+    <span>
+      {rowData.firstName && rowData.lastName
+        ? `${rowData.firstName.toUpperCase()} ${rowData.lastName.toUpperCase()}`
+        : rowData.firstName
+          ? rowData.firstName.toUpperCase()
+          : rowData.lastName.toUpperCase()}
+    </span>
+  )}
+></Column>
+
                                             <Column header="Address" field="address1"></Column>
                                             <Column header="City" field="city"></Column>
                                             <Column header="State" field="state"></Column>
@@ -496,8 +545,19 @@ preShipment
                                                     </button>
                                                 )}></Column>
 
+<Column
+  header="Name"
+  body={(rowData) => (
+    <span>
+      {rowData.firstName && rowData.lastName
+        ? `${rowData.firstName.toUpperCase()} ${rowData.lastName.toUpperCase()}`
+        : rowData.firstName
+          ? rowData.firstName.toUpperCase()
+          : rowData.lastName.toUpperCase()}
+    </span>
+  )}
+></Column>
 
-                                                <Column header="Name" field="firstName"></Column>
                                                 <Column header="Address" field="address1"></Column>
                                                 <Column header="City" field="city"></Column>
                                                 <Column header="State" field="state"></Column>
