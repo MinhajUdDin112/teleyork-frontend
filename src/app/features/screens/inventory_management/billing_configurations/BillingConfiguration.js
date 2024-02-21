@@ -16,6 +16,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import UpdateBill from "./components/update_bill";
 import EditPlan from "../../plans_configurations/edit_plan";
+import { Card } from "primereact/card";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const BillingConfiguration = () => {  
     const [refresh,setRefresh]=useState(false)
@@ -150,12 +151,19 @@ const BillingConfiguration = () => {
         }
     };
     useEffect(() => {
-
+        
         getDiscount();
         getConfigData();
         getFeature();
     }, [refresh]); 
-   
+    useEffect(()=>{  
+        if(formik.values.inventoryType !== ""){
+       Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res)=>{ 
+            
+           setAllPlan(res?.data?.data || []);
+        }) 
+       }
+   },[formik.values.inventoryType])
 
     const addDiscount = async () => {
         const dataToSend = {
@@ -196,7 +204,7 @@ const BillingConfiguration = () => {
     };
 
 
-    useEffect(() => {
+ {/*   useEffect(() => {
         const getPlan = async () => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`);
@@ -208,7 +216,7 @@ const BillingConfiguration = () => {
         };
         getPlan();
     }, []);
-
+*/}
 
     const handleGenrateInvoice = () => {
 
@@ -222,17 +230,18 @@ const BillingConfiguration = () => {
     };
 
     return (
-        <>
+        <Card>
             <ToastContainer />
-            <form onSubmit={formik.handleSubmit}>
-                <div className="card">
-                    <h3 className="font-bold mb-3">Billing Configuration</h3>
-                    <div className=" card flex flex-column ">
-                        <div className=" p-fluid formgrid grid flex ">
-                            <div className="mt-3 field col-12 md:col-3 ">
-                                <label className="field_label mb-2 text-md">Billing Model</label>
+            <form onSubmit={formik.handleSubmit}> 
+            
+            <h3 className="font-bold mb-3">Billing Configuration</h3>
+                <div className="">
+                    <div className=" ">
+                        <div className=" flex flex-wrap flex-row justify-content-around  ">
+                            <div className="field-width mt-3 ">
+                                <label className="field_label  text-md">Billing Model</label>
                                 <Dropdown
-                                    className="w-21rem"
+                                    className="w-full mt-1"
                                     id="billingmodel"
                                     options={optionsForBillingmodel}
                                     value={formik.values.billingmodel}
@@ -249,10 +258,14 @@ const BillingConfiguration = () => {
                                 ) : null}
                             </div>
                                 <Toast ref={toast2}/>  
-                            <div className="mt-3 field col-12 md:col-3  ">
-                                <label className="field_label mb-2 text-md">Inventory Type</label>
+                                <div className="field-width mt-3">
+                    <label className="field_label text-md">One Time Charges</label>
+                    <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                </div> 
+                <div className="mt-3 field-width ">
+                                <label className="field_label text-md">Inventory Type</label>
                                 <Dropdown
-                                    className="w-21rem"
+                                    className="w-full  mt-1"
                                     id="inventoryType"
                                     options={optionsForInventoryType}
                                     value={formik.values.inventoryType}
@@ -269,94 +282,75 @@ const BillingConfiguration = () => {
                                 ) : null}
                             </div>
 
-                            <div className="field col-12 md:col-3 mt-3">
-                                <label className="field_label text-md">One Time Charges</label>
-                                <InputText id="oneTimeCharge" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
+                <div className="mt-3 field-width  ">
+                    <label className="field_label   text-md">Monthly Charges</label>
+                    <MultiSelect id="monthlyCharge" display="chip" options={allPlan} value={formik.values.monthlyCharge} onChange={(e) => formik.setFieldValue("monthlyCharge", e.value)} optionLabel={(option) => `${option.name} - (${option.planId})`} optionValue="_id" className="w-full  mt-1" />
 
-                            <div className="mt-3 field col-12 md:col-3  ">
-                                <label className="field_label mb-2 text-md">Monthly Charges</label>
-                                <MultiSelect
-                                    id="monthlyCharge"
-                                    display="chip"
-                                    options={allPlan}
-                                    value={formik.values.monthlyCharge}
-                                    onChange={(e) => formik.setFieldValue("monthlyCharge", e.value)}
-                                    optionLabel={(option) => `${option.name} - (${option.planId})`}
-                                    optionValue="_id"
-                                    className="w-20rem"
-                                />
+                    {formik.touched.monthlyCharge && formik.errors.monthlyCharge ? (
+                        <p className="mt-2 ml-2" style={{ color: "red" }}>
+                            {formik.errors.monthlyCharge}
+                        </p>
+                    ) : null}
+                </div>
+                <div className="mt-3 field-width  ">
+                    <label className="field_label  text-md">First Bill Create Date</label>
+                    <Dropdown
+                        className="w-full  mt-1"
+                        id="BillCreationDate"
+                        options={optionsForCreation}
+                        value={formik.values.BillCreationDate}
+                        onChange={(e) => {
+                            formik.setFieldValue("BillCreationDate", e.value);
+                            formik.handleChange(e);
+                        }}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.BillCreationDate && formik.errors.BillCreationDate ? (
+                        <p className="mt-2 ml-2" style={{ color: "red" }}>
+                            {formik.errors.BillCreationDate}
+                        </p>
+                    ) : null}
+                </div>
+                <div className="field-width mt-3">
+                    <label className="field_label text-md">Subsequent Bill Create Date </label>
+                    <InputText id="subsequentBillCreateDate" className="w-full  mt-1" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                </div>
+                <div className="field-width mt-3">
+                    <label className="field_label text-md">Due Date</label>
+                    <InputText id="dueDate" placeholder="No of days From Bill Create Date" className="w-full  mt-1" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                </div>
+                <div className="field-width mt-3">
+                    <label className="field_label text-md">Late Fee Charge</label>
+                    <InputText id="latefeeCharge" value={formik.values.latefeeCharge} className="w-full  mt-1" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                </div>
+                <div className="field-width mt-3">
+                    <label className="field_label text-md">Apply Late Fee </label>
+                    <InputText id="applyLateFee" placeholder="No of Days from Due Date" className="w-full  mt-1" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                </div>
 
-                                {formik.touched.monthlyCharge && formik.errors.monthlyCharge ? (
-                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
-                                        {formik.errors.monthlyCharge}
-                                    </p>
-                                ) : null}
-                            </div>
-                            <div className="mt-3 field col-12 md:col-3  ">
-                                <label className="field_label mb-2 text-md">First Bill Create Date</label>
-                                <Dropdown
-                                    className="w-21rem"
-                                    id="BillCreationDate"
-                                    options={optionsForCreation}
-                                    value={formik.values.BillCreationDate}
-                                    onChange={(e) => {
-                                        formik.setFieldValue("BillCreationDate", e.value);
-                                        formik.handleChange(e);
-                                    }}
-                                    onBlur={formik.handleBlur}
-                                />
-                                {formik.touched.BillCreationDate && formik.errors.BillCreationDate ? (
-                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
-                                        {formik.errors.BillCreationDate}
-                                    </p>
-                                ) : null}
-                            </div>
-                            <div className="field col-12 md:col-3 mt-3">
-                                <label className="field_label text-md">Subsequent Bill Create Date </label>
-                                <InputText id="subsequentBillCreateDate" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
-                            <div className="field col-12 md:col-3 mt-3">
-                                <label className="field_label text-md">Due Date</label>
-                                <InputText id="dueDate" placeholder="No of days From Bill Create Date" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
-                            <div className="field col-12 md:col-3 mt-3">
-                                <label className="field_label text-md">Late Fee Charge</label>
-                                <InputText id="latefeeCharge"  value={formik.values.latefeeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
-                            <div className="field col-12 md:col-3 mt-3">
-                                <label className="field_label text-md">Apply Late Fee </label>
-                                <InputText id="applyLateFee" placeholder="No of Days from Due Date" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
+                <div className="mt-3 field-width  ">
+                    <label className="field_label  text-md">Payment Method</label>
 
-                            <div className="mt-3 field col-12 md:col-3  ">
-                                <label className="field_label mb-2 text-md">Payment Method</label>
-                                
+                    <MultiSelect
+                        className="w-full  mt-1"
+                        id="paymentMethod"
+                        options={optionsForPayment}
+                        display="chip"
+                        value={formik.values.paymentMethod}
+                        onChange={(e) => {
+                            formik.setFieldValue("paymentMethod", e.value);
+                            formik.handleChange(e);
+                        }}
+                    />
 
-<MultiSelect
-                                   className="w-21rem"
-                                   id="paymentMethod"
-                                   options={optionsForPayment}
-                                    display="chip"
-                             
-                                    value={formik.values.paymentMethod}
-                                    onChange={(e) => {
-                                        formik.setFieldValue("paymentMethod", e.value);
-                                        formik.handleChange(e);
-                                    }}
-                                 
-                                  
-                                   
-                                />
-                                
-                                {formik.touched.paymentMethod && formik.errors.paymentMethod ? (
-                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
-                                        {formik.errors.paymentMethod}
-                                    </p>
-                                ) : null}
-                            </div>
-                            <div className="mt-3 field col-12 md:col-3  ">
-                                <label className="field_label mb-2 text-md">
+                    {formik.touched.paymentMethod && formik.errors.paymentMethod ? (
+                        <p className="mt-2 ml-2" style={{ color: "red" }}>
+                            {formik.errors.paymentMethod}
+                        </p>
+                    ) : null}
+                </div>
+                            <div className="mt-3 field-width ">
+                                <label className="field_label  text-md">
                                     Select Discount OR{" "}
                                     <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
                                         Add Discount
@@ -371,11 +365,11 @@ const BillingConfiguration = () => {
                                     optionLabel={(option) => `${option.discountname
                                         } - (${option.amount})`}
                                     optionValue="_id"
-                                    className="w-20rem"
+                                    className="w-full mt-1"
                                 />
                             </div>
-                            <div className="mt-3 field col-12 md:col-3  ">
-                                <label className="field_label mb-2 text-md">
+                            <div className="mt-3 field-width ">
+                                <label className="field_label  text-md">
                                     Additional Feature OR{" "}
                                     <span onClick={showFeature} style={{ color: "blue", cursor: "pointer" }}>
                                         Add Feature
@@ -390,26 +384,26 @@ const BillingConfiguration = () => {
                                     optionLabel={(option) => `${option.featureName
                                         } - (${option.featureAmount})`}
                                     optionValue="_id"
-                                    className="w-20rem"
+                                    className="w-full mt-1"
                                 />
 
                             </div>
                         </div>
                         {newDiscount ? (
-                            <>
+                            <div style={{marginLeft:"50%",transform:"translate(-50%)",width:"100%"}}>
                                 <div className="  mt-2 font-bold text-lg">Discount:</div>
                                 <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
-                                    <div className="field col-12 md:col-3">
+                                    <div className="field-width">
                                         <label className="field_label mb-2 text-lg">Name</label>
-                                        <InputText id="discountname" value={formik.values.discountname} onChange={formik.handleChange} />
+                                        <InputText id="discountname"  className="w-full" value={formik.values.discountname} onChange={formik.handleChange} />
                                     </div>
-                                    <div className="field col-12 md:col-3">
+                                    <div className="field-width ml-5 ">
                                         <label className="field_label mb-2 text-lg"> Amount </label>
-                                        <InputText id="amount" value={formik.values.amount} onChange={formik.handleChange} />
+                                        <InputText id="amount" className="w-full" value={formik.values.amount} onChange={formik.handleChange} />
                                     </div>
                                     <i className="pi pi-check ml-2" style={{ color: "green", fontSize: "24px", cursor: "pointer" }} onClick={addDiscount}></i>
                                 </div>
-                            </>
+                            </div>
                         ) : (
                             ""
                         )}
@@ -519,7 +513,7 @@ const BillingConfiguration = () => {
                 </DataTable>
             </div>
 
-        </>
+        </Card>
     );
 };
 

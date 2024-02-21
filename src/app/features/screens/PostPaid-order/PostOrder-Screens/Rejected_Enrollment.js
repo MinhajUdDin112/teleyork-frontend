@@ -162,7 +162,7 @@ const Rejected_Enrollments = () => {
                 localStorage.removeItem("zipData");
             }
         } catch (error) {
-            // toast.error("Error fetching All  Rejected Enrollment: " + error?.response);
+             toast.error( error?.response?.data?.msg);
             setIsLoading(false);
         }
     };

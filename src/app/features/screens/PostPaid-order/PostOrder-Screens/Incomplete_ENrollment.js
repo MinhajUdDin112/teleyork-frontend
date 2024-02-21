@@ -158,7 +158,7 @@ const InComplete_Enrollments = () => {
                 localStorage.removeItem("productData");
             }
         } catch (error) {
-            toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+            toast.error(error?.response?.data?.msg);
             setIsLoading(false);
         }
     };
