@@ -138,9 +138,10 @@ const PostpaidEvaluatedEnrollments = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/prePostEvaluatedEnrollmentsList?userId=${parseLoginRes?._id}&accountType=Postpaid`);
             if (res?.status === 200 || res?.status === 201) {
-                if (!(res?.data?.data)) {
+               /* if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
-                } else if (res?.data?.data) {
+                } else*/
+                if (res?.data?.data) {
                     const updatedData = res?.data?.data.map((item) => ({
                         ...item,
                         enrollment: item.isSelfEnrollment ? "Self Enrollments" : "Enrollment",
@@ -159,7 +160,7 @@ const PostpaidEvaluatedEnrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
+            toast.error(error?.response?.data?.msg);
             setIsLoading(false);
         }
     };

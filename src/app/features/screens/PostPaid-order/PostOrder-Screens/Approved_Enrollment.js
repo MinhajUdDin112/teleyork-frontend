@@ -103,7 +103,7 @@ const ApprovedEnrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching completed enrollment is : + ${error?.response?.data?.msg}`);
+            toast.error(error?.response?.data?.msg);
             setIsLoading(false);
         }
     };
