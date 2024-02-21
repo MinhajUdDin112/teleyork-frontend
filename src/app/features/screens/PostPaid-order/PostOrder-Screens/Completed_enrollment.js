@@ -134,7 +134,7 @@ const Completed_Enrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching competed enrollment is : + ${error?.response?.data?.msg}`);
+            toast.error( error?.response?.data?.msg);
             setIsLoading(false);
         }
     };
