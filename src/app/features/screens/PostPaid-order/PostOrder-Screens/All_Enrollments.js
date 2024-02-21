@@ -227,7 +227,7 @@ const All_Enrollments = () => {
                         
                                 const dataToSend = {
                                     userId: parseLoginRes?._id,
-                                    testLabel: "true",
+                                    testLabel: "false",
                                     orderId:orderId
                                 }
                         try {
@@ -333,7 +333,7 @@ const All_Enrollments = () => {
                          
                                 const dataToSend = {
                                     userId: parseLoginRes?._id,
-                                    testLabel: "true",
+                                    testLabel: "false",
                                     orderId:orderId
                                 }
                                 try {
@@ -542,7 +542,7 @@ const All_Enrollments = () => {
                         
                                   const dataToSend = {
                                       userId: parseLoginRes?._id,
-                                      testLabel: "true",
+                                      testLabel: "false",
                                       orderId:orderId
                                   }
                             try {
@@ -595,7 +595,7 @@ const All_Enrollments = () => {
                           
                                   const dataToSend = {
                                       userId: parseLoginRes?._id,
-                                      testLabel: "true",
+                                      testLabel: "false",
                                       orderId:orderId
                                   }
                             try {
