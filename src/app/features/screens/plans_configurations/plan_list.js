@@ -23,7 +23,14 @@ export default function ListAllPlans() {
                 setPlanList(res?.data?.data);
             })
             .catch((err) => {}); 
-        }
+        }    
+        if(addPlanVisibility === false){
+            Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`)
+                .then((res) => {
+                    setPlanList(res?.data?.data);
+                })
+                .catch((err) => {}); 
+            } 
     }, [refresh]);
     const [planList, setPlanList] = useState([]); 
     const [rowData,setRowData]=useState(null)
@@ -47,7 +54,7 @@ export default function ListAllPlans() {
                     setAddPlanVisibility(false);
                 }}
             >
-                <PlansConfigurations data={rowData} setAddPlanVisibility={setAddPlanVisibility}/>
+                <PlansConfigurations data={rowData} setRefresh={setRefresh} setAddPlanVisibility={setAddPlanVisibility}/>
             </Dialog> 
             <Dialog
                 header="Update Plan"

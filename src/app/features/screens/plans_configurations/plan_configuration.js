@@ -85,7 +85,7 @@ const inventoryType = [
     },
 ];
 
-export default function PlansConfigurations({setAddPlanVisibility}) {
+export default function PlansConfigurations({setAddPlanVisibility,setRefresh}) {
     const toast = useRef(null);
     const formik = useFormik({
         initialValues: {
@@ -115,7 +115,8 @@ export default function PlansConfigurations({setAddPlanVisibility}) {
                 .then(() => {
                     toast.current.show({ severity: "success", summary: "Plan Submission", detail: "Plan Added Successfully" });
                     setTimeout(() => {
-                        setAddPlanVisibility(false);
+                        setAddPlanVisibility(false); 
+                          setRefresh(prev =>!prev )
                     }, 1000);
                 })
                 .catch((err) => {
