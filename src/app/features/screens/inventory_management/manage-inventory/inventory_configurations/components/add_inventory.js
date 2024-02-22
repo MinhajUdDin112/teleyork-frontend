@@ -22,13 +22,13 @@ export default function AddInventory({setRefresh, setAddInventoryVisibility}){
         validationSchema, 
         onSubmit:(values)=>{ 
        Axios.post(`${BASE_URL}/api/inventoryType/add`,formik.values).then(()=>{
-        toast.current.show({ severity: "success", summary: "Inventory Type Added Successfully", detail: "Plan Updated Successfully" });
+        toast.current.show({ severity: "success", summary: "Inventory Type Addition", detail: "Updated Successfully" });
         setTimeout(() => {
             setAddInventoryVisibility(false); 
             setRefresh(prev=>!prev)
         }, 1000);
        }).catch(err=>{ 
-        toast.current.show({ severity: "error", summary: "Plan Updation", detail: "Plan Updation Failed" });
+        toast.current.show({ severity: "error", summary: "Inventory Type Updation", detail: "Updation Failed" });
             
        })
         }
