@@ -3,7 +3,8 @@ import { Dropdown } from "primereact/dropdown";
 import * as Yup from "yup";  
 import "./add_units_components/sim_singleupload/css/style.css"
 import { Button } from "primereact/button";
-import { useFormik } from "formik"; 
+import { useFormik } from "formik";  
+import { Dialog } from "primereact/dialog";
 import { useLocation } from "react-router-dom";
 import Header from "./add_unit-flow_page_header.js";
 import CellPhoneBulkUpload from "./add_units_components/cell_phone_bulkupload/cell_phone_bulkupload.js";
@@ -27,6 +28,7 @@ import TabletSingleUploadAddActivateProvision from "./add_units_components/table
 import TabletSingleUploadAddAndAssignNonActivateProvision from "./add_units_components/tablet_single_upload/add_and_assign_non_activate_provision.js";
 import TabletSingleUploadAddPreActivatedProvision from "./add_units_components/tablet_single_upload/add_preactivated_provision.js";
 import TabletSingleUploadReprovision from "./add_units_components/tablet_single_upload/reprovision.js";
+import ListAllInventories from "../inventory_configurations/inventory_configurations.js";
 const AddUnits = ({ setActiveComponent }) => {          
     const location = useLocation();
     const currentPath = location?.pathname  
@@ -56,7 +58,7 @@ const AddUnits = ({ setActiveComponent }) => {
       }; 
       const [isManage,setIsManage]=useState(null)  
       const [isCreate,setIsCreate]=useState(null) 
-    
+     const [configInvenoty,setConfigInventory]=useState(false)
      useEffect(()=>{ 
        actionBasedChecks()
      },[])    
@@ -78,7 +80,18 @@ const AddUnits = ({ setActiveComponent }) => {
         },
     });
     return (
-        <>
+        <>  
+           <Dialog
+                header="Inventory Configurations"
+                visible={configInvenoty} 
+                className="pt-0"
+                style={{ width: "80vw" }}
+                onHide={() => {
+                    setConfigInventory(false);
+                }}
+            >
+                <ListAllInventories />
+            </Dialog>
             <Button
                 label="Back"
                 style={{ position: "absolute", marginLeft: "25px", fontSize: "16px", marginTop: "25px" }}
@@ -93,7 +106,17 @@ const AddUnits = ({ setActiveComponent }) => {
                 <div className="flex flex-wrap mb-3  justify-content-around">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0 ">
-                            Inventory Type <span style={{ color: "red" }}>*</span>
+                            Inventory Type <span style={{ color: "red" }}>*</span>  
+                             
+                                    <i disabled={!isCreate}    onClick={() => {
+                                        //setAddAgentDialogVisbility((prev) => !prev); 
+                                        setConfigInventory(prev=>!prev)
+                                    }} 
+                                     
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "4px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
+                                
                         </p>
                         <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>
@@ -159,7 +182,8 @@ const AddUnits = ({ setActiveComponent }) => {
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_pre_activated" ? (
                     <TabletSingleUploadAddPreActivatedProvision  unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
                 ) :undefined
-            ) : undefined}
+            ) : undefined} 
+           
         </>
     );
 };
