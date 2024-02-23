@@ -1,9 +1,7 @@
 import React, { useRef } from "react";
 import { Toast } from "primereact/toast";
 import "./style/stripe_payment_form.css";
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"; 
-import Axios from "axios"; 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";  
 export default function PaymentStripeForm({ clientSecret,object,handleNext}) {
     const stripe = useStripe();
     const toast = useRef(null);  
