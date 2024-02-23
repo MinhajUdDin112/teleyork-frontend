@@ -30,7 +30,6 @@ import TabletSingleUploadAddAndAssignNonActivateProvision from "./add_units_comp
 import TabletSingleUploadAddPreActivatedProvision from "./add_units_components/tablet_single_upload/add_preactivated_provision.js";
 import TabletSingleUploadReprovision from "./add_units_components/tablet_single_upload/reprovision.js";
 import ListAllInventories from "../inventory_configurations/inventory_configurations.js";
-import ListAllBilling from "../billingmodel_configurations/billing_model_configurations.js";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
@@ -66,8 +65,7 @@ const AddUnits = ({ setActiveComponent }) => {
       const [isCreate,setIsCreate]=useState(null) 
      const [configInvenoty,setConfigInventory]=useState(false) 
      
-     const [configBillingModel,setConfigBillingModel]=useState(false) 
-     useEffect(()=>{ 
+    useEffect(()=>{ 
        actionBasedChecks()
        Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
        .then((res) => {
@@ -106,17 +104,7 @@ const AddUnits = ({ setActiveComponent }) => {
             >
                 <ListAllInventories />
             </Dialog> 
-            <Dialog
-                header="Billing Model Configurations"
-                visible={configBillingModel} 
-                className="pt-0"
-                style={{ width: "80vw" }}
-                onHide={() => {
-                    setConfigBillingModel(false);
-                }}
-            >
-                <ListAllBilling />
-            </Dialog> 
+           
             <Button
                 label="Back"
                 style={{ position: "absolute", marginLeft: "25px", fontSize: "16px", marginTop: "25px" }}
@@ -148,14 +136,7 @@ const AddUnits = ({ setActiveComponent }) => {
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Billing Model <span style={{ color: "red" }}>*</span>       
-                            <i disabled={!isCreate}    onClick={() => {
-                                        //setAddAgentDialogVisbility((prev) => !prev); 
-                                        setConfigBillingModel(prev=>!prev)
-                                    }} 
-                                     
-                                        className="pi pi pi-plus"
-                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "4px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                    ></i>
+
                         </p>
                         <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="_id" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>
