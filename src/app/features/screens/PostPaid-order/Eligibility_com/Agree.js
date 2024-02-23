@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "primereact/button";
-import { useFormik, formi, setIn } from "formik";
+import { useFormik, } from "formik";
 import * as Yup from "yup";
 import { Dropdown } from "primereact/dropdown";
 import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
-import { clippingParents } from "@popperjs/core";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 const BASE_URL = process.env.REACT_APP_BASE_URL;

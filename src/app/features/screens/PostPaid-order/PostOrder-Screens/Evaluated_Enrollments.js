@@ -15,6 +15,7 @@ import DialogForReject from "../PostPaid-Dialoge/DialogeFor_Reject"
 import DialogForActivateSim from "../PostPaid-Dialoge/DialogeFor_Activate"
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
+import { DateTime } from "luxon";
 import DialogeForRemarks from "../PostPaid-Dialoge/DialogeFor_Remarks";
 import DialogeForTransferUser from "../PostPaid-Dialoge/DialogeFor_TransferUser";
 import DialogeForRemarksForIJ from "../PostPaid-Dialoge/DialogeFor_RemaeksForIJ";
@@ -43,7 +44,7 @@ const PostpaidEvaluatedEnrollments = () => {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
+        createdFilter: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
         createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO }
     });
     const [globalFilterValue, setGlobalFilterValue] = useState("");
@@ -116,17 +117,31 @@ const PostpaidEvaluatedEnrollments = () => {
             setEnrollmentIdFilterValue(value);
         }
         else if (field === "createdTo") {
+            const parsedDate = DateTime.fromJSDate(new Date(e.value));
+            let easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
+            easternDateTime = easternDateTime.set({
+                hour: 23,
+                minute: 59,
+                second: 0,
+            });
+
+            const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
+            const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
+            const value2=etDateObject.toSeconds()
             setCreatedDateToFilterValue(e.value)
-            const updatedDate = new Date(e.value);
-            updatedDate.setDate(updatedDate.getDate() + 1);
-            _filters["createdTo"].value = new Date(updatedDate).toISOString()
+            _filters["createdTo"].value = value2
             setFilters(_filters);
         }
 
         else {
+            const parsedDate = DateTime.fromJSDate(new Date(e.value));
+            const easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
+            const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
+            const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
+            const value=etDateObject.toSeconds()
 
             setCreatedDateFilterValue(e.value);
-            _filters["createdAt"].value = new Date(e.value).toISOString()
+            _filters["createdFilter"].value = value
             setFilters(_filters);
         }
 
@@ -152,12 +167,15 @@ const PostpaidEvaluatedEnrollments = () => {
                                 day: "2-digit",
                                 year: "numeric",
                             })
-                            .replace(/\//g, "-"),
-                        createdTo: item.createdAt,
-                    }));
-                    setAllEnrollments(updatedData);
+                            .replace(/\//g, "-"), 
+                            createdFilter:DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() ,
+                            createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
+                      
+                    })); 
+                      
+                setAllEnrollments(updatedData)
                 }
-                setIsLoading(false);
+                setIsLoading(false); 
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);

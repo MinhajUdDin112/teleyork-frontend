@@ -95,7 +95,7 @@ import CustomerUsage from "./app/features/screens/customer_services/CustomerUsag
 import PrepaidInCompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/incomplete_enrollments.js/incomplete";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
 import PrepaidAllEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_enrollments.js/all_enrollment";
-import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
+//import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
 import Post_service_availbilty from "./app/features/screens/PostPaid-order/Pages/Post_Service_availbilty";
 import Post_enrollment_Flow from "./app/features/screens/PostPaid-order/Pages/post_enrollment_flow";
 import Completed_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Completed_enrollment";

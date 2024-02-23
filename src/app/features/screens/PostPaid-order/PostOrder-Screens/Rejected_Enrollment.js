@@ -3,6 +3,7 @@ import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
+import { DateTime } from "luxon";
 import { Column } from "primereact/column";
 import Axios from "axios";
 import { Dialog } from "primereact/dialog";
@@ -22,7 +23,7 @@ const Rejected_Enrollments = () => {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
+        createdFilter: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
         createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO },
     });
     const [createDateToFilterValue, setCreatedDateToFilterValue] = useState("");
@@ -49,14 +50,29 @@ const Rejected_Enrollments = () => {
             setFilters(_filters);
             setEnrollmentIdFilterValue(value);
         } else if (field === "createdTo") {
-            setCreatedDateToFilterValue(e.value);
-            const updatedDate = new Date(e.value);
-            updatedDate.setDate(updatedDate.getDate() + 1);
-            _filters["createdTo"].value = new Date(updatedDate).toISOString();
+            const parsedDate = DateTime.fromJSDate(new Date(e.value));
+            let easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
+            easternDateTime = easternDateTime.set({
+                hour: 23,
+                minute: 59,
+                second: 0,
+            });
+
+            const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
+            const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
+            const value2=etDateObject.toSeconds()
+            setCreatedDateToFilterValue(e.value)
+            _filters["createdTo"].value = value2
             setFilters(_filters);
         } else {
+            const parsedDate = DateTime.fromJSDate(new Date(e.value));
+            const easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
+            const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
+            const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
+            const value=etDateObject.toSeconds()
+
             setCreatedDateFilterValue(e.value);
-            _filters["createdAt"].value = new Date(e.value).toISOString();
+            _filters["createdFilter"].value = value
             setFilters(_filters);
         }
     };
@@ -151,8 +167,10 @@ const Rejected_Enrollments = () => {
                                 day: "2-digit",
                                 year: "numeric",
                             })
-                            .replace(/\//g, "-"),
-                        createdTo: item.createdAt,
+                            .replace(/\//g, "-"), 
+                            createdFilter:DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() ,
+                            createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
+                      
                     }));
       
                   setAllEnrollments(updatedData);
