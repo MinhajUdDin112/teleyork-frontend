@@ -6,10 +6,13 @@ import { Button } from "primereact/button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
+import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; 
+import  EditUser from "./EditUser" 
 const BASE_URL = process.env.REACT_APP_BASE_URL
-const ManageUser = () => {
+const ManageUser = () => { 
+     const [showEditUser,setShowEditUser]=useState(false)
     let toastfordelete = useRef(null);
     const [allUsers, setAllUsers] = useState([]);
     const [userId, setUserId] = useState(null);
@@ -17,7 +20,7 @@ const ManageUser = () => {
     const [searchText, setSearchText] = useState('');
     const [isCreate, setIsCreate] = useState(false);
     const [isManage, setIsManage] = useState(false);
-
+   const [rowData,setRowData]=useState(null)
     const location = useLocation();
     const currentPath = location?.pathname
 
@@ -37,9 +40,8 @@ const ManageUser = () => {
     };
 
     const handleUserEdit = (rowData) => {
-        navigate("/edit-user", {
-            state: { rowData },
-        });
+         setRowData(rowData) 
+         setShowEditUser(prev=>!prev) 
     };
     const handleUserDelete = async (rowData) => {
         setUserId(rowData._id);
@@ -149,12 +151,13 @@ const ManageUser = () => {
     }, []);
 
     return (
-        <>
-            <div className="card">
-                <h3 className="mt-1 ">Manage User</h3>
+        <Card className="pl-0 pr-0"> 
+          <div className="card mx-5 p-0 ">
+            <div>
+                <h3 className="mt-1 p-2 pt-4 font-bold ">Manage User</h3>
             </div>
-            <div className="card">
-                <DataTable value={filteredUsers} tableStyle={{ minWidth: "50rem" }} header={userTableHeader}>
+            <div >
+                <DataTable value={filteredUsers} tableStyle={{ minWidth: "1400px" }} header={userTableHeader}>
                     <Column field="role.role" header="Role"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="email" header="Email"></Column>
@@ -194,10 +197,14 @@ const ManageUser = () => {
                             />
                         </div>
                     </div>
-                </Dialog>
+                </Dialog>  
+                 <Dialog  header="Edit User" visible={showEditUser} style={{width:"80vw"}} onHide={()=>{ setShowEditUser(prev=>!prev)}}   > 
+                    <EditUser data={rowData} />    
+                    </Dialog> 
             </div>
-            <Toast ref={toastfordelete} />
-        </>
+            <Toast ref={toastfordelete} /> 
+            </div>
+        </Card>
     );
 };
 

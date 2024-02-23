@@ -11,8 +11,8 @@ import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const EditUser = () => {
-
+const EditUser = ({data}) => {
+     console.log(data)
     const [allRoles, setAllRoles] = useState([])
     const [allDepartment, setAllDepartment] = useState([]);
     const [allUser, setAllUser] = useState([]);
@@ -46,16 +46,16 @@ const EditUser = () => {
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
-            role: '',
-            name: '',
-            email: '',
-            mobile: '',
-            city: '',
-            state: '',
-            address: '',
-            zip: '',
-            reportingTo: "",
-            department: "",
+            role: data?.role?._id,
+            name: data?.name,
+            email: data?.email,
+            mobile: (data?.contact).substring(3),
+            city: data?.city,
+            state: data?.state,
+            address: data?.address,
+            zip: data?.zip,
+            reportingTo: data?.reportingTo,
+            department: data?.department?.department,
         },
         onSubmit: async (values) => {
 
@@ -82,7 +82,7 @@ const EditUser = () => {
             Axios.patch(`${BASE_URL}/api/web/user/`, data)
                 .then((response) => {
                     if (response?.status === 200) {
-                        toast.warn("User Updated")
+                        toast.success("User Updated Successfully")
                         navigate('/manage-user')
                     }
                 })
@@ -157,10 +157,8 @@ const EditUser = () => {
     return (
         <>
           <ToastContainer/>
-          <div className="card">
-    <h3 className="mt-1 ">Edit User</h3>
-</div>
-            <div className='card'>
+    
+            <div>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid mb-3">
 
