@@ -1,4 +1,4 @@
-import React from "react";  
+ import React from "react";  
 import { useFormik } from "formik"; 
 import * as Yup from "yup"; 
 import { InputText } from "primereact/inputtext";
@@ -7,28 +7,29 @@ import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
 const validationSchema = Yup.object().shape({
-    inventoryType: Yup.string().required("Inventory Type Is Required"),
+    billingModel: Yup.string().required("Inventory Type Is Required"),
 })  
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-export default function AddInventory({setRefresh, setAddInventoryVisibility}){ 
+export default function UpdateBillingModel({data ,setRefresh ,setEditBillingModelVisibility}){ 
     const toast = useRef(null);
     const formik=useFormik({ 
         initialValues:{ 
-         inventoryType:"", 
-         serviceProvider:parseLoginRes?.company
+         billingModel:data?.billingModel, 
+         serviceProvider:parseLoginRes?.company, 
+         billingModelId:data?._id
         }, 
         validationSchema, 
         onSubmit:(values)=>{ 
-       Axios.post(`${BASE_URL}/api/inventoryType/add`,formik.values).then(()=>{
-        toast.current.show({ severity: "success", summary: "Inventory Type Addition", detail: "Added Successfully" });
+       Axios.put(`${BASE_URL}/api/billingModel/update`,formik.values).then(()=>{
+        toast.current.show({ severity: "success", summary: "Billing Model Updation", detail: "Updated Successfully" });
         setTimeout(() => {
-            setAddInventoryVisibility(false); 
+            setEditBillingModelVisibility(false); 
             setRefresh(prev=>!prev)
         }, 1000);
        }).catch(err=>{ 
-        toast.current.show({ severity: "error", summary: "Inventory Type Addition", detail: "Addition Failed" });
+        toast.current.show({ severity: "error", summary: "Billing Model  Updation", detail: "Updation Failed" });
             
        })
         }
@@ -40,10 +41,10 @@ export default function AddInventory({setRefresh, setAddInventoryVisibility}){
            <div className="w-full     flex flex-wrap justify-content-around flex-row  "> 
            <div className="mt-0">
                         <label className="block">
-                            Inventory Type <span className="star">*</span>
+                            Billing Model <span className="star">*</span>
                         </label>
-                        <InputText className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
-                        {formik.touched.inventoryType && formik.errors.inventoryType? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
+                        <InputText className="field-width mt-2" name="billingModel" value={formik.values.billingModel} onChange={formik.handleChange} />
+                        {formik.touched.billingModel && formik.errors.billingModel? <p className="mt-2 ml-1 star">{formik.errors.billingModel}</p> : null}
                     </div>
            </div>  
            <div className="w-full  mt-4    flex flex-wrap justify-content-around flex-row  "> 

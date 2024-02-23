@@ -3,8 +3,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { Password } from "primereact/password";
-import card from "primereact";
 import Axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -17,7 +15,6 @@ const CreateUser = () => {
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
     const [allReporting, setAllReporting] = useState([]);
-    const [allUser, setAllUser] = useState([]);
     const [allState, setAllState] = useState([]);
     const [allCity, setAllCity] = useState([]);
     const [checkDeprt, setCheckDeprt] = useState("");
@@ -158,7 +155,8 @@ const CreateUser = () => {
             const getCities = async () => {
                 try {
                     const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);
-                    setAllCity(res?.data?.data || []);
+                    setAllCity(res?.data?.data || []); 
+                    console.log("Cities are ",res?.data)
                 } catch (error) {
                     toast.error(`Error fetching States : ${error?.response?.data?.msg}`);
                 }
@@ -271,7 +269,7 @@ const CreateUser = () => {
                             <label className="Label__Text">
                                 Select City<span className="steric">*</span>
                             </label>
-                            <Dropdown id="city" options={allCity} value={formik.values.city} onChange={(e) => formik.setFieldValue("city", e.value)} optionLabel="city" optionValue="_id" showClear filter filterBy="city" />
+                            <Dropdown id="city" options={allCity} value={formik.values.city} onChange={(e) => formik.setFieldValue("city", e.value)} optionLabel="city" optionValue="city" showClear filter filterBy="city" />
                             {getFormErrorMessage("city")}
                         </div>
 

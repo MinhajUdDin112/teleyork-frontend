@@ -839,7 +839,7 @@ const All_Enrollments = () => {
                         <DialogeForRemarks getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} />
                     </Dialog>
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
-                        <DialogeForRemarksForIJ getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
+                       <DialogeForRemarksForIJ getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
                     </Dialog>
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
                         <DialogeForTransferUser enrollmentId={isEnrolmentId} setDialogeForTransfer={setDialogeForTransfer} />
