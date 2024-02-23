@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { Card } from "primereact/card";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 const CreateUser = () => {
     const [allRoles, setAllRoles] = useState([]);
@@ -169,12 +170,12 @@ const CreateUser = () => {
    
 
     return (
-        <>
+        <Card>
             <ToastContainer />
-            <div className="card">
-                <h3 className="mt-1 ">Add User</h3>
+            <div>
+                <h3 className="mt-1 font-bold ">Add User</h3>
             </div>
-            <div className="card">
+            <div >
                 <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid mb-3">
                         <div className="p-field col-12 md:col-3">
@@ -288,7 +289,7 @@ const CreateUser = () => {
                     </div>
                 </form>
             </div>
-        </>
+        </Card>
     );
 };
 
