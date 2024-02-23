@@ -5,6 +5,7 @@ import "./add_units_components/sim_singleupload/css/style.css"
 import { Button } from "primereact/button";
 import { useFormik } from "formik";  
 import { Dialog } from "primereact/dialog";
+import Axios from "axios";
 import { useLocation } from "react-router-dom";
 import Header from "./add_unit-flow_page_header.js";
 import CellPhoneBulkUpload from "./add_units_components/cell_phone_bulkupload/cell_phone_bulkupload.js";
@@ -29,9 +30,13 @@ import TabletSingleUploadAddAndAssignNonActivateProvision from "./add_units_comp
 import TabletSingleUploadAddPreActivatedProvision from "./add_units_components/tablet_single_upload/add_preactivated_provision.js";
 import TabletSingleUploadReprovision from "./add_units_components/tablet_single_upload/reprovision.js";
 import ListAllInventories from "../inventory_configurations/inventory_configurations.js";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const loginRes = localStorage.getItem("userData");
+const parseLoginRes = JSON.parse(loginRes);
 const AddUnits = ({ setActiveComponent }) => {          
     const location = useLocation();
     const currentPath = location?.pathname  
+    const [billingModelList,setBillingModelList]=useState([]) 
     const actionBasedChecks = () => {
 
         const loginPerms = localStorage.getItem("permissions")
@@ -58,11 +63,17 @@ const AddUnits = ({ setActiveComponent }) => {
       }; 
       const [isManage,setIsManage]=useState(null)  
       const [isCreate,setIsCreate]=useState(null) 
-     const [configInvenoty,setConfigInventory]=useState(false)
-     useEffect(()=>{ 
+     const [configInvenoty,setConfigInventory]=useState(false) 
+     
+    useEffect(()=>{ 
        actionBasedChecks()
+       Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
+       .then((res) => {
+           setBillingModelList(res?.data?.data);
+       })
+       .catch((err) => {});
+
      },[])    
-    console.log("calling")
     const validationSchema = Yup.object().shape({
         unitType: Yup.string().required("please select"),
         uploadType: Yup.string().required("please select type "),
@@ -72,7 +83,8 @@ const AddUnits = ({ setActiveComponent }) => {
         initialValues: {
             unit: "",
             upload: "",
-            provision: "",
+            provision: "", 
+            billingModel:""
         },
         validationSchema: validationSchema,
         onSubmit: (values, actions) => {
@@ -91,7 +103,8 @@ const AddUnits = ({ setActiveComponent }) => {
                 }}
             >
                 <ListAllInventories />
-            </Dialog>
+            </Dialog> 
+           
             <Button
                 label="Back"
                 style={{ position: "absolute", marginLeft: "25px", fontSize: "16px", marginTop: "25px" }}
@@ -119,6 +132,13 @@ const AddUnits = ({ setActiveComponent }) => {
                                 
                         </p>
                         <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                    </div>  
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0">
+                            Billing Model <span style={{ color: "red" }}>*</span>       
+
+                        </p>
+                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="_id" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">

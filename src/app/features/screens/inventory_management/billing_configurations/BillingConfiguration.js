@@ -1,11 +1,11 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataTable } from "primereact/datatable";
-import {  useFormik } from "formik"; 
-import { Toast } from "primereact/toast"; 
-
+import { useFormik } from "formik";
+import { Toast } from "primereact/toast";
+import ListAllBilling from "./components/billingmodel_configurations/billing_model_configurations";
 import Axios from "axios";
 import { Dropdown } from "primereact/dropdown";
 import { Column } from "primereact/column";
@@ -18,12 +18,13 @@ import UpdateBill from "./components/update_bill";
 import EditPlan from "../../plans_configurations/edit_plan";
 import { Card } from "primereact/card";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const BillingConfiguration = () => {  
-    const [refresh,setRefresh]=useState(false)
-    const toast2=useRef(null)
-    const [newDiscount, setNewDiscount] = useState(false); 
-    const [currentRow,setCurrentRow]=useState() 
-    const [updatePlanVisibility,setUpdatePlanVisibility]=useState(false)
+const BillingConfiguration = () => {
+    const [configBillingModel, setConfigBillingModel] = useState(false);
+    const [refresh, setRefresh] = useState(false);
+    const toast2 = useRef(null);
+    const [newDiscount, setNewDiscount] = useState(false);
+    const [currentRow, setCurrentRow] = useState();
+    const [updatePlanVisibility, setUpdatePlanVisibility] = useState(false);
     const [newFeature, setNewFeature] = useState(false);
     const [allPlan, setAllPlan] = useState([]);
     const [allDiscount, setAllDiscount] = useState([]);
@@ -47,9 +48,9 @@ const BillingConfiguration = () => {
             additionalFeature: [],
             featureName: "",
             featureAmount: "",
-            latefeeCharge:"",
-            applyLateFee:"",
-            subsequentBillCreateDate :"",
+            latefeeCharge: "",
+            applyLateFee: "",
+            subsequentBillCreateDate: "",
         },
         onSubmit: async (values, actions) => {
             const dataToSend = {
@@ -71,17 +72,15 @@ const BillingConfiguration = () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/billing/billconfig`, dataToSend);
                 if (response?.status === 200 || response?.status === 201) {
-                    toast.success("Bill Configured Successfully")
+                    toast.success("Bill Configured Successfully");
                     getConfigData();
                     actions.resetForm();
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
-              
             }
         },
     });
-
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -96,7 +95,6 @@ const BillingConfiguration = () => {
         { label: "Select Inventory Type", value: "" },
         { label: "Sim Card", value: "SimCard" },
         { label: "Wireless Device", value: "Wireless Device" },
-       
     ];
 
     const optionsForPayment = [
@@ -109,7 +107,8 @@ const BillingConfiguration = () => {
     ];
     const optionsForCreation = [
         { label: "On Activation", value: "On Activation" },
-        { label: "After QA Approval ", value: "On QA Approve" }];
+        { label: "After QA Approval ", value: "On QA Approve" },
+    ];
 
     function showDiscount() {
         setNewDiscount(true);
@@ -119,51 +118,41 @@ const BillingConfiguration = () => {
     }
 
     const getDiscount = async () => {
-
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/discount/getalldiscounts`);
             setAllDiscount(res?.data?.data || []);
-          
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
     };
     const getFeature = async () => {
-
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/feature/getallfeatures`);
             setAllFeature(res?.data?.data || []);
-          
-
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
     };
     const getConfigData = async () => {
-
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/billing/getall`);
             setconfigData(res?.data?.data || []);
-          
-
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
     };
     useEffect(() => {
-        
         getDiscount();
         getConfigData();
         getFeature();
-    }, [refresh]); 
-    useEffect(()=>{  
-        if(formik.values.inventoryType !== ""){
-       Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res)=>{ 
-            
-           setAllPlan(res?.data?.data || []);
-        }) 
-       }
-   },[formik.values.inventoryType])
+    }, [refresh]);
+    useEffect(() => {
+        if (formik.values.inventoryType !== "") {
+            Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res) => {
+                setAllPlan(res?.data?.data || []);
+            });
+        }
+    }, [formik.values.inventoryType]);
 
     const addDiscount = async () => {
         const dataToSend = {
@@ -203,8 +192,8 @@ const BillingConfiguration = () => {
         }
     };
 
-
- {/*   useEffect(() => {
+    {
+        /*   useEffect(() => {
         const getPlan = async () => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`);
@@ -216,11 +205,10 @@ const BillingConfiguration = () => {
         };
         getPlan();
     }, []);
-*/}
-
-    const handleGenrateInvoice = () => {
-
+*/
     }
+
+    const handleGenrateInvoice = () => {};
     const actionTemplate = (rowData) => {
         return (
             <div>
@@ -231,15 +219,35 @@ const BillingConfiguration = () => {
 
     return (
         <Card>
+            <Dialog
+                header="Billing Model Configurations"
+                visible={configBillingModel}
+                className="pt-0"
+                style={{ width: "80vw" }}
+                onHide={() => {
+                    setConfigBillingModel(false);
+                }}
+            >
+                <ListAllBilling />
+            </Dialog>
             <ToastContainer />
-            <form onSubmit={formik.handleSubmit}> 
-            
-            <h3 className="font-bold mb-3">Billing Configuration</h3>
+            <form onSubmit={formik.handleSubmit}>
+                <h3 className="font-bold mb-3">Billing Configuration</h3>
                 <div className="">
                     <div className=" ">
                         <div className=" flex flex-wrap flex-row justify-content-around  ">
                             <div className="field-width mt-3 ">
-                                <label className="field_label  text-md">Billing Model</label>
+                                <label className="field_label  text-md">
+                                    Billing Model{" "}
+                                    <i
+                                        onClick={() => {
+                                            //setAddAgentDialogVisbility((prev) => !prev);
+                                            setConfigBillingModel((prev) => !prev);
+                                        }}
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "4px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
+                                </label>
                                 <Dropdown
                                     className="w-full mt-1"
                                     id="billingmodel"
@@ -257,12 +265,12 @@ const BillingConfiguration = () => {
                                     </p>
                                 ) : null}
                             </div>
-                                <Toast ref={toast2}/>  
-                                <div className="field-width mt-3">
-                    <label className="field_label text-md">One Time Charges</label>
-                    <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div> 
-                <div className="mt-3 field-width ">
+                            <Toast ref={toast2} />
+                            <div className="field-width mt-3">
+                                <label className="field_label text-md">One Time Charges</label>
+                                <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
+                            <div className="mt-3 field-width ">
                                 <label className="field_label text-md">Inventory Type</label>
                                 <Dropdown
                                     className="w-full  mt-1"
@@ -282,73 +290,82 @@ const BillingConfiguration = () => {
                                 ) : null}
                             </div>
 
-                <div className="mt-3 field-width  ">
-                    <label className="field_label   text-md">Monthly Charges</label>
-                    <MultiSelect id="monthlyCharge" display="chip" options={allPlan} value={formik.values.monthlyCharge} onChange={(e) => formik.setFieldValue("monthlyCharge", e.value)} optionLabel={(option) => `${option.name} - (${option.planId})`} optionValue="_id" className="w-full  mt-1" />
+                            <div className="mt-3 field-width  ">
+                                <label className="field_label   text-md">Monthly Charges</label>
+                                <MultiSelect
+                                    id="monthlyCharge"
+                                    display="chip"
+                                    options={allPlan}
+                                    value={formik.values.monthlyCharge}
+                                    onChange={(e) => formik.setFieldValue("monthlyCharge", e.value)}
+                                    optionLabel={(option) => `${option.name} - (${option.planId})`}
+                                    optionValue="_id"
+                                    className="w-full  mt-1"
+                                />
 
-                    {formik.touched.monthlyCharge && formik.errors.monthlyCharge ? (
-                        <p className="mt-2 ml-2" style={{ color: "red" }}>
-                            {formik.errors.monthlyCharge}
-                        </p>
-                    ) : null}
-                </div>
-                <div className="mt-3 field-width  ">
-                    <label className="field_label  text-md">First Bill Create Date</label>
-                    <Dropdown
-                        className="w-full  mt-1"
-                        id="BillCreationDate"
-                        options={optionsForCreation}
-                        value={formik.values.BillCreationDate}
-                        onChange={(e) => {
-                            formik.setFieldValue("BillCreationDate", e.value);
-                            formik.handleChange(e);
-                        }}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.BillCreationDate && formik.errors.BillCreationDate ? (
-                        <p className="mt-2 ml-2" style={{ color: "red" }}>
-                            {formik.errors.BillCreationDate}
-                        </p>
-                    ) : null}
-                </div>
-                <div className="field-width mt-3">
-                    <label className="field_label text-md">Subsequent Bill Create Date </label>
-                    <InputText id="subsequentBillCreateDate" className="w-full  mt-1" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
-                <div className="field-width mt-3">
-                    <label className="field_label text-md">Due Date</label>
-                    <InputText id="dueDate" placeholder="No of days From Bill Create Date" className="w-full  mt-1" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
-                <div className="field-width mt-3">
-                    <label className="field_label text-md">Late Fee Charge</label>
-                    <InputText id="latefeeCharge" value={formik.values.latefeeCharge} className="w-full  mt-1" onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
-                <div className="field-width mt-3">
-                    <label className="field_label text-md">Apply Late Fee </label>
-                    <InputText id="applyLateFee" placeholder="No of Days from Due Date" className="w-full  mt-1" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
+                                {formik.touched.monthlyCharge && formik.errors.monthlyCharge ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.monthlyCharge}
+                                    </p>
+                                ) : null}
+                            </div>
+                            <div className="mt-3 field-width  ">
+                                <label className="field_label  text-md">First Bill Create Date</label>
+                                <Dropdown
+                                    className="w-full  mt-1"
+                                    id="BillCreationDate"
+                                    options={optionsForCreation}
+                                    value={formik.values.BillCreationDate}
+                                    onChange={(e) => {
+                                        formik.setFieldValue("BillCreationDate", e.value);
+                                        formik.handleChange(e);
+                                    }}
+                                    onBlur={formik.handleBlur}
+                                />
+                                {formik.touched.BillCreationDate && formik.errors.BillCreationDate ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.BillCreationDate}
+                                    </p>
+                                ) : null}
+                            </div>
+                            <div className="field-width mt-3">
+                                <label className="field_label text-md">Subsequent Bill Create Date </label>
+                                <InputText id="subsequentBillCreateDate" className="w-full  mt-1" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
+                            <div className="field-width mt-3">
+                                <label className="field_label text-md">Due Date</label>
+                                <InputText id="dueDate" placeholder="No of days From Bill Create Date" className="w-full  mt-1" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
+                            <div className="field-width mt-3">
+                                <label className="field_label text-md">Late Fee Charge</label>
+                                <InputText id="latefeeCharge" value={formik.values.latefeeCharge} className="w-full  mt-1" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
+                            <div className="field-width mt-3">
+                                <label className="field_label text-md">Apply Late Fee </label>
+                                <InputText id="applyLateFee" placeholder="No of Days from Due Date" className="w-full  mt-1" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
 
-                <div className="mt-3 field-width  ">
-                    <label className="field_label  text-md">Payment Method</label>
+                            <div className="mt-3 field-width  ">
+                                <label className="field_label  text-md">Payment Method</label>
 
-                    <MultiSelect
-                        className="w-full  mt-1"
-                        id="paymentMethod"
-                        options={optionsForPayment}
-                        display="chip"
-                        value={formik.values.paymentMethod}
-                        onChange={(e) => {
-                            formik.setFieldValue("paymentMethod", e.value);
-                            formik.handleChange(e);
-                        }}
-                    />
+                                <MultiSelect
+                                    className="w-full  mt-1"
+                                    id="paymentMethod"
+                                    options={optionsForPayment}
+                                    display="chip"
+                                    value={formik.values.paymentMethod}
+                                    onChange={(e) => {
+                                        formik.setFieldValue("paymentMethod", e.value);
+                                        formik.handleChange(e);
+                                    }}
+                                />
 
-                    {formik.touched.paymentMethod && formik.errors.paymentMethod ? (
-                        <p className="mt-2 ml-2" style={{ color: "red" }}>
-                            {formik.errors.paymentMethod}
-                        </p>
-                    ) : null}
-                </div>
+                                {formik.touched.paymentMethod && formik.errors.paymentMethod ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.paymentMethod}
+                                    </p>
+                                ) : null}
+                            </div>
                             <div className="mt-3 field-width ">
                                 <label className="field_label  text-md">
                                     Select Discount OR{" "}
@@ -362,8 +379,7 @@ const BillingConfiguration = () => {
                                     options={allDiscount}
                                     value={formik.values.selectdiscount}
                                     onChange={(e) => formik.setFieldValue("selectdiscount", e.value)}
-                                    optionLabel={(option) => `${option.discountname
-                                        } - (${option.amount})`}
+                                    optionLabel={(option) => `${option.discountname} - (${option.amount})`}
                                     optionValue="_id"
                                     className="w-full mt-1"
                                 />
@@ -381,21 +397,19 @@ const BillingConfiguration = () => {
                                     options={allFeature}
                                     value={formik.values.additionalFeature}
                                     onChange={(e) => formik.setFieldValue("additionalFeature", e.value)}
-                                    optionLabel={(option) => `${option.featureName
-                                        } - (${option.featureAmount})`}
+                                    optionLabel={(option) => `${option.featureName} - (${option.featureAmount})`}
                                     optionValue="_id"
                                     className="w-full mt-1"
                                 />
-
                             </div>
                         </div>
                         {newDiscount ? (
-                            <div style={{marginLeft:"50%",transform:"translate(-50%)",width:"100%"}}>
+                            <div style={{ marginLeft: "50%", transform: "translate(-50%)", width: "100%" }}>
                                 <div className="  mt-2 font-bold text-lg">Discount:</div>
                                 <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
                                     <div className="field-width">
                                         <label className="field_label mb-2 text-lg">Name</label>
-                                        <InputText id="discountname"  className="w-full" value={formik.values.discountname} onChange={formik.handleChange} />
+                                        <InputText id="discountname" className="w-full" value={formik.values.discountname} onChange={formik.handleChange} />
                                     </div>
                                     <div className="field-width ml-5 ">
                                         <label className="field_label mb-2 text-lg"> Amount </label>
@@ -430,89 +444,80 @@ const BillingConfiguration = () => {
                             <Button label="Submit" type="Submit" />
                         </div>
                     </div>
-
                 </div>
             </form>
 
             <div className="card">
-                <h3 className="font-bold">Configurations</h3>  
-                 <Dialog   visible={updatePlanVisibility} style={{ width: '80vw' }} header="Update Bill"  
-                        
-                  onHide={()=>{ setUpdatePlanVisibility(false)}}> 
-                  <UpdateBill  rowData={currentRow} setRefresh={setRefresh} setUpdatePlanVisibility={setUpdatePlanVisibility}/> 
-                   </Dialog> 
+                <h3 className="font-bold">Configurations</h3>
+                <Dialog
+                    visible={updatePlanVisibility}
+                    style={{ width: "80vw" }}
+                    header="Update Bill"
+                    onHide={() => {
+                        setUpdatePlanVisibility(false);
+                    }}
+                >
+                    <UpdateBill rowData={currentRow} setRefresh={setRefresh} setUpdatePlanVisibility={setUpdatePlanVisibility} />
+                </Dialog>
                 <DataTable value={configData} showGridlines resizableColumns columnResizeMode="fit">
                     <Column header="Billing Model" field="billingmodel" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Inventory Type" field="inventoryType" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column
-                        header="One Time Charge"
-                        field="oneTimeCharge"
-                        body={(rowData) => `$${rowData.oneTimeCharge}`}
-                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
-                    />
+                    <Column header="One Time Charge" field="oneTimeCharge" body={(rowData) => `$${rowData.oneTimeCharge}`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
 
-                    <Column header="Monthly Charges" body={(rowData) => rowData?.monthlyCharge?.map(mc => mc.name).join(', ')} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Monthly Charges" body={(rowData) => rowData?.monthlyCharge?.map((mc) => mc.name).join(", ")} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Bill Create Date" field="BillCreationDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Due Date" field="Due Date" body={(rowData)=>`${rowData?.dueDate} Days from Bill Create Date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Due Date" field="Due Date" body={(rowData) => `${rowData?.dueDate} Days from Bill Create Date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
                     <Column header="Days from First Bill Create Date" field="subsequentBillCreateDate" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Late Fee   " field="Late Fee"     body={(rowData) => `$${rowData.latefeeCharge}`}headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header=" Apply Late Fee " field="Apply Late Fee"  body={(rowData) => `After ${rowData.applyLateFee} Days from Due Date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                   
-                    <Column
-                        header="Feature"
-                        body={(rowData) =>
-                            rowData?.additionalFeature
-                                ?.map((sd) => `${sd.featureName} - $${sd.featureAmount}`)
-                                .join(', ')
-                        }
-                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
-                    />  
-                    <Column
-                        header="Discount"
-                        body={(rowData) =>
-                            rowData?.selectdiscount
-                                ?.map((sd) => `${sd.discountname} - $${sd.amount}`)
-                                .join(', ')
-                        }
-                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
-                    />
-                  <Column 
-    header="Payment Method" 
-    field="paymentMethod" 
-    headerStyle={{ 
-        color: "white", 
-        backgroundColor: "#81AEB9", 
-        fontWeight: "normal", 
-        fontSize: "large" 
-    }}   
-    body={(rowData) => rowData.paymentMethod.join(', ')} 
-/>  
-<Column header="Actions"  headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}   body={(rowData)=>{ 
-     console.log("row data is ",rowData)
-     return(  
-        <>
-        <Button label="Update" onClick={()=>{  
-            setCurrentRow(rowData) 
-            setUpdatePlanVisibility(true)
-        }}/>   
-         <Button label="Delete" className="ml-4" onClick={()=>{ 
-              Axios.delete(`${BASE_URL}/api/web/billing/deletebillconfig?billId=${rowData._id}`).then(()=>{ 
-               
-                toast.success("Plan Deleted Successfully "); 
-                setRefresh(prev=>!prev)
-              }).catch(err=>{ 
-             
-                toast.error("Plan Deletion Failed");
-              })
-         }}/> 
-         </>
-     )
-}}></Column>
+                    <Column header="Late Fee   " field="Late Fee" body={(rowData) => `$${rowData.latefeeCharge}`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header=" Apply Late Fee " field="Apply Late Fee" body={(rowData) => `After ${rowData.applyLateFee} Days from Due Date`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
 
-                    
+                    <Column header="Feature" body={(rowData) => rowData?.additionalFeature?.map((sd) => `${sd.featureName} - $${sd.featureAmount}`).join(", ")} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column header="Discount" body={(rowData) => rowData?.selectdiscount?.map((sd) => `${sd.discountname} - $${sd.amount}`).join(", ")} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column
+                        header="Payment Method"
+                        field="paymentMethod"
+                        headerStyle={{
+                            color: "white",
+                            backgroundColor: "#81AEB9",
+                            fontWeight: "normal",
+                            fontSize: "large",
+                        }}
+                        body={(rowData) => rowData.paymentMethod.join(", ")}
+                    />
+                    <Column
+                        header="Actions"
+                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+                        body={(rowData) => {
+                            console.log("row data is ", rowData);
+                            return (
+                                <>
+                                    <Button
+                                        label="Update"
+                                        onClick={() => {
+                                            setCurrentRow(rowData);
+                                            setUpdatePlanVisibility(true);
+                                        }}
+                                    />
+                                    <Button
+                                        label="Delete"
+                                        className="ml-4"
+                                        onClick={() => {
+                                            Axios.delete(`${BASE_URL}/api/web/billing/deletebillconfig?billId=${rowData._id}`)
+                                                .then(() => {
+                                                    toast.success("Plan Deleted Successfully ");
+                                                    setRefresh((prev) => !prev);
+                                                })
+                                                .catch((err) => {
+                                                    toast.error("Plan Deletion Failed");
+                                                });
+                                        }}
+                                    />
+                                </>
+                            );
+                        }}
+                    ></Column>
                 </DataTable>
             </div>
-
         </Card>
     );
 };
