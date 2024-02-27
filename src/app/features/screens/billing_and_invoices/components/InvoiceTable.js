@@ -9,6 +9,7 @@ import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 
 const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
+    console.log("invoice data is on invoice page",invoiceData)
     const cardData = invoiceData;   
     const [isLoading, setIsLoading] = useState(false)
     const [singleInvoiceData,setInvoiceData]=useState()
@@ -23,7 +24,6 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
             return "unpaid-invoice-red"; // No class
         }
     };
-
       // Get role name  from login response
       const loginRes = localStorage.getItem("userData");
       const parseLoginRes = JSON.parse(loginRes);
@@ -107,26 +107,38 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                             if(rowData.amountPaid==="0"){
 return <p>Pending</p>
                             }
-                            else if(rowData.amountPaid>"0" && rowData.dueAmount==="0"){
+                            else if(rowData.amountPaid>"0" && rowData.dueAmount>"0"){
                                 return <p>Partially Paid</p>
                             }
-                            else {
+                            else if(rowData.amountPaid>"0" && rowData.dueAmount=="0") {
                                 return <p>Paid</p>
+                            }
+                            else{
+                                return <p>Pending</p>
                             }
 
                 }}  />
                 <Column field="invoicePaymentMethod" header="Payment Method"  />
-                <Column
+                {/* {
+                    invoiceData?.isAdHocInvoice ?    
+                    <Column
+                    field="NO"
+                    header="Billing Period"
+                   
+                /> :
+                    <Column
                     field="BillingPeriod"
                     header="Billing Period"
                     body={(rowData) => {
                        
-                        let billingperiod = "From :" + rowData.billingPeriod.from + "," + " To:" + rowData.billingPeriod.to;
+                        let billingperiod = "From :" + rowData?.billingPeriod?.from + "," + " To:" + rowData?.billingPeriod?.to;
 
                         return <p>{billingperiod}</p>;
                     }}
                     style={{ minWidth: "350px" }}
                 />
+                } */}
+             
               {  companyNameToCapital.includes("ZISFONE") ?  <Column
                     field="Action"
                     body={
@@ -169,11 +181,11 @@ return <p>Pending</p>
                     header="Invoice EBill"
                     
                 />
-
+ {/* icon={isLoading ? "pi pi-spin pi-spinner" : ""} */}
 <Column
     field="Invoice_Pdf"
     body={rowData => (
-        <Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2" onClick={() => {setInvoiceData(rowData)}} disabled={isLoading} icon={isLoading ? "pi pi-spin pi-spinner" : ""}>
+        <Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2" onClick={() => {setInvoiceData(rowData)}} disabled={isLoading}>
             Download
         </Button>  
     )}
