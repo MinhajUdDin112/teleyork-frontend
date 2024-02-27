@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { Calendar } from "primereact/calendar";
 import classNames from "classnames";
 
-const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
+const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISuccess }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const [selectedCity1, setSelectedCity1] = useState(null);
     const [city, setCity] = useState("");
@@ -21,12 +21,12 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
     const [allType, setAllType] = useState()
 
     const validationSchema = Yup.object().shape({
-        invoiceAmount: Yup.string().required("Please Select Invoice Amount"),
+        // invoiceAmount: Yup.string().required("Please Select Invoice Amount"),
         invoiceType: Yup.string().required("Please select Invoice Type"),
         amount: Yup.string().required("Please select Amount"),
-        isTax: Yup.string().required("Please select isTax"),
-        taxAmount: Yup.string().required("Please Enter Tax Amount"),
-        taxBreakup: Yup.string().required("Please Enter Tax Breakup"),
+       // isTax: Yup.string().required("Please select isTax"),
+        // taxAmount: Yup.string().required("Please Enter Tax Amount"),
+        // taxBreakup: Yup.string().required("Please Enter Tax Breakup"),
         dueDate:Yup.string().required("Please Enter Due Date"),
     });
 
@@ -36,7 +36,7 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
             invoiceAmount: "",
             invoiceType: "",
             isTax: "",
-            invoiceAmount: "",
+            amount: "",
             taxAmount: "",
             taxBreakup: "",
             typeName: "",
@@ -44,25 +44,35 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
         },
         onSubmit: async (values, actions) => {
             setisButtonLoading(true);
-            console.log("Here is ")
+          
             const dataToSend = {
-
+                enrollmentId:cpData?.enrollmentId,
+                accountId:cpData?.accountId,
+                invoiceOneTimeCharges:formik.values.amount,
+                totalAmount:formik.values.amount,
+                invoicetype:formik.values.invoiceType,
+                includeTaxes:city,
+                invoiceDueDate:formik.values.dueDate,
+                amountPaid:"0",
+                invoicePaymentMethod:"Skip"
              };
 
             try {
-                const response = await Axios.post(`${BASE_URL}/api/user/web`, dataToSend);
+                const response = await Axios.post(`${BASE_URL}/api/web/invoices/adHocInvoiceGeneration`, dataToSend);
                 if (response?.status === 201 || response?.status === 200) {
-                    toast.success("Successfully Run");
+                    toast.success("Successfully Created");
                     setisButtonLoading(false);
                     actions.resetForm();
+                    onAPISuccess(true)
                 }
             } catch (error) {
-              toast.error(error?.response?.data?.msg);
+              toast.error(error?.response?.data?.error);
               setisButtonLoading(false);
             }
-            setAdHocInvoiceModal(false)
+           
         },
     });
+   
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const company = parseLoginRes?.company;
@@ -129,7 +139,7 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
                             Add Type
                         </span>{" "}</p>
                         <p className="col-8 m-0 p-1">
-                            <Dropdown placeholder="Invoice Type" id="invoiceType" value={formik.values.invoiceType} options={allType}  onBlur={formik.handleBlur} onChange={formik.handleChange} filter filterBy="typeName" optionLabel="typeName" optionValue="_id"  className={classNames({ "p-invalid": isFormFieldValid("invoiceType") }, "h-3rem w-21rem align-items-center mr-3")} />
+                            <Dropdown placeholder="Invoice Type" id="invoiceType" value={formik.values.invoiceType} options={allType}   onChange={formik.handleChange} filter filterBy="typeName" optionLabel="typeName" optionValue="typeName"  className={classNames({ "p-invalid": isFormFieldValid("invoiceType") }, "h-3rem w-21rem align-items-center mr-3")} />
                             {getFormErrorMessage("invoiceType")}
                         </p>
                         
@@ -153,14 +163,14 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Amount($):</p>
                         <p className="col-8 m-0 p-1">
-                            <InputText placeholder="Enter Amount" onBlur={formik.handleBlur} value={formik.values.amount} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("amount") }, "h-3rem w-21rem border-round-xs mr-3")} />
+                            <InputText placeholder="Enter Amount" id="amount" value={formik.values.amount} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("amount") }, "h-3rem w-21rem border-round-xs mr-3")} />
                             {getFormErrorMessage("amount")}
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Due Date:</p>
                         <p className="col-8 m-0 p-1">
-                        <Calendar id="dueDate" value={formik.values.dueDate} onChange={formik.handleChange} showIcon style={{ width: "21rem" }} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("dueDate") }, " mr-3")} />
+                        <Calendar id="dueDate" value={formik.values.dueDate} onChange={formik.handleChange} showIcon style={{ width: "21rem" }}  className={classNames({ "p-invalid": isFormFieldValid("dueDate") }, " mr-3")} />
                             {getFormErrorMessage("dueDate")}
                         </p>
                     </div>
@@ -168,11 +178,6 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
                         <p className="col-4 font-semibold m-0 p-1">Do You want to include tax?:</p>
                         <p className="col-8 m-0 p-1">
                             <div>
-
-
-
-
-
                                 <RadioButton inputId="isTax" name="pizza" value="yes" onChange={(e) => setCity(e.value)} checked={city === "yes"} />
                                 <label htmlFor="isTax" className="mr-2 px-2">
                                     Yes
@@ -181,36 +186,35 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal }) => {
                                 <label htmlFor="isTax" className="mr-2 px-2">
                                     No
                                 </label>
+                                
                             </div>
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Tax Amount($):</p>
                         <p className="col-8 m-0 p-1">
-                            <InputText id="taxAmount" placeholder="Enter Tax Amount" value={formik.values.taxAmount} onChange={formik.handleChange} onBlur={formik.handleBlur}   className={classNames({ "p-invalid": isFormFieldValid("taxAmount") }, "h-3rem w-21rem border-round-xs mr-3")} />
-                            {getFormErrorMessage("taxAmount")}
+                            <InputText id="taxAmount" placeholder="Enter Tax Amount" value={formik.values.taxAmount} onChange={formik.handleChange}    className= "h-3rem w-21rem border-round-xs"/>
+                           
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Tax Breakup($):</p>
                         <p className="col-8 m-0 p-1">
-                            <InputText id="taxBreakup" placeholder="Enter Tax Breakup" value={formik.values.taxBreakup} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("taxBreakup") }, "h-3rem w-21rem border-round-xs mr-3")} />
-                            {getFormErrorMessage("taxBreakup")}
+                            <InputText id="taxBreakup" placeholder="Enter Tax Breakup" value={formik.values.taxBreakup} onChange={formik.handleChange}  className= "h-3rem w-21rem border-round-xs mr-3" />
+                           
                         </p>
                     </div>
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Invoice Amount($):</p>
                         <p className="col-8 m-0 p-1">
-                            <InputText id="invoiceAmount" placeholder="Enter Invoice Amount" value={formik.values.invoiceAmount} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("invoiceAmount") }, "h-3rem w-21rem border-round-xs mr-3")} />
-                            {getFormErrorMessage("invoiceAmount")}
+                            <InputText id="invoiceAmount" placeholder="Enter Invoice Amount" value={formik.values.invoiceAmount} onChange={formik.handleChange}  className= "h-3rem w-21rem border-round-xs mr-3"/>
+                           
                         </p>
                     </div>
                 </div>
                 <div className="flex justify-content-between m-3" >
                 <Button label="Close" onClick={() => setAdHocInvoiceModal(false)} />
                 <Button label="Submit" type="submit" /> 
-
-               
                 </div>
            
            
