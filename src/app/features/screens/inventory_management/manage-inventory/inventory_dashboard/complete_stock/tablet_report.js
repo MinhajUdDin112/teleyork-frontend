@@ -83,7 +83,7 @@ export default function TabletCompleteStockReport(){
                 }}
                 style={{ overflowX: "auto" }}
             >
-                <DataTable className="card" tableStyle={{ minWidth: "60rem" }} value={current} showGridlines>
+                <DataTable  tableStyle={{ minWidth: "60rem" }} value={current} stripedRows>
                     <Column field="SimNumber" header="SimNumber" />
 
                     <Column field="box" header="Box" />

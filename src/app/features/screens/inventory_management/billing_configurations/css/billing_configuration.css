@@ -1,0 +1,8 @@
+.discountmain,.featuremain{ 
+    width:100%;
+    align-items: center;
+    margin-top:30px;
+} 
+.discount_field_width,.feature_field_width{ 
+    width:32%; 
+}

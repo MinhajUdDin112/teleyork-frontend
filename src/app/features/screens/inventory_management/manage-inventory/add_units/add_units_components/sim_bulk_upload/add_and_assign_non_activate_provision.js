@@ -10,7 +10,7 @@ import { Dropdown } from "primereact/dropdown";
 import AddAgentDetail from "./dialogs/add_agent_detail";
 import { Dialog } from "primereact/dialog";
 import InfoForUsers from "./InfoForUsers/info_for_users";
-export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissions}) {   
+export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissions,unit,model}) {   
     const BASE_URL=process.env.REACT_APP_BASE_URL
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
@@ -89,7 +89,8 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: "sim",
+            unitType: unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add And Assign Non Active",
         },

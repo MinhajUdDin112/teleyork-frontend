@@ -11,7 +11,7 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./dialogs/add_agent_detail";
 import InfoForUsers from "./InfoForUsers/info_for_users";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function SIMBulkUploadAddPreActivatedProvision({ permissions }) {
+export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit,model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -85,7 +85,8 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions }) {
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: "sim",
+            unitType: unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Bulk Add Pre-Activate Sim",
         },

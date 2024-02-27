@@ -2,99 +2,91 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { Dialog } from "primereact/dialog";
 import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable"; 
+import { DataTable } from "primereact/datatable";  
+import "./css/inventory_dashboard.css"
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function SIMCompleteStockReport() {
+export default function SIMCompleteStockReport({unitType,billingModel}) {
     const loginRes = localStorage.getItem("userData"); 
     const parseLoginRes = JSON.parse(loginRes);
-    const [completereportvisibility, setCompleteReportVisibility] = useState(false);
-    
-    const [completedsimreport, setCompletedSimReport] = useState({ Stock: 0, Used: 0, Free: 0 });
-    const [current, setCurrent] = useState([]);
-    const colors = {
-        Stock: "#0073b7",
-        Used: "#00c0ef",
-        Free: " #00a65a",
-    };
-    const [currentheader, setCurrentHeader] = useState("");
-    const [freesim, setFreeSim] = useState([]);
-    const [usedsim, setUsedSim] = useState([]);
-    const [stocksim, setStockSim] = useState([]);
-    function ShowDetails(type) {
-        if (type === "Free") {
-            setCurrent(freesim);
-            setCurrentHeader("Free SIM Stock");
-        } else if (type === "Used") {
-            setCurrent(usedsim);
-            setCurrentHeader("Used SIM Stock");
-        } else {
-            setCurrent(stocksim);
-            setCurrentHeader("Complete SIM Stock");
-        }
-        setCompleteReportVisibility(true);
-    }
+  const [freeInventory,setFreeInventory]=useState(0) 
+  const [completeFreeInventory,setCompleteFreeInventory]=useState([])  
+  const [usedInventory,setUsedInventory]=useState(0) 
+  const [completeUsedInventory,setCompleteUsedInventory]=useState([])  
+ const [completeUsedInventoryVisiblity,setCompleteUsedInventoryVisibility]=useState(false) 
+ 
+ const [completeFreeInventoryVisiblity,setCompleteFreeInventoryVisibility]=useState(false)
     useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/simInventory?serviceProvider=${parseLoginRes.company}`)
-            .then((resstock) => {
-                let obj = {
-                    Stock: resstock.data.data.length,
-                };
-                Axios.get(`${BASE_URL}/api/web/simInventory/available?serviceProvider=${parseLoginRes.company}`)
-                    .then((resfree) => {
-                        obj.Free = resfree.data.data.length;
-                        Axios.get(`${BASE_URL}/api/web/simInventory/inUse?serviceProvider=${parseLoginRes.company}`)
-                            .then((resinuse) => {
-                                obj.Used = resinuse.data.data.length;
-                                setCompletedSimReport(obj);
-                                setStockSim(resstock.data.data);
-                                setFreeSim(resfree.data.data);
-                                setUsedSim(resinuse.data.data);
-                            })
-                            .catch((error) => {});
+       
+             
+                Axios.get(`${BASE_URL}/api/web/simInventory/getByBillModel?serviceProvider=${parseLoginRes.company}&UnitType=${unitType}&billingModel=${billingModel}&status=available`)
+                    .then((resfree) => { 
+                      
+                        setFreeInventory(resfree.data.result.length) 
+                        setCompleteFreeInventory(resfree.data.result)  
+                          
+                        
                     })
                     .catch((error) => {});
-            })
-            .catch((error) => {});
-    }, []);
+            
+    },[unitType,billingModel]);  
+     useEffect(()=>{
+    Axios.get(`${BASE_URL}/api/web/simInventory/getByBillModel?serviceProvider=${parseLoginRes.company}&UnitType=${unitType}&billingModel=${billingModel}&status=inUse`)
+    .then((resinuse) => {     
+        setUsedInventory(resinuse.data.result.length) 
+        setCompleteUsedInventory(resinuse.data.result) 
+    })
+    .catch((error) => {}); 
+},[unitType,billingModel])
     return (
         <>
-            <img src="/images/inventory_dashboard/sim.svg" alt="img" style={{ display: "inline-block", width: "40px", height: "auto" }} />
-
-            <h5 style={{ width: "50px", display: "inline-block", position: "absolute", marginTop: "12px" }}>SIMService</h5>
-            {Object.keys(completedsimreport).map((item) => (
-                <div className="mt-2 flex flex-wrap justify-content-between">
-                    <div>
-                        <span>{item}</span>
-                    </div>
-                    <div onClick={() => {
-                                ShowDetails(item);
-                            }} className="flex justify-content-center align-items-center" style={{ cursor: "pointer", background: `${colors[item]}`, borderRadius: "25px", width: "25px", height: "25px" }}>
-                        <span
-                            style={{ color: "white" }}
-                            
-                        >
-                            {completedsimreport[item]}
-                        </span>
-                    </div>
-                </div>
-            ))}
+               <div className="flex flex-wrap flex-row maininventory  w-full justify-content-evenly"> 
+                   <div className="inventory_module card" onClick={()=>{setCompleteFreeInventoryVisibility(prev=>!prev)}}> 
+                       <h1>Free</h1> 
+                        <p>{freeInventory}</p>
+                   </div> 
+                   <div className="inventory_module card" onClick={()=>{setCompleteUsedInventoryVisibility(prev=>!prev)}}> 
+                       <h1>In Use</h1> 
+                        <p>{usedInventory}</p>
+                   </div> 
+                   <div className="inventory_module card"> 
+                       <h1>Stock</h1> 
+                        <p>{usedInventory+freeInventory}</p>
+                   </div>
+                </div>  
             <Dialog 
               draggable={false}
-                header={currentheader}
-                visible={completereportvisibility}
+                header="Free Inventories"
+                visible={completeFreeInventoryVisiblity}
                 onHide={() => {
-                    setCompleteReportVisibility(false);
+                    setCompleteFreeInventoryVisibility(false);
                 }}
                 style={{ overflowX: "auto" }}
             >
-                <DataTable className="card" tableStyle={{ minWidth: "60rem" }} value={current} showGridlines>
+                <DataTable  tableStyle={{ minWidth: "60rem" }} value={completeFreeInventory} stripedRows>
                     <Column field="SimNumber" header="SimNumber" />
 
                     <Column field="box" header="Box" />
 
                     <Column field="Model" header="Model" />
                 </DataTable>
-            </Dialog>
+            </Dialog>   
+            <Dialog 
+              draggable={false}
+                header="Used Inventories"
+                visible={completeUsedInventoryVisiblity}
+                onHide={() => {
+                    setCompleteUsedInventoryVisibility(false);
+                }}
+                style={{ overflowX: "auto" }}
+            >
+                <DataTable  tableStyle={{ minWidth: "60rem" }} value={completeUsedInventory} stripedRows>
+                    <Column field="SimNumber" header="SimNumber" />
+
+                    <Column field="box" header="Box" />
+
+                    <Column field="Model" header="Model" />
+                </DataTable>
+            </Dialog>  
         </>
     );
 }

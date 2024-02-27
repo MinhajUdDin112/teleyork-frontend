@@ -16,10 +16,17 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     const [newFeature, setNewFeature] = useState(false);
     const [allPlan, setAllPlan] = useState([]);
     const [allDiscount, setAllDiscount] = useState([]);
-    const [allFeature, setAllFeature] = useState([]);
-
+    const [allFeature, setAllFeature] = useState([]); 
+    let additionalFeature=[]
+     for(let i=0;i<rowData.additionalFeature.length;i++){ 
+   additionalFeature.push(rowData.additionalFeature[i]._id)
+     }  
+     let selecteddiscount=[] 
+     for(let i=0;i<rowData.selectdiscount.length;i++){ 
+        selecteddiscount.push(rowData.selectdiscount[i]._id)
+          } 
     const formik = useFormik({
-        // validationSchema: validationSchema,
+        // validationSchema: validationSchema,   
         initialValues: {
             billingmodel: rowData.billingmodel,
             oneTimeCharge: rowData.oneTimeCharge,
@@ -27,9 +34,9 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             inventoryType:rowData.inventoryType,
             dueDate: rowData.dueDate,
             paymentMethod: rowData.paymentMethod,
-            selectdiscount: rowData.selectdiscount,
+            selectdiscount: selecteddiscount,
             BillCreationDate: rowData.BillCreationDate,
-            additionalFeature: rowData.additionalFeature,
+            additionalFeature: additionalFeature,
             latefeeCharge: rowData.latefeeCharge,
             applyLateFee: rowData.applyLateFee,
             subsequentBillCreateDate: rowData.subsequentBillCreateDate,
@@ -95,16 +102,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             toast.error(error?.response?.data?.msg);
         }
     };
-
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
-    const optionsForBillingmodel = [
-        { label: "Select Billing Model", value: "" },
-        { label: "Prepaid", value: "Prepaid" },
-        { label: "Postpaid", value: "Postpaid" },
-        { label: "ACP", value: "ACP" },
-    ];
     const optionsForInventoryType = [
         { label: "Select Inventory Type", value: "" },
         { label: "Sim Card", value: "SimCard" },

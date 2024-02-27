@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
+import FormConfigure from "./form_configuration/form_configurations";
 const validationSchema = Yup.object().shape({
     inventoryType: Yup.string().required("Inventory Type Is Required"),
 })  
@@ -34,8 +35,8 @@ export default function AddInventory({setRefresh, setAddInventoryVisibility}){
         }
     })
     return(   
-         
-         <div className="flex flex-wrap justify-content-around flex-row"> 
+           <div>
+         <div className="flex flex-wrap align-items-center justify-content-around flex-row"> 
           <form onSubmit={formik.handleSubmit}>
            <div className="w-full     flex flex-wrap justify-content-around flex-row  "> 
            <div className="mt-0">
@@ -53,7 +54,10 @@ export default function AddInventory({setRefresh, setAddInventoryVisibility}){
            </div> 
             </form> 
             
-            <Toast ref={toast} />
+            <Toast ref={toast} />  
+        
+         </div>  
+         <FormConfigure/>
          </div>
     )
 }

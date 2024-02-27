@@ -12,7 +12,7 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions }) {
+function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,model }) {
     let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -105,7 +105,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions }) {
             SimNumber: "",
             box: "",
             Model: "",
-            unitType: "sim",
+            unitType: unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add And Assign Non Active",
         },

@@ -10,7 +10,7 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function TabletBulkUploadReprovision({unit,permissions}) {
+export default function TabletBulkUploadReprovision({permissions,unit,model}) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -87,7 +87,8 @@ export default function TabletBulkUploadReprovision({unit,permissions}) {
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: unit,
+            unitType: unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Tablet Reprovision",
         },
