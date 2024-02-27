@@ -51,9 +51,9 @@ const InvoicePage = () => {
     const getInvoice = async () => {
         const resp = await Axios.get(`${BASE_URL}/api/web/invoices/getinvoicebycustomerid?customerid=${selectedId}`)
         if (resp?.status == "200" || resp?.status == "201") {
-            setCurrentPlan(resp?.data?.data?.invoice)
-            setInvoices(resp?.data?.data?.invoice)
-            localStorage.setItem("invoiceData", JSON.stringify(resp?.data?.data?.invoice));
+            setCurrentPlan(resp?.data?.data)
+            setInvoices(resp?.data?.data)
+            localStorage.setItem("invoiceData", JSON.stringify(resp?.data?.data));
            
         }
     }
@@ -73,7 +73,7 @@ const InvoicePage = () => {
                 <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
             </Dialog>
             <Dialog draggable={false} visible={adHocInvoiceModal} header={`Add Adhoc Invoice`} style={{ width: "50vw" }} onHide={() => setAdHocInvoiceModal((prev) => !prev)}>
-            <AdHocModal cpData={cpData} adHocInvoiceModal={adHocInvoiceModal} setAdHocInvoiceModal={setAdHocInvoiceModal} />
+            <AdHocModal cpData={cpData} onAPISuccess={handleAPISuccess} adHocInvoiceModal={adHocInvoiceModal} setAdHocInvoiceModal={setAdHocInvoiceModal} />
             </Dialog>
            
                
