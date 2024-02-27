@@ -1,0 +1,21 @@
+.inventory_module{ 
+    width:200px; 
+     height:100px; 
+     cursor: pointer;
+} 
+.inventory_module p,.inventory_module h1{
+     text-align: center;
+} 
+.inventory_module h1{ 
+    font-size: 20px; 
+    font-weight: 600;
+} 
+.inventory_module p{ 
+    font-size: 18px; 
+    font-weight: 600;  
+}
+.maininventory{
+    width:100%; 
+    align-items: center;    
+    justify-items: center;
+}

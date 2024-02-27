@@ -10,7 +10,7 @@ import { Dialog } from "primereact/dialog";
 import AddTabletModelDialog from "./Dialogs/add_tablet_model_dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail"; 
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function TabletSingleUploadReprovision({unit,permissions}) {
+export default function TabletSingleUploadReprovision({permissions,unit,model}) {
     let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -137,7 +137,8 @@ export default function TabletSingleUploadReprovision({unit,permissions}) {
             /* team: "",*/
             box: "",
             Model: "",
-            unitType: unit,
+            unitType: unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Tablet Reprovision",
             make:""

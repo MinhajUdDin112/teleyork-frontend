@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Axios from "axios";
-import { Card } from "primereact/card";
 import UpdateBillingModel from "./components/update_billing_model";
 import { ToastContainer } from "react-toastify";
 import { Dialog } from "primereact/dialog";

@@ -10,7 +10,7 @@ import { Toast } from "primereact/toast";
 import AddAgentDetail from "./dialogs/add_agent_detail";
 import InfoForUsers from "./InfoForUsers/info_for_users";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function SIMBulkUploadAddActivateProvision({permissions}) {
+export default function SIMBulkUploadAddActivateProvision({permissions,unit,model}) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -87,7 +87,8 @@ export default function SIMBulkUploadAddActivateProvision({permissions}) {
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: "sim",
+            unitType: unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Bulk Add And Activate",
         },

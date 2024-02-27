@@ -1,11 +1,12 @@
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
-import React from "react";
+import React,{useEffect} from "react";
 import "./css/plan_configuration.css";
 import { useFormik } from "formik"; 
-import * as Yup from "yup";
+import * as Yup from "yup"; 
+import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
-import { Button } from "primereact/button";
+import { Button } from "primereact/button";  
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
@@ -31,16 +32,7 @@ const validationSchema = Yup.object().shape({
 
     inventoryType: Yup.string().required("Inventory Type Is Required"),
 });
-const typeOptions = [
-    {
-        label: "Prepaid",
-        value: "prepaid",
-    },
-    {
-        label: "Postpaid",
-        value: "postpaid",
-    },
-];
+
 const dataAllowanceUnitOptions = [
     {
         label: "GB",
@@ -73,19 +65,36 @@ const durationUnitOptions = [
         value: "days",
     },
 ];
-const inventoryType = [
-    {
-        label: "Sim Card",
-        value: "SimCard",
-    },
-    {
-        label: "Wireless Device",
-        value: "Wireless Device",
-    },
-];
 
-export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
-    const toast = useRef(null);
+
+export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {  
+    const toast = useRef(null);      
+  
+    const [inventoryTypeOptions,setInventoryTypeOptions]=useState([]) 
+    const [billingModelOptions,setBillingModelOptions]=useState([])   
+    const getInventoryList=async () => { 
+        try{ 
+           const res=await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`)
+              setInventoryTypeOptions(res?.data?.data || [])
+             } 
+        catch(error){ 
+             toast.error(error?.response?.data?.msg);
+        }
+    }        
+    const getBillingModelList=async () => { 
+        try{ 
+           const res=await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
+           setBillingModelOptions(res?.data?.data || [])
+             } 
+        catch(error){ 
+          
+            toast.error(error?.response?.data?.msg);
+        }
+    }    
+    useEffect(()=>{ 
+       getInventoryList()   
+       getBillingModelList()  
+    },[])
     const formik = useFormik({
         initialValues: {
             name: data.name,
@@ -101,7 +110,7 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
             planId: data.planId,
             dataAllowanceUnit: data.dataAllowanceUnit,
             voiceAllowanceUnit: data.voiceAllowanceUnit,
-            textAllowanceUnit: "SMS",
+            textAllowanceUnit: "sms",
             durationUnit: data.durationUnit,
             additionalFeatures: ["calls", "minutes"],
             termsAndConditions: "no termsAndConditions",
@@ -127,16 +136,16 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
         <Card className="pt-0">
             <div>
                 <form onSubmit={formik.handleSubmit} className="flex flex-wrap  flex-row justify-content-around">
-                    <div className="mt-0">
+                    <div className="mt-2">
                         <label className="block">
-                            Name <span className="star">*</span>
+                           Plan Name <span className="star">*</span>
                         </label>
                         <InputText className="field-width mt-2" name="name" value={formik.values.name} onChange={formik.handleChange} />
                         {formik.touched.name && formik.errors.name ? <p className="mt-2 ml-1 star">{formik.errors.name}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Descriptions <span className="star">*</span>
+                           Plan Descriptions <span className="star">*</span>
                         </label>
                         <InputText className="field-width mt-2" name="description" value={formik.values.description} onChange={formik.handleChange} />
                         {formik.touched.description && formik.errors.description ? <p className="mt-2 ml-1 star">{formik.errors.description}</p> : null}
@@ -144,78 +153,78 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
 
                     <div className="mt-2">
                         <label className="block">
-                            Data Allowance <span className="star">*</span>
+                           Plan Data Allowance <span className="star">*</span>
                         </label>
                         <InputText keyfilter="int" className="field-width mt-2" name="dataAllowance" value={formik.values.dataAllowance} onChange={formik.handleChange} />
                         {formik.touched.dataAllowance && formik.errors.dataAllowance ? <p className="mt-2 ml-1 star">{formik.errors.dataAllowance}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            DataAllowance Unit <span className="star">*</span>
+                           Plan Data Allowance Unit <span className="star">*</span>
                         </label>
                         <Dropdown options={dataAllowanceUnitOptions} className="field-width mt-2" name="dataAllowanceUnit" value={formik.values.dataAllowanceUnit} onChange={formik.handleChange} />
                         {formik.touched.dataAllowanceUnit && formik.errors.dataAllowanceUnit ? <p className="mt-2 ml-1 star">{formik.errors.dataAllowanceUnit}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Voice Allowance <span className="star">*</span>
+                           Plan Voice Allowance <span className="star">*</span>
                         </label>
                         <InputText keyfilter="int" className="field-width mt-2" name="voiceAllowance" value={formik.values.voiceAllowance} onChange={formik.handleChange} />
                         {formik.touched.voiceAllowance && formik.errors.voiceAllowance ? <p className="mt-2 ml-1 star">{formik.errors.voiceAllowance}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Voice Allowance Unit <span className="star">*</span>
+                            Plan Voice Allowance Unit <span className="star">*</span>
                         </label>
                         <Dropdown options={voiceAllowanceUnitOptions} className="field-width mt-2" name="voiceAllowanceUnit" value={formik.values.voiceAllowanceUnit} onChange={formik.handleChange} />
                         {formik.touched.voiceAllowanceUnit && formik.errors.voiceAllowanceUnit ? <p className="mt-2 ml-1 star">{formik.errors.voiceAllowanceUnit}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Text Allowance <span className="star">*</span>
+                           Plan Text Allowance <span className="star">*</span>
                         </label>
                         <InputText keyfilter="int" className="field-width mt-2" name="textAllowance" value={formik.values.textAllowance} onChange={formik.handleChange} />
                         {formik.touched.textAllowance && formik.errors.textAllowance ? <p className="mt-2 ml-1 star">{formik.errors.textAllowance}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Text Allowance Unit <span className="star">*</span>
+                           Plan Text Allowance Unit <span className="star">*</span>
                         </label>
                         <Dropdown options={textAllowanceUnitOptions} className="field-width mt-2" name="textAllowanceUnit" value={formik.values.textAllowanceUnit} onChange={formik.handleChange} />
                         {formik.touched.textAllowanceUnit && formik.errors.textAllowanceUnit ? <p className="mt-2 ml-1 star">{formik.errors.textAllowanceUnit}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Inventory Type <span className="star">*</span>
+                            Plan Inventory Type <span className="star">*</span>
                         </label>
-                        <Dropdown options={inventoryType} className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
+                        <Dropdown placeholder="Plan Inventory Type" options={inventoryTypeOptions} optionLabel="inventoryType" optionValue="inventoryType" className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
                         {formik.touched.inventoryType && formik.errors.inventoryType ? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Type <span className="star">*</span>
+                          Plan  Type <span className="star">*</span>
                         </label>
-                        <Dropdown options={typeOptions} className="field-width mt-2" name="type" value={formik.values.type} onChange={formik.handleChange} />
+                        <Dropdown placeholder="Plan  Type" options={billingModelOptions} className="field-width mt-2" name="type" optionLabel="billingModel" optionValue="billingModel" value={formik.values.type} onChange={formik.handleChange} />
                         {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
                     </div>
 
                     <div className="mt-2">
                         <label className="block">
-                            Duration <span className="star">*</span>
+                           Plan Duration <span className="star">*</span>
                         </label>
                         <InputText keyfilter="int" className="field-width mt-2" name="duration" value={formik.values.duration} onChange={formik.handleChange} />
                         {formik.touched.duration && formik.errors.duration ? <p className="mt-2 ml-1 star">{formik.errors.duration}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Duration Unit <span className="star">*</span>
+                          Plan Duration Unit <span className="star">*</span>
                         </label>
                         <Dropdown options={durationUnitOptions} className="field-width mt-2" name="durationUnit" value={formik.values.durationUnit} onChange={formik.handleChange} />
                         {formik.touched.durationUnit && formik.errors.durationUnit ? <p className="mt-2 ml-1 star">{formik.errors.durationUnit}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                            Price <span className="star">*</span>
+                           Plan Price <span className="star">*</span>
                         </label>
                         <InputText keyfilter="num" className="field-width mt-2" name="price" value={formik.values.price} onChange={formik.handleChange} />
                         {formik.touched.price && formik.errors.price ? <p className="mt-2 ml-1 star">{formik.errors.price}</p> : null}

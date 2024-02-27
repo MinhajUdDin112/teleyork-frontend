@@ -10,7 +10,7 @@ import { Dialog } from "primereact/dialog";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function SIMSingleUploadAddProvision({ permissions }) {
+export default function SIMSingleUploadAddProvision({ permissions,unit,model }) {
     let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -100,7 +100,8 @@ export default function SIMSingleUploadAddProvision({ permissions }) {
             SimNumber: "",
             box: "",
             Model: "",
-            unitType: "sim",
+            unitType: unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add Stock",
         },

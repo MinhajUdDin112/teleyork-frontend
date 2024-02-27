@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataTable } from "primereact/datatable";
 import { useFormik } from "formik";
+import "./css/billing_configuration.css"
 import { Toast } from "primereact/toast";
 import ListAllBilling from "./components/billingmodel_configurations/billing_model_configurations";
 import Axios from "axios";
@@ -15,7 +16,6 @@ import { MultiSelect } from "primereact/multiselect";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import UpdateBill from "./components/update_bill";
-import EditPlan from "../../plans_configurations/edit_plan";
 import { Card } from "primereact/card";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const BillingConfiguration = () => {
@@ -29,9 +29,8 @@ const BillingConfiguration = () => {
     const [allPlan, setAllPlan] = useState([]);
     const [allDiscount, setAllDiscount] = useState([]);
     const [allFeature, setAllFeature] = useState([]);
-
+    const [refreshOnBillingConfig,setRefreshOnBillingConfig]=useState(false)
     const [configData, setconfigData] = useState();
-
     const formik = useFormik({
         // validationSchema: validationSchema,
         initialValues: {
@@ -84,18 +83,8 @@ const BillingConfiguration = () => {
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
-    const optionsForBillingmodel = [
-        { label: "Select Billing Model", value: "" },
-        { label: "Prepaid", value: "Prepaid" },
-        { label: "Postpaid", value: "Postpaid" },
-        { label: "ACP", value: "ACP" },
-    ];
-    const optionsForInventoryType = [
-        { label: "Select Inventory Type", value: "" },
-        { label: "Sim Card", value: "SimCard" },
-        { label: "Wireless Device", value: "Wireless Device" },
-    ];
+    const [optionsForBillingmodel,setOptionsForBillingModel] = useState([])
+     const [optionsForInventoryType,setOptionForInventoryType]=useState([])
 
     const optionsForPayment = [
         { label: "Select Payment Method", value: "" },
@@ -140,12 +129,38 @@ const BillingConfiguration = () => {
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
-    };
+    }; 
+    const getBillingModelList=async () => { 
+        try{ 
+           const res=await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
+             setOptionsForBillingModel(res?.data?.data || [])
+             } 
+        catch(error){ 
+          
+            toast.error(error?.response?.data?.msg);
+        }
+    }    
+    const getInventoryList=async () => { 
+        try{ 
+           const res=await     Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`)
+              setOptionForInventoryType(res?.data?.data || [])
+             } 
+        catch(error){ 
+          
+            toast.error(error?.response?.data?.msg);
+        }
+    }
+  
     useEffect(() => {
         getDiscount();
         getConfigData();
-        getFeature();
-    }, [refresh]);
+        getFeature();   
+        getInventoryList()
+    }, [refresh]); 
+     useEffect(()=>{ 
+      
+        getBillingModelList()
+     },[refreshOnBillingConfig])
     useEffect(() => {
         if (formik.values.inventoryType !== "") {
             Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res) => {
@@ -219,6 +234,7 @@ const BillingConfiguration = () => {
                 style={{ width: "80vw" }}
                 onHide={() => {
                     setConfigBillingModel(false);
+                    setRefreshOnBillingConfig(prev=>!prev)
                 }}
             >
                 <ListAllBilling />
@@ -229,7 +245,7 @@ const BillingConfiguration = () => {
                 <div className="">
                     <div className=" ">
                         <div className=" flex flex-wrap flex-row justify-content-around  ">
-                            <div className="field-width mt-3 ">
+                            <div className="field-width  " style={{marginTop:"10px"}}>
                                 <label className="field_label  text-md">
                                     Billing Model{" "}
                                     <i
@@ -245,7 +261,10 @@ const BillingConfiguration = () => {
                                     className="w-full mt-1"
                                     id="billingmodel"
                                     options={optionsForBillingmodel}
-                                    value={formik.values.billingmodel}
+                                    value={formik.values.billingmodel}        
+                                    placeholder="Select Billing Model" 
+                                    optionLabel="billingModel" 
+                                    optionValue="billingModel"
                                     onChange={(e) => {
                                         formik.setFieldValue("billingmodel", e.value);
                                         formik.handleChange(e);
@@ -267,9 +286,12 @@ const BillingConfiguration = () => {
                                 <label className="field_label text-md">Inventory Type</label>
                                 <Dropdown
                                     className="w-full  mt-1"
-                                    id="inventoryType"
+                                    id="inventoryType"  
+                                    placeholder="Select Inventory Type"
                                     options={optionsForInventoryType}
-                                    value={formik.values.inventoryType}
+                                    value={formik.values.inventoryType} 
+                                    optionLabel="inventoryType" 
+                                     optionValue="inventoryType"
                                     onChange={(e) => {
                                         formik.setFieldValue("inventoryType", e.value);
                                         formik.handleChange(e);
@@ -288,7 +310,8 @@ const BillingConfiguration = () => {
                                 <MultiSelect
                                     id="monthlyCharge"
                                     display="chip"
-                                    options={allPlan}
+                                    options={allPlan} 
+                                    placeholder="Monthly Charges"
                                     value={formik.values.monthlyCharge}
                                     onChange={(e) => formik.setFieldValue("monthlyCharge", e.value)}
                                     optionLabel={(option) => `${option.name} - (${option.planId})`}
@@ -306,7 +329,9 @@ const BillingConfiguration = () => {
                                 <label className="field_label  text-md">First Bill Create Date</label>
                                 <Dropdown
                                     className="w-full  mt-1"
-                                    id="BillCreationDate"
+                                    id="BillCreationDate" 
+                                    
+                                    placeholder="First Bill Create Date"
                                     options={optionsForCreation}
                                     value={formik.values.BillCreationDate}
                                     onChange={(e) => {
@@ -331,7 +356,7 @@ const BillingConfiguration = () => {
                             </div>
                             <div className="field-width mt-3">
                                 <label className="field_label text-md">Late Fee Charge</label>
-                                <InputText id="latefeeCharge" value={formik.values.latefeeCharge} className="w-full  mt-1" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                <InputText id="latefeeCharge" placeholder="Late Fee Charge" value={formik.values.latefeeCharge} className="w-full  mt-1" onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
                             <div className="field-width mt-3">
                                 <label className="field_label text-md">Apply Late Fee </label>
@@ -343,7 +368,8 @@ const BillingConfiguration = () => {
 
                                 <MultiSelect
                                     className="w-full  mt-1"
-                                    id="paymentMethod"
+                                    id="paymentMethod" 
+                                    placeholder="Select Payment Method"
                                     options={optionsForPayment}
                                     display="chip"
                                     value={formik.values.paymentMethod}
@@ -359,7 +385,8 @@ const BillingConfiguration = () => {
                                     </p>
                                 ) : null}
                             </div>
-                            <div className="mt-3 field-width ">
+                            <div className="mt-3 field-width "> 
+
                                 <label className="field_label  text-md">
                                     Select Discount OR{" "}
                                     <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
@@ -368,7 +395,8 @@ const BillingConfiguration = () => {
                                 </label>
                                 <MultiSelect
                                     id="selectdiscount"
-                                    display="chip"
+                                    display="chip" 
+                                    placeholder="Select Discounts"
                                     options={allDiscount}
                                     value={formik.values.selectdiscount}
                                     onChange={(e) => formik.setFieldValue("selectdiscount", e.value)}
@@ -386,7 +414,9 @@ const BillingConfiguration = () => {
                                 </label>
                                 <MultiSelect
                                     id="additionalFeature"
-                                    display="chip"
+                                    display="chip" 
+                                    
+                                    placeholder="Select Additional Features"
                                     options={allFeature}
                                     value={formik.values.additionalFeature}
                                     onChange={(e) => formik.setFieldValue("additionalFeature", e.value)}
@@ -397,18 +427,17 @@ const BillingConfiguration = () => {
                             </div>
                         </div>
                         {newDiscount ? (
-                            <div style={{ marginLeft: "50%", transform: "translate(-50%)", width: "100%" }}>
-                                <div className="  mt-2 font-bold text-lg">Discount:</div>
-                                <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
-                                    <div className="field-width">
-                                        <label className="field_label mb-2 text-lg">Name</label>
+                            <div >
+                                <div className="discountmain flex flex-wrap  flex-row justify-content-around">
+                                    <div className="discount_field_width">
+                                        <label className="field_label mb-2 text-lg">Discount Name</label>
                                         <InputText id="discountname" className="w-full" value={formik.values.discountname} onChange={formik.handleChange} />
                                     </div>
-                                    <div className="field-width ml-5 ">
-                                        <label className="field_label mb-2 text-lg"> Amount </label>
+                                    <div  className="discount_field_width">
+                                        <label className="field_label mb-2 text-lg">Discount Amount </label>
                                         <InputText id="amount" className="w-full" value={formik.values.amount} onChange={formik.handleChange} />
                                     </div>
-                                    <i className="pi pi-check ml-2" style={{ color: "green", fontSize: "24px", cursor: "pointer" }} onClick={addDiscount}></i>
+                                   <Button className="discount_field_width mt-4" label="Add Discount" onClick={addDiscount} />
                                 </div>
                             </div>
                         ) : (
@@ -417,37 +446,37 @@ const BillingConfiguration = () => {
 
                         {newFeature ? (
                             <>
-                                <div className="  mt-2 font-bold text-lg">Feature:</div>
-                                <div className="p-fluid formgrid grid mt-3" style={{ alignItems: "center" }}>
-                                    <div className="field col-12 md:col-3">
+                                <div className="featuremain flex flex-wrap  flex-row justify-content-around" >
+                                    <div className="feature_field_width">
                                         <label className="field_label mb-2 text-lg">Name</label>
-                                        <InputText id="featureName" value={formik.values.featureName} onChange={formik.handleChange} />
+                                        <InputText id="featureName" className="w-full" value={formik.values.featureName} onChange={formik.handleChange} />
                                     </div>
-                                    <div className="field col-12 md:col-3">
+                                    <div className="feature_field_width">
                                         <label className="field_label mb-2 text-lg"> Amount </label>
-                                        <InputText id="featureAmount" value={formik.values.featureAmount} onChange={formik.handleChange} />
+                                        <InputText id="featureAmount" className="w-full" value={formik.values.featureAmount} onChange={formik.handleChange} />
                                     </div>
-                                    <i className="pi pi-check ml-2" style={{ color: "green", fontSize: "24px", cursor: "pointer" }} onClick={addFeature}></i>
+                                    <Button className="feature_field_width mt-4" label="Add Feature" onClick={addFeature} />
+                               
                                 </div>
                             </>
                         ) : (
                             ""
                         )}
-                        <div className="text-right mr-5">
+                        <div className="text-right mr-5 mt-4">
                             <Button label="Submit" type="Submit" />
                         </div>
                     </div>
                 </div>
             </form>
 
-            <div className="card">
+            <div >
                 <h3 className="font-bold">Configurations</h3>
                 <Dialog
                     visible={updatePlanVisibility}
                     style={{ width: "80vw" }}
                     header="Update Bill"
                     onHide={() => {
-                        setUpdatePlanVisibility(false);
+                        setUpdatePlanVisibility(false);    
                     }}
                 >
                     <UpdateBill rowData={currentRow} setRefresh={setRefresh} setUpdatePlanVisibility={setUpdatePlanVisibility} />
@@ -481,11 +510,12 @@ const BillingConfiguration = () => {
                         header="Actions"
                         headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
                         body={(rowData) => {
-                            console.log("row data is ", rowData);
                             return (
                                 <>
                                     <Button
-                                        label="Update"
+                                        label="Update" 
+
+                                        className=" pt-2 pb-2"
                                         onClick={() => {
                                             setCurrentRow(rowData);
                                             setUpdatePlanVisibility(true);
@@ -493,7 +523,7 @@ const BillingConfiguration = () => {
                                     />
                                     <Button
                                         label="Delete"
-                                        className="ml-4"
+                                        className="ml-4 pt-2 pb-2"
                                         onClick={() => {
                                             Axios.delete(`${BASE_URL}/api/web/billing/deletebillconfig?billId=${rowData._id}`)
                                                 .then(() => {

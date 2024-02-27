@@ -19,6 +19,7 @@ export default function CellPhoneCompletedStockReport() {
     const [free_cellphone, setFreeCellPhone] = useState([]);
     const [used_cellphone, setUsedCellPhone] = useState([]);
     const [stock_cellphone, setStockCellPhone] = useState([]);
+    
     const [completereportvisibility, setCompleteReportVisibility] = useState(false);
 
     function ShowDetails(type) {
@@ -84,7 +85,7 @@ export default function CellPhoneCompletedStockReport() {
                         }}
                         style={{ overflowX: "auto" }}
                     >
-                        <DataTable className="card" tableStyle={{ minWidth: "60rem" }} value={current} showGridlines>
+                        <DataTable  tableStyle={{ minWidth: "60rem" }} value={current} stripedRows>
                             <Column field="SimNumber" header="SimNumber" />
                             <Column field="IMEI" header="IMEI" />
                             <Column field="box" header="Box" />

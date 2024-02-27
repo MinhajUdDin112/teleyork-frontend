@@ -10,7 +10,7 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";  
 const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function TabletBulkUploadAddAndAssignNonActivateProvision({unit,permissions}) {
+export default function TabletBulkUploadAddAndAssignNonActivateProvision({permissions,unit,model}) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -87,7 +87,8 @@ export default function TabletBulkUploadAddAndAssignNonActivateProvision({unit,p
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType:unit,
+            unitType:unit, 
+            billingModel:model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add And Assign Non Active",
         },

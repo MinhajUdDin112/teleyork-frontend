@@ -5,6 +5,8 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import Axios from "axios";
 import { Toast } from "primereact/toast";
+import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
+import { toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
@@ -116,21 +118,21 @@ export default function EsnSimSingleUpload({ permissions }) {
             //Getting SIM Details
             Axios.get(`${BASE_URL}/api/web/simInventory/getByESN?esn=${e.target.value}`)
                 .then((res) => {
-           
                     setEsnExist(e.target.value);
-
                     formik.setFieldValue("agentType", res.data.data.AgentType._id);
                     formik.setFieldValue("carrier", res.data.data.carrier._id);
                     formik.setFieldValue("status", res.data.data.status);
                     formik.setFieldValue("Model", res.data.data.Model.toLowerCase());
                     formik.setFieldValue("box", res.data.data.box);
                     formik.setFieldValue("SimNumber", res.data.data.SimNumber);
-
                     setDefaultSelectedAgent(res.data.data.AgentName._id);
                     setDepartmentSelected(res.data.data.AgentType._id);
+                    toast.success("Inventory Detail Successfully Fetched");
                 })
                 .catch((err) => {
                     //Setting this to null so Api Not call if ESN Not found in Inventory
+
+                    toast.error("Inventory Not Exist");
                     setEsnExist(null);
                     formik.setFieldValue("agentType", "");
                     formik.setFieldValue("carrier", "");
@@ -173,9 +175,12 @@ export default function EsnSimSingleUpload({ permissions }) {
                     Axios.put(`${BASE_URL}/api/web/simInventory/update?simNumber=${esnExist}`, obj)
                         .then(() => {
                             obj.SimNumberToUpdate = currentvalue;
+                            toast.success("Inventory Successfully Updated");
                         })
                         .catch((err) => {
                             obj.SimNumberToUpdate = currentvalue;
+
+                            toast.error("Inventory Updation Failed");
                         });
                 } else {
                     obj.SimNumberToUpdate = currentvalue;
@@ -185,9 +190,13 @@ export default function EsnSimSingleUpload({ permissions }) {
                 Axios.put(`${BASE_URL}/api/web/simInventory/update?simNumber=${esnExist}`, obj)
                     .then(() => {
                         obj.SimNumberToUpdate = currentvalue;
+
+                        toast.success("Inventory Successfully Updated");
                     })
                     .catch((err) => {
                         obj.SimNumberToUpdate = currentvalue;
+
+                        toast.error("Inventory Updation Failed");
                     });
             }
         }
@@ -195,6 +204,7 @@ export default function EsnSimSingleUpload({ permissions }) {
     return (
         <>
             <div>
+                <ToastContainer />
                 <div className="flex flex-wrap mb-3 justify-content-around ">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -209,8 +219,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                             }}
                             onBlur={formik.handleBlur}
                             className="field-width mt-2"
-                         
-                          />
+                        />
                         {formik.errors.SimNumberToUpdate && formik.touched.SimNumberToUpdate && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumberToUpdate}
@@ -309,20 +318,19 @@ export default function EsnSimSingleUpload({ permissions }) {
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">Box#</p>
                         <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width  mt-2" />
-                    </div>      
+                    </div>
                     <div className="mt-4 mr-3 mb-3 ">
-                    <Button 
-                    className="field-width jusitfy-content-center mt-4"
-                        label="Submit"
-                        onClick={() => {
-                            formik.handleSubmit();
-                            //  handlesubmit()
-                        }}
-                        disabled={!permissions.isCreate}
-                    />
+                        <Button
+                            className="field-width jusitfy-content-center mt-4"
+                            label="Submit"
+                            onClick={() => {
+                                formik.handleSubmit();
+                                //  handlesubmit()
+                            }}
+                            disabled={!permissions.isCreate}
+                        />
+                    </div>
                 </div>
-                </div>
-                
             </div>
             <Dialog
                 visible={addsim_Model_dialog_visibility}

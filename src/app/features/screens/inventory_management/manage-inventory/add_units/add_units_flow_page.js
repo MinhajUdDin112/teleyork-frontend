@@ -1,9 +1,10 @@
 import React,{useState,useEffect} from "react";
 import { Dropdown } from "primereact/dropdown";
-import * as Yup from "yup";  
+import * as Yup from "yup"; 
+import { useFormik } from "formik";    
 import "./add_units_components/sim_singleupload/css/style.css"
 import { Button } from "primereact/button";
-import { useFormik } from "formik";  
+
 import { Dialog } from "primereact/dialog";
 import Axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -11,7 +12,7 @@ import Header from "./add_unit-flow_page_header.js";
 import CellPhoneBulkUpload from "./add_units_components/cell_phone_bulkupload/cell_phone_bulkupload.js";
 import CellPhoneSingleUpload from "./add_units_components/cell_phone_singleupload/cell_phone_singleupload.js";
 import SIMSingleUploadAddProvision from "./add_units_components/sim_singleupload/add_stock_provision.js";
-import { provision, unit, type,simprovision } from "./assets.js";
+import { provision,  type,simprovision } from "./assets.js";
 import TabletBulkUploadAddAndAssignNonActivateProvision from "./add_units_components/tablet_bulk_upload/add_and_assign_non_activate_provision.js";
 import SIMBulkUploadAddActivateProvision from "./add_units_components/sim_bulk_upload/addactivate_provision.js";
 import SIMBulkUploadAddPreActivatedProvision from "./add_units_components/sim_bulk_upload/add_preactivated_provision.js";
@@ -35,7 +36,8 @@ const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
 const AddUnits = ({ setActiveComponent }) => {          
     const location = useLocation();
-    const currentPath = location?.pathname  
+    const currentPath = location?.pathname   
+    const [unitOptions,setUnitOptions]=useState([])
     const [billingModelList,setBillingModelList]=useState([]) 
     const actionBasedChecks = () => {
 
@@ -64,7 +66,7 @@ const AddUnits = ({ setActiveComponent }) => {
       const [isManage,setIsManage]=useState(null)  
       const [isCreate,setIsCreate]=useState(null) 
      const [configInvenoty,setConfigInventory]=useState(false) 
-     
+       const [onInventoryConfig,setOnInventoryConfig]=useState(false)
     useEffect(()=>{ 
        actionBasedChecks()
        Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
@@ -73,7 +75,14 @@ const AddUnits = ({ setActiveComponent }) => {
        })
        .catch((err) => {});
 
-     },[])    
+     },[])      
+     useEffect(()=>{ 
+        Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`)
+        .then((res) => {
+            setUnitOptions(res?.data?.data)
+        })
+        .catch((err) => {});
+     },[onInventoryConfig])
     const validationSchema = Yup.object().shape({
         unitType: Yup.string().required("please select"),
         uploadType: Yup.string().required("please select type "),
@@ -99,7 +108,8 @@ const AddUnits = ({ setActiveComponent }) => {
                 className="pt-0"
                 style={{ width: "80vw" }}
                 onHide={() => {
-                    setConfigInventory(false);
+                    setConfigInventory(false); 
+                    setOnInventoryConfig(prev=>!prev)
                 }}
             >
                 <ListAllInventories />
@@ -119,7 +129,7 @@ const AddUnits = ({ setActiveComponent }) => {
                 <div className="flex flex-wrap mb-3  justify-content-around">
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0 ">
-                            Inventory Type <span style={{ color: "red" }}>*</span>  
+                            Inventory Type  
                              
                                     <i disabled={!isCreate}    onClick={() => {
                                         //setAddAgentDialogVisbility((prev) => !prev); 
@@ -131,14 +141,14 @@ const AddUnits = ({ setActiveComponent }) => {
                                     ></i>
                                 
                         </p>
-                        <Dropdown value={formik.values.unit} name="unit" options={unit} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>  
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
-                            Billing Model <span style={{ color: "red" }}>*</span>       
+                            Billing Model        
 
                         </p>
-                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="_id" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="billingModel" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -158,49 +168,49 @@ const AddUnits = ({ setActiveComponent }) => {
             </div>
             {formik.values.unit === "Cell Phone" ? (
                 formik.values.upload === "Single" ? (
-                    <CellPhoneSingleUpload permissions={{isCreate:isCreate}} />
+                    <CellPhoneSingleUpload unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Bulk" ? (
-                    <CellPhoneBulkUpload permissions={{isCreate:isCreate}} />
+                    <CellPhoneBulkUpload unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ) : undefined
             ) : formik.values.unit === "SIM" ? (
                 formik.values.upload === "Single" && formik.values.provision === "add_stock" ? (
-                    <SIMSingleUploadAddProvision permissions={{isCreate:isCreate}} />
+                    <SIMSingleUploadAddProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 )  : formik.values.upload === "Single" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <SIMSingleUploadAddAndAssignNonActivateProvision permissions={{isCreate:isCreate}} />
+                    <SIMSingleUploadAddAndAssignNonActivateProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ): formik.values.upload === "Single" && formik.values.provision === "add_pre_activated" ? (
-                    <SIMSingleUploadAddPreActivatedProvision permissions={{isCreate:isCreate}}/>
+                    <SIMSingleUploadAddPreActivatedProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ): formik.values.upload === "Bulk" && formik.values.provision === "add_stock" ? (
-                    <SIMBulkUploadAddProvision  permissions={{isCreate:isCreate}}/>
-                ) : formik.values.upload === "Single" && formik.values.provision === "add_and_activated" ? (
-                    <SIMSingleUploadAddActivateProvision  permissions={{isCreate:isCreate}}/>
+                    <SIMBulkUploadAddProvision  unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
+                ) : formik.values.upload === "Single"  && formik.values.provision === "add_and_activated" ? (
+                    <SIMSingleUploadAddActivateProvision  unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ? (
-                    <SIMBulkUploadAddActivateProvision  permissions={{isCreate:isCreate}}/>
+                    <SIMBulkUploadAddActivateProvision  unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ): formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <SIMBulkUploadAddAndAssignNonActivateProvision permissions={{isCreate:isCreate}} />
+                    <SIMBulkUploadAddAndAssignNonActivateProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ): formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
-                    <SIMBulkUploadAddPreActivatedProvision permissions={{isCreate:isCreate}}/>
+                    <SIMBulkUploadAddPreActivatedProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ) : undefined
-            ) : formik.values.unit === "Tablet" || formik.values.unit === "Wireless device" ? (
+            ) : formik.values.unit === "Tablet" || formik.values.unit === "Wireless Device" ? (
                 formik.values.upload === "Bulk"  && formik.values.provision === "add_stock" ? (
-                    <TabletBulkUploadAddProvision unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
+                    <TabletBulkUploadAddProvision unit={formik.values.unit} model={formik.values.billingModel}  permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ? (
-                    <TabletBulkUploadAddActivateProvision unit={formik.values.unit} permissions={{isCreate:isCreate}} />
+                    <TabletBulkUploadAddActivateProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <TabletBulkUploadAddAndAssignNonActivateProvision unit={formik.values.unit}  permissions={{isCreate:isCreate}}/>
+                    <TabletBulkUploadAddAndAssignNonActivateProvision unit={formik.values.unit} model={formik.values.billingModel}  permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Bulk"  && formik.values.provision === "reprovision" ? (
-                    <TabletBulkUploadReprovision  unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
+                    <TabletBulkUploadReprovision  unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
-                    <TabletBulkUploadAddPreActivatedProvision  permissions={{isCreate:isCreate}}/>
+                    <TabletBulkUploadAddPreActivatedProvision  unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Single"  && formik.values.provision === "add_stock" ? (
-                    <TabletSingleUploadAddProvision unit={formik.values.unit} permissions={{isCreate:isCreate}} />
+                    <TabletSingleUploadAddProvision unit={formik.values.unit} model={formik.values.billingModel}  permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_and_activated" ? (
-                    <TabletSingleUploadAddActivateProvision unit={formik.values.unit} permissions={{isCreate:isCreate}} />
+                    <TabletSingleUploadAddActivateProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_and_assign_non_activated" ? (
-                    <TabletSingleUploadAddAndAssignNonActivateProvision  unit={formik.values.unit} permissions={{isCreate:isCreate}} />
+                    <TabletSingleUploadAddAndAssignNonActivateProvision  unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Single" && formik.values.provision === "reprovision" ? (
-                    <TabletSingleUploadReprovision unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
+                    <TabletSingleUploadReprovision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Single" && formik.values.provision === "add_pre_activated" ? (
-                    <TabletSingleUploadAddPreActivatedProvision  unit={formik.values.unit} permissions={{isCreate:isCreate}}/>
+                    <TabletSingleUploadAddPreActivatedProvision  unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ) :undefined
             ) : undefined} 
            
