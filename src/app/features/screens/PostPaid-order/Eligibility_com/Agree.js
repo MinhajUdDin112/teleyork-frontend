@@ -274,7 +274,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                     }
                                 }
                                 setInventory(inventory);
-                                if (inventory === "Sim Card") {
+                                if (inventory === "SIM") {
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("simdiscountobjectarray")));
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
@@ -283,7 +283,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                     formik.setFieldValue("totalamount", amountafterdiscount);
                                     formik.setFieldValue("plan", "")
                                     // Inside the inventory selection handler
-                                    formik.setFieldValue("productName", "SIM CARD")
+                                    formik.setFieldValue("productName", "SIM")
 
                                 } else if (inventory === "Wireless Device") {
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
@@ -308,7 +308,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
                     <div className="mt-2">
                         <label className="block">Select Plan</label>
-                        {inventory === "Sim Card" ? (
+                        {inventory === "SIM" ? (
                             <>
                                 <>
                                     <Dropdown
@@ -322,23 +322,26 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                                         onChange={(e) => {
 
 
-                                            if (formik.values.plan === "") {
-                                                let devicepricing = JSON.parse(localStorage.getItem("simpricing"));
-                                                for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
-                                                    if (devicepricing.monthlyCharge[i]._id === e.value) {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing.monthlyCharge[i].price).toString();
+                                            if (formik.values.plan === "") {  
+                                                 
+                                                let devicepricing = JSON.parse(localStorage.getItem("planprices"));
+                                                for (let i = 0; i < devicepricing.length; i++) {
+                                                    if (devicepricing[i]._id === e.value) {
+                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
                                                     }
                                                 }
                                                 formik.setFieldValue("plan", e.value);
                                                 formik.handleChange(e);
                                             } else {
-                                                let devicepricing = JSON.parse(localStorage.getItem("simpricing"));
-                                                for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
-                                                    if (devicepricing.monthlyCharge[i]._id === e.value || devicepricing.monthlyCharge[i]._id === formik.values.plan) {
-                                                        if (devicepricing.monthlyCharge[i]._id === formik.values.plan) {
-                                                            formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing.monthlyCharge[i].price).toString();
+                                                let devicepricing = JSON.parse(localStorage.getItem("planprices"));  
+                                                console.log("inside new vaue")
+                                                for (let i = 0; i < devicepricing.length; i++) { 
+                                                
+                                                    if (devicepricing[i]._id === e.value || devicepricing[i]._id === formik.values.plan) {
+                                                        if (devicepricing[i]._id === formik.values.plan) {
+                                                            formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing[i].price).toString();
                                                         } else {
-                                                            formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing.monthlyCharge[i].price).toString();
+                                                            formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
                                                         }
                                                     }
                                                 }
@@ -364,22 +367,22 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
 
                                         if (formik.values.plan === "") {
-                                            let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));
-                                            for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
-                                                if (devicepricing.monthlyCharge[i]._id === e.value) {
-                                                    formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing.monthlyCharge[i].price).toString();
+                                            let devicepricing = JSON.parse(localStorage.getItem("planprices"));
+                                            for (let i = 0; i < devicepricing.length; i++) {
+                                                if (devicepricing[i]._id === e.value) {
+                                                    formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
                                                 }
                                             }
                                             formik.setFieldValue("plan", e.value);
                                             formik.handleChange(e);
                                         } else {
-                                            let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));
-                                            for (let i = 0; i < devicepricing.monthlyCharge.length; i++) {
-                                                if (devicepricing.monthlyCharge[i]._id === e.value || devicepricing.monthlyCharge[i]._id === formik.values.plan) {
-                                                    if (devicepricing.monthlyCharge[i]._id === formik.values.plan) {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing.monthlyCharge[i].price).toString();
+                                            let devicepricing = JSON.parse(localStorage.getItem("planprices"));
+                                            for (let i = 0; i < devicepricing.length; i++) {
+                                                if (devicepricing[i]._id === e.value || devicepricing[i]._id === formik.values.plan) {
+                                                    if (devicepricing[i]._id === formik.values.plan) {
+                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing[i].price).toString();
                                                     } else {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing.monthlyCharge[i].price).toString();
+                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
                                                     }
                                                 }
                                             }
@@ -394,7 +397,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     </div>
                     <div className="mt-2">
                         <label className="block">Select Additional Feature</label>
-                        {inventory === "Sim Card" ? (
+                        {inventory === "SIM" ? (
                             <>
                                 <MultiSelect
                                     disabled={paymentInfo ? true : false}

@@ -98,8 +98,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             break;
         }
     }
-    if (inventory === "Sim Card") {
-        productName = "SIM CARD"
+    if (inventory === "SIM") {
+        productName = "SIM"
 
         let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
         let simalladditional = JSON.parse(localStorage.getItem("simadditional"));

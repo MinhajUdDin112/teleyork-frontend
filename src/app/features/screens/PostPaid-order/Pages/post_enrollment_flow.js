@@ -22,10 +22,17 @@ export default function Post_enrollment_Flow() {
 
      
 
-      useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/billing/plans?inventoryType=SimCard,Wireless Device&billingmodel=Postpaid`)
+      useEffect(() => { 
+        //${BASE_URL}/api/web/billing/plans?inventoryType=SimCard,Wireless Device&billingmodel=Postpaid   
+        Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`)
+        .then((res) => {
+             localStorage.setItem("planprices",JSON.stringify(res?.data?.data))
+        })
+        .catch((err) => {}); 
+    
+        Axios.get(`${BASE_URL}/api/web/billing/getall`)
             .then((response) => {
-              
+               console.log(response.data.data)
                 let inventoryType = []; 
                 for (let i = 0; i < response?.data?.data?.length; i++) {
                     let plans = [];
@@ -34,8 +41,8 @@ export default function Post_enrollment_Flow() {
                     let totaldiscounts=0    
                     let additionaltotal=0;
                     let additionalfeaturearray=[]
-                    if (response?.data?.data[i]?.inventoryType === "SimCard") {
-                        let obj = { label: "Sim Card", value:response?.data?.data[i]?._id };
+                    if (response?.data?.data[i]?.inventoryType === "SIM" && response?.data?.data[i]?.billingmodel === "Postpaid") {
+                        let obj = { label: "SIM", value:response?.data?.data[i]?._id };
                         //objectforpricing[response.data.data[i].inventoryType]["oneTimeCharge"]=response.data.data[i].inventoryType.oneTimeCharge
                         inventoryType.push(obj);
                         for (let k = 0; k < response?.data?.data[i]?.monthlyCharge?.length; k++) {
@@ -74,7 +81,7 @@ export default function Post_enrollment_Flow() {
                         localStorage.setItem("simpricing", JSON.stringify(response.data.data[i]));
                          //SIM Plans
                         localStorage.setItem("simplan", JSON.stringify(plans));
-                    } else if (response?.data?.data[i]?.inventoryType === "Wireless Device") {   
+                    } else if (response?.data?.data[i]?.inventoryType === "Wireless Device" && response?.data?.data[i]?.billingmodel === "Postpaid") {   
                     
                         let obj = { label: "Wireless Device", value:response?.data?.data[i]?._id };
                         inventoryType.push(obj);
