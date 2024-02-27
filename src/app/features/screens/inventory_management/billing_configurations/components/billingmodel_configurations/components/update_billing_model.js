@@ -13,7 +13,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
 export default function UpdateBillingModel({data ,setRefresh ,setEditBillingModelVisibility}){ 
-    const toast = useRef(null);
+    const toast = useRef(null); 
     const formik=useFormik({ 
         initialValues:{ 
          billingModel:data?.billingModel, 
