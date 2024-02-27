@@ -223,14 +223,7 @@ const BillingConfiguration = () => {
 */
     }
 
-    const handleGenrateInvoice = () => {};
-    const actionTemplate = (rowData) => {
-        return (
-            <div>
-                <Button label="Generate Invoice" onClick={() => handleGenrateInvoice(rowData)} className=" p-button-primary mr-2 ml-2 pt-1 pb-1" text raised />
-            </div>
-        );
-    };
+   
 
     return (
         <Card>

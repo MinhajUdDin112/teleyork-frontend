@@ -178,7 +178,7 @@ const CustomerProfile = () => {
         const path = cpData?.label;
        
         const trimmedPath = path.replace(/^uploads\//, "");
-        const fileUrl = `https://api-zisfone.teleyork.com//${trimmedPath}`;
+        const fileUrl = `${BASE_URL}/${trimmedPath}`;
     
         const link = document.createElement("a");
         link.href = fileUrl;

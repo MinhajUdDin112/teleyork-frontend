@@ -137,7 +137,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </div>
                        
                         <p className="text-center">
-                            Please make checks payable to:<span className="company">{companyName}</span>
+                            Please make checks payable to: <span className="company">{companyName}</span>
                         </p>
 
                         <div className="remittancebottom"></div>
