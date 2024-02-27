@@ -20,7 +20,11 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     let additionalFeature=[]
      for(let i=0;i<rowData.additionalFeature.length;i++){ 
    additionalFeature.push(rowData.additionalFeature[i]._id)
-     }  
+     }     
+     let oneTimeCharge=[] 
+     for(let i=0;i<rowData.monthlyCharge.length;i++){ 
+        oneTimeCharge.push(rowData.monthlyCharge[i]._id)
+          } 
      let selecteddiscount=[] 
      for(let i=0;i<rowData.selectdiscount.length;i++){ 
         selecteddiscount.push(rowData.selectdiscount[i]._id)
@@ -30,7 +34,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
         initialValues: {
             billingmodel: rowData.billingmodel,
             oneTimeCharge: rowData.oneTimeCharge,
-            monthlyCharge: rowData.monthlyCharge, 
+            monthlyCharge: oneTimeCharge, 
             inventoryType:rowData.inventoryType,
             dueDate: rowData.dueDate,
             paymentMethod: rowData.paymentMethod,
