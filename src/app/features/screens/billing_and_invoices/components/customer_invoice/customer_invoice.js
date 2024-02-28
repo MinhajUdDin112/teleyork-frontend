@@ -25,10 +25,11 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
         html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 }).then((canvas) => {
             const pdf = new jsPDF();
             // pdf.setFont("Roboto");
-
+            const createdAtDate = new Date(invoiceData?.createdAt);
+            const formattedDate = createdAtDate.toLocaleDateString();
             pdf.setFont("Roboto-Black-normal");
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
-            pdf.save("converted.pdf");
+            pdf.save(`${formattedDate}-${userDetails?.lastName}-${userDetails?.accountId}.pdf`);
             setIsLoading(false);
         });
     };
@@ -53,7 +54,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                     ) : (
                         <div className="ml-4">
                             <img className="mb-0  pt-4" src="/companyLogo2.png" height="80" width="200" />
-                            <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL, 60563</h6>
+                            <h6 className="mt-0">1755 Park Street, Suite 200, Naperville, IL 60563</h6>
                         </div>
                     )}
 
@@ -67,7 +68,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             {userDetails?.address2}
                         </p>
                         <p className="font-semibold line3">
-                            {userDetails?.city}, {userDetails?.state}, {userDetails?.zip}
+                            {userDetails?.city}, {userDetails?.state} {userDetails?.zip}
                         </p>
                     </div>
                 </div>
@@ -230,7 +231,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             <tr>
                                 <td>{userDetails?.selectProduct}</td>
 
-                                <td>{invoiceData?.invoiceOneTimeCharges}</td>
+                                <td>${invoiceData?.invoiceOneTimeCharges}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -286,7 +287,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <thead>
                             <tr>
                                 <td>Description</td>
-                                <td>Amount</td>
+                                <td>$Amount</td>
                             </tr>
                         </thead>
                         <tbody>

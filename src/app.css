@@ -454,3 +454,10 @@ box-shadow: 2px;
 .dialoge-style{
   padding-top: 30px;
 }
+
+.account-type-label {
+  cursor: default; /* Prevent cursor from changing to pointer */
+  pointer-events: none; /* Disable click events */
+  
+  /* Add any other styling as needed */
+}
