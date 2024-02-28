@@ -1,44 +1,39 @@
-import React from 'react'
-import { useFormik } from 'formik';
-import * as Yup from 'yup'
-import { InputText } from 'primereact/inputtext'
-import { Button } from 'primereact/button';
-import Axios from 'axios';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { Dropdown } from 'primereact/dropdown';
-import { useLocation } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import Axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+import { Dropdown } from "primereact/dropdown";
+import { useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const BASE_URL=process.env.REACT_APP_BASE_URL
-const EditUser = ({data}) => {
-     console.log(data)
-    const [allRoles, setAllRoles] = useState([])
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const EditUser = ({ data }) => {
+    console.log(data);
+    const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
     const [allUser, setAllUser] = useState([]);
-
     const location = useLocation();
     const { rowData } = location.state || {};
-
-
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
     // Get user data from ls
-    const loginRes = localStorage.getItem("userData")
-    const parseLoginRes = JSON.parse(loginRes)
-
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
     // Validation Schema
     const validationSchema = Yup.object().shape({
-        role: Yup.string().required('This field is required.'),
-        name: Yup.string().required('This field is required.'),
-        email: Yup.string().email('Invalid email format').required('This field is required.'),
+        role: Yup.string().required("This field is required."),
+        name: Yup.string().required("This field is required."),
+        email: Yup.string().email("Invalid email format").required("This field is required."),
         mobile: Yup.string()
-            .matches(/^\d{1,10}$/, 'Maxumum 15 digits')
-            .required('This field is required.'),
-        city: Yup.string().required('This field is required.'),
-        state: Yup.string().required('This field is required.'),
-        address: Yup.string().required('This field is required.'),
-        zip: Yup.string().required('This field is required.'),
+            .matches(/^\d{1,10}$/, "Maxumum 15 digits")
+            .required("This field is required."),
+        city: Yup.string().required("This field is required."),
+        state: Yup.string().required("This field is required."),
+        address: Yup.string().required("This field is required."),
+        zip: Yup.string().required("This field is required."),
         reportingTo: Yup.string().required("This field is required."),
         department: Yup.string().required("This field is required."),
     });
@@ -58,7 +53,6 @@ const EditUser = ({data}) => {
             department: data?.department?.department,
         },
         onSubmit: async (values) => {
-
             // Prepare the data to send to the server
             const data = {
                 company: parseLoginRes?.company,
@@ -82,13 +76,13 @@ const EditUser = ({data}) => {
             Axios.patch(`${BASE_URL}/api/web/user/`, data)
                 .then((response) => {
                     if (response?.status === 200) {
-                        toast.success("User Updated Successfully")
-                        navigate('/manage-user')
+                        toast.success("User Updated Successfully");
+                        navigate("/manage-user");
                     }
                 })
                 .catch((error) => {
                     // Handle errors here
-                   toast.error(error?.response?.data?.msg)
+                    toast.error(error?.response?.data?.msg);
                 });
         },
     });
@@ -99,9 +93,9 @@ const EditUser = ({data}) => {
     };
 
     const handleUserDataMapping = () => {
-        if (rowData) { // Check if formik and rowData exist
+        if (rowData) {
+            // Check if formik and rowData exist
             Object.keys(rowData).forEach((key) => {
-               
                 if (formik.initialValues.hasOwnProperty(key)) {
                     formik.setFieldValue(key, rowData[key]);
                     formik.setFieldValue("role", rowData?.role?._id);
@@ -109,76 +103,60 @@ const EditUser = ({data}) => {
                 }
             });
         }
-    }
+    };
 
     const getRoles = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.company}`);
-           
-            setAllRoles(res?.data?.data || []);     
-        } catch (error) {
-           
-        }
+
+            setAllRoles(res?.data?.data || []);
+        } catch (error) {}
     };
     useEffect(() => {
         const getDepartment = async () => {
             try {
                 const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.company}`);
                 setAllDepartment(res?.data?.data || []);
-            } catch (error) {
-                
-            }
+            } catch (error) {}
         };
         getDepartment();
     }, []);
 
-       
     useEffect(() => {
-        if(formik.values.department){
-            const departId= formik.values.department;
-        const getRoles = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
-           
-              setAllUser(res?.data?.data || []);
-            } catch (error) {
-                
-            }
-        };
-        getRoles();
-    }
-}, [formik.values.department])
+        if (formik.values.department) {
+            const departId = formik.values.department;
+            const getRoles = async () => {
+                try {
+                    const res = await Axios.get(`${BASE_URL}/api/web/user/getByDepartments?department=${departId}`);
+
+                    setAllUser(res?.data?.data || []);
+                } catch (error) {}
+            };
+            getRoles();
+        }
+    }, [formik.values.department]);
 
     useEffect(() => {
-        handleUserDataMapping()
+        handleUserDataMapping();
         getRoles();
     }, []);
 
     return (
         <>
-          <ToastContainer/>
-    
+            <ToastContainer />
+
             <div>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid mb-3">
-
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                Role
-                            </label>
-                            <Dropdown
-                                id="role"
-                                options={allRoles}
-                                value={formik.values.role}
-                                onChange={formik.handleChange}
-                                optionLabel='role'
-                                optionValue='_id'
-                                keyfilter={/^[A-Za-z\s]+$/}
-                            />
+                            <label className="Label__Text">Role</label>
+                            <Dropdown id="role" options={allRoles} value={formik.values.role} onChange={formik.handleChange} optionLabel="role" optionValue="_id" keyfilter={/^[A-Za-z\s]+$/} />
                             {getFormErrorMessage("role")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Department <span className="steric">*</span></label>
+                            <label className="Label__Text">
+                                Department <span className="steric">*</span>
+                            </label>
                             <Dropdown
                                 id="department"
                                 options={allDepartment}
@@ -193,121 +171,68 @@ const EditUser = ({data}) => {
                             {getFormErrorMessage("department")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Reporting To <span className="steric">*</span></label>
-                            <Dropdown id="reportingTo" 
-                            options={allUser} 
-                            value={formik.values.reportingTo} 
-                            onChange={(e) => formik.setFieldValue("reportingTo", e.value)} 
-                            optionLabel="name" 
-                            optionValue="_id"  
-                            showClear
-                             filter 
-                             filterBy="name" />
+                            <label className="Label__Text">
+                                Reporting To <span className="steric">*</span>
+                            </label>
+                            <Dropdown id="reportingTo" options={allUser} value={formik.values.reportingTo} onChange={(e) => formik.setFieldValue("reportingTo", e.value)} optionLabel="name" optionValue="_id" showClear filter filterBy="name" />
                             {getFormErrorMessage("reportingTo")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                Name
-                            </label>
-                            <InputText
-                                id="name"
-                                value={formik.values.name}
-                                onChange={formik.handleChange}
-                                keyfilter={/^[A-Za-z\s]+$/}
-                            />
+                            <label className="Label__Text">Name</label>
+                            <InputText id="name" value={formik.values.name} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
                             {getFormErrorMessage("name")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                Email
-                            </label>
-                            <InputText
-                                id="email"
-                                value={formik.values.email}
-                                onChange={formik.handleChange}
-                                type='email'
-                                keyfilter={/^[a-zA-Z0-9_.@]*$/}
-                            />
+                            <label className="Label__Text">Email</label>
+                            <InputText id="email" value={formik.values.email} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
                             {getFormErrorMessage("email")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                Contact
-                            </label>
-                            <InputText
-                                id="mobile"
-                                value={formik.values.mobile}
-                                onChange={formik.handleChange}
-                                minLength={10} maxLength={10} keyfilter={/^[0-9]*$/}
-                            />
+                            <label className="Label__Text">Contact</label>
+                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} />
                             {getFormErrorMessage("mobile")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                City
-                            </label>
-                            <InputText
-                                id="city"
-                                value={formik.values.city}
-                                onChange={formik.handleChange}
-                                keyfilter={/^[A-Za-z\s]+$/}
-                            />
+                            <label className="Label__Text">City</label>
+                            <InputText id="city" value={formik.values.city} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
                             {getFormErrorMessage("city")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                State
-                            </label>
-                            <InputText
-                                id="state"
-                                value={formik.values.state}
-                                onChange={formik.handleChange}
-                                keyfilter={/^[A-Za-z\s]+$/}
-                            />
+                            <label className="Label__Text">State</label>
+                            <InputText id="state" value={formik.values.state} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
                             {getFormErrorMessage("state")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                Address
-                            </label>
-                            <InputText
-                                id="address"
-                                value={formik.values.address}
-                                onChange={formik.handleChange}
-                                keyfilter={/^[a-zA-Z0-9_,.]*$/}
-                            />
+                            <label className="Label__Text">Address</label>
+                            <InputText id="address" value={formik.values.address} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                             {getFormErrorMessage("address")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className='Label__Text'>
-                                Zip
-                            </label>
+                            <label className="Label__Text">Zip</label>
                             <InputText
                                 id="zip"
                                 value={formik.values.zip}
                                 onChange={formik.handleChange}
-                            // type='number'
+                                // type='number'
                             />
                             {getFormErrorMessage("zip")}
                         </div>
-
                     </div>
-                    <div className='mt-4'>
+                    <div className="mt-4">
                         <Button label="Submit" iconPos="right" className="" type="submit" />
                         {/* <Button label="Cancel" iconPos="right" className="Btn__cancel" type="button" onClick={onHide} /> */}
                     </div>
                 </form>
             </div>
         </>
-    )
+    );
+};
 
-}
-
-export default EditUser
+export default EditUser;

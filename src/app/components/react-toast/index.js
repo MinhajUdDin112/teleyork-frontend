@@ -13,7 +13,7 @@ function Toasts({ success, error }) {
         }
     }, [success, error]);
 
-    return <Toast ref={toast} />;
+    return <Toast ref={toast} style={{ color: "#f9f9f9" }} />;
 }
 
 export default Toasts;
