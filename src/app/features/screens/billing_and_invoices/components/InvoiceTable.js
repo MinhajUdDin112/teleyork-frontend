@@ -9,7 +9,7 @@ import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 
 const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
-    console.log("invoice data is on invoice page",invoiceData)
+   
     const cardData = invoiceData;   
     const [isLoading, setIsLoading] = useState(false)
     const [singleInvoiceData,setInvoiceData]=useState()

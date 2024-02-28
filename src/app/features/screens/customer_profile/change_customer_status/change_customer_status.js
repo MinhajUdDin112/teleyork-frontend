@@ -125,28 +125,27 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
         
         }
 
-        else  if (statusTo === "active" && connectionType=="Externally") {
-            const dataToSend={
-                enrollmentId:cpData?._id,
-                userId:parseLoginRes?._id        
-            }
-            try {
-                 setIsLoading(true)
-                const response= await  Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend)
-                
-                if(response?.status===200 || response?.status===201){
-                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
-                    
-                }
-                setIsLoading(false)
-            }  catch (error) {
-                setIsLoading(false)
-    
-                toast.current.show({ severity: "error", summary: "Customer Status", detail: error?.response?.data?.msg || error });
-            }
-            setIsLoading(false)
+        else if (statusTo === "active" && connectionType === "Externally") {
+            const dataToSend = {
+                enrollmentId: cpData?._id,
+                userId: parseLoginRes?._id
+            };
         
+            try {
+                setIsLoading(true);
+                const response = await Axios.post(`${BASE_URL}/api/user/activateByPwg`, dataToSend);
+        
+                if (response?.status === 200 || response?.status === 201) {
+                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
+                }
+            } catch (error) {
+                const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
+            }
+        
+            setIsLoading(false);
         }
+        
        
      else   if (statusTo === "disconnect") {
             Axios.post(`${BASE_URL}/api/user/disconnectMdnByPwg`, { enrollmentId: cpData?._id })

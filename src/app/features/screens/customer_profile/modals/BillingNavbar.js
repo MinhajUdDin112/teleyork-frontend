@@ -105,6 +105,7 @@ const navigate = useNavigate();
             ? "Pre Paid"
             : "",
         icon: "pi-circle-fill",
+        className: "account-type-label",
       },
     ];
   }
