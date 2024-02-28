@@ -17,7 +17,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
    
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
-        if (rowData.invoiceStatus === "Paid") {
+        if (rowData.invoiceStatus === "Paid" || rowData.invoiceStatus === "Partially Paid") {
             return "text-blue-400";
         } 
          else {
@@ -28,7 +28,8 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
       const loginRes = localStorage.getItem("userData");
       const parseLoginRes = JSON.parse(loginRes);
        const companyName = parseLoginRes?.companyName;
-     const companyNameToCapital = companyName.toUpperCase();
+      const companyNameToCapital = companyName.toUpperCase();
+    // const companyNameToCapital = "ZISFONE";
 
 
      

@@ -16,7 +16,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const DialogeForAuthPayment = ({ userDetails, invoiceData, setdialogeForAuthPayment, onAPISuccess }) => {
 
-
+    const [isLoading, setIsLoading] = useState(false)
     const [authRes, setAuthRes] = useState();
 
 
@@ -27,7 +27,6 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, setdialogeForAuthPaym
         cardCode: Yup.string().required("Please Enter CVC"),
         expirationDate: Yup.string().required("Please select Exp Date"),
         totalAmount: Yup.string().required("Please Select Amount"),
-        NameOnAccount: Yup.string().required("This is required"),
         routingNumber: Yup.string().required("This is required"),
         AccountNumber: Yup.string().required("This is required"),
         paymentMethod: Yup.string().required("Please Select Paymet Method")
@@ -64,6 +63,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, setdialogeForAuthPaym
 
     ];
     const cardApi = async()=>{
+        setIsLoading(true)
         const dataToSend = {
             totalAmount: formik.values.totalAmount,
             cardNumber: formik.values.cardNumber,
@@ -77,7 +77,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, setdialogeForAuthPaym
                 setAuthRes(response?.data?.transactionResponse)
                 // setdialogeForAuthPayment(false);
                 toast.success("Successfully Paid")
-
+                setIsLoading(false)
                 const dataToSend = {
                     totalAmount: userDetails?.totalAmount,
                     amountPaid: formik.values.totalAmount,
@@ -105,9 +105,12 @@ onAPISuccess(true);
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
+            setIsLoading(false)
     }
+    setIsLoading(false)
     }
 const echeckApi=async()=>{
+    setIsLoading(true)
     const dataToSend = {
         totalAmount: formik.values.totalAmount,
         NameOnAccount: formik.values.NameOnAccount,
@@ -122,7 +125,7 @@ const echeckApi=async()=>{
             setAuthRes(response?.data?.transactionResponse)
             // setdialogeForAuthPayment(false);
             toast.success("Successfully Paid")
-
+            setIsLoading(false)
             const dataToSend = {
                 totalAmount: userDetails?.totalAmount,
                 amountPaid: formik.values.totalAmount,
@@ -150,8 +153,9 @@ const echeckApi=async()=>{
         }
     } catch (error) {
         toast.error(error?.response?.data?.msg);
-
+        setIsLoading(false)
     }
+    setIsLoading(false)
 }
 
 
@@ -253,7 +257,7 @@ const echeckApi=async()=>{
                                                 </tr>
                                                 <div className="mt-2">
 
-<Button label="Submit" type="button" onClick={cardApi} />
+<Button label="Submit" type="button" onClick={cardApi} disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
 </div>
 
                                             </> : formik.values.paymentMethod == "echeck" ? <>
@@ -281,12 +285,12 @@ const echeckApi=async()=>{
                                                     </td>
                                                     <td>
                                                         <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("NameOnAccount") }, "input_text")} type="text" id="NameOnAccount" value={formik.values.NameOnAccount} onChange={formik.handleChange} />
-                                                        {getFormErrorMessage("NameOnAccount")}
+                                                       
                                                     </td>
                                                 </tr>
                                                 <div className="mt-2">
 
-<Button label="Submit" type="button" onClick={echeckApi} />
+<Button label="Submit" type="button" onClick={echeckApi} disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
 </div>
                                             </> : ""
                                         }
