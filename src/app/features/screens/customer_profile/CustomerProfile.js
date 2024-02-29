@@ -54,7 +54,7 @@ const CustomerProfile = () => {
         initialValues: {
             noteType: "",
             note: "",
-            priority: "highest",
+            priority: "low",
         },
         onSubmit: async (values, actions) => {
             // Prepare the data to send to the server
@@ -188,7 +188,11 @@ const CustomerProfile = () => {
         link.click();
         document.body.removeChild(link);
     };
-    
+    let toCapitalCustomerStatus;
+    const customerStatus = cpData?.status;
+    if(customerStatus){
+        toCapitalCustomerStatus = customerStatus.toUpperCase()
+    }
     return (
         <div className="card">
             <ToastContainer />
@@ -204,7 +208,7 @@ const CustomerProfile = () => {
                 <Dialog visible={displayAllNotesDialogVisibility} header={`Customer Notes (Customer ID - ${selectedId})`} style={{ width: "90vw" }} onHide={() => setDisplayAllNotesDialogVisibility((prev) => !prev)}>
                     <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
-                <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
+                <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status (Current Status: ${toCapitalCustomerStatus})`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
                     <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
                 </Dialog>
 
@@ -583,10 +587,7 @@ const CustomerProfile = () => {
                                                     <td>Fulfillment Method</td>
                                                     <td>NIL</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Tablet Subsidy Qualification</td>
-                                                    <td>{cpData?.deviceEligibilty !== undefined ? (cpData?.deviceEligibilty === true ? "Yes" : "NO") : "NIL"}</td>
-                                                </tr>
+                                               
 
                                                 <tr>
                                                     <td>Enrollment Date</td>
@@ -656,6 +657,7 @@ const CustomerProfile = () => {
                                     >
                                         <Column header="Created By" field="user.name"></Column>
                                         <Column header="Note" field="note"></Column>
+                                        <Column header="Note Type" field="noteType"></Column>
                                         <Column header="Priority" field="priority"></Column>
                                         <Column
                                             header="Creation Date"
@@ -686,6 +688,7 @@ const CustomerProfile = () => {
                             <form onSubmit={formik.handleSubmit}>
                                 <div>
                                     <Dropdown
+                                    placeholder="Select Note Type"
                                         id="noteType"
                                         options={allNotesTypes}
                                         value={formik.values.noteType}
@@ -722,7 +725,7 @@ const CustomerProfile = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <Button label="Do you want to create a ticket? " icon="pi pi-plus" className="pl-0" link />
+                                    {/* <Button label="Do you want to create a ticket? " icon="pi pi-plus" className="pl-0" link /> */}
                                     <hr className="m-0 mb-2" />
                                     <div className="text-right">
                                         <Button label="Add Note" type="submit" icon={isButtonLoading ? <ProgressSpinner strokeWidth="6" style={{ width: "1.5rem", height: "1.5rem", color: "white" }} /> : null} disabled={isButtonLoading} />
