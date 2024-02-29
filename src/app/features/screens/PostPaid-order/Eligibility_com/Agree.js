@@ -68,7 +68,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     printSetting: "Both",
                     productName: "",
                     selectProduct: formik.values.billId,
-
+                   
                 }
                 try {
 
