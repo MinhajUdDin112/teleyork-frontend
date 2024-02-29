@@ -112,6 +112,7 @@ import PrepaidApproved_Enrollments from "./app/features/screens/prepaid_postpaid
 import PlansConfigurations from "./app/features/screens/plans_configurations/plan_configuration";
 import ListAllPlans from "./app/features/screens/plans_configurations/plan_list";
 import PrepaidEvaluatedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/evaluated_enrollments/Evaluated_Enrollments";
+//import ListAllBilling from "./app/features/screens/billingModel/billingmodel_configurations/billing_model_configurations";
 const App = () => {
     // cleanLocalStorage()
     const loginPerms = localStorage.getItem("permissions");
@@ -380,7 +381,7 @@ const parseselectedid = JSON.parse(selectedid);
                                     {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
                                     <Route path="/postpaid-evaluatedenrollments" element={isPermitted("/postpaid-evaluatedenrollments") ? <PostpaidEvaluatedEnrollments /> : <Dashboard />} />
                                     <Route path="/prepaid-evaluatedenrollments" element={isPermitted("/prepaid-evaluatedenrollments") ? <PrepaidEvaluatedEnrollments /> : <Dashboard />} />
-
+                                   {/* <Route path="/billing-models" element={<ListAllBilling/>} />*/}
                                     <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                     <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                     <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
