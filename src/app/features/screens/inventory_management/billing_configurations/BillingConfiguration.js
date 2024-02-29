@@ -96,7 +96,7 @@ const BillingConfiguration = () => {
     ];
     const optionsForCreation = [
         { label: "On Activation", value: "On Activation" },
-        { label: "After QA Approval ", value: "On QA Approve" },
+        { label: "After QA Approval ", value: "On QA Approval" },
     ];
 
     function showDiscount() {

@@ -32,7 +32,7 @@ export default function Post_enrollment_Flow() {
     
         Axios.get(`${BASE_URL}/api/web/billing/getall`)
             .then((response) => {
-               console.log(response.data.data)
+              
                 let inventoryType = []; 
                 for (let i = 0; i < response?.data?.data?.length; i++) {
                     let plans = [];
