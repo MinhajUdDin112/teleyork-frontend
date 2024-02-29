@@ -28,8 +28,8 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
       const loginRes = localStorage.getItem("userData");
       const parseLoginRes = JSON.parse(loginRes);
        const companyName = parseLoginRes?.companyName;
-      const companyNameToCapital = companyName.toUpperCase();
-    // const companyNameToCapital = "ZISFONE";
+    //  const companyNameToCapital = companyName.toUpperCase();
+     const companyNameToCapital = "ZISFONE";
 
 
      
@@ -105,18 +105,16 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                 <Column field="lateFee" header="Late Fee"  />
                 <Column field="invoiceDueDate" header="DueDate"  />
                 <Column field="invoiceStatus" header="Status" body={(rowData)=>{
-                            if(rowData.amountPaid==="0"){
-return <p>Pending</p>
+                            if (parseFloat(rowData.amountPaid) === 0) {
+                                return <p>Pending</p>;
+                            } else if (parseFloat(rowData.amountPaid) > 0 && parseFloat(rowData.dueAmount) === 0) {
+                                return <p>Paid</p>;
+                            } else if (parseFloat(rowData.amountPaid) > 0 && parseFloat(rowData.dueAmount) > 0) {
+                                return <p>Partially Paid</p>;
+                            } else {
+                                return <p>Pending</p>;
                             }
-                            else if(rowData.amountPaid>"0" && rowData.dueAmount>"0"){
-                                return <p>Partially Paid</p>
-                            }
-                            else if(rowData.amountPaid>"0" && rowData.dueAmount=="0") {
-                                return <p>Paid</p>
-                            }
-                            else{
-                                return <p>Pending</p>
-                            }
+                            
 
                 }}  />
                 <Column field="invoicePaymentMethod" header="Payment Method"  />
