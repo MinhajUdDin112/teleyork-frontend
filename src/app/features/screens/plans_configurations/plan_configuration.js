@@ -129,7 +129,7 @@ useEffect(()=>{
                     }, 1000);
                 })
                 .catch((err) => {
-                    toast.current.show({ severity: "error", summary: "Plan Submission", detail: "Plan Addition Failed" });
+                    toast.current.show({ severity: "error", summary: "Plan Submission", detail: err?.response?.data?.msg });
                 });
         },
     });

@@ -128,7 +128,7 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
                     }, 1000);
                 })
                 .catch((err) => {
-                    toast.current.show({ severity: "error", summary: "Plan Updation", detail: "Plan Updation Failed" });
+                    toast.current.show({ severity: "error", summary: "Plan Updation", detail: err?.response?.data?.msg });
                 });
         },
     });
