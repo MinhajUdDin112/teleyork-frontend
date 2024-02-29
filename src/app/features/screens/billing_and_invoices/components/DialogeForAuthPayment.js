@@ -158,6 +158,15 @@ const echeckApi=async()=>{
     setIsLoading(false)
 }
 
+const formatExpirationDate = (value) => {
+    // Remove non-numeric characters
+    value = value.replace(/\D/g, '');
+    // Insert "/" after the second character
+    if (value.length > 2) {
+        value = value.slice(0, 2) + "/" + value.slice(2);
+    }
+    return value;
+};
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
@@ -251,7 +260,7 @@ const echeckApi=async()=>{
                                                         Exp Date <span className="steric">*</span>
                                                     </td>
                                                     <td>
-                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardCode") }, "input_text")} type="text" id="expirationDate" value={formik.values.expirationDate} onChange={formik.handleChange} />
+                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardCode") }, "input_text")} type="text" id="expirationDate" maxLength={5}   value={formatExpirationDate(formik.values.expirationDate)}  onChange={formik.handleChange} />
                                                         {getFormErrorMessage("expirationDate")}
                                                     </td>
                                                 </tr>
