@@ -7,7 +7,7 @@ import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
 import { Dialog } from "primereact/dialog";
-import AddNewFeature from "./components/add_newfeature";
+import AddNewFeature from "./add_newfeature";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh }) {
     console.log(rowData);
