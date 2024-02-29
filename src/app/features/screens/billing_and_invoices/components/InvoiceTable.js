@@ -9,7 +9,7 @@ import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 
 const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
-    console.log("invoice data is on invoice page",invoiceData)
+   
     const cardData = invoiceData;   
     const [isLoading, setIsLoading] = useState(false)
     const [singleInvoiceData,setInvoiceData]=useState()
@@ -17,7 +17,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
    
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
-        if (rowData.invoiceStatus === "Paid") {
+        if (rowData.invoiceStatus === "Paid" || rowData.invoiceStatus === "Partially Paid") {
             return "text-blue-400";
         } 
          else {
@@ -29,6 +29,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
       const parseLoginRes = JSON.parse(loginRes);
        const companyName = parseLoginRes?.companyName;
      const companyNameToCapital = companyName.toUpperCase();
+    
 
 
      
@@ -104,18 +105,16 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                 <Column field="lateFee" header="Late Fee"  />
                 <Column field="invoiceDueDate" header="DueDate"  />
                 <Column field="invoiceStatus" header="Status" body={(rowData)=>{
-                            if(rowData.amountPaid==="0"){
-return <p>Pending</p>
+                            if (parseFloat(rowData.amountPaid) === 0) {
+                                return <p>Pending</p>;
+                            } else if (parseFloat(rowData.amountPaid) > 0 && parseFloat(rowData.dueAmount) === 0) {
+                                return <p>Paid</p>;
+                            } else if (parseFloat(rowData.amountPaid) > 0 && parseFloat(rowData.dueAmount) > 0) {
+                                return <p>Partially Paid</p>;
+                            } else {
+                                return <p>Pending</p>;
                             }
-                            else if(rowData.amountPaid>"0" && rowData.dueAmount>"0"){
-                                return <p>Partially Paid</p>
-                            }
-                            else if(rowData.amountPaid>"0" && rowData.dueAmount=="0") {
-                                return <p>Paid</p>
-                            }
-                            else{
-                                return <p>Pending</p>
-                            }
+                            
 
                 }}  />
                 <Column field="invoicePaymentMethod" header="Payment Method"  />

@@ -3,29 +3,29 @@ import { InputText } from "primereact/inputtext";
 import { DataTable } from "primereact/datatable";
 import { DateTime } from "luxon";
 import { Dropdown } from "primereact/dropdown";
-import { Column } from "primereact/column"; 
- import { Calendar } from "primereact/calendar";
+import { Column } from "primereact/column";
+import { Calendar } from "primereact/calendar";
 import Axios from "axios";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom"; 
-import { FilterMatchMode} from 'primereact/api'
+import { useNavigate } from "react-router-dom";
+import { FilterMatchMode } from "primereact/api";
 import { Button } from "primereact/button";
-const BASE_URL=process.env.REACT_APP_BASE_URL
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ApprovedEnrollments = () => {
     // State For Select Row
     const [selectedEnrollments, setSelectedEnrollments] = useState(null);
     const [rowClick, setRowClick] = useState(true);
-    const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
+    const [createDateToFilterValue, setCreatedDateToFilterValue] = useState("");
     const [filters, setFilters] = useState({
-        global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
-        enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },  
-        createdFilter:{ value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
-        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
-    });    
-    const [enrollmentIdFilterValue,setEnrollmentIdFilterValue]=useState("")  
-    const [createDateFilterValue,setCreatedDateFilterValue]=useState("")  
+        global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        createdFilter: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
+        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO },
+    });
+    const [enrollmentIdFilterValue, setEnrollmentIdFilterValue] = useState("");
+    const [createDateFilterValue, setCreatedDateFilterValue] = useState("");
     const [allCompletedEnrollments, setAllCompletedEnrollments] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [globalFilterValue, setGlobalFilterValue] = useState("");
@@ -33,21 +33,19 @@ const ApprovedEnrollments = () => {
         const value = e.target.value;
         let _filters = { ...filters };
 
-        _filters['global'].value = value;
-         
-        setFilters(_filters);  
-        setGlobalFilterValue(value); 
-      
-    }; 
-     const onNameDateEnrollmentIdValueFilter=(e,field)=>{ 
+        _filters["global"].value = value;
+
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+    const onNameDateEnrollmentIdValueFilter = (e, field) => {
         const value = e.target.value;
         let _filters = { ...filters };
-        if(field === "enrollment"){
-        _filters['enrollment'].value = value;   
-        setFilters(_filters);  
-        setEnrollmentIdFilterValue(value); 
-        }     
-        else if(field === "createdTo"){ 
+        if (field === "enrollment") {
+            _filters["enrollment"].value = value;
+            setFilters(_filters);
+            setEnrollmentIdFilterValue(value);
+        } else if (field === "createdTo") {
             const parsedDate = DateTime.fromJSDate(new Date(e.value));
             let easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
             easternDateTime = easternDateTime.set({
@@ -58,44 +56,38 @@ const ApprovedEnrollments = () => {
 
             const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
             const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
-            const value2=etDateObject.toSeconds()
-            setCreatedDateToFilterValue(e.value)
-            _filters["createdTo"].value = value2
+            const value2 = etDateObject.toSeconds();
+            setCreatedDateToFilterValue(e.value);
+            _filters["createdTo"].value = value2;
             setFilters(_filters);
-        }
-        else{ 
-             const parsedDate = DateTime.fromJSDate(new Date(e.value));
+        } else {
+            const parsedDate = DateTime.fromJSDate(new Date(e.value));
             const easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
             const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
             const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
-            const value=etDateObject.toSeconds()
-
+            const value = etDateObject.toSeconds();
             setCreatedDateFilterValue(e.value);
-            _filters["createdFilter"].value = value
+            _filters["createdFilter"].value = value;
             setFilters(_filters);
         }
-        
-     } 
-   
- 
+    };
+
     const navigate = useNavigate();
 
     const handleEnrollmentIdClick = (rowData) => {
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
-        localStorage.setItem("selectedId", JSON.stringify(rowData._id));      
+        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
-    
-    
+
     // Get user data from ls
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
- 
-     // Get role name  from login response
-     const roleName = parseLoginRes?.role?.role;
-     const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
 
+    // Get role name  from login response
+    const roleName = parseLoginRes?.role?.role;
+    const toCapital = roleName ? roleName.toUpperCase() : "DEFAULT_VALUE";
 
-     const getAllCompletedEnrollments = async () => {
+    const getAllCompletedEnrollments = async () => {
         setIsLoading(true);
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${parseLoginRes?._id}&accountType=Postpaid`);
@@ -110,14 +102,13 @@ const ApprovedEnrollments = () => {
                             day: "2-digit",
                             year: "numeric",
                         })
-                        .replace(/\//g, "-"), 
-                        createdFilter:DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() ,
-                        createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
-                  
+                        .replace(/\//g, "-"),
+                    createdFilter: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
+                    createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
                 }));
-    
+
                 setAllCompletedEnrollments(updatedData);
-    
+
                 setIsLoading(false);
             }
         } catch (error) {
@@ -129,12 +120,10 @@ const ApprovedEnrollments = () => {
     useEffect(() => {
         getAllCompletedEnrollments();
     }, []);
-    const header=()=>{  
-        return(
-            
-        <div className="flex flex-wrap justify-content-center mt-2">
-         
-         <Dropdown
+    const header = () => {
+        return (
+            <div className="flex flex-wrap justify-content-center mt-2">
+                <Dropdown
                     className="mt-2 w-15rem ml-4"
                     options={[
                         { label: "Self Enrollment", value: "Self Enrollments" },
@@ -142,91 +131,101 @@ const ApprovedEnrollments = () => {
                         { label: "All Enrollments", value: null },
                     ]}
                     value={enrollmentIdFilterValue}
-                    onChange={(e)=>{
-                        onNameDateEnrollmentIdValueFilter(e, "enrollment"); 
+                    onChange={(e) => {
+                        onNameDateEnrollmentIdValueFilter(e, "enrollment");
                     }}
                     placeholder="Enrollment Type"
                 />
-                <InputText
-                    value={globalFilterValue}
-                    onChange={
-                        onGlobalFilterValueChange}
-                    className="w-15rem ml-4 mt-2"
-                    placeholder="Search By Name or Enrollment ID"
-                />     
-                <div className="w-45rem ml-4 mt-2" >
-                <Calendar
-                 className="w-21rem" 
-      value={createDateFilterValue}
-      dateFormat="mm/dd/yy"  
-      placeholder="Start Date"
-      onChange={(e) => {
-        onNameDateEnrollmentIdValueFilter(e, "createdAt");
-    }}  
-
-      showIcon
-    />     
-    <label className=" p-2" style={{fontSize:"19px",textAlign:"center",color:"grey"}}>To</label>  
-    <Calendar
-              className="w-21rem"   
-      value={createDateToFilterValue}
-      dateFormat="mm/dd/yy"  
-      placeholder="End Date"
-      onChange={(e) => {
-        onNameDateEnrollmentIdValueFilter(e, "createdTo");
-    }}  
-
-      showIcon
-    />    
-    </div>
-    </div>)
-       }
-       const actionTemplateForPR = (rowData) => {
-        return (
-            <Button label="Billing" onClick={() => handleEnrollmentBill(rowData)} text raised className="pt-1 pb-1" />
+                <InputText value={globalFilterValue} onChange={onGlobalFilterValueChange} className="w-15rem ml-4 mt-2" placeholder="Search By Name or Enrollment ID" />
+                <div className="w-45rem ml-4 mt-2">
+                    <Calendar
+                        className="w-21rem"
+                        value={createDateFilterValue}
+                        dateFormat="mm/dd/yy"
+                        placeholder="Start Date"
+                        onChange={(e) => {
+                            onNameDateEnrollmentIdValueFilter(e, "createdAt");
+                        }}
+                        showIcon
+                    />
+                    <label className=" p-2" style={{ fontSize: "19px", textAlign: "center", color: "grey" }}>
+                        To
+                    </label>
+                    <Calendar
+                        className="w-21rem"
+                        value={createDateToFilterValue}
+                        dateFormat="mm/dd/yy"
+                        placeholder="End Date"
+                        onChange={(e) => {
+                            onNameDateEnrollmentIdValueFilter(e, "createdTo");
+                        }}
+                        showIcon
+                    />
+                </div>
+            </div>
         );
     };
-    
-     const handleEnrollmentBill = (rowData) => {
-    
+    const actionTemplateForPR = (rowData) => {
+        return <Button label="Billing" onClick={() => handleEnrollmentBill(rowData)} text raised className="pt-1 pb-1" />;
+    };
+
+    const handleEnrollmentBill = (rowData) => {
         navigate("/invoice", { state: { selectedId: rowData._id } });
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
 
-  return (
-   <>
-   
-    <div className="card ">
-             <ToastContainer/>
-            <div className="card  p-0 ">
-            <div className="flex justify-content-between ">
-                <div className="">
-                    <h3 className="font-bold   pl-2 mt-4"><strong>Approved Enrollments</strong></h3>
-                </div>
-            </div>
-                
-                <div className="">
-                <DataTable  selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)}   value={ allCompletedEnrollments} filters={filters}
-                            globalFilterFields={['enrollmentId',"name"]} header={header} emptyMessage="No customers found."
-                            stripedRows resizableColumns size="small"   paginator rows={10} rowsPerPageOptions={[ 25, 50]}>
+    return (
+        <>
+            <div className="card ">
+                <ToastContainer />
+                <div className="card  p-0 ">
+                    <div className="flex justify-content-between ">
+                        <div className="">
+                            <h3 className="font-bold   pl-2 mt-4">
+                                <strong>Approved Enrollments</strong>
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div className="">
+                        <DataTable
+                            selectionMode={rowClick ? null : "checkbox"}
+                            selection={selectedEnrollments}
+                            onSelectionChange={(e) => setSelectedEnrollments(e.value)}
+                            value={allCompletedEnrollments}
+                            filters={filters}
+                            globalFilterFields={["enrollmentId", "name"]}
+                            header={header}
+                            emptyMessage="No customers found."
+                            stripedRows
+                            resizableColumns
+                            size="small"
+                            paginator
+                            rows={10}
+                            rowsPerPageOptions={[25, 50]}
+                        >
                             {/* <Column expander style={{ width: "3em" }} /> */}
-                        {/* <Column header="#" field="SNo"></Column> */}       
-                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-               
-                        <Column header="Enrollment ID" field="enrollmentId"  body={(rowData) => (
-                    <button style={{border:'none', backgroundColor:'white', cursor:'pointer'}} onClick={() => handleEnrollmentIdClick(rowData)}>
-                        {rowData.enrollmentId}
-                    </button>
-                )}></Column>
-                 <Column header="Enrollment Type" field="enrollment"></Column>
-                       
-                        <Column header="Name" field="name"></Column>
-                        <Column header="Address" field="address1"></Column>
-                        <Column header="City" field="city"></Column>
-                        <Column header="State" field="state"></Column>
-                        <Column header="Zip" field="zip"></Column>
-                        <Column field="contact" header="Telephone Number" />
-                        <Column
+                            {/* <Column header="#" field="SNo"></Column> */}
+                            <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
+
+                            <Column
+                                header="Enrollment ID"
+                                field="enrollmentId"
+                                body={(rowData) => (
+                                    <button style={{ border: "none", backgroundColor: "white", cursor: "pointer" }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                        {rowData.enrollmentId}
+                                    </button>
+                                )}
+                            ></Column>
+                            <Column header="Enrollment Type" field="enrollment"></Column>
+
+                            <Column header="Name" field="name"></Column>
+                            <Column header="Address" field="address1"></Column>
+                            <Column header="City" field="city"></Column>
+                            <Column header="State" field="state"></Column>
+                            <Column header="Zip" field="zip"></Column>
+                            <Column field="contact" header="Telephone Number" />
+                            <Column
                                 field="DOB"
                                 header="DOB"
                                 body={(rowData) =>
@@ -239,58 +238,47 @@ const ApprovedEnrollments = () => {
                                         .replace(/\//g, "-")
                                 }
                             />
-                        <Column field="createdBy.name" header="Created By"/>
-                        {
-                            toCapital.includes("CSR") ? "":
-                            <Column field="approvedBy.name" header="Approved By" />  
-                           
-                        }
-                        {
-                            toCapital.includes("CSR") ? "": <Column
-                            field="Approved At"
-                            header="Approved At"
-                            body={(rowData) =>
-                                new Date(rowData.approvedAt)
-                                    .toLocaleDateString("en-US", {
-                                        month: "2-digit",
-                                        day: "2-digit",
-                                        year: "numeric",
-                                    })
-                                    .replace(/\//g, "-")
-                            }
-                        />
-                        }
-                        
-                         <Column/>
-                     <Column
-    field="Phase"
-    header="Phase"
-    body={(rowData) => (
-        <span>
-            {rowData.assignedToUser.map((user) => (
-                <span key={user?.department?.department}>
-                    {user?.department?.department}
-                </span>
-            ))}
-        </span>
-    )}
-/>
-<Column header="Actions" body={actionTemplateForPR}></Column>
+                            <Column field="createdBy.name" header="Created By" />
+                            {toCapital.includes("CSR") ? "" : <Column field="approvedBy.name" header="Approved By" />}
+                            {toCapital.includes("CSR") ? (
+                                ""
+                            ) : (
+                                <Column
+                                    field="Approved At"
+                                    header="Approved At"
+                                    body={(rowData) =>
+                                        new Date(rowData.approvedAt)
+                                            .toLocaleDateString("en-US", {
+                                                month: "2-digit",
+                                                day: "2-digit",
+                                                year: "numeric",
+                                            })
+                                            .replace(/\//g, "-")
+                                    }
+                                />
+                            )}
 
-
-
-
-                        
-                             
-                    </DataTable>
-                    {isLoading ? <ProgressSpinner rr  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
-              
-                 </div>
+                            <Column />
+                            <Column
+                                field="Phase"
+                                header="Phase"
+                                body={(rowData) => (
+                                    <span>
+                                        {rowData.assignedToUser.map((user) => (
+                                            <span key={user?.department?.department}>{user?.department?.department}</span>
+                                        ))}
+                                    </span>
+                                )}
+                            />
+                            <Column header="Actions" body={actionTemplateForPR}></Column>
+                        </DataTable>
+                        {isLoading ? <ProgressSpinner rr className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+                    </div>
+                </div>
+                <br />
             </div>
-            <br />
-        </div> 
-   </>
-  )
-}
+        </>
+    );
+};
 
-export default ApprovedEnrollments
+export default ApprovedEnrollments;

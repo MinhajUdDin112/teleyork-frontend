@@ -2,58 +2,49 @@ import React from "react";
 import { useState, useEffect } from "react";
 export default function ManagepermissionModule({ module, disabledMode, permissionObject, setPermissionObject }) {
     const [checkMain, setCheckMain] = useState(false);
-   
-    const togglePermission = (submoduleId, actionId) => {  
-        if(permissionObject[submoduleId] !== undefined){
-        if (permissionObject[submoduleId].includes(actionId)) {
-            const updatedArray = permissionObject[submoduleId].filter((item) => item !== actionId);
 
-            setPermissionObject((prevstate) => ({
-                ...prevstate,
-                [submoduleId]: updatedArray,
-            }));
+    const togglePermission = (submoduleId, actionId) => {
+        if (permissionObject[submoduleId] !== undefined) {
+            if (permissionObject[submoduleId].includes(actionId)) {
+                const updatedArray = permissionObject[submoduleId].filter((item) => item !== actionId);
+
+                setPermissionObject((prevstate) => ({
+                    ...prevstate,
+                    [submoduleId]: updatedArray,
+                }));
+            } else {
+                const array = permissionObject[submoduleId];
+                array.push(actionId);
+                setPermissionObject((prevstate) => ({
+                    ...prevstate,
+                    [submoduleId]: array,
+                }));
+            }
         } else {
-            const array = permissionObject[submoduleId];
-            array.push(actionId);
             setPermissionObject((prevstate) => ({
                 ...prevstate,
-                [submoduleId]: array,
+                [submoduleId]: [actionId],
             }));
-        } 
-    }  
-    else{ 
-        setPermissionObject((prevstate) => ({
-            ...prevstate,
-            [submoduleId]: [actionId],
-        }));  
-    }
-
+        }
     };
     function toggleMainModulePermission(mainmodule) {
-      
         let cond = true;
-        for (let i = 0; i < mainmodule.submodule.length; i++) { 
-               
-                if(permissionObject[mainmodule.submodule[i]._id] !== undefined){
-            if (permissionObject[mainmodule.submodule[i]._id].length !== 3 ) {
+        for (let i = 0; i < mainmodule.submodule.length; i++) {
+            if (permissionObject[mainmodule.submodule[i]._id] !== undefined) {
+                if (permissionObject[mainmodule.submodule[i]._id].length !== 3) {
+                    cond = false;
+                    break;
+                }
+            } else {
                 cond = false;
                 break;
-            }           
-        }  
-        else{ 
-           cond=false; 
-           break;
+            }
         }
-           
 
-        } 
-       
-    
         if (cond === true) {
             let objofsubmoduleid = {};
-           
-            for (let i = 0; i < mainmodule.submodule.length; i++) {    
-              
+
+            for (let i = 0; i < mainmodule.submodule.length; i++) {
                 objofsubmoduleid[mainmodule.submodule[i]._id] = [];
             }
             // setCheckMain(prev=>!prev)
@@ -61,38 +52,42 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
                 ...prev,
                 ...objofsubmoduleid,
             }));
-        }   
-        else if(cond === false){ 
+        } else if (cond === false) {
             let objofsubmoduleid = {};
             for (let i = 0; i < mainmodule.submodule.length; i++) {
-            
-                let arr=[]  
-                for(let k=0;k<3;k++){
-                arr.push(mainmodule.submodule[i].actions[k]._id)  
-                }  
-                objofsubmoduleid[mainmodule.submodule[i]._id] =arr
+                let arr = [];
+                for (let k = 0; k < 3; k++) {
+                    arr.push(mainmodule.submodule[i].actions[k]._id);
+                }
+                objofsubmoduleid[mainmodule.submodule[i]._id] = arr;
             }
-            // setCheckMain(prev=>!prev) 
-            setCheckMain(true)
+            // setCheckMain(prev=>!prev)
+            setCheckMain(true);
             setPermissionObject((prev) => ({
                 ...prev,
                 ...objofsubmoduleid,
             }));
-        } 
-        else{ 
-
+        } else {
         }
-    
-    }  
+    }
 
-    function toggleSubModulePermissions(submodule) { 
-        if(permissionObject[submodule._id] !== undefined){
-        if (permissionObject[submodule._id].length === 3) {  
-           
-            setPermissionObject((prevstate) => ({
-                ...prevstate,
-                [submodule._id]: [],
-            }));
+    function toggleSubModulePermissions(submodule) {
+        if (permissionObject[submodule._id] !== undefined) {
+            if (permissionObject[submodule._id].length === 3) {
+                setPermissionObject((prevstate) => ({
+                    ...prevstate,
+                    [submodule._id]: [],
+                }));
+            } else {
+                let arr2 = [];
+                for (let i = 0; i < 3; i++) {
+                    arr2.push(submodule.actions[i]._id);
+                }
+                setPermissionObject((prevstate) => ({
+                    ...prevstate,
+                    [submodule._id]: arr2,
+                }));
+            }
         } else {
             let arr2 = [];
             for (let i = 0; i < 3; i++) {
@@ -102,45 +97,32 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
                 ...prevstate,
                 [submodule._id]: arr2,
             }));
-        }  
-    }     
-    else{ 
-        let arr2 = [];
-        for (let i = 0; i < 3; i++) {
-            arr2.push(submodule.actions[i]._id);
         }
-        setPermissionObject((prevstate) => ({
-            ...prevstate,
-            [submodule._id]: arr2,
-        }));
-    }
-
     }
     useEffect(() => {
-        let cond = true;  
-        for (let i = 0; i < module.submodule.length; i++) { 
-            if(permissionObject[module.submodule[i]._id] !== undefined){
-            if (permissionObject[module.submodule[i]._id].length !== 3 || permissionObject[module.submodule[i]._id] === undefined) {
+        let cond = true;
+        for (let i = 0; i < module.submodule.length; i++) {
+            if (permissionObject[module.submodule[i]._id] !== undefined) {
+                if (permissionObject[module.submodule[i]._id].length !== 3 || permissionObject[module.submodule[i]._id] === undefined) {
+                    cond = false;
+                    break;
+                }
+            } else {
                 cond = false;
                 break;
-            }  
-        } 
-        else{ 
-            cond=false; 
-            break;
+            }
         }
-        }  
-    
+
         setCheckMain(cond);
     }, [permissionObject]);
 
     return (
-        <div style={{marginTop:"45px"}} >
+        <div style={{ marginTop: "45px" }}>
             <div className="surface-0 shadow-1 p-3 border-1 border-50 border-round">
                 <ul style={{ paddingLeft: "24%" }}>
-                    <li style={{ marginTop: "10px",listStyleType:"none"}}>
+                    <li style={{ marginTop: "10px", listStyleType: "none" }}>
                         <input
-                            style={{ cursor: "pointer"}}
+                            style={{ cursor: "pointer" }}
                             type="checkbox"
                             disabled={disabledMode}
                             checked={checkMain}
@@ -152,13 +134,13 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
                     </li>
                     {module.submodule.map((submodule) => (
                         <ul>
-                            <li style={{ marginTop: "5px" ,listStyleType:"none"}}>
+                            <li style={{ marginTop: "5px", listStyleType: "none" }}>
                                 <div key={submodule._id} style={{ width: "245px" }}>
                                     <input
                                         style={{ cursor: "pointer" }}
                                         type="checkbox"
                                         disabled={disabledMode}
-                                        checked={permissionObject[submodule._id] !== undefined ?permissionObject[submodule._id].length === 3 ? true : false:false}
+                                        checked={permissionObject[submodule._id] !== undefined ? (permissionObject[submodule._id].length === 3 ? true : false) : false}
                                         onChange={() => {
                                             toggleSubModulePermissions(submodule);
                                         }}
@@ -167,10 +149,18 @@ export default function ManagepermissionModule({ module, disabledMode, permissio
                                 </div>
                             </li>
                             <ul>
-                                <li style={{ marginTop: "5px",listStyleType:"none" }}>
+                                <li style={{ marginTop: "5px", listStyleType: "none" }}>
                                     {submodule.actions.map((action) => (
                                         <div key={`${submodule._id}-${action._id}`} style={{ marginTop: "5px" }}>
-                                            <input style={{ cursor: "pointer" }} type="checkbox" disabled={disabledMode} checked={permissionObject[submodule._id] !== undefined ? permissionObject[submodule._id].includes(action._id) === true ? true : false:false} onChange={() => {togglePermission(submodule._id, action._id)}} />
+                                            <input
+                                                style={{ cursor: "pointer" }}
+                                                type="checkbox"
+                                                disabled={disabledMode}
+                                                checked={permissionObject[submodule._id] !== undefined ? (permissionObject[submodule._id].includes(action._id) === true ? true : false) : false}
+                                                onChange={() => {
+                                                    togglePermission(submodule._id, action._id);
+                                                }}
+                                            />
                                             {action.name}
                                         </div>
                                     ))}

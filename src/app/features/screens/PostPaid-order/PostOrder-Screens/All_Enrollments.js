@@ -11,8 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
-import DialogForReject from "../PostPaid-Dialoge/DialogeFor_Reject"
-import DialogForActivateSim from "../PostPaid-Dialoge/DialogeFor_Activate"
+import DialogForReject from "../PostPaid-Dialoge/DialogeFor_Reject";
+import DialogForActivateSim from "../PostPaid-Dialoge/DialogeFor_Activate";
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
 import DialogeForRemarks from "../PostPaid-Dialoge/DialogeFor_Remarks";
@@ -38,13 +38,13 @@ const All_Enrollments = () => {
     const [link, setLink] = useState();
     const [allEnrollments, setAllEnrollments] = useState([]);
     const [expandedRows, setExpandedRows] = useState([]);
-    const [createDateToFilterValue, setCreatedDateToFilterValue] = useState("")
-    const [checkType, setCheckType] = useState()
+    const [createDateToFilterValue, setCreatedDateToFilterValue] = useState("");
+    const [checkType, setCheckType] = useState();
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         createdFilter: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
-        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO }
+        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO },
     });
     const [globalFilterValue, setGlobalFilterValue] = useState("");
     const [enrollmentIdFilterValue, setEnrollmentIdFilterValue] = useState("");
@@ -56,9 +56,7 @@ const All_Enrollments = () => {
     const [dialogeForApprove, setDialogeForApprove] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
     const [checkRemarks, setCheckRemarks] = useState();
-    const [selectedIdsForApprove, setSelectedIdsForApprove] = useState()
-
-   
+    const [selectedIdsForApprove, setSelectedIdsForApprove] = useState();
 
     const navigate = useNavigate();
 
@@ -70,12 +68,10 @@ const All_Enrollments = () => {
     // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-     const companyName = parseLoginRes?.companyName;
-    
+    const companyName = parseLoginRes?.companyName;
+
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName.toUpperCase();
-
-
 
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
@@ -86,15 +82,14 @@ const All_Enrollments = () => {
         setGlobalFilterValue(value);
     };
     const onNameDateEnrollmentIdValueFilter = (e, field) => {
-       // const value = e.target.value; 
-       const value = e.target.value;
+        // const value = e.target.value;
+        const value = e.target.value;
         let _filters = { ...filters };
         if (field === "enrollment") {
             _filters["enrollment"].value = value;
             setFilters(_filters);
             setEnrollmentIdFilterValue(value);
-        }
-        else if (field === "createdTo") { 
+        } else if (field === "createdTo") {
             const parsedDate = DateTime.fromJSDate(new Date(e.value));
             let easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
             easternDateTime = easternDateTime.set({
@@ -105,34 +100,29 @@ const All_Enrollments = () => {
 
             const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
             const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
-            const value2=etDateObject.toSeconds()
-            setCreatedDateToFilterValue(e.value)
-            _filters["createdTo"].value = value2
+            const value2 = etDateObject.toSeconds();
+            setCreatedDateToFilterValue(e.value);
+            _filters["createdTo"].value = value2;
             setFilters(_filters);
-        }
-
-        else {
+        } else {
             const parsedDate = DateTime.fromJSDate(new Date(e.value));
             const easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
             const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
             const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
-            const value=etDateObject.toSeconds()
+            const value = etDateObject.toSeconds();
 
             setCreatedDateFilterValue(e.value);
-            _filters["createdFilter"].value = value
+            _filters["createdFilter"].value = value;
             setFilters(_filters);
         }
-
     };
-
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=Postpaid`);
             if (res?.status === 200 || res?.status === 201) {
-               
-               /* if (!(res?.data?.data)) {
+                /* if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
                 } else */
                 if (res?.data?.data) {
@@ -146,10 +136,10 @@ const All_Enrollments = () => {
                                 day: "2-digit",
                                 year: "numeric",
                             })
-                            .replace(/\//g, "-"), 
-                            createdFilter:DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() ,
+                            .replace(/\//g, "-"),
+                        createdFilter: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
                         createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
-                    }));  
+                    }));
 
                     setAllEnrollments(updatedData);
                 }
@@ -163,7 +153,6 @@ const All_Enrollments = () => {
 
     useEffect(() => {
         getAllEnrollments();
-
     }, []);
 
     const viewRow = async (rowData) => {
@@ -177,7 +166,7 @@ const All_Enrollments = () => {
                 const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
                 if (response?.status === 201 || response?.status === 200) {
                     localStorage.removeItem("zip");
-                    localStorage.removeItem("fromRejected")
+                    localStorage.removeItem("fromRejected");
                     localStorage.setItem("initialInformation", JSON.stringify(response.data));
                     localStorage.setItem("homeAddress", JSON.stringify(response.data));
                     localStorage.setItem("selectProgram", JSON.stringify(response.data));
@@ -188,9 +177,7 @@ const All_Enrollments = () => {
                 toast.error(error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
-
-        }
-        else {
+        } else {
             setSelectedEnrollmentId(_id);
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
@@ -217,7 +204,6 @@ const All_Enrollments = () => {
             }
         }
 
-
         setisButtonLoading(false);
     };
 
@@ -237,28 +223,27 @@ const All_Enrollments = () => {
 
                 const dataToSend = {
                     orderNumber: rowData?.enrollmentId,
-                }
+                };
                 try {
                     const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                     if (response?.status == 200 || response?.status == 201) {
-                        const  orderId= response?.data?.data?.orderId;
-                        
-                                const dataToSend = {
-                                    userId: parseLoginRes?._id,
-                                    testLabel: "false",
-                                    orderId:orderId
-                                }
+                        const orderId = response?.data?.data?.orderId;
+
+                        const dataToSend = {
+                            userId: parseLoginRes?._id,
+                            testLabel: "false",
+                            orderId: orderId,
+                        };
                         try {
                             const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
                                 if (response?.status == 200 || response?.status == 201) {
-                                        
                                     const getCustomerProfileData = async () => {
                                         try {
                                             const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
                                             if (res?.status == 200 || res?.status == 201) {
-                                                setCpData(res?.data?.paymentDetails|| []);
-                                            
+                                                setCpData(res?.data?.paymentDetails || []);
+
                                                 const dataToSend = {
                                                     customerId: enrolmentId,
                                                     invoiceType: "Sign Up",
@@ -278,34 +263,31 @@ const All_Enrollments = () => {
                                                     printSetting: "Both",
                                                     billingPeriod: {
                                                         from: "onActivation",
-                                                        to: "onActivation"
-                                                    }
+                                                        to: "onActivation",
+                                                    },
                                                 };
-                                           
+
                                                 try {
-                                                    const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
-                                                    if(response?.status == 200 || response?.status == 201){
-                                                     
+                                                    const response = await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
+                                                    if (response?.status == 200 || response?.status == 201) {
                                                         toast.success("Device Generated");
                                                     }
                                                 } catch (error) {
                                                     toast.error(error?.response?.data?.message);
                                                 }
                                             }
-                                        } catch (error) { }
-                                        
-                                    }
-                                
-                                    getCustomerProfileData();
+                                        } catch (error) {}
+                                    };
 
+                                    getCustomerProfileData();
                                 }
                             }
                         } catch (error) {
-                            toast.error(error?.response?.data?.msg)
+                            toast.error(error?.response?.data?.msg);
                         }
                     }
                 } catch (error) {
-                    toast.error(error?.response?.data?.msg)
+                    toast.error(error?.response?.data?.msg);
                 }
             }
         } catch (error) {
@@ -313,10 +295,7 @@ const All_Enrollments = () => {
             setisButtonLoading(false);
         }
         getAllEnrollments();
-
     };
-
-   
 
     const approveRowByTl = async (rowData) => {
         setisButtonLoading(true);
@@ -324,51 +303,43 @@ const All_Enrollments = () => {
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-      
-        setCheckRemarks(rowData?.QualityRemarks)
+
+        setCheckRemarks(rowData?.QualityRemarks);
 
         if (rowData?.QualityRemarks) {
             if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
-                toast.error("Declined sales can only rejected")
+                toast.error("Declined sales can only rejected");
                 setisButtonLoading(false);
-            }
-            else {
-
+            } else {
                 try {
                     const response = await Axios.patch(`${BASE_URL}/api/user/prePostapproval`, dataToSend);
                     if (response?.status === 201 || response?.status === 200) {
-                       
-                     
                         getAllEnrollments();
 
                         const dataToSend = {
                             orderNumber: rowData?.enrollmentId,
-                        }
+                        };
                         try {
                             const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                             if (response?.status == 200 || response?.status == 201) {
-                          const  orderId= response?.data?.data?.orderId;
-                         
+                                const orderId = response?.data?.data?.orderId;
+
                                 const dataToSend = {
                                     userId: parseLoginRes?._id,
                                     testLabel: "false",
-                                    orderId:orderId
-                                }
+                                    orderId: orderId,
+                                };
                                 try {
-
-
                                     const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                     if (response?.status == 200 || response?.status == 201) {
-                                        
                                         const getCustomerProfileData = async () => {
                                             try {
                                                 const res = await Axios.get(`${BASE_URL}/api/user/getpostpaidpayment?customerId=${enrolmentId}`);
                                                 if (res?.status == 200 || res?.status == 201) {
-                                                    setCpData(res?.data?.paymentDetails|| []);
-                                             
-                                            
+                                                    setCpData(res?.data?.paymentDetails || []);
+
                                                     // Move the following code inside this try block
-                                                
+
                                                     const dataToSend = {
                                                         customerId: enrolmentId,
                                                         invoiceType: "Sign Up",
@@ -388,34 +359,32 @@ const All_Enrollments = () => {
                                                         printSetting: "Both",
                                                         billingPeriod: {
                                                             from: "onActivation",
-                                                            to: "onActivation"
-                                                        }
+                                                            to: "onActivation",
+                                                        },
                                                     };
-                                               
+
                                                     try {
-                                                        const response =  await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
-                                                        if(response?.status == 200 || response?.status == 201){
+                                                        const response = await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
+                                                        if (response?.status == 200 || response?.status == 201) {
                                                             setisButtonLoading(false);
                                                             toast.success("Approved and Invoice Generated");
                                                         }
                                                     } catch (error) {
-                                                        toast.error("Approved but Invoice is not generate")
+                                                        toast.error("Approved but Invoice is not generate");
                                                         toast.error(error?.response?.data?.message);
                                                     }
                                                 }
-                                            } catch (error) { }
-                                            
-                                        }
-                                    
-                                        getCustomerProfileData();
+                                            } catch (error) {}
+                                        };
 
+                                        getCustomerProfileData();
                                     }
                                 } catch (error) {
-                                    toast.error(error?.response?.data?.msg)
+                                    toast.error(error?.response?.data?.msg);
                                 }
                             }
                         } catch (error) {
-                            toast.error(error?.response?.data?.msg)
+                            toast.error(error?.response?.data?.msg);
                         }
                     }
                 } catch (error) {
@@ -424,14 +393,11 @@ const All_Enrollments = () => {
                 }
                 getAllEnrollments();
             }
-        }
-
-        else {
-
+        } else {
             toast.error("Please Add Remarks First");
-            setisButtonLoading(false)
+            setisButtonLoading(false);
         }
-    }
+    };
 
     const runNLAD = async (rowData) => {
         setisButtonLoading(true);
@@ -499,7 +465,6 @@ const All_Enrollments = () => {
     };
 
     const enrollUser = async (rowData) => {
-
         setisButtonLoading(true);
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?userId=${parseLoginRes?._id}&enrollmentId=${rowData?._id}`);
@@ -510,7 +475,6 @@ const All_Enrollments = () => {
                 setisButtonLoading(false);
             }
         } catch (error) {
-
             const body = error?.response?.data?.data?.body;
 
             const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
@@ -552,28 +516,27 @@ const All_Enrollments = () => {
                     getAllEnrollments();
                     const dataToSend = {
                         orderNumber: rowData?.enrollmentId,
-                    }
+                    };
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                         if (response?.status == 200 || response?.status == 201) {
-                            const  orderId= response?.data?.data?.orderId;
-                        
-                                  const dataToSend = {
-                                      userId: parseLoginRes?._id,
-                                      testLabel: "false",
-                                      orderId:orderId
-                                  }
+                            const orderId = response?.data?.data?.orderId;
+
+                            const dataToSend = {
+                                userId: parseLoginRes?._id,
+                                testLabel: "false",
+                                orderId: orderId,
+                            };
                             try {
                                 const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                 if (response?.status == 200 || response?.status == 201) {
-                                  
                                 }
                             } catch (error) {
-                                toast.error(error?.response?.data?.msg)
+                                toast.error(error?.response?.data?.msg);
                             }
                         }
                     } catch (error) {
-                        toast.error(error?.response?.data?.msg)
+                        toast.error(error?.response?.data?.msg);
                     }
                 }
             } catch (error) {
@@ -587,7 +550,7 @@ const All_Enrollments = () => {
         }
     };
 
-    const handleApproveSelected = async rowData => {
+    const handleApproveSelected = async (rowData) => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
@@ -605,28 +568,27 @@ const All_Enrollments = () => {
                     getAllEnrollments();
                     const dataToSend = {
                         orderNumber: rowData?.enrollmentId,
-                    }
+                    };
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/web/order`, dataToSend);
                         if (response?.status == 200 || response?.status == 201) {
-                            const  orderId= response?.data?.data?.orderId;
-                          
-                                  const dataToSend = {
-                                      userId: parseLoginRes?._id,
-                                      testLabel: "false",
-                                      orderId:orderId
-                                  }
+                            const orderId = response?.data?.data?.orderId;
+
+                            const dataToSend = {
+                                userId: parseLoginRes?._id,
+                                testLabel: "false",
+                                orderId: orderId,
+                            };
                             try {
                                 const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, dataToSend);
                                 if (response?.status == 200 || response?.status == 201) {
-                                  
                                 }
                             } catch (error) {
-                                toast.error(error?.response?.data?.msg)
+                                toast.error(error?.response?.data?.msg);
                             }
                         }
                     } catch (error) {
-                        toast.error(error?.response?.data?.msg)
+                        toast.error(error?.response?.data?.msg);
                     }
                 }
             } catch (error) {
@@ -659,45 +621,46 @@ const All_Enrollments = () => {
                 )}
 
                 <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1" text raised disabled={isButtonLoading} />
-                <Button label="Approve" onClick={() => {
-                    if (!rowData.QualityRemarks) {
-                        toast.error("Please Add Remarks")
-                    }
-                    else if (rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average") {
-                        approveRowByTl(rowData)
-                    }
-                    else {
-                        if (rowData.QualityRemarks !== undefined) {
-                            toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved")
+                <Button
+                    label="Approve"
+                    onClick={() => {
+                        if (!rowData.QualityRemarks) {
+                            toast.error("Please Add Remarks");
+                        } else if (rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average") {
+                            approveRowByTl(rowData);
+                        } else {
+                            if (rowData.QualityRemarks !== undefined) {
+                                toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved");
+                            } else {
+                                toast.error("Please Add Remarks");
+                            }
                         }
-                        else {
-                            toast.error("Please Add Remarks")
-
+                    }}
+                    className=" p-button-success mr-2 ml-2  pt-1 pb-1 "
+                    text
+                    raised
+                    disabled={isButtonLoading}
+                />
+                <Button
+                    label="Reject"
+                    onClick={() => {
+                        if (!rowData?.QualityRemarks) {
+                            toast.error("Please Add Remarks");
+                        } else if (rowData.QualityRemarks === "declined") {
+                            handleOpenDialog(rowData);
+                        } else {
+                            if (rowData.QualityRemarks !== undefined) {
+                                toast.error("Only enrollment with call quality marked as declined will be rejected");
+                            } else {
+                                toast.error("Please Add Remarks");
+                            }
                         }
-                    }
-
-
-                }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => {
-                    if (!rowData?.QualityRemarks) {
-                        toast.error("Please Add Remarks")
-                    }
-                    else if (rowData.QualityRemarks === "declined") {
-                        handleOpenDialog(rowData);
-                    }
-                    else {
-                        if (rowData.QualityRemarks !== undefined) {
-                            toast.error("Only enrollment with call quality marked as declined will be rejected")
-
-                        }
-                        else {
-                            toast.error("Please Add Remarks")
-
-                        }
-
-                    }
-
-                }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    }}
+                    className=" p-button-danger pt-1 pb-1 mr-2 ml-2"
+                    text
+                    raised
+                    disabled={isButtonLoading}
+                />
             </div>
         );
     };
@@ -729,17 +692,12 @@ const All_Enrollments = () => {
         );
     };
     const handleOpenDialog = (rowData) => {
-
         setisButtonLoading(true);
         setIsModalOpen(true);
         setIsEnrolmentId(rowData?._id);
         setCsrId(rowData?.csr);
-        setCheckType(rowData?.enrollment)
+        setCheckType(rowData?.enrollment);
         setisButtonLoading(false);
-
-
-
-
     };
 
     const handleDialogeForActivate = (rowData) => {
@@ -771,7 +729,6 @@ const All_Enrollments = () => {
     const header = () => {
         return (
             <div className="flex flex-wrap justify-content-center mt-2">
-
                 <Dropdown
                     className="mt-2 w-15rem ml-4"
                     options={[
@@ -785,14 +742,8 @@ const All_Enrollments = () => {
                     }}
                     placeholder="Enrollment Type"
                 />
-                <InputText
-                    value={globalFilterValue}
-                    onChange={
-                        onGlobalFilterValueChange}
-                    className="w-15rem ml-4 mt-2"
-                    placeholder="Search By Name or Enrollment ID"
-                />
-                <div className="w-45rem ml-4 mt-2" >
+                <InputText value={globalFilterValue} onChange={onGlobalFilterValueChange} className="w-15rem ml-4 mt-2" placeholder="Search By Name or Enrollment ID" />
+                <div className="w-45rem ml-4 mt-2">
                     <Calendar
                         className="w-21rem"
                         value={createDateFilterValue}
@@ -801,10 +752,11 @@ const All_Enrollments = () => {
                         onChange={(e) => {
                             onNameDateEnrollmentIdValueFilter(e, "createdAt");
                         }}
-
                         showIcon
                     />
-                    <label className="p-2" style={{ fontSize: "19px", textAlign: "center", color: "grey" }}>To</label>
+                    <label className="p-2" style={{ fontSize: "19px", textAlign: "center", color: "grey" }}>
+                        To
+                    </label>
                     <Calendar
                         className="w-21rem"
                         value={createDateToFilterValue}
@@ -813,7 +765,6 @@ const All_Enrollments = () => {
                         onChange={(e) => {
                             onNameDateEnrollmentIdValueFilter(e, "createdTo");
                         }}
-
                         showIcon
                     />
                 </div>
@@ -839,7 +790,7 @@ const All_Enrollments = () => {
                         <DialogeForRemarks getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} />
                     </Dialog>
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
-                       <DialogeForRemarksForIJ getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
+                        <DialogeForRemarksForIJ getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
                     </Dialog>
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
                         <DialogeForTransferUser enrollmentId={isEnrolmentId} setDialogeForTransfer={setDialogeForTransfer} />
@@ -858,25 +809,25 @@ const All_Enrollments = () => {
                         </div>
 
                         <div className=" ml-auto flex">
-                            <div className="mr-5">
-
-                            </div>
+                            <div className="mr-5"></div>
                             <div className="  flex pr-4 ">
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? ""
-                                    :
-                                    //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ? 
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
+                                    ""
+                                ) : (
+                                    //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
                                     //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
                                     // :
                                     <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3 card " text disabled={isButtonLoading} />
-                                }
+                                )}
 
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? ""
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
+                                    ""
+                                ) : (
                                     //  :
                                     //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
-                                    //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
-                                    :
+                                    //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />
                                     <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3 card" text disabled={isButtonLoading || selectedRows.length === 0} />
-                                }
+                                )}
                             </div>
                         </div>
                     </div>
@@ -935,9 +886,7 @@ const All_Enrollments = () => {
                             <Column field="contact" header="Contact" />
                             <Column field="createdBy.name" header="Created By" />
                             <Column field="createdDate" header="Created At" />
-                            {
-                                toCapital.includes("QA MANAGER") ? <Column field="assignToQa.name" header="Initial Assignee" /> : ""
-                            }
+                            {toCapital.includes("QA MANAGER") ? <Column field="assignToQa.name" header="Initial Assignee" /> : ""}
 
                             <Column
                                 field="Phase"
@@ -945,9 +894,7 @@ const All_Enrollments = () => {
                                 body={(rowData) => (
                                     <span>
                                         {rowData.assignedToUser.map((user) => (
-                                            <span key={user?.department?.department}>
-                                                {user?.department?.department}
-                                            </span>
+                                            <span key={user?.department?.department}>{user?.department?.department}</span>
                                         ))}
                                     </span>
                                 )}
@@ -955,7 +902,6 @@ const All_Enrollments = () => {
                             <Column field="selectProduct" header="Product" />
                             <Column field="currentPlan.planName" header="Plan" />
                             <Column field="totalAmount" header="Price" />
-
 
                             {toCapital == "CSR" || toCapital == "CS" || toCapital == "TEAM LEAD" || toCapital == "CS MANAGER" ? (
                                 ""
@@ -968,8 +914,6 @@ const All_Enrollments = () => {
                             )}
                         </DataTable>
                         {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
-
-
                     </div>
                 </div>
                 <br />

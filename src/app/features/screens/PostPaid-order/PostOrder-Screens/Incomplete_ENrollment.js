@@ -13,11 +13,11 @@ import { FilterMatchMode } from "primereact/api";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { InputText } from "primereact/inputtext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const InComplete_Enrollments = () => { 
-     // State For Select Row
-     const [selectedEnrollments, setSelectedEnrollments] = useState(null);
-     const [rowClick, setRowClick] = useState(true);
-    
+const InComplete_Enrollments = () => {
+    // State For Select Row
+    const [selectedEnrollments, setSelectedEnrollments] = useState(null);
+    const [rowClick, setRowClick] = useState(true);
+
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -57,19 +57,19 @@ const InComplete_Enrollments = () => {
 
             const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
             const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
-            const value2=etDateObject.toSeconds()
-            setCreatedDateToFilterValue(e.value)
-            _filters["createdTo"].value = value2
+            const value2 = etDateObject.toSeconds();
+            setCreatedDateToFilterValue(e.value);
+            _filters["createdTo"].value = value2;
             setFilters(_filters);
         } else {
             const parsedDate = DateTime.fromJSDate(new Date(e.value));
             const easternDateTime = parsedDate.setZone("America/New_York", { keepLocalTime: true });
             const formattedEasternTime = easternDateTime.toFormat("d LLL yyyy, h:mm a");
             const etDateObject = DateTime.fromFormat(formattedEasternTime, "d LLL yyyy, h:mm a", { zone: "America/New_York" });
-            const value=etDateObject.toSeconds()
+            const value = etDateObject.toSeconds();
 
             setCreatedDateFilterValue(e.value);
-            _filters["createdFilter"].value = value
+            _filters["createdFilter"].value = value;
             setFilters(_filters);
         }
     };
@@ -149,14 +149,13 @@ const InComplete_Enrollments = () => {
                             day: "2-digit",
                             year: "numeric",
                         })
-                        .replace(/\//g, "-"), 
-                        createdFilter:DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() ,
-                        createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
-                  
+                        .replace(/\//g, "-"),
+                    createdFilter: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
+                    createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
                 }));
 
                 setAllInCompletedEnrollments(updatedData);
-              
+
                 setIsLoading(false);
 
                 localStorage.removeItem("basicData");
@@ -181,9 +180,9 @@ const InComplete_Enrollments = () => {
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
             if (response?.status === 201 || response?.status === 200) {
                 // Step 1: Retrieve existing data from localStorage
-                localStorage.removeItem("fromRejected")
-                localStorage.removeItem("productData")
-                localStorage.removeItem("dataToSend")
+                localStorage.removeItem("fromRejected");
+                localStorage.removeItem("productData");
+                localStorage.removeItem("dataToSend");
                 let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
 
                 if (storedData) {
@@ -193,8 +192,8 @@ const InComplete_Enrollments = () => {
                     storedData = true;
                     localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
                 }
-localStorage.removeItem("paymentInfo")
-localStorage.removeItem("zipData")
+                localStorage.removeItem("paymentInfo");
+                localStorage.removeItem("zipData");
                 localStorage.setItem("basicData", JSON.stringify(response.data));
                 localStorage.setItem("address", JSON.stringify(response.data));
                 // localStorage.setItem("programmeId", JSON.stringify(response.data));
@@ -268,17 +267,34 @@ localStorage.removeItem("zipData")
 
     return (
         <div className="card ">
-            <div className="card p-0 "> 
-            <div className="flex justify-content-between ">
-                <div className="">
-                    <h3 className="font-bold   pl-2 mt-4"><strong>InComplete Enrollments</strong></h3>
+            <div className="card p-0 ">
+                <div className="flex justify-content-between ">
+                    <div className="">
+                        <h3 className="font-bold   pl-2 mt-4">
+                            <strong>InComplete Enrollments</strong>
+                        </h3>
+                    </div>
                 </div>
-            </div>
                 <div>
-                    <DataTable selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)}  size="small"   value={allInCompletedEnrollments} stripedRows resizableColumns paginator rows={10} filters={filters} globalFilterFields={["enrollmentId", "name"]} header={header} emptyMessage="No customers found." rowsPerPageOptions={[25, 50]}>
+                    <DataTable
+                        selectionMode={rowClick ? null : "checkbox"}
+                        selection={selectedEnrollments}
+                        onSelectionChange={(e) => setSelectedEnrollments(e.value)}
+                        size="small"
+                        value={allInCompletedEnrollments}
+                        stripedRows
+                        resizableColumns
+                        paginator
+                        rows={10}
+                        filters={filters}
+                        globalFilterFields={["enrollmentId", "name"]}
+                        header={header}
+                        emptyMessage="No customers found."
+                        rowsPerPageOptions={[25, 50]}
+                    >
                         {/* <Column expander style={{ width: "3em" }} /> */}
-                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-               
+                        <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
+
                         <Column
                             header="Enrollment ID"
                             field="enrollmentId"
@@ -290,7 +306,7 @@ localStorage.removeItem("zipData")
                         ></Column>
                         <Column header="Enrollment Type" field="enrollment"></Column>
                         <Column header="Name" field="name"></Column>
-                        <Column   header="City" field="city"></Column>
+                        <Column header="City" field="city"></Column>
                         <Column header="State" field="state"></Column>
                         <Column header="Zip" field="zip"></Column>
                         <Column field="contact" header="Telephone Number" />
@@ -311,27 +327,23 @@ localStorage.removeItem("zipData")
 
                         <Column field="createdBy.name" header="Created By" />
                         <Column
-    field="Phase"
-    header="Phase"
-    body={(rowData) => (
-        <span>
-            {rowData.assignedToUser.map((user) => (
-                <span key={user?.department?.department}>
-                    {user?.department?.department}
-                </span>
-            ))}
-        </span>
-    )}
-/>
-                       
-                        <Column header="Address"    field="address1"></Column>
+                            field="Phase"
+                            header="Phase"
+                            body={(rowData) => (
+                                <span>
+                                    {rowData.assignedToUser.map((user) => (
+                                        <span key={user?.department?.department}>{user?.department?.department}</span>
+                                    ))}
+                                </span>
+                            )}
+                        />
+
+                        <Column header="Address" field="address1"></Column>
                         <Column header="Actions" body={actionTemplate}></Column>
-                       
                     </DataTable>
 
-                    {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
-              
-                 </div>
+                    {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+                </div>
             </div>
         </div>
     );
