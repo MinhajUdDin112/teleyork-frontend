@@ -141,7 +141,7 @@ const AddUnits = ({ setActiveComponent }) => {
                                     ></i>
                                 
                         </p>
-                        <Dropdown optionLabel="inventoryType" optionValue="_id" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>  
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
