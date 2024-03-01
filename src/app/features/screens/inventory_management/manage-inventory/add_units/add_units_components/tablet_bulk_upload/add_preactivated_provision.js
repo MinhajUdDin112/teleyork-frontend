@@ -134,7 +134,9 @@
             formData.append("file", formik.values.file);
             formData.append("serviceProvider", parseLoginRes?.company);
             formData.append("Uploaded_by", formik.values.Uploaded_by);
-            formData.append("carrier", formik.values.carrier);
+            formData.append("carrier", formik.values.carrier); 
+            
+        formData.append("billingModel", formik.values.billingModel); 
             formData.append("agentType", formik.values.agentType);
             formData.append("AgentName", formik.values.AgentName);
             formData.append("unitType", formik.values.unitType);
