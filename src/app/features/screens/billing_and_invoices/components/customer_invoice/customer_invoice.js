@@ -22,7 +22,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
     const downloadInvoice = () => {
         setIsLoading(true);
         document.querySelector(".downloadtemp").style.width = "1050px";
-        html2canvas(document.querySelector(".downloadtemp"), { scale: 1 }).then((canvas) => {
+        html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 }).then((canvas) => {
             const pdf = new jsPDF();
             // pdf.setFont("Roboto");
             const createdAtDate = new Date(invoiceData?.createdAt);
