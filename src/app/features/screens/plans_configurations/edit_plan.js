@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import React,{useEffect} from "react";
 import "./css/plan_configuration.css";
 import { useFormik } from "formik"; 
-import * as Yup from "yup"; 
+import * as Yup from "yup";  
 import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";  
@@ -72,29 +72,22 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
   
     const [inventoryTypeOptions,setInventoryTypeOptions]=useState([]) 
     const [billingModelOptions,setBillingModelOptions]=useState([])   
-    const getInventoryList=async () => { 
-        try{ 
-           const res=await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`)
-              setInventoryTypeOptions(res?.data?.data || [])
-             } 
-        catch(error){ 
-             toast.error(error?.response?.data?.msg);
-        }
-    }        
+      
     const getBillingModelList=async () => { 
         try{ 
            const res=await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
            setBillingModelOptions(res?.data?.data || [])
              } 
         catch(error){ 
-          
-            toast.error(error?.response?.data?.msg);
+            toast.current.show({ severity: "error", summary: "Plan Updation", detail: error?.response?.data?.msg });
+           
         }
     }    
     useEffect(()=>{ 
        getInventoryList()   
        getBillingModelList()  
-    },[])
+    },[])    
+
     const formik = useFormik({
         initialValues: {
             name: data.name,
@@ -131,7 +124,31 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
                     toast.current.show({ severity: "error", summary: "Plan Updation", detail: err?.response?.data?.msg });
                 });
         },
-    });
+    });  
+    useEffect(()=>{ 
+        getInventoryList()
+   },[formik.values.type]) 
+   const getInventoryList = async () => { 
+       if(formik.values.type !== ""){
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/web/billing/getProductByBillModel?billingModel=${formik.values.type}&serviceProvider=${parseLoginRes?.company}`);
+            
+            if(res?.data?.data !== undefined){ 
+             setInventoryTypeOptions(res?.data?.data ); 
+            } 
+            else{  
+             formik.setFieldValue("inventoryType","")
+             setInventoryTypeOptions([]) 
+ 
+            }
+        } catch (error) {  
+            formik.setFieldValue("inventoryType","")
+            setInventoryTypeOptions([]) 
+         toast.current.show({ severity: "error", summary: "Plan Updation", detail: error?.response?.data?.msg });
+           
+        } 
+  }
+  };
     return (
         <Card className="pt-0">
             <div>
@@ -192,6 +209,13 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
                         </label>
                         <Dropdown options={textAllowanceUnitOptions} className="field-width mt-2" name="textAllowanceUnit" value={formik.values.textAllowanceUnit} onChange={formik.handleChange} />
                         {formik.touched.textAllowanceUnit && formik.errors.textAllowanceUnit ? <p className="mt-2 ml-1 star">{formik.errors.textAllowanceUnit}</p> : null}
+                    </div> 
+                    <div className="mt-2">
+                        <label className="block">
+                          Billing Model <span className="star">*</span>
+                        </label>
+                        <Dropdown placeholder="Plan  Type" options={billingModelOptions} className="field-width mt-2" name="type" optionLabel="billingModel" optionValue="billingModel" value={formik.values.type} onChange={formik.handleChange} />
+                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
@@ -200,13 +224,7 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
                         <Dropdown placeholder="Plan Inventory Type" options={inventoryTypeOptions} optionLabel="inventoryType" optionValue="inventoryType" className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
                         {formik.touched.inventoryType && formik.errors.inventoryType ? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
                     </div>
-                    <div className="mt-2">
-                        <label className="block">
-                          Plan  Type <span className="star">*</span>
-                        </label>
-                        <Dropdown placeholder="Plan  Type" options={billingModelOptions} className="field-width mt-2" name="type" optionLabel="billingModel" optionValue="billingModel" value={formik.values.type} onChange={formik.handleChange} />
-                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
-                    </div>
+                  
 
                     <div className="mt-2">
                         <label className="block">
