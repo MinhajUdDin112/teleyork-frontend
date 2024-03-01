@@ -405,7 +405,6 @@ const App = () => {
                                             <Route path="/withproofenrollments" element={isPermitted("/withproofenrollments") ? <WithProofEnrollments /> : <Dashboard />} />
                                             <Route path="/prepaid-rejectedenrollment" element={isPermitted("/prepaid-rejectedenrollment") ? <PrepaidRejectedEnrollments /> : <Dashboard />} />
                                             <Route path="/prepaid-approvedenrollment" element={isPermitted("/prepaid-approvedenrollment") ? <PrepaidApproved_Enrollments /> : <Dashboard />} />
-
                                             <Route path="/recentsearches" element={isPermitted("/recentsearches") ? <RecentSearches /> : <Dashboard />} />
                                             <Route path="/usage" element={isPermitted("/usage") ? <CustomerUsage /> : <Dashboard />} />
                                             <Route path="/purchasehistory" element={isPermitted("/purchasehistory") ? <PurchaseHistory /> : <Dashboard />} />

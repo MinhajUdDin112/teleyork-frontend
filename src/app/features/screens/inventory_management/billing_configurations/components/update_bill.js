@@ -6,10 +6,11 @@ import { Button } from "primereact/button";
 import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
-import { Dialog } from "primereact/dialog";
+import { Dialog } from "primereact/dialog";  
+import "./billingmodel_configurations/css/updatebill.css"
 import AddNewFeature from "./add_newfeature";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh }) {
+export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh,optionsForInventoryType }) {
     console.log(rowData);
     //const toast=Toast
     const [newDiscount, setNewDiscount] = useState(false);
@@ -108,11 +109,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     };
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const optionsForInventoryType = [
-        { label: "Select Inventory Type", value: "" },
-        { label: "Sim Card", value: "SimCard" },
-        { label: "Wireless Device", value: "Wireless Device" },
-    ];
+
 
     const optionsForPayment = [
         { label: "Select Payment Method", value: "" },
@@ -127,12 +124,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
         { label: "After QA Approval ", value: "On QA Approve" },
     ];
 
-    function showDiscount() {
-        setNewDiscount(true);
-    }
-    function showFeature() {
-        setNewFeature(true);
-    }
+  
 
     const getDiscount = async () => {
         try {
@@ -167,16 +159,21 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className=" flex flex-wrap flex-row justify-content-around">
-                <div className="field-width mt-3">
-                    <label className="field_label text-md">One Time Charges</label>
-                    <InputText id="oneTimeCharge" className="w-full" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div> 
+                <div className="field-width mt-3 ">
+                    <label className="field_label text-md  mb-2">One Time Charges</label>
+                    <div className="latefeecharge flex flex-wrap flex-row justify-content-left align-items-center ">
+                    <InputText id="oneTimeCharge" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                      <p>$</p>
+                      </div>
+                 </div> 
                 <div className="mt-3 field-width ">
                                 <label className="field_label mb-2 text-md">Inventory Type</label>
                                 <Dropdown
                                     className="w-full"
                                     id="inventoryType"
-                                    options={optionsForInventoryType}
+                                    options={optionsForInventoryType}   
+                                    optionLabel="inventoryType" 
+                                    optionValue="inventoryType"
                                     value={formik.values.inventoryType}
                                     onChange={(e) => {
                                         formik.setFieldValue("inventoryType", e.value);
@@ -221,21 +218,33 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                     ) : null}
                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Subsequent Bill Create Date </label>
-                    <InputText id="subsequentBillCreateDate" className="w-full" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
+                    <label className="field_label text-md mb-2">Subsequent Bill Create Date </label>  
+                     <div className="subsequentbillcreatedate flex flex-wrap flex-row justify-content-center align-items-center ">
+                    <InputText id="subsequentBillCreateDate" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                      <p>Days From the First Bill Create Date</p>
+                      </div>
+                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Due Date</label>
-                    <InputText id="dueDate" placeholder="No of days From Bill Create Date" className="w-full" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
+                    <label className="field_label text-md mb-2">Due Date</label>
+                    <div className="subsequentbillcreatedate flex flex-wrap flex-row justify-content-center align-items-center ">
+                    <InputText id="dueDate" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                      <p>Days From the Bill Create Date</p>
+                      </div>
+                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Late Fee Charge</label>
-                    <InputText id="latefeeCharge" value={formik.values.latefeeCharge} className="w-full" onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
+                    <label className="field_label text-md mb-2">Late Fee Charge</label>
+                    <div className="latefeecharge flex flex-wrap flex-row justify-content-left align-items-center ">
+                    <InputText id="latefeeCharge" value={formik.values.latefeeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                      <p>$</p>
+                      </div>
+                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Apply Late Fee </label>
-                    <InputText id="applyLateFee" placeholder="No of Days from Due Date" className="w-full" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div>
+                    <label className="field_label text-md mb-2">Apply Late Fee </label>
+                    <div className="subsequentbillcreatedate flex flex-wrap flex-row justify-content-center align-items-center ">
+                    <InputText id="applyLateFee" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                      <p>Days After the Due Date</p>
+                      </div>
+                 </div>
 
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">Payment Method</label>
