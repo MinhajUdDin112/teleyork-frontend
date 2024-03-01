@@ -71,20 +71,14 @@ export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }
 
     const [billingModelOptions, setBillingModelOptions] = useState([]);
 
-    const getInventoryList = async () => {
-        try {
-            const res = await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`);
-            setInventoryTypeOptions(res?.data?.data || []);
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-        }
-    };
+    
     const getBillingModelList = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`);
             setBillingModelOptions(res?.data?.data || []);
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
+        } catch (error) { 
+            toast.current.show({ severity: "error", summary: "Plan Updation", detail: error?.response?.data?.msg });
+          
         }
     };
     useEffect(() => {
@@ -128,7 +122,31 @@ export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }
                     toast.current.show({ severity: "error", summary: "Plan Submission", detail: err?.response?.data?.msg });
                 });
         },
-    });
+    }); 
+    useEffect(()=>{ 
+         getInventoryList()
+    },[formik.values.type]) 
+    const getInventoryList = async () => { 
+        if(formik.values.type !== ""){
+       try {
+           const res = await Axios.get(`${BASE_URL}/api/web/billing/getProductByBillModel?billingModel=${formik.values.type}&serviceProvider=${parseLoginRes?.company}`);
+           
+           if(res?.data?.data !== undefined){ 
+            setInventoryTypeOptions(res?.data?.data ); 
+           } 
+           else{  
+            formik.setFieldValue("inventoryType","")
+            setInventoryTypeOptions([]) 
+
+           }
+       } catch (error) { 
+        formik.setFieldValue("inventoryType","")
+        setInventoryTypeOptions([])  
+        toast.current.show({ severity: "error", summary: "Plan Updation", detail: error?.response?.data?.msg });
+          
+       } 
+   }
+   };
     return (
         <div>
             <div>
