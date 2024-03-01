@@ -240,7 +240,7 @@ const BillingConfiguration = () => {
                 }}
             >        
             
-                <ListAllBilling />
+                <ListAllBilling  />
             </Dialog>   
             
             <ToastContainer />
@@ -478,12 +478,12 @@ const BillingConfiguration = () => {
                     <Dialog
                         visible={updatePlanVisibility}
                         style={{ width: "80vw" }}
-                        header="Update Bill"
+                        header="Update Billing Configuration "
                         onHide={() => {
                             setUpdatePlanVisibility(false);    
                         }}
                     >
-                        <UpdateBill rowData={currentRow} setRefresh={setRefresh} setUpdatePlanVisibility={setUpdatePlanVisibility} />
+                        <UpdateBill rowData={currentRow} setRefresh={setRefresh} optionsForInventoryType={optionsForInventoryType} setUpdatePlanVisibility={setUpdatePlanVisibility} />
                     </Dialog>
                     <DataTable value={configData} showGridlines resizableColumns columnResizeMode="fit">
                         <Column header="Billing Model" field="billingmodel" body={(rowData)=>{  

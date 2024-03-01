@@ -141,12 +141,14 @@ useEffect(()=>{
                         <label className="block">
                            Plan Name <span className="star">*</span>
                         </label>
-                        <InputText placeholder="Plan Name" className="field-width mt-2" name="name" value={formik.values.name} onChange={formik.handleChange} />
+                        <InputText placeholder="Plan Name" className="field-width mt-2" name="name" value={formik.values.name} onChange={(e)=>{ 
+                             formik.setFieldValue("name",capitalizeFirstLetter(e.target.value))
+                        }} />
                         {formik.touched.name && formik.errors.name ? <p className="mt-2 ml-1 star">{formik.errors.name}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
-                           Plan Descriptions <span className="star">*</span>
+                           Plan Description <span className="star">*</span>
                         </label>
                         <InputText  placeholder="Plan Description" className="field-width mt-2" name="description" value={formik.values.description} onChange={formik.handleChange} />
                         {formik.touched.description && formik.errors.description ? <p className="mt-2 ml-1 star">{formik.errors.description}</p> : null}
@@ -199,6 +201,13 @@ useEffect(()=>{
                         </label>
                         <Dropdown placeholder="Plan Text Allowance Unit" options={textAllowanceUnitOptions} className="field-width mt-2" name="textAllowanceUnit" value={formik.values.textAllowanceUnit} onChange={formik.handleChange} />
                         {formik.touched.textAllowanceUnit && formik.errors.textAllowanceUnit ? <p className="mt-2 ml-1 star">{formik.errors.textAllowanceUnit}</p> : null}
+                    </div> 
+                    <div className="mt-2">
+                        <label className="block">
+                           Billing Model <span className="star">*</span>
+                        </label>
+                        <Dropdown  placeholder="Plan Type" options={billingModelOptions}  optionLabel="billingModel" optionValue="billingModel" className="field-width mt-2" name="type" value={formik.values.type} onChange={formik.handleChange} />
+                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
                     </div>
                     <div className="mt-2">
                         <label className="block">
@@ -207,13 +216,7 @@ useEffect(()=>{
                         <Dropdown placeholder="Plan Inventory Type" options={inventoryTypeOptions} optionLabel="inventoryType" optionValue="inventoryType" className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
                         {formik.touched.inventoryType && formik.errors.inventoryType ? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
                     </div>
-                    <div className="mt-2">
-                        <label className="block">
-                           Plan Type <span className="star">*</span>
-                        </label>
-                        <Dropdown  placeholder="Plan Type" options={billingModelOptions}  optionLabel="billingModel" optionValue="billingModel" className="field-width mt-2" name="type" value={formik.values.type} onChange={formik.handleChange} />
-                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
-                    </div>
+                
 
                   
                     <div className="mt-2">
@@ -245,4 +248,8 @@ useEffect(()=>{
             <Toast ref={toast} />
         </div>
     );
+}
+function capitalizeFirstLetter(string) { 
+    console.log(string)
+    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
