@@ -59,14 +59,14 @@ export default function InventoryDashboard({ setActiveComponent }) {
                                
                                 
                         </p>
-                        <Dropdown optionLabel="inventoryType" optionValue="_id" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>  
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Billing Model <span style={{ color: "red" }}>*</span>       
 
                         </p>
-                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="_id" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="billingModel" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>  
                     </div>
             <div className="flex justify-content-around flex-wrap">
