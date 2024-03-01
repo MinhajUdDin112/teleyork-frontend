@@ -148,7 +148,7 @@ const AddUnits = ({ setActiveComponent }) => {
                             Billing Model        
 
                         </p>
-                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="_id" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="billingModel" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">

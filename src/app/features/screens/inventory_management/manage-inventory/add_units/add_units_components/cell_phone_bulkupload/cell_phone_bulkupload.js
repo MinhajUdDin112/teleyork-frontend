@@ -170,7 +170,9 @@ export default function CellPhoneBulkUpload({permissions,unit,model}) {
         formData.append("agentType", formik.values.agentType);
         formData.append("AgentName", formik.values.AgentName);
         formData.append("unitType", formik.values.unitType);
-        formData.append("provisionType", formik.values.provisionType);
+        formData.append("provisionType", formik.values.provisionType);     
+        
+        formData.append("billingModel", formik.values.billingModel); 
         // Perform API call or other actions with the formData
         if(Object.keys(formik.errors).length === 0 ) {  
             if(formik.values.file !== ""){
