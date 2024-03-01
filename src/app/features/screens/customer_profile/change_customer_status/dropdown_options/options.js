@@ -1,20 +1,21 @@
 const TransferException = [
     {
-        label: "Imporper Transfer-(TE1)",
-        value: "TE1",
+        label: "No coverage",
+        value: "No coverage",
     },
     {
-        label: "Operations Ceased-(TE2)",
-        value: "TE2",
+        label: "Customer request",
+        value: "Customer request",
     },
     {
-        label: "Rule Violation-(TE3)",
-        value: "TE3",
+        label: "Customer changed address",
+        value: "Customer changed address",
     },
     {
-        label: "Move Outside Service Area-(TE4)",
-        value: "TE4",
+        label: "Other",
+        value: "Other",
     },
+   
 ];
 const statusOption = [
     { label: "Select Status", value: "" },
@@ -31,10 +32,6 @@ const statusOption = [
         value: "inTransit",
     },
     {
-        label: "Active",
-        value: "active",
-    },
-    {
         label: "Evaluation",
         value: "evaluation",
     },
@@ -43,12 +40,21 @@ const statusOption = [
         value: "delivered",
     },
     {
-        label: "Reconnect",
-        value: "reconnect",
+        label: "Active",
+        value: "active",
     },
+   
+    // {
+    //     label: "Reconnect",
+    //     value: "reconnect",
+    // },
+    // {
+    //     label: "Suspend",
+    //     value: "suspend",
+    // },
     {
-        label: "Suspend",
-        value: "suspend",
+        label: "Disconnect",
+        value: "disconnect",
     },
 ];
 const connection = [

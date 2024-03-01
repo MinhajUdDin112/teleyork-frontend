@@ -14,6 +14,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [singleInvoiceData,setInvoiceData]=useState()
     const [dialogeForAuthPayment,setdialogeForAuthPayment]=useState(false)
+    const [invoiceId, setInvoiceId] = useState()
    
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
@@ -28,19 +29,19 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
       const loginRes = localStorage.getItem("userData");
       const parseLoginRes = JSON.parse(loginRes);
        const companyName = parseLoginRes?.companyName;
-    // const companyNameToCapital = companyName.toUpperCase();
-     const companyNameToCapital ="ZISFONE"
+     const companyNameToCapital = companyName.toUpperCase();
+    
 
 
      
-       
+    
      
 
     return (
         <div className="mx-4">
           
              <Dialog header={"Payment"} visible={dialogeForAuthPayment} style={{ width: "50vw" }} onHide={() => setdialogeForAuthPayment(false)}>
-                        <DialogeForAuthPayment onAPISuccess ={onAPISuccess }  setdialogeForAuthPayment={setdialogeForAuthPayment} userDetails={userDetails} invoiceData={invoiceData}/>
+                        <DialogeForAuthPayment onAPISuccess ={onAPISuccess }  setdialogeForAuthPayment={setdialogeForAuthPayment} invoiceId={invoiceId} userDetails={userDetails} invoiceData={invoiceData}/>
                     </Dialog>
           
             <DataTable  
@@ -139,15 +140,22 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                 } */}
              
               {  companyNameToCapital.includes("ZISFONE") ?  <Column
-                    field="Action"
-                    body={
-                        <Button className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none" onClick={() => setdialogeForAuthPayment(true)}>
-                            Payment
-                        </Button>
-                    }
-                    header="Payment"
-                    style={{ minWidth: "250px" }}
-                />:""}
+    field="Action"
+    body={(rowData) => (
+        <Button 
+            className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none" 
+            onClick={() => {
+                setdialogeForAuthPayment(true);
+                setInvoiceId(rowData?._id);
+            }}
+        >
+            Payment
+        </Button>
+    )}
+    header="Payment"
+    style={{ minWidth: "250px" }}
+/>
+:""}
                  
 
                 <Column

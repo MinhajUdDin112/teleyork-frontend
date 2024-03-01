@@ -282,10 +282,7 @@ const BillingConfiguration = () => {
                                     ) : null}
                                 </div>
                                 <Toast ref={toast2} />
-                                <div className="field-width mt-3">
-                                    <label className="field_label text-md">One Time Charges</label>
-                                    <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                                </div>
+                              
                                 <div className="mt-3 field-width ">
                                     <label className="field_label text-md">Inventory Type</label>
                                     <Dropdown
@@ -308,7 +305,10 @@ const BillingConfiguration = () => {
                                         </p>
                                     ) : null}
                                 </div>
-    
+                                <div className="field-width mt-3">
+                                    <label className="field_label text-md">One Time Charges</label>
+                                    <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                </div>
                                 <div className="mt-3 field-width  ">
                                     <label className="field_label   text-md">Monthly Charges</label>
                                     <MultiSelect
