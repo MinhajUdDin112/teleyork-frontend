@@ -9,19 +9,25 @@ import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import CardAuthPayment from "./dialog/CardAuthPayment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
+const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
 
     const [inventory, setInventory] = useState();
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isSearch, setIsSearch] = useState(false);
-    const [historyData, setHistoryData] = useState();
+    const [dialogForCardAuth, setdialogForCardAuth] = useState(false);
+
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const companyName = parseLoginRes?.companyName
+    const toCapitalCompanyName = companyName.toUpperCase()
+   
     //Handle Back
     let paymentInfo = JSON.parse(localStorage.getItem("dataToSend"));
+    
     const paymentStatus = localStorage.getItem("paymentstatus")
-    let productData = JSON.parse(localStorage.getItem("productData"));
 
     const validationSchema = Yup.object().shape({
         //billId: Yup.string().required("Product is required"),
@@ -42,9 +48,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             productName:"",
         },
         onSubmit: async (values, actions) => {
-
-
-            if (formik.values.paymentMode == "skip") {
+           
+            if (formik.values.paymentMode == "Skip Payment") {
                 const dataToSend = {
                     invoiceType: "Sign Up",
                     customerId: _id,
@@ -60,7 +65,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         to: "onActivation"
                     },
                     invoiceStatus: "pending",
-                    paymentMethod: "skip",
+                    paymentMethod: "Skip Payment",
                     invoiceOneTimeCharges: oneTimeCharge,
                     lateFee: applyLateFee,
                     planName: planName,
@@ -68,69 +73,27 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     printSetting: "Both",
                     productName: "",
                     selectProduct: formik.values.billId,
-                   
                 }
                 try {
-
                     const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
-
                     if (response?.status === 201 || response?.status === 200) {
-                       
-                        localStorage.setItem("productData", JSON.stringify(response?.data?.data));
                         localStorage.setItem("dataToSend", JSON.stringify(dataToSend));
+                        localStorage.setItem("productData", JSON.stringify(response?.data?.data));
                         handleNext();
                     }
                 } catch (error) {
                     toast.error(error?.response?.data?.msg)
                 }
-
             }
+              
+            else  if (paymentStatus === "paid") {
+                handleNext();
+            }
+            else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="ZISFONE LLC") {   
+                setdialogForCardAuth(true);
+        } 
 
-          else  if (paymentStatus === "paid") {
-                    handleNext();
-                } 
-                else {
-                    setPaymentDialogVisibility(true);
-                    const dataToSend = {
-                        invoiceType: "Sign Up",
-                        customerId: _id,
-                        planId: formik.values.plan,
-                        planCharges: planCharges,
-                        additionalCharges: additionalFeature,
-                        discount: discounts,
-                        totalAmount: formik.values.totalamount,
-                        amountPaid: formik.values.totalamount,
-                        invoiceDueDate: dueDate,
-                        billingPeriod: {
-                            from: "onActivation",
-                            to: "onActivation"
-                        },
-                        invoiceStatus: "paid",
-                        paymentMethod: "Card",
-                        invoiceOneTimeCharges: oneTimeCharge,
-                        lateFee: applyLateFee,
-                        planName: planName,
-                        chargingType: "Monthly",
-                        printSetting: "Both",
-                        productName: formik.values.productName,
-                        selectProduct: formik.values.billId,
-                    }
-                    try {
-
-                        const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
-
-                        if (response?.status === 201 || response?.status === 200) {
-                            localStorage.setItem("productData", JSON.stringify(response?.data?.data));
-                            localStorage.setItem("dataToSend", JSON.stringify(dataToSend));
-
-                        }
-                    } catch (error) {
-                        toast.error(error?.response?.data?.msg)
-                    }
-
-
-                
-            } 
+           
         },
     });
 
@@ -215,34 +178,30 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         }
     }
 
-
-    const optionsForPayment = [
-        { label: "Select ", value: "" },
-        // { label: "Credit/Debit card", value: "card" },
-        { label: "Skip Payment", value: "skip" },
-
-    ];
-
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error block">{formik.errors[name]}</small>;
     };
     useEffect(() => {
+       
         if (paymentInfo && paymentInfo) {
-            setPaymentDialogVisibility(false)
-            formik.setFieldValue("billId", paymentInfo?.selectProduct);
-            formik.setFieldValue("plan", paymentInfo?.planId);
-            formik.setFieldValue("additionalFeature", paymentInfo?.additionalCharges);
-            formik.setFieldValue("discount", paymentInfo?.discount);
-            formik.setFieldValue("totalamount", paymentInfo?.totalAmount);
-            formik.setFieldValue("paymentMode", paymentInfo?.paymentMethod)
-
+            
+            setPaymentDialogVisibility(false);
+            formik.setFieldValue("billId", paymentInfo.selectProduct);
+            formik.setFieldValue("plan", paymentInfo.planId);
+            formik.setFieldValue("additionalFeature", paymentInfo.additionalCharges);
+            formik.setFieldValue("discount", paymentInfo.discount);
+            formik.setFieldValue("totalamount", paymentInfo.totalAmount);
+            formik.setFieldValue("paymentMode", paymentInfo.paymentMethod);
         }
     }, []);
 
     return (
         <form onSubmit={formik.handleSubmit}>
             <ToastContainer />
+            <Dialog className="stripe-dialog-width" header="Crad Payment" visible={dialogForCardAuth} onHide={() => setdialogForCardAuth(false)}>
+                                <CardAuthPayment amount={formik.values.totalamount} object={formik.values} handleNext={handleNext} />
+                            </Dialog>
             <div className="card">
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
                     <div>
@@ -495,18 +454,50 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     </div>
                     <div className="mt-2">
                         <label className="block">Select Payment Method</label>
-                        <Dropdown
+                       {  inventory === "SIM" ?  <Dropdown
+                                 disabled={paymentInfo ? true : false}
+                                 className="field-width mt-2"
+                                 id="paymentMode"
+                                 options={JSON.parse(localStorage.getItem("simPaymentMethod"))}
+                                value={formik.values.paymentMode}
+                                onChange={(e) => {
+                                    formik.setFieldValue("paymentMode", e.value);
+                                    formik.handleChange(e);
+    
+                                }}
+                                optionValue="name"
+                                optionLabel="name"
+                                filter
+                                showClear
+                                filterBy="name"
+                            /> :  inventory === "Wireless Device" ?  <Dropdown
                             disabled={paymentInfo ? true : false}
                             className="field-width mt-2"
                             id="paymentMode"
-                            options={optionsForPayment}
-                            value={formik.values.paymentMode}
-                            onChange={(e) => {
-                                formik.setFieldValue("paymentMode", e.value);
-                                formik.handleChange(e);
+                            options={JSON.parse(localStorage.getItem("devicePaymentMethod"))}
+                           value={formik.values.paymentMode}
+                           onChange={(e) => {
+                               formik.setFieldValue("paymentMode", e.value);
+                               formik.handleChange(e);
 
-                            }}
-                        />
+                           }}
+                           optionValue="name"
+                           optionLabel="name"
+                           filter
+                           showClear
+                           filterBy="name"
+                       /> :
+                       <Dropdown
+                       disabled={paymentInfo ? true : false}
+                       className="field-width mt-2"
+                       id="paymentMode"
+                      optionValue="name"
+                      optionLabel="name"
+                      filter
+                      showClear
+                      filterBy="name"
+                  />}
+                        
                         {getFormErrorMessage("paymentMode")}
                     </div>
                     {formik.values.paymentMode == "card" ? (

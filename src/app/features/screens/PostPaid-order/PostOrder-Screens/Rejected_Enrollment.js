@@ -200,7 +200,7 @@ const Rejected_Enrollments = () => {
     };
     useEffect(() => {
         getAllEnrollments();
-        getAllDisconnectedEnroll();
+        // getAllDisconnectedEnroll();
     }, []);
 
     const viewRow = async (rowData) => {

@@ -289,11 +289,15 @@ const CustomerProfile = () => {
 
                                                     {isShow && isShow ? <td>NIL</td> : <div className="mt-3"><h3>***</h3></div>}
                                                 </tr>
+                                                <tr>
+                                                    <td>Contact</td>
 
+                                                    {isShow && isShow ? <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                </tr>
                                                 <tr>
                                                     <td>Alternate Ph</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? <td>{cpData?.alternateContact !== undefined ? cpData?.alternateContact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
                                                 </tr>
                                                 <tr>
                                                     <td>Email</td>
