@@ -8,13 +8,11 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import { loginAction } from "../../../store/auth/AuthAction";
 import { useState } from "react";
 import Axios from "axios";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function LoginScreen() { 
-    
-   
+export default function LoginScreen() {
     const dispatch = useDispatch();
-const [liveURL, setLiveURL] = useState()
+    const [liveURL, setLiveURL] = useState();
     const error = useSelector((state) => state.login);
     const errormsg = error?.loginError;
     const loading = error?.loginLoading;
@@ -32,35 +30,26 @@ const [liveURL, setLiveURL] = useState()
         },
     });
 
-    
-
     //get url
-    useEffect( () => {
+    useEffect(() => {
         var currentURL;
-        var modifiedURL; 
-          currentURL = window.location.href;
+        var modifiedURL;
+        currentURL = window.location.href;
         // currentURL = "http://dev-ijwireless.teleyork.com/#/login";
         if (currentURL.includes("dev-")) {
             modifiedURL = currentURL.replace("http://dev-", "");
             modifiedURL = modifiedURL.replace("/#/login", "");
-           
         } else {
             modifiedURL = currentURL.replace("http://", "");
             modifiedURL = modifiedURL.replace("/#/login", "");
-          
         }
-        const sendURl = async ()=>{
+        const sendURl = async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/serviceProvider/getSPdetailByDomain?subDomain=${modifiedURL}`);
-            } catch (error) {
-                
-            }
-        }
+            } catch (error) {}
+        };
         sendURl();
-       
     }, []);
-
-  
 
     return (
         <>
