@@ -342,20 +342,14 @@ const All_Enrollments = () => {
 
                                                     const dataToSend = {
                                                         customerId: enrolmentId,
+                                                        planId: res?.data?.paymentDetails?.planId,
                                                         invoiceType: "Sign Up",
                                                         totalAmount: res?.data?.paymentDetails?.totalAmount,
-                                                        additionalCharges: res?.data?.paymentDetails?.additionalCharges,
-                                                        discount: res?.data?.paymentDetails?.discount,
-                                                        amountPaid: "0",
-                                                        invoiceDueDate: res?.data?.paymentDetails?.invoiceDueDate,
-                                                        lateFee: res?.data?.paymentDetails?.lateFee,
-                                                        invoiceOneTimeCharges: res?.data?.paymentDetails?.invoiceOneTimeCharges,
-                                                        invoiceStatus: "Pending",
-                                                        planId: res?.data?.paymentDetails?.planId,
-                                                        planName: res?.data?.paymentDetails?.planName,
-                                                        planCharges: res?.data?.paymentDetails?.planCharges,
+                                                        amountPaid: res?.data?.paymentDetails?.amountPaid,
+                                                        invoiceStatus: res?.data?.paymentDetails?.invoiceStatus,
+                                                       
                                                         chargingType: "monthly",
-                                                        invoicePaymentMethod: "Skip",
+                                                        invoicePaymentMethod: res?.data?.paymentDetails?.paymentMethod,
                                                         printSetting: "Both",
                                                         billingPeriod: {
                                                             from: "onActivation",

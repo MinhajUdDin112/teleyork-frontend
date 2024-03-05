@@ -44,10 +44,10 @@ const EditUser = ({ data }) => {
             role: data?.role?._id,
             name: data?.name,
             email: data?.email,
-            mobile: (data?.contact).substring(3),
+          
             city: data?.city,
             state: data?.state,
-            address: data?.address,
+           
             zip: data?.zip,
             reportingTo: data?.reportingTo,
             department: data?.department?.department,
@@ -65,9 +65,9 @@ const EditUser = ({ data }) => {
                 email: values.email,
                 password: values.password,
                 // RADId: 1,
-                contact: values.mobile,
+              
                 city: values.city,
-                address: values.address,
+               
                 zip: values.zip,
                 state: values.state,
             };
@@ -99,7 +99,7 @@ const EditUser = ({ data }) => {
                 if (formik.initialValues.hasOwnProperty(key)) {
                     formik.setFieldValue(key, rowData[key]);
                     formik.setFieldValue("role", rowData?.role?._id);
-                    formik.setFieldValue("mobile", rowData?.contact);
+                   
                 }
             });
         }
@@ -190,12 +190,7 @@ const EditUser = ({ data }) => {
                             {getFormErrorMessage("email")}
                         </div>
 
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Contact</label>
-                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} />
-                            {getFormErrorMessage("mobile")}
-                        </div>
-
+                       
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">City</label>
                             <InputText id="city" value={formik.values.city} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
@@ -208,11 +203,7 @@ const EditUser = ({ data }) => {
                             {getFormErrorMessage("state")}
                         </div>
 
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Address</label>
-                            <InputText id="address" value={formik.values.address} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
-                            {getFormErrorMessage("address")}
-                        </div>
+                    
 
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">Zip</label>

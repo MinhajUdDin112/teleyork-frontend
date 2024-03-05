@@ -113,12 +113,12 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             {userDetails && userDetails?.paymentMethod == "Card" ? (
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData?.dueAmount}</p>
+                                    <p>${invoiceData?.netPrice}</p>
                                 </div>
                             ) : (
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData?.dueAmount}</p>
+                                    <p>${invoiceData?.netPrice}</p>
                                 </div>
                             )}
 
@@ -181,12 +181,12 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
                         <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
                             <p>Total Recurring Charges</p>
-                            <p>${invoiceData?.netPrice}</p>
+                            <p>${invoiceData?.recurringCharges}</p>
                         </div>
 
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>One Time Charge</p>
-                            <p>${invoiceData?.invoiceOneTimeCharges}</p>
+                            <p>${userDetails?.invoiceOneTimeCharges}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>Taxes and Surcharges</p>
@@ -195,11 +195,11 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <h5 className="font-bold line2">CURRENT SERVICES</h5>
                         <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
                             <p>Total Recurring Charges</p>
-                            <p>${invoiceData?.netPrice}</p>
+                            <p>${invoiceData?.recurringCharges}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>One Time Charge</p>
-                            <p>${invoiceData?.invoiceOneTimeCharges}</p>
+                            <p>${userDetails?.invoiceOneTimeCharges}</p>
                         </div>
                         <div className="pl-2  flex flex-wrap justify-content-between ">
                             <p>Taxes and Surcharges</p>
@@ -210,7 +210,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                     <div className="topline"></div>
                     <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                         <p>Total Amount Due</p>
-                        <p>${invoiceData?.dueAmount}</p>
+                        <p>${invoiceData?.netPrice}</p>
                     </div>
                 </div>
                 <div className="center-line">
@@ -231,7 +231,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             <tr>
                                 <td>{userDetails?.selectProduct}</td>
 
-                                <td>${invoiceData?.invoiceOneTimeCharges}</td>
+                                <td>${userDetails?.invoiceOneTimeCharges}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -278,7 +278,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                     </table>
                     <div className="flex font-bold flex-row flex-wrap justify-content-between">
                         <p>Total Recurring Charges</p>
-                        <p>${invoiceData?.netPrice}</p>
+                        <p>${invoiceData?.recurringCharges}</p>
                     </div>
                     <div className="topline"></div>
                     <h6 className="font-bold">Regulatory Taxes and Surcharges: </h6>
