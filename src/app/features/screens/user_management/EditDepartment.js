@@ -3,43 +3,35 @@ import Axios from "axios";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import { useNavigate, useLocation } from "react-router-dom";
 import { useRef } from "react";
 import { Checkbox } from "primereact/checkbox";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const EditDepartment = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [name, setName] = useState("");
-  const [status, setStatus] = useState(false);
-  let toast = useRef(null);
-
-  useEffect(() => {
-    if (location.state && location.state.rowData) {
-      const { department, status } = location.state.rowData;
-      setName(department);
-      setStatus(status);
-    } else {
-      navigate("/manage-department");
-    }
-  }, [location, navigate]);
+const EditDepartment = ({rowData,setRefresh ,setEditDepartmentVisibility}) => {
+  
+  const [name, setName] = useState(rowData?.department);
+  const [status, setStatus] = useState(rowData?.status);
+  let toast = useRef(null); 
+   
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
       await Axios.put(
         `${BASE_URL}/api/deparments/updateDeparment`,
         {
-          departmentId:location.state.rowData._id,
+          departmentId:rowData?._id,
           department: name,
           status: status,
         }
       );
       toast.current.show({
         severity: "success",
-        summary: "Success",
+        summary: "Department Configuration",
         detail: "Department updated successfully",
-      });
-      navigate("/manage-department");
+      });    
+      setTimeout(() => {
+        setEditDepartmentVisibility(false); 
+        setRefresh(prev=>!prev)
+    }, 1000);
     } catch (error) {
       toast.current.show({
         severity: "error",
@@ -51,10 +43,6 @@ const EditDepartment = () => {
 
   return (
     <>
-      <div className="card">
-        <h3 className="mt-1">Edit Department</h3>
-      </div>
-      <div className="p-fluid">
         <Toast ref={toast} />
         <form onSubmit={handleEdit}>
           <div className="flex flex-wrap mt-2">
@@ -74,7 +62,7 @@ const EditDepartment = () => {
         
           <Button label="Update" type="submit" className="w-10rem mt-3" />
         </form>
-      </div>
+    
     </>
   );
 };

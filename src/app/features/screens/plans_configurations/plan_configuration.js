@@ -66,6 +66,9 @@ const durationUnitOptions = [
 ];
 
 export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }) {
+     
+    
+    const [currentBillingId,setCurrentBillingId]=useState("")   
     const toast = useRef(null);
     const [inventoryTypeOptions, setInventoryTypeOptions] = useState([]);
 
@@ -82,7 +85,6 @@ export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }
         }
     };
     useEffect(() => {
-        getInventoryList();
         getBillingModelList();
     }, []);
 
@@ -122,35 +124,57 @@ export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }
                     toast.current.show({ severity: "error", summary: "Plan Submission", detail: err?.response?.data?.msg });
                 });
         },
-    }); 
-    useEffect(()=>{ 
-         getInventoryList()
-    },[formik.values.type]) 
-    const getInventoryList = async () => { 
+    });   
+    useEffect( ()=>{           
+        async function fetchData(){
         if(formik.values.type !== ""){
-       try {
-           const res = await Axios.get(`${BASE_URL}/api/web/billing/getProductByBillModel?billingModel=${formik.values.type}&serviceProvider=${parseLoginRes?.company}`);
-           
-           if(res?.data?.data !== undefined){ 
-            setInventoryTypeOptions(res?.data?.data ); 
-           } 
-           else{  
-            formik.setFieldValue("inventoryType","")
-            setInventoryTypeOptions([]) 
-
-           }
-       } catch (error) { 
-        formik.setFieldValue("inventoryType","")
-        setInventoryTypeOptions([])  
-        toast.current.show({ severity: "error", summary: "Plan Updation", detail: error?.response?.data?.msg });
-          
-       } 
-   }
-   };
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/billingModel/getInventoryByBillModel?BillModelId=${currentBillingId}`);
+                let obj = [];
+                let data = res?.data?.data;
+                data.forEach((item) => {
+                    let obj2 = {};
+                    obj2.inventoryType = item;
+                    obj.push(obj2);
+                });
+                setInventoryTypeOptions(obj);
+            } catch (error) {
+                //toast.error(error?.response?.data?.msg);
+            } 
+        } 
+    } 
+    fetchData()
+     },[currentBillingId])
+    
+   
     return (
         <div>
             <div>
                 <form onSubmit={formik.handleSubmit} className="flex flex-wrap  flex-row justify-content-around">
+                <div className="mt-2">
+                        <label className="block">
+                            Billing Model <span className="star">*</span>
+                        </label>
+                        <Dropdown placeholder="Plan Type" options={billingModelOptions} optionLabel="billingModel" optionValue="billingModel" className="field-width mt-2" name="type" value={formik.values.type} onChange={(e) => {
+                                        console.log("E is ", e);
+                                        formik.setFieldValue("type", e.value);
+                                        let id;
+                                        billingModelOptions.map((item) => {
+                                            if (item.billingModel === e.value) {
+                                                id = item._id;
+                                            }
+                                        });
+                                        setCurrentBillingId(id);
+                                    }} />
+                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
+                    </div>
+                    <div className="mt-2">
+                        <label className="block">
+                            Plan Inventory Type <span className="star">*</span>
+                        </label>
+                        <Dropdown placeholder="Plan Inventory Type" options={inventoryTypeOptions} optionLabel="inventoryType" optionValue="inventoryType" className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
+                        {formik.touched.inventoryType && formik.errors.inventoryType ? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
+                    </div>
                     <div className="mt-2">
                         <label className="block">
                             Plan Name <span className="star">*</span>
@@ -222,20 +246,7 @@ export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }
                         <Dropdown placeholder="Plan Text Allowance Unit" options={textAllowanceUnitOptions} className="field-width mt-2" name="textAllowanceUnit" value={formik.values.textAllowanceUnit} onChange={formik.handleChange} />
                         {formik.touched.textAllowanceUnit && formik.errors.textAllowanceUnit ? <p className="mt-2 ml-1 star">{formik.errors.textAllowanceUnit}</p> : null}
                     </div>
-                    <div className="mt-2">
-                        <label className="block">
-                            Billing Model <span className="star">*</span>
-                        </label>
-                        <Dropdown placeholder="Plan Type" options={billingModelOptions} optionLabel="billingModel" optionValue="billingModel" className="field-width mt-2" name="type" value={formik.values.type} onChange={formik.handleChange} />
-                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
-                    </div>
-                    <div className="mt-2">
-                        <label className="block">
-                            Plan Inventory Type <span className="star">*</span>
-                        </label>
-                        <Dropdown placeholder="Plan Inventory Type" options={inventoryTypeOptions} optionLabel="inventoryType" optionValue="inventoryType" className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
-                        {formik.touched.inventoryType && formik.errors.inventoryType ? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
-                    </div>
+                   
 
                     <div className="mt-2">
                         <label className="block">
