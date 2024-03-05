@@ -5,35 +5,38 @@ import * as Yup from "yup";
 import Axios from "axios";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
+import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
 
-
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const CardAuthPayment =({amount,handleNext,object})=>{
-    
+const EcheckAuthPayment = ({amount,handleNext,object}) => {
+
     amount = parseFloat(amount).toFixed(2);
+
     const basicData = localStorage.getItem("basicData");
     const parsebasicData = JSON.parse(basicData);
     const userDetails = parsebasicData?.data
-   
+
     const [isLoading, setIsLoading] = useState(false)
-    
     const validationSchema = Yup.object().shape({
-        cardNumber: Yup.string().required("Please Enter Card Number"),
-        cardCode: Yup.string().required("Please Enter CVC"),
-        expirationDate: Yup.string().required("Please select Exp Date"),
+       
         totalAmount: Yup.string().required("Please Select Amount"),
+        routingNumber: Yup.string().required("This is required"),
+        AccountNumber: Yup.string().required("This is required"),
+
     });
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
             totalAmount: "",
-            cardNumber: "",
-            cardCode: "",
-            expirationDate: "",
-            amount: amount, 
+            amount: amount,
+            routingNumber: "",
+            AccountNumber: "",
+            NameOnAccount: "",
+            refId: "",
+            accountId: userDetails?.accountId,
         },
 
         onSubmit: async (values, actions) => {
@@ -41,17 +44,17 @@ const CardAuthPayment =({amount,handleNext,object})=>{
             setIsLoading(true)
             const dataToSend = {
                 amount: formik.values.totalAmount,
-                cardNumber: formik.values.cardNumber,
-                cardCode: formik.values.cardCode,
-                expirationDate: formik.values.expirationDate,
-                invoiceNo: formik.values.accountId,
+                nameOnAccount: formik.values.NameOnAccount,
+                routingNumber: formik.values.routingNumber,
+                accountNumber: formik.values.AccountNumber,
+                accountType: formik.values.accountType,
+                accountId: formik.values.accountId,
                 customerId:userDetails?._id
             };
             try {
-    
-                const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);
+                const response = await Axios.post(`${BASE_URL}/api/web/invoices/echeckpayment`, dataToSend);
                 if (response?.data?.messages?.resultCode == "Ok" || response?.data?.messages?.resultCode == "OK" || response?.data?.msg?.resultCode == "Ok") {
-
+                    toast.success("Successfully Paid")
                     const dataToSend = {
                         invoiceType: "Sign Up",
                         customerId: userDetails?._id,
@@ -63,10 +66,10 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                             to: "onActivation"
                         },
                         invoiceStatus: "Paid",
-                        paymentMethod: "Credit Card",
+                        paymentMethod: "E-Check",
                         chargingType: "Monthly",
                         printSetting: "Both",
-                        selectProduct: object.billId,        
+                        selectProduct: object.billId,         
                     }
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
@@ -80,36 +83,28 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                         toast.error(error?.response?.data?.msg)
                         setIsLoading(false)
                     } 
-                    setIsLoading(false)   
+                    setIsLoading(false)  
                 }
                 else {
-                    console.log("error is ",response?.data?.data)
-                    toast.error(response?.data?.data?.message[0]?.text)
+                    console.log("error is ", response?.data?.transactionResponse)
+                    toast.error(response?.data?.transactionResponse?.errors?.error[0].errorText)
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false)
             }
             setIsLoading(false)
+
         },
     });
-
-    const formatExpirationDate = (value) => {
-        
-        value = value.replace(/\D/g, '');
-        if (value.length > 4) {
-            value = value.slice(0, 4) + "-" + value.slice(4);
-        }
-        return value;
-    };
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-    return(
+    return (
         <>
-         <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={formik.handleSubmit}>
                 <ToastContainer />
                 <div className="col-12  ">
                     <div className="p-3">
@@ -117,6 +112,7 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                             <div>
                                 <table className="cp_table w-full">
                                     <tbody>
+
                                         <tr className="text-lg">
                                             <td>
                                                 Total Amount: <span className="steric">*</span>
@@ -137,48 +133,48 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                                                 {getFormErrorMessage("totalAmount")}
                                             </td>
                                         </tr>
-                                      
-                                     
-                                                <tr>
-                                                    <td className="text-lg">
-                                                        Card Number <span className="steric">*</span>
-                                                    </td>
-                                                    <td>
-                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardNumber") }, "input_text")} type="text" id="cardNumber" value={formik.values.cardNumber} maxLength={16} onChange={formik.handleChange} />
-                                                        {getFormErrorMessage("cardNumber")}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="text-lg">
-                                                        CVC <span className="steric">*</span>
-                                                    </td>
-                                                    <td>
-                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardCode") }, "input_text")} type="text" id="cardCode" value={formik.values.cardCode} maxLength={3} onChange={formik.handleChange} />
-                                                        {getFormErrorMessage("cardCode")}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="text-lg">
-                                                        Exp Date <span className="steric">*</span>
-                                                    </td>
-                                                    <InputText
-                                                        className={classNames({ " ml-3": true, "p-invalid": isFormFieldValid("expirationDate") }, "input_text")}
-                                                        type="text"
-                                                        id="expirationDate"
-                                                        maxLength={7}
-                                                        placeholder="YYYY-MM"
-                                                        value={formatExpirationDate(formik.values.expirationDate)}
-                                                        onChange={(e) => {
-                                                            const formattedValue = formatExpirationDate(e.target.value);
-                                                            formik.setFieldValue("expirationDate", formattedValue);
-                                                        }}
-                                                    />
 
-                                                </tr>
-                                                <div className="mt-2">
+                                        <tr>
+                                            <td className="text-lg">
+                                                Account Number <span className="steric">*</span>
+                                            </td>
+                                            <td>
+                                                <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("AccountNumber") }, "input_text")} type="text" id="AccountNumber" value={formik.values.AccountNumber} maxLength={16} onChange={formik.handleChange} />
+                                                {getFormErrorMessage("AccountNumber")}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="text-lg">
+                                                Routing Number <span className="steric">*</span>
+                                            </td>
+                                            <td>
+                                                <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("routingNumber") }, "input_text")} type="text" id="routingNumber" maxLength={9} value={formik.values.routingNumber} onChange={formik.handleChange} />
+                                                {getFormErrorMessage("routingNumber")}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="text-lg">
+                                                Name On Account <span className="steric">*</span>
+                                            </td>
+                                            <td>
+                                                <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("NameOnAccount") }, "input_text")} type="text" id="NameOnAccount" value={formik.values.NameOnAccount} onChange={formik.handleChange} />
 
-                                                    <Button label="Submit" type="submit"  disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
-                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="text-lg">
+                                                Account Type <span className="steric">*</span>
+                                            </td>
+                                            <td>
+                                                <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("accountType") }, "input_text")} type="text" id="accountType" value={formik.values.accountType} onChange={formik.handleChange} />
+
+                                            </td>
+                                        </tr>
+                                        <div className="mt-2">
+
+                                        <Button label="Submit" type="submit"  disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                                        </div>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -190,4 +186,4 @@ const CardAuthPayment =({amount,handleNext,object})=>{
         </>
     )
 }
-export default CardAuthPayment
+export default EcheckAuthPayment;

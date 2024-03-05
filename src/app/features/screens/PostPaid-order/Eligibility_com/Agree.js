@@ -10,6 +10,7 @@ import { MultiSelect } from "primereact/multiselect";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import CardAuthPayment from "./dialog/CardAuthPayment";
+import EcheckAuthPayment from "./dialog/EcheckAuthPayment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
@@ -18,7 +19,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dialogForCardAuth, setdialogForCardAuth] = useState(false);
-
+    const [dialogForEcheck, setDialogForEcheck] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName
@@ -88,6 +89,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
               
             else  if (paymentStatus === "paid") {
                 handleNext();
+            }
+            else  if (formik.values.paymentMode === "E-Check" && toCapitalCompanyName=="ZISFONE LLC") {
+                setDialogForEcheck(true);
             }
             else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="ZISFONE LLC") {   
                 setdialogForCardAuth(true);
@@ -196,11 +200,17 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
         }
     }, []);
 
+
+
+
     return (
         <form onSubmit={formik.handleSubmit}>
             <ToastContainer />
             <Dialog className="stripe-dialog-width" header="Crad Payment" visible={dialogForCardAuth} onHide={() => setdialogForCardAuth(false)}>
                                 <CardAuthPayment amount={formik.values.totalamount} object={formik.values} handleNext={handleNext} />
+                            </Dialog>
+             <Dialog className="stripe-dialog-width" header="E-Check Payment" visible={dialogForEcheck} onHide={() => setDialogForEcheck(false)}>
+                                <EcheckAuthPayment amount={formik.values.totalamount} object={formik.values} handleNext={handleNext} />
                             </Dialog>
             <div className="card">
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
@@ -293,7 +303,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                                 formik.handleChange(e);
                                             } else {
                                                 let devicepricing = JSON.parse(localStorage.getItem("planprices"));  
-                                                console.log("inside new vaue")
+                                               
                                                 for (let i = 0; i < devicepricing.length; i++) { 
                                                 
                                                     if (devicepricing[i]._id === e.value || devicepricing[i]._id === formik.values.plan) {
@@ -439,19 +449,20 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         )}
                     </div>
                     <div className="mt-2">
-                        <label className="block">Net Amount</label>
-                        <InputText
-                            disabled
-                            className="field-width mt-2"
-                            id="totalamount"
-                            value={formik.values.totalamount}
-                            onChange={(e) => {
-                                formik.setFieldValue("totalpayment", e.value);
-                                formik.handleChange(e);
-                            }}
-                        />
-                        {getFormErrorMessage("totalpayment")}
-                    </div>
+    <label className="block">Net Amount</label>
+    <InputText
+        disabled
+        className="field-width mt-2"
+        id="totalamount"
+        value={ parseFloat(formik.values.totalamount).toFixed(2)}
+        onChange={(e) => {
+            formik.setFieldValue("totalpayment", e.value);
+            formik.handleChange(e);
+        }}
+    />
+    {getFormErrorMessage("totalpayment")}
+</div>
+
                     <div className="mt-2">
                         <label className="block">Select Payment Method</label>
                        {  inventory === "SIM" ?  <Dropdown
