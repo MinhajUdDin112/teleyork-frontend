@@ -108,7 +108,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                 <Column field="invoiceStatus" header="Status" body={(rowData)=>{
                             if (parseFloat(rowData.amountPaid) === 0) {
                                 return <p>Pending</p>;
-                            } else if (parseFloat(rowData.amountPaid) > 0 && parseFloat(rowData.dueAmount) === 0) {
+                            } else if ( parseFloat(rowData.dueAmount) === 0) {
                                 return <p>Paid</p>;
                             } else if (parseFloat(rowData.amountPaid) > 0 && parseFloat(rowData.dueAmount) > 0) {
                                 return <p>Partially Paid</p>;
@@ -161,7 +161,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                 <Column
                     field="Action"
                     body={
-                        <Button className="bg-green-400 rounded-none pl-2 pr-2 pt-2 pl-3 pr-3  pb-2 border-none" >
+                        <Button className="bg-green-400 rounded-none pl-2 pr-2 pt-2 pr-3  pb-2 border-none" >
                             Void
                         </Button>
                     }
@@ -192,7 +192,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
 <Column
     field="Invoice_Pdf"
     body={rowData => (
-        <Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2" onClick={() => {setInvoiceData(rowData)}} disabled={isLoading}>
+        <Button className="bg-green-700 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2" onClick={() => {setInvoiceData(rowData)}} disabled={isLoading}>
             Download
         </Button>  
     )}

@@ -10,6 +10,7 @@ import { MultiSelect } from "primereact/multiselect";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import CardAuthPayment from "./dialog/CardAuthPayment";
+import EcheckAuthPayment from "./dialog/EcheckAuthPayment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
@@ -18,7 +19,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dialogForCardAuth, setdialogForCardAuth] = useState(false);
-
+    const [dialogForEcheck, setDialogForEcheck] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName
@@ -88,6 +89,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
               
             else  if (paymentStatus === "paid") {
                 handleNext();
+            }
+            else  if (formik.values.paymentMode === "E-Check" && toCapitalCompanyName=="ZISFONE LLC") {
+                setDialogForEcheck(true);
             }
             else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="ZISFONE LLC") {   
                 setdialogForCardAuth(true);
@@ -201,6 +205,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             <ToastContainer />
             <Dialog className="stripe-dialog-width" header="Crad Payment" visible={dialogForCardAuth} onHide={() => setdialogForCardAuth(false)}>
                                 <CardAuthPayment amount={formik.values.totalamount} object={formik.values} handleNext={handleNext} />
+                            </Dialog>
+             <Dialog className="stripe-dialog-width" header="E-Check Payment" visible={dialogForEcheck} onHide={() => setDialogForEcheck(false)}>
+                                <EcheckAuthPayment amount={formik.values.totalamount} object={formik.values} handleNext={handleNext} />
                             </Dialog>
             <div className="card">
                 <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">

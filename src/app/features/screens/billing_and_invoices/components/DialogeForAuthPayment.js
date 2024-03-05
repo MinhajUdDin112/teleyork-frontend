@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Calendar } from "primereact/calendar";
+import React, { useState } from "react";
+
 import { Button } from "primereact/button";
-import { Formik, useFormik } from "formik";
+import {  useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from "axios";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
-import moment from "moment/moment";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
-import { tr } from "date-fns/locale";
+
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -92,7 +91,6 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
                     invoicePaymentMethod: "Credit Card",
                     transId: response?.data?.transactionResponse?.transId,
                     networkTransId: response?.data?.transactionResponse?.networkTransId
-
                 }
 
                 try {
@@ -108,8 +106,8 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
                 }
             }
             else {
-                console.log("error is ",response?.data?.transactionResponse)
-                toast.error(response?.data?.transactionResponse?.errors?.error[0].errorText)
+                console.log("error is ",response?.data?.data)
+                toast.error(response?.data?.data?.message[0]?.text)
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
