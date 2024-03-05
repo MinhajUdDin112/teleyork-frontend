@@ -5,13 +5,12 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { ToastContainer,  } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const CreateDepartment = () => {
-  const navigate = useNavigate(); 
+const CreateDepartment = ({setCreateDepartmentVisibility,setRefresh}) => {
+
   //let toast = useRef(null);
 
   const loginRes = localStorage.getItem('userData');
@@ -35,8 +34,13 @@ const CreateDepartment = () => {
           status: values.status, // true for active, false for inactive
           company: parseLoginRes?.company,
         });
-        if (response?.status === 200 || response?.status === 201) {
-          navigate('/manage-department');
+        if (response?.status === 200 || response?.status === 201) { 
+          
+        toast.success("Department Successfull Added");
+          setTimeout(() => {
+            setCreateDepartmentVisibility(false); 
+            setRefresh(prev=>!prev)
+        }, 1000);
         }
       } catch (error) {
        
@@ -53,10 +57,7 @@ const CreateDepartment = () => {
   return (
     <>
     <ToastContainer/>
-      <div className="card">
-        <h3 className="mt-1">Create Department <span className="steric">*</span></h3>
-      </div>
-      <div className="card">
+    
         <form onSubmit={formik.handleSubmit}>
           <div className="p-fluid p-formgrid grid mb-3">
             <div className="p-field col-12">
@@ -95,7 +96,7 @@ const CreateDepartment = () => {
             <Button label="Submit" iconPos="right"  type="submit" />
           </div>
         </form>
-      </div>
+     
     </>
   );
 };

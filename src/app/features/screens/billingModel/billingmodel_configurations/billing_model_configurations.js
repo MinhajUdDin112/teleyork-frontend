@@ -1,0 +1,114 @@
+import React, { useEffect, useState } from "react";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import Axios from "axios";
+import UpdateBillingModel from "./components/update_billing_model";
+import { ToastContainer } from "react-toastify";
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+import { toast } from "react-toastify";
+import AddBillingModel from "./components/add_billing_model";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const loginRes = localStorage.getItem("userData");
+const parseLoginRes = JSON.parse(loginRes);
+export default function BillingModelConfigurations() {
+    console.log("All Inventories Listed");
+    const [refresh, setRefresh] = useState(false);
+    const [editBillingModelVisibility, setEditBillingModelVisibility] = useState(false);
+    useEffect(() => {
+        if (editBillingModelVisibility === false) {
+            Axios.get(`${BASE_URL}/api/billingModal/all?serviceProvider=${parseLoginRes?.company}`)
+                .then((res) => {
+                    setBillingModelList(res?.data?.data);
+                })
+                .catch((err) => {});
+        }
+        if (addBillingModelVisibility === false) {
+            Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
+                .then((res) => {
+                    setBillingModelList(res?.data?.data);
+                })
+                .catch((err) => {});
+        }
+    }, [refresh]);
+    const [billingModelList, setBillingModelList] = useState([]);
+    const [rowData, setRowData] = useState(null);
+    const [addBillingModelVisibility, setAddBillingModelVisibility] = useState(false);
+    return (
+        <div className="overflow-hidden card">
+            <ToastContainer />
+            <Button
+                onClick={() => {
+                    setAddBillingModelVisibility(true);
+                }}
+                className="text-center mr-0"
+                style={{ marginTop: "0px", textAlign: "center", marginLeft: "90%", transform: "translate(-70%)", width: "250px" }}
+                label="Add Billing Model"
+            />
+
+            <Dialog
+                header="Add Billing Model"
+                visible={addBillingModelVisibility}
+                style={{ width: "80vw" }}
+                onHide={() => {
+                    setAddBillingModelVisibility(false);
+                }}
+            >
+                <AddBillingModel setRefresh={setRefresh} setAddBillingModelVisibility={setAddBillingModelVisibility} />
+            </Dialog>
+            <Dialog
+                header="Update Billing Model"
+                visible={editBillingModelVisibility}
+                className="pt-0"
+                style={{ width: "80vw" }}
+                onHide={() => {
+                    setEditBillingModelVisibility(false);
+                }}
+            >
+                <UpdateBillingModel data={rowData} setRefresh={setRefresh} setEditBillingModelVisibility={setEditBillingModelVisibility} />
+            </Dialog>
+            <DataTable value={billingModelList} size="small" stripedRows resizableColumns emptyMessage="Billing Models Not Found" style={{ marginTop: "10px" }}>
+                <Column header="ID" field="_id" />
+                <Column header="Billing Model" field="billingModel" />
+
+                <Column
+                    header="Actions"
+                    body={(rowData) => {
+                        return (
+                            <>
+                                <Button
+                                    label="Update"
+                                    onClick={() => {
+                                        setRowData(rowData);
+                                        setEditBillingModelVisibility(true);
+                                    }}
+                                    className=" p-button-primary mr-2 ml-2 pt-1 pb-1"
+                                    text
+                                    raised
+                                />
+                                <Button
+                                    label="Delete"
+                                    onClick={() => {
+                                        Axios.put(`${BASE_URL}/api/billingModel/delete?id=${rowData._id}`)
+                                            .then((res) => {
+                                                toast.success("Billing Model Removed Successfully");
+
+                                                setRefresh((prev) => !prev);
+                                            })
+                                            .catch((err) => {
+                                                toast.error("Billing Model Removal Failed");
+                                            });
+                                    }}
+                                    className=" p-button-primary mr-2 ml-2 pt-1 pb-1"
+                                    text
+                                    raised
+                                />
+                            </>
+                        );
+                    }}
+                    field="Edit"
+                />
+            </DataTable>
+        </div>
+    );
+}

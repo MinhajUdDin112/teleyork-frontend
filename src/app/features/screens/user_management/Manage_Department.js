@@ -7,11 +7,17 @@ import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; 
+import CreateDepartment from "./CreateDepartment"; 
+import EditDepartment from "./EditDepartment";
 //import { Toast,ToastContainer } from "react-toastify/dist/components";
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL = process.env.REACT_APP_BASE_URL; 
+
 const ManageDepartment = () => {
     let toastfordelete = useRef(null);
+    const [createDepartmentVisibility,setCreateDepartmentVisibility]=useState(false)
+    const [editDepartmentVisibility,setEditDepartmentVisibility]=useState(false)
+    const [rowData,setRowData]=useState(null)
     const [allDepartments, setAllDepartments] = useState([]);
     const [departmentId, setDepartmentId] = useState(null);
     const [visibleDeleteDepartment, setVisibleDeleteDepartment] = useState(false);
@@ -20,10 +26,8 @@ const ManageDepartment = () => {
     const [isManage, setIsManage] = useState(false);
     const location = useLocation();
     const currentPath = location?.pathname;
-    const navigate = useNavigate();
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
     const companyId = parseLoginRes?.company;
 
     const actions = (rowData) => {
@@ -38,9 +42,8 @@ const ManageDepartment = () => {
     };
 
     const handleDepartmentEdit = (rowData) => {
-        navigate("/edit-department", {
-            state: { rowData },
-        });
+       setRowData(rowData) 
+       setEditDepartmentVisibility(prev=>!prev)
     };
 
     const handleDepartmentDelete = async (rowData) => {
@@ -56,10 +59,10 @@ const ManageDepartment = () => {
             toast.error(error?.response?.data?.msg);
         }
     };
-
+  const [refresh,setRefresh]=useState(false)
     useEffect(() => {
         getAllDepartments();
-    }, []);
+    }, [refresh]);
 
     function confirmDeleteDepartment() {
         Axios.delete(`${BASE_URL}/api/deparments/deleteDepartment?departmentId=${departmentId}`)
@@ -110,7 +113,12 @@ const ManageDepartment = () => {
             <div className="card">
                 <h3 className="mt-1 ">Manage Department</h3>
             </div>
-
+         <Dialog draggable={false} header="Create Department" style={{width:"80vw"}} visible={createDepartmentVisibility} onHide={()=>{setCreateDepartmentVisibility(prev=>!prev)}}> 
+            <CreateDepartment setRefresh={setRefresh} setCreateDepartmentVisibility={setCreateDepartmentVisibility}/>
+         </Dialog> 
+         <Dialog draggable={false} header="Configure Department" style={{width:"80vw"}} visible={editDepartmentVisibility} onHide={()=>{setEditDepartmentVisibility(prev=>!prev)}}> 
+            <EditDepartment rowData={rowData} setRefresh={setRefresh} setEditDepartmentVisibility={setEditDepartmentVisibility}/>
+         </Dialog>
             <div className="card">
                 <DataTable
                     value={filteredUsers}
@@ -121,7 +129,7 @@ const ManageDepartment = () => {
                                 <i className="pi pi-search" />
                                 <InputText value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search by Name" />
                             </div>
-                            <Button label="Add" onClick={() => navigate("/create-department")} disabled={!(isCreate || isManage)} />
+                            <Button label="Add" onClick={() => {setCreateDepartmentVisibility(prev=>!prev)}} disabled={!(isCreate || isManage)} />
                         </div>
                     )}
                 >

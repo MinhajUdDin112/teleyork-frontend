@@ -5,7 +5,6 @@ import EditPlan from "./edit_plan";
 import Axios from "axios";
 import { Card } from "primereact/card";
 import PlansConfigurations from "./plan_configuration";
-
 import { ToastContainer } from "react-toastify";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";

@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import { useFormik } from "formik";    
 import "./add_units_components/sim_singleupload/css/style.css"
 import { Button } from "primereact/button";
-
 import { Dialog } from "primereact/dialog";
 import Axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -30,11 +29,27 @@ import TabletSingleUploadAddActivateProvision from "./add_units_components/table
 import TabletSingleUploadAddAndAssignNonActivateProvision from "./add_units_components/tablet_single_upload/add_and_assign_non_activate_provision.js";
 import TabletSingleUploadAddPreActivatedProvision from "./add_units_components/tablet_single_upload/add_preactivated_provision.js";
 import TabletSingleUploadReprovision from "./add_units_components/tablet_single_upload/reprovision.js";
-import ListAllInventories from "../inventory_configurations/inventory_configurations.js";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-const AddUnits = ({ setActiveComponent }) => {          
+const AddUnits = ({ setActiveComponent }) => {            
+    const validationSchema = Yup.object().shape({
+        unitType: Yup.string().required("please select"),
+        uploadType: Yup.string().required("please select type "),
+        provisionType: Yup.string(),
+    });
+    const formik = useFormik({
+        initialValues: {
+            unit: "",
+            upload: "",
+            provision: "", 
+            billingModel:""
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values, actions) => {
+           
+        },
+    });   
     const location = useLocation();
     const currentPath = location?.pathname   
     const [unitOptions,setUnitOptions]=useState([])
@@ -63,10 +78,9 @@ const AddUnits = ({ setActiveComponent }) => {
         setIsManage(isManage)
     
       }; 
-      const [isManage,setIsManage]=useState(null)  
+      const [isManage,setIsManage]=useState(null)    
+      const [currentBillingId,setCurrentBillingId]=useState("")
       const [isCreate,setIsCreate]=useState(null) 
-     const [configInvenoty,setConfigInventory]=useState(false) 
-       const [onInventoryConfig,setOnInventoryConfig]=useState(false)
     useEffect(()=>{ 
        actionBasedChecks()
        Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
@@ -76,44 +90,30 @@ const AddUnits = ({ setActiveComponent }) => {
        .catch((err) => {});
 
      },[])      
-     useEffect(()=>{ 
-        Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`)
-        .then((res) => {
-            setUnitOptions(res?.data?.data)
-        })
-        .catch((err) => {});
-     },[onInventoryConfig])
-    const validationSchema = Yup.object().shape({
-        unitType: Yup.string().required("please select"),
-        uploadType: Yup.string().required("please select type "),
-        provisionType: Yup.string(),
-    });
-    const formik = useFormik({
-        initialValues: {
-            unit: "",
-            upload: "",
-            provision: "", 
-            billingModel:""
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values, actions) => {
-           
-        },
-    });
+     useEffect( ()=>{           
+        async function fetchData(){
+        if(formik.values.billingModel !== ""){
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/billingModel/getInventoryByBillModel?BillModelId=${currentBillingId}`);
+                let obj = [];
+                let data = res?.data?.data;
+                data.forEach((item) => {
+                    let obj2 = {};
+                    obj2.inventoryType = item;
+                    obj.push(obj2);
+                });
+                setUnitOptions(obj);
+            } catch (error) {
+                //toast.error(error?.response?.data?.msg);
+            } 
+        } 
+    } 
+    fetchData()
+     },[currentBillingId])
+    
     return (
         <>  
-           <Dialog
-                header="Inventory Configurations"
-                visible={configInvenoty} 
-                className="pt-0"
-                style={{ width: "80vw" }}
-                onHide={() => {
-                    setConfigInventory(false); 
-                    setOnInventoryConfig(prev=>!prev)
-                }}
-            >
-                <ListAllInventories />
-            </Dialog> 
+         
            
             <Button
                 label="Back"
@@ -126,30 +126,33 @@ const AddUnits = ({ setActiveComponent }) => {
                 <Header unit={formik.values.unit} />
             </div>
             <div>
-                <div className="flex flex-wrap mb-3  justify-content-around">
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0 ">
-                            Inventory Type  
-                             
-                                    <i disabled={!isCreate}    onClick={() => {
-                                        //setAddAgentDialogVisbility((prev) => !prev); 
-                                        setConfigInventory(prev=>!prev)
-                                    }} 
-                                     
-                                        className="pi pi pi-plus"
-                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "4px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                    ></i>
-                                
-                        </p>
-                        <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
-                    </div>  
-                    <div className="mr-3 mb-3 mt-3">
+                <div className="flex flex-wrap mb-3  justify-content-around">   
+                <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Billing Model        
 
                         </p>
-                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="billingModel" options={billingModelList} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.billingModel} name="billingModel" optionLabel="billingModel" optionValue="billingModel" options={billingModelList} onChange={(e) => {
+                                        console.log("E is ", e);
+                                        formik.setFieldValue("billingModel", e.value);
+                                        let id;
+                                        billingModelList.map((item) => {
+                                            if (item.billingModel === e.value) {
+                                                id = item._id;
+                                            }
+                                        });
+                                        setCurrentBillingId(id);
+                                    }} placeholder="Select an option" className="field-width mt-2" />
                     </div>
+                    <div className="mr-3 mb-3 mt-3">
+                        <p className="m-0 ">
+                            Inventory Type  
+                    
+                                
+                        </p>
+                        <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                    </div>  
+                 
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Upload Type <span style={{ color: "red" }}>*</span>
