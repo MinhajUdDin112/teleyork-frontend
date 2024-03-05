@@ -296,7 +296,7 @@ export default function SIMBulkUploadAddProvision({ permissions,unit,model }) {
                                 &nbsp; (Sample file)
                             </p>
                         ) : (
-                            <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold">
+                            <a download={true} href="/images/Sample File(Sim Bulk Upload).xlsx" className="font-bold">
                                 {" "}
                                 &nbsp; (Sample file)
                             </a>

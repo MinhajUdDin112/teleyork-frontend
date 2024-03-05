@@ -7,6 +7,7 @@ import { AppFooter } from "./AppFooter";
 import MainPrepaidOrders from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/prepaid_orders_main";
 import ShippingQueue from "./app/features/screens/inventory_management/shipping_queue/shipping_queue";
 import { AppMenu } from "./AppMenu";
+import BillingModelConfigurations from "./app/features/screens/billingModel/billingmodel_configurations/billing_model_configurations";
 import { AppConfig } from "./AppConfig";
 import PostpaidEvaluatedEnrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Evaluated_Enrollments";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -424,7 +425,7 @@ const App = () => {
                                             <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue") ? <Provisioning_queue /> : <Dashboard />} />
 
                                             <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments") ? <Approved_Enrollments /> : <Dashboard />} />
-
+                                            <Route path="/billing-model-configuration" element={<BillingModelConfigurations/>}/>
                                             {/* <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
                                 <Route path="/sentall/:id" element={isPermitted("/sentall") ? <ShowSentAll /> : <Dashboard />} /> */}
 

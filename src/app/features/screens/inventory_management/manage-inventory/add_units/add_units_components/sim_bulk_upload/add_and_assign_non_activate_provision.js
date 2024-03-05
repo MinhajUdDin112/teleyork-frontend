@@ -308,7 +308,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                         <strong>Notes:</strong>
                         SIM, MDN, Model ID (STANDARD/MICRO/NANO), MSL/PUK,Puk2, PO#,BOX#, Wholesale/Cost Price for SIM, Selling/Retail Price for SIM, UICCID, Zipcode, Activation Fee , MSID,Device ID/IMEI,ACP Co-Pay Amount,ACP Device Reimbursement Amount,Device Retail Price   
                         {formik.values.carrier === ""? <p className="font-bold" style={{display:"inline-block"}}> &nbsp; (Sample file)</p>
-                        : <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold"> &nbsp; (Sample file)</a>
+                        : <a download={true} href="/images/Sample File(Sim Bulk Upload).xlsx" className="font-bold"> &nbsp; (Sample file)</a>
                         }
                     </p>
                     <p className="mt-4">
