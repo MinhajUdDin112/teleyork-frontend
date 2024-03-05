@@ -200,6 +200,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
         }
     }, []);
 
+
+
+
     return (
         <form onSubmit={formik.handleSubmit}>
             <ToastContainer />
@@ -300,7 +303,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                                 formik.handleChange(e);
                                             } else {
                                                 let devicepricing = JSON.parse(localStorage.getItem("planprices"));  
-                                                console.log("inside new vaue")
+                                               
                                                 for (let i = 0; i < devicepricing.length; i++) { 
                                                 
                                                     if (devicepricing[i]._id === e.value || devicepricing[i]._id === formik.values.plan) {
@@ -446,19 +449,20 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         )}
                     </div>
                     <div className="mt-2">
-                        <label className="block">Net Amount</label>
-                        <InputText
-                            disabled
-                            className="field-width mt-2"
-                            id="totalamount"
-                            value={formik.values.totalamount}
-                            onChange={(e) => {
-                                formik.setFieldValue("totalpayment", e.value);
-                                formik.handleChange(e);
-                            }}
-                        />
-                        {getFormErrorMessage("totalpayment")}
-                    </div>
+    <label className="block">Net Amount</label>
+    <InputText
+        disabled
+        className="field-width mt-2"
+        id="totalamount"
+        value={ parseFloat(formik.values.totalamount).toFixed(2)}
+        onChange={(e) => {
+            formik.setFieldValue("totalpayment", e.value);
+            formik.handleChange(e);
+        }}
+    />
+    {getFormErrorMessage("totalpayment")}
+</div>
+
                     <div className="mt-2">
                         <label className="block">Select Payment Method</label>
                        {  inventory === "SIM" ?  <Dropdown

@@ -99,28 +99,19 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                                 <p>Billing Period</p>
                                 <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} `}</p>
                             </div>
-                            {userDetails && userDetails?.paymentMethod == "Card" ? (
+                          
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Amount Paid</p>
-                                    <p>${invoiceData?.amountPaid}</p>
+                                    <p>${parseFloat(invoiceData?.amountPaid).toFixed(2)}</p>
                                 </div>
-                            ) : (
-                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Amount Paid</p>
-                                    <p>${invoiceData?.amountPaid}</p>
-                                </div>
-                            )}
-                            {userDetails && userDetails?.paymentMethod == "Card" ? (
-                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Total Amount Due</p>
-                                    <p>${invoiceData?.netPrice}</p>
-                                </div>
-                            ) : (
-                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Total Amount Due</p>
-                                    <p>${invoiceData?.netPrice}</p>
-                                </div>
-                            )}
+                           
+                            
+                            <div className="pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+    <p>Total Amount Due</p>
+    <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+</div>
+
+                            
 
                             <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
@@ -210,7 +201,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                     <div className="topline"></div>
                     <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                         <p>Total Amount Due</p>
-                        <p>${invoiceData?.netPrice}</p>
+                        <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
                     </div>
                 </div>
                 <div className="center-line">

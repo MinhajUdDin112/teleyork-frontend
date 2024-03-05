@@ -31,7 +31,7 @@ const navigate = useNavigate();
   }, [changeCustomerStatusDialog]);
 
   function handleWalletClick() {
-    console.log("id is",parseselectedid)
+   
     navigate("/invoice", { state: { selectedId: parseselectedid} });
   }
   const goToProfile =()=>{
@@ -107,6 +107,10 @@ const navigate = useNavigate();
         icon: "pi-circle-fill",
         className: "account-type-label",
       },
+      // {
+      //   label:`Wallet: ${cpData?.wallet}`,
+      //   className: "account-type-label",
+      // },
     ];
   }
   

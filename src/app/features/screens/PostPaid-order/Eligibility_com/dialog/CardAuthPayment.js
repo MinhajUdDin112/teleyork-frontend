@@ -12,6 +12,8 @@ import classNames from "classnames";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const CardAuthPayment =({amount,handleNext,object})=>{
+    
+    amount = parseFloat(amount).toFixed(2);
     const basicData = localStorage.getItem("basicData");
     const parsebasicData = JSON.parse(basicData);
     const userDetails = parsebasicData?.data

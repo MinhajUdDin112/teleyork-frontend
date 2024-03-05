@@ -13,15 +13,14 @@ import classNames from "classnames";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialogeForAuthPayment, onAPISuccess }) => {
+const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount, onAPISuccess }) => {
 
-   
+    dueAmount = parseFloat(dueAmount).toFixed(2);
    
     const [isLoading, setIsLoading] = useState(false)
     const [authRes, setAuthRes] = useState();
 
 
-    const remainingaAmount = invoiceData[0]?.dueAmount
 
     const validationSchema = Yup.object().shape({
         cardNumber: Yup.string().required("Please Enter Card Number"),
@@ -42,8 +41,8 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
             cardNumber: "",
             cardCode: "",
             expirationDate: "",
-            amount: remainingaAmount,
-            invoiceStatus: "", // Initialize invoiceStatus field
+            amount: dueAmount,
+            invoiceStatus: "", 
             routingNumber: "",
             AccountNumber: "",
             NameOnAccount: "",
@@ -85,16 +84,13 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
                 toast.success("Successfully Paid")
                 setIsLoading(false)
                 const dataToSend = {
-                    totalAmount: userDetails?.totalAmount,
                     amountPaid: formik.values.totalAmount,
                     invoiceStatus: "Paid",
                     invoicePaymentMethod: "Credit Card",
-                    transId: response?.data?.transactionResponse?.transId,
-                    networkTransId: response?.data?.transactionResponse?.networkTransId
                 }
 
                 try {
-                    const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceData[0]?._id}`, dataToSend);
+                    const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
 
                     if (response?.status == "200" || response?.status == "201") {
                         toast.success("Invoice Update Successfully")
@@ -135,15 +131,14 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
                 toast.success("Successfully Paid")
                 setIsLoading(false)
                 const dataToSend = {
-                    totalAmount: userDetails?.totalAmount,
+                   
                     amountPaid: formik.values.totalAmount,
                     invoiceStatus: "Paid",
                     invoicePaymentMethod: "E-Check",
-                    transId: response?.data?.transactionResponse?.transId,
                 }
 
                 try {
-                    const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceData[0]?._id}`, dataToSend);
+                    const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
 
                     if (response?.status == "200" || response?.status == "201") {
                         toast.success("Invoice Update Successfully")
@@ -174,6 +169,8 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
         }
         return value;
     };
+   
+    
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
@@ -205,7 +202,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
                                         </tr>
                                         <tr className="text-lg">
                                             <td>
-                                                Total Amount: <span className="steric">*</span>
+                                                Due Amount: <span className="steric">*</span>
                                             </td>
                                             <td>
                                                 {" "}
@@ -249,7 +246,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, setdialoge
                                                         Card Number <span className="steric">*</span>
                                                     </td>
                                                     <td>
-                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardNumber") }, "input_text")} type="text" id="cardNumber" value={formik.values.cardNumber} maxLength={16} onChange={formik.handleChange} />
+                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardNumber") }, "input_text")} type="text" id="cardNumber" value={formik.values.cardNumber} maxLength={16} onChange={formik.handleChange}  />
                                                         {getFormErrorMessage("cardNumber")}
                                                     </td>
                                                 </tr>

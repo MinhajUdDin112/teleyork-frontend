@@ -7,6 +7,7 @@ import DialogeForAuthPayment from "./DialogeForAuthPayment";
 import CustomerInvoice from "./customer_invoice/customer_invoice"
 import "./css/invoicetable.css";  
 import { Dialog } from "primereact/dialog";
+import { ro } from "date-fns/locale";
 
 const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
    
@@ -15,6 +16,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
     const [singleInvoiceData,setInvoiceData]=useState()
     const [dialogeForAuthPayment,setdialogeForAuthPayment]=useState(false)
     const [invoiceId, setInvoiceId] = useState()
+    const [dueAmount, setdueAmount] = useState()
    
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
@@ -41,7 +43,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
         <div className="mx-4">
           
              <Dialog header={"Payment"} visible={dialogeForAuthPayment} style={{ width: "50vw" }} onHide={() => setdialogeForAuthPayment(false)}>
-                        <DialogeForAuthPayment onAPISuccess ={onAPISuccess }  setdialogeForAuthPayment={setdialogeForAuthPayment} invoiceId={invoiceId} userDetails={userDetails} invoiceData={invoiceData}/>
+                        <DialogeForAuthPayment onAPISuccess ={onAPISuccess } dueAmount={dueAmount} setdialogeForAuthPayment={setdialogeForAuthPayment} invoiceId={invoiceId} userDetails={userDetails} invoiceData={invoiceData}/>
                     </Dialog>
           
             <DataTable  
@@ -101,11 +103,12 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                     }}
                 />
                 <Column field="planCharges" header="Plan Charges" />
-                <Column field="totalAmount" header="Total Amount"  />
-                <Column field="amountPaid" header="Paid Amount"  />
+                <Column field="totalAmount" header="Total Amount" body={(rowData) => parseFloat(rowData.totalAmount).toFixed(2)} />
+                <Column field="amountPaid" header="Paid Amount" body={(rowData) => parseFloat(rowData.amountPaid).toFixed(2)} />
+               
                 <Column field="lateFee" header="Late Fee"  />
                 <Column field="invoiceDueDate" header="DueDate"  />
-                <Column field="invoiceStatus" header="Status" body={(rowData)=>{
+                {/* <Column field="invoiceStatus" header="Status" body={(rowData)=>{
                             if (parseFloat(rowData.amountPaid) === 0) {
                                 return <p>Pending</p>;
                             } else if ( parseFloat(rowData.dueAmount) === 0) {
@@ -117,7 +120,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
                             }
                             
 
-                }}  />
+                }}  /> */}
                 <Column field="invoicePaymentMethod" header="Payment Method"  />
                 {/* {
                     invoiceData?.isAdHocInvoice ?    
@@ -147,6 +150,7 @@ const InvoiceTable = ({userDetails, invoiceData, onAPISuccess  }) => {
             onClick={() => {
                 setdialogeForAuthPayment(true);
                 setInvoiceId(rowData?._id);
+                setdueAmount(rowData?.netPrice)
             }}
         >
             Payment
