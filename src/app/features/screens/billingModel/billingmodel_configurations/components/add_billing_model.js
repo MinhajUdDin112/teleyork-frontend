@@ -81,7 +81,10 @@ export default function AddBillingModel({setRefresh, setAddBillingModelVisibilit
                             setinventoryList(prev=>({...prev,[key]:key}))  
                               formik.setFieldValue("input","")
                         }
-                      }} onChange={formik.handleChange}/>
+                      }} onChange={(e)=>{     
+                            let sentence=e.target.value;
+                         formik.setFieldValue("input",sentence.toUpperCase())
+                      }}/>
                      </div>
            </div>  
            <div className="w-full  mt-4  ml-5   flex flex-wrap justify-content-left flex-row  "> 
