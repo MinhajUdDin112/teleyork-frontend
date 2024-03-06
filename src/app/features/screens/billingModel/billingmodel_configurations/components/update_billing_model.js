@@ -24,11 +24,11 @@ export default function UpdateBillingModel({data ,setRefresh ,setEditBillingMode
         }, 
         validationSchema, 
         onSubmit:(values)=>{    
-            const dataTosend={billingModel:formik.values.billingModel,billingModelId:formik.values.billingModelId,serviceProvider:parseLoginRes?.company}  
+            const dataTosend={billingModel:(formik.values.billingModel).trim(),billingModelId:formik.values.billingModelId,serviceProvider:parseLoginRes?.company}  
             let inventoryarray=[]
           
            Object.keys(inventoryList).map(item=>{ 
-            inventoryarray.push(item)
+            inventoryarray.push(item.trim())
            })
            dataTosend.inventory=inventoryarray
        Axios.put(`${BASE_URL}/api/billingModel/update`,dataTosend).then(()=>{
@@ -59,7 +59,8 @@ export default function UpdateBillingModel({data ,setRefresh ,setEditBillingMode
                         <label className="block">
                             Billing Model <span className="star">*</span>
                         </label>
-                        <InputText className="field-width mt-2" name="billingModel" value={formik.values.billingModel} onChange={formik.handleChange} />
+                        <InputText className="field-width mt-2" name="billingModel" value={formik.values.billingModel} onChange={(e)=>{ let sentence=e.target.value;
+                        formik.setFieldValue("billingModel",sentence.toUpperCase())}} />
                         {formik.touched.billingModel && formik.errors.billingModel? <p className="mt-2 ml-1 star">{formik.errors.billingModel}</p> : null}
                     </div>       
                     <div style={{width:"30vw"}} className="field-width flex ml-5  flex-wrap flex-row justify-content-left"> 
