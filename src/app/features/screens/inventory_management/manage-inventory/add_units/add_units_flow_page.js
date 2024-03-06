@@ -169,7 +169,7 @@ const AddUnits = ({ setActiveComponent }) => {
                     ) : undefined}
                 </div>
             </div>
-            {formik.values.unit === "Cell Phone" ? (
+            {formik.values.unit === "CELL PHONE" ? (
                 formik.values.upload === "Single" ? (
                     <CellPhoneSingleUpload unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}} />
                 ) : formik.values.upload === "Bulk" ? (
@@ -193,7 +193,7 @@ const AddUnits = ({ setActiveComponent }) => {
                 ): formik.values.upload === "Bulk" && formik.values.provision === "add_pre_activated" ? (
                     <SIMBulkUploadAddPreActivatedProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{isCreate:isCreate}}/>
                 ) : undefined
-            ) : formik.values.unit === "Tablet" || formik.values.unit === "Wireless Device" ? (
+            ) : formik.values.unit === "TABLET" || formik.values.unit === "WIRELESS DEVICE" ? (
                 formik.values.upload === "Bulk"  && formik.values.provision === "add_stock" ? (
                     <TabletBulkUploadAddProvision unit={formik.values.unit} model={formik.values.billingModel}  permissions={{isCreate:isCreate}}/>
                 ) : formik.values.upload === "Bulk" && formik.values.provision === "add_and_activated" ? (
