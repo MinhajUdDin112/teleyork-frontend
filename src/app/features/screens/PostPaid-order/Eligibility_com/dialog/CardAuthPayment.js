@@ -12,6 +12,7 @@ import classNames from "classnames";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const CardAuthPayment =({amount,handleNext,object})=>{
+    const [formattedCardNumber, setFormattedCardNumber] = useState("");
     
     amount = parseFloat(amount).toFixed(2);
     const basicData = localStorage.getItem("basicData");
@@ -41,7 +42,7 @@ const CardAuthPayment =({amount,handleNext,object})=>{
             setIsLoading(true)
             const dataToSend = {
                 amount: formik.values.totalAmount,
-                cardNumber: formik.values.cardNumber,
+                cardNumber: formattedCardNumber.replace(/-/g, ""),
                 cardCode: formik.values.cardCode,
                 expirationDate: formik.values.expirationDate,
                 invoiceNo: formik.values.accountId,
@@ -103,6 +104,19 @@ const CardAuthPayment =({amount,handleNext,object})=>{
         return value;
     };
 
+    const formatCardNumber = (value) => {
+        return value
+            .replace(/\D/g, "")
+            .replace(/(.{4})/g, "$1-") // Insert hyphens after every 4 digits
+            .trim()
+            .slice(0, 19); // Limit to 19 characters
+    };
+
+    const handleCardNumberChange = (e) => {
+        const formattedValue = formatCardNumber(e.target.value);
+        setFormattedCardNumber(formattedValue);
+        formik.setFieldValue("cardNumber", e.target.value.replace(/-/g, "")); // Remove hyphens before storing in formik state
+    };
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
@@ -144,7 +158,14 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                                                         Card Number <span className="steric">*</span>
                                                     </td>
                                                     <td>
-                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardNumber") }, "input_text")} type="text" id="cardNumber" value={formik.values.cardNumber} maxLength={16} onChange={formik.handleChange} />
+                                                    <InputText
+                                                    className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardNumber") }, "input_text")}
+                                                    type="text"
+                                                    id="cardNumber"
+                                                    value={formattedCardNumber}
+                                                    maxLength={19}
+                                                    onChange={handleCardNumberChange}
+                                                />
                                                         {getFormErrorMessage("cardNumber")}
                                                     </td>
                                                 </tr>
