@@ -1,0 +1,9 @@
+.updaterestore{ 
+    width:320px; 
+       display: flex; 
+       flex-direction: row; 
+       flex-wrap: wrap; 
+       justify-content: space-between;  
+       margin-left: 100%; 
+       transform: translateX(-320px);
+} 
