@@ -1,6 +1,7 @@
 //company agent tracking master carrier tin
 import React, { useRef, useState, useEffect } from "react";
-import { useFormik } from "formik";
+import { useFormik } from "formik"; 
+import "./css/bulkuploaderror.css"
 import Axios from "axios";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
@@ -102,11 +103,11 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
     function ApiResponseShow({res}){   
         
         return( 
-           <div className="flex flex-wrap justify-content-left"> 
+           <div className="flex flex-wrap justify-content-left "> 
                <p>{res.msg}</p>  
                <div >
-                <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
-                  <ul className="m-0 list-none"> 
+                <p className="errormsg"> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
+                  <ul className="m-0 list-none errormsg  "> 
                        { 
                           res.data.data.duplicateNumbers.map(item=>( 
                            <li>{item}</li>
