@@ -4,19 +4,17 @@ import { NavLink } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector, useStore } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../../../store/auth/AuthAction";
-import { useState } from "react";
 import Axios from "axios";
-import { toast } from "react-toastify"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function LoginScreen() { 
-    
-   
+export default function LoginScreen({ setRefreshApp }) {
     const dispatch = useDispatch();
-const [liveURL, setLiveURL] = useState()
+    //const loginData = useSelector((state) => state.authentication.loginData);
     const error = useSelector((state) => state.login);
+    console.log("error is ", error);
     const errormsg = error?.loginError;
+    let logindata = error?.loginData;
     const loading = error?.loginLoading;
     const formik = useFormik({
         initialValues: {
@@ -32,36 +30,30 @@ const [liveURL, setLiveURL] = useState()
         },
     });
 
-    
-
     //get url
-    useEffect( () => {
+    useEffect(() => {  
+        
+    setRefreshApp((prev) => !prev);
+    }, [error]);
+    useEffect(() => {
         var currentURL;
-        var modifiedURL; 
-          currentURL = window.location.href;
+        var modifiedURL;
+        currentURL = window.location.href;
         // currentURL = "http://dev-ijwireless.teleyork.com/#/login";
         if (currentURL.includes("dev-")) {
             modifiedURL = currentURL.replace("http://dev-", "");
             modifiedURL = modifiedURL.replace("/#/login", "");
-           
         } else {
             modifiedURL = currentURL.replace("http://", "");
             modifiedURL = modifiedURL.replace("/#/login", "");
-          
         }
-        const sendURl = async ()=>{
+        const sendURl = async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/serviceProvider/getSPdetailByDomain?subDomain=${modifiedURL}`);
-            } catch (error) {
-                
-            }
-        }
+            } catch (error) {}
+        };
         sendURl();
-       
     }, []);
-
-  
-
     return (
         <>
             <div className="flex justify-center items-center" style={{ minHeight: "100vh" }}>

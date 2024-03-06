@@ -9,10 +9,11 @@ import { ToastContainer } from "react-toastify";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+export default function ListAllPlans() {   
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-export default function ListAllPlans() { 
       const [refresh,setRefresh]=useState(false)
     const [editPlanVisibility,setEditPlanVisibility]=useState(false)
     useEffect(() => { 

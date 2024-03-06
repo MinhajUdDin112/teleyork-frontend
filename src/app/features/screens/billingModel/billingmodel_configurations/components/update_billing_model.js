@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
 const validationSchema = Yup.object().shape({
-    billingModel: Yup.string().required("Inventory Type Is Required"),
+    billingModel: Yup.string().required("Billing Model Is Required"),
 })  
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
@@ -24,11 +24,11 @@ export default function UpdateBillingModel({data ,setRefresh ,setEditBillingMode
         }, 
         validationSchema, 
         onSubmit:(values)=>{    
-            const dataTosend={billingModel:formik.values.billingModel,billingModelId:formik.values.billingModelId,serviceProvider:parseLoginRes?.company}  
+            const dataTosend={billingModel:(formik.values.billingModel).trim(),billingModelId:formik.values.billingModelId,serviceProvider:parseLoginRes?.company}  
             let inventoryarray=[]
           
            Object.keys(inventoryList).map(item=>{ 
-            inventoryarray.push(item)
+            inventoryarray.push(item.trim())
            })
            dataTosend.inventory=inventoryarray
        Axios.put(`${BASE_URL}/api/billingModel/update`,dataTosend).then(()=>{
@@ -53,16 +53,22 @@ export default function UpdateBillingModel({data ,setRefresh ,setEditBillingMode
     return(   
          
          <div className="flex flex-wrap justify-content-around flex-row"> 
-          <form onSubmit={formik.handleSubmit}>
+          <form>
            <div style={{width:"70vw"}} className="    flex flex-wrap justify-content-left flex-row  "> 
            <div className="mt-0">
                         <label className="block">
                             Billing Model <span className="star">*</span>
                         </label>
-                        <InputText className="field-width mt-2" name="billingModel" value={formik.values.billingModel} onChange={formik.handleChange} />
+                        <InputText className="field-width mt-2" name="billingModel" value={formik.values.billingModel} onChange={(e)=>{ let sentence=e.target.value;
+                        formik.setFieldValue("billingModel",sentence.toUpperCase())}} />
                         {formik.touched.billingModel && formik.errors.billingModel? <p className="mt-2 ml-1 star">{formik.errors.billingModel}</p> : null}
                     </div>       
-                    <div style={{width:"30vw"}} className="field-width flex ml-5 mt-4 flex-wrap flex-row justify-content-left"> 
+                    <div style={{width:"30vw"}} className="field-width flex ml-5  flex-wrap flex-row justify-content-left"> 
+                    <label className="block w-full">
+                            Inventory Types <span style={{color:"red",fontSize:"12px"}}>(Press Enter On Field To Update)</span> <span className="star">*</span>
+                        </label>  
+                        <div className="block mt-2 ">
+                  
                      { 
                         Object.keys(inventoryList).map(item=>(  
                             
@@ -75,15 +81,19 @@ export default function UpdateBillingModel({data ,setRefresh ,setEditBillingMode
                             
                         ))
                      }   
+                     </div> 
                      
-                      <InputText name="input" value={formik.values.input} className="inline ml-4 w-10rem" onKeyDown={(e)=>{  
+                      <InputText name="input" value={formik.values.input} className="inline ml-4 mt-2 w-10rem" onKeyDown={(e)=>{  
                         let key=formik.values.input
-                        if(e.key === 'Enter'){    
+                        if(e.key === 'Enter' || e.keyCode === 13){    
                             console.log(inventoryList)
                             setinventoryList(prev=>({...prev,[key]:key}))  
                               formik.setFieldValue("input","")
                         }
-                      }} onChange={formik.handleChange}/>
+                      }} onChange={  (e)=>{ let sentence=e.target.value;
+                        formik.setFieldValue("input",sentence.toUpperCase())}} 
+                        /> 
+
                      </div>
            </div>             
            

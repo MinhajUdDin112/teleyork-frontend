@@ -106,7 +106,7 @@ export const AppTopbar = (props) => {
                 }}
             >
                 <img className="w-8rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
-                <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+               
             </Link> :undefined
 }
                    
@@ -146,7 +146,7 @@ export const AppTopbar = (props) => {
                 }}
             >
                 <img className="w-10rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
-                <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+
             </Link>:""
                 } 
 

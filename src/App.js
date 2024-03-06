@@ -1,3 +1,14 @@
+//import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
+//import Provisioningqueue from "./app/features/screens/PostPaid-order/PostOrder-Screens/Provising_Queue";
+//import Upload_Bulk from "./app/features/screens/PostPaid-order/PostOrder-Screens/Bulk_Upload";
+//import PlansConfigurations from "./app/features/screens/plans_configurations/plan_configuration";
+// importing vendors Routes
+// import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
+// import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
+//import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
+//import SmsNotification from "./app/features/screens/sms_notification/Upload";
+//import { useSelector } from "react-redux";
+//import { menuNavigation } from "./navigation";
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { useLocation } from "react-router-dom";
@@ -38,19 +49,14 @@ import HandoverEventOrder from "./app/features/screens/lifeline_orders/HandoverE
 import PendingEventOrder from "./app/features/screens/lifeline_orders/PendingEventOrder";
 import WithProofEnrollments from "./app/features/screens/lifeline_orders/WithProofEnrollments";
 import WithoutProofEnrollments from "./app/features/screens/lifeline_orders/WithoutProofEnrollments";
-// import IncompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/IncompleteEnrollments";
-// import CompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/CompleteEnrollments";
-
 import DropshipOrdersFlowPage from "./app/features/screens/inventory_management/dropship_orders/dropship_orders_flow_page";
 import RecentSearches from "./app/features/screens/customer_services/RecentSearches";
-import PaymentSearchTool from "./app/features/screens/customer_services/PaymentSearchTool";
 import AgentStoreLocator from "./app/features/screens/customer_services/AgentStoreLocator";
 import DeactivatEsn from "./app/features/screens/customer_services/DeactivatEsn";
 import EligibilityProofUpload from "./app/features/screens/customer_services/EligibilityProofUpload";
 import DealerWallet from "./app/features/screens/customer_services/DealerWallet";
 import PurchaseHistory from "./app/features/screens/customer_services/PurchaseHistory";
 import CustomerHistory from "./app/features/screens/customer_services/CustomerHistory";
-import SmsNotification from "./app/features/screens/sms_notification/Upload";
 import Upload from "./app/features/screens/sms_notification/Upload";
 import Sent from "./app/features/screens/sms_notification/Sent";
 import Draft from "./app/features/screens/sms_notification/Draft";
@@ -60,14 +66,12 @@ import Address from "./app/features/screens/self_enrollment/Address";
 import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
 import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
 import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
-import { useSelector } from "react-redux";
 import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
 import ShowSentAll from "./app/features/screens/sms_notification/ShowSentAll";
 import Dashboard from "./app/features/screens/dashboard/Dashboard";
 import LoginScreen from "./app/features/screens/auth/login_screen";
-import { menuNavigation } from "./navigation";
 import CreateRole from "./app/features/screens/roles_and_permissions/CreateRole";
 import CreateUser from "./app/features/screens/user_management/CreateUser";
 import ManageUser from "./app/features/screens/user_management/ManageUser";
@@ -96,7 +100,6 @@ import CustomerUsage from "./app/features/screens/customer_services/CustomerUsag
 import PrepaidInCompleteEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/incomplete_enrollments.js/incomplete";
 import InvenotorySearch from "./app/features/screens/search_customer/advance_search/inventory_search/inventory_search";
 import PrepaidAllEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_enrollments.js/all_enrollment";
-//import PaymentScreen from "./app/features/screens/customer_services/components/PaymentScreen";
 import Post_service_availbilty from "./app/features/screens/PostPaid-order/Pages/Post_Service_availbilty";
 import Post_enrollment_Flow from "./app/features/screens/PostPaid-order/Pages/post_enrollment_flow";
 import Completed_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Completed_enrollment";
@@ -104,21 +107,18 @@ import All_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Scr
 import Incompleted_Enrollment from "./app/features/screens/PostPaid-order/PostOrder-Screens/Incomplete_ENrollment";
 import Rejected_Enrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Rejected_Enrollment";
 import ApprovedEnrollments from "./app/features/screens/PostPaid-order/PostOrder-Screens/Approved_Enrollment";
-import Provisioningqueue from "./app/features/screens/PostPaid-order/PostOrder-Screens/Provising_Queue";
-import Upload_Bulk from "./app/features/screens/PostPaid-order/PostOrder-Screens/Bulk_Upload";
 import PostPersonalInfo from "./app/features/screens/PostPaid-order/PersonalInfo_com/PersonalInfo";
 import Post_Dispatch_Insight from "./app/features/screens/PostPaid-order/PostOrder-Screens/Post_Dispatch_Insights";
 import PrepaidRejectedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/rejected_enrollment/rejected_enrollment";
 import PrepaidApproved_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/approved_enrollment/approved_enrollment";
-import PlansConfigurations from "./app/features/screens/plans_configurations/plan_configuration";
 import ListAllPlans from "./app/features/screens/plans_configurations/plan_list";
 import PrepaidEvaluatedEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/evaluated_enrollments/Evaluated_Enrollments";
-// importing vendors Routes
 import Manage_Vendors from "./app/features/screens/user_management/ManageVendors/Manage_Vendors";
 import Add_Vendors from "./app/features/screens/user_management/ManageVendors/components/Add_Vendors";
 import Update_Vendors from "./app/features/screens/user_management/ManageVendors/components/Update_Vendors";
 const App = () => {
-    // cleanLocalStorage()
+    // cleanLocalStorage() 
+    const [refreshApp,setRefreshApp]=useState(false)
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
     const [dynamicMenu, setDynamicMenu] = useState([]);
@@ -141,10 +141,8 @@ const App = () => {
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();
-    PrimeReact.ripple = true;
     let menuClick = false;
     let mobileTopbarMenuClick = false;
-    const { user } = useSelector((state) => state.login);
     //get selected id from local storage
     const selectedid = localStorage.getItem("selectedId");
     const parseselectedid = JSON.parse(selectedid);
@@ -164,7 +162,6 @@ const App = () => {
         setInputStyle(inputStyle);
     };
     const onRipple = (e) => {
-        PrimeReact.ripple = e.value;
         setRipple(e.value);
     };
     const onLayoutModeChange = (mode) => {
@@ -386,13 +383,10 @@ const App = () => {
                                             {/* <Route path="/enrollment" element={isPermitted("/enrollment") ? <EnrollmentFlowPage /> : <Dashboard />} /> */}
                                             <Route path="/postpaid-evaluatedenrollments" element={isPermitted("/postpaid-evaluatedenrollments") ? <PostpaidEvaluatedEnrollments /> : <Dashboard />} />
                                             <Route path="/prepaid-evaluatedenrollments" element={isPermitted("/prepaid-evaluatedenrollments") ? <PrepaidEvaluatedEnrollments /> : <Dashboard />} />
-
                                             <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                             <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                             <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
-
                                             {parseselectedid ? <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> : <Route path="/invoice" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
-
                                             <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
                                             <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
                                             <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
@@ -418,17 +412,12 @@ const App = () => {
                                             <Route path="/orderhistory" element={isPermitted("/orderhistory") ? <OrderHistory /> : <Dashboard />} />
                                             <Route path="/viewfile" element={isPermitted("/viewfile") ? <ViewFiles /> : <Dashboard />} />
                                             <Route path="/prepaid-allenrollment" element={isPermitted("/prepaid-allenrollment") ? <PrepaidAllEnrollments /> : <Dashboard />} />
-
                                             <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                             <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
                                             <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
                                             <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue") ? <Provisioning_queue /> : <Dashboard />} />
-
                                             <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments") ? <Approved_Enrollments /> : <Dashboard />} />
-                                            <Route path="/billing-model-configuration" element={<BillingModelConfigurations/>}/>
-                                            {/* <Route path="/draftall/:id" element={isPermitted("/draftall") ? <ShowDraftAll /> : <Dashboard />} />
-                                <Route path="/sentall/:id" element={isPermitted("/sentall") ? <ShowSentAll /> : <Dashboard />} /> */}
-
+                                            <Route path="/billing-model-configuration" element={<BillingModelConfigurations />} />
                                             <Route path="/draftall/:id" element={<ShowDraftAll />} />
                                             <Route path="/sentall/:id" element={<ShowSentAll />} />
                                             <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
@@ -437,30 +426,20 @@ const App = () => {
                                             <Route path="/selfeligibile" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
                                             <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
                                             <Route path="/resumeapplication" element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
-
                                             <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
                                             <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                             <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
                                             <Route path="/manage-user" element={isPermitted("/manage-user") ? <ManageUser /> : <Dashboard />} />
-                                            {/* <Route path="/create-user" element={isPermitted("/create-user") ? <CreateUser /> : <Dashboard />} /> */}
                                             <Route path="/create-user" element={<CreateUser />} />
                                             <Route path="/edit-user" element={isPermitted("/edit-user") ? <EditUser /> : <Dashboard />} />
                                             <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />
                                             <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
-
-                                            {/* handling Vendor Route */}
                                             <Route path="/manage-vendors" element={isPermitted("/manage-vendors") ? <Manage_Vendors /> : <Dashboard />} />
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
-
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                             {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
-
-                                            {/* <Route exact path="/customer-profile" element={<CustomerProfile />} /> */}
-
-                                            <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
-
-                                            {/* PostPaid Order Route */}
+                                             <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                             <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
                                             <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />
                                             <Route exact path="postpaid-allenrollment" element={isPermitted("/postpaid-allenrollment") ? <All_Enrollments /> : <Dashboard />} />
@@ -473,21 +452,17 @@ const App = () => {
                                     ) : undefined}
                                 </>
                             )}
-                            {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} /> */}
                         </div>
-
                         <AppFooter layoutColorMode={layoutColorMode} />
                     </div>
-
                     <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
-
                     <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
-                        <div className="layout-mask p-component-overlay"></div>
+                    <div className="layout-mask p-component-overlay"></div>
                     </CSSTransition>
                 </div>
             ) : (
                 <Routes>
-                    <Route path="/login" element={<LoginScreen />} />
+                    <Route path="/login" element={<LoginScreen setRefreshApp={setRefreshApp} />} />
                     <Route path="/selfenrollment" element={<VerifyZip />} />
                     <Route path="/personalinfo" element={<PersonalInfo />} />
                     <Route path="/selfaddress" element={<Address />} />
