@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
 const validationSchema = Yup.object().shape({
-    billingModel: Yup.string().required("Inventory Type Is Required"),
+    billingModel: Yup.string().required("Billing Model Is Required"),
 })  
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
