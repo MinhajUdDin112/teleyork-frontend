@@ -49,7 +49,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                     {companyNameToCapital.includes("ZISFONE") ? (
                         <div className="ml-4">
                             <img className="mb-0  pt-4" src="/zisfonelogo.png" height="50" width="170" />
-                            <h6 className="mt-0">170 Old Country Road, Suite 303, Mineola, NY, 11501</h6>
+                            <h6 className="mt-0">170 Old Country Road, Suite 303, Mineola, NY 11501</h6>
                         </div>
                     ) : (
                         <div className="ml-4">
@@ -99,28 +99,19 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                                 <p>Billing Period</p>
                                 <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} `}</p>
                             </div>
-                            {userDetails && userDetails?.paymentMethod == "Card" ? (
+                          
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Amount Paid</p>
-                                    <p>${invoiceData?.amountPaid}</p>
+                                    <p>${parseFloat(invoiceData?.amountPaid).toFixed(2)}</p>
                                 </div>
-                            ) : (
-                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Amount Paid</p>
-                                    <p>${invoiceData?.amountPaid}</p>
-                                </div>
-                            )}
-                            {userDetails && userDetails?.paymentMethod == "Card" ? (
-                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Total Amount Due</p>
-                                    <p>${invoiceData?.netPrice}</p>
-                                </div>
-                            ) : (
-                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Total Amount Due</p>
-                                    <p>${invoiceData?.netPrice}</p>
-                                </div>
-                            )}
+                           
+                            
+                            <div className="pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+    <p>Total Amount Due</p>
+    <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+</div>
+
+                            
 
                             <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                 <p>Due Date</p>
@@ -129,7 +120,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </div>
 
                         <p className="text-center">
-                            Please make checks payable to:<span className="company">{companyName}</span>
+                            Please make checks payable to: <span className="company">{companyName}</span>
                         </p>
 
                         <div className="remittancebottom"></div>
@@ -210,7 +201,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                     <div className="topline"></div>
                     <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                         <p>Total Amount Due</p>
-                        <p>${invoiceData?.netPrice}</p>
+                        <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
                     </div>
                 </div>
                 <div className="center-line">
