@@ -86,7 +86,12 @@ export default function BillingModelConfigurations() {
                 <UpdateBillingModel data={rowData} setRefresh={setRefresh} setEditBillingModelVisibility={setEditBillingModelVisibility} />
             </Dialog>
             <DataTable value={billingModelList} size="small" stripedRows resizableColumns emptyMessage="Billing Models Not Found" style={{ marginTop: "10px" }}>
-                <Column header="ID" field="_id" />
+                <Column header="ID" field="_id" body={(rowData)=>{  
+                    let id=(rowData._id).toUpperCase()
+                         return( 
+                             <p>{id.substring(Math.max(0, id.length - 4))}</p>
+                          )
+                }} />
                 <Column header="Billing Model" field="billingModel" />
 
                 <Column
