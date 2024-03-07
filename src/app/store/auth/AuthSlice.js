@@ -18,13 +18,15 @@ const authSlice = createSlice({
         builder.addCase(loginAction.pending, (state, action) => {
             state.loginLoading = true;
         });
-        builder.addCase(loginAction.fulfilled, (state, action) => {
+        builder.addCase(loginAction.fulfilled, (state, action) => {   
+
             state.loginData = action.payload;
             localStorage.setItem("userData", JSON.stringify(action.payload.data));
             localStorage.setItem("accessToken", JSON.stringify(action.payload.data.token));
-            localStorage.setItem("refreshToken", JSON.stringify(action.payload.data.refreshToken));
+            localStorage.setItem("refreshToken", JSON.stringify(action.payload.data.refreshToken));      
+          
             state.loginLoading = false;
-            state.loginError = null;
+            state.loginError = null; 
           
         });
         builder.addCase(loginAction.rejected, (state, action) => {

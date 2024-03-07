@@ -118,7 +118,7 @@ import Add_Vendors from "./app/features/screens/user_management/ManageVendors/co
 import Update_Vendors from "./app/features/screens/user_management/ManageVendors/components/Update_Vendors";
 const App = () => {
     // cleanLocalStorage() 
-    const [refreshApp,setRefreshApp]=useState(false)
+    const [refreshApp,setRefreshApp]=useState(false)  
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
     const [dynamicMenu, setDynamicMenu] = useState([]);
@@ -154,7 +154,8 @@ const App = () => {
             removeClass(document.body, "body-overflow-hidden");
         }
     }, [mobileMenuActive]);
-    //TOOLTIP When Change
+    //TOOLTIP When Change      
+
     useEffect(() => {
         copyTooltipRef && copyTooltipRef.current && copyTooltipRef.current.updateTargetEvents();
     }, [location]);
@@ -311,7 +312,8 @@ const App = () => {
             },
         ]);
 
-        setPermittedRoutes(permittedRoutes);
+        setPermittedRoutes(permittedRoutes);  
+
     };
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
@@ -361,7 +363,7 @@ const App = () => {
                                 )
                             ) : (
                                 <>
-                                    {permittedRoutes.length !== 0 ? (
+                                    {permittedRoutes.length  !== 0  ? (
                                         <Routes>
                                             <Route path="*" element={<NotFound />} />
                                             <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} />
