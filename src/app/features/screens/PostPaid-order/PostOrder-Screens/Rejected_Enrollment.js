@@ -30,6 +30,7 @@ const Rejected_Enrollments = () => {
     const [enrollmentIdFilterValue, setEnrollmentIdFilterValue] = useState("");
     const [createDateFilterValue, setCreatedDateFilterValue] = useState("");
     const [globalFilterValue, setGlobalFilterValue] = useState("");
+    const [allDisconnectedEnrollments, setallDisconnectedEnrollments] = useState("");
        
 
     const onGlobalFilterValueChange = (e) => {
@@ -94,30 +95,8 @@ const Rejected_Enrollments = () => {
     const location = useLocation();
     const currentPath = location?.pathname;
 
-    // const rowExpansionTemplate = (data) => {
-    //     return (
-    //         <div>
-    //             <DataTable value={[data]} stripedRows>
-    //                 <Column field="DOB" header="DOB" body={(rowData) => (rowData?.DOB ? rowData.DOB.split("T")[0] : "")} />
-    //                 <Column field="plan.name" header="Plan Name" />
-    //                 <Column field="createdBy?.name" header="Created BY" />
-    //                 <Column field="plan.price" header="Plan Price" />
-    //                 <Column field="Phonecost" header="Phone Cost" />
-    //                 <Column field="Amountpaid" header="Amount Paid by Customer" />
-    //                 <Column field="Postingdate" header="Posting Date" />
-    //                 <Column field="EsnNumber" header="ESN Number" />
-    //                 <Column field="Telephone" header="Telephone Number" />
-    //                 <Column field="Activationcall" header="Activation Call" />
-    //                 <Column field="Activationcalldatetime" header="Activation Call Date Time" />
-    //                 <Column field="status" header="Status" />
-    //                 <Column field="Handover" header="Handover Equipment" />
-    //                 <Column field="rejectedReason" header="Rejected Reason" />
-    //                 <Column field="Enrolltype" header="Enroll Type" />
-    //                 <Column field="Reviewernote" header="Reviewer Note" />
-    //             </DataTable>
-    //         </div>
-    //     );
-    // };
+    
+   
 
     const handleEnrollmentIdClick = (rowData) => {
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
@@ -184,8 +163,44 @@ const Rejected_Enrollments = () => {
             setIsLoading(false);
         }
     };
+    const getAllDisconnectedEnroll = async () => {
+        setIsLoading(true);
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/user/disconnectionList?userId=${parseLoginRes?._id}&accountType=Postpaid`);
+            if (res?.status === 200 || res?.status === 201) {
+                if (!res?.data?.data) {
+                    toast.error(res?.data?.msg);
+                } else if (res?.data?.data) {
+                    const updatedData = res?.data?.data.map((item) => ({
+                        ...item,
+                        enrollment: item.isSelfEnrollment ? "Self Enrollments" : "Enrollment",
+                        name: `${item?.firstName ? item?.firstName.toUpperCase() : ""} ${item?.lastName ? item?.lastName.toUpperCase() : ""}`,
+                        createdDate: new Date(item.createdAt)
+                            .toLocaleDateString("en-US", {
+                                month: "2-digit",
+                                day: "2-digit",
+                                year: "numeric",
+                            })
+                            .replace(/\//g, "-"), 
+                            createdFilter:DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds() ,
+                            createdTo: DateTime.fromFormat(item.createdAt, "d LLL yyyy, h:mm a", { zone: "America/New_York" }).toSeconds(),
+                      
+                    }));
+      
+                  setallDisconnectedEnrollments(updatedData);
+                }
+    
+                setIsLoading(false);
+              
+            }
+        } catch (error) {
+             toast.error( error?.response?.data?.msg);
+            setIsLoading(false);
+        }
+    };
     useEffect(() => {
         getAllEnrollments();
+        // getAllDisconnectedEnroll();
     }, []);
 
     const viewRow = async (rowData) => {
@@ -308,24 +323,9 @@ const Rejected_Enrollments = () => {
                     <h3 className=" font-bold   pl-2 mt-4"><strong>Rejected Enrollments</strong></h3>
                 </div>
             </div>
-            {/* <div className="card flex flex-column justify-content-center mx-5 border-noround">
-                <div className="flex flex-wrap mx-3 my-3">
-                    <div className="mb-3 mr-3">
-                        <p className="m-0 pb-1 text-sm font-semibold ">Date Range</p>
-                        <Calendar id="range" value={dateRange} onChange={(e) => setDateRange(e.value)} selectionMode="range" showIcon readOnlyInput style={{ width: "23rem" }} />
-                    </div>
-                    <div className="mb-3 mr-3">
-                        <p className="m-0 pb-1 text-sm font-semibold ">Search</p>
-                        <InputText value={search} onChange={(e) => setSearch(e.value)} placeholder="Search by Customer F Name, L Name, Enrollment ID" style={{ width: "23rem" }} />
-                    </div>
-                    <div className="p-1">
-                        <Button label="Search" className="mt-4 text-sm bg-green-200 border-none w-7rem" />
-                    </div>
-                </div>
-            </div> */}
-            {/* <div className="card p-3 mx-5 border-noround bg-green-200 "><p className="text-sm font-semibold">Search Result: 0</p></div> */}
+           
             <div >
-                <div className="flex justify-content-end   ">{/* <InputText className="w-15rem my-2 text-base h-2.5rem" placeholder="Keyword Search"></InputText> */}</div>
+                <div className="flex justify-content-end   "></div>
                 {isButtonLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" />: null}
 
                 <div className="">
@@ -442,6 +442,93 @@ const Rejected_Enrollments = () => {
                         >
                          <p>{reasonbody}</p>
                         </Dialog>
+            </div>
+            <div className="flex justify-content-between ">
+                <div className="">
+                    <h3 className=" font-bold   pl-2 mt-4"><strong>Disconnected Enrollments</strong></h3>
+                </div>
+            </div>
+           
+            <div >
+                <div className="flex justify-content-end   "></div>
+                {isButtonLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" />: null}
+
+                <div className="">
+                    <DataTable selectionMode={rowClick ? null : 'checkbox'} selection={selectedEnrollments} onSelectionChange={(e) => setSelectedEnrollments(e.value)} value={allDisconnectedEnrollments} filters={filters} globalFilterFields={["enrollmentId", "name"]} header={header} emptyMessage="No customers found." stripedRows resizableColumns size="small"  paginator rows={10} rowsPerPageOptions={[25, 50]} >
+                        {/* <Column expander style={{ width: "3em" }} /> */}
+                        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+               
+                        <Column
+                            header="Enrollment ID"
+                            field="enrollmentId"
+                            body={(rowData) => (
+                                <button style={{ border: "none", backgroundColor: "white", cursor: "pointer" }} onClick={() => handleEnrollmentIdClick(rowData)}>
+                                    {rowData.enrollmentId}
+                                </button>
+                            )}
+                        ></Column>
+                        <Column header="Enrollment Type" field="enrollment"></Column>
+
+                        <Column header="Name" field="name"></Column>
+                        <Column header="Address" field="address1"></Column>
+                        <Column header="City" field="city"></Column>
+                        <Column header="State" field="state"></Column>
+                        <Column header="Zip" field="zip"></Column>
+                        <Column field="contact" header="Telephone Number" />
+                        <Column
+                            field="DOB"
+                            header="DOB"
+                            body={(rowData) =>
+                                new Date(rowData.DOB)
+                                    .toLocaleDateString("en-US", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })
+                                    .replace(/\//g, "-")
+                            }
+                        />
+                        <Column  field="createdBy.name" header="Created By" />
+                        {
+                            toCapital.includes("CSR") ? "":<Column field="rejectedBy.name" header="Rejected By" />
+                        }
+                        {
+                            toCapital.includes("CSR") ? "": <Column
+                            field="Rejected At"
+                            header="Rejected At"
+                            body={(rowData) =>
+                                new Date(rowData.rejectedAt)
+                                    .toLocaleDateString("en-US", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })
+                                    .replace(/\//g, "-")
+                            }
+                        />
+                        }
+
+                        <Column field="disconnectedReason" header="Disconnected Reason"   
+                         
+                         />
+                        
+                         {/* <Column
+    field="Phase"
+    header="Phase"
+    body={(rowData) => (
+        <span>
+            {rowData.assignedToUser.map((user) => (
+                <span key={user?.department?.department}>
+                    {user?.department?.department}
+                </span>
+            ))}
+        </span>
+    )}
+/> */}
+
+     {/* <Column header="Actions" body={actionTemplate}></Column> */}
+                    </DataTable>
+                </div>
             </div>
         </div>
     );

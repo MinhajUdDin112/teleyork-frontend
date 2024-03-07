@@ -30,12 +30,10 @@ const CreateUser = () => {
         role: Yup.string().required("This field is required."),
         name: Yup.string().required("This field is required."),
         email: Yup.string().email("Invalid email format").required("This field is required."),
-        mobile: Yup.string()
-            .matches(/^\d{1,10}$/, "Maxumum 15 digits")
-            .required("This field is required."),
+       
         city: Yup.string().required("This field is required."),
         state: Yup.string().required("This field is required."),
-        address1: Yup.string().required("This field is required."),
+       
         zip: Yup.string().required("This field is required."),
         reportingTo: Yup.string().required("This field is required."),
         department: Yup.string().required("This field is required."),
@@ -48,12 +46,11 @@ const CreateUser = () => {
             role: "",
             name: "",
             email: "",
-            mobile: "",
+         
             //password: "",
             city: "",
             state: "",
-            address1: "",
-            address2: "",
+          
             zip: "",
             reportingTo: "",
             department: "",
@@ -70,10 +67,9 @@ const CreateUser = () => {
                 name: values.name,
                 email: values.email,
                 //password: values.password,
-                contact: values.mobile,
+               
                 city: values.city,
-                address1: values.address1,
-                address2: values.address2,
+              
                 zip: values.zip,
                 state: values.state,
                 repId: values.repId,
@@ -83,11 +79,13 @@ const CreateUser = () => {
             Axios.post(`${BASE_URL}/api/web/user`, data)
                 .then((response) => {
                     toast.success("successfully Added. Please Check Your Email For Password");
+                    navigate("/manage-user");
                 })
                 .catch((error) => {
-                    toast.error("Error:", error?.response?.data?.msg);
+                    toast.error( error?.response?.data?.msg);
+                   
                 });
-            navigate("/manage-user");
+           
         },
     });
 
@@ -227,13 +225,7 @@ const CreateUser = () => {
                             <Dropdown id="reportingTo" options={allReporting} value={formik.values.reportingTo} onChange={(e) => formik.setFieldValue("reportingTo", e.value)} optionLabel="name" optionValue="_id" showClear filter filterBy="name" />
                             {getFormErrorMessage("reportingTo")}
                         </div>
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Contact <span className="steric">*</span>
-                            </label>
-                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} />
-                            {getFormErrorMessage("mobile")}
-                        </div>
+                      
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">
                                 Email <span className="steric">*</span>
@@ -241,17 +233,7 @@ const CreateUser = () => {
                             <InputText id="email" value={formik.values.email} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
                             {getFormErrorMessage("email")}
                         </div>
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Address1 <span className="steric">*</span>
-                            </label>
-                            <InputText id="address1" value={formik.values.address1} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
-                            {getFormErrorMessage("address1")}
-                        </div>
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Address2</label>
-                            <InputText id="address2" value={formik.values.address2} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
-                        </div>
+                    
 
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">

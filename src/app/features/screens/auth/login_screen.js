@@ -1,21 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { NavLink } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector, useStore } from "react-redux";
-import { loginAction } from "../../../store/auth/AuthAction";
-import { useState } from "react";
+import * as Yup from "yup"; 
 import Axios from "axios";
-import { toast } from "react-toastify";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function LoginScreen() {
-    const dispatch = useDispatch();
-    const [liveURL, setLiveURL] = useState();
-    const error = useSelector((state) => state.login);
-    const errormsg = error?.loginError;
-    const loading = error?.loginLoading;
+export default function LoginScreen({ setRefreshApp }) {
+  
+    const [loading,setLoading]=useState(false)       
+    const [errormsg,setErrorMsg]=useState(null)
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -25,12 +19,29 @@ export default function LoginScreen() {
             email: Yup.string().email("Invalid email").required("Email is required"),
             password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
         }),
-        onSubmit: (values) => {
-            dispatch(loginAction(values));
+        onSubmit: async (values) => {  
+              setLoading(prev=>!prev)
+         Axios.post(`${BASE_URL}/api/web/user/login`, formik.values).then((response)=>{ 
+            const allowdPerms = response?.data?.data?.permissions
+            localStorage.setItem("userData", JSON.stringify(response?.data?.data));
+            localStorage.setItem("accessToken", JSON.stringify(response?.data?.data?.token));
+            localStorage.setItem("refreshToken", JSON.stringify(response?.data?.refreshToken));      
+          
+            localStorage.setItem("permissions", JSON.stringify(allowdPerms))
+            setRefreshApp((prev) => !prev);
+         }).catch(err=>{ 
+          setErrorMsg(err.response?.data?.msg)  
+          setLoading(prev=>!prev)
+         })
+
         },
+<<<<<<< HEAD
     });
 
     //get url
+=======
+    }); 
+>>>>>>> 8b5be76b066b0e11fa3fe91e006907b35461bee0
     useEffect(() => {
         var currentURL;
         var modifiedURL;
@@ -50,7 +61,10 @@ export default function LoginScreen() {
         };
         sendURl();
     }, []);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8b5be76b066b0e11fa3fe91e006907b35461bee0
     return (
         <>
             <div className="flex justify-center items-center" style={{ minHeight: "100vh" }}>

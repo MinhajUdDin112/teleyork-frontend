@@ -124,7 +124,9 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
         formData.append("serviceProvider", parseLoginRes?.company);
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
-        formData.append("agentType", formik.values.agentType);
+        formData.append("agentType", formik.values.agentType); 
+        
+        formData.append("billingModel", formik.values.billingModel); 
         formData.append("AgentName", formik.values.AgentName);
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
@@ -298,7 +300,7 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
                                 &nbsp; (Sample file)
                             </p>
                         ) : (
-                            <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold">
+                            <a download={true} href="/images/Sample File(Sim Bulk Upload).xlsx" className="font-bold">
                                 {" "}
                                 &nbsp; (Sample file)
                             </a>

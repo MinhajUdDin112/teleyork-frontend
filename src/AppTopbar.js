@@ -91,11 +91,26 @@ export const AppTopbar = (props) => {
                     props.setSearchByValueClick(false);
                 }}
             >
-                <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
+              { capitalCompanyName.includes("IJ") ? <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                     <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
-                </Link>
-            </div>
+                </Link> :capitalCompanyName.includes("ZISFONE")?
+                <Link
+                to="/"
+                className="layout-topbar-logo layoutzisfone flex flex-wrap  flex-row justify-content-center"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    props.setSearchBy(null);
+
+                    props.setSearchByValueClick(false);
+                }}
+            >
+                <img className="w-8rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
+               
+            </Link> :undefined
+}
+                   
+            </div>   
             <div
                 className="layout-topbar"
                 onClick={(e) => {
@@ -103,8 +118,8 @@ export const AppTopbar = (props) => {
                     e.stopPropagation();
                 }}
             >
-                {
-                    capitalCompanyName.includes("IJ") ?  
+                
+                  {  capitalCompanyName.includes("IJ") ?  
                     <Link
                     to="/"
                     className="layout-topbar-logo insidetopbarlogo"
@@ -131,9 +146,9 @@ export const AppTopbar = (props) => {
                 }}
             >
                 <img className="w-10rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
-                
+
             </Link>:""
-                }
+                } 
 
              
 

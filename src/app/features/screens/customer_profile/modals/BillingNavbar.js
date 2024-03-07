@@ -30,14 +30,20 @@ const navigate = useNavigate();
     getCustomerProfileData();
   }, [changeCustomerStatusDialog]);
 
-  function handleWalletClick() {
-    console.log("id is",parseselectedid)
+  function openPaymentScreen() {
+   
     navigate("/invoice", { state: { selectedId: parseselectedid} });
   }
   const goToProfile =()=>{
    
     navigate("/customer-profile", { state: { selectedId: parseselectedid } });
 
+  }
+  const handleWalletClick =()=>{
+    setOpenDialogeForWallet(true)
+    console.log(
+      "Here"
+    )
   }
   var items;
   if (accountType === null) {
@@ -93,7 +99,7 @@ const navigate = useNavigate();
             </g>
           </svg>
         ),
-        command: () => handleWalletClick(),
+        command: () => openPaymentScreen(),
       },
       {
         label:
@@ -107,6 +113,31 @@ const navigate = useNavigate();
         icon: "pi-circle-fill",
         className: "account-type-label",
       },
+      
+    {
+        label:`Wallet: ${cpData?.wallet !== undefined ? cpData?.wallet : "0"}`,
+        icon: (
+          <svg
+            className="custom-icon-plus"
+            viewBox="0 0 8 8"
+            id="meteor-icon-kit__regular-plus-xxs"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M3 3V0.83333C3 0.3731 3.4477 0 4 0C4.5523 0 5 0.3731 5 0.83333V3H7.1667C7.6269 3 8 3.4477 8 4C8 4.5523 7.6269 5 7.1667 5H5V7.1667C5 7.6269 4.5523 8 4 8C3.4477 8 3 7.6269 3 7.1667V5H0.83333C0.3731 5 0 4.5523 0 4C0 3.4477 0.3731 3 0.83333 3H3z"
+                fill="#758CA3"
+              ></path>
+            </g>
+          </svg>
+        ),
+        command: () => handleWalletClick(),
+      }
     ];
   }
   
@@ -116,10 +147,10 @@ const navigate = useNavigate();
       <Dialog
         header={"Add Wallet"}
         visible={openDialogeForWallet}
-        style={{ width: "60vw" }}
+        style={{ width: "50vw" }}
         onHide={() => setOpenDialogeForWallet(false)}
       >
-        <DialogeForWallet setOpenDialogeForWallet={setOpenDialogeForWallet} />
+        <DialogeForWallet userDetails={cpData} setOpenDialogeForWallet={setOpenDialogeForWallet} />
       </Dialog>
       <Menubar
         model={items}

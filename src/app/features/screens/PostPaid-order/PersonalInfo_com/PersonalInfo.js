@@ -113,6 +113,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             isACP: acp,
             salesChannel: "",
             maidenMotherName:"",
+            alternateContact:""
         },
         onSubmit: async (values, actions) => {
             if (selectedDay === null || selectedYear === null || selectedMonth === null) {
@@ -150,7 +151,8 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     BenifitDOB: formik.values.BenifitDOB,
                     isACP: acp, 
                     salesChannel:formik.values.salesChannel,
-                    maidenMotherName:formik.values.maidenMotherName
+                    maidenMotherName:formik.values.maidenMotherName,
+                    alternateContact:formik.values.alternateContact
                 };
 
                 setIsLoading(true);
@@ -189,24 +191,8 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         seteSim(e.target.value);
     };
 
-    const handleRadio = (value) => {
-        setIsSelfReceive(value === "myself");
-        if (value === "somebody") {
-            setIsHouseHold(true);
-        } else {
-            setIsHouseHold(false);
-        }
-    };
-
-    const handleACP = (e) => {
-        if (formik.values.isACP == true) {
-            formik.values.isACP = false;
-            setAcp(false);
-        } else {
-            formik.values.isACP = true;
-            setAcp(true);
-        }
-    };
+   
+    
     const options = [
         { label: "Select", value: "" },
         { label: "JR.", value: "JR." },
@@ -356,27 +342,53 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
 
     useEffect(() => {
         const fetchData = async () => {
+          
             if (parsezipResponse && !basicResponse) {
-                if (formik.values.contact.length > 9) {
-                    const data = {
-                        contact: formik.values.contact,
-                        accountType:"Postpaid"
-                    };
-
-                    try {
-                        const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-
-                        setIsDuplicate(false);
-                    } catch (error) {
-                        toast.error(error?.response?.data?.msg);
-                        setIsDuplicate(true);
-                    }
+                if (formik.values.contact.length > 9 ) {           
+            const data = {
+                contact: formik.values.contact,
+                accountType:"Postpaid",
+                alternateContact:""
+            };
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                setIsDuplicate(false);
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+            setIsDuplicate(true);        
+        }
+                  
                 }
             }
         };
 
         fetchData();
-    }, [formik.values.contact]);
+    }, [formik.values.contact  ]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+          
+            if (parsezipResponse && !basicResponse) {
+                if (formik.values.alternateContact.length > 9 ) {           
+            const data = {
+                contact: "",
+                accountType:"Postpaid",
+                alternateContact:formik.values.alternateContact
+            };
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                setIsDuplicate(false);
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+            setIsDuplicate(true);        
+        }
+                  
+                }
+            }
+        };
+
+        fetchData();
+    }, [formik.values.alternateContact  ]);
     useEffect(() => {
         const dobString = parsebasicResponse?.data?.DOB;
 
@@ -407,7 +419,8 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
             formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
             formik.setFieldValue("salesChannel",parsebasicResponse?.data?.salesChannel)
-            formik.setFieldValue("maidenMotherName",parsebasicResponse?.data?.maidenMotherName)
+            formik.setFieldValue("maidenMotherName",parsebasicResponse?.data?.maidenMotherName);
+            formik.setFieldValue("alternateContact",parsebasicResponse?.data?.alternateContact)
             //chnage state
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
@@ -571,6 +584,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             <Dropdown
                                 placeholder="Month"
                                 value={formik.values.month}
+                                filter
                                 id="month"
                                 onChange={(e) => {
                                     if (selectedYear !== null && selectedDay !== null) {
@@ -605,12 +619,14 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 }}
                                 options={dayoption}
                                 className={classNames({ "p-invalid": dayerror }, "input_text md-col-3 col-4")}
+                                filter
                             />
                             <Dropdown
                                 placeholder="Year"
                                 className={classNames({ "p-invalid": yearerror }, "input_text md-col-3 col-4")}
                                 value={formik.values.year}
                                 name="year"
+                                filter
                                 itemTemplate={customItemTemplate}
                                 onChange={(e) => {
                                     if (selectedMonth !== null && selectedDay !== null) {
@@ -699,6 +715,23 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             pattern="^(?!1|0|800|888|877|866|855|844|833).*$"
                         />
                         {getFormErrorMessage("contact")}
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label" htmlFor="contact">
+                           Alternate Contact 
+                        </label>
+
+                        <InputText
+                            onChange={formik.handleChange}
+                            id="alternateContact"
+                            value={formik.values.alternateContact}
+                            onBlur={formik.handleBlur}
+                            
+                            minLength={10}
+                            maxLength={10}
+                            keyfilter={/^[0-9]*$/}
+                            pattern="^(?!1|0|800|888|877|866|855|844|833).*$"
+                        />
                     </div>
                 </div>
             </form>

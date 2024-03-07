@@ -88,8 +88,10 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-            SimNumber: Yup.string().required("SIM Number Is require").min(18, "Sim Number must be at least  18 characters").max(19, "Sim Number must be at most 19 characters"),
-
+            SimNumber:  Yup.string()
+            .required("ESN is required")
+            .matches(/^\d+$/, 'ESN must contain only digits')
+            .length(19, "ESN must be exactly 19 digits"),
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),

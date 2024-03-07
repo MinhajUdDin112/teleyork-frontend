@@ -136,7 +136,8 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
         formData.append("agentType", formik.values.agentType);
-        formData.append("AgentName", formik.values.AgentName);
+        formData.append("AgentName", formik.values.AgentName);       
+        formData.append("billingModel", formik.values.billingModel); 
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
         // Perform API call or other actions with the formData
@@ -306,7 +307,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                                 &nbsp; (Sample file)
                             </p>
                         ) : (
-                            <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold">
+                            <a download={true} href="/images/Sample File(Sim Bulk Upload).xlsx" className="font-bold">
                                 {" "}
                                 &nbsp; (Sample file)
                             </a>

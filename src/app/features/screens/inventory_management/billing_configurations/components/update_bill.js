@@ -7,35 +7,38 @@ import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
 import { Dialog } from "primereact/dialog";
-import AddNewFeature from "./components/add_newfeature";
+import "./billingmodel_configurations/css/updatebill.css";
+import AddNewFeature from "./add_newfeature";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh }) {
+export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh, optionsForInventoryType }) {
     console.log(rowData);
     //const toast=Toast
+    const [currentBillingId, setCurrentBillingId] = useState("");
     const [newDiscount, setNewDiscount] = useState(false);
     const [newFeature, setNewFeature] = useState(false);
     const [allPlan, setAllPlan] = useState([]);
     const [allDiscount, setAllDiscount] = useState([]);
-    const [allFeature, setAllFeature] = useState([]); 
-    let additionalFeature=[]
-     for(let i=0;i<rowData.additionalFeature.length;i++){ 
-   additionalFeature.push(rowData.additionalFeature[i]._id)
-     }     
-     let oneTimeCharge=[] 
-     for(let i=0;i<rowData.monthlyCharge.length;i++){ 
-        oneTimeCharge.push(rowData.monthlyCharge[i]._id)
-          } 
-     let selecteddiscount=[] 
-     for(let i=0;i<rowData.selectdiscount.length;i++){ 
-        selecteddiscount.push(rowData.selectdiscount[i]._id)
-          } 
+    const [allFeature, setAllFeature] = useState([]);
+    const [inventoryTypeOptions, setInventoryTypeOptions] = useState([]);
+    let additionalFeature = [];
+    for (let i = 0; i < rowData.additionalFeature.length; i++) {
+        additionalFeature.push(rowData.additionalFeature[i]._id);
+    }
+    let oneTimeCharge = [];
+    for (let i = 0; i < rowData.monthlyCharge.length; i++) {
+        oneTimeCharge.push(rowData.monthlyCharge[i]._id);
+    }
+    let selecteddiscount = [];
+    for (let i = 0; i < rowData.selectdiscount.length; i++) {
+        selecteddiscount.push(rowData.selectdiscount[i]._id);
+    }
     const formik = useFormik({
-        // validationSchema: validationSchema,   
+        // validationSchema: validationSchema,
         initialValues: {
             billingmodel: rowData.billingmodel,
             oneTimeCharge: rowData.oneTimeCharge,
-            monthlyCharge: oneTimeCharge, 
-            inventoryType:rowData.inventoryType,
+            monthlyCharge: oneTimeCharge,
+            inventoryType: rowData.inventoryType,
             dueDate: rowData.dueDate,
             paymentMethod: rowData.paymentMethod,
             selectdiscount: selecteddiscount,
@@ -71,7 +74,6 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                 applyLateFee: formik.values.applyLateFee,
                 subsequentBillCreateDate: formik.values.subsequentBillCreateDate,
             };
-            console.log("data to send is", dataToSend);
 
             try {
                 const response = await Axios.put(`${BASE_URL}/api/web/billing/billconfig?id=${rowData._id}`, dataToSend);
@@ -108,11 +110,6 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     };
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const optionsForInventoryType = [
-        { label: "Select Inventory Type", value: "" },
-        { label: "Sim Card", value: "SimCard" },
-        { label: "Wireless Device", value: "Wireless Device" },
-    ];
 
     const optionsForPayment = [
         { label: "Select Payment Method", value: "" },
@@ -123,16 +120,11 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
         { label: "Skip Payment", value: "Skip Payment" },
     ];
     const optionsForCreation = [
-        { label: "On Activation", value: "On Activation" },
-        { label: "After QA Approval ", value: "On QA Approve" },
+   
+            { label: "On Activation", value: "On Activation" },
+            { label: "After QA Approval ", value: "On QA Approval" },
+       
     ];
-
-    function showDiscount() {
-        setNewDiscount(true);
-    }
-    function showFeature() {
-        setNewFeature(true);
-    }
 
     const getDiscount = async () => {
         try {
@@ -153,43 +145,83 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
 
     useEffect(() => {
         getDiscount();
-
+        getBillingModelList();
         getFeature();
-    }, []); 
-    useEffect(()=>{  
-        if(formik.values.inventoryType !== ""){
-       Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res)=>{ 
-            
-           setAllPlan(res?.data?.data || []);
-        }) 
-       }
-   },[formik.values.inventoryType])
+    }, []);
+    useEffect(() => {
+        if (formik.values.inventoryType !== "") {
+            Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res) => {
+                setAllPlan(res?.data?.data || []);
+            });
+        }
+    }, [formik.values.inventoryType]);
+    useEffect(() => {
+        async function fetchData() {
+            if (formik.values.billingmodel !== "") {
+                try {
+                    const res = await Axios.get(`${BASE_URL}/api/billingModel/getInventoryByBillModel?BillModelId=${currentBillingId}`);
+                    let obj = [];
+                    let data = res?.data?.data;
+                    data.forEach((item) => {
+                        let obj2 = {};
+                        obj2.inventoryType = item;
+                        obj.push(obj2);
+                    });
+                    setInventoryTypeOptions(obj);
+                } catch (error) {
+                    //toast.error(error?.response?.data?.msg);
+                }
+            }
+        }
+        fetchData();
+    }, [currentBillingId]);
+    const getBillingModelList = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`);
+            // setBillingModelOptions(res?.data?.data || [])
+            let billingmodel = res?.data?.data;
+            let id;
+            billingmodel.map((item) => {
+                if (item.billingModel === formik.values.billingmodel) {
+                    id = item._id;
+                }
+            });
+            setCurrentBillingId(id);
+        } catch (error) {
+            toast.current.show({ severity: "error", summary: "Plan Updation", detail: error?.response?.data?.msg });
+        }
+    };
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className=" flex flex-wrap flex-row justify-content-around">
-                <div className="field-width mt-3">
-                    <label className="field_label text-md">One Time Charges</label>
-                    <InputText id="oneTimeCharge" className="w-full" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                </div> 
+                <div className="field-width mt-3 ">
+                    <label className="field_label text-md  mb-2">One Time Charges</label>
+                    <div className="latefeecharge flex flex-wrap flex-row justify-content-left align-items-center ">
+                        <InputText id="oneTimeCharge" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <p>$</p>
+                    </div>
+                </div>
                 <div className="mt-3 field-width ">
-                                <label className="field_label mb-2 text-md">Inventory Type</label>
-                                <Dropdown
-                                    className="w-full"
-                                    id="inventoryType"
-                                    options={optionsForInventoryType}
-                                    value={formik.values.inventoryType}
-                                    onChange={(e) => {
-                                        formik.setFieldValue("inventoryType", e.value);
-                                        formik.handleChange(e);
-                                    }}
-                                    onBlur={formik.handleBlur}
-                                />
-                                {formik.touched.inventoryType && formik.errors.inventoryType ? (
-                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
-                                        {formik.errors.inventoryType}
-                                    </p>
-                                ) : null}
-                            </div>
+                    <label className="field_label mb-2 text-md">Inventory Type</label>
+                    <Dropdown
+                        className="w-full"
+                        id="inventoryType"
+                        options={inventoryTypeOptions}
+                        optionLabel="inventoryType"
+                        optionValue="inventoryType"
+                        value={formik.values.inventoryType}
+                        onChange={(e) => {
+                            formik.setFieldValue("inventoryType", e.value);
+                            formik.handleChange(e);
+                        }}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.inventoryType && formik.errors.inventoryType ? (
+                        <p className="mt-2 ml-2" style={{ color: "red" }}>
+                            {formik.errors.inventoryType}
+                        </p>
+                    ) : null}
+                </div>
 
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">Monthly Charges</label>
@@ -221,20 +253,32 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                     ) : null}
                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Subsequent Bill Create Date </label>
-                    <InputText id="subsequentBillCreateDate" className="w-full" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                    <label className="field_label text-md mb-2">Subsequent Bill Create Date </label>
+                    <div className="subsequentbillcreatedate flex flex-wrap flex-row justify-content-center align-items-center ">
+                        <InputText id="subsequentBillCreateDate" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <p>Days From the First Bill Create Date</p>
+                    </div>
                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Due Date</label>
-                    <InputText id="dueDate" placeholder="No of days From Bill Create Date" className="w-full" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                    <label className="field_label text-md mb-2">Due Date</label>
+                    <div className="subsequentbillcreatedate flex flex-wrap flex-row justify-content-center align-items-center ">
+                        <InputText id="dueDate" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <p>Days From the Bill Create Date</p>
+                    </div>
                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Late Fee Charge</label>
-                    <InputText id="latefeeCharge" value={formik.values.latefeeCharge} className="w-full" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                    <label className="field_label text-md mb-2">Late Fee Charge</label>
+                    <div className="latefeecharge flex flex-wrap flex-row justify-content-left align-items-center ">
+                        <InputText id="latefeeCharge" value={formik.values.latefeeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <p>$</p>
+                    </div>
                 </div>
                 <div className="field-width mt-3">
-                    <label className="field_label text-md">Apply Late Fee </label>
-                    <InputText id="applyLateFee" placeholder="No of Days from Due Date" className="w-full" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                    <label className="field_label text-md mb-2">Apply Late Fee </label>
+                    <div className="subsequentbillcreatedate flex flex-wrap flex-row justify-content-center align-items-center ">
+                        <InputText id="applyLateFee" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <p>Days After the Due Date</p>
+                    </div>
                 </div>
 
                 <div className="mt-3 field-width  ">
@@ -261,7 +305,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">
                         Select Discount
-                       {/* <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
+                        {/* <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
                             Add Discount
                         </span>{" "} */}
                     </label>
@@ -278,8 +322,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                 </div>
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">
-                        Additional Feature 
-                       {/* <span onClick={showFeature} style={{ color: "blue", cursor: "pointer" }}>
+                        Additional Feature
+                        {/* <span onClick={showFeature} style={{ color: "blue", cursor: "pointer" }}>
                             Add Feature
                         </span>{" "} 
                          */}

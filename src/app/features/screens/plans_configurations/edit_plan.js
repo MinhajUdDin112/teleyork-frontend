@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import React,{useEffect} from "react";
 import "./css/plan_configuration.css";
 import { useFormik } from "formik"; 
-import * as Yup from "yup"; 
+import * as Yup from "yup";  
 import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";  
@@ -11,8 +11,7 @@ import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const loginRes = localStorage.getItem("userData");
-const parseLoginRes = JSON.parse(loginRes);
+
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name Is Required"),
     description: Yup.string().required("Description Is Required"),
@@ -69,32 +68,19 @@ const durationUnitOptions = [
 
 export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {  
     const toast = useRef(null);      
-  
+    
+    const loginRes = localStorage.getItem("userData");
+const parseLoginRes = JSON.parse(loginRes);
+    const [currentBillingId,setCurrentBillingId]=useState("")  
     const [inventoryTypeOptions,setInventoryTypeOptions]=useState([]) 
     const [billingModelOptions,setBillingModelOptions]=useState([])   
-    const getInventoryList=async () => { 
-        try{ 
-           const res=await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`)
-              setInventoryTypeOptions(res?.data?.data || [])
-             } 
-        catch(error){ 
-             toast.error(error?.response?.data?.msg);
-        }
-    }        
-    const getBillingModelList=async () => { 
-        try{ 
-           const res=await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
-           setBillingModelOptions(res?.data?.data || [])
-             } 
-        catch(error){ 
-          
-            toast.error(error?.response?.data?.msg);
-        }
-    }    
+      
+ 
     useEffect(()=>{ 
-       getInventoryList()   
+       //getInventoryList()   
        getBillingModelList()  
-    },[])
+    },[])    
+
     const formik = useFormik({
         initialValues: {
             name: data.name,
@@ -128,14 +114,76 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
                     }, 1000);
                 })
                 .catch((err) => {
-                    toast.current.show({ severity: "error", summary: "Plan Updation", detail: "Plan Updation Failed" });
+                    toast.current.show({ severity: "error", summary: "Plan Updation", detail: err?.response?.data?.msg });
                 });
         },
-    });
+    });     
+    const getBillingModelList=async () => { 
+        try{ 
+           const res=await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
+           setBillingModelOptions(res?.data?.data || [])    
+           let billingmodel=res?.data?.data   
+           let id;
+           billingmodel.map((item) => {
+               if (item.billingModel === formik.values.type) {
+                   id = item._id;
+               }
+           });
+           setCurrentBillingId(id);
+             } 
+        catch(error){ 
+            toast.current.show({ severity: "error", summary: "Plan Updation", detail: error?.response?.data?.msg });
+           
+        }
+    }    
+    useEffect( ()=>{           
+        async function fetchData(){
+        if(formik.values.type !== ""){
+            try {
+                const res = await Axios.get(`${BASE_URL}/api/billingModel/getInventoryByBillModel?BillModelId=${currentBillingId}`);
+                let obj = [];
+                let data = res?.data?.data;
+                data.forEach((item) => {
+                    let obj2 = {};
+                    obj2.inventoryType = item;
+                    obj.push(obj2);
+                });
+                setInventoryTypeOptions(obj);
+            } catch (error) {
+                //toast.error(error?.response?.data?.msg);
+            } 
+        } 
+    } 
+    fetchData()
+     },[currentBillingId])
     return (
         <Card className="pt-0">
             <div>
                 <form onSubmit={formik.handleSubmit} className="flex flex-wrap  flex-row justify-content-around">
+                <div className="mt-2">
+                        <label className="block">
+                          Billing Model <span className="star">*</span>
+                        </label>
+                        <Dropdown placeholder="Plan  Type" options={billingModelOptions} className="field-width mt-2" name="type" optionLabel="billingModel" optionValue="billingModel" value={formik.values.type} onChange={(e) => {
+                                        console.log("E is ", e);
+                                        formik.setFieldValue("type", e.value);
+                                        let id;
+                                        billingModelOptions.map((item) => {
+                                            if (item.billingModel === e.value) {
+                                                id = item._id;
+                                            }
+                                        });
+                                        setCurrentBillingId(id);
+                                    }} />
+                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
+                    </div>
+                    <div className="mt-2">
+                        <label className="block">
+                            Plan Inventory Type <span className="star">*</span>
+                        </label>
+                        <Dropdown placeholder="Plan Inventory Type" options={inventoryTypeOptions} optionLabel="inventoryType" optionValue="inventoryType" className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
+                        {formik.touched.inventoryType && formik.errors.inventoryType ? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
+                    </div>
                     <div className="mt-2">
                         <label className="block">
                            Plan Name <span className="star">*</span>
@@ -192,21 +240,9 @@ export default function EditPlan({ data, setEditPlanVisibility,setRefresh }) {
                         </label>
                         <Dropdown options={textAllowanceUnitOptions} className="field-width mt-2" name="textAllowanceUnit" value={formik.values.textAllowanceUnit} onChange={formik.handleChange} />
                         {formik.touched.textAllowanceUnit && formik.errors.textAllowanceUnit ? <p className="mt-2 ml-1 star">{formik.errors.textAllowanceUnit}</p> : null}
-                    </div>
-                    <div className="mt-2">
-                        <label className="block">
-                            Plan Inventory Type <span className="star">*</span>
-                        </label>
-                        <Dropdown placeholder="Plan Inventory Type" options={inventoryTypeOptions} optionLabel="inventoryType" optionValue="inventoryType" className="field-width mt-2" name="inventoryType" value={formik.values.inventoryType} onChange={formik.handleChange} />
-                        {formik.touched.inventoryType && formik.errors.inventoryType ? <p className="mt-2 ml-1 star">{formik.errors.inventoryType}</p> : null}
-                    </div>
-                    <div className="mt-2">
-                        <label className="block">
-                          Plan  Type <span className="star">*</span>
-                        </label>
-                        <Dropdown placeholder="Plan  Type" options={billingModelOptions} className="field-width mt-2" name="type" optionLabel="billingModel" optionValue="billingModel" value={formik.values.type} onChange={formik.handleChange} />
-                        {formik.touched.type && formik.errors.type ? <p className="mt-2 ml-1 star">{formik.errors.type}</p> : null}
-                    </div>
+                    </div> 
+                    
+                  
 
                     <div className="mt-2">
                         <label className="block">

@@ -1,6 +1,7 @@
 //company agent tracking master carrier tin
 import React, { useRef, useState, useEffect } from "react";
-import { useFormik } from "formik";
+import { useFormik } from "formik"; 
+import "./css/bulkuploaderror.css"
 import Axios from "axios";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
@@ -102,11 +103,11 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
     function ApiResponseShow({res}){   
         
         return( 
-           <div className="flex flex-wrap justify-content-left"> 
+           <div className="flex flex-wrap justify-content-left "> 
                <p>{res.msg}</p>  
                <div >
-                <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
-                  <ul className="m-0 list-none"> 
+                <p className="errormsg"> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
+                  <ul className="m-0 list-none errormsg  "> 
                        { 
                           res.data.data.duplicateNumbers.map(item=>( 
                            <li>{item}</li>
@@ -137,7 +138,9 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
         formData.append("serviceProvider", parseLoginRes?.company);
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
-        formData.append("agentType", formik.values.agentType);
+        formData.append("agentType", formik.values.agentType); 
+        
+        formData.append("billingModel", formik.values.billingModel); 
         formData.append("AgentName", formik.values.AgentName);
         formData.append("unitType", formik.values.unitType); 
         formData.append("provisionType", formik.values.provisionType);
@@ -306,7 +309,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                         <strong>Notes:</strong>
                         SIM, MDN, Model ID (STANDARD/MICRO/NANO), MSL/PUK,Puk2, PO#,BOX#, Wholesale/Cost Price for SIM, Selling/Retail Price for SIM, UICCID, Zipcode, Activation Fee , MSID,Device ID/IMEI,ACP Co-Pay Amount,ACP Device Reimbursement Amount,Device Retail Price   
                         {formik.values.carrier === ""? <p className="font-bold" style={{display:"inline-block"}}> &nbsp; (Sample file)</p>
-                        : <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold"> &nbsp; (Sample file)</a>
+                        : <a download={true} href="/images/Sample File(Sim Bulk Upload).xlsx" className="font-bold"> &nbsp; (Sample file)</a>
                         }
                     </p>
                     <p className="mt-4">

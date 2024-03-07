@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataTable } from "primereact/datatable";
 import { useFormik } from "formik";
-import "./css/billing_configuration.css"
+import "./css/billing_configuration.css";
 import { Toast } from "primereact/toast";
 import ListAllBilling from "./components/billingmodel_configurations/billing_model_configurations";
 import Axios from "axios";
@@ -20,6 +20,7 @@ import { Card } from "primereact/card";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const BillingConfiguration = () => {
     const [configBillingModel, setConfigBillingModel] = useState(false);
+    const [currentBillingId, setCurrentBillingId] = useState("");
     const [refresh, setRefresh] = useState(false);
     const toast2 = useRef(null);
     const [newDiscount, setNewDiscount] = useState(false);
@@ -29,7 +30,7 @@ const BillingConfiguration = () => {
     const [allPlan, setAllPlan] = useState([]);
     const [allDiscount, setAllDiscount] = useState([]);
     const [allFeature, setAllFeature] = useState([]);
-    const [refreshOnBillingConfig,setRefreshOnBillingConfig]=useState(false)
+    const [refreshOnBillingConfig, setRefreshOnBillingConfig] = useState(false);
     const [configData, setconfigData] = useState();
     const formik = useFormik({
         // validationSchema: validationSchema,
@@ -83,9 +84,9 @@ const BillingConfiguration = () => {
 
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const [optionsForBillingmodel,setOptionsForBillingModel] = useState([])
-     const [optionsForInventoryType,setOptionForInventoryType]=useState([])
-
+    const [optionsForBillingmodel, setOptionsForBillingModel] = useState([]);
+    const [optionsForInventoryType, setOptionForInventoryType] = useState([]);
+    const [onChangeBillingModel, setOnChangeBillingModel] = useState(false);
     const optionsForPayment = [
         { label: "Select Payment Method", value: "" },
         { label: "Cash", value: "Cash" },
@@ -96,7 +97,7 @@ const BillingConfiguration = () => {
     ];
     const optionsForCreation = [
         { label: "On Activation", value: "On Activation" },
-        { label: "After QA Approval ", value: "On QA Approve" },
+        { label: "After QA Approval ", value: "On QA Approval" },
     ];
 
     function showDiscount() {
@@ -129,38 +130,45 @@ const BillingConfiguration = () => {
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
-    }; 
-    const getBillingModelList=async () => { 
-        try{ 
-           const res=await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`)
-             setOptionsForBillingModel(res?.data?.data || [])
-             } 
-        catch(error){ 
-          
+    };
+    const getBillingModelList = async () => {
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`);
+            console.log("data for billing model is", res.data.data);
+            setOptionsForBillingModel(res?.data?.data || []);
+        } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
-    }    
-    const getInventoryList=async () => { 
-        try{ 
-           const res=await     Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${parseLoginRes?.company}`)
-              setOptionForInventoryType(res?.data?.data || [])
-             } 
-        catch(error){ 
-          
+    };
+    const getInventoryList = async () => {   
+         if(formik.values.billingmodel !== ""){
+        try {
+            const res = await Axios.get(`${BASE_URL}/api/billingModel/getInventoryByBillModel?BillModelId=${currentBillingId}`);
+            let obj = [];
+            let data = res?.data?.data;
+            data.forEach((item) => {
+                let obj2 = {};
+                obj2.inventoryType = item;
+                obj.push(obj2);
+            });
+            setOptionForInventoryType(obj);
+        } catch (error) {
             toast.error(error?.response?.data?.msg);
-        }
+        } 
     }
-  
+    };
+
     useEffect(() => {
         getDiscount();
         getConfigData();
-        getFeature();   
-        getInventoryList()
-    }, [refresh]); 
-     useEffect(()=>{ 
-      
-        getBillingModelList()
-     },[refreshOnBillingConfig])
+        getFeature();
+    }, [refresh]);
+    useEffect(() => {
+        getBillingModelList();
+    }, [refreshOnBillingConfig]);
+    useEffect(() => {
+        getInventoryList();
+    }, [onChangeBillingModel]);
     useEffect(() => {
         if (formik.values.inventoryType !== "") {
             Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res) => {
@@ -223,8 +231,6 @@ const BillingConfiguration = () => {
 */
     }
 
-   
-
     return (
         <Card>
             <Dialog
@@ -234,40 +240,40 @@ const BillingConfiguration = () => {
                 style={{ width: "80vw" }}
                 onHide={() => {
                     setConfigBillingModel(false);
-                    setRefreshOnBillingConfig(prev=>!prev)
+                    setRefreshOnBillingConfig((prev) => !prev);
                 }}
             >
                 <ListAllBilling />
             </Dialog>
+
             <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
                 <h3 className="font-bold mb-3">Billing Configuration</h3>
                 <div className="">
                     <div className=" ">
                         <div className=" flex flex-wrap flex-row justify-content-around  ">
-                            <div className="field-width  " style={{marginTop:"10px"}}>
-                                <label className="field_label  text-md">
-                                    Billing Model{" "}
-                                    <i
-                                        onClick={() => {
-                                            //setAddAgentDialogVisbility((prev) => !prev);
-                                            setConfigBillingModel((prev) => !prev);
-                                        }}
-                                        className="pi pi pi-plus"
-                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "4px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                    ></i>
-                                </label>
+                            <div className="field-width  " style={{ marginTop: "10px" }}>
+                                <label className="field_label  text-md">Billing Model </label>
                                 <Dropdown
                                     className="w-full mt-1"
                                     id="billingmodel"
                                     options={optionsForBillingmodel}
-                                    value={formik.values.billingmodel}        
-                                    placeholder="Select Billing Model" 
-                                    optionLabel="billingModel" 
+                                    value={formik.values.billingmodel}
+                                    placeholder="Select Billing Model"
+                                    optionLabel="billingModel"
                                     optionValue="billingModel"
                                     onChange={(e) => {
+                                        console.log("E is ", e);
                                         formik.setFieldValue("billingmodel", e.value);
+                                        let id;
+                                        optionsForBillingmodel.map((item) => {
+                                            if (item.billingModel === e.value) {
+                                                id = item._id;
+                                            }
+                                        });
                                         formik.handleChange(e);
+                                        setCurrentBillingId(id);
+                                        setOnChangeBillingModel((prev) => !prev);
                                     }}
                                     onBlur={formik.handleBlur}
                                 />
@@ -278,20 +284,17 @@ const BillingConfiguration = () => {
                                 ) : null}
                             </div>
                             <Toast ref={toast2} />
-                            <div className="field-width mt-3">
-                                <label className="field_label text-md">One Time Charges</label>
-                                <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
+
                             <div className="mt-3 field-width ">
                                 <label className="field_label text-md">Inventory Type</label>
                                 <Dropdown
                                     className="w-full  mt-1"
-                                    id="inventoryType"  
+                                    id="inventoryType"
                                     placeholder="Select Inventory Type"
                                     options={optionsForInventoryType}
-                                    value={formik.values.inventoryType} 
-                                    optionLabel="inventoryType" 
-                                     optionValue="inventoryType"
+                                    value={formik.values.inventoryType}
+                                    optionLabel="inventoryType"
+                                    optionValue="inventoryType"
                                     onChange={(e) => {
                                         formik.setFieldValue("inventoryType", e.value);
                                         formik.handleChange(e);
@@ -304,13 +307,16 @@ const BillingConfiguration = () => {
                                     </p>
                                 ) : null}
                             </div>
-
+                            <div className="field-width mt-3">
+                                <label className="field_label text-md">One Time Charges</label>
+                                <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            </div>
                             <div className="mt-3 field-width  ">
                                 <label className="field_label   text-md">Monthly Charges</label>
                                 <MultiSelect
                                     id="monthlyCharge"
                                     display="chip"
-                                    options={allPlan} 
+                                    options={allPlan}
                                     placeholder="Monthly Charges"
                                     value={formik.values.monthlyCharge}
                                     onChange={(e) => formik.setFieldValue("monthlyCharge", e.value)}
@@ -329,8 +335,7 @@ const BillingConfiguration = () => {
                                 <label className="field_label  text-md">First Bill Create Date</label>
                                 <Dropdown
                                     className="w-full  mt-1"
-                                    id="BillCreationDate" 
-                                    
+                                    id="BillCreationDate"
                                     placeholder="First Bill Create Date"
                                     options={optionsForCreation}
                                     value={formik.values.BillCreationDate}
@@ -368,7 +373,7 @@ const BillingConfiguration = () => {
 
                                 <MultiSelect
                                     className="w-full  mt-1"
-                                    id="paymentMethod" 
+                                    id="paymentMethod"
                                     placeholder="Select Payment Method"
                                     options={optionsForPayment}
                                     display="chip"
@@ -385,8 +390,7 @@ const BillingConfiguration = () => {
                                     </p>
                                 ) : null}
                             </div>
-                            <div className="mt-3 field-width "> 
-
+                            <div className="mt-3 field-width ">
                                 <label className="field_label  text-md">
                                     Select Discount OR{" "}
                                     <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
@@ -395,7 +399,7 @@ const BillingConfiguration = () => {
                                 </label>
                                 <MultiSelect
                                     id="selectdiscount"
-                                    display="chip" 
+                                    display="chip"
                                     placeholder="Select Discounts"
                                     options={allDiscount}
                                     value={formik.values.selectdiscount}
@@ -414,8 +418,7 @@ const BillingConfiguration = () => {
                                 </label>
                                 <MultiSelect
                                     id="additionalFeature"
-                                    display="chip" 
-                                    
+                                    display="chip"
                                     placeholder="Select Additional Features"
                                     options={allFeature}
                                     value={formik.values.additionalFeature}
@@ -427,17 +430,17 @@ const BillingConfiguration = () => {
                             </div>
                         </div>
                         {newDiscount ? (
-                            <div >
+                            <div>
                                 <div className="discountmain flex flex-wrap  flex-row justify-content-around">
                                     <div className="discount_field_width">
                                         <label className="field_label mb-2 text-lg">Discount Name</label>
                                         <InputText id="discountname" className="w-full" value={formik.values.discountname} onChange={formik.handleChange} />
                                     </div>
-                                    <div  className="discount_field_width">
+                                    <div className="discount_field_width">
                                         <label className="field_label mb-2 text-lg">Discount Amount </label>
                                         <InputText id="amount" className="w-full" value={formik.values.amount} onChange={formik.handleChange} />
                                     </div>
-                                   <Button className="discount_field_width mt-4" label="Add Discount" onClick={addDiscount} />
+                                    <Button className="discount_field_width mt-4" label="Add Discount" onClick={addDiscount} />
                                 </div>
                             </div>
                         ) : (
@@ -446,7 +449,7 @@ const BillingConfiguration = () => {
 
                         {newFeature ? (
                             <>
-                                <div className="featuremain flex flex-wrap  flex-row justify-content-around" >
+                                <div className="featuremain flex flex-wrap  flex-row justify-content-around">
                                     <div className="feature_field_width">
                                         <label className="field_label mb-2 text-lg">Name</label>
                                         <InputText id="featureName" className="w-full" value={formik.values.featureName} onChange={formik.handleChange} />
@@ -456,7 +459,6 @@ const BillingConfiguration = () => {
                                         <InputText id="featureAmount" className="w-full" value={formik.values.featureAmount} onChange={formik.handleChange} />
                                     </div>
                                     <Button className="feature_field_width mt-4" label="Add Feature" onClick={addFeature} />
-                               
                                 </div>
                             </>
                         ) : (
@@ -469,21 +471,35 @@ const BillingConfiguration = () => {
                 </div>
             </form>
 
-            <div >
+            <div>
                 <h3 className="font-bold">Configurations</h3>
                 <Dialog
                     visible={updatePlanVisibility}
                     style={{ width: "80vw" }}
-                    header="Update Bill"
+                    header="Update Billing Configuration "
                     onHide={() => {
-                        setUpdatePlanVisibility(false);    
+                        setUpdatePlanVisibility(false);
                     }}
                 >
-                    <UpdateBill rowData={currentRow} setRefresh={setRefresh} setUpdatePlanVisibility={setUpdatePlanVisibility} />
+                    <UpdateBill rowData={currentRow} setRefresh={setRefresh} optionsForInventoryType={optionsForInventoryType} setUpdatePlanVisibility={setUpdatePlanVisibility} />
                 </Dialog>
                 <DataTable value={configData} showGridlines resizableColumns columnResizeMode="fit">
-                    <Column header="Billing Model" field="billingmodel" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
-                    <Column header="Inventory Type" field="inventoryType" headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
+                    <Column
+                        header="Billing Model"
+                        field="billingmodel"
+                        body={(rowData) => {
+                            return <p>{rowData?.billingmodel}</p>;
+                        }}
+                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+                    />
+                    <Column
+                        header="Inventory Type"
+                        field="inventoryType"
+                        body={(rowData) => {
+                            return <p>{rowData?.inventoryType}</p>;
+                        }}
+                        headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }}
+                    />
                     <Column header="One Time Charge" field="oneTimeCharge" body={(rowData) => `$${rowData.oneTimeCharge}`} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
 
                     <Column header="Monthly Charges" body={(rowData) => rowData?.monthlyCharge?.map((mc) => mc.name).join(", ")} headerStyle={{ color: "white", backgroundColor: "#81AEB9", fontWeight: "normal", fontSize: "large" }} />
@@ -513,8 +529,7 @@ const BillingConfiguration = () => {
                             return (
                                 <>
                                     <Button
-                                        label="Update" 
-
+                                        label="Update"
                                         className=" pt-2 pb-2"
                                         onClick={() => {
                                             setCurrentRow(rowData);

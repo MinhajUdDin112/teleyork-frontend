@@ -1,0 +1,34 @@
+.subsequentbillcreatedate,.latefeecharge{ 
+     width:100%;  
+     border: solid rgb(206, 212, 218) 1px; 
+     border-radius: 5px;
+      padding:9px;   
+      align-items: center; 
+}  
+.subsequentbillcreatedate input,.latefeecharge input{ 
+    width:8%;   
+     text-align: center;
+    padding: 0px;
+    border: none !important;
+    
+} 
+.latefeecharge input{ 
+    width:50%;  
+    text-align: right; 
+    
+    padding-right: 12px;
+}
+.subsequentbillcreatedate .p-inputtext:focus,.latefeecharge .p-inputtext:focus {
+    border-color:none !important; 
+    box-shadow: none !important ;
+    /* Add any other styles you want to apply when the input is focused */
+}
+.subsequentbillcreatedate p{ 
+    width: 90%; 
+    padding-top: 2px;
+} 
+.latefeecharge p{ 
+     width:50%; 
+     
+    padding-top: 1px;
+}

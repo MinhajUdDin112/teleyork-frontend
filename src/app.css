@@ -109,7 +109,15 @@
     top:0px;
     z-index: 999; 
     
+   }  
+   .layoutzisfone{ 
+     padding-top: 28px; 
+     padding-bottom: 22px; 
    } 
+   .layoutzisfone span{ 
+    margin-top: -40px; 
+    margin-left: 22px;
+   }
   
   .layout-topbar{ 
     margin-top: 105px;
