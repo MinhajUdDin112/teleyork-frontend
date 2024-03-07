@@ -11,9 +11,10 @@ import { toast } from "react-toastify";
 import AddBillingModel from "./components/add_billing_model";
 import RestoreModels from "./components/Restore_Models/List_Restore_Models";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const loginRes = localStorage.getItem("userData");
+
+export default function BillingModelConfigurations() {  
+    const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-export default function BillingModelConfigurations() {
     const [refresh, setRefresh] = useState(false);
     const [restoreModelsVisibility, setRestoreModelsVisiblity] = useState(false);
     const [editBillingModelVisibility, setEditBillingModelVisibility] = useState(false);
