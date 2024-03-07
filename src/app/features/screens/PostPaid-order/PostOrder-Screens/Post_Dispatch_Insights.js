@@ -66,47 +66,35 @@ const Post_Dispatch_Insight = () => {
             const formattedEndDate = selectedendDate ? moment(selectedendDate).format('YYYY-MM-DD') : '';
 
             setIsSearch(true);
-            const dataToSend = {
-
-                status: formik.values.status,
-                startDate: formattedStartDate,
-                endDate: formattedEndDate,
-            };
-          
             setIsLoading(true);
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/dispatchInsight?userId=${parseLoginRes?._id}&accountType=Postpaid&startDate=${formattedStartDate}T00:00:00&endDate=${formattedEndDate}T23:59:59`);
                 if (response?.status === 200 || response?.status === 201) {
                     setHistoryData(response?.data?.data);
-                  
+                    setIsLoading(false)
                     
                 }
             } catch (error) {
-                toast.error(error?.response?.data?.msg);
+              //  toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
             }
 
         },
     });
-    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
-    const getFormErrorMessage = (name) => {
-        return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-    };
+   
 
     const handleEnrollmentIdClick = (rowData) => {
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
-    const showData = () => {
-
-    }
+ 
     return (
         <div>
             <form onSubmit={formik.handleSubmit}>
 
                 <div className="card flex flex-column justify-content-center mx-5 border-noround">
                     <h2 className="font-bold"> Dispatch Insights</h2>
-                    <div className="flex flex-wrap mx-3 my-3">
+                    <div className="flex flex-wrap mx-3 my-3 center-center">
                         <div className="mb-3 mr-3">
                             <p className="m-0 pb-1 text-md font-semibold ">Date From:</p>
                             <Calendar id="startDate" value={formik.values.startDate} onChange={formik.handleChange} showIcon style={{ width: "21rem" }} />
@@ -120,7 +108,8 @@ const Post_Dispatch_Insight = () => {
                             <Button
                                 label="Search"
                                 type="submit"
-                                className="mt-4 text-lg bg-green-400 border-none w-7rem pt-3 pb-2 text-center"
+                                className="mt-4 text-lg bg-green-400 border-none w-7rem  text-center"
+                                disabled={isLoading}
 
                             />
                         </div>
@@ -266,7 +255,7 @@ const Post_Dispatch_Insight = () => {
 
 
                                 </DataTable>
-                                {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+                               
                             </>
                                 : isstatus == "Printed" ? <>
                                     <DataTable value={historyData?.enrollmentsByStatus?.labelPrinted
@@ -355,7 +344,6 @@ const Post_Dispatch_Insight = () => {
 
 
                                     </DataTable>
-                                    {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
                                 </>
                                     : isstatus == "Shipment" ? <>
 
@@ -446,7 +434,7 @@ preShipment
 
 
                                         </DataTable>
-                                        {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}</>
+                                      </>
                                         : isstatus == "Transit" ? <> <DataTable value={historyData?.enrollmentsByStatus?.inTransit
 
                                         } stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
@@ -533,7 +521,7 @@ preShipment
 
 
                                         </DataTable>
-                                            {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}</>
+                                           </>
                                             : isstatus == "Dilevered" ? <> <DataTable value={historyData?.enrollmentsByStatus?.delivered
                                             } stripedRows resizableColumns size="small" paginator rows={10} rowsPerPageOptions={[25, 50]}>
 
@@ -618,7 +606,7 @@ preShipment
 
 
                                             </DataTable>
-                                                {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}</>
+                                              </>
                                                 : ""
                         }
 

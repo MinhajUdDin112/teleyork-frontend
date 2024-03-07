@@ -151,7 +151,7 @@ const Select = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     <Button
                         label="Continue"
                         type="submit"
-                        disabled={ buttonClicked || formik.errors.checkbox || formik.values.checkbox.some((isChecked) => !isChecked)}
+                        disabled={isLoading|| buttonClicked || formik.errors.checkbox || formik.values.checkbox.some((isChecked) => !isChecked)}
                         icon={isLoading ? "pi pi-spin pi-spinner" : ""}
                         onClick={handleButton}
                     />

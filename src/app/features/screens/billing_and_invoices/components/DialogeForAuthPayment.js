@@ -62,8 +62,6 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
 
         { label: "Credit/Debit Card", value: "card" },
         { label: "E-Check", value: "echeck" },
-
-
     ];
     const cardApi = async () => {
         setIsLoading(true)
