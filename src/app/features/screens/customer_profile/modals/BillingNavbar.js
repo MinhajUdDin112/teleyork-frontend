@@ -107,10 +107,10 @@ const navigate = useNavigate();
         icon: "pi-circle-fill",
         className: "account-type-label",
       },
-      // {
-      //   label:`Wallet: ${cpData?.wallet}`,
-      //   className: "account-type-label",
-      // },
+      {
+        label:`Wallet: ${cpData?.wallet !== undefined ? cpData?.wallet : "0"}`,
+        className: "account-type-label",
+      },
     ];
   }
   

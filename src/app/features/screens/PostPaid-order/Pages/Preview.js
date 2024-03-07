@@ -211,11 +211,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 {
                                     parsefromRejected ? <div className="flex  pt-2">
                                         <p className="w-6 ml-4">Amount:</p>
-                                        <p className="w-6">{basicData?.totalAmount}</p>
+                                        <p className="w-6">{parseFloat(basicData?.totalAmount).toFixed(2)}</p>
 
                                     </div> : <div className="flex  pt-2">
                                         <p className="w-6 ml-4">Amount:</p>
-                                        <p className="w-6">{parseproductData?.totalAmount}</p>
+                                        <p className="w-6">{parseFloat(parseproductData?.totalAmount).toFixed(2)}</p>
 
                                     </div>
                                 }

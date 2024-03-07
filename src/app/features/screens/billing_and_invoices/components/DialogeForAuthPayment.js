@@ -19,6 +19,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
    
     const [isLoading, setIsLoading] = useState(false)
     const [authRes, setAuthRes] = useState();
+    const [formattedCardNumber, setFormattedCardNumber] = useState("");
 
 
 
@@ -68,7 +69,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
         setIsLoading(true)
         const dataToSend = {
             amount: formik.values.totalAmount,
-            cardNumber: formik.values.cardNumber,
+            cardNumber: formattedCardNumber.replace(/-/g, ""),
             cardCode: formik.values.cardCode,
             expirationDate: formik.values.expirationDate,
             invoiceNo: formik.values.accountId,
@@ -84,6 +85,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
                 toast.success("Successfully Paid")
                 setIsLoading(false)
                 const dataToSend = {
+                    customerId:userDetails?._id,
                     amountPaid: formik.values.totalAmount,
                     invoiceStatus: "Paid",
                     invoicePaymentMethod: "Credit Card",
@@ -170,6 +172,19 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
         return value;
     };
    
+    const formatCardNumber = (value) => {
+        return value
+            .replace(/\D/g, "")
+            .replace(/(.{4})/g, "$1-") // Insert hyphens after every 4 digits
+            .trim()
+            .slice(0, 19); // Limit to 19 characters
+    };
+
+    const handleCardNumberChange = (e) => {
+        const formattedValue = formatCardNumber(e.target.value);
+        setFormattedCardNumber(formattedValue);
+        formik.setFieldValue("cardNumber", e.target.value.replace(/-/g, "")); // Remove hyphens before storing in formik state
+    };
     
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
@@ -246,7 +261,14 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
                                                         Card Number <span className="steric">*</span>
                                                     </td>
                                                     <td>
-                                                        <InputText className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardNumber") }, "input_text")} type="text" id="cardNumber" value={formik.values.cardNumber} maxLength={16} onChange={formik.handleChange}  />
+                                                    <InputText
+                                                    className={classNames({ " mr-3": true, "p-invalid": isFormFieldValid("cardNumber") }, "input_text")}
+                                                    type="text"
+                                                    id="cardNumber"
+                                                    value={formattedCardNumber}
+                                                    maxLength={19}
+                                                    onChange={handleCardNumberChange}
+                                                />
                                                         {getFormErrorMessage("cardNumber")}
                                                     </td>
                                                 </tr>

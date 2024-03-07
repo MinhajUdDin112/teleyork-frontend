@@ -254,7 +254,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                     // Inside the inventory selection handler
                                     formik.setFieldValue("productName", "SIM")
 
-                                } else if (inventory === "Wireless Device") {
+                                } else if (inventory === "WIRELESS DEVICE") {
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
@@ -263,7 +263,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
                                     formik.setFieldValue("totalamount", amountafterdiscount);
                                     formik.setFieldValue("plan", "")
-                                    formik.setFieldValue("productName", "WIRELESS Device")
+                                    formik.setFieldValue("productName", "WIRELESS DEVICE")
 
                                 }
                                 formik.handleChange(e);
@@ -481,7 +481,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 filter
                                 showClear
                                 filterBy="name"
-                            /> :  inventory === "Wireless Device" ?  <Dropdown
+                            /> :  inventory === "WIRELESS DEVICE" ?  <Dropdown
                             disabled={paymentInfo ? true : false}
                             className="field-width mt-2"
                             id="paymentMode"

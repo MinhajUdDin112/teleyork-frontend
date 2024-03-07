@@ -23,7 +23,7 @@ export default function Post_enrollment_Flow() {
      
 
       useEffect(() => { 
-        //${BASE_URL}/api/web/billing/plans?inventoryType=SimCard,Wireless Device&billingmodel=Postpaid   
+       
         Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`)
         .then((res) => {
           
@@ -33,7 +33,7 @@ export default function Post_enrollment_Flow() {
     
         Axios.get(`${BASE_URL}/api/web/billing/getall`)
             .then((response) => {
-                
+              
                 let inventoryType = []; 
                 for (let i = 0; i < response?.data?.data?.length; i++) {
                     let plans = [];
@@ -43,7 +43,8 @@ export default function Post_enrollment_Flow() {
                     let totaldiscounts=0    
                     let additionaltotal=0;
                     let additionalfeaturearray=[]
-                    if (response?.data?.data[i]?.inventoryType === "SIM" && response?.data?.data[i]?.billingmodel === "Postpaid") {
+                    if (response?.data?.data[i]?.inventoryType === "SIM" && (response?.data?.data[i]?.billingmodel === "Postpaid" || response?.data?.data[i]?.billingmodel === "POSTPAID") ) {
+                     
                         let obj = { label: "SIM", value:response?.data?.data[i]?._id };
                         //objectforpricing[response.data.data[i].inventoryType]["oneTimeCharge"]=response.data.data[i].inventoryType.oneTimeCharge
                         inventoryType.push(obj);
@@ -92,9 +93,9 @@ export default function Post_enrollment_Flow() {
                         localStorage.setItem("simplan", JSON.stringify(plans));
                         ///payments method
                         localStorage.setItem("simPaymentMethod", JSON.stringify(paymentMethods));
-                    } else if (response?.data?.data[i]?.inventoryType === "Wireless Device" && response?.data?.data[i]?.billingmodel === "Postpaid") {   
-                    
-                        let obj = { label: "Wireless Device", value:response?.data?.data[i]?._id };
+                    } else if (response?.data?.data[i]?.inventoryType === "WIRELESS DEVICE" && (response?.data?.data[i]?.billingmodel === "Postpaid" || response?.data?.data[i]?.billingmodel === "POSTPAID")) {   
+                 
+                        let obj = { label: "WIRELESS DEVICE", value:response?.data?.data[i]?._id };
                         inventoryType.push(obj);
                         for (let k = 0; k < response?.data?.data[i]?.monthlyCharge?.length; k++) {
                             let obj = {
@@ -143,7 +144,7 @@ export default function Post_enrollment_Flow() {
                          localStorage.setItem("devicePaymentMethod", JSON.stringify(paymentMethods));
                     }
                 }
-                localStorage.setItem("inventoryType", JSON.stringify(inventoryType));
+                 localStorage.setItem("inventoryType", JSON.stringify(inventoryType));
             })
             .catch((err) => {});
     }, []);
