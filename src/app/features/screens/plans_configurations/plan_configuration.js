@@ -9,8 +9,7 @@ import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const loginRes = localStorage.getItem("userData");
-const parseLoginRes = JSON.parse(loginRes);
+
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name Is Required"),
     description: Yup.string().required("Description Is Required"),
@@ -67,7 +66,8 @@ const durationUnitOptions = [
 
 export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }) {
      
-    
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
     const [currentBillingId,setCurrentBillingId]=useState("")   
     const toast = useRef(null);
     const [inventoryTypeOptions, setInventoryTypeOptions] = useState([]);
