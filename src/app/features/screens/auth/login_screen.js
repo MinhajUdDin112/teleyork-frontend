@@ -1,21 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { NavLink } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { loginAction } from "../../../store/auth/AuthAction";
+import * as Yup from "yup"; 
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function LoginScreen({ setRefreshApp }) {
-    const dispatch = useDispatch();
-    //const loginData = useSelector((state) => state.authentication.loginData);
-    const error = useSelector((state) => state.login);
-    console.log("error is ", error);
-    const errormsg = error?.loginError;
-    let logindata = error?.loginData;
-    const loading = error?.loginLoading;
+  
+    const [loading,setLoading]=useState(false)       
+    const [errormsg,setErrorMsg]=useState(null)
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -25,16 +19,23 @@ export default function LoginScreen({ setRefreshApp }) {
             email: Yup.string().email("Invalid email").required("Email is required"),
             password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
         }),
-        onSubmit: (values) => {
-            dispatch(loginAction(values));
-        },
-    });
+        onSubmit: async (values) => {  
+              setLoading(prev=>!prev)
+         Axios.post(`${BASE_URL}/api/web/user/login`, formik.values).then((response)=>{ 
+            const allowdPerms = response?.data?.data?.permissions
+            localStorage.setItem("userData", JSON.stringify(response?.data?.data));
+            localStorage.setItem("accessToken", JSON.stringify(response?.data?.data?.token));
+            localStorage.setItem("refreshToken", JSON.stringify(response?.data?.refreshToken));      
+          
+            localStorage.setItem("permissions", JSON.stringify(allowdPerms))
+            setRefreshApp((prev) => !prev);
+         }).catch(err=>{ 
+          setErrorMsg(err.response?.data?.msg)  
+          setLoading(prev=>!prev)
+         })
 
-    //get url
-    useEffect(() => {  
-        
-    setRefreshApp((prev) => !prev);
-    }, [error]);
+        },
+    }); 
     useEffect(() => {
         var currentURL;
         var modifiedURL;
