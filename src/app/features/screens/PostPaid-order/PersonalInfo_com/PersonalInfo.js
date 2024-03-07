@@ -191,24 +191,8 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         seteSim(e.target.value);
     };
 
-    const handleRadio = (value) => {
-        setIsSelfReceive(value === "myself");
-        if (value === "somebody") {
-            setIsHouseHold(true);
-        } else {
-            setIsHouseHold(false);
-        }
-    };
-
-    const handleACP = (e) => {
-        if (formik.values.isACP == true) {
-            formik.values.isACP = false;
-            setAcp(false);
-        } else {
-            formik.values.isACP = true;
-            setAcp(true);
-        }
-    };
+   
+    
     const options = [
         { label: "Select", value: "" },
         { label: "JR.", value: "JR." },
@@ -600,6 +584,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             <Dropdown
                                 placeholder="Month"
                                 value={formik.values.month}
+                                filter
                                 id="month"
                                 onChange={(e) => {
                                     if (selectedYear !== null && selectedDay !== null) {
@@ -634,12 +619,14 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 }}
                                 options={dayoption}
                                 className={classNames({ "p-invalid": dayerror }, "input_text md-col-3 col-4")}
+                                filter
                             />
                             <Dropdown
                                 placeholder="Year"
                                 className={classNames({ "p-invalid": yearerror }, "input_text md-col-3 col-4")}
                                 value={formik.values.year}
                                 name="year"
+                                filter
                                 itemTemplate={customItemTemplate}
                                 onChange={(e) => {
                                     if (selectedMonth !== null && selectedDay !== null) {

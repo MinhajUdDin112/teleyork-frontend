@@ -12,7 +12,7 @@ export default function LoginScreen({ setRefreshApp }) {
     const dispatch = useDispatch();
     //const loginData = useSelector((state) => state.authentication.loginData);
     const error = useSelector((state) => state.login);
-    console.log("error is ", error);
+   
     const errormsg = error?.loginError;
     let logindata = error?.loginData;
     const loading = error?.loginLoading;
