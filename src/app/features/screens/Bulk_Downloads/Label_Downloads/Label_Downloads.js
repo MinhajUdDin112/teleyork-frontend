@@ -5,76 +5,100 @@ import { Calendar } from "primereact/calendar";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import Axios from "axios";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Label_Downloads = () => {
     const [apiData, setApiData] = useState([]);
+    const [roleData, setRoleData] = useState([]);
     const [model, setModel] = useState("");
     const [user, setUser] = useState("");
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
     const [downloadType, setDownloadType] = useState("");
-    const [filteredData, setFilteredData] = useState([]);
-    const Billing_models = [{ name: "Prepaid" }, { name: "Postpaid" }, { name: "ACP" }];
-    const User = [{ name: "CSA" }, { name: "TeamLead" }, { name: "QA" }, { name: "All Users" }];
-    // const DownloadType = [{ name: "Label" }, { name: "Invoices" }, { name: "Inventory" }];
+    const [labels, setLabels] = useState([]);
+    const Billing_models = [
+        { name: "Prepaid", value: "Prepaid" },
+        { name: "Postpaid", value: "Postpaid" },
+        { name: "ACP", value: "ACP" },
+    ];
 
-    // calling api
-
+    const serviceProvider = localStorage.getItem("userData");
+    const userData = JSON.parse(serviceProvider);
+    useEffect(() => {
+        const roleData = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${userData?.company}`);
+                const data = response?.data?.data;
+                setRoleData(data);
+                console.log("roleData api", data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        roleData();
+    }, []);
+    // label api
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch("https://65e5a109d7f0758a76e6e5ab.mockapi.io/api/labels/user", {
-                method: "GET",
-            });
-            const data = await response.json();
-            setApiData(data);
-            setFilteredData(data);
-            console.log("api data", data);
+            try {
+                const formattedDateFrom = dateFrom ? new Date(dateFrom).toISOString().slice(0, 19) : "";
+                const formattedDateTo = dateTo ? new Date(dateTo).toISOString().slice(0, 19) : "";
+                // const response = await Axios.get(`${BASE_URL}/api/web/bulkDownloads/label?startDate=2023-03-05T00:00:00&endDate=2024-03-06T23:59:59&role=6533c0f9027ce82576113aac&billingModel=Postpaid`);
+                const response = await Axios.get(`${BASE_URL}/api/web/bulkDownloads/label?startDate=${formattedDateFrom}&endDate=${formattedDateTo}&role=${user}&billingModel=${model}`);
+                const data = response?.data;
+                console.log("get api data ", data);
+                setApiData(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         };
         fetchData();
-    }, []);
+    }, [dateFrom, dateTo, user, model]);
+    console.log("api data", apiData);
 
-    const handleDownload = () => {
-        // Construct data for download
-        const dataToDownload = filteredData.map((filteredData) => ({
-            Users: filteredData.name,
-            "Download Type": filteredData["downloadtype"],
-            Counter: filteredData.counter,
-        }));
+    // const handleDownload = () => {
+    //     const dataToDownload = filteredData.map((filteredData) => ({
+    //         Users: filteredData.name,
+    //         "Download Type": filteredData["downloadtype"],
+    //         Counter: filteredData.counter,
+    //     }));
 
-        // Convert data to CSV format
-        const csvData = "data:text/csv;charset=utf-8," + Object.keys(dataToDownload[0]).join(",") + "\n" + dataToDownload.map((row) => Object.values(row).join(",")).join("\n");
+    //     const csvData = "data:text/csv;charset=utf-8," + Object.keys(dataToDownload[0]).join(",") + "\n" + dataToDownload.map((row) => Object.values(row).join(",")).join("\n");
 
-        // Create download link
-        const encodedUri = encodeURI(csvData);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "label_downloads.csv");
-        document.body.appendChild(link);
-
-        // Trigger download
-        link.click();
-    };
-    // consoling all the data which user enter in the dashboard of bulk download
-
-    // console.log("model", model);
-    // console.log("user", user);
-    // console.log("dateFrom", dateFrom);
-    // console.log("dateTo", dateTo);
-    // console.log("downloadType", downloadType);
-
-    const handleFilter = () => {
-        // Convert selected date values to JavaScript Date objects
-        const fromDate = dateFrom ? new Date(dateFrom) : null;
-        const toDate = dateTo ? new Date(dateTo) : null;
-
-        // Filter data based on start and end date
-        const filtered = apiData.filter((data) => {
-            const startDate = new Date(data.startdate);
-            const endDate = new Date(data.enddate);
-            return (!fromDate || startDate >= fromDate) && (!toDate || endDate <= toDate);
-        });
-
-        // Update filtered data state
-        setFilteredData(filtered);
+    //     const encodedUri = encodeURI(csvData);
+    //     const link = document.createElement("a");
+    //     link.setAttribute("href", encodedUri);
+    //     link.setAttribute("download", "label_downloads.csv");
+    //     document.body.appendChild(link);
+    //     link.click();
+    // };
+    console.log("userdata", user);
+    console.log("apiData", apiData);
+    // const handleLabels = async (rowData) => {
+    //     console.log("handleLabels", rowData.labels);
+    //     setLabels([...labels, ...rowData.labels]); // Appending new labels to the existing ones
+    //     try {
+    //         const labelResponse = await Axios.post(`${BASE_URL}/api/web/bulkDownloads/labelsDownload`, { labels });
+    //         console.log("Labels sent successfully:", labelResponse.data);
+    //         // Handle response as needed
+    //     } catch (error) {
+    //         console.error("Error sending labels:", error);
+    //     }
+    // };
+    const handleLabels = async (rowData) => {
+        try {
+            const labelResponse = await Axios.post(`${BASE_URL}/api/web/bulkDownloads/labelsDownload`, { labels: rowData.labels }, { responseType: "blob" });
+            const blob = new Blob([labelResponse.data]);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "labels.zip");
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        } catch (error) {
+            console.error("Error sending labels:", error);
+        }
     };
     return (
         <Card className="pl-0 pr-0">
@@ -88,7 +112,7 @@ const Label_Downloads = () => {
                 </div>
                 <div className="p-field col-12 md:col-3" style={{ marginLeft: "40rem", marginTop: "-5.1rem" }}>
                     <label className="Label__Text">Add Users</label>
-                    <Dropdown value={user} onChange={(e) => setUser(e.value)} options={User} optionLabel="name" editable placeholder="Select User" className="w-full md:w-14rem " />
+                    <Dropdown value={user} onChange={(e) => setUser(e.value)} options={roleData} optionLabel="role" optionValue="_id" editable placeholder="Select User" className="w-full md:w-14rem " />
                 </div>
                 <div className="p-field col-12 md:col-3 " style={{ marginLeft: "20rem" }}>
                     <label className="Label__Text">Date From</label>
@@ -98,20 +122,29 @@ const Label_Downloads = () => {
                     <label className="Label__Text">Date To</label>
                     <Calendar value={dateTo} onChange={(e) => setDateTo(e.value)} />
                 </div>
-                {/* <div className="p-field col-12 md:col-3" style={{ marginLeft: "20rem", paddingTop: "0.5rem" }}>
-                    <label className="Label__Text">
-                        Download Type 
-                    </label>
-                    <Dropdown value={downloadType} onChange={(e) => setDownloadType(e.value)} options={DownloadType} optionLabel="name" editable placeholder="Select Download Type" className="w-full md:w-14rem " />
-                </div> */}
-                <Button label="Apply Filters" onClick={handleFilter} style={{ marginLeft: "20.5rem", marginTop: "0.5rem", position: "absolute" }} />
+                {/* <Button label="Apply Filters" style={{ marginLeft: "20.5rem", marginTop: "0.5rem", position: "absolute" }} /> */}
             </Card>
             <div className="card" style={{ width: "62rem", marginLeft: "5rem", marginTop: "4rem" }}>
-                <Button label="Download" onClick={handleDownload} style={{ marginLeft: "50.5rem", marginTop: "0.3rem", position: "absolute" }} />
-                <DataTable value={filteredData} style={{ width: "50rem" }}>
-                    <Column field="name" header="Users"></Column>
-                    <Column field="downloadtype" header="Download Type"></Column>
-                    <Column field="counter" header="Counter"></Column>
+                <Button label="Download" style={{ marginLeft: "50.5rem", marginTop: "0.3rem", position: "absolute" }} />
+                <DataTable value={apiData} style={{ width: "50rem" }}>
+                    <Column field="user.name" header="Users"></Column>
+                    <Column field="labels.length" header="Counter"></Column>
+                    <Column
+                        field="Action"
+                        body={(rowData) => (
+                            <Button
+                                className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none"
+                                onClick={() => {
+                                    rowData?.labels.map(() => {
+                                        setLabels(rowData?.labels);
+                                    });
+                                    handleLabels(rowData);
+                                }}
+                            >
+                                Download
+                            </Button>
+                        )}
+                    />
                 </DataTable>
             </div>
         </Card>
@@ -119,3 +152,18 @@ const Label_Downloads = () => {
 };
 
 export default Label_Downloads;
+
+// const downloadLabel = () => {
+//     const path = cpData?.label;
+
+//     const trimmedPath = path.replace(/^uploads\//, "");
+//     const fileUrl = `${BASE_URL}/${trimmedPath}`;
+
+//     const link = document.createElement("a");
+//     link.href = fileUrl;
+//     link.setAttribute("target", "_blank"); // Open in new tab
+//     link.setAttribute("download", ""); // Indicate that the file should be downloaded
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+// };
