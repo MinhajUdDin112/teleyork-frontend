@@ -35,7 +35,13 @@ export default function LoginScreen({ setRefreshApp }) {
          })
 
         },
+<<<<<<< HEAD
+    });
+
+    //get url
+=======
     }); 
+>>>>>>> 8b5be76b066b0e11fa3fe91e006907b35461bee0
     useEffect(() => {
         var currentURL;
         var modifiedURL;
@@ -55,6 +61,10 @@ export default function LoginScreen({ setRefreshApp }) {
         };
         sendURl();
     }, []);
+<<<<<<< HEAD
+
+=======
+>>>>>>> 8b5be76b066b0e11fa3fe91e006907b35461bee0
     return (
         <>
             <div className="flex justify-center items-center" style={{ minHeight: "100vh" }}>
