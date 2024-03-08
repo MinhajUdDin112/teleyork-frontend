@@ -76,7 +76,7 @@ const EcheckAuthPayment = ({amount,handleNext,object}) => {
                         if (response?.status === 201 || response?.status === 200) {
                             localStorage.setItem("dataToSend", JSON.stringify(dataToSend));
                             localStorage.setItem("productData", JSON.stringify(response?.data?.data));
-                            localStorage.setItem("paymentstatus","paid")  
+                            localStorage.setItem("paymentstatus","paid")   
                             handleNext();
                         }
                     } catch (error) {
@@ -87,7 +87,7 @@ const EcheckAuthPayment = ({amount,handleNext,object}) => {
                 }
                 else {
                     console.log("error is ", response?.data?.transactionResponse)
-                    toast.error(response?.data?.transactionResponse?.errors?.error[0].errorText)
+                    toast.error(response?.data?.data?.message[0]?.text)
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
