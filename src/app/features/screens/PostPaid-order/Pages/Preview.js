@@ -63,6 +63,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             localStorage.removeItem("programmeId");
             localStorage.removeItem("fromRejected")
 
+
         } catch (error) {
             toast.error(error?.response?.data?.msg)
             setIsLoading(false);
@@ -170,6 +171,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <p className="w-6 ml-4">First Name:</p>
                                     <p className="w-6">{previewInfo?.firstName}</p>
                                 </div>
+                                <div className="flex border-bottom-2 pt-2s">
+                                    <p className="w-6 ml-4">Mother's Maiden Name:</p>
+                                    <p className="w-6">{previewInfo?.maidenMotherName !==undefined ?previewInfo?.maidenMotherName:"Nill"  }</p>
+                                </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
                                     <p className="w-6">{previewInfo?.address1}</p>
@@ -190,7 +195,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                              
                                 {
                                     parsefromRejected && basicData && basicData.currentPlan && (
-                                        <div className="flex pt-2 border-bottom-2">
+                                        <div className="flex pt-2 ">
                                             <p className="w-6 ml-4">Product:</p>
                                             <p className="w-6">{basicData?.selectProduct.toUpperCase()}</p>
                                         </div>
@@ -198,7 +203,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 }
                                   {
                                     !parsefromRejected && parseproductData && (
-                                        <div className="flex pt-2 border-bottom-2">
+                                        <div className="flex pt-2 ">
                                             <p className="w-6 ml-4">Product:</p>
                                             <p className="w-6">{parseproductData?.
                                         selectProduct.toUpperCase()
@@ -208,7 +213,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 }
                                 
 
-                                {
+                                {/* {
                                     parsefromRejected ? <div className="flex  pt-2">
                                         <p className="w-6 ml-4">Amount:</p>
                                         <p className="w-6">{parseFloat(basicData?.totalAmount).toFixed(2)}</p>
@@ -218,7 +223,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         <p className="w-6">{parseFloat(parseproductData?.totalAmount).toFixed(2)}</p>
 
                                     </div>
-                                }
+                                } */}
 
 
                             </div>
@@ -263,9 +268,19 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     )
                                 }
 
+{
+                                    parsefromRejected ? <div className="flex  pt-2 ">
+                                        <p className="w-6 ml-4">Amount:</p>
+                                        <p className="w-6">{parseFloat(basicData?.totalAmount).toFixed(2)}</p>
 
+                                    </div> : <div className="flex  pt-2 ">
+                                        <p className="w-6 ml-4">Amount:</p>
+                                        <p className="w-6">{parseFloat(parseproductData?.totalAmount).toFixed(2)}</p>
 
-                                {
+                                    </div>
+                                }
+
+                                {/* {
                                     paymentStatus && paymentStatus === "paid" ?
                                         <div className="flex pt-2 border-bottom-2">
                                             <p className="w-6 ml-4">Payment Method:</p>
@@ -277,7 +292,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                             <p className="w-6">SKIP</p>
 
                                         </div>
-                                }
+                                        
+                                } */}
 
 
                             </div>

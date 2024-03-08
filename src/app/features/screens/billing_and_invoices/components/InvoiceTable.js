@@ -105,7 +105,11 @@ const InvoiceTable = ({ userDetails, invoiceData, onAPISuccess }) => {
                 <Column field="planCharges" header="Plan Charges" />
                 <Column field="totalAmount" header="Total Amount" body={(rowData) => parseFloat(rowData.totalAmount).toFixed(2)} />
                 <Column field="amountPaid" header="Paid Amount" body={(rowData) => parseFloat(rowData.amountPaid).toFixed(2)} />
-                <Column  header="In Wallet" body={(rowData) => parseFloat(userDetails?.wallet).toFixed(2)} />
+                <Column
+  header="In Wallet"
+  body={(rowData) => userDetails?.wallet !== undefined ? parseFloat(userDetails.wallet).toFixed(2) : '$0'}
+/>
+
               
                 <Column field="lateFee" header="Late Fee" />
                 <Column field="invoiceDueDate" header="DueDate" />
