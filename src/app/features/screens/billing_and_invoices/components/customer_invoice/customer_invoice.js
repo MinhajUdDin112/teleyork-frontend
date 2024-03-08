@@ -61,7 +61,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <div className="customer-info line1">
                             <p className="font-semibold line3">{userDetails?.firstName} {userDetails?.lastName}</p>
                             <p className="font-semibold line3">{userDetails?.contact}</p>
-                            <p className="font-semibold line3">{userDetails?.address1}{userDetails?.address2}</p>
+                            <p className="font-semibold line3">{userDetails?.address1} {userDetails?.address2}</p>
                             <p className="font-semibold line3">{userDetails?.city}, {userDetails?.state}, {userDetails?.zip}</p>
                         </div>
                     </div>
@@ -179,8 +179,8 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </p>
                         <p className="font-semibold line3">{userDetails?.contact}</p>
                         <p className="font-semibold line3">
-                            {userDetails?.address1}
-                            {userDetails?.address2}
+                            {userDetails?.address1} {userDetails?.address2}
+                            
                         </p>
                         <p className="font-semibold line3">
                             {userDetails?.city}, {userDetails?.state} {userDetails?.zip}
