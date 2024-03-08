@@ -123,8 +123,8 @@ import Invoices_Downloads from "./app/features/screens/Bulk_Downloads/Invoices_D
 import Inventory_Downloads from "./app/features/screens/Bulk_Downloads/Inventory_Downloads/Inventory_Downloads";
 
 const App = () => {
-    // cleanLocalStorage() 
-    const [refreshApp,setRefreshApp]=useState(false)  
+    // cleanLocalStorage()
+    const [refreshApp, setRefreshApp] = useState(false);
     const loginPerms = localStorage.getItem("permissions");
     const parsedLoginPerms = JSON.parse(loginPerms);
     const [dynamicMenu, setDynamicMenu] = useState([]);
@@ -160,7 +160,7 @@ const App = () => {
             removeClass(document.body, "body-overflow-hidden");
         }
     }, [mobileMenuActive]);
-    //TOOLTIP When Change      
+    //TOOLTIP When Change
 
     useEffect(() => {
         copyTooltipRef && copyTooltipRef.current && copyTooltipRef.current.updateTargetEvents();
@@ -318,8 +318,7 @@ const App = () => {
             },
         ]);
 
-        setPermittedRoutes(permittedRoutes);  
-
+        setPermittedRoutes(permittedRoutes);
     };
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
@@ -369,7 +368,7 @@ const App = () => {
                                 )
                             ) : (
                                 <>
-                                    {permittedRoutes.length  !== 0  ? (
+                                    {permittedRoutes.length !== 0 ? (
                                         <Routes>
                                             <Route path="*" element={<NotFound />} />
                                             <Route path="/" element={<Dashboard permittedRoutes={permittedRoutes} />} />
@@ -444,10 +443,10 @@ const App = () => {
                                             <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                             <Route path="/manage-vendors" element={isPermitted("/manage-vendors") ? <Manage_Vendors /> : <Dashboard />} />
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
-                                           <Route exact path="/update_vendors" element={<Update_Vendors />} />
+                                            <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                             {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
-                                             <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
+                                            <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                             <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
                                             <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />
                                             <Route exact path="postpaid-allenrollment" element={isPermitted("/postpaid-allenrollment") ? <All_Enrollments /> : <Dashboard />} />
@@ -456,6 +455,11 @@ const App = () => {
                                             <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments /> : <Dashboard />} />
                                             <Route exact path="postpaid-dispatchinsight" element={isPermitted("/postpaid-dispatchinsight") ? <Post_Dispatch_Insight /> : <Dashboard />} />
                                             <Route path="/Postpersonalinfo" element={<PostPersonalInfo />} />
+
+                                            {/* handling Bulk Downloads Routes */}
+                                            <Route path="/label-downloads" element={isPermitted("/label-downloads") ? <Label_Downloads /> : <Dashboard />} />
+                                            <Route path="/invoices-downloads" element={isPermitted("/invoices-downloads") ? <Invoices_Downloads /> : <Dashboard />} />
+                                            <Route path="/inventory-downloads" element={isPermitted("/inventory-downloads") ? <Inventory_Downloads /> : <Dashboard />} />
                                         </Routes>
                                     ) : undefined}
                                 </>
@@ -465,7 +469,7 @@ const App = () => {
                     </div>
                     <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
                     <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
-                    <div className="layout-mask p-component-overlay"></div>
+                        <div className="layout-mask p-component-overlay"></div>
                     </CSSTransition>
                 </div>
             ) : (
