@@ -152,7 +152,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 setGoBack(true);
                             }}
                         />
-                        <Button label="Submit" onClick={postData} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                        <Button label="Submit" onClick={postData} disabled={!isChecked || isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
                     </div>
                     <br></br>
 

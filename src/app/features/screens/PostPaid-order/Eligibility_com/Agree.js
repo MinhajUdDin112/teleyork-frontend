@@ -51,6 +51,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
         onSubmit: async (values, actions) => {
            
             if (formik.values.paymentMode == "Skip Payment") {
+                setIsLoading(true)
                 const dataToSend = {
                     invoiceType: "Sign Up",
                     customerId: _id,
@@ -84,7 +85,9 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                     }
                 } catch (error) {
                     toast.error(error?.response?.data?.msg)
+                    setIsLoading(false)
                 }
+                setIsLoading(false)
             }
               
             else  if (paymentStatus === "paid") {
