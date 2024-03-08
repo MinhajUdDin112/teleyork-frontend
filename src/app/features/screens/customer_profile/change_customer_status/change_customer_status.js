@@ -116,7 +116,7 @@ export default function ChangeCustomerStatus({ cpData,setChangeCustomerStatus })
                 toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
                 setIsLoading(false)
             }
-            setIsLoading(true)
+            setIsLoading(false)
         }
         else  if (statusTo === "evaluation" ) {
             setIsLoading(true)

@@ -279,10 +279,11 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <p>Payment Received On Account</p>
                         <p>$0.00</p>
                     </div>
-                    <div className=" pl-2 flex flex-wrap justify-content-between">
-                        <p>Balance Forward</p>
-                        <p>{`$${parseFloat(userDetails?.wallet).toFixed(2)}`}</p>
-                    </div>
+                    <div className="pl-2 flex flex-wrap justify-content-between">
+  <p>Balance Forward</p>
+  <p>{`$${userDetails?.wallet !== undefined ? parseFloat(userDetails.wallet).toFixed(2) : '0'}`}</p>
+</div>
+
                     <div>
                         <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
                         <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
