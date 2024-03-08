@@ -45,8 +45,6 @@ export const AppTopbar = (props) => {
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const capitalCompanyName = parseLoginRes?.companyName.toUpperCase();
-  
-
     const handleLogout = () => {
         props.setSearchValue("");
         props.setSearchByValueClick(false);
@@ -91,26 +89,26 @@ export const AppTopbar = (props) => {
                     props.setSearchByValueClick(false);
                 }}
             >
-              { capitalCompanyName.includes("IJ") ? <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
-                    <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                    <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
-                </Link> :capitalCompanyName.includes("ZISFONE")?
-                <Link
-                to="/"
-                className="layout-topbar-logo layoutzisfone flex flex-wrap  flex-row justify-content-center"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    props.setSearchBy(null);
+                {capitalCompanyName.includes("IJ") ? (
+                    <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
+                        <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
+                        <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+                    </Link>
+                ) : capitalCompanyName.includes("ZISFONE") ? (
+                    <Link
+                        to="/"
+                        className="layout-topbar-logo layoutzisfone flex flex-wrap  flex-row justify-content-center"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            props.setSearchBy(null);
 
-                    props.setSearchByValueClick(false);
-                }}
-            >
-                <img className="w-8rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
-               
-            </Link> :undefined
-}
-                   
-            </div>   
+                            props.setSearchByValueClick(false);
+                        }}
+                    >
+                        <img className="w-8rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
+                    </Link>
+                ) : undefined}
+            </div>
             <div
                 className="layout-topbar"
                 onClick={(e) => {
@@ -118,39 +116,36 @@ export const AppTopbar = (props) => {
                     e.stopPropagation();
                 }}
             >
-                
-                  {  capitalCompanyName.includes("IJ") ?  
+                {capitalCompanyName.includes("IJ") ? (
                     <Link
-                    to="/"
-                    className="layout-topbar-logo insidetopbarlogo"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        props.setSearchBy(null);
+                        to="/"
+                        className="layout-topbar-logo insidetopbarlogo"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            props.setSearchBy(null);
 
-                        props.setSearchByValueClick(false);
-                    }}
-                >
-                    <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                    <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
-                    
-                </Link>
-                : capitalCompanyName.includes("ZISFONE")?
-                <Link
-                to="/"
-                className="layout-topbar-logo insidetopbarlogo"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    props.setSearchBy(null);
+                            props.setSearchByValueClick(false);
+                        }}
+                    >
+                        <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
+                        <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+                    </Link>
+                ) : capitalCompanyName.includes("ZISFONE") ? (
+                    <Link
+                        to="/"
+                        className="layout-topbar-logo insidetopbarlogo"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            props.setSearchBy(null);
 
-                    props.setSearchByValueClick(false);
-                }}
-            >
-                <img className="w-10rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
-
-            </Link>:""
-                } 
-
-             
+                            props.setSearchByValueClick(false);
+                        }}
+                    >
+                        <img className="w-10rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
+                    </Link>
+                ) : (
+                    ""
+                )}
 
                 <button type="button" className="p-link  layout-menu-button layout-topbar-button" onClick={props.onToggleMenuClick}>
                     <i className="pi pi-bars" />
@@ -181,7 +176,7 @@ export const AppTopbar = (props) => {
                                     props.setSearchByValueClick(true);
                                     props.setCallSearchApi((prev) => !prev);
                                 }
-                                setVisibleSearch(true);
+                                setVisibleSearch(false);
                             }
                         }}
                         onClick={(e) => {
@@ -222,7 +217,8 @@ export const AppTopbar = (props) => {
                         onChange={(e) => {
                             if (e.value !== null) {
                                 props.setSearchByValueClick(false);
-                                props.setSearchBy(e.value);
+                                props.setSearchBy(e.value);  
+                                 setVisibleSearch(false)
                             }
                         }}
                         options={countries}

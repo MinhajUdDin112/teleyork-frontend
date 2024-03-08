@@ -444,16 +444,7 @@ const App = () => {
                                             <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                             <Route path="/manage-vendors" element={isPermitted("/manage-vendors") ? <Manage_Vendors /> : <Dashboard />} />
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
-                                            <Route exact path="/update_vendors" element={<Update_Vendors />} />
-<<<<<<< HEAD
-
-                                            {/* handling Bulk Downloads Routes */}
-                                            <Route path="/label-downloads" element={isPermitted("/label-downloads") ? <Label_Downloads /> : <Dashboard />} />
-                                            <Route path="/invoices-downloads" element={isPermitted("/invoices-downloads") ? <Invoices_Downloads /> : <Dashboard />} />
-                                            <Route path="/inventory-downloads" element={isPermitted("/inventory-downloads") ? <Inventory_Downloads /> : <Dashboard />} />
-
-=======
->>>>>>> 8b5be76b066b0e11fa3fe91e006907b35461bee0
+                                           <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                             {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
                                              <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
