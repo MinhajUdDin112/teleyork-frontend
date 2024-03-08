@@ -93,7 +93,6 @@ const Dashboard = ({ permittedRoutes }) => {
                     <Calendar
                         className=" calendar1 font-bold"
                         value={startDateValue}
-                      
                         onChange={(e) => {
                             if (e.value !== null) {
                                 const parsedDate = DateTime.fromJSDate(new Date(e.value));

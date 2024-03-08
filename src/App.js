@@ -116,6 +116,12 @@ import PrepaidEvaluatedEnrollments from "./app/features/screens/prepaid_postpaid
 import Manage_Vendors from "./app/features/screens/user_management/ManageVendors/Manage_Vendors";
 import Add_Vendors from "./app/features/screens/user_management/ManageVendors/components/Add_Vendors";
 import Update_Vendors from "./app/features/screens/user_management/ManageVendors/components/Update_Vendors";
+
+// importing Bulk Downloads
+import Label_Downloads from "./app/features/screens/Bulk_Downloads/Label_Downloads/Label_Downloads";
+import Invoices_Downloads from "./app/features/screens/Bulk_Downloads/Invoices_Downloads/Invoices_Downloads";
+import Inventory_Downloads from "./app/features/screens/Bulk_Downloads/Inventory_Downloads/Inventory_Downloads";
+
 const App = () => {
     // cleanLocalStorage() 
     const [refreshApp,setRefreshApp]=useState(false)  
@@ -438,7 +444,7 @@ const App = () => {
                                             <Route path="/edit-department" element={isPermitted("/edit-department") ? <EditDepartment /> : <Dashboard />} />
                                             <Route path="/manage-vendors" element={isPermitted("/manage-vendors") ? <Manage_Vendors /> : <Dashboard />} />
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
-                                            <Route exact path="/update_vendors" element={<Update_Vendors />} />
+                                           <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
                                             {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
                                              <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
