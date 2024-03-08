@@ -131,8 +131,9 @@ const Label_Downloads = () => {
                     <Column field="labels.length" header="Counter"></Column>
                     <Column
                         field="Action"
-                        body={(rowData) => (
-                            <Button
+                        body={(rowData) => { 
+                            return(
+                            /*  <Button
                                 className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none"
                                 onClick={() => {
                                     rowData?.labels.map(() => {
@@ -142,8 +143,12 @@ const Label_Downloads = () => {
                                 }}
                             >
                                 Download
-                            </Button>
-                        )}
+                            </Button>    
+                            
+                            */ 
+                           <></>
+                            )
+                        }}
                     />
                 </DataTable>
             </div>
