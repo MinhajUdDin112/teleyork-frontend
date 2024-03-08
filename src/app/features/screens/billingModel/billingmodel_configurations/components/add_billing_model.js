@@ -10,9 +10,10 @@ const validationSchema = Yup.object().shape({
     billingModel: Yup.string().required("Billing Model Is Required"),
 })  
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+export default function AddBillingModel({setRefresh, setAddBillingModelVisibility}){     
+    
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-export default function AddBillingModel({setRefresh, setAddBillingModelVisibility}){  
     const [inventoryList,setinventoryList]=useState({})   
     const [refresh2,setRefresh2]=useState(false)
     const toast = useRef(null);

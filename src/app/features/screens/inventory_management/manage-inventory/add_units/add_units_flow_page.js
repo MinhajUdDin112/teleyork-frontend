@@ -30,9 +30,10 @@ import TabletSingleUploadAddAndAssignNonActivateProvision from "./add_units_comp
 import TabletSingleUploadAddPreActivatedProvision from "./add_units_components/tablet_single_upload/add_preactivated_provision.js";
 import TabletSingleUploadReprovision from "./add_units_components/tablet_single_upload/reprovision.js";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const loginRes = localStorage.getItem("userData");
-const parseLoginRes = JSON.parse(loginRes);
-const AddUnits = ({ setActiveComponent }) => {            
+
+const AddUnits = ({ setActiveComponent }) => {          
+    const loginRes = localStorage.getItem("userData");
+const parseLoginRes = JSON.parse(loginRes);       
     const validationSchema = Yup.object().shape({
         unitType: Yup.string().required("please select"),
         uploadType: Yup.string().required("please select type "),
@@ -147,7 +148,7 @@ const AddUnits = ({ setActiveComponent }) => {
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0 ">
                             Inventory Type  
-                    
+                                     
                                 
                         </p>
                         <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
