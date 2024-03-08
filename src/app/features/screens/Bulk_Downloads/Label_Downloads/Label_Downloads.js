@@ -137,7 +137,8 @@ const Label_Downloads = () => {
                                 <Button
                                     className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none"
                                     onClick={() => {
-                                        rowData?.labels.map(() => {
+                                        let labelData = rowData?.labels;
+                                        labelData.map(() => {
                                             setLabels(rowData?.labels);
                                         });
                                         handleLabels(rowData);
