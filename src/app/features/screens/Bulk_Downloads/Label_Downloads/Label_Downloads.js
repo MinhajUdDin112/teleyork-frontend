@@ -15,7 +15,6 @@ const Label_Downloads = () => {
     const [user, setUser] = useState([]);
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
-    const [downloadType, setDownloadType] = useState("");
     const [labels, setLabels] = useState([]);
     const Billing_models = [
         { name: "Prepaid", value: "Prepaid" },
@@ -39,13 +38,21 @@ const Label_Downloads = () => {
         roleData();
     }, []);
     // label api
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const formattedDateFrom = dateFrom ? new Date(dateFrom).toISOString().slice(0, 19) : "";
                 const formattedDateTo = dateTo ? new Date(dateTo).toISOString().slice(0, 19) : "";
-                // const response = await Axios.get(`${BASE_URL}/api/web/bulkDownloads/label?startDate=2023-03-05T00:00:00&endDate=2024-03-06T23:59:59&role=6533c0f9027ce82576113aac&billingModel=Postpaid`);
-                const response = await Axios.get(`${BASE_URL}/api/web/bulkDownloads/label?startDate=${formattedDateFrom}&endDate=${formattedDateTo}&role=${user}&billingModel=${model}`);
+
+                const requestData = {
+                    startDate: formattedDateFrom,
+                    endDate: formattedDateTo,
+                    role: user,
+                    billingModel: model,
+                };
+                // Make sure to adjust Axios to send data in the request body
+                const response = await Axios.post(`${BASE_URL}/api/web/bulkDownloads/label`, requestData);
                 const data = response?.data;
                 console.log("get api data ", data);
                 setApiData(data);
@@ -55,10 +62,10 @@ const Label_Downloads = () => {
         };
         fetchData();
     }, [dateFrom, dateTo, user, model]);
-    console.log("api data", apiData);
 
-    console.log("userdata", user);
-    console.log("apiData", apiData);
+    // console.log("api data", apiData);
+    // console.log("userdata", user);
+    // console.log("apiData", apiData);
 
     const handleLabels = async (rowData) => {
         try {
@@ -106,24 +113,22 @@ const Label_Downloads = () => {
                 <h1>Label Downloads</h1>
             </div>
             <Card style={{ height: "18rem" }}>
-                <div className="p-field col-12 md:col-3" style={{ marginLeft: "20rem" }}>
+                <div className="p-field col-12 md:col-3" style={{ marginLeft: "7rem" }}>
                     <label className="Label__Text">Billing Model</label>
                     <Dropdown value={model} onChange={(e) => setModel(e.value)} options={Billing_models} optionLabel="name" editable placeholder="Select Model" className="w-full md:w-14rem " />
                 </div>
-                <div className="p-field col-12 md:col-3" style={{ marginLeft: "40rem", marginTop: "-5.1rem" }}>
+                <div className="p-field col-12 md:col-3" style={{ marginLeft: "30rem", marginTop: "-5.1rem" }}>
                     <label className="Label__Text">Add Users</label>
                     <MultiSelect value={user} onChange={(e) => setUser(e.value)} options={roleData} optionLabel="role" display="chip" placeholder="Select User" maxSelectedLabels={3} optionValue="_id" className="w-full md:w-20rem" />
-                    {/* <Dropdown value={user} onChange={(e) => setUser(e.value)} options={roleData} optionLabel="role" optionValue="_id" editable placeholder="Select User" className="w-full md:w-14rem " /> */}
                 </div>
-                <div className="p-field col-12 md:col-3 " style={{ marginLeft: "20rem" }}>
+                <div className="p-field col-12 md:col-3 " style={{ marginLeft: "7rem", marginTop: "2rem" }}>
                     <label className="Label__Text">Date From</label>
                     <Calendar value={dateFrom} onChange={(e) => setDateFrom(e.value)} />
                 </div>
-                <div className="p-field col-12 md:col-3 " style={{ marginLeft: "40rem", marginTop: "-5rem" }}>
+                <div className="p-field col-12 md:col-3 " style={{ marginLeft: "30rem", marginTop: "-5rem" }}>
                     <label className="Label__Text">Date To</label>
                     <Calendar value={dateTo} onChange={(e) => setDateTo(e.value)} />
                 </div>
-                {/* <Button label="Apply Filters" style={{ marginLeft: "20.5rem", marginTop: "0.5rem", position: "absolute" }} /> */}
             </Card>
             <div className="card" style={{ width: "62rem", marginLeft: "5rem", marginTop: "4rem" }}>
                 <Button label="Download" onClick={handleAllDownload} style={{ marginLeft: "50.5rem", marginTop: "0.3rem", position: "absolute" }} />
