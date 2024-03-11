@@ -30,14 +30,8 @@ const CreateUser = () => {
         role: Yup.string().required("This field is required."),
         name: Yup.string().required("This field is required."),
         email: Yup.string().email("Invalid email format").required("This field is required."),
-       
-        city: Yup.string().required("This field is required."),
-        state: Yup.string().required("This field is required."),
-       
-        zip: Yup.string().required("This field is required."),
         reportingTo: Yup.string().required("This field is required."),
-        department: Yup.string().required("This field is required."),
-        // repId: Yup.string().required("This field is required."),
+        department: Yup.string().required("This field is required.")
     });
 
     const formik = useFormik({
@@ -46,12 +40,6 @@ const CreateUser = () => {
             role: "",
             name: "",
             email: "",
-         
-            //password: "",
-            city: "",
-            state: "",
-          
-            zip: "",
             reportingTo: "",
             department: "",
             repId: "",
@@ -66,12 +54,6 @@ const CreateUser = () => {
                 department: formik.values.department,
                 name: values.name,
                 email: values.email,
-                //password: values.password,
-               
-                city: values.city,
-              
-                zip: values.zip,
-                state: values.state,
                 repId: values.repId,
             };
 
@@ -232,30 +214,6 @@ const CreateUser = () => {
                             </label>
                             <InputText id="email" value={formik.values.email} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
                             {getFormErrorMessage("email")}
-                        </div>
-                    
-
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Select State<span className="steric">*</span>
-                            </label>
-                            <Dropdown id="state" options={allState} value={formik.values.state} onChange={(e) => formik.setFieldValue("state", e.value)} optionLabel="state" optionValue="state" showClear filter filterBy="state" />
-                            {getFormErrorMessage("state")}
-                        </div>
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Select City<span className="steric">*</span>
-                            </label>
-                            <Dropdown id="city" options={allCity} value={formik.values.city} onChange={(e) => formik.setFieldValue("city", e.value)} optionLabel="city" optionValue="city" showClear filter filterBy="city" />
-                            {getFormErrorMessage("city")}
-                        </div>
-
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Zip <span className="steric">*</span>
-                            </label>
-                            <InputText id="zip" value={formik.values.zip} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
-                            {getFormErrorMessage("zip")}
                         </div>
                     </div>
                     <div className="mt-4">

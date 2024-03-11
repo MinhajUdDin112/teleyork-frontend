@@ -28,7 +28,7 @@
     text-transform: uppercase;
 }
 .p-menuitem-text {
-    font-size: 21px; /* Change the size as needed */
+    font-size: 21px; 
   }
   @media(max-width:767px){  
     .p-menuitem-text{

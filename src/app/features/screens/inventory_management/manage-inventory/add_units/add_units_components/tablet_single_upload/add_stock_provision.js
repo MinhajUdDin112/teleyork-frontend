@@ -205,7 +205,7 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
                         <p className="m-0">
                             ESN <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText keyfilter="int" value={formik.values.Esn} maxLength={19} minLength={19} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.Esn && formik.touched.Esn && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Esn}
