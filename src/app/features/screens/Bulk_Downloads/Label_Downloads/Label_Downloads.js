@@ -17,6 +17,7 @@ const Label_Downloads = () => {
     const [user, setUser] = useState([]);
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
+    const [labels, setLabels] = useState([]);
 
     const Billing_models = [
         { name: "Prepaid", value: "Prepaid" },
