@@ -7,7 +7,7 @@ import CompletedEnrollments from "./components/CompletedEnrollments";
 import ProvisioningQueue from "./components/ProvisioningQueue";  
 import DateRangeEnrollmentStatChart from "./daterange_enrollment_stats_chart/daterange_enrollment_stat_chart";
 import ActiveEnrollments from "./components/ActiveEnrollments";
-export default function DateRangeStats({role,startDate,endDate,permittedRoutes}){   
+export default function DateRangeStats({role,startDate,endDate,permittedRoutes,selectedModule}){   
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes); 
     const userid = parseLoginRes._id;
@@ -68,7 +68,7 @@ export default function DateRangeStats({role,startDate,endDate,permittedRoutes})
                     const Component = obj[item].component; // Assign the component to a variable
                     return (
                         <div key={item} className="card info">
-                            <Component role={role} userid={userid} BASE_URL={BASE_URL} startDate={startDate} endDate={endDate} /> {/* Render the component dynamically */}
+                            <Component selectedModule={selectedModule} role={role} userid={userid} BASE_URL={BASE_URL} startDate={startDate} endDate={endDate} /> {/* Render the component dynamically */}
                             <p className="w-full text-center">{obj[item].label}</p>
                         </div>
                     );
