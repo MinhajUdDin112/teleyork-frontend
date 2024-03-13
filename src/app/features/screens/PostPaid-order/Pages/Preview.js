@@ -249,7 +249,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Address 2:</p>
-                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.address2}</p>
+                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.address2 !== undefined && previewInfo?.address2.trim() !== "" ? previewInfo?.address2 : "---"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>
