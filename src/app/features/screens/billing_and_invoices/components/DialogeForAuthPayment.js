@@ -84,13 +84,8 @@ const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
                     const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
 
                     if (response?.status == "200" || response?.status == "201") {
-<<<<<<< HEAD
                         toast.success("Invoice Update Successfully")
                         handleAPISuccess(true);
-=======
-                        toast.success("Invoice Update Successfully");
-                        onAPISuccess(true);
->>>>>>> 545cc1e6ed9ea3b8857298f2778110bcd8fcfd63
                     }
                 } catch (error) {
                     toast.error("Update Invoice error is" + error?.response?.data?.msg);
@@ -133,13 +128,8 @@ const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
                     const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
 
                     if (response?.status == "200" || response?.status == "201") {
-<<<<<<< HEAD
                         toast.success("Invoice Update Successfully")
                         handleAPISuccess(true);
-=======
-                        toast.success("Invoice Update Successfully");
-                        onAPISuccess(true);
->>>>>>> 545cc1e6ed9ea3b8857298f2778110bcd8fcfd63
                     }
                 } catch (error) {
                     toast.error("Update Invoice error is" + error?.response?.data?.msg);
