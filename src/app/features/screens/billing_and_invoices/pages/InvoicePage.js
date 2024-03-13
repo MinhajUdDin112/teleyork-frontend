@@ -1,36 +1,30 @@
 import React, { useEffect, useState } from "react";
 import InvoiceTable from "../components/InvoiceTable";
-
 import AdHocModal from "../components/modals/AdHocModal";
 import BillingNavbar from "../../customer_profile/modals/BillingNavbar";
 import Axios from "axios";
 import { Card } from "primereact/card";
 import {  useLocation } from 'react-router-dom';
-
 import ChangeCustomerStatus from "../../customer_profile/change_customer_status/change_customer_status";
 import { Dialog } from "primereact/dialog";
-
 import { Button } from "primereact/button";
+import { createContext } from "react";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+const onAPISuccess = createContext();
 
 const InvoicePage = () => {
-   
     const [accountType, setAccountType] = useState("")
     const [invoices, setInvoices] = useState([])
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
-     const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false);
-    
+    const [adHocInvoiceModal, setAdHocInvoiceModal] = useState(false); 
     const [currentPlan, setCurrentPlan] = useState([])
-   
     const [userDetails, setUserDetails] = useState()
     const [cpData, setCpData] = useState([]);
-
     const location = useLocation();
     const selectedId = location?.state && location?.state?.selectedId;
 
     const handleAPISuccess = (responseData) => {
-        // Update data in main page state
         window.location.reload();
       };
     const getUserDetail = async () => {
@@ -53,20 +47,17 @@ const InvoicePage = () => {
         if (resp?.status == "200" || resp?.status == "201") {
             setCurrentPlan(resp?.data?.data)
             setInvoices(resp?.data?.data)
-            localStorage.setItem("invoiceData", JSON.stringify(resp?.data?.data));
-           
+            localStorage.setItem("invoiceData", JSON.stringify(resp?.data?.data));  
         }
     }
-    useEffect(() => {
-      
+    useEffect(() => {  
         getUserDetail();
         getInvoice()
     }, [selectedId])
 
     return (
         <>
-
-       
+        <onAPISuccess.Provider value={{handleAPISuccess}}>
         <Card>
             <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
             <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
@@ -79,7 +70,7 @@ const InvoicePage = () => {
                
            
             <div className="mt-5 mb-5 ml-5">  
-<Button label="AD HOC Invoice" text raised onClick={()=>{setAdHocInvoiceModal(true)}}/>
+                    <Button label="AD HOC Invoice" text raised onClick={()=>{setAdHocInvoiceModal(true)}}/>
         </div>
             <div className=" p-0 m-3 card">
                
@@ -91,7 +82,7 @@ const InvoicePage = () => {
                         •Row in blue color are paid invoices
                     </p>
                 </div>
-                <InvoiceTable onAPISuccess={handleAPISuccess} userDetails={userDetails} className="mb-3" invoiceData={invoices} />
+                <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} />
 
             </div>
           
@@ -100,8 +91,11 @@ const InvoicePage = () => {
            
 
         </Card>
+        </onAPISuccess.Provider>
+       
         </>
     );
 };
 
 export default InvoicePage;
+export {onAPISuccess}

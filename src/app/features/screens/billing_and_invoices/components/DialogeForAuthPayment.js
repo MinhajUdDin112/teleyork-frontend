@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -9,10 +8,15 @@ import { toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
-
+import { useContext } from "react";
+import { onAPISuccess } from "../pages/InvoicePage";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount, onAPISuccess }) => {
+
+const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
+    
+    const {handleAPISuccess} =  useContext(onAPISuccess);
+     
     dueAmount = parseFloat(dueAmount).toFixed(2);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -80,8 +84,13 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
                     const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
 
                     if (response?.status == "200" || response?.status == "201") {
+<<<<<<< HEAD
+                        toast.success("Invoice Update Successfully")
+                        handleAPISuccess(true);
+=======
                         toast.success("Invoice Update Successfully");
                         onAPISuccess(true);
+>>>>>>> 545cc1e6ed9ea3b8857298f2778110bcd8fcfd63
                     }
                 } catch (error) {
                     toast.error("Update Invoice error is" + error?.response?.data?.msg);
@@ -124,8 +133,13 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
                     const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
 
                     if (response?.status == "200" || response?.status == "201") {
+<<<<<<< HEAD
+                        toast.success("Invoice Update Successfully")
+                        handleAPISuccess(true);
+=======
                         toast.success("Invoice Update Successfully");
                         onAPISuccess(true);
+>>>>>>> 545cc1e6ed9ea3b8857298f2778110bcd8fcfd63
                     }
                 } catch (error) {
                     toast.error("Update Invoice error is" + error?.response?.data?.msg);
