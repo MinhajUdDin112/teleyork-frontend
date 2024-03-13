@@ -171,9 +171,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <p className="w-6 ml-4">First Name:</p>
                                     <p className="w-6">{previewInfo?.firstName}</p>
                                 </div>
-                                <div className="flex border-bottom-2 pt-2s">
+                                <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Mother's Maiden Name:</p>
-                                    <p className="w-6">{previewInfo?.maidenMotherName !==undefined ?previewInfo?.maidenMotherName:"Nill"  }</p>
+                                    <p className="w-6">{previewInfo?.maidenMotherName !== undefined && previewInfo?.maidenMotherName.trim() !== "" ? previewInfo?.maidenMotherName.toUpperCase() : "---"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>

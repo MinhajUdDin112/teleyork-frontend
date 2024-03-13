@@ -3,13 +3,12 @@ import { Button } from "primereact/button";
 import { NavLink } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
-import * as Yup from "yup"; 
+import * as Yup from "yup";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function LoginScreen({ setRefreshApp }) {
-  
-    const [loading,setLoading]=useState(false)       
-    const [errormsg,setErrorMsg]=useState(null)
+    const [loading, setLoading] = useState(false);
+    const [errormsg, setErrorMsg] = useState(null);
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -19,23 +18,24 @@ export default function LoginScreen({ setRefreshApp }) {
             email: Yup.string().email("Invalid email").required("Email is required"),
             password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
         }),
-        onSubmit: async (values) => {  
-              setLoading(prev=>!prev)
-         Axios.post(`${BASE_URL}/api/web/user/login`, formik.values).then((response)=>{ 
-            const allowdPerms = response?.data?.data?.permissions
-            localStorage.setItem("userData", JSON.stringify(response?.data?.data));
-            localStorage.setItem("accessToken", JSON.stringify(response?.data?.data?.token));
-            localStorage.setItem("refreshToken", JSON.stringify(response?.data?.refreshToken));      
-          
-            localStorage.setItem("permissions", JSON.stringify(allowdPerms))
-            setRefreshApp((prev) => !prev);
-         }).catch(err=>{ 
-          setErrorMsg(err.response?.data?.msg)  
-          setLoading(prev=>!prev)
-         })
+        onSubmit: async (values) => {
+            setLoading((prev) => !prev);
+            Axios.post(`${BASE_URL}/api/web/user/login`, formik.values)
+                .then((response) => {
+                    const allowdPerms = response?.data?.data?.permissions;
+                    localStorage.setItem("userData", JSON.stringify(response?.data?.data));
+                    localStorage.setItem("accessToken", JSON.stringify(response?.data?.data?.token));
+                    localStorage.setItem("refreshToken", JSON.stringify(response?.data?.refreshToken));
 
+                    localStorage.setItem("permissions", JSON.stringify(allowdPerms));
+                    setRefreshApp((prev) => !prev);
+                })
+                .catch((err) => {
+                    setErrorMsg(err.response?.data?.msg);
+                    setLoading((prev) => !prev);
+                });
         },
-    }); 
+    });
     useEffect(() => {
         var currentURL;
         var modifiedURL;

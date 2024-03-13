@@ -161,14 +161,9 @@ const ManageUser = () => {
                     <Column field="role.role" header="Role"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="email" header="Email"></Column>
-                    <Column field="state" header="State"></Column>
-                    <Column field="city" header="City"></Column>
-                    <Column field="address" header="Address"></Column>
-                    <Column field="zip" header="Zip"></Column>
                     <Column field={(item) => (item?.active === true ? "Active" : "Inactive")} header="Status"></Column>
                     <Column field="createdDate" header="Created Date" body={(rowData) => new Date(rowData.createdDate).toLocaleDateString()}></Column>
                     <Column body={actions} header="Actions"></Column>
-                    {/* <Column body={permissions} header="Permissions"></Column> */}
                 </DataTable>
                 <Dialog
                     header="Delete User"

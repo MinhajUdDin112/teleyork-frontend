@@ -82,7 +82,7 @@ const InvoicePage = () => {
 <Button label="AD HOC Invoice" text raised onClick={()=>{setAdHocInvoiceModal(true)}}/>
         </div>
             <div className=" p-0 m-3 card">
-                {/* <PlanInfo  /> */}
+               
                 <div className="mx-4">
                     <p className="m-0 text-lg font-bold " style={{ color: "red" }}>
                         •Row in red color are unpaid invoices
