@@ -39,10 +39,10 @@ height:40px;
 margin-top: 0px;
 }
 .date-range {
-    width: 60%;
+    width: 70%;
 }
 .date-range .calendar1 {
-    width: 40%;
+    width: 35%;
     font-size: 21px;
     height: 40px;
 }
@@ -53,9 +53,8 @@ margin-top: 0px;
     color: grey;
     text-align: center;
 }
-
 .date-range .calendar2 {
-    width: 40%;
+    width: 35%;
     height: 40px;
 }
 .date-range button {

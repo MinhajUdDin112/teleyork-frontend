@@ -82,14 +82,23 @@ const Dashboard = ({ permittedRoutes }) => {
                 })
                 .catch((err) => {});
         }
-    }, []);
+    }, []);  
+    const [selectedModule,setSelectedModule]=useState("")  
+    const ModulesOptions=[{ 
+     label:"ACP", 
+     value:"acp"
+    },{ 
+        label:"Postpaid", 
+        value:"postpaid"
+    }]
     return (
         <div className="card">
-            <div className="card forrange pt-3 pb-2 flex flex-wrap justify-content-center fordropdown ">
-                {parseLoginRes.role.role === "TEAM LEAD" || parseLoginRes.role.role === "PROVISION MANAGER" || parseLoginRes.role.role === "QA MANAGER" ? (
-                    <Dropdown className="dropdownstyle" value={selectedAgent} onChange={(e) => setSelectedAgent(e.value)} options={agentOptions} optionLabel="name" placeholder="Select Agent" />
+            <div className="card forrange pt-3 pb-2 flex flex-wrap flex-row  justify-content-center  fordropdown ">  
+           {/* <Dropdown className="dropdownstyle mt-2 mr-2" value={selectedModule} onChange={(e) => setSelectedModule(e.value)} options={ModulesOptions} optionLabel="label" optionValue="value" placeholder="Select Module" />  */}
+                        {parseLoginRes.role.role === "TEAM LEAD" || parseLoginRes.role.role === "PROVISION MANAGER" || parseLoginRes.role.role === "QA MANAGER" ? (
+                    <Dropdown className="dropdownstyle mt-2" value={selectedAgent} onChange={(e) => setSelectedAgent(e.value)} options={agentOptions} optionLabel="name" placeholder="Select Agent" />
                 ) : undefined}
-                <div className="date-range  flex flex-wrap justify-content-center flex-row ">
+                <div className="date-range mt-2  flex flex-wrap justify-content-center flex-row ">
                     <Calendar
                         className=" calendar1 font-bold"
                         value={startDateValue}
@@ -140,14 +149,14 @@ const Dashboard = ({ permittedRoutes }) => {
                 <div className="content1 card">
                     {startDate !== null || endDate !== null ? (
                         selectedAgent === null ? (
-                            <DateRangeStats role={parseLoginRes.role.role} startDate={startDate} endDate={endDate} permittedRoutes={permittedRoutes} />
+                            <DateRangeStats role={parseLoginRes.role.role} startDate={startDate} selectedModule={selectedModule} endDate={endDate} permittedRoutes={permittedRoutes} />
                         ) : (
-                            <AgentDateRangeStats role={parseLoginRes.role.role} startDate={startDate} agentid={selectedAgent} endDate={endDate} permittedRoutes={permittedRoutes} />
+                            <AgentDateRangeStats role={parseLoginRes.role.role} startDate={startDate} agentid={selectedAgent} selectedModule={selectedModule} endDate={endDate} permittedRoutes={permittedRoutes} />
                         )
                     ) : selectedAgent === null ? (
-                        <Last24HoursEnrollments role={parseLoginRes.role.role} permittedRoutes={permittedRoutes} />
+                        <Last24HoursEnrollments selectedModule={selectedModule} role={parseLoginRes.role.role} permittedRoutes={permittedRoutes} />
                     ) : (
-                        <Last24HoursAgentEnrollments role={parseLoginRes.role.role} agentid={selectedAgent} permittedRoutes={permittedRoutes} />
+                        <Last24HoursAgentEnrollments selectedModule={selectedModule} role={parseLoginRes.role.role} agentid={selectedAgent} permittedRoutes={permittedRoutes} />
                     )}
                     {/*
                 <EnrollmentByStates permittedRoutes={permittedRoutes} /> */}
@@ -158,27 +167,27 @@ const Dashboard = ({ permittedRoutes }) => {
                             startDate !== null || endDate !== null ? (
                                 <>
                                     <h6 className="sales-channel-stats p-4 ml-4">Date Range Sales Channel</h6>
-                                    <DateRangeSalesChannel BASE_URL={BASE_URL} roleId={parseLoginRes._id} startDate={startDate} endDate={endDate} />
-                                    <DateRangeSalesChannelChart BASE_URL={BASE_URL} roleId={parseLoginRes._id} startDate={startDate} endDate={endDate} />
+                                    <DateRangeSalesChannel selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={parseLoginRes._id} startDate={startDate} endDate={endDate} />
+                                    <DateRangeSalesChannelChart selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={parseLoginRes._id} startDate={startDate} endDate={endDate} />
                                 </>
                             ) : (
                                 <>
                                     <h6 className="sales-channel-stats p-4 ml-4">Last 24 Hours Sales Channel</h6>
-                                    <Last24HoursSalesChannel BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
-                                    <Last24AgentSalesChannelChart BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
+                                    <Last24HoursSalesChannel selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
+                                    <Last24AgentSalesChannelChart selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
                                 </>
                             )
                         ) : startDate !== null || endDate !== null ? (
                             <>
                                 <h6 className="sales-channel-stats p-4 ml-4">Date Range Sales Channel</h6>
-                                <DateRangeAgentSalesChannel BASE_URL={BASE_URL} roleId={selectedAgent} startDate={startDate} endDate={endDate} />
-                                <DateRangeSalesChannelChart BASE_URL={BASE_URL} roleId={selectedAgent} startDate={startDate} endDate={endDate} />
+                                <DateRangeAgentSalesChannel selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={selectedAgent} startDate={startDate} endDate={endDate} />
+                                <DateRangeSalesChannelChart selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={selectedAgent} startDate={startDate} endDate={endDate} />
                             </>
                         ) : (
                             <>
                                 <h6 className="sales-channel-stats p-4 ml-4">Last 24 Hours Sales Channel</h6>
-                                <Last24HoursAgentSalesChannel BASE_URL={BASE_URL} roleId={selectedAgent} />
-                                <Last24AgentSalesChannelChart BASE_URL={BASE_URL} roleId={selectedAgent} />
+                                <Last24HoursAgentSalesChannel selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={selectedAgent} />
+                                <Last24AgentSalesChannelChart selectedModule={selectedModule} BASE_URL={BASE_URL} roleId={selectedAgent} />
                             </>
                         )}
                     </div>
@@ -190,29 +199,29 @@ const Dashboard = ({ permittedRoutes }) => {
                                 <>
                                     <h6 className="sales-channel-stats p-4 ml-4">Date Range Department Wise Rejected</h6>
 
-                                    <DepartmentWiseRejectedByDateRange startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
-                                    <DepartmentWiseRejectedDateRangeChart startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
+                                    <DepartmentWiseRejectedByDateRange selectedModule={selectedModule} startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
+                                    <DepartmentWiseRejectedDateRangeChart selectedModule={selectedModule} startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
                                 </>
                             ) : (
                                 <>
                                     <h6 className="sales-channel-stats p-4 ml-4">Last 24 Hours Department Wise Rejected</h6>
-                                    <DepartmentWiseRejectedInLast24 role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
-                                    <DepartmentWiseRejectedLast24Chart role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
+                                    <DepartmentWiseRejectedInLast24 selectedModule={selectedModule} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
+                                    <DepartmentWiseRejectedLast24Chart selectedModule={selectedModule} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={parseLoginRes._id} />
                                 </>
                             )
                         ) : startDate !== null || endDate !== null ? (
                             <>
                                 <h6 className="sales-channel-stats p-4 ml-4">Date Range Department Wise Rejected</h6>
 
-                                <DepartmentWiseAgentRejectedByDateRange startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
-                                <DepartmentWiseAgentRejectedDateRangeChart startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
+                                <DepartmentWiseAgentRejectedByDateRange selectedModule={selectedModule} startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
+                                <DepartmentWiseAgentRejectedDateRangeChart selectedModule={selectedModule} startDate={startDate} endDate={endDate} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
                             </>
                         ) : (
                             <>
                                 <h6 className="sales-channel-stats p-4 ml-4">Last 24 Hours Department Wise Rejected</h6>
 
-                                <DepartmentWiseAgentRejectedInLast24 role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
-                                <DepartmentWiseAgentRejectedLast24Chart role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
+                                <DepartmentWiseAgentRejectedInLast24 selectedModule={selectedModule} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
+                                <DepartmentWiseAgentRejectedLast24Chart selectedModule={selectedModule} role={parseLoginRes.role.role} BASE_URL={BASE_URL} roleId={selectedAgent} />
                             </>
                         )}
                     </div>
