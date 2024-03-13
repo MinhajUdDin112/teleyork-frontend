@@ -195,7 +195,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                              
                                 {
                                     parsefromRejected && basicData && basicData.currentPlan && (
-                                        <div className="flex pt-2 ">
+                                        <div className="flex pt-2 border-bottom-2">
                                             <p className="w-6 ml-4">Product:</p>
                                             <p className="w-6">{basicData?.selectProduct.toUpperCase()}</p>
                                         </div>
@@ -203,7 +203,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 }
                                   {
                                     !parsefromRejected && parseproductData && (
-                                        <div className="flex pt-2 ">
+                                        <div className="flex pt-2 border-bottom-2 ">
                                             <p className="w-6 ml-4">Product:</p>
                                             <p className="w-6">{parseproductData?.
                                         selectProduct.toUpperCase()
@@ -211,7 +211,20 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         </div>
                                     )
                                 }
-                                
+                                 {
+                                    paymentStatus && paymentStatus === "paid" ?
+                                        <div className="flex pt-2 border-bottom-2">
+                                            <p className="w-6 ml-4">Payment Method:</p>
+                                            <p className="w-6">CREDIT CARD</p>
+
+                                        </div> :
+                                        <div className="flex pt-2 border-bottom-2">
+                                            <p className="w-6 ml-4">Payment Method:</p>
+                                            <p className="w-6">SKIP</p>
+
+                                        </div>
+                                        
+                                }
 
                                 {/* {
                                     parsefromRejected ? <div className="flex  pt-2">
@@ -224,8 +237,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
                                     </div>
                                 } */}
-
-
                             </div>
                             <div className="border-2 w-5 ">
                                 <div className="flex border-bottom-2 pt-2">
@@ -235,6 +246,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
                                     <p style={{ marginLeft: "-10px" }}>{previewInfo?.city}</p>
+                                </div>
+                                <div className="flex border-bottom-2 pt-2">
+                                    <p className="w-6 ml-4">Address 2:</p>
+                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.address2}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>
@@ -279,22 +294,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
                                     </div>
                                 }
-
-                                {/* {
-                                    paymentStatus && paymentStatus === "paid" ?
-                                        <div className="flex pt-2 border-bottom-2">
-                                            <p className="w-6 ml-4">Payment Method:</p>
-                                            <p className="w-6">CREDIT CARD</p>
-
-                                        </div> :
-                                        <div className="flex pt-2 border-bottom-2">
-                                            <p className="w-6 ml-4">Payment Method:</p>
-                                            <p className="w-6">SKIP</p>
-
-                                        </div>
-                                        
-                                } */}
-
+                                
 
                             </div>
                         </div>
