@@ -1,15 +1,40 @@
 import Axios from "axios";
 import React, { useState, useEffect } from "react";
 import { DateTime } from "luxon";
-export default function AllEnrollments({ BASE_URL, userid, startDate, endDate }) {
+export default function AllEnrollments({ BASE_URL, userid, startDate, endDate ,selectedModule}) {
+   
     const [allEnrollments, setAllEnrollments] = useState(0);
     useEffect(() => {
-        let isMounted = true;
-        Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`)
+        let isMounted = true; 
+        let url1="";    
+        let url2=""; 
+        let url3="" 
+        url1=`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`
+        url2=`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`
+         url3=`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`
+      /*  if(selectedModule === "prepaid"){ 
+         url1=`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}&accountType=Prepaid`
+         url2=`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}&accountType=Prepaid`
+         url3=`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}&accountType=Prepaid`
+        } 
+        else if(selectedModule === "postpaid"){ 
+           url1=`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}&accountType=Postpaid`
+           url2=`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}&accountType=Postpaid`
+           url3=`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}&accountType=Postpaid`
+     
+        } 
+        else{ 
+            url1=`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${userid}`
+            url2=`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`
+             url3=`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`
+     
+        }   
+        */
+        Axios.get(`${url1}`)
             .then((response1) => {
-                Axios.get(`${BASE_URL}/api/user/rejectedEnrollmentUser?userId=${userid}`)
+                Axios.get(`${url2}`)
                     .then((response2) => {
-                        Axios.get(`${BASE_URL}/api/user/approvedEnrollmentList?userId=${userid}`)
+                        Axios.get(`${url3}`)
                             .then((response3) => {
                                 let endDateEnrollment = endDate;
                                 if (startDate !== null) {
@@ -60,6 +85,6 @@ export default function AllEnrollments({ BASE_URL, userid, startDate, endDate })
         return () => {
             isMounted = false;
         };
-    }, [startDate, endDate,userid]);
+    }, [startDate, endDate,userid,selectedModule]);
     return <h2 className="text-center">{allEnrollments}</h2>;
 }
