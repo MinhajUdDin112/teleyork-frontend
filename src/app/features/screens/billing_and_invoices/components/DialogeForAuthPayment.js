@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Button } from "primereact/button";
 import {  useFormik } from "formik";
 import * as Yup from "yup";
@@ -9,12 +8,15 @@ import { toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
-
-
+import { useContext } from "react";
+import { onAPISuccess } from "../pages/InvoicePage";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount, onAPISuccess }) => {
 
+const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
+    
+    const {handleAPISuccess} =  useContext(onAPISuccess);
+     
     dueAmount = parseFloat(dueAmount).toFixed(2);
    
     const [isLoading, setIsLoading] = useState(false)
@@ -94,7 +96,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
 
                     if (response?.status == "200" || response?.status == "201") {
                         toast.success("Invoice Update Successfully")
-                        onAPISuccess(true);
+                        handleAPISuccess(true);
                     }
 
                 } catch (error) {
@@ -142,7 +144,7 @@ const DialogeForAuthPayment = ({ userDetails, invoiceData, invoiceId, dueAmount,
 
                     if (response?.status == "200" || response?.status == "201") {
                         toast.success("Invoice Update Successfully")
-                        onAPISuccess(true);
+                        handleAPISuccess(true);
                     }
 
                 } catch (error) {

@@ -20,6 +20,7 @@ import DialogeForOneNote from "./dialogs/DialogeForOneNote";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
+import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = () => {
     const [cpData, setCpData] = useState([]);
@@ -34,6 +35,8 @@ const CustomerProfile = () => {
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
     const [isShow, setIsShow] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
@@ -84,9 +87,8 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
+               
                 setCpData(res?.data?.data || []);
-              
-               ;
             }
         } catch (error) { }
     };
@@ -105,7 +107,7 @@ const CustomerProfile = () => {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
             setAllNotes(res?.data?.data || []);
         } catch (error) {
-            // toast.error(error?.response?.data?.msg);
+
         }
     };
 
@@ -114,18 +116,23 @@ const CustomerProfile = () => {
         getNotes();
     }, []);
 
+useEffect(() => {
+        getCustomerProfileData();
+        
+    }, [refresh]);
     useEffect(() => {
         getNotesType();
     }, [newNoteTypeAdded]);
+
     const handleDialogeForAddType = () => {
         setAddNewType(true);
     };
     const options = [
-        { label: "Priority",value: ""},
-        { label: "Highest", value: "highest"},
-        { label: "High", value: "high"},
-        { label: "Medium", value: "medium"},
-        { label: "Low", value: "low"},
+        { label: "Priority", value: "" },
+        { label: "Highest", value: "highest" },
+        { label: "High", value: "high" },
+        { label: "Medium", value: "medium" },
+        { label: "Low", value: "low" },
         { label: "Lowest", value: "lowest" },
     ];
     function convertDateToRequiredFormat(inputDate) {
@@ -151,7 +158,7 @@ const CustomerProfile = () => {
     //For Showing SOCS Which is Comma Seperated array
     function showsocs(socarray) {
         if (socarray !== undefined) {
-           
+
             var commaSeparatedString = "";
             for (let i = 0; i < socarray.length; i++) {
                 if (i === 0) {
@@ -174,12 +181,16 @@ const CustomerProfile = () => {
             setIsShow(true)
         }
     }
+    const handleEdit =()=>{
+        localStorage.setItem("basicData", JSON.stringify(cpData));
+        localStorage.setItem("address", JSON.stringify(cpData));
+        setIsEdit(true)
+        
+    }
     const downloadLabel = () => {
         const path = cpData?.label;
-       
         const trimmedPath = path.replace(/^uploads\//, "");
         const fileUrl = `${BASE_URL}/${trimmedPath}`;
-    
         const link = document.createElement("a");
         link.href = fileUrl;
         link.setAttribute("target", "_blank"); // Open in new tab
@@ -190,7 +201,7 @@ const CustomerProfile = () => {
     };
     let toCapitalCustomerStatus;
     const customerStatus = cpData?.status;
-    if(customerStatus){
+    if (customerStatus) {
         toCapitalCustomerStatus = customerStatus.toUpperCase()
     }
 
@@ -200,7 +211,7 @@ const CustomerProfile = () => {
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog}/>
+                <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
                 </Dialog>
@@ -214,27 +225,35 @@ const CustomerProfile = () => {
                 <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status (Current Status: ${toCapitalCustomerStatus})`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
                     <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
                 </Dialog>
-
+                <Dialog draggable={false} visible={isEdit} header={"Update Personal Info" } style={{ width: "70vw" }} onHide={() => setIsEdit((prev) => !prev)}>
+                    <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit}/>
+                </Dialog>
                 <div className="pt-3">
                     {
                         cpData?.label ? <> <div className="ml-5">
-                        <Button label="Download Label" onClick={downloadLabel}/>
-                    </div></>:""
+                            <Button label="Download Label" onClick={downloadLabel} />
+                        </div></> : ""
                     }
-               
+
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
                                 <div className="card h-full flex flex-column overflow-x">
                                     <div className="flex justify-content-between">
-                                        
+
                                         <div className="text-900 font-medium text-lg p-3">Customer Information </div>
-                                        <div>
-{
-    isShow ==true ?  <i className="pi pi-eye-slash p-3" style={{ fontSize: '2rem' }} onClick={handleView}></i>
-    :   <i className="pi pi-eye p-3" style={{ fontSize: '2rem' }} onClick={handleView}></i> 
-}
-                                       
+                                        <div className="flex">
+                                            <div>
+                                                <i className="pi pi-user-edit p-3" style={{ fontSize: '2rem', cursor:"pointer" }} onClick={handleEdit}></i>
+                                            </div>
+                                            <div>
+                                                {
+                                                    isShow == true ? <i className="pi pi-eye-slash p-3" style={{ fontSize: '2rem' , cursor:"pointer" }} onClick={handleView}></i>
+                                                        : <i className="pi pi-eye p-3" style={{ fontSize: '2rem', cursor:"pointer" }} onClick={handleView}></i>
+                                                }
+
+                                            </div>
+
 
                                         </div>
                                     </div>
@@ -594,7 +613,7 @@ const CustomerProfile = () => {
                                                     <td>Fulfillment Method</td>
                                                     <td>NIL</td>
                                                 </tr>
-                                               
+
 
                                                 <tr>
                                                     <td>Enrollment Date</td>
@@ -695,7 +714,7 @@ const CustomerProfile = () => {
                             <form onSubmit={formik.handleSubmit}>
                                 <div>
                                     <Dropdown
-                                    placeholder="Select Note Type"
+                                        placeholder="Select Note Type"
                                         id="noteType"
                                         options={allNotesTypes}
                                         value={formik.values.noteType}
@@ -743,7 +762,7 @@ const CustomerProfile = () => {
                     </div>
                 </div>
             </div>
-            { 
+            {
              /*<div>
                 <CustomerInvoice />
             </div>   
