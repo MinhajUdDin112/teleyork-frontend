@@ -9,7 +9,7 @@ import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 import { ro } from "date-fns/locale";
 
-const InvoiceTable = ({ userDetails, invoiceData, onAPISuccess }) => {
+const InvoiceTable = ({ userDetails, invoiceData }) => {
 
     const cardData = invoiceData;
     const [isLoading, setIsLoading] = useState(false)
@@ -33,17 +33,11 @@ const InvoiceTable = ({ userDetails, invoiceData, onAPISuccess }) => {
     const companyName = parseLoginRes?.companyName;
     const companyNameToCapital = companyName.toUpperCase();
 
-
-
-
-
-
-
     return (
         <div className="mx-4">
 
             <Dialog header={"Payment"} visible={dialogeForAuthPayment} style={{ width: "50vw" }} onHide={() => setdialogeForAuthPayment(false)}>
-                <DialogeForAuthPayment onAPISuccess={onAPISuccess} dueAmount={dueAmount} setdialogeForAuthPayment={setdialogeForAuthPayment} invoiceId={invoiceId} userDetails={userDetails} invoiceData={invoiceData} />
+                <DialogeForAuthPayment  dueAmount={dueAmount} setdialogeForAuthPayment={setdialogeForAuthPayment} invoiceId={invoiceId} userDetails={userDetails} invoiceData={invoiceData} />
             </Dialog>
 
             <DataTable
@@ -105,9 +99,7 @@ const InvoiceTable = ({ userDetails, invoiceData, onAPISuccess }) => {
                 <Column field="planCharges" header="Plan Charges" />
                 <Column field="totalAmount" header="Total Amount" body={(rowData) => parseFloat(rowData.totalAmount).toFixed(2)} />
                 <Column field="amountPaid" header="Paid Amount" body={(rowData) => parseFloat(rowData.amountPaid).toFixed(2)} />
-                <Column
-  header="In Wallet"
-  body={(rowData) => userDetails?.wallet !== undefined ? parseFloat(userDetails.wallet).toFixed(2) : '0'}
+                <Column header="In Wallet"  body={(rowData) => userDetails?.wallet !== undefined ? parseFloat(userDetails.wallet).toFixed(2) : '0'}
 />
 
               

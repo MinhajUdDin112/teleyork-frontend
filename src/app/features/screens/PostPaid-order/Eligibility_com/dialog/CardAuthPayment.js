@@ -138,7 +138,6 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                                             <td>
                                                 {" "}
                                                 <InputText type="text" id="amount" value={formik.values.amount} onChange={formik.handleChange} disabled />
-
                                             </td>
                                         </tr>
                                         <tr className="text-lg">
