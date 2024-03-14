@@ -25,11 +25,12 @@ export default function PostpaidActivatedBulkUpload() {
             formData.append("serviceProvider", parseLoginRes.company);
             Axios.post(`${BASE_URL}/api/user/bulkPostpaidActivatedUpload`, formData)
                 .then((res) => {
-                    toast.current.show({ severity: "success", summary: "Bulk Upload Activated Enrollments", detail: "Added Successfully " });
-                    setDisableSubmit(false);
-                    selectedFile(null);
+                  setDisableSubmit(false);
+                setSelectedFile(null);
                     setFileError(null);
-                    setButtonLabel("Upload File");
+                    setButtonLabel("Upload File"); 
+                    toast.current.show({ severity: "success", summary: "Bulk Upload Activated Enrollments", detail: "Added Successfully " });
+                  
                 })
                 .catch((err) => {
                     toast.current.show({ severity: "error", summary: "Bulk Upload Activated Enrollments", detail: err?.response?.data?.msg });
@@ -71,7 +72,7 @@ export default function PostpaidActivatedBulkUpload() {
                     </p>
                 </div>
                 <div>
-                    <Button disabled={disableSubmit} label="Submit" onClick={submitFile} />
+                    <Button disabled={disableSubmit} label="Submit" onClick={()=>{submitFile()}} />
                 </div>
             </div>
             <Toast ref={toast} />
