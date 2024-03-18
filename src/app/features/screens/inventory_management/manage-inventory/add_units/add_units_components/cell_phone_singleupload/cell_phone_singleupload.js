@@ -108,8 +108,9 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
             Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
             box: Yup.string().required("Box is required"),
             Model: Yup.string().required("Model is required"),
-            IMEI: Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
-            AgentName: Yup.string().required("Agent Name is required"),
+            IMEI: Yup.string()
+            .required("IMEI is required")
+            .matches(/^\d+$/, 'ESN must contain only digits').length(15, "IMEI must be exactly 15 digits"),
             agentType: Yup.string().required("Department is required"),
         }),
         initialValues: {
@@ -316,7 +317,7 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" keyfilter="int" value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText type="text" keyfilter="int" value={formik.values.IMEI} maxLength={15} minLength={15} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
