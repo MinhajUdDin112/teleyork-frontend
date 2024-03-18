@@ -6,7 +6,6 @@ import { InputText } from "primereact/inputtext";
 import { DataTable } from "primereact/datatable";
 import { useFormik } from "formik";
 import { Column } from "primereact/column";
-import { Card } from "primereact/card";
 export default function ManageStandingOrder({setHideBackInventoryButton, setActivePhoneRequestComponent }) {
     setHideBackInventoryButton(true)  
     const [onsearchdata, setOnSearchData] = useState([]);  

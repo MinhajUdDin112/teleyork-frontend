@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify"; 
 import CreateDepartment from "./CreateDepartment"; 
 import EditDepartment from "./EditDepartment";
