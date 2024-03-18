@@ -1,0 +1,39 @@
+.mainbulk h1{ 
+  font-size: 30.5px;     
+   font-weight:bold;    
+   width:600px;  
+   display: inline-block; 
+   padding-left: 45px;
+}     
+.headerenrollment{ 
+   display: flex; 
+   flex-wrap: wrap;  
+   flex-direction: row;
+  align-items: center;
+}
+.enrollmentsvg{ 
+   width:40px;   
+   margin-left: -45px; 
+   margin-top: -4px;
+   display: inline-block; 
+   position: absolute;
+}
+.mainbulk button{ 
+    margin-top: 60px;
+} 
+.mainbulk { 
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+
+}
+.underline2 {
+  position: relative; /* Ensure positioning context for absolute positioning */
+}
+
+.underline2::after {
+  content: ''; /* Create a pseudo-element for the underline */
+  position: absolute; /* Position the underline relative to the text */
+  left: 0; /* Align the underline with the text */
+  bottom: -8px; /* Move the underline 4px below the text */
+  width: 100%; /* Set the width of the underline to match the text */
+  border-bottom: 2px solid black; /* Style the underline */
+}

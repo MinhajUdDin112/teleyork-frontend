@@ -118,7 +118,10 @@ export default function TabletSingleUploadAddAndAssignNonActivateProvision({perm
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
             make:Yup.string().required("Make is required"),
-            Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
+            Esn:  Yup.string()
+            .required("ESN is required")
+            .matches(/^\d+$/, 'ESN must contain only digits')
+            .length(19, "ESN must be exactly 19 digits"),
             box: Yup.string().required("Box is required"),
             Model: Yup.string().required("Model is required"),
               IMEI:Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),

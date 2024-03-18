@@ -121,6 +121,7 @@ import Update_Vendors from "./app/features/screens/user_management/ManageVendors
 import Label_Downloads from "./app/features/screens/Bulk_Downloads/Label_Downloads/Label_Downloads";
 import Invoices_Downloads from "./app/features/screens/Bulk_Downloads/Invoices_Downloads/Invoices_Downloads";
 import Inventory_Downloads from "./app/features/screens/Bulk_Downloads/Inventory_Downloads/Inventory_Downloads";
+import PostpaidActivatedBulkUpload from "./app/features/screens/PostPaid-order/PostOrder-Screens/BulkActivatedUpload/Bulk_Activated_Upload";
 
 const App = () => {
     // cleanLocalStorage()
@@ -421,12 +422,15 @@ const App = () => {
                                             <Route path="/prepaid-allenrollment" element={isPermitted("/prepaid-allenrollment") ? <PrepaidAllEnrollments /> : <Dashboard />} />
                                             <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                             <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
-                                            <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
+                                            <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} /> 
+                                            
+                                            <Route path="/postpaid-activated-bulkupload" element={isPermitted("/postpaid-activated-bulkupload") ? <PostpaidActivatedBulkUpload /> : <Dashboard />} />
                                             <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue") ? <Provisioning_queue /> : <Dashboard />} />
                                             <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments") ? <Approved_Enrollments /> : <Dashboard />} />
                                             <Route path="/billing-model-configuration" element={<BillingModelConfigurations />} />
                                             <Route path="/draftall/:id" element={<ShowDraftAll />} />
-                                            <Route path="/sentall/:id" element={<ShowSentAll />} />
+                                            <Route path="/sentall/:id" element={<ShowSentAll />} /> 
+
                                             <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
                                             <Route path="/personalinfo" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
                                             <Route path="/selfaddress" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
