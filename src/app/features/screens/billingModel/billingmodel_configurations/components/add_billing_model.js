@@ -77,14 +77,16 @@ const parseLoginRes = JSON.parse(loginRes);
                      </div>
                      
                       <InputText name="input" value={formik.values.input} className="inline ml-4 mt-2 w-10rem" onKeyDown={(e)=>{  
-                        let key=formik.values.input
+                        let key=formik.values.input   
                         if(e.key === 'Enter' || e.keyCode === 13){    
-                            console.log(inventoryList)
+                           
+                            
                             setinventoryList(prev=>({...prev,[key]:key}))  
                               formik.setFieldValue("input","")
                         }
                       }} onChange={(e)=>{     
-                            let sentence=e.target.value;
+                            let sentence=e.target.value; 
+                            
                          formik.setFieldValue("input",sentence.toUpperCase())
                       }}/>
                      </div>
