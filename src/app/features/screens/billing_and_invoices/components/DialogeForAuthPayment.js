@@ -164,10 +164,19 @@ const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
     };
 
     const handleCardNumberChange = (e) => {
-        const formattedValue = formatCardNumber(e.target.value);
-        setFormattedCardNumber(formattedValue);
-        formik.setFieldValue("cardNumber", e.target.value.replace(/-/g, "")); // Remove hyphens before storing in formik state
+        if (e.nativeEvent.inputType === "deleteContentBackward") {
+            // If backspace key is pressed, remove one character at a time, including hyphens
+            const formattedValue = formattedCardNumber.slice(0, -1);
+            setFormattedCardNumber(formattedValue);
+            formik.setFieldValue("cardNumber", formattedValue.replace(/-/g, ""));
+        } else {
+            // Otherwise, format the value as usual
+            const formattedValue = formatCardNumber(e.target.value);
+            setFormattedCardNumber(formattedValue);
+            formik.setFieldValue("cardNumber", e.target.value.replace(/-/g, ""));
+        }
     };
+    
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
