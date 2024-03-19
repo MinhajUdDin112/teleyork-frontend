@@ -469,3 +469,10 @@ box-shadow: 2px;
   
   /* Add any other styling as needed */
 }
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  cursor: pointer;
+}
