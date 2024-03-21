@@ -18,6 +18,10 @@ const Add_Vendors = () => {
     const [allCity, setAllCity] = useState([]);
     const [userId, setUserId] = useState([]);
     const navigate = useNavigate();
+    const statusValues = [
+        { name: " Active", value: "Active" },
+        { name: "InActive", value: "InActive" },
+    ];
     // Validation Schema
     const validationSchema = Yup.object().shape({
         companyName: Yup.string(),
@@ -204,6 +208,11 @@ const Add_Vendors = () => {
                             <label className="Label__Text">Mode of Work</label>
                             <InputTextarea id="modeOfWork" value={formik.values.modeOfWork} onChange={formik.handleChange} rows={1} cols={30} />
                             {getFormErrorMessage("modeOfWork")}
+                        </div>
+                        <div className="p-field col-12 md:col-3">
+                            <label className="Label__Text">Status</label>
+                            <Dropdown id="status" value={formik.values.status} onChange={formik.handleChange} options={statusValues} optionLabel="name" showClear placeholder="Select Status" className="w-full md:w-14rem" />
+                            {getFormErrorMessage("status")}
                         </div>
                     </div>
 
