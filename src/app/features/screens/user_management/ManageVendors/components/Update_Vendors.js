@@ -12,143 +12,93 @@ import { ToastContainer, toast } from "react-toastify";
 import { Card } from "primereact/card";
 import { Calendar } from "primereact/calendar";
 import { InputTextarea } from "primereact/inputtextarea";
-import { Toast } from "primereact/toast";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Add_Vendors = () => {
-    const [allRoles, setAllRoles] = useState([]);
-    const [allDepartment, setAllDepartment] = useState([]);
-    const [allReporting, setAllReporting] = useState([]);
     const [allState, setAllState] = useState([]);
     const [allCity, setAllCity] = useState([]);
-    const [checkDeprt, setCheckDeprt] = useState("");
-    const [value, setValue] = useState("");
+    const [userId, setUserId] = useState([]);
     const navigate = useNavigate();
-
-    // Get user data from ls
-    const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
-
     // Validation Schema
     const validationSchema = Yup.object().shape({
-        role: Yup.string().required("This field is required."),
-        name: Yup.string().required("This field is required."),
-        companyemail: Yup.string().email("Invalid email format").required("This field is required."),
-        contactemail: Yup.string().email("Invalid email format").required("This field is required."),
-        pointofcontact: Yup.string().required("This field is required."),
-        mobile: Yup.string()
-            .matches(/^\d{1,10}$/, "Maxumum 15 digits")
-            .required("This field is required."),
-        city: Yup.string().required("This field is required."),
-        state: Yup.string().required("This field is required."),
-        address1: Yup.string().required("This field is required."),
-        zip: Yup.string().required("This field is required."),
-        reportingTo: Yup.string().required("This field is required."),
-        department: Yup.string().required("This field is required."),
-        ntneinnumber: Yup.string().required("This field is required."),
-        signdate: Yup.string().required("This field is required."),
-        expirationdate: Yup.string().required("This field is required."),
-        modeofwork: Yup.string().required("This field is required."),
-        image: Yup.string().required("This field is required."),
+        companyName: Yup.string(),
+        address1: Yup.string(),
+        city: Yup.string(),
+        state: Yup.string(),
+        zipCode: Yup.string(),
+        companyEmail: Yup.string().email("Invalid email format"),
+        pointOfContact: Yup.string(),
+        pointOfContactPhoneNo: Yup.string(),
+        pointOfContactEmail: Yup.string().email("Invalid email format"),
+        NTN_EIN_Number: Yup.string(),
+        contractSignDate: Yup.string(),
+        contractExpirationDate: Yup.string(),
+        modeOfWork: Yup.string(),
+        attachmentLink: Yup.string(),
     });
+    useEffect(() => {
+        const editUserData = JSON.parse(localStorage.getItem("editUserData"));
+        // Parse the JSON string back to object
+        if (editUserData) {
+            setUserId(editUserData._id);
+            formik.setFieldValue("companyName", editUserData.companyName);
+            formik.setFieldValue("address1", editUserData.address1);
+            formik.setFieldValue("address2", editUserData.address2);
+            formik.setFieldValue("city", editUserData.city);
+            formik.setFieldValue("state", editUserData.state);
+            formik.setFieldValue("zipCode", editUserData.zipCode);
+            formik.setFieldValue("companyEmail", editUserData.companyEmail);
+            formik.setFieldValue("pointOfContact", editUserData.pointOfContact);
+            formik.setFieldValue("pointOfContactPhoneNo", editUserData.pointOfContactPhoneNo);
+            formik.setFieldValue("pointOfContactEmail", editUserData.pointOfContactEmail);
+            formik.setFieldValue("NTN_EIN_Number", editUserData.NTN_EIN_Number);
+            formik.setFieldValue("contractSignDate", editUserData.contractSignDate ? DateFormat(editUserData.contractSignDate) : "");
+            formik.setFieldValue("contractExpirationDate", editUserData.contractExpirationDate ? DateFormat(editUserData.contractExpirationDate) : "");
+            formik.setFieldValue("modeOfWork", editUserData.modeOfWork);
+        }
+    }, []);
 
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
-            name: "",
-            companyemail: "",
-            contactemail: "",
-            pointofcontact: "",
-            mobile: "",
-            city: "",
-            ntneinnumber: "",
-            state: "",
+            companyName: "",
             address1: "",
             address2: "",
-            zip: "",
-            signdate: "",
-            expirationdate: "",
-            modeofwork: "",
-            image: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            companyEmail: "",
+            pointOfContact: "",
+            pointOfContactPhoneNo: "",
+            pointOfContactEmail: "",
+            NTN_EIN_Number: "",
+            contractSignDate: "",
+            contractExpirationDate: "",
+            modeOfWork: "",
+            attachmentLink: "",
         },
-        onSubmit: async (values) => {
-            // Prepare the data to send to the server
-            const data = {
-                company: parseLoginRes?.company,
-                createdBy: parseLoginRes?._id,
-                name: values.name,
-                address1: values.address1,
-                address2: values.address2,
-                city: values.city,
-                state: values.state,
-                zip: values.zip,
-                companyemail: values.companyemail,
-                pointofcontact: values.pointofcontact,
-                mobile: values.mobile,
-                contactemail: values.contactemail,
-                ntneinnumber: values.ntneinnumber,
-                signdate: values.signdate,
-                expirationdate: values.expirationdate,
-                modeofwork: values.modeofwork,
-            };
 
-            // Send the data to the server using Axios POST request
-            Axios.post(`${BASE_URL}/api/web/user`, data)
-                .then((response) => {
-                    toast.success("successfully Added. Please Check Your Email For Password");
-                })
-                .catch((error) => {
-                    toast.error("Error:", error?.response?.data?.msg);
-                });
-            navigate("/manage-user");
+        onSubmit: async (values) => {
+            try {
+                const res = await Axios.put(`${BASE_URL}/api/web/manageVendors/update/${userId}`, values);
+                const data = res.data;
+                console.log("Response from server:", data);
+                toast.success(res.data.msg);
+                navigate("/manage-vendors");
+            } catch (error) {
+                toast.error(error.response.data.msg);
+            }
         },
     });
-
+    const DateFormat = (dateString) => {
+        const date = new Date(dateString);
+        return date;
+    };
     console.log(formik.values);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-    // useEffect(() => {
-    //     const getDepartment = async () => {
-    //         try {
-    //             const res = await Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes?.company}`);
-    //             setAllDepartment(res?.data?.data || []);
-    //         } catch (error) {
-    //             toast.error(`Error fetching department: ${error?.response?.data?.msg}`);
-    //         }
-    //     };
-    //     getDepartment();
-    // }, []);
-
-    // useEffect(() => {
-    //     if (formik.values.department) {
-    //         const getRoles = async () => {
-    //             try {
-    //                 const res = await Axios.get(`${BASE_URL}/api/web/role/all?serviceProvider=${parseLoginRes?.company}`);
-    //                 setAllRoles(res?.data?.data || []);
-    //             } catch (error) {
-    //                 toast.error(`Error fetching roles : ${error?.response?.data?.msg}`);
-    //             }
-    //         };
-    //         getRoles();
-    //     }
-    // }, [formik.values.department]);
-
-    // useEffect(() => {
-    //     if (formik.values.role) {
-    //         const roleId = formik.values.role;
-    //         const getReportingTo = async () => {
-    //             try {
-    //                 const res = await Axios.get(`${BASE_URL}/api/web/user/getReportingTo?roleId=${roleId}`);
-    //                 setAllReporting(res?.data?.result || []);
-    //             } catch (error) {
-    //                 toast.error(`Error fetching users : ${error?.response?.data?.msg}`);
-    //             }
-    //         };
-    //         getReportingTo();
-    //     }
-    // }, [formik.values.role]);
 
     useEffect(() => {
         const getStates = async () => {
@@ -187,16 +137,12 @@ const Add_Vendors = () => {
                 <form onSubmit={formik.handleSubmit}>
                     <div className="p-fluid p-formgrid grid mb-3">
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Company Name <span className="steric">*</span>
-                            </label>
-                            <InputText id="name" value={formik.values.name} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
-                            {getFormErrorMessage("name")}
+                            <label className="Label__Text">Company Name</label>
+                            <InputText id="companyName" value={formik.values.companyName} onChange={formik.handleChange} keyfilter={/^[A-Za-z\s]+$/} />
+                            {getFormErrorMessage("companyName")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Address1 <span className="steric">*</span>
-                            </label>
+                            <label className="Label__Text">Address1</label>
                             <InputText id="address1" value={formik.values.address1} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                             {getFormErrorMessage("address1")}
                         </div>
@@ -205,93 +151,64 @@ const Add_Vendors = () => {
                             <InputText id="address2" value={formik.values.address2} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                City <span className="steric">*</span>
-                            </label>
+                            <label className="Label__Text">City</label>
                             <InputText id="city" value={formik.values.city} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
-
                             {getFormErrorMessage("city")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                State/Province<span className="steric">*</span>
-                            </label>
+                            <label className="Label__Text">State/Province</label>
                             <Dropdown id="state" options={allState} value={formik.values.state} onChange={(e) => formik.setFieldValue("state", e.value)} optionLabel="state" optionValue="state" showClear filter filterBy="state" />
                             {getFormErrorMessage("state")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Zip Code <span className="steric">*</span>
-                            </label>
-                            <InputText id="zip" value={formik.values.zip} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
-                            {getFormErrorMessage("zip")}
+                            <label className="Label__Text">Zip Code</label>
+                            <InputText id="zipCode" value={formik.values.zipCode} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
+                            {getFormErrorMessage("zipCode")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Company's Official Email <span className="steric">*</span>
-                            </label>
-                            <InputText id="companyemail" value={formik.values.companyemail} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
-                            {getFormErrorMessage("companyemail")}
+                            <label className="Label__Text">Company's Official Email</label>
+                            <InputText id="companyEmail" value={formik.values.companyEmail} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
+                            {getFormErrorMessage("companyEmail")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Point of Contact <span className="steric">*</span>
-                            </label>
-                            <InputText id="pointofcontact" value={formik.values.pointofcontact} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
-                            {getFormErrorMessage("pointofcontact")}
+                            <label className="Label__Text">Point of Contact</label>
+                            <InputText id="pointOfContact" value={formik.values.pointOfContact} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
+                            {getFormErrorMessage("pointOfContact")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Point of Contact Phone Number <span className="steric">*</span>
-                            </label>
-                            <InputText id="mobile" value={formik.values.mobile} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} />
-                            {getFormErrorMessage("mobile")}
+                            <label className="Label__Text">Point of Contact Phone Number</label>
+                            <InputText id="pointOfContactPhoneNo" value={formik.values.pointOfContactPhoneNo} onChange={formik.handleChange} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} />
+                            {getFormErrorMessage("pointOfContactPhoneNo")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Point of Contact Email<span className="steric">*</span>
-                            </label>
-                            <InputText id="contactemail" value={formik.values.contactemail} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
-                            {getFormErrorMessage("contactemail")}
+                            <label className="Label__Text">Point of Contact Email</label>
+                            <InputText id="pointOfContactEmail" value={formik.values.pointOfContactEmail} onChange={formik.handleChange} type="email" keyfilter={/^[a-zA-Z0-9_.@]*$/} />
+                            {getFormErrorMessage("pointOfContactEmail")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                NTN/EIN Number<span className="steric">*</span>
-                            </label>
-                            <InputText id="ntneinnumber" value={formik.values.ntneinnumber} onChange={formik.handleChange} />
-                            {getFormErrorMessage("ntneinnumber")}
+                            <label className="Label__Text">NTN/EIN Number</label>
+                            <InputText id="NTN_EIN_Number" value={formik.values.NTN_EIN_Number} onChange={formik.handleChange} />
+                            {getFormErrorMessage("NTN_EIN_Number")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Contract Sign Date<span className="steric">*</span>
-                            </label>
-                            <Calendar id="signdate" value={formik.values.signdate} onChange={formik.handleChange} />
-                            {getFormErrorMessage("signdate")}
+                            <label className="Label__Text">Contract Sign Date</label>
+                            <Calendar id="contractSignDate" value={formik.values.contractSignDate} onChange={formik.handleChange} />
+                            {getFormErrorMessage("contractSignDate")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Contract Expiration Date<span className="steric">*</span>
-                            </label>
-                            <Calendar id="expirationdate" value={formik.values.expirationdate} onChange={formik.handleChange} />
-                            {getFormErrorMessage("expirationdate")}
+                            <label className="Label__Text">Contract Expiration Date</label>
+                            <Calendar id="contractExpirationDate" value={formik.values.contractExpirationDate} onChange={formik.handleChange} />
+                            {getFormErrorMessage("contractExpirationDate")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Mode of Work<span className="steric">*</span>
-                            </label>
-                            <InputTextarea id="modeofwork" value={formik.values.modeofwork} onChange={formik.handleChange} rows={1} cols={30} />
-                            {getFormErrorMessage("modeofwork")}
-                        </div>
-                        <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">
-                                Attachment Link <span className="steric">*</span>
-                            </label>
-                            <InputText id="image" value={formik.values.image} onChange={formik.handleChange} type="file" />
+                            <label className="Label__Text">Mode of Work</label>
+                            <InputTextarea id="modeOfWork" value={formik.values.modeOfWork} onChange={formik.handleChange} rows={1} cols={30} />
+                            {getFormErrorMessage("modeOfWork")}
                         </div>
                     </div>
 
                     <div className="mt-4">
-                        <Button label="Update" iconPos="right" className="" />
+                        <Button label="Update" iconPos="right" className="" type="submit" />
                     </div>
                 </form>
             </div>
