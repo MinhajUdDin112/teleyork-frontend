@@ -183,23 +183,23 @@ const Reports = () => {
         }
     };
 
+    const getAllData = async () => {
+        try {
+            const response = await Axios.get(`${BASE_URL}/api/web/reportDownload/getAllData`);
+            const data = response?.data?.data;
+            console.log(data);
+            if (response?.status === 200 || response?.status === 201) {
+                const successMessage = data?.result;
+                console.log("Data fetched successfully:", successMessage);
+                // Assuming setApiData is used to set the data to a state variable
+                setApiData(data); // Set the array of reports to the state
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.error);
+        }
+    };
     // get all data and show in table
     useEffect(() => {
-        const getAllData = async () => {
-            try {
-                const response = await Axios.get(`${BASE_URL}/api/web/reportDownload/getAllData`);
-                const data = response?.data?.data;
-                console.log(data);
-                if (response?.status === 200 || response?.status === 201) {
-                    const successMessage = data?.result;
-                    console.log("Data fetched successfully:", successMessage);
-                    // Assuming setApiData is used to set the data to a state variable
-                    setApiData(data); // Set the array of reports to the state
-                }
-            } catch (error) {
-                toast.error(error?.response?.data?.error);
-            }
-        };
         getAllData();
     }, []);
 
