@@ -123,6 +123,8 @@ import Invoices_Downloads from "./app/features/screens/Bulk_Downloads/Invoices_D
 import Inventory_Downloads from "./app/features/screens/Bulk_Downloads/Inventory_Downloads/Inventory_Downloads";
 import PostpaidActivatedBulkUpload from "./app/features/screens/PostPaid-order/PostOrder-Screens/BulkActivatedUpload/Bulk_Activated_Upload";
 
+// importing Reports
+import Reports from "./app/features/screens/Reports_Downloads/Reports";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -464,6 +466,9 @@ const App = () => {
                                             <Route path="/label-downloads" element={isPermitted("/label-downloads") ? <Label_Downloads /> : <Dashboard />} />
                                             <Route path="/invoices-downloads" element={isPermitted("/invoices-downloads") ? <Invoices_Downloads /> : <Dashboard />} />
                                             <Route path="/inventory-downloads" element={isPermitted("/inventory-downloads") ? <Inventory_Downloads /> : <Dashboard />} />
+
+                                            {/* Reports Route */}
+                                            <Route path="/reports-downloads" element={isPermitted("/reports-downloads") ? <Reports /> : <Dashboard />} />
                                         </Routes>
                                     ) : undefined}
                                 </>
