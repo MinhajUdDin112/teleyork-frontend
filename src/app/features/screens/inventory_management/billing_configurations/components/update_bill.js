@@ -22,16 +22,20 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     const [inventoryTypeOptions, setInventoryTypeOptions] = useState([]);
     let additionalFeature = [];
     for (let i = 0; i < rowData.additionalFeature.length; i++) {
-        additionalFeature.push(rowData.additionalFeature[i]._id);
+        additionalFeature.push(rowData?.additionalFeature[i]?._id);
     }
+    additionalFeature = additionalFeature.filter((item) => item !== undefined);
     let oneTimeCharge = [];
     for (let i = 0; i < rowData.monthlyCharge.length; i++) {
-        oneTimeCharge.push(rowData.monthlyCharge[i]._id);
+        oneTimeCharge.push(rowData?.monthlyCharge[i]?._id);
     }
+
+    oneTimeCharge = oneTimeCharge.filter((item) => item !== undefined);
     let selecteddiscount = [];
     for (let i = 0; i < rowData.selectdiscount.length; i++) {
-        selecteddiscount.push(rowData.selectdiscount[i]._id);
+        selecteddiscount.push(rowData?.selectdiscount[i]?._id);
     }
+    selecteddiscount = selecteddiscount.filter((item) => item !== undefined);
     const formik = useFormik({
         // validationSchema: validationSchema,
         initialValues: {
@@ -49,7 +53,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             subsequentBillCreateDate: rowData.subsequentBillCreateDate,
         },
         onSubmit: async (values, actions) => {
-            let selectdiscount = [];
+            /*  let selectdiscount = [];
             for (let i = 0; i < Object.keys(formik.values.selectdiscount).length; i++) {
                 selectdiscount.push(formik.values.selectdiscount[i]._id);
             }
@@ -60,7 +64,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             let paymentMethod = [];
             for (let i = 0; i < Object.keys(formik.values.paymentMethod).length; i++) {
                 paymentMethod.push(formik.values.paymentMethod[i]._id);
-            }
+            }*/
             const dataToSend = {
                 ServiceProvider: parseLoginRes?.company,
                 oneTimeCharge: formik.values.oneTimeCharge,
@@ -120,10 +124,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
         { label: "Skip Payment", value: "Skip Payment" },
     ];
     const optionsForCreation = [
-   
-            { label: "On Activation", value: "On Activation" },
-            { label: "After QA Approval ", value: "On QA Approval" },
-       
+        { label: "On Activation", value: "On Activation" },
+        { label: "After QA Approval ", value: "On QA Approval" },
     ];
 
     const getDiscount = async () => {
@@ -291,6 +293,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                         display="chip"
                         value={formik.values.paymentMethod}
                         onChange={(e) => {
+                            console.log(e);
                             formik.setFieldValue("paymentMethod", e.value);
                             formik.handleChange(e);
                         }}

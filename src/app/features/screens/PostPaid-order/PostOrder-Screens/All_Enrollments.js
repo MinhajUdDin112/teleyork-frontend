@@ -654,7 +654,11 @@ const All_Enrollments = () => {
                     text
                     raised
                     disabled={isButtonLoading}
-                />
+                />       <Button label="Files" onClick={() => {
+                       localStorage.setItem("selectedId",JSON.stringify(rowData?._id))
+                      navigate("/viewfile")
+                }} className="pt-1 pb-1" text raised disabled={isButtonLoading} />
+              
             </div>
         );
     };

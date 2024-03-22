@@ -44,7 +44,7 @@ export const AppTopbar = (props) => {
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const capitalCompanyName = parseLoginRes?.companyName.toUpperCase();
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
     const handleLogout = () => {
         props.setSearchValue("");
         props.setSearchByValueClick(false);
