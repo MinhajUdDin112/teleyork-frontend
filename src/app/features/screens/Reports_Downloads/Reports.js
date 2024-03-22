@@ -36,8 +36,8 @@ const Reports = () => {
     });
 
     const Dates = [
-        { name: "Order Create Date", value: "OrderCreateDate" },
-        { name: "QA Approval Date", value: "QAApprovalDate" },
+        { name: "Order Create Date", value: "createdAt" },
+        { name: "QA Approval Date", value: "approvedAt" },
         { name: "QA Reject Date", value: "QARejectDate" },
         { name: "ESN Assign Date", value: "ESNAssignDate" },
         { name: "Label Create Date", value: "LabelCreateDate" },
@@ -53,46 +53,46 @@ const Reports = () => {
     ];
 
     const personalInformationValues = [
-        { name: "First Name", value: "FirstName" },
-        { name: "Last Name", value: "Lastname" },
-        { name: "Middle Initial", value: "MiddleInitial" },
-        { name: "Suffix", value: "Suffix" },
+        { name: "First Name", value: "firstName" },
+        { name: "Last Name", value: "lastName" },
+        { name: "Middle Initial", value: "middleName" },
+        { name: "Suffix", value: "suffix" },
         { name: "SSN", value: "SSN" },
-        { name: "Date of Birth", value: "DateOfBirth" },
-        { name: "Contact Number", value: "ContactNumber" },
-        { name: "Email", value: "Email" },
-        { name: "Alternate Number", value: "AlternateNumber" },
-        { name: "Address 1", value: "Address1" },
-        { name: "Address 2, ", value: "Address2" },
-        { name: "City", value: "City" },
-        { name: "State", value: "State" },
-        { name: "Zip Code", value: "Zipcode" },
-        { name: "Mailing Address 1", value: "MailingAddress1" },
-        { name: "Mailing Address 2", value: "MailingAddress2" },
-        { name: "Mailing City, ", value: "MailingCity" },
-        { name: "Mailing State,", value: "MailingState" },
-        { name: "Mailing Zip Code,", value: "MailingZipCode" },
-        { name: "PO Box Address", value: "PoBocAddress" },
-        { name: "Account ID", value: "AccountID" },
-        { name: "Enrolment ID", value: "EnrolmentID" },
+        { name: "Date of Birth", value: "DOB" },
+        { name: "Contact Number", value: "contact" },
+        { name: "Email", value: "email" },
+        { name: "Alternate Number", value: "alternateContact" },
+        { name: "Address 1", value: "address1" },
+        { name: "Address 2, ", value: "address2" },
+        { name: "City", value: "city" },
+        { name: "State", value: "state" },
+        { name: "Zip Code", value: "zip" },
+        { name: "Mailing Address 1", value: "mailingAddress1" },
+        { name: "Mailing Address 2", value: "mailingAddress2" },
+        { name: "Mailing City, ", value: "mailingCity" },
+        { name: "Mailing State,", value: "mailingState" },
+        { name: "Mailing Zip Code,", value: "mailingZip" },
+        { name: "PO Box Address", value: "PoBoxAddress" },
+        { name: "Account ID", value: "accountId" },
+        { name: "Enrolment ID", value: "enrolmentId" },
     ];
 
     const planInformationValues = [
-        { name: "ESN Number", value: "ESNNumber" },
-        { name: "IMEI Number", value: "IMEINumber" },
+        { name: "ESN Number", value: "esn" },
+        { name: "IMEI Number", value: "IMEI" },
         { name: "MDN", value: "MDN" },
-        { name: "Plan Name ", value: "PlanName" },
-        { name: "Plan Code", value: "PlanCode" },
-        { name: "PWG Customer ID", value: "PWGCustomer" },
+        { name: "Plan Name ", value: "name" },
+        { name: "Plan Code", value: "planId" },
+        { name: "PWG Customer ID", value: "customerId" },
         { name: "Carrier", value: "Carrier" },
-        { name: "Line Status", value: "LineStatus" },
+        { name: "Line Status", value: "status" },
     ];
 
     const miscellaneousValues = [
-        { name: "Created by", value: "CreatedBy" },
-        { name: "QA Agent (Assigned)", value: "QAAgentAssigned" },
-        { name: "QA Agent (Approved By)", value: "QAAgentApprovedBy" },
-        { name: "QA Agent (Rejected By)", value: "QAAgentRejectedBy" },
+        { name: "Created by", value: "createdBy" },
+        { name: "QA Agent (Assigned)", value: "assignToQa" },
+        { name: "QA Agent (Approved By)", value: "approvedBy" },
+        { name: "QA Agent (Rejected By)", value: "rejectedBy" },
     ];
 
     const formatDate = (date) => {
@@ -105,86 +105,58 @@ const Reports = () => {
             [field]: newValue instanceof Date ? formatDate(newValue) : newValue,
         }));
     };
-    const handleSubmit = () => {
-        const selectedFields = Object.keys(enteredDetails).filter((key) => enteredDetails[key].length > 0);
-
-        // Create an object to hold the data for each row
-        const rowData = {};
-
-        // Iterate over each selected field
-        selectedFields.forEach((field) => {
-            // If the field has multiple selected values
-            if (Array.isArray(enteredDetails[field])) {
-                // Iterate over each selected value and assign it to the corresponding field in the rowData object
-                enteredDetails[field].forEach((value, index) => {
-                    rowData[`${field}_${index + 1}`] = value; // Use index + 1 to start from 1 instead of 0
-                });
-            } else {
-                // If the field has a single selected value, assign it directly to the corresponding field in the rowData object
-                rowData[field] = enteredDetails[field];
-            }
-        });
-
-        // Convert the rowData object to an array of values
-        const rowValues = Object.values(rowData);
-
-        // Convert the rowValues array to a CSV string using PapaParse
-        const csvString = Papa.unparse([rowValues]);
-
-        // Prepend "CUSTOMER INFORMATION" to the CSV data
-        let csvData = "CUSTOMER INFORMATION\n";
-
-        // Append the "Report Creation Date" with the current date
-        const currentDate = new Date().toISOString().slice(0, 10);
-        csvData += `Report Creation Date,${currentDate}\n\n`;
-
-        // Append the CSV data
-        csvData += csvString;
-
-        // Create a Blob containing the CSV string
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-
-        // Create a temporary link element to trigger the download
-        const link = document.createElement("a");
-        if (link.download !== undefined) {
-            // Create a URL for the Blob
-            const url = URL.createObjectURL(blob);
-            // Set the link's href and download attributes
-            link.setAttribute("href", url);
-            link.setAttribute("download", "report.csv");
-            // Hide the link
-            link.style.visibility = "hidden";
-            // Append the link to the document body
-            document.body.appendChild(link);
-            // Click the link to trigger the download
-            link.click();
-            // Remove the link from the document body
-            document.body.removeChild(link);
-        }
+    const dataToSend = {
+        reportName: value,
+        startDate: dateFrom,
+        endDate: dateTo,
+        dates: dates,
+        personalInformation: personalInformation,
+        planInformation: planInformation,
+        miscellaneous: miscellaneous,
     };
 
-    // add template to database
-    const getAllData = async () => {
+    const handleSubmit = async () => {
+        if (!value) {
+            toast.error("Report Name is required");
+            return;
+        }
+
         try {
-            const response = await Axios.get(`${BASE_URL}/api/web/reportDownload/getAllData`);
-            const data = await response?.data?.result;
+            const formattedDateFrom = dateFrom ? new Date(dateFrom).toISOString().slice(0, 19) : "";
+            const formattedDateTo = dateTo ? new Date(dateTo).toISOString().slice(0, 19) : "";
+
+            const dataToSend = {
+                reportName: value,
+                startDate: formattedDateFrom,
+                endDate: formattedDateTo,
+                dates: dates,
+                personalInformation: personalInformation,
+                planInformation: planInformation,
+                miscellaneous: miscellaneous,
+            };
+
+            const response = await Axios.post(`${BASE_URL}/api/web/reportDownload/add`, dataToSend);
+            const data = await response?.data;
             console.log(data);
             if (response?.status === 200 || response?.status === 201) {
                 const successMessage = response?.data?.msg;
-                console.log("Data fetched successfully:", successMessage);
-                setApiData(data);
+                console.log("Data stored successfully:", successMessage);
+                toast.success(successMessage);
+
+                // After saving the template, fetch all data again to update the table
+                getAllData();
             }
         } catch (error) {
-            console.error("Error fetching data:", error?.response?.data);
             toast.error(error?.response?.data?.error);
         }
     };
-    // Fetch all data on component mount
-    useEffect(() => {
-        getAllData();
-    }, []);
+    // add template to database
 
     const handleTemplate = async () => {
+        if (!value) {
+            toast.error("Report Name is required");
+            return;
+        }
         try {
             const formattedDateFrom = dateFrom ? new Date(dateFrom).toISOString().slice(0, 19) : "";
             const formattedDateTo = dateTo ? new Date(dateTo).toISOString().slice(0, 19) : "";
@@ -209,7 +181,6 @@ const Reports = () => {
                 getAllData();
             }
         } catch (error) {
-            console.error("Error fetching data:", error?.response?.data);
             toast.error(error?.response?.data?.error);
         }
     };
@@ -219,20 +190,21 @@ const Reports = () => {
         const getAllData = async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/reportDownload/getAllData`);
-                const data = await response?.data?.result;
+                const data = response?.data?.data;
                 console.log(data);
                 if (response?.status === 200 || response?.status === 201) {
-                    const successMessage = response?.data?.msg;
+                    const successMessage = data?.result;
                     console.log("Data fetched successfully:", successMessage);
-                    setApiData(data);
+                    // Assuming setApiData is used to set the data to a state variable
+                    setApiData(data); // Set the array of reports to the state
                 }
             } catch (error) {
-                console.error("Error fetching data:", error?.response?.data);
                 toast.error(error?.response?.data?.error);
             }
         };
         getAllData();
     }, []);
+
     const DateFormat = (dateString) => {
         const date = new Date(dateString);
         return date;
@@ -243,7 +215,7 @@ const Reports = () => {
             console.log("Row id is:", _id);
             setId(_id);
             const response = await Axios.get(`${BASE_URL}/api/web/reportDownload/getOne/${_id}`);
-            const data = response?.data?.result;
+            const data = response?.data?.data;
             console.log("Data for row:", data);
             console.log("Start Date (Original):", data.startDate);
             console.log("End Date (Original):", data.endDate);
@@ -257,8 +229,7 @@ const Reports = () => {
             setPlanInformation(data.planInformation);
             setMiscellaneous(data.miscellaneous);
         } catch (error) {
-            console.error("Error fetching data:", error);
-            toast.error("Error fetching data");
+            toast.error(error?.response?.data?.error);
         }
     };
 
@@ -267,14 +238,13 @@ const Reports = () => {
             console.log("Delete row id", _id);
             const response = await Axios.delete(`${BASE_URL}/api/web/reportDownload/delete/${_id}`);
             if (response.status === 200) {
-                toast.success("Data deleted successfully");
+                toast.success(response?.data?.msg);
                 setApiData(apiData.filter((row) => row._id !== _id));
             } else {
-                toast.error("Error deleting data");
+                toast.error(response?.data?.error);
             }
         } catch (error) {
-            console.error("Error deleting data:", error);
-            toast.error("Error deleting data");
+            toast.error(error?.response?.data?.error);
         }
     };
     const editAction = (rowData) => {
@@ -343,10 +313,8 @@ const Reports = () => {
                         }}
                     />
                 </div>
-
-                <Button label="Save Template" onClick={handleTemplate} style={{ marginLeft: "25.5rem", marginTop: "-3.3rem", position: "absolute" }} />
-                <Button label="Update Template" onClick={handleUpdate} style={{ marginLeft: "38.5rem", marginTop: "-3.3rem", position: "absolute" }} />
-
+                {!id && <Button label="Save Template" onClick={handleTemplate} style={{ marginLeft: "25.5rem", marginTop: "-3.3rem", position: "absolute" }} />}
+                {id && <Button label="Update Template" onClick={handleUpdate} style={{ marginLeft: "25.5rem", marginTop: "-3.3rem", position: "absolute" }} />}
                 <div className="p-field col-12 md:col-3 " style={{ marginTop: "2rem" }}>
                     <label className="Label__Text">Date From</label>
                     <br />
@@ -458,19 +426,13 @@ const Reports = () => {
                     </table>
                     <Button label="Close" onClick={() => setVisible(false)} />
                 </Dialog>
-                <Button label="Submit" style={{ marginLeft: "0.8rem", marginTop: "0.6rem", position: "absolute" }} onClick={handleSubmit} />
+                <Button label="Download" style={{ marginLeft: "0.8rem", marginTop: "0.6rem", position: "absolute" }} onClick={handleSubmit} />
             </Card>
             <div className="card" style={{ marginTop: "1rem" }}>
                 <DataTable value={apiData} tableStyle={{ minWidth: "50rem" }}>
                     <Column field="reportName" header="Report Name"></Column>
                     <Column body={editAction} header="Edit"></Column>
                     <Column body={deleteAction} header="Delete"></Column>
-                    <Column
-                        field="Action"
-                        body={() => {
-                            return <Button className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none">Download</Button>;
-                        }}
-                    />
                 </DataTable>
             </div>
         </>
