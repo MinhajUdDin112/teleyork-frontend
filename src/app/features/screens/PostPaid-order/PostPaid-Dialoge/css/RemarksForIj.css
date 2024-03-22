@@ -1,0 +1,21 @@
+.qualitylabel{ 
+     font-size:14px;    
+} 
+.callqualitysection{ 
+     width:50%;  
+} 
+.foruplodfile{ 
+     width:30%; 
+     background-color: blue;
+ } 
+ .mainremarks{  
+     width: 100%;
+ } 
+ .remark{ 
+   width: 100%; 
+   margin-top: 24px;
+ }
+ .errormessage{ 
+     color: red;
+ }     
+
