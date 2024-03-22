@@ -13,11 +13,8 @@ import { Calendar } from "primereact/calendar";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const Add_Vendors = () => {
-    const [allState, setAllState] = useState([]);
-    const [allCity, setAllCity] = useState([]);
+const Add_Vendors = ({ updateVendorList }) => {
     const navigate = useNavigate();
-    // const [status, setStatus] = useState(null);
     const [file, setFile] = useState(null);
     const statusValues = [
         { name: " Active", value: "Active" },
@@ -39,7 +36,6 @@ const Add_Vendors = () => {
         contractSignDate: Yup.string().required("This field is required."),
         contractExpirationDate: Yup.string().required("This field is required."),
         modeOfWork: Yup.string().required("This field is required."),
-        // attachmentLink: Yup.mixed().required("File is required"),,
     });
 
     const formik = useFormik({
@@ -80,6 +76,9 @@ const Add_Vendors = () => {
                 console.log("Response from server:", data);
                 toast.success(message);
                 navigate("/manage-vendors");
+
+                // Update vendor list after successful submission
+                updateVendorList();
             } catch (error) {
                 toast.error(error.response.data.msg);
             }
@@ -92,34 +91,6 @@ const Add_Vendors = () => {
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-
-    useEffect(() => {
-        const getStates = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/zipCode/getAllStates`);
-                setAllState(res?.data?.data || []);
-            } catch (error) {
-                toast.error(`${error?.response?.data?.msg}`);
-            }
-        };
-        getStates();
-    }, []);
-
-    useEffect(() => {
-        if (formik.values.state) {
-            const selectedState = formik.values.state;
-            const getCities = async () => {
-                try {
-                    const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);
-                    setAllCity(res?.data?.data || []);
-                } catch (error) {
-                    toast.error(`${error?.response?.data?.msg}`);
-                }
-            };
-            getCities();
-        }
-    }, [formik.values.state]);
-
     return (
         <Card>
             <ToastContainer />
@@ -158,7 +129,7 @@ const Add_Vendors = () => {
                             <label className="Label__Text">
                                 State/Province<span className="steric">*</span>
                             </label>
-                            <Dropdown id="state" options={allState} value={formik.values.state} onChange={(e) => formik.setFieldValue("state", e.value)} optionLabel="state" optionValue="state" showClear filter filterBy="state" />
+                            <InputText id="state" value={formik.values.state} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                             {getFormErrorMessage("state")}
                         </div>
                         <div className="p-field col-12 md:col-3">

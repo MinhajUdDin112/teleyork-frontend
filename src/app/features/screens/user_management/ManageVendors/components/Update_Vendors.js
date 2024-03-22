@@ -87,7 +87,10 @@ const Add_Vendors = () => {
                 const data = res.data;
                 console.log("Response from server:", data);
                 toast.success(res.data.msg);
-                navigate("/manage-vendors");
+                setTimeout(() => {
+                    navigate("/manage-vendors");
+                }, 2000);
+                // navigate("/manage-vendors");
             } catch (error) {
                 toast.error(error.response.data.msg);
             }
@@ -104,32 +107,32 @@ const Add_Vendors = () => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
-    useEffect(() => {
-        const getStates = async () => {
-            try {
-                const res = await Axios.get(`${BASE_URL}/api/zipCode/getAllStates`);
-                setAllState(res?.data?.data || []);
-            } catch (error) {
-                toast.error(`${error?.response?.data?.msg}`);
-            }
-        };
-        getStates();
-    }, []);
+    // useEffect(() => {
+    //     const getStates = async () => {
+    //         try {
+    //             const res = await Axios.get(`${BASE_URL}/api/zipCode/getAllStates`);
+    //             setAllState(res?.data?.data || []);
+    //         } catch (error) {
+    //             toast.error(`${error?.response?.data?.msg}`);
+    //         }
+    //     };
+    //     getStates();
+    // }, []);
 
-    useEffect(() => {
-        if (formik.values.state) {
-            const selectedState = formik.values.state;
-            const getCities = async () => {
-                try {
-                    const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);
-                    setAllCity(res?.data?.data || []);
-                } catch (error) {
-                    toast.error(`${error?.response?.data?.msg}`);
-                }
-            };
-            getCities();
-        }
-    }, [formik.values.state]);
+    // useEffect(() => {
+    //     if (formik.values.state) {
+    //         const selectedState = formik.values.state;
+    //         const getCities = async () => {
+    //             try {
+    //                 const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);
+    //                 setAllCity(res?.data?.data || []);
+    //             } catch (error) {
+    //                 toast.error(`${error?.response?.data?.msg}`);
+    //             }
+    //         };
+    //         getCities();
+    //     }
+    // }, [formik.values.state]);
 
     return (
         <Card>
@@ -161,7 +164,7 @@ const Add_Vendors = () => {
                         </div>
                         <div className="p-field col-12 md:col-3">
                             <label className="Label__Text">State/Province</label>
-                            <Dropdown id="state" options={allState} value={formik.values.state} onChange={(e) => formik.setFieldValue("state", e.value)} optionLabel="state" optionValue="state" showClear filter filterBy="state" />
+                            <InputText id="state" value={formik.values.state} onChange={formik.handleChange} keyfilter={/^[a-zA-Z0-9_,.]*$/} />
                             {getFormErrorMessage("state")}
                         </div>
                         <div className="p-field col-12 md:col-3">
