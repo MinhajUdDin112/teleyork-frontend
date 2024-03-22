@@ -144,7 +144,6 @@ const Reports = () => {
                 toast.success(successMessage);
 
                 // After saving the template, fetch all data again to update the table
-                getAllData();
             }
         } catch (error) {
             toast.error(error?.response?.data?.error);
@@ -178,7 +177,6 @@ const Reports = () => {
                 console.log("Data stored successfully:", successMessage);
                 toast.success(successMessage);
                 // After saving the template, fetch all data again to update the table
-                getAllData();
             }
         } catch (error) {
             toast.error(error?.response?.data?.error);
@@ -232,7 +230,6 @@ const Reports = () => {
             toast.error(error?.response?.data?.error);
         }
     };
-
     const handleDelete = async (_id) => {
         try {
             console.log("Delete row id", _id);
