@@ -125,7 +125,7 @@ const BillingConfiguration = () => {
     };
     const getConfigData = async () => {
         try {
-            const res = await Axios.get(`${BASE_URL}/api/web/billing/getall`);
+            const res = await Axios.get(`${BASE_URL}/api/web/billing/getBillConfig`);
             setconfigData(res?.data?.data || []);
         } catch (error) {
             toast.error(error?.response?.data?.msg);
