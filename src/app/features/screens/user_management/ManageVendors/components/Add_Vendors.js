@@ -16,6 +16,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Add_Vendors = ({ updateVendorList }) => {
     const navigate = useNavigate();
     const [file, setFile] = useState(null);
+    const [error, setError] = useState("");
     const statusValues = [
         { name: " Active", value: "Active" },
         { name: "InActive", value: "InActive" },
@@ -36,6 +37,8 @@ const Add_Vendors = ({ updateVendorList }) => {
         contractSignDate: Yup.string().required("This field is required."),
         contractExpirationDate: Yup.string().required("This field is required."),
         modeOfWork: Yup.string().required("This field is required."),
+        status: Yup.string().required("This field is required."),
+        file: Yup.string(),
     });
 
     const formik = useFormik({
@@ -56,10 +59,16 @@ const Add_Vendors = ({ updateVendorList }) => {
             contractExpirationDate: "",
             modeOfWork: "",
             status: "",
+            file: "",
         },
 
         onSubmit: async (values) => {
             console.log(values);
+            if (!file) {
+                setError("Please select a file.");
+                return;
+            }
+
             let formData = new FormData();
             for (const key in values) {
                 formData.append(key, values[key]);
@@ -196,13 +205,17 @@ const Add_Vendors = ({ updateVendorList }) => {
                             {getFormErrorMessage("modeOfWork")}
                         </div>
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Status</label>
+                            <label className="Label__Text">
+                                Status<span className="steric">*</span>
+                            </label>
                             <Dropdown id="status" value={formik.values.status} onChange={formik.handleChange} options={statusValues} optionLabel="name" showClear placeholder="Select Status" className="w-full md:w-14rem" />
                             {getFormErrorMessage("status")}
                         </div>
 
                         <div className="p-field col-12 md:col-3">
-                            <label className="Label__Text">Attachment Link</label>
+                            <label className="Label__Text">
+                                Attachment Link <span className="steric">*</span>
+                            </label>
                             <InputText
                                 id="file"
                                 onChange={(event) => {
@@ -211,7 +224,7 @@ const Add_Vendors = ({ updateVendorList }) => {
                                 }}
                                 type="file"
                             />
-                            {getFormErrorMessage("attachmentLink")}
+                            {error && <div style={{ color: "red" }}>{error}</div>}
                         </div>
                     </div>
                     <div>

@@ -4,7 +4,7 @@ import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import { MultiSelect } from "primereact/multiselect";
 import { Button } from "primereact/button";
-import Papa from "papaparse";
+// import Papa from "papaparse";
 import { ToastContainer, toast } from "react-toastify";
 import { Dialog } from "primereact/dialog";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,7 +24,7 @@ const Reports = () => {
     const [visible, setVisible] = useState(false);
     const [apiData, setApiData] = useState([]);
     const [id, setId] = useState(null);
-    const [selectedRowData, setSelectedRowData] = useState(null);
+    // const [selectedRowData, setSelectedRowData] = useState(null);
     const [enteredDetails, setEnteredDetails] = useState({
         "Report Name": "",
         "Date From": "",
@@ -105,26 +105,15 @@ const Reports = () => {
             [field]: newValue instanceof Date ? formatDate(newValue) : newValue,
         }));
     };
-    const dataToSend = {
-        reportName: value,
-        startDate: dateFrom,
-        endDate: dateTo,
-        dates: dates,
-        personalInformation: personalInformation,
-        planInformation: planInformation,
-        miscellaneous: miscellaneous,
-    };
 
     const handleSubmit = async () => {
         if (!value) {
             toast.error("Report Name is required");
             return;
         }
-
         try {
             const formattedDateFrom = dateFrom ? new Date(dateFrom).toISOString().slice(0, 19) : "";
             const formattedDateTo = dateTo ? new Date(dateTo).toISOString().slice(0, 19) : "";
-
             const dataToSend = {
                 reportName: value,
                 startDate: formattedDateFrom,
@@ -134,19 +123,21 @@ const Reports = () => {
                 planInformation: planInformation,
                 miscellaneous: miscellaneous,
             };
+            const response = await Axios.post(`${BASE_URL}/api/web/reportDownload/getAllEnrollments`, dataToSend, { responseType: "blob" });
 
-            const response = await Axios.post(`${BASE_URL}/api/web/reportDownload/add`, dataToSend);
-            const data = await response?.data;
-            console.log(data);
-            if (response?.status === 200 || response?.status === 201) {
-                const successMessage = response?.data?.msg;
-                console.log("Data stored successfully:", successMessage);
-                toast.success(successMessage);
-
-                // After saving the template, fetch all data again to update the table
+            if (response.data) {
+                const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement("a");
+                link.href = downloadUrl;
+                link.setAttribute("download", `${value}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            } else {
+                toast.error("No data received from the server.");
             }
         } catch (error) {
-            toast.error(error?.response?.data?.error);
+            toast.error(error?.response?.data?.error || "An error occurred while fetching data.");
         }
     };
     // add template to database
