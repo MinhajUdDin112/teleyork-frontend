@@ -58,6 +58,7 @@ const Add_Vendors = () => {
             formik.setFieldValue("contractSignDate", editUserData.contractSignDate ? DateFormat(editUserData.contractSignDate) : "");
             formik.setFieldValue("contractExpirationDate", editUserData.contractExpirationDate ? DateFormat(editUserData.contractExpirationDate) : "");
             formik.setFieldValue("modeOfWork", editUserData.modeOfWork);
+            formik.setFieldValue("status", editUserData.status);
         }
     }, []);
 
@@ -78,7 +79,7 @@ const Add_Vendors = () => {
             contractSignDate: "",
             contractExpirationDate: "",
             modeOfWork: "",
-            attachmentLink: "",
+            status: "",
         },
 
         onSubmit: async (values) => {
@@ -106,33 +107,6 @@ const Add_Vendors = () => {
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-
-    // useEffect(() => {
-    //     const getStates = async () => {
-    //         try {
-    //             const res = await Axios.get(`${BASE_URL}/api/zipCode/getAllStates`);
-    //             setAllState(res?.data?.data || []);
-    //         } catch (error) {
-    //             toast.error(`${error?.response?.data?.msg}`);
-    //         }
-    //     };
-    //     getStates();
-    // }, []);
-
-    // useEffect(() => {
-    //     if (formik.values.state) {
-    //         const selectedState = formik.values.state;
-    //         const getCities = async () => {
-    //             try {
-    //                 const res = await Axios.get(`${BASE_URL}/api/zipCode/getcitiesByState?state=${selectedState}`);
-    //                 setAllCity(res?.data?.data || []);
-    //             } catch (error) {
-    //                 toast.error(`${error?.response?.data?.msg}`);
-    //             }
-    //         };
-    //         getCities();
-    //     }
-    // }, [formik.values.state]);
 
     return (
         <Card>

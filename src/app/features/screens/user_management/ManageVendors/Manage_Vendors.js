@@ -8,7 +8,6 @@ import { Card } from "primereact/card";
 import { ToastContainer, toast } from "react-toastify";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ManageVendor = () => {
-    const [showEditUser, setShowEditUser] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
     const [userId, setUserId] = useState(null);
     const [rowData, setRowData] = useState(null);
@@ -34,6 +33,13 @@ const ManageVendor = () => {
         navigate("/Update_vendors");
     };
     const handleUserDelete = async (rowData) => {
+        // Display confirmation dialogue box
+        const isConfirmed = window.confirm("Are you sure you want to delete this user?");
+
+        if (!isConfirmed) {
+            return; // If not confirmed, exit the function
+        }
+
         try {
             const response = await Axios.delete(`${BASE_URL}/api/web/manageVendors/delete/${rowData._id}`);
             const message = response.data.msg;
@@ -46,6 +52,7 @@ const ManageVendor = () => {
             toast.error(errorMessage);
         }
     };
+
     const formatDate = (rowData, column) => {
         const dateValue = rowData[column.field];
         if (dateValue) {
