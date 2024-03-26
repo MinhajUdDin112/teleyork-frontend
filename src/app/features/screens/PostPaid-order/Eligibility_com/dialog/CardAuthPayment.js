@@ -35,7 +35,6 @@ const CardAuthPayment =({amount,handleNext,object})=>{
         },
 
         onSubmit: async (values, actions) => {
-
             setIsLoading(true) 
              let serviceprovider=JSON.parse(localStorage.getItem("userData")).company  
                let Modules=JSON.parse(localStorage.getItem("permissions"))   
