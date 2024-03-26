@@ -234,7 +234,7 @@ export const AppTopbar = (props) => {
                     />
                 </div>
                 <ConfirmPopup target={document.getElementById("li")} visible={visible} onHide={() => setVisible(false)} message={<CustomMessage />} acceptLabel="Logout" accept={handleLogout} />
-                <ul className={classNames("layout-topbar-menu lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
+                <ul className={classNames("layout-topbar-menu   lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
                     <div className="flex  ">
                         <p className="mr-7 mt-2" style={{ fontSize: "1.3rem" }}>
                             {parseLoginRes?.role?.role}

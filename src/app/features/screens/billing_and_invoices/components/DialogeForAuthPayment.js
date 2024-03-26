@@ -57,14 +57,25 @@ const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
         { label: "E-Check", value: "echeck" },
     ];
     const cardApi = async () => {
-        setIsLoading(true);
+        setIsLoading(true);  
+        let serviceprovider=JSON.parse(localStorage.getItem("userData")).company  
+        let Modules=JSON.parse(localStorage.getItem("permissions"))   
+        let moduleid;
+         for(let i=0;i<Modules.length;i++){ 
+              if(Modules[i].module === "Postpaid Orders"){  
+                  moduleid=Modules[i].moduleId
+              }
+         } 
         const dataToSend = {
             amount: formik.values.totalAmount,
             cardNumber: formattedCardNumber.replace(/-/g, ""),
             cardCode: formik.values.cardCode,
             expirationDate: formik.values.expirationDate,
             invoiceNo: formik.values.accountId,
-            invoiceId: invoiceId,
+            invoiceId: invoiceId,                    
+            serviceProvider:serviceprovider, 
+            modules:moduleid, 
+            paymentGateway:"Authorize"
         };
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);
