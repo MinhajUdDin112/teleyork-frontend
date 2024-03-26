@@ -13,14 +13,11 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const CardAuthPayment =({amount,handleNext,object})=>{
     const [formattedCardNumber, setFormattedCardNumber] = useState("");
-    
     amount = parseFloat(amount).toFixed(2);
     const basicData = localStorage.getItem("basicData");
     const parsebasicData = JSON.parse(basicData);
     const userDetails = parsebasicData?.data
-   
     const [isLoading, setIsLoading] = useState(false)
-    
     const validationSchema = Yup.object().shape({
         cardNumber: Yup.string().required("Please Enter Card Number"),
         cardCode: Yup.string().required("Please Enter CVC"),
@@ -39,20 +36,31 @@ const CardAuthPayment =({amount,handleNext,object})=>{
 
         onSubmit: async (values, actions) => {
 
-            setIsLoading(true)
+            setIsLoading(true) 
+             let serviceprovider=JSON.parse(localStorage.getItem("userData")).company  
+               let Modules=JSON.parse(localStorage.getItem("permissions"))   
+               let moduleid;
+                for(let i=0;i<Modules.length;i++){ 
+                     if(Modules[i].module === "Postpaid Orders"){  
+                         moduleid=Modules[i].moduleId
+                     }
+                } 
             const dataToSend = {
                 amount: formik.values.totalAmount,
                 cardNumber: formattedCardNumber.replace(/-/g, ""),
                 cardCode: formik.values.cardCode,
                 expirationDate: formik.values.expirationDate,
                 invoiceNo: formik.values.accountId,
-                customerId:userDetails?._id
+                customerId:userDetails?._id, 
+                serviceProvider:serviceprovider, 
+                modules:moduleid, 
+                paymentGateway:"Authorize"
             };
             try {
     
-                const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);
+                const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);  
                 if (response?.data?.messages?.resultCode == "Ok" || response?.data?.messages?.resultCode == "OK" || response?.data?.msg?.resultCode == "Ok") {
-
+                 
                     const dataToSend = {
                         invoiceType: "Sign Up",
                         customerId: userDetails?._id,

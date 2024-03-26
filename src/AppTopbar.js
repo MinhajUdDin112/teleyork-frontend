@@ -67,10 +67,10 @@ export const AppTopbar = (props) => {
     );
     function capitalizeEveryWord(sentence) {
         // Split the sentence into an array of words
-        var words = sentence.split(" ");
+        var words = sentence?.split(" ");
 
         // Capitalize the first letter of each word
-        var capitalizedWords = words.map(function (word) {
+        var capitalizedWords = words?.map(function (word) {
             return word.charAt(0).toUpperCase() + word.slice(1);
         });
 
@@ -89,7 +89,7 @@ export const AppTopbar = (props) => {
                     props.setSearchByValueClick(false);
                 }}
             >
-                {capitalCompanyName.includes("IJ") ? (
+                {capitalCompanyName?.includes("IJ") ? (
                     <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                         <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                         <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
