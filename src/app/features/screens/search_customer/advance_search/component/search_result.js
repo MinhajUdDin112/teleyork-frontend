@@ -5,9 +5,6 @@ import { Column } from "primereact/column";
 export default function DisplayAdvanceSearchApiResponse({ searchData, setSearchBy }) {
     const navigate = useNavigate();
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
-    const roleName = parseLoginRes?.role?.role;
-   
     const handleEnrollmentIdClick = (rowData) => {
         setSearchBy(null);
         navigate("/customer-profile", { state: { selectedId: rowData._id } });

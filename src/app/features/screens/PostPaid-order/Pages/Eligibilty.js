@@ -92,9 +92,6 @@ import Select from "../Eligibility_com/Select";
 
 const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [currentComponent, setCurrentComponent] = useState(1);
-
-    const zipRes = localStorage.getItem("zipData");
-
     const handleNext = () => {
      
             if (currentComponent < 2) {

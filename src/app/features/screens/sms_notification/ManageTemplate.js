@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { Route, Routes,useLocation } from "react-router-dom";
-import { getAllTemplateAction, getOneTemplateAction } from "../../../store/notification/NotificationAction";
+import {getOneTemplateAction } from "../../../store/notification/NotificationAction";
 import CustomLoading from "../../components/custom_spinner";
 import { clearGetOneTemplateData } from "../../../store/notification/NotificationSllice";
 import Axios from "axios";
@@ -35,7 +35,7 @@ const ManageTemplate = () => {
     const dispatch = useDispatch();
     const [filterType, setFilterType] = useState("all");
     const [filteredByType, setFilteredByType] = useState([]); // New state for filtered data by type
-    const { getAllTemplate, getOneTemplate, getAllTemplateLoading, getOneTemplateLoading } = useSelector((state) => state.notification);
+    const {  getOneTemplate, getAllTemplateLoading} = useSelector((state) => state.notification);
       
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -92,11 +92,7 @@ const ManageTemplate = () => {
             setVisibleDelelteTemplate(true);
         }
 
-        function handleEditTemplate() {
-            navigate("/managetemplate/edittemplate");
-            setNavigateToEdit(true);
-            setTemplateToEdit(rowData);
-        }
+     
         return (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Button label="Download " onClick={() => handleDownload(rowData)} disabled={!isManage} />
