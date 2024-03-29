@@ -325,7 +325,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                     {getFormErrorMessage("plan")}
                                 </>
                             </>
-                        ) : (
+                        ) :  (
                             <>
                                 <Dropdown
                                     disabled={paymentInfo ? true : false}

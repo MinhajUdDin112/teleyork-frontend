@@ -4,7 +4,7 @@ import "./style/stripe_payment_form.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import Axios from "axios"; 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripeForm({ clientSecret, object, setActiveIndex, setPaymentDialogVisibility }) { 
+export default function PaymentStripeForm({ plan,clientSecret,paid, object, setActiveIndex, setPaymentDialogVisibility }) { 
     const submitbuttonref=useRef(null)
     const stripe = useStripe();
     const [disableSubmit, setDisableSubmit] = useState(false);
@@ -61,14 +61,17 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                             amount: simpricing.selectdiscount[i]?.amount,
                         };
                         discounts.push(obj);
-                    }
-                    for (let i = 0; i < simpricing?.monthlyCharge?.length; i++) {
-                        if (object?.billId === simpricing?.monthlyCharge[i]?._id) {
-                            planName = simpricing?.monthlyCharge[i]?.name;
-                            planCharges = simpricing?.monthlyCharge[i]?.price;
-                            planId = simpricing?.monthlyCharge[i]?._id;
+                    }   
+                    let plandata=JSON.parse(localStorage.getItem("planprices"))  
+                    for (let i = 0; i < plandata?.length; i++) {
+                        if (object.plan === plandata[i]?._id) {
+                            planName = plandata[i]?.name;
+                            planCharges = plandata[i]?.price;
+
+                            planId = plandata[i]?._id;
                         }
                     }
+                   
                     let simadditional = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
                     for (let k = 0; k < simadditional?.length; k++) {
                         for (let i = 0; i < simpricing?.additionalFeature?.length; i++) {
@@ -81,7 +84,8 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                             }
                         }
                     }
-                } else {
+                } else { 
+                     let plandata=JSON.parse(localStorage.getItem("planprices"))
                     dueDate = devicepricing?.dueDate;
                     applyLateFee = devicepricing?.applyLateFee;
                     oneTimeCharge = devicepricing?.oneTimeCharge;
@@ -92,12 +96,12 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                         };
                         discounts.push(obj);
                     }
-                    for (let i = 0; i < devicepricing?.monthlyCharge?.length; i++) {
-                        if (object.plan === devicepricing?.monthlyCharge[i]?._id) {
-                            planName = devicepricing?.monthlyCharge[i]?.name;
-                            planCharges = devicepricing?.monthlyCharge[i]?.price;
+                    for (let i = 0; i < plandata?.length; i++) {
+                        if (object.plan === plandata[i]?._id) {
+                            planName = plandata[i]?.name;
+                            planCharges = plandata[i]?.price;
 
-                            planId = devicepricing?.monthlyCharge[i]?._id;
+                            planId = plandata[i]?._id;
                         }
                     }
                     let deviceadditional = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"));
@@ -113,8 +117,9 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                         }
                     }
                 }
-                let plan = [];
-                plan.push(object?.plan);
+                let plan = object?.plan;  
+                // let dateincasepart  
+                //object.totalAmount === paid ? dueDate:"Partial"
                 let dataToSend = {
                     stripeId: paymentIntent.id,
                     customerId: object.customerid,
@@ -122,12 +127,12 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                     totalAmount: object.totalamount,
                     additionalCharges: additionalFeature,
                     discount: discounts,
-                    amountPaid: object.totalamount,
+                    amountPaid: paid,
                     invoiceDueDate: dueDate,
                     lateFee: applyLateFee,
                     invoiceOneTimeCharges: oneTimeCharge,
-                    invoiceStatus: "Paid",
-                    planId: planId,
+                    invoiceStatus: object.totalAmount === paid ? "Paid":"Partial",
+                    planId: plan,
                     planName: planName,
                     planCharges: planCharges,
                     chargingType: "monthly",
@@ -138,8 +143,8 @@ export default function PaymentStripeForm({ clientSecret, object, setActiveIndex
                         to: "onActivation",
                     },
                 };
-              
-                Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend)
+                localStorage.setItem("datasendforinvoice",JSON.stringify(dataToSend))
+                Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend)
                     .then((response) => {
                         localStorage.setItem("paymentallinfo", JSON.stringify(response.data));
                         const loginRes = localStorage.getItem("userData");

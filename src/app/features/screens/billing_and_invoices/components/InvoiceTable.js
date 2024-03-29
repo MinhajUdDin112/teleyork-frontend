@@ -8,9 +8,10 @@ import CustomerInvoice from "./customer_invoice/customer_invoice"
 import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 import { ro } from "date-fns/locale";
+import CustomerInvoicePrepaid from "./customer_invoice/customer_invoice_prepaid";
 
 const InvoiceTable = ({ userDetails, invoiceData }) => {
-
+ console.log(userDetails)
     const cardData = invoiceData;
     const [isLoading, setIsLoading] = useState(false)
     const [singleInvoiceData, setInvoiceData] = useState()
@@ -20,7 +21,7 @@ const InvoiceTable = ({ userDetails, invoiceData }) => {
 
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
-        if (rowData.invoiceStatus === "Paid" || rowData.invoiceStatus === "Partially Paid") {
+        if (rowData.invoiceStatus === "Paid" || rowData.invoiceStatus === "Partially Paid" || rowData.invoiceStatus === "Partial") {
             return "text-blue-400";
         }
         else {
@@ -202,9 +203,11 @@ const InvoiceTable = ({ userDetails, invoiceData }) => {
                 />
 
 
-            </DataTable>
-            <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />
-        </div>
+            </DataTable> 
+             { 
+             userDetails?.accountType === "Prepaid" ? <CustomerInvoicePrepaid userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading}/>:  <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />
+             }
+            </div>
     );
 };
 
