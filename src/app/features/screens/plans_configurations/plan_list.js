@@ -71,7 +71,10 @@ const parseLoginRes = JSON.parse(loginRes);
                  <Column header="Plan ID" field="planId"/>
                 <Column header="Name" field="name" />
                 <Column header="Description" field="description" />
-
+                
+                <Column header="Inventory Type" field="inventoryType" /> 
+                
+                <Column header="Billing Model" field="type" />
                 <Column header="Text Allowance" field="textAllowance" />
                 <Column header="Data Allowance" field="dataAllowance" />
                 <Column header="Voice Allowance" field="voiceAllowance" /> 
