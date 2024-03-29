@@ -8,12 +8,13 @@ import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
-   
+    console.log("payment screen is here ");
     const [inventory, setInventory] = useState();
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isSearch, setIsSearch] = useState(false);
     const [historyData, setHistoryData] = useState();
+    const [previousPlanPrice, setPreviousPlanPrice] = useState(0);
     //Handle Back
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
 
@@ -23,7 +24,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const validationSchema = Yup.object().shape({
         billId: Yup.string().required("Product is required"),
         paymentMode: Yup.string().required("Payment Mode are required"),
-        plan: Yup.string().required("Plan is required"),
+        plan: Yup.string().required("Plan is required"),  
+        paid:Yup.string().required("Paid Amount is required")
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -33,7 +35,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             paymentMode: "",
             discount: [],
             additional: [],
-            totalamount: "",
+            totalamount: "",  
+            paid:"",
             customerid: _id,
             type: "Sign Up ",
         },
@@ -49,8 +52,10 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             }
         },
     });
+    console.log("formik values is", formik.values);
     useEffect(() => {
         if (paymentInfo) {
+            console.log("payment mode has set");
             setPaymentDialogVisibility(false);
             formik.setFieldValue("billId", paymentInfo.billId);
             formik.setFieldValue("plan", paymentInfo.plan);
@@ -89,13 +94,18 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             disabled={paymentInfo ? true : false}
                             className="field-width mt-2"
                             value={formik.values.billId}
-                            onChange={(e) => {
+                            onChange={(e) => {  
+                                 console.log(e)
+                                 localStorage.setItem("product",e.key)
+                                formik.setFieldValue("totalamount", 0);
                                 formik.setFieldValue("billId", e.value);
+
                                 let inventory;
                                 let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
                                 for (let i = 0; i < inventoryType.length; i++) {
                                     if (e.value === inventoryType[i].value) {
-                                        inventory = inventoryType[i].label;
+                                        inventory = inventoryType[i].label; 
+                                         localStorage.setItem("product",inventory)
                                         break;
                                     }
                                 }
@@ -104,19 +114,21 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("simdiscountobjectarray")));
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
-                                      formik.setFieldValue("plan","")
-                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
+                                    formik.setFieldValue("plan", "");
+                                    let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
-                                    formik.setFieldValue("totalamount", amountafterdiscount);
-                                } else if (inventory === "WIRELESS DEVICE") { 
-                                    formik.setFieldValue("plan","")
+                                    formik.setFieldValue("totalamount", amountafterdiscount);  
+                                    setPreviousPlanPrice(0)
+                                } else if (inventory === "WIRELESS DEVICE") {
+                                    formik.setFieldValue("plan", "");
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("deviceadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
-                                    formik.setFieldValue("totalamount", amountafterdiscount);
+                                    formik.setFieldValue("totalamount", amountafterdiscount);   
+                                    setPreviousPlanPrice(0)
                                 }
                                 formik.handleChange(e);
                             }}
@@ -135,33 +147,36 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     id="plan"
                                     placeholder="Select Plan"
                                     optionLabel="name"
+                                    optionValue="value"
                                     options={JSON.parse(localStorage.getItem("simplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
-                                       
-
+                                        console.log("inventory is", inventory);
+                                        console.log(e);
                                         if (formik.values.plan === "") {
                                             let devicepricing = JSON.parse(localStorage.getItem("planprices"));
                                             for (let i = 0; i < devicepricing.length; i++) {
-                                                if (devicepricing._id === e.value) {
-                                                    formik.setFieldValue("totalamount",parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
+                                                if (devicepricing[i]._id === e.value) {
+                                                    console.log("adding plan === null ");
+                                                    formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
+                                                    setPreviousPlanPrice(devicepricing[i].price);
                                                 }
                                             }
+
                                             formik.setFieldValue("plan", e.value);
-                                            formik.handleChange(e);
+                                            //formik.handleChange(e);
                                         } else {
                                             let devicepricing = JSON.parse(localStorage.getItem("planprices"));
+
                                             for (let i = 0; i < devicepricing.length; i++) {
-                                                if (devicepricing[i]._id === e.value || devicepricing[i]._id === formik.values.plan) {
-                                                    if (devicepricing[i]._id === formik.values.plan) {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing[i].price).toString();
-                                                    } else {
-                                                        formik.setFieldValue("totalamount",parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
-                                                    }
+                                                if (devicepricing[i]._id === e.value) {
+                                                    console.log("adding current plan pricing ");
+                                                    formik.setFieldValue("totalamount", (parseFloat(formik.values.totalamount) + devicepricing[i].price - previousPlanPrice).toString());
+                                                    setPreviousPlanPrice(devicepricing[i].price);
                                                 }
                                             }
                                             formik.setFieldValue("plan", e.value);
-                                            formik.handleChange(e);
+                                            //formik.handleChange(e);
                                         }
                                     }}
                                 />
@@ -178,25 +193,23 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     options={JSON.parse(localStorage.getItem("deviceplan"))}
                                     value={formik.values.plan}
                                     onChange={(e) => {
-                                     
-
                                         if (formik.values.plan === "") {
                                             let devicepricing = JSON.parse(localStorage.getItem("planprices"));
                                             for (let i = 0; i < devicepricing.length; i++) {
-                                                if (devicepricing._id === e.value) {
-                                                    formik.setFieldValue("totalamount", parseFloat((formik.values.totalamount) + devicepricing[i].price)).toString();
+                                                if (devicepricing[i]._id === e.value) {
+                                                    formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
                                                 }
                                             }
                                             formik.setFieldValue("plan", e.value);
                                             formik.handleChange(e);
                                         } else {
-                                            let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));
+                                            let devicepricing = JSON.parse(localStorage.getItem("planprices"));
                                             for (let i = 0; i < devicepricing.length; i++) {
                                                 if (devicepricing[i]._id === e.value || devicepricing[i]._id === formik.values.plan) {
                                                     if (devicepricing[i]._id === formik.values.plan) {
-                                                        formik.setFieldValue("totalamount",parseFloat(formik.values.totalamount - devicepricing[i].price).toString());
+                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing[i].price).toString();
                                                     } else {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount + devicepricing[i].price).toString());
+                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
                                                     }
                                                 }
                                             }
@@ -207,15 +220,9 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 />
                                 {getFormErrorMessage("plan")}
                             </>
-                        ) :<Dropdown
-                        disabled={paymentInfo ? true : false}
-                        className="field-width mt-2"
-                        placeholder="Select Plan"
-                        id="plan"
-                        optionLabel="name"
-                        options={[]}
-                        /> 
-                        }
+                        ) : (
+                            <Dropdown disabled={paymentInfo ? true : false} className="field-width mt-2" placeholder="Select Plan" id="plan" optionLabel="name" options={[]} />
+                        )}
                     </div>
                     <div className="mt-2">
                         <label className="block">Select Additional Feature</label>
@@ -300,6 +307,20 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 {getFormErrorMessage("additional")}
                             </>
                         )}
+                    </div>     
+                    <div className="mt-2">
+                        <label className="block">Paying Amount</label>
+                        <InputText
+                    
+                            className="field-width mt-2"
+                            id="paid"
+                            value={formik.values.paid}
+                            onChange={(e) => {
+                                formik.setFieldValue("paid", e.target.value);
+                               // formik.handleChange(e);
+                            }}
+                        />
+                        {getFormErrorMessage("paid")}
                     </div>
                     <div className="mt-2">
                         <label className="block">Net Amount</label>
@@ -336,7 +357,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     {formik.values.paymentMode == "card" && !(localStorage.getItem("paymentstatus") === "paid") ? (
                         <>
                             <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} setPaymentDialogVisibility={setPaymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
-                                <PaymentStripModule amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
+                                <PaymentStripModule paid={formik.values.paid} plan={formik.values.plan} amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
                             </Dialog>
                         </>
                     ) : undefined}

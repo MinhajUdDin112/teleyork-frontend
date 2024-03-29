@@ -28,7 +28,7 @@ export default function EnrollmentFlowPage() {
                     let totaldiscounts=0    
                     let additionaltotal=0;
                     let additionalfeaturearray=[]
-                    if (response?.data?.data[i]?.inventoryType === "SIM" && (response?.data?.data[i]?.billingmodel === "Postpaid" || response?.data?.data[i]?.billingmodel === "POSTPAID") ) {
+                    if ((response?.data?.data[i]?.inventoryType === "SIM") &&  (response?.data?.data[i]?.billingmodel === "PREPAID") ) {
                      
                         let obj = { label: "SIM", value:response?.data?.data[i]?._id };
                         //objectforpricing[response.data.data[i].inventoryType]["oneTimeCharge"]=response.data.data[i].inventoryType.oneTimeCharge
@@ -78,7 +78,7 @@ export default function EnrollmentFlowPage() {
                         localStorage.setItem("simplan", JSON.stringify(plans));
                         ///payments method
                         localStorage.setItem("simPaymentMethod", JSON.stringify(paymentMethods));
-                    } else if (response?.data?.data[i]?.inventoryType === "WIRELESS DEVICE" && (response?.data?.data[i]?.billingmodel === "Postpaid" || response?.data?.data[i]?.billingmodel === "POSTPAID")) {   
+                    } else if (response?.data?.data[i]?.inventoryType === "WIRELESS DEVICE" && (response?.data?.data[i]?.billingmodel === "PREPAID")) {   
                  
                         let obj = { label: "WIRELESS DEVICE", value:response?.data?.data[i]?._id };
                         inventoryType.push(obj);

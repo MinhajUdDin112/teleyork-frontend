@@ -53,6 +53,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         }
     }, []);
     let inventory;
+    let productName;
     let discount = "";
     let additional = "";
     let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
@@ -63,7 +64,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             break;
         }
     }
-    if (inventory === "Sim Card") {
+    if (inventory === "SIM") { 
+        productName = "SIM"
         let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
         let simalladditional = JSON.parse(localStorage.getItem("simadditional"));
 
@@ -79,7 +81,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         for (let i = 0; i < selecteddiscount?.length; i++) {
             discount += `${selecteddiscount[i].discountname},`;
         }
-    } else if (inventory === "Wireless Device") {
+    } else if (inventory === "WIRELESS DEVICE") {   
+        productName = "WIRELESS DEVICE"
         let selecteddiscount = JSON.parse(localStorage.getItem("devicepricing"))?.selectdiscount;
         let devicealladditional = JSON.parse(localStorage.getItem("deviceadditional"));
         let additionallocal = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"));
@@ -97,7 +100,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
     const handleSign = () => {
         setChecked(true);
-    };
+    };   
+    
     return (
         <>
             <ToastContainer />
@@ -153,23 +157,24 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <p className="w-6 ml-4">Discounts:</p>
                                     <p className="w-6">
                                         {" "}
-                                        {paymentInfo?.discount.map((item) => (
-                                            <div>
-                                                <p className="inline">
-                                                    {item.name}: ${item.amount}
+                                        {paymentInfo?.discount.map((item,index) => (
+                                         
+                                                <p className="inline"> 
+
+                                                    {item.name}{index+1 !== (paymentInfo?.discount).length ? ",":undefined}
                                                 </p>
-                                            </div>
+                                          
                                         ))}
                                     </p>
                                 </div>
 
-                                <div className="flex  pt-2">
+                                <div className="flex  border-bottom-2  pt-2">
                                     <p className="w-6 ml-4">One Time Charges: </p>
                                     <p className="w-6">${paymentInfo?.invoiceOneTimeCharges}</p>
                                 </div>
-                                <div className="flex border-bottom-2 pt-2">
+                                <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Inventory: </p>
-                                    <p className="w-6">{inventory}</p>
+                                    <p className="w-6">{localStorage.getItem("product")}</p>
                                 </div>
                             </div>
                             <div className="border-2 w-5 ">
@@ -210,10 +215,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Additional Feature:</p>
                                     <p className="w-6">
-                                        {paymentInfo?.additionalCharges.map((item) => (
+                                        {paymentInfo?.additionalCharges.map((item,index) => (
                                             <div>
                                                 <p className="inline">
-                                                    {item.name} :${item.amount}
+                                                    {item.name}{index+1 !== (paymentInfo?.discount).length ? ",":undefined}
                                                 </p>
                                             </div>
                                         ))}
