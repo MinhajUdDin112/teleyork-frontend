@@ -5,7 +5,7 @@ import DialogeForWallet from "../dialogs/DialogeForWallet";
 import { Dialog } from "primereact/dialog";
 import { useNavigate } from "react-router-dom";
 
-const BillingNavbar = ({ setChangeCustomerStatus, changeCustomerStatusDialog }) => {
+const BillingNavbar = ({refresh, setChangeCustomerStatus, changeCustomerStatusDialog }) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [cpData, setCpData] = useState([]);
   const [openDialogeForWallet, setOpenDialogeForWallet] = useState(false);
@@ -28,7 +28,7 @@ const navigate = useNavigate();
   };
   useEffect(() => {
     getCustomerProfileData();
-  }, [changeCustomerStatusDialog]);
+  }, [changeCustomerStatusDialog,refresh]);
 
   function openPaymentScreen() {
    
@@ -115,7 +115,7 @@ const navigate = useNavigate();
       },
       
     {
-        label:`Wallet: ${cpData?.wallet !== undefined ? cpData?.wallet : "0"}`,
+        label:`Wallet: ${cpData?.wallet !== undefined ? parseFloat(cpData?.wallet).toFixed(2) : "0"}`,
         icon: (
           <svg
             className="custom-icon-plus"

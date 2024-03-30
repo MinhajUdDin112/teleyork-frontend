@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { Calendar } from "primereact/calendar";
 import classNames from "classnames";
 
-const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISuccess }) => {
+const AdHocModal = ({ setRefresh,cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISuccess }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const [selectedCity1, setSelectedCity1] = useState(null);
     const [city, setCity] = useState("");
@@ -62,8 +62,10 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISucce
                 if (response?.status === 201 || response?.status === 200) {
                     toast.success("Successfully Created");
                     setisButtonLoading(false);
-                    actions.resetForm();
-                    onAPISuccess(true)
+                    actions.resetForm();     
+                    setAdHocInvoiceModal(false)
+                    setRefresh(prev=>!prev)  
+                    // onAPISuccess(true)
                 }
             } catch (error) {
               toast.error(error?.response?.data?.error);

@@ -4,14 +4,15 @@ import { loadStripe } from "@stripe/stripe-js";
 import Axios from "axios";
 import { useEffect,useState } from "react";
 import PaymentStripeForm from "./stripe_payment_dialog/stripe_payment_form";
-const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripModule({amount,object,handleNext}) { 
+const BASE_URL = process.env.REACT_APP_BASE_URL;    
+let stripePromise;
+export default function PaymentStripModule({paid,amount,object,handleNext}) { 
   let [clientSecret,setClientSecret]=useState(null)  
-   let stripePromise;
+
   useEffect(()=>{   
      
   stripePromise = loadStripe("pk_test_51OcirDLVLQnJs4K0bDuAGI0kOqwpv7EPz8QAHP1ck2233eZ1EtPjZHT1CWgPamZKCAlEZdhPSAQwtjBKQXgpm9zF00t20QE6EZ");
-    Axios.post(`${BASE_URL}/api/web/billing/paymentintent`,{amount:amount}).then((response)=>{ 
+    Axios.post(`${BASE_URL}/api/web/billing/paymentintent`,{amount:parseFloat(paid).toFixed(2)}).then((response)=>{ 
      
      setClientSecret(response.data.clientSecret)
 }).catch(err=>{ 
@@ -24,7 +25,7 @@ export default function PaymentStripModule({amount,object,handleNext}) {
         <Elements stripe={stripePromise} options={{
             clientSecret
         }}>
-           <PaymentStripeForm clientSecret={clientSecret} amount={amount} handleNext={handleNext} object={object}/>
+           <PaymentStripeForm clientSecret={clientSecret} paid={paid} amount={amount} handleNext={handleNext} object={object}/>
         </Elements>:undefined      
 }  
  </>

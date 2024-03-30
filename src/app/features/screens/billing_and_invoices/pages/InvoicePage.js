@@ -13,7 +13,8 @@ import { createContext } from "react";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const onAPISuccess = createContext();
 
-const InvoicePage = () => {
+const InvoicePage = () => {  
+    const [refresh,setRefresh]=useState(false)
     const [accountType, setAccountType] = useState("")
     const [invoices, setInvoices] = useState([])
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
@@ -53,18 +54,18 @@ const InvoicePage = () => {
     useEffect(() => {  
         getUserDetail();
         getInvoice()
-    }, [selectedId])
+    }, [selectedId,refresh])
 
     return (
         <>
         <onAPISuccess.Provider value={{handleAPISuccess}}>
         <Card>
-            <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
+            <BillingNavbar refresh={refresh} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
             <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
                 <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
             </Dialog>
             <Dialog draggable={false} visible={adHocInvoiceModal} header={`Add Adhoc Invoice`} style={{ width: "50vw" }} onHide={() => setAdHocInvoiceModal((prev) => !prev)}>
-            <AdHocModal cpData={cpData} onAPISuccess={handleAPISuccess} adHocInvoiceModal={adHocInvoiceModal} setAdHocInvoiceModal={setAdHocInvoiceModal} />
+            <AdHocModal setRefresh={setRefresh} cpData={cpData} onAPISuccess={handleAPISuccess} adHocInvoiceModal={adHocInvoiceModal} setAdHocInvoiceModal={setAdHocInvoiceModal} />
             </Dialog>
            
                
@@ -82,7 +83,7 @@ const InvoicePage = () => {
                         •Row in blue color are paid invoices
                     </p>
                 </div>
-                <InvoiceTable userDetails={userDetails} className="mb-3" invoiceData={invoices} />
+                <InvoiceTable  setRefresh={setRefresh} userDetails={userDetails} className="mb-3" invoiceData={invoices} />
 
             </div>
           

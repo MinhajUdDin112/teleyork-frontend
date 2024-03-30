@@ -5,12 +5,7 @@ import { useState } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { RadioButton } from "primereact/radiobutton";
-import { Checkbox } from "primereact/checkbox";
-import { useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
-import { useSelector } from "react-redux/es/hooks/useSelector";
 import classNames from "classnames";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
@@ -23,22 +18,14 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [isDifferent, setIsDifferent] = useState();
     const [isPoBox, setIsPoBox] = useState();
     const [isLoading, setIsLoading] = useState(false);
- 
-
     const zipDataLs = localStorage.getItem("basicData");
     const zipDataParsed = JSON.parse(zipDataLs);
     const zipCode = zipDataParsed?.data?.zip;
     const zipCity = zipDataParsed?.data?.city;
-    const zipState = zipDataParsed?.data?.state;
-
-     // Get role name  from login response
-     const loginRes = localStorage.getItem("userData");
-     const parseLoginRes = JSON.parse(loginRes);
-     
+    const zipState = zipDataParsed?.data?.state;     
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("Address is required"),
     });
-
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -60,7 +47,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             poBoxState: "",
             poBoxCity: "",
         },
-        onSubmit: async (values, actions) => {
+        onSubmit: async () => {
             checkEligiblity();
             const userId = _id;
             const dataToSend = {
@@ -102,18 +89,16 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     });
 
     const checkEligiblity = async () => {
-        try {
+       /* try {
             const response = await Axios.post(`${BASE_URL}/api/user/deviceEligibilty?enrollmentId=${_id}`);
             if (response?.status === 200 || response?.status === 201) {
                 localStorage.setItem("checkEligiblity", JSON.stringify(response.data));
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
-        }
+        }       
+        */
     };
-
-   
-
     useEffect(() => {
         if (zipCode) {
             formik.setFieldValue("zip", zipCode);
@@ -230,75 +215,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         }
     }, [isDifferent, isPoBox]);
 
-    const handleAddressChange = (e) => {
-        const address = e?.value?.structured_formatting?.secondary_text;
-        const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
-        const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
-
-        if (address) {
-            let cityName = "";
-            let cityName1 = "";
-            let trimmedCityName = "";
-            let tolowerTrimmedCityName = "";
-
-            if (address && address.includes(",")) {
-                const parts = address.split(",");
-                if (parts.length >= 1) {
-                    cityName = parts[0];
-                    cityName1 = parts[1];
-
-                    cityName = cityName.toLowerCase();
-                    cityName1 = cityName1.toLowerCase();
-
-                    const words = cityName.split(" ");
-
-                    if (words.length >= 2) {
-                        trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
-                        tolowerTrimmedCityName = trimmedCityName.toLowerCase();
-                    } else {
-                        tolowerTrimmedCityName = cityName;
-                    }
-                }
-            }
-            const cityFromDb = formik.values.city;
-
-            let toLower;
-            if (cityFromDb.includes(" ")) {
-                const words = cityFromDb.split(" ");
-                if (words.length >= 2) {
-                    toLower = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
-                    toLower = toLower.toLowerCase();
-                    toLower = toLower.trim();
-                }
-            } else {
-                toLower = cityFromDb.toLowerCase();
-                toLower = toLower.trim();
-            }
-            if (tolowerTrimmedCityName.includes(toLower) || toLower.includes(tolowerTrimmedCityName) || cityName.includes(toLower) || toLower.includes(cityName) || cityName1.includes(toLower) || toLower.includes(cityName1)) {
-                const completeAddress = e?.value?.structured_formatting?.main_text;
-
-                const extractedAddress1 = completeAddress.match(pattern);
-
-                if (extractedAddress1) {
-                    const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
-
-                    formik.setFieldValue("address1", final);
-                } else {
-                    formik.setFieldValue("address1", completeAddress);
-                }
-                const match = completeAddress.match(regex);
-
-                var add2 = match ? match[0] : "";
-
-                if (add2) {
-                    add2 = add2.toUpperCase();
-                    formik.setFieldValue("address2", add2);
-                }
-            } else {
-                toast.error(`Please choose an address associated with ${formik.values.city}, ${formik.values.state} `);
-            }
-        }
-    };
+   
     const handleAddressChangeForZisFone = (e) => {
         const address = e?.value?.structured_formatting?.secondary_text;
         const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
@@ -506,3 +423,72 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 };
 
 export default Address;
+/*const handleAddressChange = (e) => {
+    const address = e?.value?.structured_formatting?.secondary_text;
+    const regex = /\b(APT|BSMT|BLDG|DEPT|FL|HNGR|LBBY|LOWR|OFC|PH|RM|UNIT|UPPR|TRLR|STE|SPC)\s*([\w\d]+)\b/i;
+    const pattern = /(.+)(?=(unit|apt|bsmt|bldg|dept|fl|hngr|lbby|lowr|ofc|ph|UPPR|TRLR|STE|spc|RM))/i;
+
+    if (address) {
+        let cityName = "";
+        let cityName1 = "";
+        let trimmedCityName = "";
+        let tolowerTrimmedCityName = "";
+
+        if (address && address.includes(",")) {
+            const parts = address.split(",");
+            if (parts.length >= 1) {
+                cityName = parts[0];
+                cityName1 = parts[1];
+
+                cityName = cityName.toLowerCase();
+                cityName1 = cityName1.toLowerCase();
+
+                const words = cityName.split(" ");
+
+                if (words.length >= 2) {
+                    trimmedCityName = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
+                    tolowerTrimmedCityName = trimmedCityName.toLowerCase();
+                } else {
+                    tolowerTrimmedCityName = cityName;
+                }
+            }
+        }
+        const cityFromDb = formik.values.city;
+
+        let toLower;
+        if (cityFromDb.includes(" ")) {
+            const words = cityFromDb.split(" ");
+            if (words.length >= 2) {
+                toLower = words[0] + (words[1].charAt(0).toLowerCase() + words[1].slice(1));
+                toLower = toLower.toLowerCase();
+                toLower = toLower.trim();
+            }
+        } else {
+            toLower = cityFromDb.toLowerCase();
+            toLower = toLower.trim();
+        }
+        if (tolowerTrimmedCityName.includes(toLower) || toLower.includes(tolowerTrimmedCityName) || cityName.includes(toLower) || toLower.includes(cityName) || cityName1.includes(toLower) || toLower.includes(cityName1)) {
+            const completeAddress = e?.value?.structured_formatting?.main_text;
+
+            const extractedAddress1 = completeAddress.match(pattern);
+
+            if (extractedAddress1) {
+                const final = extractedAddress1 ? extractedAddress1[1].trim() : completeAddress.trim();
+
+                formik.setFieldValue("address1", final);
+            } else {
+                formik.setFieldValue("address1", completeAddress);
+            }
+            const match = completeAddress.match(regex);
+
+            var add2 = match ? match[0] : "";
+
+            if (add2) {
+                add2 = add2.toUpperCase();
+                formik.setFieldValue("address2", add2);
+            }
+        } else {
+            toast.error(`Please choose an address associated with ${formik.values.city}, ${formik.values.state} `);
+        }
+    }
+};  */

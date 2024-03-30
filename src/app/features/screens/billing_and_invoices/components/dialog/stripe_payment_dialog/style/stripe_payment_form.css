@@ -1,0 +1,29 @@
+.submit-button{ 
+  margin-top: 34px; 
+  border: none;  
+  color: grey; 
+   margin-left: 50%; 
+   transform: translate(-50%); 
+   padding: 10px; 
+   font-size: 14px;
+   border-radius: 5px; 
+   cursor: pointer;
+} 
+.stripe-dialog-width{ 
+  width:50vw; 
+
+} 
+@media(max-width:1000px){ 
+    .stripe-dialog-width{ 
+        width:80vw; 
+      
+      } 
+}
+@media(max-width:430px){ 
+    .stripe-dialog-width{ 
+        width:100vw;  
+        overflow-x: auto;
+        position: absolute;
+      
+      } 
+}
