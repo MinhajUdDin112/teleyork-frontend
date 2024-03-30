@@ -106,15 +106,7 @@ const DialogeForRemarksForIJ = ({enrollmentId, getAllEnrollments,setOpenDialogeF
                       
                    <label className="ml-2">Average</label> 
                     </div>      
-                    <div className="flex flex-wrap flex-row mt-2 justify-content-left "> 
-                      <RadioButton value="declined"  onChange={(e)=>{ 
-                            setIsCallQualityRemarks(e.value)
-                      }}  
-                        checked={isCallQualityRemarks === "declined"}
-                       className="ml-2"/> 
-                      
-                   <label className="ml-2" >declined</label> 
-                    </div> 
+                  
                     <div className="flex flex-wrap flex-row mt-2 justify-content-left "> 
                       <RadioButton value="satisfactory"  onChange={(e)=>{ 
                             setIsCallQualityRemarks(e.value)
@@ -123,6 +115,15 @@ const DialogeForRemarksForIJ = ({enrollmentId, getAllEnrollments,setOpenDialogeF
                        className="ml-2"/> 
                       
                    <label className="ml-2" >Satisfactory</label> 
+                    </div>      
+                    <div className="flex flex-wrap flex-row mt-2 justify-content-left "> 
+                      <RadioButton value="declined"  onChange={(e)=>{ 
+                            setIsCallQualityRemarks(e.value)
+                      }}  
+                        checked={isCallQualityRemarks === "declined"}
+                       className="ml-2"/> 
+                      
+                   <label className="ml-2" >Declined</label> 
                     </div> 
                    </div>  
                   
