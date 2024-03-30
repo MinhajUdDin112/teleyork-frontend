@@ -440,7 +440,7 @@ const BillingConfiguration = () => {
                                         <label className="field_label mb-2 text-lg">Discount Amount </label>
                                         <InputText id="amount" className="w-full" value={formik.values.amount} onChange={formik.handleChange} />
                                     </div>
-                                    <Button className="discount_field_width mt-4" label="Add Discount" onClick={addDiscount} />
+                                    <Button type="button"   className="discount_field_width mt-4" label="Add Discount" onClick={addDiscount} />
                                 </div>
                             </div>
                         ) : (
@@ -458,7 +458,7 @@ const BillingConfiguration = () => {
                                         <label className="field_label mb-2 text-lg"> Amount </label>
                                         <InputText id="featureAmount" className="w-full" value={formik.values.featureAmount} onChange={formik.handleChange} />
                                     </div>
-                                    <Button className="feature_field_width mt-4" label="Add Feature" onClick={addFeature} />
+                                    <Button type="button" className="feature_field_width mt-4" label="Add Feature" onClick={addFeature} />
                                 </div>
                             </>
                         ) : (
