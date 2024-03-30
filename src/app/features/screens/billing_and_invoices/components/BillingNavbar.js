@@ -4,7 +4,7 @@ import Axios from "axios";
 import DialogeForWallet from "./dialogs/DialogeForWallet";
 import { Dialog } from "primereact/dialog";
 
-const BillingNavbar = ({ setChangeCustomerStatus }) => {
+const BillingNavbar = ({refresh, setChangeCustomerStatus }) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [cpData, setCpData] = useState([]);
   const [openDialogeForWallet, setOpenDialogeForWallet] = useState(false);
@@ -28,7 +28,7 @@ const BillingNavbar = ({ setChangeCustomerStatus }) => {
 
   useEffect(() => {
     getCustomerProfileData();
-  }, []);
+  }, [refresh]);
 
   function handleWalletClick() {
     setOpenDialogeForWallet(true);

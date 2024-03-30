@@ -3,14 +3,14 @@ import { Button } from "primereact/button";
 import { useFormik, } from "formik";
 import * as Yup from "yup";
 import { Dropdown } from "primereact/dropdown";
-import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import CardAuthPayment from "./dialog/CardAuthPayment";
-import EcheckAuthPayment from "./dialog/EcheckAuthPayment";
+import EcheckAuthPayment from "./dialog/EcheckAuthPayment"; 
+import PaymentStripModule from "./dialog/stripe_payment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
@@ -33,7 +33,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const validationSchema = Yup.object().shape({
         //billId: Yup.string().required("Product is required"),
         paymentMode: Yup.string().required("Payment Mode are required"),
-        plan: Yup.string().required("Please Select it first"),
+        plan: Yup.string().required("Please Select it first"),  
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -45,7 +45,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             additional: [],
             totalamount: "",
             customerid: _id,
-            type: "Sign Up ",
+            type: "Sign Up ",         
+             paid:"", 
             productName:"",
         },
         onSubmit: async (values, actions) => {
@@ -98,7 +99,10 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             }
             else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="ZISFONE LLC") {   
                 setdialogForCardAuth(true);
-        } 
+        }  
+        else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="IJ WIRELESS") {   
+        setPaymentDialogVisibility(true)
+    } 
 
            
         },
@@ -450,7 +454,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 {getFormErrorMessage("additional")}
                             </>
                         )}
-                    </div>
+                    </div>     
+
                     <div className="mt-2">
     <label className="block">Net Amount</label>
     <InputText
@@ -464,8 +469,24 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
         }}
     />
     {getFormErrorMessage("totalpayment")}
-</div>
-
+</div>    
+{ (formik.values.paymentMode ==="Credit Card" && toCapitalCompanyName=="IJ WIRELESS")  ?  
+     
+<div className="mt-2">
+                        <label className="block">Paying Amount</label>
+                        <InputText
+                    
+                            className="field-width mt-2"
+                            id="paid"
+                            value={formik.values.paid}
+                            onChange={(e) => {
+                                formik.setFieldValue("paid", e.target.value);
+                               // formik.handleChange(e);
+                            }}
+                        />
+                        {getFormErrorMessage("paid")}
+                    </div> 
+                     :undefined} 
                     <div className="mt-2">
                         <label className="block">Select Payment Method</label>
                        {  inventory === "SIM" ?  <Dropdown
@@ -514,13 +535,11 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         
                         {getFormErrorMessage("paymentMode")}
                     </div>
-                    {formik.values.paymentMode == "card" ? (
-                        <>
+                 
                             <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
-                                <PaymentStripModule amount={formik.values.totalamount} object={formik.values} handleNext={handleNext} />
+                                <PaymentStripModule amount={formik.values.totalamount} paid={formik.values.paid} object={formik.values} handleNext={handleNext} />
                             </Dialog>
-                        </>
-                    ) : undefined}
+                      
                 </div>
             </div>
         </form>

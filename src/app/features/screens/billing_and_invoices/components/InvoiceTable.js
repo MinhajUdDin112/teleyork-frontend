@@ -9,8 +9,8 @@ import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 import { ro } from "date-fns/locale";
 import CustomerInvoicePrepaid from "./customer_invoice/customer_invoice_prepaid";
-
-const InvoiceTable = ({ userDetails, invoiceData }) => {
+import PaymentStripModule from "./dialog/stripe_payment";
+const InvoiceTable = ({setRefresh, userDetails, invoiceData }) => {
  console.log(userDetails)
     const cardData = invoiceData;
     const [isLoading, setIsLoading] = useState(false)
@@ -33,14 +33,16 @@ const InvoiceTable = ({ userDetails, invoiceData }) => {
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName;
     const companyNameToCapital = companyName.toUpperCase();
-
+   const [paymentDialogVisibility,setPaymentDialogVisibility]=useState(false)
     return (
         <div className="mx-4">
 
             <Dialog header={"Payment"} visible={dialogeForAuthPayment} style={{ width: "50vw" }} onHide={() => setdialogeForAuthPayment(false)}>
                 <DialogeForAuthPayment  dueAmount={dueAmount} setdialogeForAuthPayment={setdialogeForAuthPayment} invoiceId={invoiceId} userDetails={userDetails} invoiceData={invoiceData} />
             </Dialog>
-
+            <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
+                                <PaymentStripModule  setRefresh={setRefresh} dueAmount={dueAmount} userDetails={userDetails} setPaymentDialogVisibility={setPaymentDialogVisibility}  invoiceId={invoiceId} />
+                            </Dialog>
             <DataTable
                 size="small"
                 className="mt-4"
@@ -158,7 +160,27 @@ const InvoiceTable = ({ userDetails, invoiceData }) => {
                     header="Payment"
                     style={{ minWidth: "250px" }}
                 />
-                    : ""}
+                    :companyNameToCapital.includes("IJ")?  
+                    <Column
+                    field="Action"
+                    body={(rowData) => (
+                        <Button
+                            className="bg-green-700 pl-2 pr-2 pt-1 pb-1 border-none"
+                            onClick={() => {
+                                setPaymentDialogVisibility(true);
+                                setInvoiceId(rowData?._id);
+                                setdueAmount(rowData?.netPrice)
+                                
+                            }}
+                        >
+                            Payment
+                        </Button>
+                    )}
+                    header="Payment"
+                    style={{ minWidth: "250px" }}
+                />:undefined
+                      
+                }
 
 
                 <Column
