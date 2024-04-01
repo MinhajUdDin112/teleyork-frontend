@@ -35,7 +35,7 @@ export default function PaymentStripeForm({paid, amount,clientSecret,object,hand
             setDisableSubmit(false);
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
         } else {
-          
+            console.log("Payment Details Is",paymentIntent.id)
             const dataToSend = {
                 invoiceType: "Sign Up",
                 customerId: userDetails?._id,
@@ -50,7 +50,9 @@ export default function PaymentStripeForm({paid, amount,clientSecret,object,hand
                 paymentMethod: "Credit Card",
                 chargingType: "Monthly",
                 printSetting: "Both",
-                selectProduct: object.billId,        
+                selectProduct: object.billId,          
+                paymentId:paymentIntent.id, 
+                paymentChannel:"Stripe",   
             }
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
