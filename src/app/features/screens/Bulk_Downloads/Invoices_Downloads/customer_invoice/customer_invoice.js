@@ -8,6 +8,7 @@ import "./css/customer_invoice.css";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }) {
+    console.log("user id is ", userId);
     const [userData, setUserData] = useState(null);
     const [isDataReady, setIsDataReady] = useState(false);
     const [currentInvoiceIndex, setCurrentInvoiceIndex] = useState(0);

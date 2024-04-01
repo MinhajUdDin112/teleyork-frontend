@@ -2,9 +2,9 @@ import { Button } from "primereact/button";
 import html2canvas from "html2canvas";
 import "./css/customer_invoice.css";
 import { useRef, useEffect } from "react";
-import jsPDF from "jspdf"; 
+import jsPDF from "jspdf";
 
-import html2pdf from 'html2pdf.js';
+import html2pdf from "html2pdf.js";
 import { ProgressSpinner } from "primereact/progressspinner";
 import React, { useState } from "react";
 import InvoiceTypes from "../InvoiceTypes";
@@ -13,7 +13,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading }) {
     // const [isLoading, setIsLoading] = useState(false);
-   const downloadref=useRef()
+    const downloadref = useRef();
     const downloadButtonRef = useRef();
 
     useEffect(() => {
@@ -34,8 +34,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
             pdf.save(`${formattedDate}-${userDetails?.lastName}-${userDetails?.accountId}.pdf`);
             setIsLoading(false);
-        })
-      
+        });
     };
 
     // Get role name  from login response
@@ -47,13 +46,8 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
     return (
         <div>
             <Button ref={downloadButtonRef} className="download-invoice" label="" onClick={downloadInvoice}></Button>
-<<<<<<< Updated upstream
-            {invoiceData && invoiceData.isAdHocInvoice ?
-                <div  ref={downloadref} className="flex flex-wrap justify-content-around  downloadtemp">
-=======
             {invoiceData && invoiceData.isAdHocInvoice ? (
-                <div className="flex flex-wrap justify-content-around  downloadtemp">
->>>>>>> Stashed changes
+                <div ref={downloadref} className="flex flex-wrap justify-content-around  downloadtemp">
                     <div className="flex flex-column mb-5">
                         {companyNameToCapital.includes("ZISFONE") ? (
                             <div className="ml-4">
@@ -285,7 +279,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </div>
                         <div className="pl-2 flex flex-wrap justify-content-between">
                             <p>Balance Forward</p>
-                            <p>{`$${userDetails?.wallet !== undefined ? parseFloat(userDetails.wallet).toFixed(2) : "0"}`}</p>
+                            <p>{userDetails?.wallet !== undefined ? parseFloat(userDetails.wallet).toFixed(2) : "0"}</p>
                         </div>
 
                         <div>
