@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataTable } from "primereact/datatable";
 import { useFormik } from "formik";
-import "./css/billing_configuration.css";
+import "./css/billing_configuration.css";  
+import * as Yup from 'yup';
 import { Toast } from "primereact/toast";
 import ListAllBilling from "./components/billingmodel_configurations/billing_model_configurations";
 import Axios from "axios";
@@ -31,9 +32,38 @@ const BillingConfiguration = () => {
     const [allDiscount, setAllDiscount] = useState([]);
     const [allFeature, setAllFeature] = useState([]);
     const [refreshOnBillingConfig, setRefreshOnBillingConfig] = useState(false);
-    const [configData, setconfigData] = useState();
+    const [configData, setconfigData] = useState();            
+    const validationSchema = Yup.object().shape({
+        
+          monthlyCharge: Yup.array()
+          .required('Field is required')
+          .min(1, 'Field must contain at least one value')
+          .of(Yup.string()),   
+          paymentMethod: Yup.array()
+          .required('Field is required')
+          .min(1, 'Field must contain at least one value')
+          .of(Yup.string()),  
+          
+          billingmodel:Yup.string().required("Billing Model Is Required") ,   
+          
+          inventoryType:Yup.string().required("Inventory Type Is Required") , 
+               
+          oneTimeCharge:Yup.string().required("One Time Charges Is Required") ,   
+          
+          dueDate:Yup.string().required("Due Date Is Required") ,    
+          
+          BillCreationDate:Yup.string().required("Bill Creation Date Is Required") ,   
+          
+          
+          latefeeCharge:Yup.string().required("Late Fee Charge Is Required") ,   
+          
+          applyLateFee:Yup.string().required("Late Fee Charge Is Required") ,   
+          
+          subsequentBillCreateDate:Yup.string().required("Subsequent Bill Create Date Is Required") , 
+            
+      });
     const formik = useFormik({
-        // validationSchema: validationSchema,
+        validationSchema: validationSchema,
         initialValues: {
             billingmodel: "",
             inventoryType: "",
@@ -100,10 +130,12 @@ const BillingConfiguration = () => {
         { label: "After QA Approval ", value: "On QA Approval" },
     ];
 
-    function showDiscount() {
+    function showDiscount() {  
+        setNewFeature(false);
         setNewDiscount(true);
     }
-    function showFeature() {
+    function showFeature() {  
+         setNewDiscount(false)
         setNewFeature(true);
     }
 
@@ -186,7 +218,9 @@ const BillingConfiguration = () => {
 
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/discount/adddiscount`, dataToSend);
-            if (response?.status == 200 || response?.status == 201) {
+            if (response?.status == 200 || response?.status == 201) {    
+                 formik.setFieldValue("discountname","")  
+                 formik.setFieldValue("amount","")
                 setNewDiscount(false);
                 getDiscount();
                 toast.success("Discount added successfully");
@@ -205,7 +239,9 @@ const BillingConfiguration = () => {
 
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/feature/addfeature`, dataToSend);
-            if (response?.status == 200 || response?.status == 201) {
+            if (response?.status == 200 || response?.status == 201) {  
+                formik.setFieldValue("featureName","")  
+                 formik.setFieldValue("featureAmount","")
                 setNewFeature(false); // Fix the typo here
                 getFeature();
                 toast.success("Feature added successfully");
@@ -310,7 +346,12 @@ const BillingConfiguration = () => {
                             <div className="field-width mt-3">
                                 <label className="field_label text-md">One Time Charges</label>
                                 <InputText id="oneTimeCharge" className="w-full  mt-1" placeholder="Enter One Time Charges" value={formik.values.oneTimeCharge} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
+                                {formik.touched.oneTimeCharge && formik.errors.oneTimeCharge ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.oneTimeCharge}
+                                    </p>
+                                ) : null}
+                               </div>
                             <div className="mt-3 field-width  ">
                                 <label className="field_label   text-md">Monthly Charges</label>
                                 <MultiSelect
@@ -354,18 +395,38 @@ const BillingConfiguration = () => {
                             <div className="field-width mt-3">
                                 <label className="field_label text-md">Subsequent Bill Create Date </label>
                                 <InputText id="subsequentBillCreateDate" className="w-full  mt-1" placeholder="No of Days From First Bill Create Date" value={formik.values.subsequentBillCreateDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            </div>
+                                {formik.touched.subsequentBillCreateDate && formik.errors.subsequentBillCreateDate ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.subsequentBillCreateDate}
+                                    </p>
+                                ) : null}
+                               </div>
                             <div className="field-width mt-3">
                                 <label className="field_label text-md">Due Date</label>
                                 <InputText id="dueDate" placeholder="No of days From Bill Create Date" className="w-full  mt-1" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.touched.dueDate && formik.errors.dueDate ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.dueDate}
+                                    </p>
+                                ) : null}
                             </div>
                             <div className="field-width mt-3">
                                 <label className="field_label text-md">Late Fee Charge</label>
                                 <InputText id="latefeeCharge" placeholder="Late Fee Charge" value={formik.values.latefeeCharge} className="w-full  mt-1" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.touched.latefeeCharge && formik.errors.latefeeCharge ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.latefeeCharge}
+                                    </p>
+                                ) : null}
                             </div>
                             <div className="field-width mt-3">
                                 <label className="field_label text-md">Apply Late Fee </label>
                                 <InputText id="applyLateFee" placeholder="No of Days from Due Date" className="w-full  mt-1" value={formik.values.applyLateFee} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.touched.applyLateFee && formik.errors.applyLateFee ? (
+                                    <p className="mt-2 ml-2" style={{ color: "red" }}>
+                                        {formik.errors.applyLateFee}
+                                    </p>
+                                ) : null}
                             </div>
 
                             <div className="mt-3 field-width  ">
@@ -393,7 +454,10 @@ const BillingConfiguration = () => {
                             <div className="mt-3 field-width ">
                                 <label className="field_label  text-md">
                                     Select Discount OR{" "}
-                                    <span onClick={showDiscount} style={{ color: "blue", cursor: "pointer" }}>
+                                    <span onClick={()=>{ 
+                                         setNewDiscount(true)
+                                         setNewFeature(false)
+                                    }} style={{ color: "blue", cursor: "pointer" }}>
                                         Add Discount
                                     </span>{" "}
                                 </label>
@@ -412,7 +476,12 @@ const BillingConfiguration = () => {
                             <div className="mt-3 field-width ">
                                 <label className="field_label  text-md">
                                     Additional Feature OR{" "}
-                                    <span onClick={showFeature} style={{ color: "blue", cursor: "pointer" }}>
+                                    <span 
+                                    onClick={()=>{ 
+                                        setNewDiscount(false)
+                                        setNewFeature(true)
+                                   }}
+                                 style={{ color: "blue", cursor: "pointer" }}>
                                         Add Feature
                                     </span>{" "}
                                 </label>

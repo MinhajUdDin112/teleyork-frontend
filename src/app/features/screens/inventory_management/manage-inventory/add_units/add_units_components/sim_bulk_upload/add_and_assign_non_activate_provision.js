@@ -227,7 +227,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                                 formik.setFieldValue("agentType", e.value);  
                                  formik.setFieldValue("AgentName","")
                                 setDepartmentSelected(e.value);                       
-                                
+                  
                             }}
                             placeholder="Select an option"
                             className="field-width mt-2"
