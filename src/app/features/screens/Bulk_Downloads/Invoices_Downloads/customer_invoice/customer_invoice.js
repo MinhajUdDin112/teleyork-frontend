@@ -1,44 +1,71 @@
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "primereact/button";
 import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import Axios from "axios";
 import "./css/customer_invoice.css";
-import { useRef, useEffect } from "react";
-import jsPDF from "jspdf"; 
-
-import html2pdf from 'html2pdf.js';
-import { ProgressSpinner } from "primereact/progressspinner";
-import React, { useState } from "react";
-import InvoiceTypes from "../InvoiceTypes";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading }) {
-    // const [isLoading, setIsLoading] = useState(false);
-   const downloadref=useRef()
-    const downloadButtonRef = useRef();
+export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }) {
+    const [userData, setUserData] = useState(null);
+    const [isDataReady, setIsDataReady] = useState(false);
+    const [currentInvoiceIndex, setCurrentInvoiceIndex] = useState(0);
+    const downloadButtonRef = useRef(null);
 
     useEffect(() => {
-        if (invoiceData !== undefined && invoiceData !== null) {
+        // Fetch user data when the component mounts
+        if (userId) {
+            fetchUserData();
+        }
+    }, [userId]);
+
+    useEffect(() => {
+        // When both user data and invoices data are available, set isDataReady to true
+        if (userData && invoicesData && invoicesData.length > 0) {
+            setIsDataReady(true);
+        }
+    }, [userData, invoicesData]);
+
+    const fetchUserData = async () => {
+        try {
+            const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${userId}`);
+            setUserData(response?.data);
+        } catch (error) {
+            console.error("Error fetching user details:", error);
+        }
+    };
+
+    useEffect(() => {
+        // Start downloading when data is ready
+        if (isDataReady && currentInvoiceIndex < invoicesData.length) {
             downloadButtonRef.current.click();
         }
-    }, [invoiceData]);
+        return () => {};
+    }, [isDataReady, currentInvoiceIndex]);
 
-    const downloadInvoice = () => {
-        setIsLoading(true);
-        document.querySelector(".downloadtemp").style.width = "1050px";
-        html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 }).then((canvas) => {
+    const downloadInvoice = async (invoice) => {
+        try {
+            // Generate PDF for the current invoice
+            document.querySelector(".downloadtemp").style.width = "1050px";
+            const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 });
             const pdf = new jsPDF();
-            // pdf.setFont("Roboto");
-            const createdAtDate = new Date(invoiceData?.createdAt);
+            const createdAtDate = new Date(invoice.createdAt);
             const formattedDate = createdAtDate.toLocaleDateString();
             pdf.setFont("Roboto-Black-normal");
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
-            pdf.save(`${formattedDate}-${userDetails?.lastName}-${userDetails?.accountId}.pdf`);
-            setIsLoading(false);
-        })
-      
+            pdf.save(`${formattedDate}-${userData?.data?.lastName}-${userData?.data?.accountId}.pdf`);
+            // Increment the current invoice index using the functional form
+            if (currentInvoiceIndex + 1 === invoicesData.length) {
+                setShowInvoice(false);
+                return;
+            } else {
+                setCurrentInvoiceIndex((prevIndex) => prevIndex + 1);
+            }
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+        }
     };
-
-    // Get role name  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName;
@@ -46,14 +73,9 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
     return (
         <div>
-            <Button ref={downloadButtonRef} className="download-invoice" label="" onClick={downloadInvoice}></Button>
-<<<<<<< Updated upstream
-            {invoiceData && invoiceData.isAdHocInvoice ?
-                <div  ref={downloadref} className="flex flex-wrap justify-content-around  downloadtemp">
-=======
-            {invoiceData && invoiceData.isAdHocInvoice ? (
+            {invoicesData && invoicesData.map((invoice, index) => <Button key={index} className="download-invoice" ref={downloadButtonRef} label="" onClick={() => downloadInvoice(invoice)}></Button>)}
+            {invoicesData && invoicesData.isAdHocInvoice ? (
                 <div className="flex flex-wrap justify-content-around  downloadtemp">
->>>>>>> Stashed changes
                     <div className="flex flex-column mb-5">
                         {companyNameToCapital.includes("ZISFONE") ? (
                             <div className="ml-4">
@@ -69,14 +91,14 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                         <div className="customer-info line1">
                             <p className="font-semibold line3">
-                                {userDetails?.firstName} {userDetails?.lastName}
+                                {userData?.data?.firstName} {userData?.data?.lastName}
                             </p>
-                            <p className="font-semibold line3">{userDetails?.contact}</p>
+                            <p className="font-semibold line3">{userData?.data?.contact}</p>
                             <p className="font-semibold line3">
-                                {userDetails?.address1} {userDetails?.address2}
+                                {userData?.data?.address1} {userData?.data?.address2}
                             </p>
                             <p className="font-semibold line3">
-                                {userDetails?.city}, {userDetails?.state}, {userDetails?.zip}
+                                {userData?.data?.city}, {userData?.data?.state}, {userData?.data?.zip}
                             </p>
                         </div>
                     </div>
@@ -92,30 +114,30 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             <div className="remittance-wrapper">
                                 <div className="pl-2 w-full remittancesec  flex flex-wrap justify-content-between">
                                     <p>Account No</p>
-                                    <p>{userDetails?.accountId}</p>
+                                    <p>{userData?.data?.accountId}</p>
                                 </div>
                                 <div className="pl-2  flex remittancesec flex-wrap justify-content-between">
                                     <p>Invoice No</p>
-                                    <p>{invoiceData?.invoiceNo}</p>
+                                    <p>{invoicesData[currentInvoiceIndex]?.invoiceNo}</p>
                                 </div>
                                 <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
                                     <p>Invoice Date</p>
-                                    <p>{invoiceData?.createdAt}</p>
+                                    <p>{invoicesData[currentInvoiceIndex]?.createdAt}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Amount Paid</p>
-                                    <p>${invoiceData?.amountPaid}</p>
+                                    <p>${invoicesData[currentInvoiceIndex]?.amountPaid}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData?.totalAmount}</p>
+                                    <p>${invoicesData[currentInvoiceIndex]?.totalAmount}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                     <p>Due Date</p>
-                                    <p>{invoiceData?.invoiceDueDate}</p>
+                                    <p>{invoicesData[currentInvoiceIndex]?.invoiceDueDate}</p>
                                 </div>
                             </div>
 
@@ -135,34 +157,34 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <div className="topline"></div>
                         <div className=" pl-2 font-bold flex flex-wrap justify-content-between line">
                             <p>Invoice Number</p>
-                            <p>{invoiceData?.invoiceNo}</p>
+                            <p>{invoicesData[currentInvoiceIndex]?.invoiceNo}</p>
                         </div>
                         <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                             <p>Customer Name</p>
                             <p>
-                                {userDetails?.firstName} {userDetails?.lastName}
+                                {userData?.data?.firstName} {userData?.data?.lastName}
                             </p>
                         </div>
                         <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                             <p>Invoice Type</p>
-                            <p> {invoiceData?.invoiceType}</p>
+                            <p> {invoicesData[currentInvoiceIndex]?.invoiceType}</p>
                         </div>
                         <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                             <p>Total Amount</p>
-                            <p> ${invoiceData?.totalAmount}</p>
+                            <p> ${invoicesData[currentInvoiceIndex]?.totalAmount}</p>
                         </div>
                         <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                             <p>Amount Paid</p>
-                            <p> ${invoiceData?.amountPaid}</p>
+                            <p> ${invoicesData[currentInvoiceIndex]?.amountPaid}</p>
                         </div>
                         <div className=" pl-2 font-bold flex flex-wrap justify-content-between line">
                             <p className="line">Due Date</p>
-                            <p>{invoiceData?.invoiceDueDate}</p>
+                            <p>{invoicesData[currentInvoiceIndex]?.invoiceDueDate}</p>
                         </div>
 
                         <div className="mt-3 pl-2 remittancesec font-bold flex flex-wrap justify-content-between " style={{ marginBottom: 250 }}>
                             <p>Total Amount Due</p>
-                            <p>${invoiceData?.totalAmount}</p>
+                            <p>${invoicesData[currentInvoiceIndex]?.totalAmount}</p>
                         </div>
                     </div>
                 </div>
@@ -183,14 +205,14 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                         <div className="customer-info mt-3 line1">
                             <p className="font-semibold line3">
-                                {userDetails?.firstName} {userDetails?.lastName}
+                                {userData?.data?.firstName} {userData?.data?.lastName}
                             </p>
-                            <p className="font-semibold line3">{userDetails?.contact}</p>
+                            <p className="font-semibold line3">{userData?.data?.contact}</p>
                             <p className="font-semibold line3">
-                                {userDetails?.address1} {userDetails?.address2}
+                                {userData?.data?.address1} {userData?.data?.address2}
                             </p>
                             <p className="font-semibold line3">
-                                {userDetails?.city}, {userDetails?.state} {userDetails?.zip}
+                                {userData?.data?.city}, {userData?.data?.state} {userData?.data?.zip}
                             </p>
                         </div>
                     </div>
@@ -206,35 +228,35 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             <div className="remittance-wrapper">
                                 <div className="pl-2 w-full remittancesec  flex flex-wrap justify-content-between">
                                     <p>Account No</p>
-                                    <p>{userDetails?.accountId}</p>
+                                    <p>{userData?.data?.accountId}</p>
                                 </div>
                                 <div className="pl-2  flex remittancesec flex-wrap justify-content-between">
                                     <p>Invoice No</p>
-                                    <p>{invoiceData?.invoiceNo}</p>
+                                    <p>{invoicesData[currentInvoiceIndex]?.invoiceNo}</p>
                                 </div>
                                 <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
                                     <p>Invoice Date</p>
-                                    <p>{invoiceData?.createdAt}</p>
+                                    <p>{invoicesData[currentInvoiceIndex]?.createdAt}</p>
                                 </div>
 
                                 <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
                                     <p>Billing Period</p>
-                                    <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} `}</p>
+                                    <p>{`${invoicesData[currentInvoiceIndex]?.billingPeriod?.from} / ${invoicesData[currentInvoiceIndex]?.billingPeriod?.to} `}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Amount Paid</p>
-                                    <p>${parseFloat(invoiceData?.amountPaid).toFixed(2)}</p>
+                                    <p>${parseFloat(invoicesData[currentInvoiceIndex]?.amountPaid).toFixed(2)}</p>
                                 </div>
 
                                 <div className="pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+                                    <p>${parseFloat(invoicesData[currentInvoiceIndex]?.netPrice).toFixed(2)}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
                                     <p>Due Date</p>
-                                    <p>{invoiceData?.invoiceDueDate}</p>
+                                    <p>{invoicesData[currentInvoiceIndex]?.invoiceDueDate}</p>
                                 </div>
                             </div>
 
@@ -253,26 +275,26 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <p className="text-center font-bold line2">ACCOUNT SUMMARY</p>
                         <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
                             <p>Account No</p>
-                            <p> {userDetails?.accountId}</p>
+                            <p> {userData?.data?.accountId}</p>
                         </div>
                         <div className="pl-2 w-full   flex flex-wrap justify-content-between line">
                             <p>Customer Name</p>
                             <p>
-                                {userDetails?.firstName} {userDetails?.lastName}
+                                {userData?.data?.firstName} {userData?.data?.lastName}
                             </p>
                         </div>
                         <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
                             <p>Invoice Date</p>
-                            <p>{invoiceData?.createdAt}</p>
+                            <p>{invoicesData[currentInvoiceIndex]?.createdAt}</p>
                         </div>
 
                         <div className=" pl-2  flex flex-wrap justify-content-between line">
                             <p>Invoice Number</p>
-                            <p>{invoiceData?.invoiceNo}</p>
+                            <p>{invoicesData[currentInvoiceIndex]?.invoiceNo}</p>
                         </div>
                         <div className=" pl-2  flex flex-wrap justify-content-between line">
                             <p className="line">Due Date</p>
-                            <p>{invoiceData?.invoiceDueDate}</p>
+                            <p>{invoicesData[currentInvoiceIndex]?.invoiceDueDate}</p>
                         </div>
                         <p className="mt-4 pt-4 pl-1 font-bold ">ACCOUNT DETAILS</p>
                         <div className="pl-2 w-full mt-2  flex flex-wrap justify-content-between line">
@@ -285,19 +307,19 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </div>
                         <div className="pl-2 flex flex-wrap justify-content-between">
                             <p>Balance Forward</p>
-                            <p>{`$${userDetails?.wallet !== undefined ? parseFloat(userDetails.wallet).toFixed(2) : "0"}`}</p>
+                            <p>{`$${userData?.data?.wallet !== undefined ? parseFloat(userData.wallet).toFixed(2) : "0"}`}</p>
                         </div>
 
                         <div>
                             <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
                             <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
                                 <p>Total Recurring Charges</p>
-                                <p>${invoiceData?.recurringCharges}</p>
+                                <p>${invoicesData[currentInvoiceIndex]?.recurringCharges}</p>
                             </div>
 
                             <div className="pl-2  flex flex-wrap justify-content-between ">
                                 <p>One Time Charge</p>
-                                <p>${userDetails?.invoiceOneTimeCharges}</p>
+                                <p>${userData?.data?.invoiceOneTimeCharges}</p>
                             </div>
                             <div className="pl-2  flex flex-wrap justify-content-between ">
                                 <p>Taxes and Surcharges</p>
@@ -306,11 +328,11 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             <h5 className="font-bold line2">CURRENT SERVICES</h5>
                             <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
                                 <p>Total Recurring Charges</p>
-                                <p>${invoiceData?.recurringCharges}</p>
+                                <p>${invoicesData[currentInvoiceIndex]?.recurringCharges}</p>
                             </div>
                             <div className="pl-2  flex flex-wrap justify-content-between ">
                                 <p>One Time Charge</p>
-                                <p>${userDetails?.invoiceOneTimeCharges}</p>
+                                <p>${userData?.data?.invoiceOneTimeCharges}</p>
                             </div>
                             <div className="pl-2  flex flex-wrap justify-content-between ">
                                 <p>Taxes and Surcharges</p>
@@ -321,7 +343,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <div className="topline"></div>
                         <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                             <p>Total Amount Due</p>
-                            <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+                            <p>${parseFloat(invoicesData[currentInvoiceIndex]?.netPrice).toFixed(2)}</p>
                         </div>
                     </div>
                     <div className="center-line">
@@ -340,9 +362,9 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{userDetails?.selectProduct}</td>
+                                    <td>{userData?.data?.selectProduct}</td>
 
-                                    <td>${userDetails?.invoiceOneTimeCharges}</td>
+                                    <td>${userData?.data?.invoiceOneTimeCharges}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -357,30 +379,30 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{userDetails?.currentPlan?.planName}</td>
+                                    <td>{userData?.data?.currentPlan?.planName}</td>
 
-                                    <td>${userDetails?.currentPlan?.planCharges}</td>
+                                    <td>${userData?.data?.currentPlan?.planCharges}</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        {userDetails?.currentPlan.additionalCharges.map((charge, index) => (
+                                        {userData?.data?.currentPlan.additionalCharges.map((charge, index) => (
                                             <div key={index}>{charge.name}</div>
                                         ))}
                                     </td>
                                     <td>
-                                        {userDetails?.currentPlan.additionalCharges.map((charge, index) => (
+                                        {userData?.data?.currentPlan.additionalCharges.map((charge, index) => (
                                             <div key={index}>${charge.amount}</div>
                                         ))}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        {userDetails?.currentPlan.discount.map((discount, index) => (
+                                        {userData?.data?.currentPlan.discount.map((discount, index) => (
                                             <div key={index}>{discount.name}</div>
                                         ))}
                                     </td>
                                     <td>
-                                        {userDetails?.currentPlan.discount.map((discount, index) => (
+                                        {userData?.data?.currentPlan.discount.map((discount, index) => (
                                             <div key={index}>-${discount.amount}</div>
                                         ))}
                                     </td>
@@ -389,7 +411,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </table>
                         <div className="flex font-bold flex-row flex-wrap justify-content-between">
                             <p>Total Recurring Charges</p>
-                            <p>${invoiceData?.recurringCharges}</p>
+                            <p>${invoicesData[currentInvoiceIndex]?.recurringCharges}</p>
                         </div>
                         <div className="topline"></div>
                         <h6 className="font-bold">Regulatory Taxes and Surcharges: </h6>
