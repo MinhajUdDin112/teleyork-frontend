@@ -154,7 +154,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     }, []);
     useEffect(() => {
         if (formik.values.inventoryType !== "") {
-            Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res) => {
+            Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}&billingModel=${formik.values.billingmodel}`).then((res) => {
                 setAllPlan(res?.data?.data || []);
             });
         }
