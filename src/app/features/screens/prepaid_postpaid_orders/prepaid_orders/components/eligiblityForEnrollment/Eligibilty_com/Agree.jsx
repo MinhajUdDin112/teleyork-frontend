@@ -40,9 +40,16 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     });
     const agreeRes = localStorage.getItem("prepaidagreeData");
     const parseagreeRes = JSON.parse(agreeRes);
-    //get ZipData data from local storage
+    //get ZipData data from local storage  
+    
     const zipdata = localStorage.getItem("prepaidzipData");
-    const parseZipData = JSON.parse(zipdata);
+    const parseZipData = JSON.parse(zipdata);   
+    useEffect(() => {
+        if(parseagreeRes)
+        {
+            handleAll();
+        }
+     }, [isBack]) 
     const postdata = async () => {
         setIsLoading(true);
         const userId = _id;
@@ -52,7 +59,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             const response = await Axios.post(`${BASE_URL}/api/user/termsAndConditions`, dataToSend);
             if(response?.status===201 || response?.status===200){
                localStorage.setItem("prepaidagreeData",JSON.stringify(response?.data))
-              // setIsBack(isBack+1);
+               setIsBack(isBack+1);
                handleNext();
                setIsLoading(false)
             }

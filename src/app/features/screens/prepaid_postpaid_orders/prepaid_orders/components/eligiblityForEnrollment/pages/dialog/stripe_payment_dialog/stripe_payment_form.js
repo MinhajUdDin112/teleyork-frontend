@@ -121,7 +121,7 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                 // let dateincasepart  
                 //object.totalAmount === paid ? dueDate:"Partial"
                 let dataToSend = {
-                    stripeId: paymentIntent.id,
+                    paymentId: paymentIntent.id,
                     customerId: object.customerid,
                     invoiceType: "Sign Up",
                     totalAmount: object.totalamount,

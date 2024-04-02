@@ -92,7 +92,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
      const checkEligiblity= localStorage.getItem("checkEligiblity");
      const parseCheckEligiblity = JSON.parse(checkEligiblity);
      
-    if((parseCheckEligiblity?.data?.Message).includes("not")){
+    if((parseCheckEligiblity?.data?.Message)?.includes("not")){
         toast.error(parseCheckEligiblity?.data?.Message)
     } else{
         toast.success(parseCheckEligiblity?.data?.Message)
