@@ -13,6 +13,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Label_Downloads = () => {
     const [apiData, setApiData] = useState([]);
     const [roleData, setRoleData] = useState([]);
+    const [billingModel, setBillingModel] = useState([]);
     const [model, setModel] = useState("");
     const [user, setUser] = useState([]);
     const [dateFrom, setDateFrom] = useState("");
@@ -38,7 +39,22 @@ const Label_Downloads = () => {
                 console.error("Error fetching data:", error);
             }
         };
+
         roleData();
+    }, []);
+    useEffect(() => {
+        const Billing_models = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${userData?.company}`);
+
+                const data = response?.data?.data;
+                setRoleData(data);
+                console.log("billing model api", data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        Billing_models();
     }, []);
 
     useEffect(() => {
@@ -120,20 +136,24 @@ const Label_Downloads = () => {
                 <Card style={{ height: "18rem" }}>
                     <div className="p-field col-12 md:col-3" style={{ marginLeft: "7rem" }}>
                         <label className="Label__Text">Billing Model</label> <br />
-                        <Dropdown value={model} onChange={(e) => setModel(e.value)} options={Billing_models} optionLabel="name" editable placeholder="Select Model" className="w-full md:w-14rem " />
+                        <br />
+                        <Dropdown value={model} onChange={(e) => setModel(e.value)} options={Billing_models} optionLabel="name" placeholder="Select Model" className="w-full md:w-14rem " />
                     </div>
-                    <div className="p-field col-12 md:col-3" style={{ marginLeft: "30rem", marginTop: "-5.1rem" }}>
+                    <div className="p-field col-12 md:col-3" style={{ marginLeft: "30rem", marginTop: "-6.5rem" }}>
                         <label className="Label__Text">Add Users</label>
+                        <br />
                         <br />
                         <MultiSelect value={user} onChange={(e) => setUser(e.value)} options={roleData} optionLabel="role" display="chip" placeholder="Select User" maxSelectedLabels={3} optionValue="_id" className="w-full md:w-20rem" />
                     </div>
                     <div className="p-field col-12 md:col-3 " style={{ marginLeft: "7rem", marginTop: "2rem" }}>
                         <label className="Label__Text">Date From</label>
                         <br />
+                        <br />
                         <Calendar value={dateFrom} onChange={(e) => setDateFrom(e.value)} />
                     </div>
-                    <div className="p-field col-12 md:col-3 " style={{ marginLeft: "30rem", marginTop: "-5rem" }}>
+                    <div className="p-field col-12 md:col-3 " style={{ marginLeft: "30rem", marginTop: "-6.5rem" }}>
                         <label className="Label__Text">Date To</label>
+                        <br />
                         <br />
                         <Calendar value={dateTo} onChange={(e) => setDateTo(e.value)} />
                     </div>
