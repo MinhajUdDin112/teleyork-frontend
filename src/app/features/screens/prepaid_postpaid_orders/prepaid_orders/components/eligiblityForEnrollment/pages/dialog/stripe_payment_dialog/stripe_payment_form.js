@@ -51,7 +51,7 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                 let planName = "";
                 let planId = "";
                 let planCharges = "";
-                if (object?.plan === simpricing?._id) {
+                if (object?.billId === simpricing?._id) {
                     dueDate = simpricing?.dueDate;
                     oneTimeCharge = simpricing?.oneTimeCharge;
                     applyLateFee = simpricing?.applyLateFee;
@@ -75,7 +75,7 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                     let simadditional = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
                     for (let k = 0; k < simadditional?.length; k++) {
                         for (let i = 0; i < simpricing?.additionalFeature?.length; i++) {
-                            if (simpricing?.additionalFeature[i]?.featureName?._id === simpricing?.additionalFeature[i]?._id) {
+                            if (simpricing?.additionalFeature[i]?._id === simadditional[k]) {
                                 let obj = {
                                     name: simpricing?.additionalFeature[i]?.featureName,
                                     amount: simpricing?.additionalFeature[i]?.featureAmount,
