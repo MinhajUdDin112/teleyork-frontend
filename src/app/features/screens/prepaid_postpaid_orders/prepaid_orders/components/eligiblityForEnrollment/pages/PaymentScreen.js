@@ -20,7 +20,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
     const handleBack = () => {
         setActiveIndex(1);
-    };
+    };        
     const validationSchema = Yup.object().shape({
         billId: Yup.string().required("Product is required"),
         paymentMode: Yup.string().required("Payment Mode are required"),
@@ -52,7 +52,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             }
         },
     });
-    console.log("formik values is", formik.values);
+    console.log("formik values is", formik.values); 
+    
     useEffect(() => {
         if (paymentInfo) {
             console.log("payment mode has set");
@@ -95,11 +96,9 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             className="field-width mt-2"
                             value={formik.values.billId}
                             onChange={(e) => {  
-                                 console.log(e)
                                  localStorage.setItem("product",e.key)
                                 formik.setFieldValue("totalamount", 0);
                                 formik.setFieldValue("billId", e.value);
-
                                 let inventory;
                                 let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
                                 for (let i = 0; i < inventoryType.length; i++) {
@@ -112,25 +111,29 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 setInventory(inventory);
                                 if (inventory === "SIM") {
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("simdiscountobjectarray")));
-                                    let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
-                                    let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
-                                    formik.setFieldValue("plan", "");
-                                    let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
+                                    let oneTimeCharge = parseFloat(JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge);  
+                                    console.log("one time charge of SIM",oneTimeCharge)
+                                    let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal"))); 
+                                    console.log("Amount After Additional",amountafteradditionalfeature)
+                                    formik.setFieldValue("plan", ""); 
+                                    console.log("Total Sim Discount is",)
+                                    let amountafterdiscount = ((oneTimeCharge + amountafteradditionalfeature)-(parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount"))))).toString();
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
+                                   
                                     formik.setFieldValue("totalamount", amountafterdiscount);  
                                     setPreviousPlanPrice(0)
                                 } else if (inventory === "WIRELESS DEVICE") {
                                     formik.setFieldValue("plan", "");
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearraytotal")));
+                                   
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("deviceadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
                                     formik.setFieldValue("totalamount", amountafterdiscount);   
                                     setPreviousPlanPrice(0)
                                 }
-                                formik.handleChange(e);
+                               
                             }}
                             options={JSON.parse(localStorage.getItem("inventoryType"))}
                             placeholder="Select Inventory"
@@ -158,7 +161,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                             for (let i = 0; i < devicepricing.length; i++) {
                                                 if (devicepricing[i]._id === e.value) {
                                                     console.log("adding plan === null ");
-                                                    formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
+                                                    formik.setFieldValue("totalamount", ((parseFloat(formik.values.totalamount) + (devicepricing[i].price))).toString())
                                                     setPreviousPlanPrice(devicepricing[i].price);
                                                 }
                                             }
@@ -170,8 +173,11 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
                                             for (let i = 0; i < devicepricing.length; i++) {
                                                 if (devicepricing[i]._id === e.value) {
-                                                    console.log("adding current plan pricing ");
-                                                    formik.setFieldValue("totalamount", (parseFloat(formik.values.totalamount) + devicepricing[i].price - previousPlanPrice).toString());
+                                                    console.log("adding current plan pricing "); 
+                                                     let currentamount=parseFloat(formik.values.totalamount) 
+                                                     let currentafterremovingprevious=currentamount-previousPlanPrice    
+
+                                                    formik.setFieldValue("totalamount", (currentafterremovingprevious + devicepricing[i].price).toString());
                                                     setPreviousPlanPrice(devicepricing[i].price);
                                                 }
                                             }
@@ -197,24 +203,26 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                             let devicepricing = JSON.parse(localStorage.getItem("planprices"));
                                             for (let i = 0; i < devicepricing.length; i++) {
                                                 if (devicepricing[i]._id === e.value) {
-                                                    formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
+                                                    formik.setFieldValue("totalamount", ((parseFloat(formik.values.totalamount) + (devicepricing[i].price))).toString())
+                                                    setPreviousPlanPrice(devicepricing[i].price);
                                                 }
                                             }
                                             formik.setFieldValue("plan", e.value);
-                                            formik.handleChange(e);
+                                           
                                         } else {
                                             let devicepricing = JSON.parse(localStorage.getItem("planprices"));
+
                                             for (let i = 0; i < devicepricing.length; i++) {
-                                                if (devicepricing[i]._id === e.value || devicepricing[i]._id === formik.values.plan) {
-                                                    if (devicepricing[i]._id === formik.values.plan) {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) - devicepricing[i].price).toString();
-                                                    } else {
-                                                        formik.setFieldValue("totalamount", parseFloat(formik.values.totalamount) + devicepricing[i].price).toString();
-                                                    }
+                                                if (devicepricing[i]._id === e.value) {
+                                                    console.log("adding current plan pricing "); 
+                                                     let currentamount=parseFloat(formik.values.totalamount) 
+                                                     let currentafterremovingprevious=currentamount-previousPlanPrice    
+
+                                                    formik.setFieldValue("totalamount", (currentafterremovingprevious + devicepricing[i].price).toString());
+                                                    setPreviousPlanPrice(devicepricing[i].price);
                                                 }
                                             }
                                             formik.setFieldValue("plan", e.value);
-                                            formik.handleChange(e);
                                         }
                                     }}
                                 />

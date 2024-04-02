@@ -56,13 +56,15 @@ export default function EnrollmentFlowPage() {
                             additionalfeature.push(obj);
                         }
                         for (let y = 0; y < response.data.data[i].selectdiscount.length; y++) {
-                           
+                              console.log("discount amount is",)
                             discountobjectarray.push(response?.data?.data[i]?.selectdiscount[y]?._id.toString());
                             totaldiscounts += parseFloat(response?.data?.data[i]?.selectdiscount[y]?.amount);
                         }
                         //Additional Features 
                                //_id array
-                        localStorage.setItem("simadditionalfeaturearray",JSON.stringify(additionalfeaturearray))  
+                        localStorage.setItem("simadditionalfeaturearray",JSON.stringify(additionalfeaturearray))   
+                        
+                        localStorage.setItem("simadditionalfeaturearraytotal",JSON.stringify(additionalfeature))  
                                // Options array name and _id
                         localStorage.setItem("simadditional", JSON.stringify(additionalfeature));
                                 //totalfeatureamount 
@@ -114,7 +116,8 @@ export default function EnrollmentFlowPage() {
                               // additionalfeaturetotal 
                         localStorage.setItem("deviceadditionaltotal",JSON.stringify(additionaltotal))  
                               //additional feature array object  
-                        localStorage.setItem("deviceadditionalfeaturearray",JSON.stringify(additionalfeaturearray))
+                        localStorage.setItem("deviceadditionalfeaturearray",JSON.stringify(additionalfeaturearray))  
+                         localStorage.setItem("deviceadditionalfeaturearraytotal",JSON.stringify(additionalfeature))
                         //Discounts 
                              //total device discount
                         localStorage.setItem("totaldevicediscount", JSON.stringify(totaldiscounts)); 

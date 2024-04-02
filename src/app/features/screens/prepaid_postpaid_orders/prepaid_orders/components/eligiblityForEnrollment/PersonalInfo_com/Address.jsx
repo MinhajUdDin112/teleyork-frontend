@@ -52,7 +52,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             poBoxCity: "",
         },
         onSubmit: async (values, actions) => {    
-            checkEligiblity();
+           // checkEligiblity();
             const userId = _id;
             const dataToSend = {
                 address1: formik.values.address1,

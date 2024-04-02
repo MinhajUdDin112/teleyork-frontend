@@ -11,7 +11,6 @@ import "./billingmodel_configurations/css/updatebill.css";
 import AddNewFeature from "./add_newfeature";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh, optionsForInventoryType }) {
-    
     //const toast=Toast
     const [currentBillingId, setCurrentBillingId] = useState("");
     const [newDiscount, setNewDiscount] = useState(false);
@@ -50,8 +49,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             additionalFeature: additionalFeature,
             latefeeCharge: rowData.latefeeCharge,
             applyLateFee: rowData.applyLateFee,
-            subsequentBillCreateDate: rowData.subsequentBillCreateDate,  
-            applyToCustomer:rowData?.applyToCustomer
+            subsequentBillCreateDate: rowData.subsequentBillCreateDate,
+            applyToCustomer: rowData?.applyToCustomer,
         },
         onSubmit: async (values, actions) => {
             /*  let selectdiscount = [];
@@ -77,8 +76,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                 additionalFeature: formik.values.additionalFeature,
                 latefeeCharge: formik.values.latefeeCharge,
                 applyLateFee: formik.values.applyLateFee,
-                subsequentBillCreateDate: formik.values.subsequentBillCreateDate, 
-                applyToCustomer:formik.values.applyToCustomer
+                subsequentBillCreateDate: formik.values.subsequentBillCreateDate,
+                applyToCustomer: formik.values.applyToCustomer,
             };
 
             try {
@@ -269,7 +268,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                         <InputText id="dueDate" value={formik.values.dueDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                         <p>Days From the Bill Create Date</p>
                     </div>
-                </div>    
+                </div>
                 <div className="field-width mt-3">
                     <label className="field_label text-md mb-2">Late Fee Charge</label>
                     <div className="latefeecharge flex flex-wrap flex-row justify-content-left align-items-center ">
@@ -289,20 +288,22 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                     <Dropdown
                         className="w-full"
                         id="applyToCustomer"
-                        options={[{
-                        label:"Existing", 
-                        value:"existing"
-                        },{
-                            label:"Both", 
-                            value:"both"
-                        },{
-                            label:"New Customer", 
-                            value:"newCustomer"
-                        }]}
+                        options={[
+                            {
+                                label: "Existing",
+                                value: "existing",
+                            },
+                            {
+                                label: "Both",
+                                value: "both",
+                            },
+                            {
+                                label: "New Customer",
+                                value: "newCustomer",
+                            },
+                        ]}
                         value={formik.values.applyToCustomer}
-                        onChange={ 
-                            formik.handleChange
-                        }
+                        onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                     />
                     {formik.touched.applyToCustomer && formik.errors.applyToCustomer ? (
