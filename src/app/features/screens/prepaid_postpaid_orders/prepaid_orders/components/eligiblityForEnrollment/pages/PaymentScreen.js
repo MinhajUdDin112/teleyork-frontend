@@ -118,7 +118,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     formik.setFieldValue("plan", ""); 
                                     console.log("Total Sim Discount is",)
                                     let amountafterdiscount = ((oneTimeCharge + amountafteradditionalfeature)-(parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount"))))).toString();
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")) : []);
                                    
                                     formik.setFieldValue("totalamount", amountafterdiscount);  
                                     setPreviousPlanPrice(0)
