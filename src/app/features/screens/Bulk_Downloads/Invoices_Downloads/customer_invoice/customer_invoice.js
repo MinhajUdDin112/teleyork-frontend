@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "primereact/button";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import JSZip from "jszip";
 import Axios from "axios";
+import { saveAs } from "file-saver";
 import "./css/customer_invoice.css";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -45,28 +47,45 @@ export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }
         return () => {};
     }, [isDataReady, currentInvoiceIndex]);
 
+    const downloadInvoicesInZip = async () => {
+        try {
+            const zip = new JSZip();
+
+            for (let i = 0; i < invoicesData.length; i++) {
+                const invoice = invoicesData[i];
+                document.querySelector(".downloadtemp").style.width = "1050px";
+                const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 });
+                const pdf = new jsPDF();
+                const createdAtDate = new Date(invoice.createdAt);
+                const formattedDate = createdAtDate.toLocaleDateString();
+                pdf.setFont("Roboto-Black-normal");
+                pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
+                const pdfData = pdf.output("blob");
+                zip.file(`${formattedDate}-${userData?.data?.lastName}-${userData?.data?.accountId}-${i}.pdf`, pdfData);
+            }
+
+            const zipFileName = `invoices.zip`;
+            const zipContent = await zip.generateAsync({ type: "blob" });
+            saveAs(zipContent, zipFileName);
+
+            setShowInvoice(false);
+        } catch (error) {
+            console.error("Error generating or downloading zip file:", error);
+        }
+    };
+
     const downloadInvoice = async (invoice) => {
         try {
-            // Generate PDF for the current invoice
-            document.querySelector(".downloadtemp").style.width = "1050px";
-            const canvas = await html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 });
-            const pdf = new jsPDF();
-            const createdAtDate = new Date(invoice.createdAt);
-            const formattedDate = createdAtDate.toLocaleDateString();
-            pdf.setFont("Roboto-Black-normal");
-            pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
-            pdf.save(`${formattedDate}-${userData?.data?.lastName}-${userData?.data?.accountId}.pdf`);
             // Increment the current invoice index using the functional form
             if (currentInvoiceIndex + 1 === invoicesData.length) {
-                setShowInvoice(false);
-                return;
-            } else {
-                setCurrentInvoiceIndex((prevIndex) => prevIndex + 1);
+                await downloadInvoicesInZip();
             }
+            setCurrentInvoiceIndex((prevIndex) => prevIndex + 1);
         } catch (error) {
             console.error("Error generating PDF:", error);
         }
     };
+
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName;
