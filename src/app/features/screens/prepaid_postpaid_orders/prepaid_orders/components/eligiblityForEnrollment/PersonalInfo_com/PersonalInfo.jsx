@@ -74,7 +74,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             ESim: "",
             bestWayToReach: "",
             salesChannel: "",
-            accountType: "Prepaid", 
+            accountType: "Prepaid",        
+            maidenMotherName: "",
+            alternateContact: "",
             isACP:false
         },
         onSubmit: async (values, actions) => {
@@ -102,7 +104,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     ESim: formik.values.ESim,
                     bestWayToReach: formik.values.bestWayToReach,
                     salesChannel: formik.values.salesChannel,
-                    accountType: formik.values.accountType,
+                    accountType: formik.values.accountType,  
+                    maidenMotherName: formik.values.maidenMotherName,
+                    alternateContact: formik.values.alternateContact,
                 };
                 setIsLoading(true);
                 try {
@@ -314,7 +318,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("drivingLicense", parsebasicResponse?.data?.drivingLicense);
             formik.setFieldValue("ESim", parsebasicResponse?.data?.ESim);
             formik.setFieldValue("bestWayToReach", parsebasicResponse?.data?.bestWayToReach);
-            formik.setFieldValue("salesChannel", parsebasicResponse?.data?.salesChannel);
+            formik.setFieldValue("salesChannel", parsebasicResponse?.data?.salesChannel);  
+            formik.setFieldValue("maidenMotherName", parsebasicResponse?.data?.maidenMotherName);
+            formik.setFieldValue("alternateContact", parsebasicResponse?.data?.alternateContact);
+         
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
         }
@@ -461,6 +468,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         </label>
                         <InputText type="text" id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                         {getFormErrorMessage("SSN")}
+                    </div>     
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">Mother's Maiden Name</label>
+                        <InputText id="maidenMotherName" value={formik.values.maidenMotherName} onChange={formik.handleChange} onBlur={formik.handleBlur} style={{ textTransform: "uppercase" }} />
                     </div>
 
                     <div className="field col-12 md:col-6">
@@ -599,6 +610,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             pattern="^(?!1|0|800|888|877|866|855|844|833).*$"
                         />
                         {getFormErrorMessage("contact")}
+                    </div>          
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label" htmlFor="contact">
+                            Alternate Contact
+                        </label>
+
+                        <InputText onChange={formik.handleChange} id="alternateContact" value={formik.values.alternateContact} onBlur={formik.handleBlur} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} pattern="^(?!1|0|800|888|877|866|855|844|833).*$" />
                     </div>
                 </div>
             </form>
