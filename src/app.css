@@ -329,16 +329,24 @@ width: 100%;
     cursor: not-allowed;
   }
   .final-pre{
-   justify-content: center;
     width:100%;
-    align-items: center;
-    margin-left: 170px;
+   
+    margin-left: 0px; 
     margin-top: 60px;
 box-shadow: 2px;
+  }  
+  .final-pre .steric{   
+    color:rgba(32, 199, 46, 0.54);
   }
 .final-btn{
     margin-top: 20px;
-    margin-left: 780px;
+    margin-left: 0px; 
+    padding-left: 50px;  
+    text-transform: uppercase;  
+    margin-left: 50%; 
+    transform: translate(-50%); 
+
+    padding-right:50px;  
   }
   .sticky-buttons {
     position: sticky;
