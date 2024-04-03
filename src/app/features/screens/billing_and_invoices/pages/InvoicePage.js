@@ -77,10 +77,13 @@ const InvoicePage = () => {
                
                 <div className="mx-4">
                     <p className="m-0 text-lg font-bold " style={{ color: "red" }}>
-                        •Row in red color are unpaid invoices
+                        •Rows in red color are Unpaid Invoices
                     </p>
                     <p className="text-lg mt-2 font-bold text-blue-400" >
-                        •Row in blue color are paid invoices
+                        •Rows in blue color are Paid Invoices
+                    </p>        
+                    <p style={{color:"rgba(250, 129, 22,1)"}} className="text-lg mt-2 font-bold" >
+                        •Rows in orange color are partially Paid Invoices
                     </p>
                 </div>
                 <InvoiceTable  setRefresh={setRefresh} userDetails={userDetails} className="mb-3" invoiceData={invoices} />
