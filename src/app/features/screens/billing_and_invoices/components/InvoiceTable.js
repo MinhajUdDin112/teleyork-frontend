@@ -22,7 +22,13 @@ const InvoiceTable = ({setRefresh, userDetails, invoiceData }) => {
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
         if (rowData.invoiceStatus === "Paid" || rowData.invoiceStatus === "Partially Paid" || rowData.invoiceStatus === "Partial") {
-            return "text-blue-400";
+            if(rowData.invoiceStatus === "Paid") {
+            return "text-blue-400"; 
+            }   
+            else{ 
+                return "partialpaidinvoice"
+            }
+
         }
         else {
             return "unpaid-invoice-red"; // No class

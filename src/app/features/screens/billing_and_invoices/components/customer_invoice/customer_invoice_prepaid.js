@@ -104,7 +104,10 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
                                 <p>Billing Period</p>
                                 <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} `}</p>
                             </div>
-                          
+                            <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                                    <p>Total Amount Payable</p>
+                                    <p>${parseFloat(invoiceData?.totalAmount).toFixed(2)}</p>
+                                </div>
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Amount Paid</p>
                                     <p>${parseFloat(invoiceData?.amountPaid).toFixed(2)}</p>

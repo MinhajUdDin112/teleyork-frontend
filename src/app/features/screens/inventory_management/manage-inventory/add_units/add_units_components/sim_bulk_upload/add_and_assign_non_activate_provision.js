@@ -104,12 +104,12 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
         
         return( 
            <div className="flex flex-wrap justify-content-left "> 
-               <p>{res.msg}</p>  
+               <p>{res?.msg}</p>  
                <div >
-                <p className="errormsg"> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
+                <p className="errormsg"> Duplicate Numbers : {res?.data?.data?.duplicateNumbers?.length}</p>     
                   <ul className="m-0 list-none errormsg  "> 
                        { 
-                          res.data.data.duplicateNumbers.map(item=>( 
+                          res?.data?.data?.duplicateNumbers?.map(item=>( 
                            <li>{item}</li>
                           ))
                        }
@@ -117,12 +117,12 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({permissio
                    </div>
                   <div className="mt-3">
                   <p >    
-                  Sim Numbers Added: {res.data.data.newSimNumbers.length}  
+                  Sim Numbers Added: {res?.data?.data?.newSimNumbers?.length}  
                    
                    </p> 
                    <ul className=" m-0 list-none"> 
                        {
-                          res.data.data.newSimNumbers.map(item=>( 
+                          res?.data?.data?.newSimNumbers?.map(item=>( 
                            <li >{item}</li>
                           ))
                        }
