@@ -150,7 +150,8 @@ const App = () => {
     const [permittedRoutes, setPermittedRoutes] = useState([]);
     const copyTooltipRef = useRef();
     const location = useLocation();
-    const navigate = useNavigate();
+    const navigate = useNavigate();  
+    const [menuActiveIndex,setMenuActiveIndex]=useState(4)
     let menuClick = false;
     let mobileTopbarMenuClick = false;
     //get selected id from local storage
@@ -349,7 +350,7 @@ const App = () => {
                         onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
                     />
                     <div className="layout-sidebar">
-                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
+                        <AppMenu model={dynamicMenu} activeIndex={menuActiveIndex} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
                     </div>
                     <div className="layout-main-container ">
                         <div className="layout-main">
