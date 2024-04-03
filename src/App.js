@@ -125,6 +125,7 @@ import PostpaidActivatedBulkUpload from "./app/features/screens/PostPaid-order/P
 
 // importing Reports
 import Reports from "./app/features/screens/Reports_Downloads/Reports";
+import Roles_Permission from "./app/features/screens/user_management/Manage_Role_RIghts_Permission/Roles_Permission";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -461,7 +462,7 @@ const App = () => {
                                             <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments /> : <Dashboard />} />
                                             <Route exact path="postpaid-dispatchinsight" element={isPermitted("/postpaid-dispatchinsight") ? <Post_Dispatch_Insight /> : <Dashboard />} />
                                             <Route path="/Postpersonalinfo" element={<PostPersonalInfo />} />
-
+                                             <Route path="/roles-permissions" element={<Roles_Permission/>}/>
                                             {/* handling Bulk Downloads Routes */}
                                             <Route path="/label-downloads" element={isPermitted("/label-downloads") ? <Label_Downloads /> : <Dashboard />} />
                                             <Route path="/invoices-downloads" element={isPermitted("/invoices-downloads") ? <Invoices_Downloads /> : <Dashboard />} />
