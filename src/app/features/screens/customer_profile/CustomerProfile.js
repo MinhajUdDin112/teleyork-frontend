@@ -213,7 +213,7 @@ useEffect(() => {
             <div className="p-0 customer-profile">
                 <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
-                    <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
+                    <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} />
                 </Dialog>
 
                 <Dialog draggable={false} visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
@@ -610,14 +610,14 @@ useEffect(() => {
                                                     <td>{cpData?.source !== undefined ? cpData?.source : "NIL"}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Fulfillment Method</td>
-                                                    <td>NIL</td>
+                                                    <td>Order Create Date</td>
+                                                    <td>{cpData?.labelCreatedAt ? ChangeIsoDateToECT(cpData?.labelCreatedAt):"NIL"}</td>
                                                 </tr>
 
 
                                                 <tr>
-                                                    <td>Enrollment Date</td>
-                                                    <td>{cpData?.activatedAt !== undefined ? formattedDate : "NIL"}</td>
+                                                    <td>Activation Date</td>
+                                                    <td>{cpData?.activatedAt !== undefined ? ChangeIsoDateToECT(cpData?.activatedAt) : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -691,10 +691,7 @@ useEffect(() => {
                                             body={(rowData) => {
                                                 let createdAt = new Date(rowData.createdAt);
                                                 return (
-                                                    <p>{`${(createdAt.getMonth() + 1).toString().padStart(2, "0")}-${createdAt.getDate().toString().padStart(2, "0")}-${createdAt.getFullYear()} ${createdAt.getHours().toString().padStart(2, "0")}:${createdAt
-                                                        .getMinutes()
-                                                        .toString()
-                                                        .padStart(2, "0")}:${createdAt.getSeconds().toString().padStart(2, "0")}`}</p>
+                                                    <p>{ChangeIsoDateToECT(rowData.createdAt)}</p>
                                                 );
                                             }}
                                         ></Column>
@@ -778,3 +775,16 @@ const rowClassName = (rowData) => {
         return;
     }
 };
+function ChangeIsoDateToECT(date){ 
+    // Given ISO formatted date/time
+const isoDate = date;
+
+// Convert ISO string to Date object
+const utcDate = new Date(isoDate);
+
+// Format the date according to Eastern Time Zone (EST/EDT)
+const estTimeString = utcDate.toLocaleString("en-US", {
+  timeZone: "America/New_York"
+});
+return(estTimeString)
+}

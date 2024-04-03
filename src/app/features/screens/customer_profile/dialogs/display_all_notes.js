@@ -88,10 +88,7 @@ export default function DisplayAllNotesDialog({ notes }) {
                         let createdAt = new Date(rowData.createdAt);
                       
                         return (
-                            <span>{`${(createdAt.getMonth() + 1).toString().padStart(2, "0")}-${createdAt.getDate().toString().padStart(2, "0")}-${createdAt.getFullYear()} ${createdAt.getHours().toString().padStart(2, "0")}:${createdAt.getMinutes().toString().padStart(2, "0")}:${createdAt
-                                .getSeconds()
-                                .toString()
-                                .padStart(2, "0")}`}</span>
+                            <span>{ChangeIsoDateToECT(rowData?.createdAt)}</span>
                         );
                     }}
                     header="Posted Date Time"
@@ -99,4 +96,17 @@ export default function DisplayAllNotesDialog({ notes }) {
             </DataTable>
         </div>
     );
+}
+function ChangeIsoDateToECT(date){ 
+    // Given ISO formatted date/time
+const isoDate = date;
+
+// Convert ISO string to Date object
+const utcDate = new Date(isoDate);
+
+// Format the date according to Eastern Time Zone (EST/EDT)
+const estTimeString = utcDate.toLocaleString("en-US", {
+  timeZone: "America/New_York"
+});
+return(estTimeString)
 }
