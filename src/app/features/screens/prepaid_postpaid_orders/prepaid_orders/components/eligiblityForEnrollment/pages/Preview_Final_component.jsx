@@ -35,7 +35,7 @@ const Preview_Final_component = ({ enrollment_id }) => {
         <>
             <div className="card final-pre">
                 <h3>
-                    Enrollement is successfully saved against enrollment id: <span className="steric">{enrollment_id}</span>{" "}
+                    Enrollement is successfully saved against Enrollment ID: <span className="steric">{enrollment_id}</span>{" "}
                 </h3>
                 <Button label="OK" onClick={zipRes ? movePage : movepageToAll} className="final-btn" />
             </div>
