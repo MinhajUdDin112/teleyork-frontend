@@ -6,9 +6,12 @@ import { Ripple } from "primereact/ripple";
 import { Badge } from "primereact/badge";
 
 const AppSubmenu = (props) => {
-    const [activeIndex, setActiveIndex] = useState(null);
+    console.log("It is Inside App Sub Menu")
+    const [activeIndex, setActiveIndex] = useState(props.activeIndex);
 
-    const onMenuItemClick = (event, item, index) => {
+    const onMenuItemClick = (event, item, index) => {   
+      
+         
         //avoid processing disabled items
         if (item.disabled) {
             event.preventDefault();
@@ -22,7 +25,7 @@ const AppSubmenu = (props) => {
         if (index === activeIndex) setActiveIndex(null);
         else setActiveIndex(index);
 
-        if (props.onMenuItemClick) {
+        if (props.onMenuItemClick) {   
             props.onMenuItemClick({
                 originalEvent: event,
                 item: item,
@@ -110,8 +113,8 @@ const AppSubmenu = (props) => {
 
 export const AppMenu = (props) => {
     return (
-        <div className="layout-menu-container">
-            <AppSubmenu items={props.model} className="layout-menu" onMenuItemClick={props.onMenuItemClick} root={true} role="menu" />
+        <div className="layout-menu-container ">
+            <AppSubmenu items={props.model} activeIndex={props.activeIndex} className="layout-menu" onMenuItemClick={props.onMenuItemClick} root={true} role="menu" />
             {/* <a href="https://www.primefaces.org/primeblocks-react" className="block mt-3">
                 <img alt="primeblocks" className="w-full"
                      src={props.layoutColorMode === 'light' ? 'assets/layout/images/banner-primeblocks.png' : 'assets/layout/images/banner-primeblocks-dark.png'}/>
