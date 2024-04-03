@@ -74,7 +74,7 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                         paymentMethod: "Credit Card",
                         chargingType: "Monthly",
                         printSetting: "Both",
-                        selectProduct: object.billId,        
+                        selectProduct: object.billId,            
                     }
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)

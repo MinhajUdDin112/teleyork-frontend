@@ -105,14 +105,14 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const handleButton = () => {
         setButtonClicked(true);
     };
-
+    //`I hereby consent to enroll with ${companyName}, Inc for the selected services under the following terms and conditions: `,
+    
     const checkBoxLabels = [
-        `I hereby consent to enroll with ${companyName}, Inc for the selected services under the following terms and conditions: `,
         `${companyName}, Inc agrees to provide the selected equipment and services to the customer at the rates discussed with the customer`,
-        `The service provided is post-paid, and the customer agrees to pay the monthly bill before the end of each service month.`,
+        `The service provided is pre-paid, and the customer agrees to pay the monthly bill at the start of each service month.`,
         `The customer agrees to switch their home phone or cell phone services to ${companyName}, Inc from their current service provider.`,
        `${companyName}, Inc will make reasonable efforts to ensure that the customer retains their existing phone number. In cases where number portability is not possible, the customer will be notified`
-,
+    ,
         `If the customer chooses not to utilize the selected services and equipment, without encountering any technical issues, the customer agrees to pay the specified monthly bill, including taxes.`,
         `The customer can choose any desired date for the monthly bill within the days provided by ${companyName}, Inc for the due date. In the event that the customer is unable to make the monthly payment on time, late fees, if applicable, will be applied to the bill.`,
         `By enrolling with ${companyName}, Inc., the customer consents to receive communications, including bills, notices, and updates, electronically.`,
@@ -121,7 +121,6 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         `${companyName}, Inc will provide customer support to the customer for any service-related queries or technical issues.`,
         `This agreement shall be governed by and construed in accordance with the laws of the applicable jurisdiction.`,
         <strong>I hereby certify that I have thoroughly read and agree to this disclosure.</strong>
-      
     ];
     return (
         <>

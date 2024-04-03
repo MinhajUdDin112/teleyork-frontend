@@ -34,15 +34,28 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         };
 
         try {
-            const response = await Axios.post(`${BASE_URL}/api/user/handOverEnrollment`, dataToSend);
-            setIsLoading(false);
+            const response = await Axios.post(`${BASE_URL}/api/user/handOverEnrollment`, dataToSend);                            
+            Axios.post(`${BASE_URL}/api/web/order`, { orderNumber:enrollment_id}).then((response)=>{  
+                             
+                toast.success("Orde Placed Successfully")           
+                Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId:(response.data.data.orderId).toString(),userId:_id, testLabel: true}).then(()=>{ 
+                  toast.success("Label created Successfully")           
+                    
+            setIsLoading(false); 
+            setShowFinalComponent(true);
+            setFromIncomplete(false);
+            localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                }).catch(err=>{ 
+                    toast.success("Label Creation Failed")
+                })  
+              }).catch(err=>{ 
+                  toast.success("Order Displacing Failed")
+              })   
         } catch (error) {
             toast.error(error?.response?.data?.msg);
             setIsLoading(false);
         }
-        setShowFinalComponent(true);
-        setFromIncomplete(false);
-        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+       
     };
 
     useEffect(() => {
