@@ -34,7 +34,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         };
 
         try {
-            const response = await Axios.post(`${BASE_URL}/api/user/handOverEnrollment`, dataToSend);                            
+            const response = await Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend);                            
             Axios.post(`${BASE_URL}/api/web/order`, { orderNumber:enrollment_id}).then((response)=>{  
                              
                 toast.success("Orde Placed Successfully")           
