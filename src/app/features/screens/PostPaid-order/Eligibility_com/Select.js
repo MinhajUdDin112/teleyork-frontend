@@ -140,6 +140,7 @@ const Select = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         `${companyName}, Inc will provide customer support to the customer for any service-related queries or technical issues.`,
         `This agreement shall be governed by and construed in accordance with the laws of the applicable jurisdiction.`,
         <strong>I hereby certify that I have thoroughly read and agree to this disclosure.</strong>
+       
     ];
 
     return (

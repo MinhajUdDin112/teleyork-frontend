@@ -289,19 +289,7 @@ const PrepaidInCompleteEnrollments = () => {
                         <Column field="createdDate" header="Created At" />
 
                         <Column field="createdBy.name" header="Created By" />
-                        <Column
-    field="Phase"
-    header="Phase"
-    body={(rowData) => (
-        <span>
-            {rowData.assignedToUser.map((user) => (
-                <span key={user?.department?.department}>
-                    {user?.department?.department}
-                </span>
-            ))}
-        </span>
-    )}
-/>
+                    
                        
                         <Column header="Address"    field="address1"></Column>
                         <Column header="Actions" body={actionTemplate}></Column>
