@@ -96,7 +96,10 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                                     <p>Invoice Date</p>
                                     <p>{invoiceData?.createdAt}</p>
                                 </div>
-
+                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                                    <p>Total Amount Payable</p>
+                                    <p>${parseFloat(invoiceData?.totalAmount).toFixed(2)}</p>
+                                </div>
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Amount Paid</p>
                                     <p>${invoiceData?.amountPaid}</p>
@@ -214,6 +217,10 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                                 <div className=" pl-2  remittancesec flex flex-wrap justify-content-between">
                                     <p>Billing Period</p>
                                     <p>{`${invoiceData?.billingPeriod?.from} / ${invoiceData?.billingPeriod?.to} `}</p>
+                                </div>
+                                <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
+                                    <p>Total Amount Payable</p>
+                                    <p>${parseFloat(invoiceData?.totalAmount).toFixed(2)}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
