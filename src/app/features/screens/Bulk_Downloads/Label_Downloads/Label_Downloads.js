@@ -13,7 +13,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Label_Downloads = () => {
     const [apiData, setApiData] = useState([]);
     const [roleData, setRoleData] = useState([]);
-    const [billingModel, setBillingModel] = useState([]);
     const [model, setModel] = useState("");
     const [user, setUser] = useState([]);
     const [dateFrom, setDateFrom] = useState("");
@@ -42,20 +41,20 @@ const Label_Downloads = () => {
 
         roleData();
     }, []);
-    useEffect(() => {
-        const Billing_models = async () => {
-            try {
-                const response = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${userData?.company}`);
+    // useEffect(() => {
+    //     const Billing_models = async () => {
+    //         try {
+    //             const response = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${userData?.company}`);
 
-                const data = response?.data?.data;
-                setRoleData(data);
-                console.log("billing model api", data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        Billing_models();
-    }, []);
+    //             const data = response?.data?.data;
+    //             setRoleData(data);
+    //             console.log("billing model api", data);
+    //         } catch (error) {
+    //             console.error("Error fetching data:", error);
+    //         }
+    //     };
+    //     Billing_models();
+    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
