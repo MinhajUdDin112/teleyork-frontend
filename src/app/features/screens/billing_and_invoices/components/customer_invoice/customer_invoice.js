@@ -107,7 +107,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData?.totalAmount}</p>
+                                    <p>${invoiceData?.netPrice}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
@@ -159,7 +159,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                         <div className="mt-3 pl-2 remittancesec font-bold flex flex-wrap justify-content-between " style={{ marginBottom: 250 }}>
                             <p>Total Amount Due</p>
-                            <p>${invoiceData?.totalAmount}</p>
+                            <p>${invoiceData?.netPrice}</p>
                         </div>
                     </div>
                 </div>
