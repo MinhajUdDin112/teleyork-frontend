@@ -87,10 +87,9 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
-               
                 setCpData(res?.data?.data || []);
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const getNotesType = async () => {
@@ -106,9 +105,7 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
             setAllNotes(res?.data?.data || []);
-        } catch (error) {
-
-        }
+        } catch (error) {}
     };
 
     useEffect(() => {
@@ -116,9 +113,8 @@ const CustomerProfile = () => {
         getNotes();
     }, []);
 
-useEffect(() => {
+    useEffect(() => {
         getCustomerProfileData();
-        
     }, [refresh]);
     useEffect(() => {
         getNotesType();
@@ -158,7 +154,6 @@ useEffect(() => {
     //For Showing SOCS Which is Comma Seperated array
     function showsocs(socarray) {
         if (socarray !== undefined) {
-
             var commaSeparatedString = "";
             for (let i = 0; i < socarray.length; i++) {
                 if (i === 0) {
@@ -175,18 +170,16 @@ useEffect(() => {
 
     const handleView = () => {
         if (isShow == true) {
-            setIsShow(false)
+            setIsShow(false);
+        } else {
+            setIsShow(true);
         }
-        else {
-            setIsShow(true)
-        }
-    }
-    const handleEdit =()=>{
+    };
+    const handleEdit = () => {
         localStorage.setItem("basicData", JSON.stringify(cpData));
         localStorage.setItem("address", JSON.stringify(cpData));
-        setIsEdit(true)
-        
-    }
+        setIsEdit(true);
+    };
     const downloadLabel = () => {
         const path = cpData?.label;
         const trimmedPath = path.replace(/^uploads\//, "");
@@ -202,7 +195,7 @@ useEffect(() => {
     let toCapitalCustomerStatus;
     const customerStatus = cpData?.status;
     if (customerStatus) {
-        toCapitalCustomerStatus = customerStatus.toUpperCase()
+        toCapitalCustomerStatus = customerStatus.toUpperCase();
     }
 
     const activateDate = new Date(cpData?.activatedAt);
@@ -225,39 +218,34 @@ useEffect(() => {
                 <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status (Current Status: ${toCapitalCustomerStatus})`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
                     <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
                 </Dialog>
-                <Dialog draggable={false} visible={isEdit} header={"Update Personal Info" } style={{ width: "70vw" }} onHide={() => setIsEdit((prev) => !prev)}>
-                    <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit}/>
+                <Dialog draggable={false} visible={isEdit} header={"Update Personal Info"} style={{ width: "70vw" }} onHide={() => setIsEdit((prev) => !prev)}>
+                    <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit} />
                 </Dialog>
                 <div className="pt-3">
-                    {
-                        cpData?.label ? <> <div className="ml-5">
-                            <Button label="Download Label" onClick={downloadLabel} />
-                        </div></> : ""
-                    }
+                    {cpData?.label ? (
+                        <>
+                            {" "}
+                            <div className="ml-5">
+                                <Button label="Download Label" onClick={downloadLabel} />
+                            </div>
+                        </>
+                    ) : (
+                        ""
+                    )}
 
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
                                 <div className="card h-full flex flex-column overflow-x">
                                     <div className="flex justify-content-between">
-
                                         <div className="text-900 font-medium text-lg p-3">Customer Information </div>
                                         <div className="flex">
                                             <div>
-                                                <i className="pi pi-user-edit p-3" style={{ fontSize: '2rem', cursor:"pointer" }} onClick={handleEdit}></i>
+                                                <i className="pi pi-user-edit p-3" style={{ fontSize: "2rem", cursor: "pointer" }} onClick={handleEdit}></i>
                                             </div>
-                                            <div>
-                                                {
-                                                    isShow == true ? <i className="pi pi-eye-slash p-3" style={{ fontSize: '2rem' , cursor:"pointer" }} onClick={handleView}></i>
-                                                        : <i className="pi pi-eye p-3" style={{ fontSize: '2rem', cursor:"pointer" }} onClick={handleView}></i>
-                                                }
-
-                                            </div>
-
-
+                                            <div>{isShow == true ? <i className="pi pi-eye-slash p-3" style={{ fontSize: "2rem", cursor: "pointer" }} onClick={handleView}></i> : <i className="pi pi-eye p-3" style={{ fontSize: "2rem", cursor: "pointer" }} onClick={handleView}></i>}</div>
                                         </div>
                                     </div>
-
 
                                     <hr className="m-0" />
 
@@ -266,68 +254,137 @@ useEffect(() => {
                                         <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
-                                                    <td >First Name</td>
-                                                    {isShow && isShow ? <td>{cpData?.firstName !== undefined ? cpData?.firstName.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
-
+                                                    <td>First Name</td>
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.firstName !== undefined ? cpData?.firstName.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.lastName !== undefined ? cpData?.lastName.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.lastName !== undefined ? cpData?.lastName.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Address 1</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>*******</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*******</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Address 2</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.address2 !== undefined && cpData?.address2.trim() !== "" ? cpData?.address2.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.address2 !== undefined && cpData?.address2.trim() !== "" ? cpData?.address2.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>City</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td> : <div className="mt-3"><h3>***</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>***</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>State</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Zip</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Password</td>
 
-                                                    {isShow && isShow ? <td>NIL</td> : <div className="mt-3"><h3>***</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>NIL</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>***</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Contact</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Alternate Ph</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.alternateContact !== undefined ? cpData?.alternateContact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.alternateContact !== undefined ? cpData?.alternateContact : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Email</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.email !== undefined ? cpData?.email : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.email !== undefined ? cpData?.email : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    {isShow && isShow ? <td>{cpData?.malingAddress1 !== undefined || cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " " ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td> : <div className="mt-3"><h3>*****</h3></div>}
-
-
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
@@ -366,6 +423,18 @@ useEffect(() => {
                                                         </td>
                                                     )}
                                                 </tr>
+                                                <tr>
+                                                    <td>PO Box Address</td>
+                                                    {isShow ? (
+                                                        <td>{cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? cpData?.PoBoxAddress : ""}</td>
+                                                    ) : (
+                                                        <td>
+                                                            <div className="mt-3">
+                                                                <h3>*****</h3>
+                                                            </div>
+                                                        </td>
+                                                    )}
+                                                </tr>
 
                                                 {/* <tr>
                                                     <td>Tribal (Y/N)</td>
@@ -376,28 +445,48 @@ useEffect(() => {
                                                 <tr>
                                                     <td>Customer SSN</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mother's Maiden Name</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.maidenMotherName !== undefined ? cpData?.maidenMotherName : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.maidenMotherName !== undefined ? cpData?.maidenMotherName : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Customer DOB</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Tribal</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.isTerribleTerritory !== undefined ? (cpData?.isTerribleTerritory === true ? "Yes" : "No") : "NIL"}</td> : <div className="mt-3"><h3>***</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.isTerribleTerritory !== undefined ? (cpData?.isTerribleTerritory === true ? "Yes" : "No") : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>***</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Company</td>
@@ -589,16 +678,21 @@ useEffect(() => {
                                                     <td>Enrollment ID</td>
                                                     <td>{cpData?.enrollmentId !== undefined ? cpData?.enrollmentId : "NIL"}</td>
                                                 </tr>
-                                                {
-                                                    cpData?.accountType == "ACP" ? <> <tr>
-                                                        <td>NV Application ID</td>
-                                                        <td>{cpData?.applicationId !== undefined ? cpData?.applicationId : "NIL"}</td>
-                                                    </tr>
+                                                {cpData?.accountType == "ACP" ? (
+                                                    <>
+                                                        {" "}
+                                                        <tr>
+                                                            <td>NV Application ID</td>
+                                                            <td>{cpData?.applicationId !== undefined ? cpData?.applicationId : "NIL"}</td>
+                                                        </tr>
                                                         <tr>
                                                             <td>NLAD Subscriber ID</td>
                                                             <td>{cpData?.subscriberId !== undefined ? cpData?.subscriberId : "NIL"}</td>
-                                                        </tr></> : ""
-                                                }
+                                                        </tr>
+                                                    </>
+                                                ) : (
+                                                    ""
+                                                )}
 
                                                 <tr>
                                                     <td>PWG Customer ID</td>
@@ -614,7 +708,6 @@ useEffect(() => {
                                                     <td>{cpData?.labelCreatedAt ? ChangeIsoDateToECT(cpData?.labelCreatedAt):"NIL"}</td>
                                                 </tr>
 
-
                                                 <tr>
                                                     <td>Activation Date</td>
                                                     <td>{cpData?.activatedAt !== undefined ? ChangeIsoDateToECT(cpData?.activatedAt) : "NIL"}</td>
@@ -628,13 +721,14 @@ useEffect(() => {
                                                     <td>Disconnection Reason</td>
                                                     <td>NIL</td>
                                                 </tr>
-                                                {
-                                                    cpData?.accountType == "ACP" ? (<tr>
+                                                {cpData?.accountType == "ACP" ? (
+                                                    <tr>
                                                         <td>Lifeline Program Participation</td>
                                                         <td>{cpData?.acpProgram !== undefined ? (cpData?.acpProgram?.name !== undefined ? cpData?.acpProgram.name : "NIL") : "NIL"}</td>
-                                                    </tr>) : ""
-                                                }
-
+                                                    </tr>
+                                                ) : (
+                                                    ""
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
@@ -759,8 +853,7 @@ useEffect(() => {
                     </div>
                 </div>
             </div>
-            {
-             /*<div>
+            {/*<div>
                 <CustomerInvoice />
             </div>   
              */}

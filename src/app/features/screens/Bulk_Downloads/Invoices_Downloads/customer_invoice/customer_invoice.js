@@ -327,7 +327,7 @@ export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }
                         </div>
                         <div className="pl-2 flex flex-wrap justify-content-between">
                             <p>Balance Forward</p>
-                            <p>{`$${userData?.data?.wallet !== undefined ? parseFloat(userData.wallet).toFixed(2) : "0"}`}</p>
+                            <p>{`$${userData?.data?.wallet == undefined ? parseFloat(userData.wallet).toFixed(2) : "0"}`}</p>
                         </div>
 
                         <div>
