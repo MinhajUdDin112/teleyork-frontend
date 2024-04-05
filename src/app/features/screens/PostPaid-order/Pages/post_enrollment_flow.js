@@ -78,7 +78,9 @@ export default function Post_enrollment_Flow() {
                         //Additional Features 
                                //_id array
                         localStorage.setItem("simadditionalfeaturearray",JSON.stringify(additionalfeaturearray))  
-                               // Options array name and _id
+                               // Options array name and _id 
+                               localStorage.setItem("simadditionalfeaturearraytotal",JSON.stringify(additionalfeaturearray))  
+                         
                         localStorage.setItem("simadditional", JSON.stringify(additionalfeature));
                                 //totalfeatureamount 
                         localStorage.setItem("simadditionaltotal", JSON.stringify(additionaltotal));
@@ -130,6 +132,8 @@ export default function Post_enrollment_Flow() {
                         localStorage.setItem("deviceadditionaltotal",JSON.stringify(additionaltotal))  
                               //additional feature array object  
                         localStorage.setItem("deviceadditionalfeaturearray",JSON.stringify(additionalfeaturearray))
+                        localStorage.setItem("deviceadditionalfeaturearraytotal",JSON.stringify(additionalfeaturearray))
+                        
                         //Discounts 
                              //total device discount
                         localStorage.setItem("totaldevicediscount", JSON.stringify(totaldiscounts)); 

@@ -255,7 +255,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")) : []);
+                                   
                                     formik.setFieldValue("totalamount", amountafterdiscount);
                                     formik.setFieldValue("plan", "")
                                     // Inside the inventory selection handler
@@ -264,7 +265,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 } else if (inventory === "WIRELESS DEVICE") {
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearraytotal")));
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("deviceadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
