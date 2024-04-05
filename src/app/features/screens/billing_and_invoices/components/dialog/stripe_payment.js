@@ -27,11 +27,19 @@ export default function PaymentStripModule({setRefresh,setPaymentDialogVisibilit
             clientSecret
         }}>
            <PaymentStripeForm  setRefresh={setRefresh} setPaymentDialogVisibility={setPaymentDialogVisibility} clientSecret={clientSecret} userDetails={userDetails} invoiceId={invoiceId} paid={amountToPaid}/>
-        </Elements>:<div> 
-             <label className="block font-semibold">Amount To Be Paid </label>    
+        </Elements>:<div>   
+             <div className="flex flex-wrap flex-row justify-content-left"> 
+              <div >
+             <label className="block font-semibold block">Amount To Be Paid </label>    
               <InputText className="block mt-2" value={amountToPaid} onChange={(e)=>{ 
                 setAmountToPaid(e.target.value)
-              }} />   
+              }} />       
+              </div> 
+              <div className="ml-2">
+             <label className="block font-semibold">Total Amount To Paid </label>    
+              <InputText className="block mt-2" disabled value={dueAmount} />       
+              </div>
+                 </div>
               <Button ref={buttonref} disabled={buttonDisabled ? true:false} className="block mt-2" onClick={()=>{    
                   setDisabled(true)
                 Axios.post(`${BASE_URL}/api/web/billing/paymentintent`,{amount:parseFloat(amountToPaid).toFixed(2)}).then((response)=>{ 
