@@ -394,7 +394,7 @@ const CustomerProfile = ({setActiveTab,activeTab}) => {
                                                         </div>
                                                     )}
                                                 </tr>
-                                                <tr>
+                                                {/* <tr>
                                                     <td>Mailing Address</td>
                                                     {isShow && isShow ? (
                                                         <td>{cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td>
@@ -403,6 +403,40 @@ const CustomerProfile = ({setActiveTab,activeTab}) => {
                                                             <h3>*****</h3>
                                                         </div>
                                                     )}
+                                                </tr> */}
+                                                <tr>
+                                                    <td>Mailing Address</td>
+                                                    <td>
+                                                        {isShow ? (
+                                                            // If isShow is true, render the Mailing Address with PO Box Address if available
+                                                            <>
+                                                                {cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? (
+                                                                    <>
+                                                                        {cpData?.PoBoxAddress}
+                                                                        <br /> {/* Render PO Box Address if available */}
+                                                                        {/* {cpData?.address1} Render the remaining address */}
+                                                                    </>
+                                                                ) : (
+                                                                    // If PO Box Address is not available, render the full address
+                                                                    <>
+                                                                        {cpData?.malingAddress1} {/* Render mailingAddress1 */}
+                                                                        {cpData?.malingAddress2 &&
+                                                                            cpData?.malingAddress2.trim() !== "" && ( // Render mailingAddress2 only if it's available and not empty
+                                                                                <>
+                                                                                    <br /> {/* Add line break if mailingAddress2 is rendered */}
+                                                                                    {cpData?.malingAddress2} {/* Render mailingAddress2 */}
+                                                                                </>
+                                                                            )}
+                                                                    </>
+                                                                )}
+                                                            </>
+                                                        ) : (
+                                                            // If isShow is false, render the placeholder
+                                                            <div className="mt-3">
+                                                                <h3>*****</h3>
+                                                            </div>
+                                                        )}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
@@ -441,7 +475,8 @@ const CustomerProfile = ({setActiveTab,activeTab}) => {
                                                         </td>
                                                     )}
                                                 </tr>
-                                                <tr>
+
+                                                {/* <tr>
                                                     <td>PO Box Address</td>
                                                     {isShow ? (
                                                         <td>{cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? cpData?.PoBoxAddress : ""}</td>
@@ -452,7 +487,7 @@ const CustomerProfile = ({setActiveTab,activeTab}) => {
                                                             </div>
                                                         </td>
                                                     )}
-                                                </tr>
+                                                </tr> */}
 
                                                 {/* <tr>
                                                     <td>Tribal (Y/N)</td>
@@ -723,7 +758,7 @@ const CustomerProfile = ({setActiveTab,activeTab}) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Order Create Date</td>
-                                                    <td>{cpData?.labelCreatedAt ? ChangeIsoDateToECT(cpData?.labelCreatedAt):"NIL"}</td>
+                                                    <td>{cpData?.labelCreatedAt ? ChangeIsoDateToECT(cpData?.labelCreatedAt) : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -802,9 +837,7 @@ const CustomerProfile = ({setActiveTab,activeTab}) => {
                                             field="createdAt"
                                             body={(rowData) => {
                                                 let createdAt = new Date(rowData.createdAt);
-                                                return (
-                                                    <p>{ChangeIsoDateToECT(rowData.createdAt)}</p>
-                                                );
+                                                return <p>{ChangeIsoDateToECT(rowData.createdAt)}</p>;
                                             }}
                                         ></Column>
                                     </DataTable>
@@ -886,16 +919,16 @@ const rowClassName = (rowData) => {
         return;
     }
 };
-function ChangeIsoDateToECT(date){ 
+function ChangeIsoDateToECT(date) {
     // Given ISO formatted date/time
-const isoDate = date;
+    const isoDate = date;
 
-// Convert ISO string to Date object
-const utcDate = new Date(isoDate);
+    // Convert ISO string to Date object
+    const utcDate = new Date(isoDate);
 
-// Format the date according to Eastern Time Zone (EST/EDT)
-const estTimeString = utcDate.toLocaleString("en-US", {
-  timeZone: "America/New_York"
-});
-return(estTimeString)
+    // Format the date according to Eastern Time Zone (EST/EDT)
+    const estTimeString = utcDate.toLocaleString("en-US", {
+        timeZone: "America/New_York",
+    });
+    return estTimeString;
 }

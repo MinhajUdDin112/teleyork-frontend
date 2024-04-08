@@ -8,8 +8,6 @@ import { Button } from "primereact/button";
 import { MultiSelect } from "primereact/multiselect";
 import { ToastContainer, toast } from "react-toastify";
 import { Parser } from "json2csv";
-import csvParser from "csv-parser";
-import fs from "fs";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -17,13 +15,11 @@ const Inventory_Download = () => {
     const [apiData, setApiData] = useState([]);
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
-    const [labels, setLabels] = useState([]);
     const [status, setStatus] = useState([]);
     const [inventory, setInventory] = useState([]);
     const [inventoryTypes, setInventoryTypes] = useState([]);
     const [billingModel, setBillingModel] = useState("");
     const [model, setModel] = useState("");
-    const [selectedRow, setSelectedRow] = useState(null);
     const statusValue = [
         { name: "Free", value: "Free" },
         { name: "inUse", value: "inUse" },
