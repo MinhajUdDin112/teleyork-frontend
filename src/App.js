@@ -316,7 +316,7 @@ const App = () => {
                 return null;
             })
             .filter((item) => item && item.items.length > 0);
-
+    
         setDynamicMenu(() => [
             {
                 items: modules,
@@ -324,15 +324,29 @@ const App = () => {
         ]);
 
         setPermittedRoutes(permittedRoutes);
-    };
+    };    
     const isPermitted = (route) => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
-    };
+    }; 
+    const [customerServicesIndex,setCustomerServicesIndex]=useState()
     const [activeTab, setActiveTab] = useState();
 
-    // Function to activate a specific tab
- 
+    // Function to activate a specific tab 
+   
+    useEffect(()=>{
+        for(let i=0;i<dynamicMenu[0]?.items?.length;i++){ 
+            
+                 if(dynamicMenu[0]?.items[i]?.label === "Customer Service"){    
+                       if(customerServicesIndex === undefined){
+                    setCustomerServicesIndex(i)  
+                       }
+                    //setActiveTab(i)
+                 }
+        }
+      
+    },[dynamicMenu])  
+     console.log("dynamicMenu is",dynamicMenu)
     return (
         <>
             {protectedRoute === true ? (
@@ -456,7 +470,7 @@ const App = () => {
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                            {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile activeTab={activeTab} setActiveTab={setActiveTab}/> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
+                                            {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile activeTab={activeTab} customerServicesIndex={customerServicesIndex} setActiveTab={setActiveTab}/> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
                                             <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                             <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
                                             <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />

@@ -22,7 +22,8 @@ import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const CustomerProfile = ({setActiveTab,activeTab}) => {
+const CustomerProfile = ({setActiveTab,activeTab,customerServicesIndex}) => {       
+    console.log("Customer Services Index is",customerServicesIndex)
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -40,20 +41,29 @@ const CustomerProfile = ({setActiveTab,activeTab}) => {
     const location = useLocation();
 
   useEffect(() => {
-    // Run your logic when the route changes       
-     if(activeTab === 1){ 
+    // Run your logic when the route changes    
+    console.log("customer services page")       
+
+   if(customerServicesIndex  !== undefined) {
+     if(activeTab !== undefined){        
     setActiveTab()  
   setTimeout(()=>{ 
   
-    setActiveTab(1)
+    setActiveTab(customerServicesIndex)
   },200)
      } 
      else{
-    setActiveTab(1) 
+    setActiveTab(customerServicesIndex)       
+    console.log("it is set")    
      }
-    console.log('Route changed:', location.pathname); 
+    console.log('Route changed:', location.pathname);  
+  }  
+  else{ 
+    setActiveTab(customerServicesIndex)
+  }
    
-  }, [location]);
+  }, [location,customerServicesIndex]);    
+ 
     const [refresh, setRefresh] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     //state to refresh Note Type when new note type is added
