@@ -7,6 +7,9 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { MultiSelect } from "primereact/multiselect";
 import { ToastContainer, toast } from "react-toastify";
+import { Parser } from "json2csv";
+import csvParser from "csv-parser";
+import fs from "fs";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -20,6 +23,7 @@ const Inventory_Download = () => {
     const [inventoryTypes, setInventoryTypes] = useState([]);
     const [billingModel, setBillingModel] = useState("");
     const [model, setModel] = useState("");
+    const [selectedRow, setSelectedRow] = useState(null);
     const statusValue = [
         { name: "Free", value: "Free" },
         { name: "inUse", value: "inUse" },
@@ -27,66 +31,6 @@ const Inventory_Download = () => {
 
     const serviceProvider = localStorage.getItem("userData");
     const userData = JSON.parse(serviceProvider);
-    useEffect(() => {
-        const inventoryTypeData = async () => {
-            try {
-                const response = await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${userData?.company}`);
-                const data = response?.data?.data;
-                setInventoryTypes(data);
-                console.log("roleData api", data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        inventoryTypeData();
-    }, []);
-    useEffect(() => {
-        const fetchData = async () => {
-            const formattedDateFrom = dateFrom ? new Date(dateFrom).toISOString().slice(0, 19) : "";
-            const formattedDateTo = dateTo ? new Date(dateTo).toISOString().slice(0, 19) : "";
-            try {
-                const requestData = {
-                    startDate: formattedDateFrom,
-                    endDate: formattedDateTo,
-                    billingModel: model,
-                    inventoryType: model,
-                    status: status,
-                };
-                const response = await Axios.post(`${BASE_URL}/api/web/inventoryDownloads/getInventory`);
-                console.log("response for invnetory", response);
-            } catch (error) {
-                console.error("Error fetching data:", error?.response?.data);
-            }
-        };
-        fetchData();
-    });
-    useEffect(() => {
-        const fetchBillingModels = async () => {
-            try {
-                const response = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${userData?.company}`);
-                const data = response?.data?.data;
-                setBillingModel(data); // Set billing model options
-                console.log("billing model api", data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        fetchBillingModels(); // Call the function to fetch billing models
-    }, []);
-    // useEffect(() => {
-    //     const fetchAllInventory = async () => {
-    //         try {
-    //             const response = await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${userData?.company}`);
-    //             const data = response?.data;
-    //             setBillingModelOptions(data); // Set billing model options
-    //             console.log("  All inventories", data);
-    //         } catch (error) {
-    //             console.error("Error fetching data:", error);
-    //         }
-    //     };
-    //     fetchAllInventory(); // Call the function to fetch billing models
-    // }, []);
     useEffect(() => {
         const fetchData = async () => {
             const formattedDateFrom = dateFrom ? new Date(dateFrom).toISOString().slice(0, 19) : "";
@@ -112,24 +56,59 @@ const Inventory_Download = () => {
         };
         fetchData();
     }, [dateFrom, dateTo, model, inventory, status]); // Include all dependencies in the dependency array
+    useEffect(() => {
+        const inventoryTypeData = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${userData?.company}`);
+                const data = response?.data?.data;
+                setInventoryTypes(data);
+                console.log("roleData api", data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
 
-    const handleLabels = async (rowData) => {
-        try {
-            const labelResponse = await Axios.post(`${BASE_URL}/api/web/bulkDownloads/labelsDownload`, { labels: rowData.labels }, { responseType: "blob" });
-            const blob = new Blob([labelResponse.data]);
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "labels.zip");
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode.removeChild(link);
-        } catch (error) {
-            console.error("Error sending labels:", error);
-        }
+        inventoryTypeData();
+    }, []);
+    useEffect(() => {
+        const fetchBillingModels = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${userData?.company}`);
+                const data = response?.data?.data;
+                setBillingModel(data);
+                console.log("billing model api", data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchBillingModels(); // Call the function to fetch billing models
+    }, []);
+    const handleDownload = () => {
+        // Format ESN numbers as strings directly in the data
+        const apiDataFormatted = apiData.map((item) => ({
+            ...item,
+            esnNumber: String(item.esnNumber), // Convert ESN number to string
+        }));
+
+        // Verify ESN numbers after string conversion
+        apiDataFormatted.forEach((item) => {
+            console.log(typeof item.esnNumber, item.esnNumber);
+        });
+
+        const fields = ["billingModel", "InventoryType", "status", "esnNumber"]; // Include "esnNumber" field
+        const json2csvParser = new Parser({ fields });
+        const csv = json2csvParser.parse(apiDataFormatted);
+
+        // Download CSV file
+        const blob = new Blob([csv], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "inventory_data.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
-    // console.log("User ids from frontend", user);
     console.log("billing model selected", model);
     console.log("inventory selected", inventory);
     console.log("status selected", status);
@@ -175,9 +154,14 @@ const Inventory_Download = () => {
                 </Card>
                 <div className="card" style={{ width: "62rem", marginLeft: "5rem", marginTop: "4rem" }}>
                     {/* <Button label="Download" onClick={handleAllDownload} style={{ marginLeft: "50.5rem", marginTop: "0.3rem", position: "absolute" }} /> */}
-                    <DataTable value={apiData} style={{ width: "50rem" }}>
-                        <Column field="user.name" header="Users"></Column>
-                        <Column field="labels.length" header="Counter"></Column>
+                    <DataTable value={apiData.slice(0, 1)} style={{ width: "50rem" }}>
+                        <Column field="billingModel" header="Billing Model"></Column>
+                        <Column field="InventoryType" header="Inventory Type"></Column>
+                        <Column field="status" header="Status"></Column>
+                        <Column
+                            header="Counter"
+                            body={() => <div>{apiData.length}</div>} // Display the length of apiData as counter
+                        />{" "}
                         <Column
                             field="Action"
                             body={(rowData) => {
@@ -185,11 +169,7 @@ const Inventory_Download = () => {
                                     <Button
                                         className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none"
                                         onClick={() => {
-                                            let labelData = rowData?.labels;
-                                            labelData.map(() => {
-                                                setLabels(rowData?.labels);
-                                            });
-                                            handleLabels(rowData);
+                                            handleDownload(rowData);
                                         }}
                                     >
                                         Download
