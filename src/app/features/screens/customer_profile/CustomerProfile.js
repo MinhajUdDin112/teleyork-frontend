@@ -22,7 +22,7 @@ import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const CustomerProfile = () => {
+const CustomerProfile = ({setActiveTab,activeTab}) => {
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -35,7 +35,25 @@ const CustomerProfile = () => {
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
     const [isShow, setIsShow] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);  
+   
+    const location = useLocation();
+
+  useEffect(() => {
+    // Run your logic when the route changes       
+     if(activeTab === 1){ 
+    setActiveTab()  
+  setTimeout(()=>{ 
+  
+    setActiveTab(1)
+  },200)
+     } 
+     else{
+    setActiveTab(1) 
+     }
+    console.log('Route changed:', location.pathname); 
+   
+  }, [location]);
     const [refresh, setRefresh] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     //state to refresh Note Type when new note type is added

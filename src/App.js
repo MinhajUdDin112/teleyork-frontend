@@ -151,7 +151,6 @@ const App = () => {
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();  
-    const [menuActiveIndex,setMenuActiveIndex]=useState(4)
     let menuClick = false;
     let mobileTopbarMenuClick = false;
     //get selected id from local storage
@@ -310,7 +309,8 @@ const App = () => {
                     return {
                         label: node.module,
                         icon: "",
-                        items: moduleRoutes,
+                        items: moduleRoutes, 
+                        
                     };
                 }
                 return null;
@@ -329,7 +329,10 @@ const App = () => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
     };
+    const [activeTab, setActiveTab] = useState();
 
+    // Function to activate a specific tab
+ 
     return (
         <>
             {protectedRoute === true ? (
@@ -350,7 +353,7 @@ const App = () => {
                         onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
                     />
                     <div className="layout-sidebar">
-                        <AppMenu model={dynamicMenu} activeIndex={menuActiveIndex} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
+                        <AppMenu model={dynamicMenu} activeTab={activeTab} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
                     </div>
                     <div className="layout-main-container ">
                         <div className="layout-main">
@@ -453,7 +456,7 @@ const App = () => {
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                            {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
+                                            {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile activeTab={activeTab} setActiveTab={setActiveTab}/> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
                                             <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                             <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
                                             <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />
