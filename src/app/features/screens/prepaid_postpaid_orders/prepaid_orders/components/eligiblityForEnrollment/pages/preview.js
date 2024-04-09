@@ -44,10 +44,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             setFromIncomplete(false);
             localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
                 }).catch(err=>{ 
-                    toast.success("Label Creation Failed")
+                    toast.error("Label Creation Failed")
                 })  
               }).catch(err=>{ 
-                  toast.success("Order Displacing Failed")
+                  toast.error("Order Displacing Failed")
               })    
             }).catch((error)=>{ 
                 toast.error(error?.response?.data?.msg);
