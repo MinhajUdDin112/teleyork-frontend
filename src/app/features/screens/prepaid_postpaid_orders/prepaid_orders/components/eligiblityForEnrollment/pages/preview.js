@@ -32,12 +32,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             csr: csr,
             userId: _id,
         };
-
-        try {
-            const response = await Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend);                            
+        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend).then(()=>{                      
             Axios.post(`${BASE_URL}/api/web/order`, { orderNumber:enrollment_id}).then((response)=>{  
                              
-                toast.success("Orde Placed Successfully")           
+                toast.success("Order Placed Successfully")           
                 Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId:(response.data.data.orderId).toString(),userId:_id, testLabel: true}).then(()=>{ 
                   toast.success("Label created Successfully")           
                     
@@ -50,11 +48,12 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 })  
               }).catch(err=>{ 
                   toast.success("Order Displacing Failed")
+              })    
+            }).catch((error)=>{ 
+                toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
               })   
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-            setIsLoading(false);
-        }
+      
        
     };
 
