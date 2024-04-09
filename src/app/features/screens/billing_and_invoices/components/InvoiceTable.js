@@ -39,7 +39,23 @@ const InvoiceTable = ({setRefresh, userDetails, invoiceData }) => {
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName;
     const companyNameToCapital = companyName.toUpperCase();
-   const [paymentDialogVisibility,setPaymentDialogVisibility]=useState(false)
+   const [paymentDialogVisibility,setPaymentDialogVisibility]=useState(false)     
+   function convertDateToRequiredFormat(inputDate) {
+    // Create a new Date object from the input string
+    var originalDate = new Date(inputDate);
+    // Extract the components of the date
+    var year = originalDate.getFullYear();
+    var month = ("0" + (originalDate.getMonth() + 1)).slice(-2);
+    var day = ("0" + originalDate.getDate()).slice(-2);
+    var hours = ("0" + originalDate.getHours()).slice(-2);
+    var minutes = ("0" + originalDate.getMinutes()).slice(-2);
+    var seconds = ("0" + originalDate.getSeconds()).slice(-2);
+
+    // Create a new date string in the desired format
+    var newDateString = `${year}-${month}-${day}`;
+
+    return newDateString;
+}
     return (
         <div className="mx-4">
 
@@ -112,7 +128,11 @@ const InvoiceTable = ({setRefresh, userDetails, invoiceData }) => {
 
               
                 <Column field="lateFee" header="Late Fee" />
-                <Column field="invoiceDueDate" header="DueDate" />
+                <Column field="invoiceDueDate" header="DueDate" body={(rowData)=>{ 
+                return( 
+                    <p>{convertDateToRequiredFormat(rowData?.invoiceDueDate)}</p>
+                )
+                }}/>
                 {/* <Column field="invoiceStatus" header="Status" body={(rowData)=>{
                             if (parseFloat(rowData.amountPaid) === 0) {
                                 return <p>Pending</p>;
