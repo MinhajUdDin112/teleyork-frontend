@@ -22,8 +22,12 @@ import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+<<<<<<< Updated upstream
 const CustomerProfile = ({setActiveTab,activeTab,customerServicesIndex}) => {       
     console.log("Customer Services Index is",customerServicesIndex)
+=======
+const CustomerProfile = ({ setActiveTab, activeTab }) => {
+>>>>>>> Stashed changes
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -36,10 +40,11 @@ const CustomerProfile = ({setActiveTab,activeTab,customerServicesIndex}) => {
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
     const [isShow, setIsShow] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);  
-   
+    const [isEdit, setIsEdit] = useState(false);
+
     const location = useLocation();
 
+<<<<<<< Updated upstream
   useEffect(() => {
     // Run your logic when the route changes    
     console.log("customer services page")       
@@ -64,6 +69,20 @@ const CustomerProfile = ({setActiveTab,activeTab,customerServicesIndex}) => {
    
   }, [location,customerServicesIndex]);    
  
+=======
+    useEffect(() => {
+        // Run your logic when the route changes
+        if (activeTab === 1) {
+            setActiveTab();
+            setTimeout(() => {
+                setActiveTab(1);
+            }, 200);
+        } else {
+            setActiveTab(1);
+        }
+        console.log("Route changed:", location.pathname);
+    }, [location]);
+>>>>>>> Stashed changes
     const [refresh, setRefresh] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     //state to refresh Note Type when new note type is added
@@ -404,49 +423,26 @@ const CustomerProfile = ({setActiveTab,activeTab,customerServicesIndex}) => {
                                                         </div>
                                                     )}
                                                 </tr>
-                                                {/* <tr>
+                                                <tr>
                                                     <td>Mailing Address</td>
                                                     {isShow && isShow ? (
-                                                        <td>{cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td>
+                                                        <td>
+                                                            {cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== ""
+                                                                ? // If PO Box Address is available and not empty, render it
+                                                                  cpData?.PoBoxAddress
+                                                                : // If PO Box Address is empty, render the regular mailing address
+                                                                cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ")
+                                                                ? cpData?.malingAddress1 && cpData?.malingAddress2
+                                                                    ? `${cpData?.malingAddress1}, ${cpData?.malingAddress2}`
+                                                                    : cpData?.malingAddress1
+                                                                : cpData?.address1}
+                                                        </td>
                                                     ) : (
+                                                        // <td>{cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td>
                                                         <div className="mt-3">
                                                             <h3>*****</h3>
                                                         </div>
                                                     )}
-                                                </tr> */}
-                                                <tr>
-                                                    <td>Mailing Address</td>
-                                                    <td>
-                                                        {isShow ? (
-                                                            // If isShow is true, render the Mailing Address with PO Box Address if available
-                                                            <>
-                                                                {cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? (
-                                                                    <>
-                                                                        {cpData?.PoBoxAddress}
-                                                                        <br /> {/* Render PO Box Address if available */}
-                                                                        {/* {cpData?.address1} Render the remaining address */}
-                                                                    </>
-                                                                ) : (
-                                                                    // If PO Box Address is not available, render the full address
-                                                                    <>
-                                                                        {cpData?.malingAddress1} {/* Render mailingAddress1 */}
-                                                                        {cpData?.malingAddress2 &&
-                                                                            cpData?.malingAddress2.trim() !== "" && ( // Render mailingAddress2 only if it's available and not empty
-                                                                                <>
-                                                                                    <br /> {/* Add line break if mailingAddress2 is rendered */}
-                                                                                    {cpData?.malingAddress2} {/* Render mailingAddress2 */}
-                                                                                </>
-                                                                            )}
-                                                                    </>
-                                                                )}
-                                                            </>
-                                                        ) : (
-                                                            // If isShow is false, render the placeholder
-                                                            <div className="mt-3">
-                                                                <h3>*****</h3>
-                                                            </div>
-                                                        )}
-                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
