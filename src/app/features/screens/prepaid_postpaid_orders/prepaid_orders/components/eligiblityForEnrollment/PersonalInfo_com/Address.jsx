@@ -51,8 +51,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             poBoxState: "",
             poBoxCity: "",
         },
-        onSubmit: async (values, actions) => {    
-           // checkEligiblity();
+        onSubmit: async (values, actions) => {
+            // checkEligiblity();
             const userId = _id;
             const dataToSend = {
                 address1: formik.values.address1,
@@ -75,7 +75,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 userId: userId,
                 csr: csr,
             };
-            
+
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
@@ -87,7 +87,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
-            }  
+            }
         },
     });
 
@@ -103,14 +103,14 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     };
 
     // useEffect(() => {
-    //    
+    //
     //     if (isDifferent == "false") {
     //         formik.setFieldValue("mailingAddress1", formik.values.address1);
     //         formik.setFieldValue("mailingAddress2", formik.values.address2); // Corrected line
     //         formik.setFieldValue("mailingZip", zipCode);
     //         formik.setFieldValue("mailingCity", zipCity);
     //         formik.setFieldValue("mailingState", zipState);
-    //        
+    //
     //     }
     // }, []);
 
@@ -299,7 +299,13 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             }
         }
     };
-
+    useEffect(() => {
+        // Retrieve the city value from localStorage and set it to formik state
+        const cityValue = localStorage.getItem("cityValue");
+        if (cityValue) {
+            formik.setFieldValue("city", cityValue);
+        }
+    }, []);
     return (
         <>
             <ToastContainer />
@@ -351,9 +357,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            City <FontAwesomeIcon className="disable-icon-color icon-size" />{" "}
                         </p>
-                        <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem disable-color" />
+                        <InputText
+                            type="text"
+                            value={formik.values.city}
+                            name="city"
+                            className="w-21rem disable-color"
+                            onChange={(e) => formik.setFieldValue("city", e.target.value)}
+                            onBlur={() => {
+                                // Save the city value to localStorage when the input field loses focus
+                                localStorage.setItem("cityValue", formik.values.city);
+                            }}
+                        />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
@@ -369,8 +385,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     </div>
                 </div>
                 <p className="w-100rem mt-4">Is Your Mailling Address?</p>
-                   
-                <div className="flex flex-wrap mt-4">     
+
+                <div className="flex flex-wrap mt-4">
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
                         <label htmlFor="sameAdress" className="ml-2">
