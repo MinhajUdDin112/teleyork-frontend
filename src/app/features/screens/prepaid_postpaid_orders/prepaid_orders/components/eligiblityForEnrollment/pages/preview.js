@@ -32,7 +32,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             csr: csr,
             userId: _id,
         };
-        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend).then(()=>{                      
+        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend).then(()=>{    
+             Axios.post(`${BASE_URL}/api/user/esnAssingment`,dataToSend).then((res)=>{   
+                toast.success("Esn Successfully Assigned")                         
             Axios.post(`${BASE_URL}/api/web/order`, { orderNumber:enrollment_id}).then((response)=>{  
                              
                 toast.success("Order Placed Successfully")           
@@ -48,7 +50,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 })  
               }).catch(err=>{ 
                   toast.error("Order Displacing Failed")
-              })    
+              })    }).catch(error=>{  
+                setIsLoading(false)
+                toast.error(error?.response?.data?.msg);
+              })   
             }).catch((error)=>{ 
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);

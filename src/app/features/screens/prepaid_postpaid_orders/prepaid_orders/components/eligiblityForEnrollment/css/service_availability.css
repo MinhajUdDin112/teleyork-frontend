@@ -1,0 +1,10 @@
+.coverage-found{ 
+       color:rgb(0, 255, 128); 
+} 
+.coverage-notfound{ 
+    color:	rgb(255, 0, 0);
+} 
+.button-bg{ 
+    background-color: #ffffff; 
+     color: black;
+}
