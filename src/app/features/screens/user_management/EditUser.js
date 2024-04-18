@@ -12,7 +12,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const EditUser = ({ data }) => {
-    console.log(data);
     const [allRoles, setAllRoles] = useState([]);
     const [allDepartment, setAllDepartment] = useState([]);
     const [allUser, setAllUser] = useState([]);

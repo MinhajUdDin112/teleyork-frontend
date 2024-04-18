@@ -28,7 +28,6 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
-                    console.log(res.data.data);
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
@@ -162,7 +161,6 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;
-                    console.log("error occured");
                     ref.current.show({ severity: "error", summary: "Inventory", detail: error.response.data.msg });
                 });
         }

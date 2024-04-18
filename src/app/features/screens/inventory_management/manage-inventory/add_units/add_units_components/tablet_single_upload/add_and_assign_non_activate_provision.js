@@ -28,7 +28,6 @@ export default function TabletSingleUploadAddAndAssignNonActivateProvision({perm
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
-                    console.log(res.data.data);
                     let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};

@@ -113,7 +113,6 @@ export default function EsnSimSingleUpload({ permissions }) {
         },
     });
     function handlePopulateDataByEsn(e) {
-        console.log(formik.values);
         if (e.target.value.length === 18 || e.target.value.length === 19) {
             //Getting SIM Details
             Axios.get(`${BASE_URL}/api/web/simInventory/getByESN?esn=${e.target.value}`)
@@ -159,7 +158,6 @@ export default function EsnSimSingleUpload({ permissions }) {
         formik.setFieldValue("SimNumberToUpdate", e.target.value);
     }
     function handlesubmit() {
-        console.log(formik.values.SimNumber.length);
         let obj = formik.values;
         let currentvalue = obj.SimNumberToUpdate;
         Object.keys(obj).map((item) => {
@@ -233,7 +231,6 @@ export default function EsnSimSingleUpload({ permissions }) {
                             value={formik.values.SimNumber}
                             name="SimNumber"
                             onChange={(e) => {
-                                console.log(formik.values);
                                 formik.setFieldValue("SimNumber", e.target.value);
                                 setSimNumberError(false);
                             }}

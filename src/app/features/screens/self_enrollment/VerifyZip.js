@@ -48,7 +48,6 @@ const VerifyZip = () => {
                     setcompanyData(response?.data)
                     localStorage.setItem("companyName", JSON.stringify(response?.data?.data?.name));
             } catch (error) {
-                console.log("error is", error?.response?.data?.msg);
             }
         }
         sendURl();

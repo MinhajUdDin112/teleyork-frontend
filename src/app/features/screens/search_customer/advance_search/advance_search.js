@@ -102,7 +102,6 @@ const AdvanceSearch = ({ setSearchBy }) => {
             setCarrier(carrierholder);
         })
         .catch(() => {
-            console.log("error");
         });
     
 }, [])

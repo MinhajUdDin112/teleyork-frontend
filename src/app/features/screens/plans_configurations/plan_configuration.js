@@ -156,7 +156,7 @@ export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }
                             Billing Model <span className="star">*</span>
                         </label>
                         <Dropdown placeholder="Plan Type" options={billingModelOptions} optionLabel="billingModel" optionValue="billingModel" className="field-width mt-2" name="type" value={formik.values.type} onChange={(e) => {
-                                        console.log("E is ", e);
+                                    
                                         formik.setFieldValue("type", e.value);
                                         let id;
                                         billingModelOptions.map((item) => {
@@ -279,7 +279,6 @@ export default function PlansConfigurations({ setAddPlanVisibility, setRefresh }
     );
 }
 function capitalizeFirstLetter(string) {
-    console.log(string);
     return string
         .split(" ")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

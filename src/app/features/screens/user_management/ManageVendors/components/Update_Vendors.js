@@ -86,7 +86,6 @@ const Add_Vendors = () => {
             try {
                 const res = await Axios.put(`${BASE_URL}/api/web/manageVendors/update/${userId}`, values);
                 const data = res.data;
-                console.log("Response from server:", data);
                 toast.success(res.data.msg);
                 setTimeout(() => {
                     navigate("/manage-vendors");
@@ -101,7 +100,6 @@ const Add_Vendors = () => {
         const date = new Date(dateString);
         return date;
     };
-    console.log(formik.values);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {

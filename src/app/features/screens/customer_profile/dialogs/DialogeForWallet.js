@@ -92,7 +92,6 @@ const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
                 // }
             }
             else {
-                console.log("error is ",response?.data?.data)
                 toast.error(response?.data?.data?.message[0]?.text)
             }
         } catch (error) {
@@ -138,7 +137,6 @@ const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
                 // }
             }
             else {
-                console.log("error is ",response?.data?.transactionResponse)
                 toast.error(response?.data?.transactionResponse?.errors?.error[0].errorText)
             }
         } catch (error) {

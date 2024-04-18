@@ -113,7 +113,6 @@ export default function PaymentStripeForm({paid, amount,clientSecret,object,hand
                 }
             }
             
-            console.log("Payment Details Is",paymentIntent.id)
             const dataToSend = {
                 invoiceType: "Sign Up",
                 customerId: userDetails?._id,

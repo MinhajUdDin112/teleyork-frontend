@@ -165,7 +165,7 @@ const parseLoginRes = JSON.parse(loginRes);
                           Billing Model <span className="star">*</span>
                         </label>
                         <Dropdown placeholder="Plan  Type" options={billingModelOptions} className="field-width mt-2" name="type" optionLabel="billingModel" optionValue="billingModel" value={formik.values.type} onChange={(e) => {
-                                        console.log("E is ", e);
+                                       
                                         formik.setFieldValue("type", e.value);
                                         let id;
                                         billingModelOptions.map((item) => {

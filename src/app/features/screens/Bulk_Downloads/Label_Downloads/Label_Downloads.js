@@ -33,28 +33,12 @@ const Label_Downloads = () => {
                 const response = await Axios.get(`${BASE_URL}/api/web/role/getLabelRole?serviceProvider=${userData?.company}`);
                 const data = response?.data?.data;
                 setRoleData(data);
-                console.log("roleData api", data);
             } catch (error) {
-                console.error("Error fetching data:", error);
             }
         };
 
         roleData();
     }, []);
-    // useEffect(() => {
-    //     const Billing_models = async () => {
-    //         try {
-    //             const response = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${userData?.company}`);
-
-    //             const data = response?.data?.data;
-    //             setRoleData(data);
-    //             console.log("billing model api", data);
-    //         } catch (error) {
-    //             console.error("Error fetching data:", error);
-    //         }
-    //     };
-    //     Billing_models();
-    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -74,16 +58,13 @@ const Label_Downloads = () => {
                     setApiData(data);
                 }
             } catch (error) {
-                console.error("Error fetching data:", error?.response?.data);
                 toast.error(error?.response?.data?.error);
             }
         };
         fetchData();
     }, [dateFrom, dateTo, user, model]);
 
-    // console.log("api data", apiData);
-    // console.log("userdata", user);
-    // console.log("apiData", apiData);
+  
 
     const handleLabels = async (rowData) => {
         try {
@@ -97,7 +78,6 @@ const Label_Downloads = () => {
             link.click();
             link.parentNode.removeChild(link);
         } catch (error) {
-            console.error("Error sending labels:", error);
         }
     };
     const handleAllDownload = async () => {
@@ -120,10 +100,8 @@ const Label_Downloads = () => {
             link.click();
             link.parentNode.removeChild(link);
         } catch (error) {
-            console.error("Error sending labels:", error);
         }
     };
-    console.log("User ids from frontend", user);
 
     return (
         <>

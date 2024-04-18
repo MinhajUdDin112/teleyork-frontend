@@ -161,7 +161,6 @@ export default function TabletSingleUploadAddPreActivatedProvision({permissions,
         },
     });
     function handlesubmit(actions) {
-        console.log(formik.errors);  
          let obj=formik.values; 
          obj.serviceProvider=parseLoginRes.company 
         if (Object.keys(formik.errors).length === 0) {

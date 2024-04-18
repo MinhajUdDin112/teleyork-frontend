@@ -1,7 +1,6 @@
 import React from "react";
 import { InfoForUsersAddAndAssignNonActivatedProvision, InfoForUserAddPreActivatedProvision, InfoForUsersAddAndActivate, InfoForUsersReprovision } from "./info_for_users_assets";
 export default function InfoForUsers({ ProvisionType }) {
-    console.log(InfoForUsersAddAndAssignNonActivatedProvision);
     return (
         <>
             {" "}
