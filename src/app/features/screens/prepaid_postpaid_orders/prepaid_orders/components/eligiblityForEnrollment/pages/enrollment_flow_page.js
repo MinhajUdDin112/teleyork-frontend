@@ -22,7 +22,8 @@ export default function EnrollmentFlowPage() {
                 let inventoryType = []; 
                 for (let i = 0; i < response?.data?.data?.length; i++) {
                     let plans = [];
-                    let discountobjectarray = [];
+                    let discountobjectarray = [];     
+                    let discount= []
                     let additionalfeature = []; 
                     let paymentMethods = []; 
                     let totaldiscounts=0    
@@ -54,11 +55,11 @@ export default function EnrollmentFlowPage() {
                             additionaltotal+=parseFloat(response?.data?.data[i]?.additionalFeature[z]?.featureAmount)
                              additionalfeaturearray.push((response?.data?.data[i]?.additionalFeature[z]?._id).toString())
                             additionalfeature.push(obj);
-                        }
+                        }  
+                        
                         for (let y = 0; y < response.data.data[i].selectdiscount.length; y++) {
-                              console.log("discount amount is",)
                             discountobjectarray.push(response?.data?.data[i]?.selectdiscount[y]?._id.toString());
-                            totaldiscounts += parseFloat(response?.data?.data[i]?.selectdiscount[y]?.amount);
+                            totaldiscounts += parseFloat(response?.data?.data[i]?.selectdiscount[y]?.amount);  
                         }
                         //Additional Features 
                                //_id array
@@ -69,12 +70,15 @@ export default function EnrollmentFlowPage() {
                         
                         localStorage.setItem("simadditionalfeaturearraytotal",JSON.stringify(additionalfeaturearray))  
                                 //totalfeatureamount 
-                        localStorage.setItem("simadditionaltotal", JSON.stringify(additionaltotal));
+                        localStorage.setItem("simadditionaltotal", JSON.stringify(additionaltotal));  
+                         localStorage.setItem("simdiscount",JSON.stringify(response.data.data[i].selectdiscount)) 
+                        
                         //Discounts 
                                 //Total Discounts
                         localStorage.setItem("totalsimdiscount", JSON.stringify(totaldiscounts)); 
                                 //discount _id array will send to backend 
                         localStorage.setItem("simdiscountobjectarray", JSON.stringify(discountobjectarray));   
+                         localStorage.setItem("simdiscountobjectarraytotal",JSON.stringify(discountobjectarray))    
                         //SIM Complete Object include additional discount and any other
                         localStorage.setItem("simpricing", JSON.stringify(response.data.data[i]));
                          //SIM Plans
@@ -121,9 +125,13 @@ export default function EnrollmentFlowPage() {
                         localStorage.setItem("deviceadditionalfeaturearray",JSON.stringify(additionalfeaturearray))  
                         //Discounts 
                              //total device discount
-                        localStorage.setItem("totaldevicediscount", JSON.stringify(totaldiscounts)); 
+                        localStorage.setItem("totaldevicediscount", JSON.stringify(totaldiscounts));    
+                        
+                        localStorage.setItem("devicediscount",JSON.stringify(response.data.data[i].selectdiscount))
                             //discount _id sennding to backend
-                        localStorage.setItem("devicediscountobjectarray", JSON.stringify(discountobjectarray)); 
+                        localStorage.setItem("devicediscountobjectarray", JSON.stringify(discountobjectarray));  
+
+                        localStorage.setItem("devicediscountobjectarraytotal",JSON.stringify(discountobjectarray))  
                         //Plans 
                               //Device Plans 
                         localStorage.setItem("deviceplan", JSON.stringify(plans)); 
@@ -171,7 +179,7 @@ export default function EnrollmentFlowPage() {
             },
         },
         {
-            label: "Payment",
+            label: "Product",
             command: (event) => {
                 toast.current.show({ severity: "info", summary: "Seat Selection", detail: event.item.label });
                 setActiveIndex(2);

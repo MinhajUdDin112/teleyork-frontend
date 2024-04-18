@@ -1,0 +1,109 @@
+.inventorySelect,.planSelect{ 
+    width:350px; 
+    padding:10px;   
+    height: 350px;
+    overflow: hidden;  
+     border: solid rgba(0,0,0,.1) 1px; 
+     border-radius: 10px; 
+     margin-top: 10px; 
+     transition: opacity 250ms ease-in-out;
+     position: relative;
+}   
+.inventorySelect h1,.selectProduct{ 
+    font-size: 18px; 
+margin-top: 10px;
+}    
+.planSelect{ 
+    padding: 0px; 
+     width: 32%; 
+     margin-left: 1%;
+}
+.planSelect .planinfo{ 
+    width: 100%;
+    background-color: #336EF9;   
+    padding: 12px;  
+
+     
+} 
+.planSelect .planinfo h1{ 
+    text-align: center; 
+    font-size: 18px;  
+    color: white;
+} 
+.planSelect .planinfo h1:nth-of-type(2){ 
+    font-size: 14px; 
+    font-weight: normal;
+}
+.selectProduct{ 
+    font-weight: 600;  
+   font-size: 18px;
+}
+.inventorySelect img{ 
+     width:190px; 
+     margin-left: 50%; 
+     transform: translate(-50%);
+     height: auto;  
+     border-radius:5px ;
+} 
+.inventorySelect button{ 
+     background-color:rgba(14, 151, 4, 0.8);  
+     color: white; 
+     border: none ; 
+     border-radius: 5px; 
+      margin-left: 50%; 
+      transform: translate(-50%);  
+     padding: 10px; 
+     padding-left: 15px; 
+     padding-right: 15px;   
+     position: absolute; 
+    bottom: 15px;  
+    cursor: pointer;
+}     
+.fieldinpayment{ 
+    width: 32%; 
+    margin-left: 1%;
+}
+.planSelect  button{ 
+    background-color:rgba(14, 151, 4, 0.8);  
+     color: white; 
+     border: none ; 
+     border-radius: 5px; 
+      margin-left: 50%; 
+      transform: translate(-50%);  
+     padding: 10px; 
+     padding-left: 15px; 
+     padding-right: 15px;   
+     position: absolute; 
+    bottom: 15px;    
+
+    cursor: pointer;
+} 
+.planSelect .planprice{ 
+    text-align: center;
+} 
+.planSelect .planprice span:nth-of-type(1){ 
+    font-size: 14px; 
+    position: absolute;
+} 
+.planSelect .planprice span:nth-of-type(2){ 
+    margin-left: 10px; 
+    font-weight: 900;
+} 
+.planSelect .chargetype{ 
+    text-align: center; 
+    margin-left: 10px; 
+    margin-top: -15px;
+}
+.voiceallowance,.dataallowance,.textallowance{ 
+    font-weight: 900; 
+    width: 80%; 
+    margin-left: 50%;  
+    text-align: center;
+    transform: translate(-50%);
+} 
+.voiceallowance span,.dataallowance span,.textallowance span{ 
+  font-size: 10px; 
+  font-weight: 900;  
+  margin-left: -1px;
+  text-transform: uppercase;
+}
