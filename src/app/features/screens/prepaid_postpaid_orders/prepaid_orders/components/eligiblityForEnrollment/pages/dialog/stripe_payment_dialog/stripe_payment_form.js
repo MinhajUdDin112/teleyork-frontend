@@ -55,13 +55,19 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                     dueDate = simpricing?.dueDate;
                     oneTimeCharge = simpricing?.oneTimeCharge;
                     applyLateFee = simpricing?.applyLateFee;
-                    for (let i = 0; i < simpricing?.selectdiscount?.length; i++) {
+                    let simselecteddiscounts=JSON.parse(localStorage.getItem("simdiscountobjectarray"));  
+                     
+                    for (let i = 0; i < simpricing?.selectdiscount?.length; i++) { 
+                         for(let k=0;k<simselecteddiscounts.length;k++){   
+                              if(simselecteddiscounts[k] === simpricing?.selectdiscount[i]?._id){
                         let obj = {
-                            name: simpricing.selectdiscount[i]?.discountname,
-                            amount: simpricing.selectdiscount[i]?.amount,
+                            name: simpricing?.selectdiscount[i]?.discountname,
+                            amount: simpricing?.selectdiscount[i]?.amount,
                         };
-                        discounts.push(obj);
-                    }   
+                        discounts.push(obj);     
+                    } 
+                    }
+                    }  
                     let plandata=JSON.parse(localStorage.getItem("planprices"))  
                     for (let i = 0; i < plandata?.length; i++) {
                         if (object.plan === plandata[i]?._id) {
@@ -88,13 +94,19 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                      let plandata=JSON.parse(localStorage.getItem("planprices"))
                     dueDate = devicepricing?.dueDate;
                     applyLateFee = devicepricing?.applyLateFee;
-                    oneTimeCharge = devicepricing?.oneTimeCharge;
-                    for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) {
+                    oneTimeCharge = devicepricing?.oneTimeCharge;        
+                    let deviceselecteddiscounts=JSON.parse(localStorage.getItem("devicediscountobjectarray"));  
+                     
+                    for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) { 
+                         for(let k=0;k<deviceselecteddiscounts.length;k++){   
+                              if(deviceselecteddiscounts[k] === devicepricing?.selectdiscount[i]?._id){
                         let obj = {
                             name: devicepricing?.selectdiscount[i]?.discountname,
                             amount: devicepricing?.selectdiscount[i]?.amount,
                         };
-                        discounts.push(obj);
+                        discounts.push(obj);     
+                    } 
+                    }
                     }
                     for (let i = 0; i < plandata?.length; i++) {
                         if (object.plan === plandata[i]?._id) {
