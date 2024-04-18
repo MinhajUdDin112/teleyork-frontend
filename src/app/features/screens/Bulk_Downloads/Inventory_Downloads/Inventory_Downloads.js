@@ -45,7 +45,6 @@ const Inventory_Download = () => {
                     setApiData(response?.data?.simsData);
                 }
             } catch (error) {
-                console.error("Error fetching data:", error?.response?.data);
                 toast.error(error?.response?.data?.error);
             }
         };
