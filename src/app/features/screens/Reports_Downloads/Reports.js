@@ -84,7 +84,7 @@ const Reports = () => {
         { name: "Plan Name ", value: "name" },
         { name: "Plan Code", value: "planId" },
         { name: "PWG Customer ID", value: "customerId" },
-        { name: "Carrier", value: "Carrier" },
+        { name: "Carrier", value: "carrier" },
         { name: "Line Status", value: "status" },
     ];
 

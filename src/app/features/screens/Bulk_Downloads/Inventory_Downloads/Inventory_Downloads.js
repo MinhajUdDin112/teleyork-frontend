@@ -157,7 +157,7 @@ const Inventory_Download = () => {
                         <Column
                             header="Counter"
                             body={() => <div>{apiData.length}</div>} // Display the length of apiData as counter
-                        />{" "}
+                        />
                         <Column
                             field="Action"
                             body={(rowData) => {
