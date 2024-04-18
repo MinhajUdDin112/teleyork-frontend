@@ -322,7 +322,6 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                         display="chip"
                         value={formik.values.paymentMethod}
                         onChange={(e) => {
-                            console.log(e);
                             formik.setFieldValue("paymentMethod", e.value);
                             formik.handleChange(e);
                         }}

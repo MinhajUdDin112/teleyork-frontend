@@ -8,7 +8,6 @@ import { InputTextarea } from "primereact/inputtextarea";
 import Change_Esn_Status_And_Agent_Name_report from "./change_esn_status_and_agent_name_report";
 export default function ChangeESNSIMStatus({setActiveComponent}){      
     function handleESN_SIM_submit(){ 
-        console.log("form will submit here")
     }
     const formik = useFormik({
         initialValues: {

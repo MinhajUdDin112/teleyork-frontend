@@ -41,9 +41,7 @@ const navigate = useNavigate();
   }
   const handleWalletClick =()=>{
     setOpenDialogeForWallet(true)
-    console.log(
-      "Here"
-    )
+
   }
   var items;
   if (accountType === null) {

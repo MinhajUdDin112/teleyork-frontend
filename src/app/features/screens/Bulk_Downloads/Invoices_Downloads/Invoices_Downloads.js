@@ -38,9 +38,7 @@ const Invoices_Downloads = () => {
                 const response = await Axios.get(`${BASE_URL}/api/web/role/getLabelRole?serviceProvider=${userData?.company}`);
                 const data = response?.data?.data;
                 setRoleData(data);
-                console.log("roleData api", data);
             } catch (error) {
-                console.error("Error fetching data:", error);
             }
         };
         roleData();
@@ -59,7 +57,6 @@ const Invoices_Downloads = () => {
                     billingModel: model,
                 };
                 const response = await Axios.post(`${BASE_URL}/api/web/invoicesDownloads/invoices`, requestData);
-                console.log(response);
                 const data = response?.data;
                 if (response?.status === 200 || response?.status === 201) {
                     setApiData(data);
@@ -98,7 +95,6 @@ const Invoices_Downloads = () => {
             });
         });
 
-        // console.log("Invoices by Customer:", invoicesByCustomer);
         setInvoicesByCustomer(invoicesByCustomer);
     }, [apiData]);
 
@@ -110,27 +106,16 @@ const Invoices_Downloads = () => {
                 invoiceData.push(...customer.invoices);
             }
         });
-        // console.log("Invoice Data:", invoiceData);
         setInvoicesData(invoiceData);
-        console.log("Invoice Data:", invoiceData);
 
         // Logging the specific user ID of the clicked row
         const userId = rowData.customers[0]?.customer?._id; // Assuming the user ID is stored in customer.customer._id
-        console.log("User ID:", userId);
         setUserId(userId);
         const userDetailsResponse = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${userId}`);
         // const userDetails = userDetailsResponse.data;
         setUserDetails(userDetailsResponse.data);
-        console.log("User Details:", userDetails);
         // Set the specific invoices data for downloading
         setInvoicesData(invoiceData);
-
-        // // Extracting and logging netPrice, totalAmount, and planId for each invoice
-        // invoiceData.forEach((invoice, index) => {
-        //     console.log(`Invoice ${index + 1} - Net Price:`, invoice.netPrice);
-        //     console.log(`Invoice ${index + 1} - Total Amount:`, invoice.totalAmount);
-        //     console.log(`Invoice ${index + 1} - Plan ID:`, invoice.planId);
-        // });
     };
 
     return (

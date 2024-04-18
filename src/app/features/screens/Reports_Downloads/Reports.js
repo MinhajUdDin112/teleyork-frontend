@@ -162,10 +162,8 @@ const Reports = () => {
             };
             const response = await Axios.post(`${BASE_URL}/api/web/reportDownload/add`, dataToSend);
             const data = await response?.data;
-            console.log(data);
             if (response?.status === 200 || response?.status === 201) {
                 const successMessage = response?.data?.msg;
-                console.log("Data stored successfully:", successMessage);
                 toast.success(successMessage);
                 // After saving the template, fetch all data again to update the table
             }
@@ -178,10 +176,8 @@ const Reports = () => {
         try {
             const response = await Axios.get(`${BASE_URL}/api/web/reportDownload/getAllData`);
             const data = response?.data?.data;
-            console.log(data);
             if (response?.status === 200 || response?.status === 201) {
                 const successMessage = data?.result;
-                console.log("Data fetched successfully:", successMessage);
                 // Assuming setApiData is used to set the data to a state variable
                 setApiData(data); // Set the array of reports to the state
             }
@@ -201,18 +197,12 @@ const Reports = () => {
     // edit api
     const handleEdit = async (_id) => {
         try {
-            console.log("Row id is:", _id);
             setId(_id);
             const response = await Axios.get(`${BASE_URL}/api/web/reportDownload/getOne/${_id}`);
             const data = response?.data?.data;
-            console.log("Data for row:", data);
-            console.log("Start Date (Original):", data.startDate);
-            console.log("End Date (Original):", data.endDate);
             setValue(data.reportName);
             setDateFrom(DateFormat(data.startDate));
-            console.log("start date formatted", DateFormat(data.startDate));
             setDateTo(DateFormat(data.endDate));
-            console.log("end date formatted", DateFormat(data.endDate));
             setDates(data.dates);
             setPersonalInformation(data.personalInformation);
             setPlanInformation(data.planInformation);
@@ -223,7 +213,6 @@ const Reports = () => {
     };
     const handleDelete = async (_id) => {
         try {
-            console.log("Delete row id", _id);
             const response = await Axios.delete(`${BASE_URL}/api/web/reportDownload/delete/${_id}`);
             if (response.status === 200) {
                 toast.success(response?.data?.msg);
@@ -270,19 +259,16 @@ const Reports = () => {
             };
 
             const response = await Axios.put(`${BASE_URL}/api/web/reportDownload/edit/${id}`, dataToUpdate);
-            // console.log("selected row to update", selectedRowData._id);
+          
             const updatedData = await response?.data?.result;
-            console.log(updatedData);
             if (response?.status === 200 || response?.status === 201) {
                 const successMessage = response?.data?.msg;
-                console.log("Data updated successfully:", successMessage);
                 toast.success(successMessage);
                 // After updating the template, fetch all data again to update the table
                 getAllData();
             }
             setId("");
         } catch (error) {
-            console.error("Error updating data:", error?.response?.data);
             toast.error(error?.response?.data?.error);
         }
     };
@@ -309,7 +295,6 @@ const Reports = () => {
                     <Calendar
                         value={dateFrom}
                         onChange={(e) => {
-                            console.log(e.value);
                             setDateFrom(e.value);
                             handleInputChange("Date From", e.value);
                         }}

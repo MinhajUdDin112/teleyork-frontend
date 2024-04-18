@@ -118,7 +118,6 @@ const AddUnits = ({ setActiveComponent }) => {
                             optionValue="billingModel"
                             options={billingModelList}
                             onChange={(e) => {
-                                console.log("E is ", e);
                                 formik.setFieldValue("billingModel", e.value);
                                 let id;
                                 billingModelList.map((item) => {

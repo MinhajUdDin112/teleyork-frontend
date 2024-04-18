@@ -166,7 +166,7 @@ const BillingConfiguration = () => {
     const getBillingModelList = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${parseLoginRes?.company}`);
-            console.log("data for billing model is", res.data.data);
+
             setOptionsForBillingModel(res?.data?.data || []);
         } catch (error) {
             toast.error(error?.response?.data?.msg);
@@ -299,7 +299,6 @@ const BillingConfiguration = () => {
                                     optionLabel="billingModel"
                                     optionValue="billingModel"
                                     onChange={(e) => {
-                                        console.log("E is ", e);
                                         formik.setFieldValue("billingmodel", e.value);
                                         let id;
                                         optionsForBillingmodel.map((item) => {

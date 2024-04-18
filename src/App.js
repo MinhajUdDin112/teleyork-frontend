@@ -346,7 +346,6 @@ const App = () => {
         }
       
     },[dynamicMenu])  
-     console.log("dynamicMenu is",dynamicMenu)
     return (
         <>
             {protectedRoute === true ? (

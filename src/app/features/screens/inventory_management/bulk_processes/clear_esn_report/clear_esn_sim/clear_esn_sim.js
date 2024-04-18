@@ -7,7 +7,6 @@ import { Card } from "primereact/card";
 import ClearEsnData from "./clear_esn_sim_report";
 export default function ClearEsnSim({setPage}) {      
     function handleClearEsnSimSubmit() {
-        console.log("form will submit here");
     }
     const formik = useFormik({
         initialValues: {

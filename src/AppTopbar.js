@@ -170,7 +170,6 @@ export const AppTopbar = (props) => {
                         value={props.searchValue}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                                console.log(props.searchValue);
                                 e.stopPropagation();
                                 if (props.searchValue !== "") {
                                     props.setSearchByValueClick(true);
@@ -180,7 +179,6 @@ export const AppTopbar = (props) => {
                             }
                         }}
                         onClick={(e) => {
-                            console.log(props.searchValue);
                             e.stopPropagation();
                             if (props.searchValue !== "") {
                                 props.setSearchByValueClick(true);
@@ -198,7 +196,7 @@ export const AppTopbar = (props) => {
                             props.setSearchBy(null);
                             props.setSearchByValueClick(true);
                             if (props.searchByValueClick === true) {
-                                console.log(true);
+                      
                                 props.setCallSearchApi((prev) => !prev);
                             }
                         }}

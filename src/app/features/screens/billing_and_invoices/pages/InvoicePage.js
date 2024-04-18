@@ -39,7 +39,6 @@ const InvoicePage = () => {
             }
 
         } catch (error) {
-            console.log(error)
         }
     }
 

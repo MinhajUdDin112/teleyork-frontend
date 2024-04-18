@@ -23,7 +23,7 @@ import ChangeCustomerStatus from "./change_customer_status/change_customer_statu
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => {
-    console.log("Customer Services Index is", customerServicesIndex);
+   
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -41,8 +41,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
     const location = useLocation();
 
     useEffect(() => {
-        // Run your logic when the route changes
-        console.log("customer services page");
+       
 
         if (customerServicesIndex !== undefined) {
             if (activeTab !== undefined) {
@@ -52,9 +51,8 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                 }, 200);
             } else {
                 setActiveTab(customerServicesIndex);
-                console.log("it is set");
+                
             }
-            console.log("Route changed:", location.pathname);
         } else {
             setActiveTab(customerServicesIndex);
         }
