@@ -7,11 +7,19 @@ import { ConfirmPopup } from "primereact/confirmpopup";
 import { logout } from "./app/store/auth/AuthSlice";
 import { InputText } from "primereact/inputtext";
 import { ListBox } from "primereact/listbox";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { Sidebar } from "primereact/sidebar";
+import Axios from "axios";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const AppTopbar = (props) => {
+    const [visibleRight, setVisibleRight] = useState(false);
+    const [counter, setCounter] = useState("");
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
     });
     const [visibleSearch, setVisibleSearch] = useState(false);
+    const [notification, setNotification] = useState([]);
     function docOnClick(e) {
         setVisibleSearch(false);
     }
@@ -79,8 +87,42 @@ export const AppTopbar = (props) => {
 
         return capitalizedSentence;
     }
+
+    // counter notification API
+    useEffect(() => {
+        const getCounter = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
+                console.log("count api response", response?.data);
+                const data = response?.data?.unreadCount;
+                const note = response?.data?.notifications;
+                console.log("note", note);
+                setNotification(note);
+                setCounter(data);
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+            }
+        };
+        getCounter();
+    }, []);
+
+    const handleReadNotification = async (notificationId) => {
+        console.log("notification id", notificationId);
+        try {
+            const response = await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
+            console.log("mark as read notification", response);
+            const res = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
+            const { unreadCount, notifications } = res?.data;
+            setNotification(notifications);
+            setCounter(unreadCount);
+        } catch (error) {
+            toast(error?.response?.data?.msg);
+        }
+    };
+    console.log("notification id", notification);
     return (
         <div>
+            <ToastContainer />
             <div
                 className="logodisplay "
                 onClick={(e) => {
@@ -215,8 +257,8 @@ export const AppTopbar = (props) => {
                         onChange={(e) => {
                             if (e.value !== null) {
                                 props.setSearchByValueClick(false);
-                                props.setSearchBy(e.value);  
-                                 setVisibleSearch(false)
+                                props.setSearchBy(e.value);
+                                setVisibleSearch(false);
                             }
                         }}
                         options={countries}
@@ -234,10 +276,29 @@ export const AppTopbar = (props) => {
                 <ConfirmPopup target={document.getElementById("li")} visible={visible} onHide={() => setVisible(false)} message={<CustomMessage />} acceptLabel="Logout" accept={handleLogout} />
                 <ul className={classNames("layout-topbar-menu   lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
                     <div className="flex  ">
+                        <i className="pi pi-bell" style={{ cursor: "pointer", fontSize: "1.5rem", marginRight: "3rem", marginTop: "0.8rem" }} onClick={() => setVisibleRight(true)}>
+                            <span style={{ cursor: "pointer", color: "red", marginLeft: "0rem", fontSize: "1rem", fontWeight: "500", marginTop: "-0.6rem", position: "absolute" }}> {counter <= 9 ? counter : "9+"}</span>
+                        </i>
+                        <Sidebar className="notification" style={{ width: "35rem" }} visible={visibleRight} position="right" onHide={() => setVisibleRight(false)}>
+                            <h3>Notifications</h3>
+                            <hr />
+                            {notification.map((item, index) => (
+                                <div key={index}>
+                                    <h5>{item?.sender?.name}</h5>
+                                    <p>{item.message}</p>
+
+                                    <span style={{ cursor: "pointer" }}>
+                                        <h5 style={{ fontSize: "1rem", marginLeft: "24rem" }} onClick={() => handleReadNotification(item._id)}>
+                                            {item.read ? "" : "Mark as read"}
+                                        </h5>
+                                    </span>
+                                    <hr />
+                                </div>
+                            ))}
+                        </Sidebar>
                         <p className="mr-7 mt-2" style={{ fontSize: "1.3rem" }}>
                             {parseLoginRes?.role?.role}
                         </p>
-
                         <div
                             className="flex"
                             onClick={(e) => {
@@ -248,8 +309,7 @@ export const AppTopbar = (props) => {
                                 <i style={{ cursor: "pointer", fontSize: "1.5rem", marginTop: "5px" }} className="pi pi-user" onClick={() => setVisible(true)} />
                             </li>
                             <p className="" id="li" style={{ cursor: "pointer", fontSize: "1.5rem", marginLeft: "10px" }} onClick={() => setVisible(true)}>
-                                {" "}
-                                {parseLoginRes?.userName ? parseLoginRes?.userName.toUpperCase() : ""}{" "}
+                                {parseLoginRes?.userName ? parseLoginRes?.userName.toUpperCase() : ""}
                             </p>
                         </div>
                     </div>

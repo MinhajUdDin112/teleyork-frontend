@@ -37,7 +37,8 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
     const [isContact, setisContact] = useState();
     const [isShow, setIsShow] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-
+    const [department, setDepartment] = useState(null);
+    const [agents, setAgents] = useState([]);
     const location = useLocation();
 
     useEffect(() => {
@@ -73,6 +74,8 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
         noteType: Yup.string().required("Note Type is Required"),
         note: Yup.string().required("Please Write Note"),
         priority: Yup.string().required("Please Select Priority"),
+
+        //AgentName: Yup.string().required("Agent Name is required"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -80,6 +83,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
             noteType: "",
             note: "",
             priority: "low",
+            AgentName: "",
         },
         onSubmit: async (values, actions) => {
             // Prepare the data to send to the server
@@ -89,10 +93,10 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                 customerId: selectedId,
                 ...values,
             };
-
+            console.log("data sending from frontend is ", data);
             setisButtonLoading(true);
             try {
-                const response = await Axios.post(`${BASE_URL}/api/web/notes/`, data);
+                const response = await Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data);
                 if (response?.status == "200" || response?.status == "201") {
                     toast.success("Successfully Added");
                     setisButtonLoading(false);
@@ -111,6 +115,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
+            console.log("assignedTo value data", res?.data?.data);
         } catch (error) {}
     };
 
@@ -219,7 +224,20 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
     if (customerStatus) {
         toCapitalCustomerStatus = customerStatus.toUpperCase();
     }
-
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/web/user/all?company=${parseLoginRes.company}`);
+                console.log("response", response?.data);
+                const users = response?.data?.data;
+                const agentNames = users.map((user) => ({ label: user.name, value: user._id }));
+                setAgents(agentNames);
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+            }
+        };
+        fetchUser();
+    }, []);
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
     return (
@@ -821,6 +839,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                                                 return <p>{ChangeIsoDateToECT(rowData.createdAt)}</p>;
                                             }}
                                         ></Column>
+                                        <Column header="Assigned To" field="assignTo.name"></Column>
                                     </DataTable>
                                 </div>
                             </div>
@@ -833,7 +852,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                             </div>
                             <hr className="m-0 mb-2" />
                             <Button label="Add New Note type" icon="pi pi-plus" size="small" className="mt-2 mb-3" onClick={handleDialogeForAddType} />
-
                             <form onSubmit={formik.handleSubmit}>
                                 <div>
                                     <Dropdown
@@ -850,7 +868,28 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                                         className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text w-full mb-3")}
                                     />
                                     {getFormErrorMessage("noteType")}
+                                    <div className="mr-3 mb-3 mt-3">
+                                        <p className="m-0">Agent Name</p>
 
+                                        <Dropdown
+                                            value={formik.values.assignTo}
+                                            optionLabel="label"
+                                            optionValue="value"
+                                            options={agents} // Use agents state here
+                                            onChange={(e) => {
+                                                console.log(e);
+                                                formik.setFieldValue("assignTo", e.value); // Set the selected agent's ID
+                                                //formik.setFieldValue("AgentName", e.label); // Set the selected agent's name
+                                            }}
+                                            placeholder="Select an option"
+                                            className="field-width mt-2"
+                                        />
+                                        {/* {formik.errors.AgentName && formik.touched.AgentName && (
+                                            <div className="mt-2" style={{ color: "red" }}>
+                                                {formik.errors.AgentName}
+                                            </div>
+                                        )} */}
+                                    </div>
                                     <div className="mb-4">
                                         <InputTextarea
                                             id="note"
