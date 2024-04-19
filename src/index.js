@@ -49,5 +49,28 @@ function cleanLocalStorage() {
     localStorage.removeItem("totalsimdiscount");
     localStorage.removeItem("simdiscountobjectarray");
     localStorage.removeItem("simplan");
-    localStorage.removeItem("simpricing");
+    localStorage.removeItem("simpricing"); 
+    
+    localStorage.removeItem("devicediscount"); 
+    
+    localStorage.removeItem("simPaymentMethod"); 
+    
+    localStorage.removeItem("deviceadditionalfeaturearraytotal"); 
+    localStorage.removeItem("simadditionalfeaturearraytotal"); 
+    localStorage.removeItem("devicediscountobjectarraytotal");   
+    localStorage.removeItem("simdiscountobjectarraytotal");   
+     
+    localStorage.removeItem("simdiscount");  
+    localStorage.removeItem("planprices");  
+    localStorage.removeItem("devicePaymentMethod");   
+    localStorage.removeItem("product")     
+    localStorage.removeItem("paymentscreendetails") 
+     
+     
+
+     
+       
+     
+     
+     
 }

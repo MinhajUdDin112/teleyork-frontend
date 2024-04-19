@@ -1,21 +1,15 @@
 // import React, { useEffect, useState } from "react";
 // import Axios from "axios";
 // const BASE_URL = process.env.REACT_APP_BASE_URL;
-
-
-
 // const PlanInfo = () => {
 //     const [currentPlan, setCurrentPlan] = useState({});
 //     const [additional, setAdditional] = useState();
 //     const [discount, setDiscount] = useState();
-
 //     const selectedid = localStorage.getItem("selectedId");
 // const parseselectedid = JSON.parse(selectedid);
-
 //     useEffect(() => {
 //         Axios.get(`${BASE_URL}/api/web/invoices/getplanbycustomerid?customerid=${parseselectedid}`)
-//             .then((res) => {
-               
+//             .then((res) => {              
 //                 let additionalnew = "";
 //                 for (let i = 0; i < res?.data?.data?.currentPlan.additionalCharges.length; i++) {
 //                     if (i + 1 === res?.data?.data?.currentPlan.additionalCharges.length) {
@@ -38,13 +32,11 @@
 //                 }
 //                 setDiscount(discountnew);
 //                 setAdditional(additionalnew);
-
 //                 setCurrentPlan(res.data.data.currentPlan);
 //             })
 //             .catch((err) => { 
 //                 return console.log(err)
-//             });  
-             
+//             });              
 //     }, []);
 //     return (
 //         <div className=" ">

@@ -150,7 +150,8 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                     planCharges: planCharges,
                     chargingType: "monthly",
                     invoicePaymentMethod: "Credit/Debit Card",
-                    printSetting: "Both",
+                    printSetting: "Both", 
+                    isInvoice:true,
                     billingPeriod: {
                         from: "onActivation",
                         to: "onActivation",

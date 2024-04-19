@@ -16,7 +16,46 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("paymentmethod");
         localStorage.removeItem("paymentdetails"); 
         localStorage.removeItem("comingfromincomplete") 
-        localStorage.removeItem("comingforedit")
+        localStorage.removeItem("comingforedit")  
+        localStorage.removeItem("paymentmethod");
+        localStorage.removeItem("paymentdetails");
+        localStorage.removeItem("inventoryType");
+        //Payment Status
+        localStorage.removeItem("paymentstatus");
+    
+        localStorage.removeItem("stripeId");
+        //Device local
+        localStorage.removeItem("deviceadditional");
+        localStorage.removeItem("deviceadditionaltotal");
+        localStorage.removeItem("deviceadditionalfeaturearray");
+        localStorage.removeItem("totaldevicediscount");
+        localStorage.removeItem("devicediscountobjectarray");
+        localStorage.removeItem("deviceplan");
+        localStorage.removeItem("devicepricing");
+        //SIM Local
+        localStorage.removeItem("simadditional");
+        localStorage.removeItem("simadditionaltotal");
+        localStorage.removeItem("simadditionalfeaturearray");
+        localStorage.removeItem("totalsimdiscount");
+        localStorage.removeItem("simdiscountobjectarray");
+        localStorage.removeItem("simplan");
+        localStorage.removeItem("simpricing"); 
+        
+        localStorage.removeItem("devicediscount"); 
+        
+        localStorage.removeItem("simPaymentMethod"); 
+        
+        localStorage.removeItem("deviceadditionalfeaturearraytotal"); 
+        localStorage.removeItem("simadditionalfeaturearraytotal"); 
+        localStorage.removeItem("devicediscountobjectarraytotal");   
+        localStorage.removeItem("simdiscountobjectarraytotal");   
+         
+        localStorage.removeItem("simdiscount");  
+        localStorage.removeItem("planprices");  
+        localStorage.removeItem("devicePaymentMethod");    
+        localStorage.removeItem("product")     
+        localStorage.removeItem("paymentscreendetails") 
+
     };
     const movepageToAll = () => { 
         localStorage.removeItem("prepaidbasicData");
@@ -27,7 +66,43 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("paymentmethod");
         localStorage.removeItem("paymentdetails"); 
         localStorage.removeItem("comingfromincomplete")  
-        localStorage.removeItem("comingforedit")
+        localStorage.removeItem("comingforedit")         
+        localStorage.removeItem("paymentmethod");
+        localStorage.removeItem("paymentdetails");
+        localStorage.removeItem("inventoryType");
+        //Payment Status
+        localStorage.removeItem("paymentstatus");
+    
+        localStorage.removeItem("stripeId");
+        //Device local
+        localStorage.removeItem("deviceadditional");
+        localStorage.removeItem("deviceadditionaltotal");
+        localStorage.removeItem("deviceadditionalfeaturearray");
+        localStorage.removeItem("totaldevicediscount");
+        localStorage.removeItem("devicediscountobjectarray");
+        localStorage.removeItem("deviceplan");
+        localStorage.removeItem("devicepricing");
+        //SIM Local
+        localStorage.removeItem("simadditional");
+        localStorage.removeItem("simadditionaltotal");
+        localStorage.removeItem("simadditionalfeaturearray");
+        localStorage.removeItem("totalsimdiscount");
+        localStorage.removeItem("simdiscountobjectarray");
+        localStorage.removeItem("simplan");
+        localStorage.removeItem("simpricing"); 
+        
+        localStorage.removeItem("devicediscount"); 
+        
+        localStorage.removeItem("simPaymentMethod"); 
+        
+        localStorage.removeItem("deviceadditionalfeaturearraytotal"); 
+        localStorage.removeItem("simadditionalfeaturearraytotal"); 
+        localStorage.removeItem("devicediscountobjectarraytotal");   
+        localStorage.removeItem("simdiscountobjectarraytotal");   
+         
+        localStorage.removeItem("simdiscount");  
+        localStorage.removeItem("planprices");  
+        localStorage.removeItem("devicePaymentMethod");   
         navigate("/prepaid-allenrollment");
         
     };
