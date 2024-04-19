@@ -4,30 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { Column } from "primereact/column";
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function Searchall({ searchValue,callSearchApi, setSearchBy,setSearchByValueClick }) {
+export default function Searchall({ searchValue, callSearchApi, setSearchBy, setSearchByValueClick }) {
     const navigate = useNavigate();
     const [searchData, setSearchData] = useState([]);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
-    const toCapital = roleName.toUpperCase();  
-    const handleEnrollmentIdClick = (rowData) => { 
-        setSearchByValueClick(false)
+    const toCapital = roleName.toUpperCase();
+    const handleEnrollmentIdClick = (rowData) => {
+        setSearchByValueClick(false);
         setSearchBy(null);
         navigate("/customer-profile", { state: { selectedId: rowData._id } });
         localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
+    const data = localStorage.getItem("permissions");
+    const parseData = JSON.parse(data);
+    console.log("Parseee", parseData);
     useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/search/?query=${searchValue}&userId=${parseLoginRes._id}`)
-            .then((response) => {    
-                if (typeof response.data.data === 'object' && !Array.isArray(response.data.data)) {
-                 
-                     let arr=[response.data.data] 
-                     setSearchData(arr); 
-                  }  
-                  else{
-                setSearchData(response.data.data); 
-                  }
+        const data = {
+            permissions: parseData,
+        };
+        Axios.post(`${BASE_URL}/api/web/search/?query=${searchValue}&userId=${parseLoginRes._id}`, data)
+            .then((response) => {
+                if (typeof response.data.data === "object" && !Array.isArray(response.data.data)) {
+                    let arr = [response.data.data];
+                    setSearchData(arr);
+                } else {
+                    setSearchData(response.data.data);
+                }
             })
             .catch((err) => {
                 setSearchData([]);
