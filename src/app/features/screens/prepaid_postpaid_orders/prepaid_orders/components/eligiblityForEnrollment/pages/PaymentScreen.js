@@ -28,18 +28,12 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [currentScreen, setCurrentScreen] = useState(1);
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isSearch, setIsSearch] = useState(false);
-    const [historyData, setHistoryData] = useState();
     const [previousPlanPrice, setPreviousPlanPrice] = useState(0);
-    const [propectWithInvoice, setProspectWithInvoice] = useState(false);
-
-    const [propectWithOutInvoice, setProspectWithOutInvoice] = useState(false);
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
     const validationSchema = Yup.object().shape({
         billId: Yup.string().required("Product is required"),
         paymentMode: Yup.string().required("Payment Mode are required"),
         plan: Yup.string().required("Plan is required"),
-        paid: Yup.string().required("Paid Amount is required"),
     });
     const onPlanSelect = (item) => {
         setCurrentPlanSelect(item._id);
@@ -61,7 +55,6 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 if (devicepricing[i]._id === item._id) {
                     let currentamount = parseFloat(formik.values.totalamount);
                     let currentafterremovingprevious = currentamount - previousPlanPrice;
-
                     formik.setFieldValue("totalamount", (currentafterremovingprevious + devicepricing[i].price).toString());
                     setPreviousPlanPrice(devicepricing[i].price);
                 }
@@ -84,7 +77,12 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             type: "Sign Up ",
             discounts: "",
         },
-        onSubmit: async (values, actions) => {
+        onSubmit: async (values, actions) => { 
+             if(formik.values.paymentMode === "skip" ){  
+                localStorage.setItem("paymentscreendetails",JSON.stringify(formik.values))
+               setActiveIndex(3)
+             } 
+             else{ 
             if (localStorage.getItem("paymentstatus")) {
                 if (localStorage.getItem("paymentstatus") === "paid") {
                     setActiveIndex(3);
@@ -93,7 +91,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 }
             } else {
                 setPaymentDialogVisibility(true);
-            }
+            } 
+        }
         },
     });
 
@@ -109,7 +108,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     }, []);
     const optionsForPayment = [
         { label: "Select ", value: "" },
-        { label: "Credit/Debit card", value: "card" },
+        { label: "Credit/Debit card", value: "card" }, 
+        {label:"Skip",value:"skip"}
     ];
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
@@ -187,7 +187,6 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     <div>
                         <h5 className="font-bold text-left">ENROLLMENT ID: {enrollment_id}</h5>
                     </div>
-
                     {currentScreen === 1 ? (
                         <div className="mt-2 w-full flex flex-wrap flex-row justify-content-around">
                             <h1 className="block w-full selectProduct">Select Product</h1>
@@ -253,29 +252,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     ) : undefined}
                     {currentScreen === 3 ? (
                         <div className="w-full flex flex-wrap flex-row justify-content-left w-full">
-                            <div className="flex w-full flex-wrap flex-row justify-content-left ">
-                                <p
-                                    className={`prospectbutton ${propectWithInvoice ? "prospectactive" : ""}`}
-                                    onClick={() => {
-                                        setProspectWithInvoice(true);
-                                        setProspectWithOutInvoice(false);
-                                    }}
-                                >
-                                    {" "}
-                                    Save As Prospect With Invoice
-                                </p>
-
-                                <p
-                                    onClick={() => {
-                                        setProspectWithOutInvoice(true);
-                                        setProspectWithInvoice(false);
-                                    }}
-                                    className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""}`}
-                                >
-                                    {" "}
-                                    Save As Prospect WithOut Invoice
-                                </p>
-                            </div>
+                           
                             <div className="mt-2  fieldinpayment">
                                 <label className="block">Select Additional Feature</label>
                                 {inventory === "SIM" ? (
@@ -359,7 +336,9 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         {getFormErrorMessage("additional")}
                                     </>
                                 )}
-                            </div>
+                            </div>  
+                            { 
+                            formik.values.paymentMode === "card" ?
                             <div className="mt-2 fieldinpayment">
                                 <label className="block">Paying Amount</label>
                                 <InputText
@@ -373,7 +352,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     }}
                                 />
                                 {getFormErrorMessage("paid")}
-                            </div>
+                            </div>  :""   
+                    }
                             <div className="mt-2 fieldinpayment">
                                 <label className="block">Net Amount</label>
                                 <InputText
