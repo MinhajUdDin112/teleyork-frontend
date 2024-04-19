@@ -23,7 +23,6 @@ import ChangeCustomerStatus from "./change_customer_status/change_customer_statu
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => {
-   
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -42,8 +41,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
     const location = useLocation();
 
     useEffect(() => {
-       
-
         if (customerServicesIndex !== undefined) {
             if (activeTab !== undefined) {
                 setActiveTab();
@@ -52,7 +49,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                 }, 200);
             } else {
                 setActiveTab(customerServicesIndex);
-                
             }
         } else {
             setActiveTab(customerServicesIndex);
@@ -205,18 +201,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
         localStorage.setItem("address", JSON.stringify(cpData));
         setIsEdit(true);
     };
-    const downloadLabel = () => {
-        const path = cpData?.label;
-        const trimmedPath = path.replace(/^uploads\//, "");
-        const fileUrl = `${BASE_URL}/${trimmedPath}`;
-        const link = document.createElement("a");
-        link.href = fileUrl;
-        link.setAttribute("target", "_blank"); // Open in new tab
-        link.setAttribute("download", ""); // Indicate that the file should be downloaded
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
+
     let toCapitalCustomerStatus;
     const customerStatus = cpData?.status;
     if (customerStatus) {
@@ -226,7 +211,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
         const fetchUser = async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/user/all?company=${parseLoginRes.company}`);
-     
+
                 const users = response?.data?.data;
                 const agentNames = users.map((user) => ({ label: user.name, value: user._id }));
                 setAgents(agentNames);
@@ -260,17 +245,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                     <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit} />
                 </Dialog>
                 <div className="pt-3">
-                    {cpData?.label ? (
-                        <>
-                            {" "}
-                            <div className="ml-5">
-                                <Button label="Download Label" onClick={downloadLabel} />
-                            </div>
-                        </>
-                    ) : (
-                        ""
-                    )}
-
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
