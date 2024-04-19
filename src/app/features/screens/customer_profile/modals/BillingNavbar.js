@@ -161,7 +161,18 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
         setVisible(false);
         setRefreshComponent(true);
     };
-
+    const downloadLabel = () => {
+        const path = cpData?.label;
+        const trimmedPath = path.replace(/^uploads\//, "");
+        const fileUrl = `${BASE_URL}/${trimmedPath}`;
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.setAttribute("target", "_blank"); // Open in new tab
+        link.setAttribute("download", ""); // Indicate that the file should be downloaded
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
     return (
         <div className="menubar-styling">
             <ToastContainer />
@@ -216,6 +227,16 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                     />
                     <span> </span>
                 </>
+            )}
+            {cpData?.label ? (
+                <>
+                    {" "}
+                    <div className="ml-5">
+                        <Button label="Download Label" onClick={downloadLabel} style={{ marginTop: "1rem", marginLeft: "-2rem" }} />
+                    </div>
+                </>
+            ) : (
+                ""
             )}
 
             <Dialog

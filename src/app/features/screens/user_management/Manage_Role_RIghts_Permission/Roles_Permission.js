@@ -177,7 +177,6 @@ setAddRole(false);
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/user/all?serviceProvider=${companyId}`);
             setAllUsers(res?.data?.data || []);
-            console.log("ALll user is",res?.data?.data)
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }

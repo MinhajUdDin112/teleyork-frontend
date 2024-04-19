@@ -11,7 +11,6 @@ import { ro } from "date-fns/locale";
 import CustomerInvoicePrepaid from "./customer_invoice/customer_invoice_prepaid";
 import PaymentStripModule from "./dialog/stripe_payment";
 const InvoiceTable = ({setRefresh, userDetails, invoiceData }) => {
- console.log(userDetails)
     const cardData = invoiceData;
     const [isLoading, setIsLoading] = useState(false)
     const [singleInvoiceData, setInvoiceData] = useState()

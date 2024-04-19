@@ -23,7 +23,6 @@ import ChangeCustomerStatus from "./change_customer_status/change_customer_statu
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => {
-    console.log("Customer Services Index is", customerServicesIndex);
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -42,9 +41,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
     const location = useLocation();
 
     useEffect(() => {
-        // Run your logic when the route changes
-        console.log("customer services page");
-
         if (customerServicesIndex !== undefined) {
             if (activeTab !== undefined) {
                 setActiveTab();
@@ -53,9 +49,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                 }, 200);
             } else {
                 setActiveTab(customerServicesIndex);
-                console.log("it is set");
             }
-            console.log("Route changed:", location.pathname);
         } else {
             setActiveTab(customerServicesIndex);
         }
@@ -95,7 +89,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                 customerId: selectedId,
                 ...values,
             };
-            console.log("data sending from frontend is ", data);
             setisButtonLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data);
@@ -117,7 +110,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
-            console.log("assignedTo value data", res?.data?.data);
         } catch (error) {}
     };
 
@@ -209,18 +201,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
         localStorage.setItem("address", JSON.stringify(cpData));
         setIsEdit(true);
     };
-    const downloadLabel = () => {
-        const path = cpData?.label;
-        const trimmedPath = path.replace(/^uploads\//, "");
-        const fileUrl = `${BASE_URL}/${trimmedPath}`;
-        const link = document.createElement("a");
-        link.href = fileUrl;
-        link.setAttribute("target", "_blank"); // Open in new tab
-        link.setAttribute("download", ""); // Indicate that the file should be downloaded
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
+
     let toCapitalCustomerStatus;
     const customerStatus = cpData?.status;
     if (customerStatus) {
@@ -230,7 +211,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
         const fetchUser = async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/user/all?company=${parseLoginRes.company}`);
-                console.log("response", response?.data);
+
                 const users = response?.data?.data;
                 const agentNames = users.map((user) => ({ label: user.name, value: user._id }));
                 setAgents(agentNames);
@@ -264,17 +245,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                     <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit} />
                 </Dialog>
                 <div className="pt-3">
-                    {cpData?.label ? (
-                        <>
-                            {" "}
-                            <div className="ml-5">
-                                <Button label="Download Label" onClick={downloadLabel} />
-                            </div>
-                        </>
-                    ) : (
-                        ""
-                    )}
-
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
@@ -879,7 +849,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
                                             optionValue="value"
                                             options={agents} // Use agents state here
                                             onChange={(e) => {
-                                                console.log(e);
                                                 formik.setFieldValue("assignTo", e.value); // Set the selected agent's ID
                                                 //formik.setFieldValue("AgentName", e.label); // Set the selected agent's name
                                             }}

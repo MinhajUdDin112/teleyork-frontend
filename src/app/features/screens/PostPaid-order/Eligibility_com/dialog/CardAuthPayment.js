@@ -170,7 +170,6 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                     setIsLoading(false)   
                 }
                 else {
-                    console.log("error is ",response?.data?.data)
                     toast.error(response?.data?.data?.message[0]?.text)
                 }
             } catch (error) {

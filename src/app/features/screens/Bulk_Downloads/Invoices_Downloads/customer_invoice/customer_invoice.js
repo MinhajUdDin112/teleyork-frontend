@@ -10,7 +10,6 @@ import "./css/customer_invoice.css";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }) {
-    console.log("user id is ", userId);
     const [userData, setUserData] = useState(null);
     const [isDataReady, setIsDataReady] = useState(false);
     const [currentInvoiceIndex, setCurrentInvoiceIndex] = useState(0);
@@ -35,7 +34,6 @@ export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }
             const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${userId}`);
             setUserData(response?.data);
         } catch (error) {
-            console.error("Error fetching user details:", error);
         }
     };
 
@@ -70,7 +68,6 @@ export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }
 
             setShowInvoice(false);
         } catch (error) {
-            console.error("Error generating or downloading zip file:", error);
         }
     };
 
@@ -82,7 +79,6 @@ export default function CustomerInvoice({ userId, invoicesData, setShowInvoice }
             }
             setCurrentInvoiceIndex((prevIndex) => prevIndex + 1);
         } catch (error) {
-            console.error("Error generating PDF:", error);
         }
     };
 

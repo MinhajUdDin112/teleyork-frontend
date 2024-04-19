@@ -86,7 +86,6 @@ const EcheckAuthPayment = ({amount,handleNext,object}) => {
                     setIsLoading(false)  
                 }
                 else {
-                    console.log("error is ", response?.data?.transactionResponse)
                     toast.error(response?.data?.data?.message[0]?.text)
                 }
             } catch (error) {

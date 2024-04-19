@@ -74,7 +74,6 @@ export default function PostpaidActivatedBulkUpload() {
                             create.type = "file";
                             create.onchange = (e) => {
                                 setFileError(false);
-                                console.log(e.target.files[0]);
                                 setButtonLabel(e.target.files[0].name);
                                 setSelectedFile(e.target.files[0]);
                             };

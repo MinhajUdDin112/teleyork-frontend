@@ -39,14 +39,12 @@ const Inventory_Download = () => {
                     inventoryType: inventory,
                     status: status,
                 };
-                console.log("requestData:", requestData);
                 const response = await Axios.post(`${BASE_URL}/api/web/inventoryDownloads/getInventory`, requestData);
-                console.log("response for inventory", response);
+                
                 if (response?.status === 200 || response?.status === 201) {
                     setApiData(response?.data?.simsData);
                 }
             } catch (error) {
-                console.error("Error fetching data:", error?.response?.data);
                 toast.error(error?.response?.data?.error);
             }
         };
@@ -58,9 +56,7 @@ const Inventory_Download = () => {
                 const response = await Axios.get(`${BASE_URL}/api/inventoryType/all?serviceProvider=${userData?.company}`);
                 const data = response?.data?.data;
                 setInventoryTypes(data);
-                console.log("roleData api", data);
             } catch (error) {
-                console.error("Error fetching data:", error);
             }
         };
 
@@ -72,9 +68,7 @@ const Inventory_Download = () => {
                 const response = await Axios.get(`${BASE_URL}/api/billingModel/all?serviceProvider=${userData?.company}`);
                 const data = response?.data?.data;
                 setBillingModel(data);
-                console.log("billing model api", data);
             } catch (error) {
-                console.error("Error fetching data:", error);
             }
         };
         fetchBillingModels(); // Call the function to fetch billing models
@@ -88,7 +82,6 @@ const Inventory_Download = () => {
 
         // Verify ESN numbers after string conversion
         apiDataFormatted.forEach((item) => {
-            console.log(typeof item.esnNumber, item.esnNumber);
         });
 
         const fields = ["billingModel", "InventoryType", "status", "esnNumber"]; // Include "esnNumber" field
@@ -104,12 +97,6 @@ const Inventory_Download = () => {
         link.click();
         document.body.removeChild(link);
     };
-
-    console.log("billing model selected", model);
-    console.log("inventory selected", inventory);
-    console.log("status selected", status);
-    console.log("api data", apiData);
-
     return (
         <>
             <ToastContainer />

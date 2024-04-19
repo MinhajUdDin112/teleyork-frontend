@@ -28,8 +28,7 @@ const ManageVendor = () => {
         setRowData(rowData);
         setUserId(rowData._id);
         localStorage.setItem("editUserData", JSON.stringify(rowData));
-        // console.log("rowData", rowData);
-        // console.log("user id", rowData._id);
+     
         navigate("/Update_vendors");
     };
     const handleUserDelete = async (rowData) => {
@@ -47,7 +46,6 @@ const ManageVendor = () => {
             setAllUsers(updatedUsers);
             toast.success(message);
         } catch (error) {
-            console.error("Error deleting user:", error);
             const errorMessage = error.response ? error.response.data.msg || "Error deleting user" : "Error deleting user";
             toast.error(errorMessage);
         }
@@ -75,7 +73,6 @@ const ManageVendor = () => {
             setAllUsers(usersData);
         } catch (error) {
             // Handle errors
-            console.error("Error fetching data:", error);
             // Display error message to the user
             toast.error(`Error fetching data: ${error.message}`);
         }

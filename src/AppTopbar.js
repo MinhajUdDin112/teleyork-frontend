@@ -93,10 +93,9 @@ export const AppTopbar = (props) => {
         const getCounter = async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
-                console.log("count api response", response?.data);
+              
                 const data = response?.data?.unreadCount;
                 const note = response?.data?.notifications;
-                console.log("note", note);
                 setNotification(note);
                 setCounter(data);
             } catch (error) {
@@ -107,10 +106,9 @@ export const AppTopbar = (props) => {
     }, []);
 
     const handleReadNotification = async (notificationId) => {
-        console.log("notification id", notificationId);
         try {
             const response = await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
-            console.log("mark as read notification", response);
+           
             const res = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
             const { unreadCount, notifications } = res?.data;
             setNotification(notifications);
@@ -119,7 +117,6 @@ export const AppTopbar = (props) => {
             toast(error?.response?.data?.msg);
         }
     };
-    console.log("notification id", notification);
     return (
         <div>
             <ToastContainer />
@@ -212,7 +209,6 @@ export const AppTopbar = (props) => {
                         value={props.searchValue}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                                console.log(props.searchValue);
                                 e.stopPropagation();
                                 if (props.searchValue !== "") {
                                     props.setSearchByValueClick(true);
@@ -222,7 +218,6 @@ export const AppTopbar = (props) => {
                             }
                         }}
                         onClick={(e) => {
-                            console.log(props.searchValue);
                             e.stopPropagation();
                             if (props.searchValue !== "") {
                                 props.setSearchByValueClick(true);
@@ -240,7 +235,7 @@ export const AppTopbar = (props) => {
                             props.setSearchBy(null);
                             props.setSearchByValueClick(true);
                             if (props.searchByValueClick === true) {
-                                console.log(true);
+                      
                                 props.setCallSearchApi((prev) => !prev);
                             }
                         }}

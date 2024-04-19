@@ -63,7 +63,7 @@ const Add_Vendors = ({ updateVendorList }) => {
         },
 
         onSubmit: async (values) => {
-            console.log(values);
+           
             if (!file) {
                 setError("Please select a file.");
                 return;
@@ -81,8 +81,6 @@ const Add_Vendors = ({ updateVendorList }) => {
                 const res = await Axios.post(`${BASE_URL}/api/web/manageVendors/add`, formData);
                 const data = res.data;
                 const message = res?.data?.msg;
-                console.log("message", message);
-                console.log("Response from server:", data);
                 toast.success(message);
                 navigate("/manage-vendors");
 
@@ -93,10 +91,7 @@ const Add_Vendors = ({ updateVendorList }) => {
             }
         },
     });
-
-    console.log(formik.values);
-
-    const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+  const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };

@@ -84,7 +84,6 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
             })
             .catch(() => {});
     }, []);
-    console.log("department is ", department);
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),

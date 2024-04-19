@@ -102,7 +102,6 @@ const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
                     toast.error("Update Invoice error is" + error?.response?.data?.msg);
                 }
             } else {
-                console.log("error is ", response?.data?.data);
                 toast.error(response?.data?.data?.message[0]?.text);
             }
         } catch (error) {
@@ -146,7 +145,6 @@ const DialogeForAuthPayment = ({ userDetails, invoiceId, dueAmount }) => {
                     toast.error("Update Invoice error is" + error?.response?.data?.msg);
                 }
             } else {
-                console.log("error is ", response?.data?.transactionResponse);
                 toast.error(response?.data?.transactionResponse?.errors?.error[0].errorText);
             }
         } catch (error) {
