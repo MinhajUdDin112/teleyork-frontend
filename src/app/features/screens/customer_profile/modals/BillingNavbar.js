@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog }) => {
+import CustomerProfile from "../CustomerProfile";
+const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const [cpData, setCpData] = useState([]);
     const [openDialogeForWallet, setOpenDialogeForWallet] = useState(false);
@@ -17,19 +18,23 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const [assignType, setAssignType] = useState("");
     const [orderIdData, setOrderIdData] = useState("");
     const [refreshComponent, setRefreshComponent] = useState(false);
+    const [refreshComp, setRefreshComp] = useState(false);
     const selectedid = localStorage.getItem("selectedId");
     const parseselectedid = JSON.parse(selectedid);
 
     const navigate = useNavigate();
-    console.log("cpdata is ", cpData?.enrollmentId);
+    useEffect(() => {
+        console.log("status of not comp", refreshNotificationcomponent);
+    }, [refreshNotificationcomponent]);
+    console.log("status of not comp", refreshNotificationcomponent);
     useEffect(() => {
         const data = {
             orderNumber: cpData?.enrollmentId,
         };
+
         const fetchData = async () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/order`, data);
-                console.log("res", response?.data?.data);
                 const res = response?.data?.data;
                 setOrderIdData(res);
             } catch (error) {
@@ -46,9 +51,10 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             setAccountType(res?.data?.data?.accountType);
         } catch (error) {}
     };
+
     useEffect(() => {
         getCustomerProfileData();
-    }, [changeCustomerStatusDialog, refresh, refreshComponent]);
+    }, [changeCustomerStatusDialog, refreshNotificationcomponent, refresh, refreshComponent, refreshComp]);
 
     function openPaymentScreen() {
         navigate("/invoice", { state: { selectedId: parseselectedid } });
@@ -58,7 +64,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     };
     const handleWalletClick = () => {
         setOpenDialogeForWallet(true);
-        console.log("Here");
     };
     var items;
     if (accountType === null) {
@@ -133,7 +138,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             csr: parseLoginRes?._id,
             userId: cpData?._id,
         };
-        console.log("data sending", data);
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/esnAssingment`, data);
             toast.success(response?.data?.msg);
@@ -151,7 +155,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             userId: parseLoginRes?._id,
             testLabel: false,
         };
-        console.log("sending order id is", data);
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, data);
             toast.success(response?.data?.msg);
@@ -172,6 +175,20 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    };
+    const handleConvertToPrepaid = async () => {
+        try {
+            const data = {
+                accountType: "Prepaid",
+            };
+            const response = await Axios.patch(`${BASE_URL}/api/user/changeAccountStatus?userId=${cpData?._id}`, data);
+            setVisible(false);
+            setRefreshComp(true);
+            setRefreshComponent(true);
+            toast.success(response?.data?.message);
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+        }
     };
     return (
         <div className="menubar-styling">
@@ -260,6 +277,28 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 footer={
                     <div style={{ marginLeft: "-10rem" }}>
                         <Button label="Yes" onClick={handleLabel} />
+                        <Button label="No" onClick={() => setVisible(false)} />
+                    </div>
+                }
+            >
+                <p className="m-0">{confirmationMessage}</p>
+            </Dialog>
+            {cpData.accountType === "ACP" && (
+                <Button
+                    label="Convert to Prepaid"
+                    onClick={() => {
+                        setConfirmationMessage("Convert to Prepaid");
+                        setVisible(true);
+                    }}
+                />
+            )}
+            <Dialog
+                visible={visible && cpData.accountType === "ACP"}
+                style={{ width: "30rem" }}
+                onHide={() => setVisible(false)}
+                footer={
+                    <div style={{ marginLeft: "-10rem" }}>
+                        <Button label="Yes" onClick={handleConvertToPrepaid} />
                         <Button label="No" onClick={() => setVisible(false)} />
                     </div>
                 }

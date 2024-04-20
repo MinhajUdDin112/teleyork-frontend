@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const AppTopbar = (props) => {
     const [visibleRight, setVisibleRight] = useState(false);
+    const location = useLocation();
     const [counter, setCounter] = useState("");
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
@@ -93,7 +94,6 @@ export const AppTopbar = (props) => {
         const getCounter = async () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
-              
                 const data = response?.data?.unreadCount;
                 const note = response?.data?.notifications;
                 setNotification(note);
@@ -108,13 +108,22 @@ export const AppTopbar = (props) => {
     const handleReadNotification = async (notificationId) => {
         try {
             const response = await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
-           
+
             const res = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
             const { unreadCount, notifications } = res?.data;
             setNotification(notifications);
             setCounter(unreadCount);
         } catch (error) {
             toast(error?.response?.data?.msg);
+        }
+    };
+    const handleNavigate = (customerId) => {
+        if (customerId !== undefined) {
+            localStorage.setItem("selectedId", JSON.stringify(customerId));
+            navigate("/customer-profile", { state: { selectedId: customerId } });
+            if (location.pathname === "/customer-profile") {
+                props.setRefreshNotificationComponent((prev) => !prev);
+            }
         }
     };
     return (
@@ -176,7 +185,6 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-
                             props.setSearchByValueClick(false);
                         }}
                     >
@@ -235,7 +243,6 @@ export const AppTopbar = (props) => {
                             props.setSearchBy(null);
                             props.setSearchByValueClick(true);
                             if (props.searchByValueClick === true) {
-                      
                                 props.setCallSearchApi((prev) => !prev);
                             }
                         }}
@@ -280,12 +287,24 @@ export const AppTopbar = (props) => {
                             <h3>Notifications</h3>
                             <hr />
                             {notification.map((item, index) => (
-                                <div key={index}>
+                                <div
+                                    key={index}
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => {
+                                        handleNavigate(item?.customerId);
+                                        setVisibleRight(false);
+                                    }}
+                                >
                                     <h5>{item?.sender?.name}</h5>
                                     <p>{item.message}</p>
 
                                     <span style={{ cursor: "pointer" }}>
-                                        <h5 style={{ fontSize: "1rem", marginLeft: "24rem" }} onClick={() => handleReadNotification(item._id)}>
+                                        <h5
+                                            style={{ fontSize: "1rem", marginLeft: "24rem" }}
+                                            onClick={() => {
+                                                handleReadNotification(item?._id);
+                                            }}
+                                        >
                                             {item.read ? "" : "Mark as read"}
                                         </h5>
                                     </span>

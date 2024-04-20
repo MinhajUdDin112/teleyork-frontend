@@ -22,7 +22,7 @@ import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => {
+const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent }) => {
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -132,7 +132,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
     useEffect(() => {
         getCustomerProfileData();
         getNotes();
-    }, []);
+    }, [refreshNotificationcomponent]);
 
     useEffect(() => {
         getCustomerProfileData();
@@ -227,7 +227,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex }) => 
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
+                <BillingNavbar refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} />
                 </Dialog>
