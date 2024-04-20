@@ -35,13 +35,13 @@ export const AppTopbar = (props) => {
         return (
             <div className="flex align-items-center">
                 {option.name === "Payment Search" ? (
-                    <img src="/images/Dashboard-Search/payment-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/payment-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Recent Searches" ? (
-                    <img src="/images/Dashboard-Search/recent-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/recent-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Advance Search" ? (
-                    <img src="/images/Dashboard-Search/advance-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/advance-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : (
-                    <img src="/images/Dashboard-Search/inventory-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/inventory-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 )}
                 <div>{option.name}</div>
             </div>
@@ -107,6 +107,7 @@ export const AppTopbar = (props) => {
 
     const handleReadNotification = async (notificationId) => {
         try {
+            await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
             const response = await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
 
             const res = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);

@@ -11,6 +11,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [isChecked, setIsChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [propectWithInvoice, setProspectWithInvoice] = useState(false);
+    const [propectWithOutInvoice, setProspectWithOutInvoice] = useState(true);
     const [fromIncomplete, setFromIncomplete] = useState(false);
     //get preview  information from local storage
     const previewsRes = localStorage.getItem("prepaidaddress");
@@ -19,49 +21,55 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const zipRes = localStorage.getItem("prepaidzipData");
     //check that user come from incomplete or not
     const fromIncompl = localStorage.getItem("comingfromincomplete");
-
     const parsefromIncompl = JSON.parse(fromIncompl);
-    let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
+    let paymentInfo = JSON.parse(localStorage.getItem("paymentscreendetails"));
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
     };
+
     const postData = async () => {
         setIsLoading(true);
         const dataToSend = {
             csr: csr,
             userId: _id,
         };
-        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend).then(()=>{    
-             Axios.post(`${BASE_URL}/api/user/esnAssingment`,dataToSend).then((res)=>{   
-                toast.success("Esn Successfully Assigned")                         
-            Axios.post(`${BASE_URL}/api/web/order`, { orderNumber:enrollment_id}).then((response)=>{  
-                             
-                toast.success("Order Placed Successfully")           
-                Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId:(response.data.data.orderId).toString(),userId:_id, testLabel: true}).then(()=>{ 
-                  toast.success("Label created Successfully")           
-                    
-            setIsLoading(false); 
-            setShowFinalComponent(true);
-            setFromIncomplete(false);
-            localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
-                }).catch(err=>{ 
-                    toast.error("Label Creation Failed")
-                })  
-              }).catch(err=>{ 
-                  toast.error("Order Displacing Failed")
-              })    }).catch(error=>{  
-                setIsLoading(false)
-                toast.error(error?.response?.data?.msg);
-              })   
-            }).catch((error)=>{ 
+        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
+            .then(() => {
+                Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
+                    .then((res) => {
+                        toast.success("Esn Successfully Assigned");
+
+                        Axios.post(`${BASE_URL}/api/web/order`, { orderNumber: enrollment_id })
+                            .then((response) => {
+                                toast.success("Order Placed Successfully");
+                                Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId: response.data.data.orderId.toString(), userId: _id, testLabel: true })
+                                    .then(() => {
+                                        toast.success("Label created Successfully");
+                                        setIsLoading(false);
+
+                                        setShowFinalComponent(true);
+                                        setFromIncomplete(false);
+                                        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                                    })
+                                    .catch((err) => {
+                                        toast.error("Label Creation Failed");
+                                    });
+                            })
+                            .catch((err) => {
+                                toast.error("Order Placing Failed");
+                            });
+                    })
+                    .catch((error) => {
+                        setIsLoading(false);
+                        toast.error(error?.response?.data?.msg);
+                    });
+            })
+            .catch((error) => {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
-              })   
-      
-       
+            });
     };
-
     useEffect(() => {
         if (!zipRes && parsefromIncompl == false) {
             setIsChecked(true);
@@ -70,55 +78,190 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         }
     }, []);
     let inventory;
-    let productName;
+    let oneTimeCharge;
     let discount = "";
     let additional = "";
+    let discountobjectsendin = [];
+    let additionalobjectsendin = [];
+    let productName;
+    let dueDate;
+    let applyLateFee;
+    let planname;
+    let plancharges;
+    let plandata = JSON.parse(localStorage.getItem("planprices"));
+    for (let i = 0; i < plandata?.length; i++) {
+        if (paymentInfo?.plan === plandata[i]?._id) {
+            planname = plandata[i]?.name;
+            plancharges = plandata[i]?.price;
+            //planId = plandata[i]?._id;
+        }
+    }
     let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
     for (let i = 0; i < inventoryType?.length; i++) {
         if (paymentInfo?.billId === inventoryType[i].value) {
             inventory = inventoryType[i].label;
-
             break;
         }
     }
-    if (inventory === "SIM") { 
-        productName = "SIM"
-        let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
-        let simalladditional = JSON.parse(localStorage.getItem("simadditional"));
-
+    if (inventory === "SIM") {
+        productName = "SIM";
+        let selectdiscount = JSON.parse(localStorage.getItem("simdiscountobjectarray"));
+        let alldiscounts = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
+        applyLateFee = JSON.parse(localStorage.getItem("simpricing"))?.applyLateFee;
+        dueDate = JSON.parse(localStorage.getItem("simpricing"))?.dueDate;
+        oneTimeCharge = JSON.parse(localStorage.getItem("simpricing"))?.oneTimeCharge;
+        let simalladditional = JSON.parse(localStorage.getItem("simpricing"))?.additionalFeature;
         let additionallocal = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
-
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < simalladditional?.length; k++) {
-                if (additionallocal[i] === simalladditional[k].value) {
-                    additional += `${simalladditional[k].name},`;
+                if (additionallocal[i] === simalladditional[k]._id) {
+                    let obj = {
+                        name: simalladditional[k]?.featureName,
+                        amount: simalladditional[k]?.featureAmount,
+                    };
+                    additionalobjectsendin.push(obj);
+                    if (i + 1 === additionallocal?.length) {
+                        additional += `${simalladditional[k].featureName}`;
+                    } else {
+                        additional += `${simalladditional[k].featureName},`;
+                    }
                 }
             }
         }
-        for (let i = 0; i < selecteddiscount?.length; i++) {
-            discount += `${selecteddiscount[i].discountname},`;
+
+        for (let k = 0; k < selectdiscount?.length; k++) {
+            for (let i = 0; i < alldiscounts?.length; i++) {
+                if (selectdiscount[k] === alldiscounts[i]._id) {
+                    let obj = {
+                        name: alldiscounts[i]?.discountname,
+                        amount: alldiscounts[i]?.amount,
+                    };
+                    discountobjectsendin.push(obj);
+                    if (k + 1 === selectdiscount?.length) {
+                        discount += `${alldiscounts[i].discountname}`;
+                    } else {
+                        discount += `${alldiscounts[i].discountname},`;
+                    }
+                }
+            }
         }
-    } else if (inventory === "WIRELESS DEVICE") {   
-        productName = "WIRELESS DEVICE"
-        let selecteddiscount = JSON.parse(localStorage.getItem("devicepricing"))?.selectdiscount;
-        let devicealladditional = JSON.parse(localStorage.getItem("deviceadditional"));
+    } else if (inventory === "WIRELESS DEVICE") {
+        productName = "WIRELESS DEVICE";
+        let selectdiscount = JSON.parse(localStorage.getItem("devicediscountobjectarray"));
+        let alldiscounts = JSON.parse(localStorage.getItem("devicepricing"))?.selectdiscount;
+        oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing"))?.oneTimeCharge;
+        applyLateFee = JSON.parse(localStorage.getItem("devicepricing"))?.applyLateFee;
+        dueDate = JSON.parse(localStorage.getItem("devicepricing"))?.dueDate;
+        let devicealladditional = JSON.parse(localStorage.getItem("devicepricing"))?.additionalFeature;
         let additionallocal = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"));
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < devicealladditional?.length; k++) {
-                if (additionallocal[i] === devicealladditional[k].value) {
-                    additional += `${devicealladditional[k].name}`;
+                if (additionallocal[i] === devicealladditional[k]._id) {
+                    let obj = {
+                        name: devicealladditional[k]?.featureName,
+                        amount: devicealladditional[k]?.featureAmount,
+                    };
+                    additionalobjectsendin.push(obj);
+                    if (i + 1 === additionallocal?.length) {
+                        additional += `${devicealladditional[k].featureName}`;
+                    } else {
+                        additional += `${devicealladditional[k].featureName},`;
+                    }
                 }
             }
         }
-        for (let i = 0; i < selecteddiscount?.length; i++) {
-            discount += `${selecteddiscount[i].discountname},`;
+        for (let k = 0; k < selectdiscount?.length; k++) {
+            for (let i = 0; i < alldiscounts?.length; i++) {
+                if (selectdiscount[k] === alldiscounts[i]._id) {
+                    let obj = {
+                        name: alldiscounts[i]?.discountname,
+                        amount: alldiscounts[i]?.amount,
+                    };
+                    discountobjectsendin.push(obj);
+                    if (k + 1 === selectdiscount?.length) {
+                        discount += `${alldiscounts[i].discountname}`;
+                    } else {
+                        discount += `${alldiscounts[i].discountname},`;
+                    }
+                }
+            }
         }
     }
 
     const handleSign = () => {
         setChecked(true);
-    };   
-    
+    };
+    const postDataWithinvoice = () => {
+        setIsLoading(true);
+        const dataToSend = {
+            csr: csr,
+            userId: _id,
+        };
+     
+        
+        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
+            .then(() => {
+                   
+                let dataToSend = {
+
+                    customerId: paymentInfo.customerid,
+                    invoiceType: "Sign Up",
+                    totalAmount: paymentInfo.totalamount,
+                    additionalCharges: additionalobjectsendin,
+                    discount:discountobjectsendin,
+                    amountPaid:0, 
+                    selectProduct:paymentInfo.billId,
+                    invoiceDueDate: dueDate,
+                    lateFee: applyLateFee,
+                    invoiceOneTimeCharges: oneTimeCharge,
+                    invoiceStatus: "Unpaid",
+                    planId: paymentInfo?.plan,
+                    planName: planname,
+                    planCharges: plancharges,
+                    chargingType: "monthly",
+                    invoicePaymentMethod: "Credit/Debit Card",
+                    printSetting: "Both", 
+                    isInvoice:propectWithInvoice ? true : false,
+                    billingPeriod: {
+                        from: "onActivation",
+                        to: "onActivation",
+                    },
+                };   
+                const loginRes = localStorage.getItem("userData");
+                const parseLoginRes = JSON.parse(loginRes);
+                const data = {
+                    serviceProvider: parseLoginRes?.company,
+                    userId: parseLoginRes?._id,
+                    customerId: paymentInfo?.customerid,
+                    noteType: "Sign Up Plan Activation",
+                    note: "Sign Up Plan  Activated Successfully",
+                    priority: "highest",
+                };                      
+                                Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend)
+                   .then(() => {    
+                    Axios.post(`${BASE_URL}/api/web/notes/`, data)
+                    .then(() => {
+                        toast.current.show({ severity: "success", summary: "Sign Up Plan Note", detail: "Customer Plan Is Successfully Activated" });
+
+                        setActiveIndex(3);
+                    })
+                    .catch((err) => {});
+                                       // toast.success("Label created Successfully");
+                                        setIsLoading(false); 
+                                        setShowFinalComponent(true);
+                                        setFromIncomplete(false);
+                                        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                                      
+                                    })
+                            
+                
+                   
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
+            });    
+    };
     return (
         <>
             <ToastContainer />
@@ -135,7 +278,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 }
                             }}
                         />
-                        <Button label="Submit" onClick={postData} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
                     </div>
                     <br></br>
 
@@ -144,6 +287,33 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                         </div>
 
+                        {localStorage.getItem("paymentstatus") ? (
+                            ""
+                        ) : (
+                            <div className="flex w-full flex-wrap flex-row justify-content-left ">
+                                <p
+                                    className={`prospectbutton ${propectWithInvoice ? "prospectactive" : ""}`}
+                                    onClick={() => {
+                                        setProspectWithInvoice(true);
+                                        setProspectWithOutInvoice(false);
+                                    }}
+                                >
+                                    {" "}
+                                    Save As Prospect With Invoice
+                                </p>
+
+                                <p
+                                    onClick={() => {
+                                        setProspectWithOutInvoice(true);
+                                        setProspectWithInvoice(false);
+                                    }}
+                                    className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""}`}
+                                >
+                                    {" "}
+                                    Save As Prospect WithOut Invoice
+                                </p>
+                            </div>
+                        )}
                         <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                         <br />
 
@@ -172,22 +342,12 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Discounts:</p>
-                                    <p className="w-6">
-                                        {" "}
-                                        {paymentInfo?.discount.map((item,index) => (
-                                         
-                                                <p className="inline"> 
-
-                                                    {item.name}{index+1 !== (paymentInfo?.discount).length ? ",":undefined}
-                                                </p>
-                                          
-                                        ))}
-                                    </p>
+                                    <p className="w-6"> {discount}</p>
                                 </div>
 
                                 <div className="flex  border-bottom-2  pt-2">
                                     <p className="w-6 ml-4">One Time Charges: </p>
-                                    <p className="w-6">${paymentInfo?.invoiceOneTimeCharges}</p>
+                                    <p className="w-6">${oneTimeCharge}</p>
                                 </div>
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Inventory: </p>
@@ -207,7 +367,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <p className="w-6 ml-4">Zip Code:</p>
                                     <p className="w-6">{previewInfo?.zip}</p>
                                 </div>
-
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">SSN:</p>
                                     <p className="w-6">{previewInfo?.SSN}</p>
@@ -218,11 +377,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Plan:</p>
-                                    <p className="w-6">{paymentInfo?.planName}</p>
+                                    <p className="w-6">{planname}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Plan Charges: </p>
-                                    <p className="w-6">${paymentInfo?.planCharges}</p>
+                                    <p className="w-6">${plancharges}</p>
                                 </div>
 
                                 {/*  <div className="flex border-bottom-2 pt-2">
@@ -232,13 +391,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Additional Feature:</p>
                                     <p className="w-6">
-                                        {paymentInfo?.additionalCharges.map((item,index) => (
-                                            <div>
-                                                <p className="inline">
-                                                    {item.name}{index+1 !== (paymentInfo?.discount).length ? ",":undefined}
-                                                </p>
-                                            </div>
-                                        ))}
+                                        <div>
+                                            <p className="inline">{additional}</p>
+                                        </div>
                                     </p>
                                 </div>
                             </div>
