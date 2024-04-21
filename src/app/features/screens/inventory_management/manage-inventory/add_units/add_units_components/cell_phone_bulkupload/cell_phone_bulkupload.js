@@ -97,38 +97,6 @@ export default function CellPhoneBulkUpload({permissions,unit,model}) {
             handlesubmit(actions);
         },
     });
-    function ApiResponseShow({res}){   
-        
-        return( 
-           <div className="flex flex-wrap justify-content-left"> 
-               <p>{res.msg}</p>  
-               <div >
-                <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
-                  <ul className="m-0 list-none"> 
-                       { 
-                          res.data.data.duplicateNumbers.map(item=>( 
-                           <li>{item}</li>
-                          ))
-                       }
-                  </ul>      
-                   </div>
-                  <div className="mt-3">
-                  <p >    
-                  Sim Numbers Added: {res.data.data.newSimNumbers.length}  
-                   
-                   </p> 
-                   <ul className=" m-0 list-none"> 
-                       { 
-                          res.data.data.newSimNumbers.map(item=>( 
-                           <li >{item}</li>
-                          ))
-                       }
-                  </ul>     
-                   </div>
-                   
-           </div>
-        )
-        } 
         function ApiResponseShow({res}){   
         
             return( 

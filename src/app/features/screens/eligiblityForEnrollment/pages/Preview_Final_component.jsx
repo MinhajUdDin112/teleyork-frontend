@@ -5,7 +5,6 @@ const Preview_Final_component = ({ enrollment_id }) => {
     const navigate = useNavigate();
 
     const zipRes = localStorage.getItem("zipData");
-    const basicRes = localStorage.getItem("basicData");
 
     const movePage = () => {
         navigate("/newenrolment");
