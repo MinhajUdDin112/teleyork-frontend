@@ -22,7 +22,7 @@ import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const CustomerProfile = ({ refreshEsn, setRefreshEsn, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent }) => {
+const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent }) => {
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -101,6 +101,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setActiveTab, activeTab, c
                 toast.error("Error is " + error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
+            setRefreshBell((prev) => !prev);
         },
     });
     const getCustomerProfileData = async () => {
