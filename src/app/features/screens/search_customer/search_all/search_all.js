@@ -19,7 +19,6 @@ export default function Searchall({ searchValue, callSearchApi, setSearchBy, set
     };
     const data = localStorage.getItem("permissions");
     const parseData = JSON.parse(data);
-    console.log("Parseee", parseData);
     useEffect(() => {
         const data = {
             permissions: parseData,

@@ -24,14 +24,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
 
     const navigate = useNavigate();
     useEffect(() => {
-        console.log("status of not comp", refreshNotificationcomponent);
-    }, [refreshNotificationcomponent]);
-    console.log("status of not comp", refreshNotificationcomponent);
-    useEffect(() => {
         const data = {
             orderNumber: cpData?.enrollmentId,
         };
-
         const fetchData = async () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/order`, data);

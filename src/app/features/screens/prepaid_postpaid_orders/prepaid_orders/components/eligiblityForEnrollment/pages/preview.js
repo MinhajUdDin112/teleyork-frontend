@@ -287,7 +287,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                         </div>
 
-                        {localStorage.getItem("paymentstatus") ? (
+                        {
+                        localStorage.getItem("paymentstatus") ? (
                             ""
                         ) : (
                             <div className="flex w-full flex-wrap flex-row justify-content-left ">

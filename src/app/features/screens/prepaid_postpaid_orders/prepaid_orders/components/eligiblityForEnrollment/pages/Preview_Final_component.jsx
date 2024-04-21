@@ -5,7 +5,6 @@ const Preview_Final_component = ({ enrollment_id }) => {
     const navigate = useNavigate();
 
     const zipRes = localStorage.getItem("prepaidzipData");
-    const basicRes = localStorage.getItem("prepaidbasicData");
     const movePage = () => {
         navigate("/");
         localStorage.removeItem("prepaidbasicData");
@@ -54,7 +53,9 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("planprices");  
         localStorage.removeItem("devicePaymentMethod");    
         localStorage.removeItem("product")     
-        localStorage.removeItem("paymentscreendetails") 
+        localStorage.removeItem("paymentscreendetails")     
+        localStorage.removeItem("datasendforinvoice")  
+         localStorage.removeItem("invoiceData")
 
     };
     const movepageToAll = () => { 
@@ -102,7 +103,9 @@ const Preview_Final_component = ({ enrollment_id }) => {
          
         localStorage.removeItem("simdiscount");  
         localStorage.removeItem("planprices");  
-        localStorage.removeItem("devicePaymentMethod");   
+        localStorage.removeItem("devicePaymentMethod");  
+        localStorage.removeItem("datasendforinvoice")  
+         localStorage.removeItem("invoiceData")  
         navigate("/prepaid-allenrollment");
         
     };

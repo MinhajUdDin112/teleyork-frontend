@@ -42,7 +42,6 @@ const DialogeForInfoEdit = ({ cpData, setRefresh, setIsEdit }) => {
     ];
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isDuplicate, setIsDuplicate] = useState(false);
     const [dayerror, setDayError] = useState(false);
     const [montherror, setMonthError] = useState(false);
     const [yearerror, setYearError] = useState(false);

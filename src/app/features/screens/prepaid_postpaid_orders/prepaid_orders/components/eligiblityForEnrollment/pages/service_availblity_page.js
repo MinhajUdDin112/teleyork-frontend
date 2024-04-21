@@ -177,12 +177,39 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                               </div> 
                               :""
                             }          
-                             <Dialog  header="Proceeding Confirmation"  visible={ pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending" &&  !pwgApiCheckFound && !pwgDbCheckFound && !uspsCheckFound} >  
-                                 <p>Still  Want To Proceed</p> 
-                                   <div className="mt-2">   
-                                        <Button label="Yes" onClick={()=>{ setZipVerified(true)}}/> 
-                                         <Button label="No" className="ml-4" onClick={()=>{ setZipVerified(true)}}/>
-                                   </div>
+                             <Dialog  header="Proceeding Confirmation" style={{width:"50vw"}}  visible={ pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending" &&  !pwgApiCheckFound && !pwgDbCheckFound && !uspsCheckFound} >  
+                                
+                                   <p className="text-center">Still  Want To Proceed</p> 
+                                   <div className="mt-4 flex flex-wrap flex-row justify-content-center">   
+                                        <Button label="Yes" onClick={()=>{   
+                                                const serviceProvider = parseLoginRes?.company;
+                                                const department = parseLoginRes?.department;
+                                                const csr = parseLoginRes?._id;
+                                                const carrier = "6455532566d6fad6eac59e34";
+                                                const dataToSend = { serviceProvider, csr, department, carrier, ...formik.values ,accountType:"Prepaid"};   
+                                              
+                                               Axios.post(`${BASE_URL}/api/user/withoutzip`,dataToSend).then((res)=>{ 
+                                                 
+                                                 localStorage.setItem("prepaidzipData", JSON.stringify(res.data))   
+                                                  localStorage.setItem("zipnotverify","yes")
+                                                 setZipVerified(true)
+                                                 }).catch(err=>{ 
+                                                  
+                                                 }) 
+                                                 
+                                             }}/> 
+                                         <Button label="No" className="ml-4" onClick={()=>{ 
+                                            setShowCheckCoverage(false)  
+                                            setIsLoading(false)
+                                               setPwgApiCheck("pending") 
+                                               setPwgApiCheckFound(true)   
+                                               setPwgDbCheck("pending") 
+                                               setPwgDbCheckFound(true) 
+                                               setUspsCheck("pending") 
+                                               setUspsCheckFound(true)
+                                               }}/>
+                                   </div> 
+                                    
                               </Dialog> 
                     </form>
                 </div>

@@ -18,7 +18,7 @@ export default function EnrollmentFlowPage() {
     
         Axios.get(`${BASE_URL}/api/web/billing/getall`)
             .then((response) => {
-              
+     
                 let inventoryType = []; 
                 for (let i = 0; i < response?.data?.data?.length; i++) {
                     let plans = [];

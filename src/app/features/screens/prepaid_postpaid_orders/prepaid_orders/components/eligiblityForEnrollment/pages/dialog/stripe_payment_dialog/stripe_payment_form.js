@@ -2,16 +2,24 @@ import React, { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import "./style/stripe_payment_form.css";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import Axios from "axios"; 
+import Axios from "axios";
+import { InputSwitch } from "primereact/inputswitch";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import AlternateCardPaymentStripModule from "./alternatecardautopay/stripe_payment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripeForm({ plan,clientSecret,paid, object, setActiveIndex, setPaymentDialogVisibility }) { 
-    const submitbuttonref=useRef(null)
+export default function PaymentStripeForm({ plan, clientSecret, paid, object, setActiveIndex, setPaymentDialogVisibility }) {
+    const submitbuttonref = useRef(null);
+    const [alternatecardid, setalternatecardid] = useState();
+    const [alternateCardDetailVisibility, setAlternateCardDetailVisibility] = useState(false);
+    const [autoPay, setAutoPay] = useState(true);
     const stripe = useStripe();
     const [disableSubmit, setDisableSubmit] = useState(false);
     const toast = useRef(null);
     const elements = useElements();
-    const handleSubmit = async (event) => { 
-         submitbuttonref.current.style.opacity="0.5"
+
+    const handleSubmit = async (event) => {
+        submitbuttonref.current.style.opacity = "0.5";
         setDisableSubmit(true);
         event.preventDefault();
 
@@ -25,20 +33,19 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
         });
 
         if (error) {
-            localStorage.setItem("paymentstatus", "pending");  
-            
-         submitbuttonref.current.style.opacity="1"
+            localStorage.setItem("paymentstatus", "pending");
+
+            submitbuttonref.current.style.opacity = "1";
             setDisableSubmit(false);
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
         } else {
-          
             localStorage.setItem("paymentstatus", "paid");
 
             localStorage.setItem("stripeId", paymentIntent.id);
-          
+
             //setActiveIndex(3);
             let paymentproceed = localStorage.getItem("paymentstatus");
-          
+
             if (paymentproceed === "paid") {
                 let additionalFeature = [];
                 let discounts = [];
@@ -55,20 +62,20 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                     dueDate = simpricing?.dueDate;
                     oneTimeCharge = simpricing?.oneTimeCharge;
                     applyLateFee = simpricing?.applyLateFee;
-                    let simselecteddiscounts=JSON.parse(localStorage.getItem("simdiscountobjectarray"));  
-                     
-                    for (let i = 0; i < simpricing?.selectdiscount?.length; i++) { 
-                         for(let k=0;k<simselecteddiscounts.length;k++){   
-                              if(simselecteddiscounts[k] === simpricing?.selectdiscount[i]?._id){
-                        let obj = {
-                            name: simpricing?.selectdiscount[i]?.discountname,
-                            amount: simpricing?.selectdiscount[i]?.amount,
-                        };
-                        discounts.push(obj);     
-                    } 
+                    let simselecteddiscounts = JSON.parse(localStorage.getItem("simdiscountobjectarray"));
+
+                    for (let i = 0; i < simpricing?.selectdiscount?.length; i++) {
+                        for (let k = 0; k < simselecteddiscounts.length; k++) {
+                            if (simselecteddiscounts[k] === simpricing?.selectdiscount[i]?._id) {
+                                let obj = {
+                                    name: simpricing?.selectdiscount[i]?.discountname,
+                                    amount: simpricing?.selectdiscount[i]?.amount,
+                                };
+                                discounts.push(obj);
+                            }
+                        }
                     }
-                    }  
-                    let plandata=JSON.parse(localStorage.getItem("planprices"))  
+                    let plandata = JSON.parse(localStorage.getItem("planprices"));
                     for (let i = 0; i < plandata?.length; i++) {
                         if (object.plan === plandata[i]?._id) {
                             planName = plandata[i]?.name;
@@ -77,7 +84,7 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                             planId = plandata[i]?._id;
                         }
                     }
-                   
+
                     let simadditional = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
                     for (let k = 0; k < simadditional?.length; k++) {
                         for (let i = 0; i < simpricing?.additionalFeature?.length; i++) {
@@ -90,23 +97,23 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                             }
                         }
                     }
-                } else { 
-                     let plandata=JSON.parse(localStorage.getItem("planprices"))
+                } else {
+                    let plandata = JSON.parse(localStorage.getItem("planprices"));
                     dueDate = devicepricing?.dueDate;
                     applyLateFee = devicepricing?.applyLateFee;
-                    oneTimeCharge = devicepricing?.oneTimeCharge;        
-                    let deviceselecteddiscounts=JSON.parse(localStorage.getItem("devicediscountobjectarray"));  
-                     
-                    for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) { 
-                         for(let k=0;k<deviceselecteddiscounts.length;k++){   
-                              if(deviceselecteddiscounts[k] === devicepricing?.selectdiscount[i]?._id){
-                        let obj = {
-                            name: devicepricing?.selectdiscount[i]?.discountname,
-                            amount: devicepricing?.selectdiscount[i]?.amount,
-                        };
-                        discounts.push(obj);     
-                    } 
-                    }
+                    oneTimeCharge = devicepricing?.oneTimeCharge;
+                    let deviceselecteddiscounts = JSON.parse(localStorage.getItem("devicediscountobjectarray"));
+
+                    for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) {
+                        for (let k = 0; k < deviceselecteddiscounts.length; k++) {
+                            if (deviceselecteddiscounts[k] === devicepricing?.selectdiscount[i]?._id) {
+                                let obj = {
+                                    name: devicepricing?.selectdiscount[i]?.discountname,
+                                    amount: devicepricing?.selectdiscount[i]?.amount,
+                                };
+                                discounts.push(obj);
+                            }
+                        }
                     }
                     for (let i = 0; i < plandata?.length; i++) {
                         if (object.plan === plandata[i]?._id) {
@@ -129,35 +136,44 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
                         }
                     }
                 }
-                let plan = object?.plan;  
-                // let dateincasepart  
+                let plan = object?.plan;
+                // let dateincasepart
                 //object.totalAmount === paid ? dueDate:"Partial"
                 let dataToSend = {
                     paymentId: paymentIntent.id,
+                    isAutopay: autoPay,
+
                     customerId: object.customerid,
                     invoiceType: "Sign Up",
                     totalAmount: object.totalamount,
                     additionalCharges: additionalFeature,
                     discount: discounts,
-                    amountPaid: paid, 
-                    selectProduct:object?.billId,
+                    amountPaid: paid,
+                    selectProduct: object?.billId,
                     invoiceDueDate: dueDate,
                     lateFee: applyLateFee,
                     invoiceOneTimeCharges: oneTimeCharge,
-                    invoiceStatus: object.totalAmount === paid ? "Paid":"Partial",
+                    invoiceStatus: object.totalAmount === paid ? "Paid" : "Partial",
                     planId: plan,
                     planName: planName,
                     planCharges: planCharges,
                     chargingType: "monthly",
                     invoicePaymentMethod: "Credit/Debit Card",
-                    printSetting: "Both", 
-                    isInvoice:true,
+                    printSetting: "Both",
+                    isInvoice: true,
                     billingPeriod: {
                         from: "onActivation",
                         to: "onActivation",
                     },
                 };
-                localStorage.setItem("datasendforinvoice",JSON.stringify(dataToSend))
+                if (autoPay) {
+                    if (alternatecardid !== "") {
+                        dataToSend.autopayId = alternatecardid;
+                    } else {
+                        dataToSend.autopayId = paymentIntent.id;
+                    }
+                }
+                localStorage.setItem("datasendforinvoice", JSON.stringify(dataToSend));
                 Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend)
                     .then((response) => {
                         localStorage.setItem("paymentallinfo", JSON.stringify(response.data));
@@ -205,12 +221,45 @@ export default function PaymentStripeForm({ plan,clientSecret,paid, object, setA
     return (
         <>
             <Toast ref={toast} />
+            <div className="flex w-full flex-wrap flex-row mb-4 p-2 justify-content-left ">
+                <div>
+                    <div className=" p-2 flex flex-wrap flex-row justify-left">
+                        <InputSwitch
+                            checked={autoPay}
+                            onChange={(e) => {
+                                setAutoPay((prev) => !prev);
+                            }}
+                        />
+                        <p className="ml-2"> Auto Pay</p>
+                    </div>
+                </div>
+                {autoPay ? (
+                    <Button
+                        label="Alternate Card For Auto Pay"
+                        onClick={() => {
+                            setAlternateCardDetailVisibility(true);
+                        }}
+                        className="ml-4"
+                    />
+                ) : undefined}
+            </div>
+
             <form onSubmit={handleSubmit}>
                 <CardElement options={cardElementOptions} />
-                <button style={{color:"white"}} ref={submitbuttonref} disabled={disableSubmit} className="submit-button">
+                <button style={{ color: "white" }} ref={submitbuttonref} disabled={disableSubmit} className="submit-button">
                     Submit
                 </button>
             </form>
+            <Dialog
+                header="Alternate Card Details"
+                visible={alternateCardDetailVisibility}
+                style={{ width: "50vw" }}
+                onHide={() => {
+                    setAlternateCardDetailVisibility(false);
+                }}
+            >
+                <AlternateCardPaymentStripModule setalternatecardid={setalternatecardid} setAlternateCardDetailVisibility={setAlternateCardDetailVisibility} />
+            </Dialog>
         </>
     );
 }

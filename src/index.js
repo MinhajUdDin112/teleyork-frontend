@@ -66,7 +66,8 @@ function cleanLocalStorage() {
     localStorage.removeItem("product")     
     localStorage.removeItem("paymentscreendetails") 
      
-     
+    localStorage.removeItem("datasendforinvoice")  
+    localStorage.removeItem("invoiceData")
 
      
        
