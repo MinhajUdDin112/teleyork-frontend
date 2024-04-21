@@ -104,7 +104,7 @@ export const AppTopbar = (props) => {
             }
         };
         getCounter();
-    }, []);
+    }, [props.refreshBell]);
 
     const handleReadNotification = async (notificationId) => {
         try {
@@ -173,7 +173,6 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-
                             props.setSearchByValueClick(false);
                         }}
                     >
