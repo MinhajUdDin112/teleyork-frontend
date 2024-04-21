@@ -151,6 +151,7 @@ const App = () => {
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const [permittedRoutes, setPermittedRoutes] = useState([]);
     const [refreshNotificationcomponent, setRefreshNotificationComponent] = useState(false);
+    const [refreshEsn, setRefreshEsn] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();
@@ -479,7 +480,13 @@ const App = () => {
                                                 <Route
                                                     exact
                                                     path="/customer-profile"
-                                                    element={isPermitted("/customer-profile") ? <CustomerProfile activeTab={activeTab} customerServicesIndex={customerServicesIndex} setActiveTab={setActiveTab} refreshNotificationcomponent={refreshNotificationcomponent} /> : <Dashboard />}
+                                                    element={
+                                                        isPermitted("/customer-profile") ? (
+                                                            <CustomerProfile activeTab={activeTab} customerServicesIndex={customerServicesIndex} setActiveTab={setActiveTab} refreshNotificationcomponent={refreshNotificationcomponent} refreshEsn={refreshEsn} setRefreshEsn={setRefreshEsn} />
+                                                        ) : (
+                                                            <Dashboard />
+                                                        )
+                                                    }
                                                 />
                                             ) : (
                                                 <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />

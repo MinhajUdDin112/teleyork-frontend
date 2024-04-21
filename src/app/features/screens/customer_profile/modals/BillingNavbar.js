@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-import CustomerProfile from "../CustomerProfile";
-const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent }) => {
+const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent, setRefreshEsn }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const [cpData, setCpData] = useState([]);
     const [openDialogeForWallet, setOpenDialogeForWallet] = useState(false);
@@ -23,9 +22,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const parseselectedid = JSON.parse(selectedid);
 
     const navigate = useNavigate();
-    useEffect(() => {
-        console.log("status of not comp", refreshNotificationcomponent);
-    }, [refreshNotificationcomponent]);
+
     console.log("status of not comp", refreshNotificationcomponent);
     useEffect(() => {
         const data = {
@@ -141,6 +138,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/esnAssingment`, data);
             toast.success(response?.data?.msg);
+            setRefreshEsn((prev) => !prev);
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
