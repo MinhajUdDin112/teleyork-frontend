@@ -22,7 +22,7 @@ import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent }) => {
+const CustomerProfile = ({ refreshEsn, setRefreshEsn, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent }) => {
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -36,7 +36,6 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex, refre
     const [isContact, setisContact] = useState();
     const [isShow, setIsShow] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [department, setDepartment] = useState(null);
     const [agents, setAgents] = useState([]);
     const location = useLocation();
 
@@ -132,7 +131,7 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex, refre
     useEffect(() => {
         getCustomerProfileData();
         getNotes();
-    }, [refreshNotificationcomponent]);
+    }, [refreshNotificationcomponent, refreshEsn]);
 
     useEffect(() => {
         getCustomerProfileData();
@@ -219,15 +218,17 @@ const CustomerProfile = ({ setActiveTab, activeTab, customerServicesIndex, refre
                 toast.error(error?.response?.data?.msg);
             }
         };
+
         fetchUser();
     }, []);
+
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
     return (
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
+                <BillingNavbar refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} setRefreshEsn={setRefreshEsn} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} />
                 </Dialog>
