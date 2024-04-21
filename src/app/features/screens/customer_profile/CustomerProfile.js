@@ -37,6 +37,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [isShow, setIsShow] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [agents, setAgents] = useState([]);
+    const [refreshNotes, setRefreshNotes] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
@@ -104,6 +105,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             setRefreshBell((prev) => !prev);
         },
     });
+
     const getCustomerProfileData = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
@@ -139,7 +141,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     }, [refresh]);
     useEffect(() => {
         getNotesType();
-    }, [newNoteTypeAdded]);
+    }, [newNoteTypeAdded, refreshNotes]);
 
     const handleDialogeForAddType = () => {
         setAddNewType(true);
@@ -231,7 +233,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             <div className="p-0 customer-profile">
                 <BillingNavbar refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} setRefreshEsn={setRefreshEsn} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
-                    <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} />
+                    <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} setRefreshNotes={setRefreshNotes} />
                 </Dialog>
 
                 <Dialog draggable={false} visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
