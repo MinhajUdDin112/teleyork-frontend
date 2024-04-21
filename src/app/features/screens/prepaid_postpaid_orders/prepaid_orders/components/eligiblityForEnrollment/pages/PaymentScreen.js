@@ -82,7 +82,9 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 localStorage.setItem("paymentscreendetails",JSON.stringify(formik.values))
                setActiveIndex(3)
              } 
-             else{ 
+             else{   
+                
+                localStorage.setItem("paymentscreendetails",JSON.stringify(formik.values))
             if (localStorage.getItem("paymentstatus")) {
                 if (localStorage.getItem("paymentstatus") === "paid") {
                     setActiveIndex(3);

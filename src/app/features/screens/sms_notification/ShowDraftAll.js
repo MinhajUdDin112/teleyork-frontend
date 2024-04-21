@@ -10,39 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDraftByTemplateIdAction, submitTemplateAction } from "../../../store/notification/NotificationAction";
 import Axios from "axios";
 const BASE_URL=process.env.REACT_APP_BASE_URL
-const ShowDraftAll = () => {      
-    const location = useLocation();
-    const currentPath = location?.pathname  
-    const actionBasedChecks = () => {
-
-        const loginPerms = localStorage.getItem("permissions")
-        const parsedLoginPerms = JSON.parse(loginPerms)
-    
-        const isCreate = parsedLoginPerms.some((node) =>
-          node?.subModule.some((subNode) =>
-            subNode?.route === currentPath && subNode?.actions.some((action) =>
-              action?.name === "create"
-            )
-          )
-        );
-        setIsCreate(isCreate)
-    
-        const isManage = parsedLoginPerms.some((node) =>
-          node?.subModule.some((subNode) =>
-            subNode?.route === currentPath && subNode?.actions.some((action) =>
-              action?.name === "manage"
-            )
-          )
-        );
-        setIsManage(isManage)
-    
-      }; 
-      const [isManage,setIsManage]=useState(null)  
-      const [isCreate,setIsCreate]=useState(null) 
-    
-     useEffect(()=>{ 
-       actionBasedChecks()
-     },[])  
+const ShowDraftAll = () => {       
     let toast=useRef(null) 
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
@@ -52,14 +20,9 @@ const ShowDraftAll = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { getDraftByTemplateId, submitTemplate } = useSelector((state) => state.notification);     
+    const {  submitTemplate } = useSelector((state) => state.notification);     
      let loadingSend=useSelector(state=>state.notification.submitTemplateLoading)     
-     let submitTemplateError=useSelector(state=>state.notification.submitTemplateError)       
-    
-  
-    const { loginData } = useSelector((state) => state.login);
-
-    // Get id  from login response
+   // Get id  from login response
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
 

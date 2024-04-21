@@ -21,7 +21,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const parseselectedid = JSON.parse(selectedid);
 
     const navigate = useNavigate();
-    console.log("cpdata is ", cpData?.enrollmentId);
     useEffect(() => {
         const data = {
             orderNumber: cpData?.enrollmentId,
@@ -29,7 +28,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
         const fetchData = async () => {
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/order`, data);
-                console.log("res", response?.data?.data);
                 const res = response?.data?.data;
                 setOrderIdData(res);
             } catch (error) {
@@ -58,7 +56,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     };
     const handleWalletClick = () => {
         setOpenDialogeForWallet(true);
-        console.log("Here");
     };
     var items;
     if (accountType === null) {
@@ -133,7 +130,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             csr: parseLoginRes?._id,
             userId: cpData?._id,
         };
-        console.log("data sending", data);
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/esnAssingment`, data);
             toast.success(response?.data?.msg);
@@ -151,7 +147,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             userId: parseLoginRes?._id,
             testLabel: false,
         };
-        console.log("sending order id is", data);
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/order/createLable`, data);
             toast.success(response?.data?.msg);

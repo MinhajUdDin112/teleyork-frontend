@@ -37,15 +37,15 @@ export default function PaymentStripeForm({paid, amount,clientSecret,object,hand
         } else {   
             let additionalFeature = [];
             let discounts = [];
-
+             let dueDate; 
+             let oneTimeCharge; 
+             let planName; 
+             let applyLateFee; 
+             let planCharges;  
+             let planId;  
+              
             let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));
             let simpricing = JSON.parse(localStorage.getItem("simpricing"));
-            let dueDate = "";
-            let applyLateFee = "";
-            let oneTimeCharge = "";
-            let planName = "";
-            let planId = "";
-            let planCharges = "";
             if (object?.billId === simpricing?._id) {
                 dueDate = simpricing?.dueDate;
                 oneTimeCharge = simpricing?.oneTimeCharge;
