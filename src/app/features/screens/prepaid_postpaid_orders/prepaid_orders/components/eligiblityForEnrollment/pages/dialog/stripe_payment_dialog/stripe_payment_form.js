@@ -9,7 +9,12 @@ import { Dialog } from "primereact/dialog";
 import AlternateCardPaymentStripModule from "./alternatecardautopay/stripe_payment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function PaymentStripeForm({ plan, clientSecret, paid, object, setActiveIndex, setPaymentDialogVisibility }) {
-    const submitbuttonref = useRef(null);
+    const submitbuttonref = useRef(null); 
+    const [cardNumber,setCardNumber]=useState("") 
+    const [cvcNumber,setCvcNumber]=useState("") 
+    const [cardMonth,setCardMonth]=("")  
+    const [cardYear,setCardYear]=useState("")
+    const [autoPayDate,setAutoPayDate]=useState("")
     const [alternatecardid, setalternatecardid] = useState();
     const [alternateCardDetailVisibility, setAlternateCardDetailVisibility] = useState(false);
     const [autoPay, setAutoPay] = useState(true);
@@ -18,14 +23,16 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
     const toast = useRef(null);
     const elements = useElements();
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event) => { 
+      
         submitbuttonref.current.style.opacity = "0.5";
         setDisableSubmit(true);
         event.preventDefault();
 
         if (!stripe || !elements) {
             return;
-        }
+        }      
+     
         const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: elements.getElement(CardElement),
@@ -167,10 +174,15 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
                     },
                 };
                 if (autoPay) {
-                    if (alternatecardid !== "") {
-                        dataToSend.autopayId = alternatecardid;
-                    } else {
-                        dataToSend.autopayId = paymentIntent.id;
+                    if(cardNumber !== ""){ 
+                    dataToSend.cardNumber=cardNumber; 
+                    dataToSend.cvcNumber=cvcNumber 
+                    dataToSend.cardExpiryMonth=cardMonth   
+                    dataToSend.cardExpiryYear=cardYear 
+                     dataToSend.autopayChargeDate=autoPayDate
+                    } 
+                    else{ 
+                        dataToSend.isAutopay=false
                     }
                 }
                 localStorage.setItem("datasendforinvoice", JSON.stringify(dataToSend));
@@ -235,7 +247,7 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
                 </div>
                 {autoPay ? (
                     <Button
-                        label="Alternate Card For Auto Pay"
+                        label="Auto Pay Card Details"
                         onClick={() => {
                             setAlternateCardDetailVisibility(true);
                         }}
@@ -258,7 +270,7 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
                     setAlternateCardDetailVisibility(false);
                 }}
             >
-                <AlternateCardPaymentStripModule setalternatecardid={setalternatecardid} setAlternateCardDetailVisibility={setAlternateCardDetailVisibility} />
+                <AlternateCardPaymentStripModule setAutoPayDate={setAutoPayDate} cardNumber={cardNumber} cardYear={cardYear} cardMonth={cardMonth} cvcNumber={cvcNumber} setCardNumber={setCardNumber} setCvcNumber={setCvcNumber} setCardYear={setCardYear} setCardMonth={setCardMonth} setAlternateCardDetailVisibility={setAlternateCardDetailVisibility} />
             </Dialog>
         </>
     );

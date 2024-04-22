@@ -63,9 +63,10 @@ import Draft from "./app/features/screens/sms_notification/Draft";
 import VerifyZip from "./app/features/screens/self_enrollment/VerifyZip";
 import PersonalInfo from "./app/features/screens/self_enrollment/PersonalInfo";
 import Address from "./app/features/screens/self_enrollment/Address";
-import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
+import Eligibility from "./app/features/screens/self_enrollment/Eligibility";       
 import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
-import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
+import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication"; 
+ 
 import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
@@ -127,6 +128,12 @@ import PostpaidActivatedBulkUpload from "./app/features/screens/PostPaid-order/P
 import Reports from "./app/features/screens/Reports_Downloads/Reports";
 import Roles_Permission from "./app/features/screens/user_management/Manage_Role_RIghts_Permission/Roles_Permission";
 import BillingNavbar from "./app/features/screens/customer_profile/modals/BillingNavbar";
+import PrepiadSelfVerifyZip from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/VerifyZip";
+import PrepaidSelfPersonalInfo from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/PersonalInfo";
+import PrepaidSelfAddress from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Address";
+import PrepaidSelfEligibility from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Eligibility";
+import PrepaidSelfNationalVerifier from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/NationalVerifier";
+import PrepaidSelfResumeApplication from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/ResumeApplication";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -466,6 +473,13 @@ const App = () => {
                                             <Route path="/selfeligibile" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
                                             <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
                                             <Route path="/resumeapplication" element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfenrollment" element={isPermitted("/prepaid-selfenrollment") ? <PrepiadSelfVerifyZip /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfpersonalinfo" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfPersonalInfo /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfaddress" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfAddress /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfeligibile" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfEligibility /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfnationalverifier" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfNationalVerifier /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfresumeapplication" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfResumeApplication /> : <Dashboard />} />
+                                           
                                             <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
                                             <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                             <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
