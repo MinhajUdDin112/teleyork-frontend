@@ -233,7 +233,6 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
 
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/notes/resolveNote`, data);
-            console.log("response", response?.data);
             if (response?.status === 200 || response?.status === 201) {
                 toast.success("Successfully Resolved");
                 setResolvedNotes([...resolvedNotes, noteId]);
