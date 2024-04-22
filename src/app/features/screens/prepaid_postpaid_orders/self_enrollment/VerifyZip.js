@@ -12,7 +12,7 @@ import { useState } from "react";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
-const VerifyZip = () => {
+const PrepaidSelfVerifyZip = () => {
 
     const [companyData, setcompanyData] = useState()
 
@@ -87,7 +87,7 @@ const VerifyZip = () => {
                     localStorage.removeItem("initialInformation");
                     localStorage.removeItem("homeAddress");
                     localStorage.removeItem("selectProgram");
-                    navigate("/personalinfo");
+                    navigate("/prepaid-selfpersonalinfo");
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -104,7 +104,7 @@ const VerifyZip = () => {
 
     useEffect(() => {
         if (verifyZip) {
-            navigate("/personalinfo");
+            navigate("/prepaid-selfpersonalinfo");
         }
         if (verifyZipError) {
             toast.error(verifyZipError || "An error occurred");
@@ -148,4 +148,4 @@ const VerifyZip = () => {
     );
 };
 
-export default VerifyZip;
+export default PrepaidSelfVerifyZip;
