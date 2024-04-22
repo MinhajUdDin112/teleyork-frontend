@@ -197,20 +197,17 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             csr: csr,
             userId: _id,
         };
-     
-        
+
         Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
             .then(() => {
-                   
                 let dataToSend = {
-
                     customerId: paymentInfo.customerid,
                     invoiceType: "Sign Up",
                     totalAmount: paymentInfo.totalamount,
                     additionalCharges: additionalobjectsendin,
-                    discount:discountobjectsendin,
-                    amountPaid:0, 
-                    selectProduct:paymentInfo.billId,
+                    discount: discountobjectsendin,
+                    amountPaid: 0,
+                    selectProduct: paymentInfo.billId,
                     invoiceDueDate: dueDate,
                     lateFee: applyLateFee,
                     invoiceOneTimeCharges: oneTimeCharge,
@@ -220,13 +217,13 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     planCharges: plancharges,
                     chargingType: "monthly",
                     invoicePaymentMethod: "Credit/Debit Card",
-                    printSetting: "Both", 
-                    isInvoice:propectWithInvoice ? true : false,
+                    printSetting: "Both",
+                    isInvoice: propectWithInvoice ? true : false,
                     billingPeriod: {
                         from: "onActivation",
                         to: "onActivation",
                     },
-                };   
+                };
                 const loginRes = localStorage.getItem("userData");
                 const parseLoginRes = JSON.parse(loginRes);
                 const data = {
@@ -236,32 +233,40 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     noteType: "Sign Up Plan Activation",
                     note: "Sign Up Plan  Activated Successfully",
                     priority: "highest",
-                };                      
-                                Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend)
-                   .then(() => {    
+                };
+                Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend).then(() => {
                     Axios.post(`${BASE_URL}/api/web/notes/`, data)
-                    .then(() => {
-                        toast.current.show({ severity: "success", summary: "Sign Up Plan Note", detail: "Customer Plan Is Successfully Activated" });
+                        .then(() => {
+                            toast.current.show({ severity: "success", summary: "Sign Up Plan Note", detail: "Customer Plan Is Successfully Activated" });
 
-                        setActiveIndex(3);
-                    })
-                    .catch((err) => {});
-                                       // toast.success("Label created Successfully");
-                                        setIsLoading(false); 
-                                        setShowFinalComponent(true);
-                                        setFromIncomplete(false);
-                                        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
-                                      
-                                    })
-                            
-                
-                   
+                            setActiveIndex(3);
+                        })
+                        .catch((err) => {});
+                    // toast.success("Label created Successfully");
+                    setIsLoading(false);
+                    setShowFinalComponent(true);
+                    setFromIncomplete(false);
+                    localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                });
             })
             .catch((error) => {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
-            });    
+            });
     };
+    function ChangeIsoDateToECT(date) {
+        // Given ISO formatted date/time
+        const isoDate = date;
+
+        // Convert ISO string to Date object
+        const utcDate = new Date(isoDate);
+
+        // Format the date according to Eastern Time Zone (EST/EDT)
+        const estTimeString = utcDate.toLocaleString("en-US", {
+            timeZone: "America/New_York",
+        });
+        return estTimeString;
+    }
     return (
         <>
             <ToastContainer />
@@ -287,8 +292,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                         </div>
 
-                        {
-                        localStorage.getItem("paymentstatus") ? (
+                        {localStorage.getItem("paymentstatus") ? (
                             ""
                         ) : (
                             <div className="flex w-full flex-wrap flex-row justify-content-left ">
@@ -322,67 +326,67 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="border-2 w-5 pt-2">
                                 <div className="flex border-bottom-2">
                                     <p className="w-6 ml-4">First Name:</p>
-                                    <p className="w-6">{previewInfo?.firstName}</p>
+                                    <p className="w-6">{previewInfo?.firstName || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{previewInfo?.address1}</p>
+                                    <p className="w-6">{previewInfo?.address1 || "-"}</p>
                                 </div>
 
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">State:</p>
-                                    <p className="w-6">{previewInfo?.state}</p>
+                                    <p className="w-6">{previewInfo?.state || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">DOB:</p>
-                                    <p className="w-6">{formatDate(previewInfo?.DOB)}</p>
+                                    <p className="w-6">{formatDate(previewInfo?.DOB || "-")}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Telephone:</p>
-                                    <p className="w-6">{previewInfo?.contact}</p>
+                                    <p className="w-6">{previewInfo?.contact || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Discounts:</p>
-                                    <p className="w-6"> {discount}</p>
+                                    <p className="w-6"> {discount || "-"}</p>
                                 </div>
 
                                 <div className="flex  border-bottom-2  pt-2">
                                     <p className="w-6 ml-4">One Time Charges: </p>
-                                    <p className="w-6">${oneTimeCharge}</p>
+                                    <p className="w-6">${oneTimeCharge || "-"}</p>
                                 </div>
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Inventory: </p>
-                                    <p className="w-6">{localStorage.getItem("product")}</p>
+                                    <p className="w-6">{localStorage.getItem("product") || "-"}</p>
                                 </div>
                             </div>
                             <div className="border-2 w-5 ">
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">LastName:</p>
-                                    <p className="w-6">{previewInfo?.lastName}</p>
+                                    <p className="w-6">{previewInfo?.lastName || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city}</p>
+                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>
-                                    <p className="w-6">{previewInfo?.zip}</p>
+                                    <p className="w-6">{previewInfo?.zip || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">SSN:</p>
-                                    <p className="w-6">{previewInfo?.SSN}</p>
+                                    <p className="w-6">{previewInfo?.SSN || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Email:</p>
-                                    <p className="w-6">{previewInfo?.email}</p>
+                                    <p className="w-6">{previewInfo?.email || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Plan:</p>
-                                    <p className="w-6">{planname}</p>
+                                    <p className="w-6">{planname || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Plan Charges: </p>
-                                    <p className="w-6">${plancharges}</p>
+                                    <p className="w-6">${plancharges || "-"}</p>
                                 </div>
 
                                 {/*  <div className="flex border-bottom-2 pt-2">
@@ -393,7 +397,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <p className="w-6 ml-4">Additional Feature:</p>
                                     <p className="w-6">
                                         <div>
-                                            <p className="inline">{additional}</p>
+                                            <p className="inline">{additional || "-"}</p>
                                         </div>
                                     </p>
                                 </div>
@@ -420,9 +424,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                             <strong>
                                                 This form is electronically signed by{" "}
                                                 <strong>
-                                                    {/*(previewInfo?.firstName).toUpperCase()*/} {/*(previewInfo?.lastName).toUpperCase()*/}
-                                                </strong>{" "}
-                                                on {/*new Date().toLocaleDateString()*/}
+                                                    {previewInfo && previewInfo.firstName ? previewInfo.firstName.toUpperCase() : "Unknown"} {previewInfo && previewInfo.lastName ? previewInfo.lastName.toUpperCase() : "User"}
+                                                </strong>
+                                                on {new Date().toLocaleDateString()}
                                             </strong>
                                         </p>
                                     ) : null}
@@ -446,9 +450,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                             <strong>
                                                 This form is electronically signed by{" "}
                                                 <strong>
-                                                    {/*(previewInfo?.firstName).toUpperCase()*/} {/*(previewInfo?.lastName).toUpperCase()*/}
-                                                </strong>{" "}
-                                                on {/*new Date().toLocaleDateString()*/}
+                                                    {(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}
+                                                </strong>
+                                                <span> </span> on {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}

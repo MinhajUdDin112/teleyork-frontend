@@ -159,7 +159,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             toast.error(error?.response?.data?.msg);
         }
         setVisible(false);
-        setRefreshComponent(true);
+        setRefreshComponent((prev) => !prev);
     };
     const downloadLabel = () => {
         const path = cpData?.label;
