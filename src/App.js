@@ -158,6 +158,8 @@ const App = () => {
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const [permittedRoutes, setPermittedRoutes] = useState([]);
     const [refreshNotificationcomponent, setRefreshNotificationComponent] = useState(false);
+    const [refreshEsn, setRefreshEsn] = useState(false);
+    const [refreshBell, setRefreshBell] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();
@@ -377,6 +379,7 @@ const App = () => {
                         onMobileTopbarMenuClick={onMobileTopbarMenuClick}
                         onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
                         setRefreshNotificationComponent={setRefreshNotificationComponent}
+                        refreshBell={refreshBell}
                     />
                     <div className="layout-sidebar">
                         <AppMenu model={dynamicMenu} activeTab={activeTab} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
@@ -493,7 +496,21 @@ const App = () => {
                                                 <Route
                                                     exact
                                                     path="/customer-profile"
-                                                    element={isPermitted("/customer-profile") ? <CustomerProfile activeTab={activeTab} customerServicesIndex={customerServicesIndex} setActiveTab={setActiveTab} refreshNotificationcomponent={refreshNotificationcomponent} /> : <Dashboard />}
+                                                    element={
+                                                        isPermitted("/customer-profile") ? (
+                                                            <CustomerProfile
+                                                                activeTab={activeTab}
+                                                                customerServicesIndex={customerServicesIndex}
+                                                                setActiveTab={setActiveTab}
+                                                                refreshNotificationcomponent={refreshNotificationcomponent}
+                                                                refreshEsn={refreshEsn}
+                                                                setRefreshEsn={setRefreshEsn}
+                                                                setRefreshBell={setRefreshBell}
+                                                            />
+                                                        ) : (
+                                                            <Dashboard />
+                                                        )
+                                                    }
                                                 />
                                             ) : (
                                                 <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />

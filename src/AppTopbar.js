@@ -31,6 +31,7 @@ export const AppTopbar = (props) => {
         { name: "Recent Searches", code: "recentsearches" },
         { name: "Advance Search", code: "advance search" },
     ];
+
     const countryTemplate = (option) => {
         return (
             <div className="flex align-items-center">
@@ -103,12 +104,12 @@ export const AppTopbar = (props) => {
             }
         };
         getCounter();
-    }, []);
+    }, [props.refreshBell]);
 
     const handleReadNotification = async (notificationId) => {
         try {
             await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
-            const response = await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
+            // const response = await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
 
             const res = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
             const { unreadCount, notifications } = res?.data;
@@ -172,7 +173,6 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-
                             props.setSearchByValueClick(false);
                         }}
                     >

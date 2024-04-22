@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-import CustomerProfile from "../CustomerProfile";
-const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent }) => {
+const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent, setRefreshEsn }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const [cpData, setCpData] = useState([]);
     const [openDialogeForWallet, setOpenDialogeForWallet] = useState(false);
@@ -19,7 +18,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const [orderIdData, setOrderIdData] = useState("");
     const [refreshComponent, setRefreshComponent] = useState(false);
     const [refreshComp, setRefreshComp] = useState(false);
+    const [trackingId, setTrackingId] = useState("");
     const selectedid = localStorage.getItem("selectedId");
+
     const parseselectedid = JSON.parse(selectedid);
 
     const navigate = useNavigate();
@@ -136,6 +137,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/esnAssingment`, data);
             toast.success(response?.data?.msg);
+            setRefreshEsn((prev) => !prev);
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
@@ -185,6 +187,22 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             toast.error(error?.response?.data?.msg);
         }
     };
+    const handleTrackingPackage = async (customerId) => {
+        try {
+            const response = await Axios.get(`${BASE_URL}/api/web/order/getTrackingNumber/?customerId=${customerId}`);
+            const data = response?.data?.data;
+            if (data) {
+                const trackingId = data;
+                const trackingUrl = `https://tools.usps.com/go/TrackConfirmAction?&tLabels=${trackingId}`;
+                window.open(trackingUrl, "_blank");
+            } else {
+                console.log("No tracking data found.");
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+        }
+    };
+    console.log("cpdata", cpData);
     return (
         <div className="menubar-styling">
             <ToastContainer />
@@ -242,9 +260,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             )}
             {cpData?.label ? (
                 <>
-                    {" "}
                     <div className="ml-5">
                         <Button label="Download Label" onClick={downloadLabel} style={{ marginTop: "1rem", marginLeft: "-2rem" }} />
+                        <Button label="Track Package" onClick={() => handleTrackingPackage(cpData?._id)} style={{ marginTop: "1rem", marginLeft: "2rem" }} />
                     </div>
                 </>
             ) : (
