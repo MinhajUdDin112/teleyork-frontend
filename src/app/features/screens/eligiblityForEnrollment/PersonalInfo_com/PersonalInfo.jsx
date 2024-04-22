@@ -120,14 +120,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 const isoString = dateObject.toISOString();
 
                 const selectedDate = isoString;
-              
+
                 const formattedDate = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : "";
-              
 
                 const userId = _id;
 
                 const dataToSend = {
-                    accountType:"ACP",
+                    accountType: "ACP",
                     csr: csr,
                     userId: userId,
                     firstName: formik.values.firstName,
@@ -147,8 +146,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     BenifitLastName: formik.values.BenifitLastName,
                     BenifitSSN: formik.values.BenifitSSN,
                     BenifitDOB: formik.values.BenifitDOB,
-                    isACP: acp, 
-                    salesChannel:formik.values.salesChannel
+                    isACP: acp,
+                    salesChannel: formik.values.salesChannel,
                 };
 
                 setIsLoading(true);
@@ -166,7 +165,18 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             }
         },
     });
-
+    useEffect(() => {
+        const data = {
+            accountType: formik.values.accountType,
+            contact: formik.values.contact,
+            alternateContact: formik.values.alternateContact,
+        };
+        const checkNumber = async () => {
+            const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+            console.log("res", response?.data);
+        };
+        checkNumber();
+    }, [formik.values.contact]);
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
     }, [eSim]);
@@ -357,7 +367,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 if (formik.values.contact.length > 9) {
                     const data = {
                         contact: formik.values.contact,
-                        accountType:"Prepaid"
+                        accountType: "Prepaid",
                     };
 
                     try {
@@ -403,7 +413,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("BenifitDOB", new Date(parsebasicResponse?.data?.BenifitDOB));
             formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
             formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
-            formik.setFieldValue("salesChannel",parsebasicResponse?.data?.salesChannel)
+            formik.setFieldValue("salesChannel", parsebasicResponse?.data?.salesChannel);
             //chnage state
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
@@ -476,7 +486,15 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         <label className="field_label mb-2 font-semibold">
                             Sales Channel <span className="steric">*</span>
                         </label>
-                        <Dropdown placeholder="Select Channel" id="salesChannel" className={classNames({ "p-invalid": isFormFieldValid("salesChannel") }, "input_text w-full mb-2")} options={salesChannelOptions} value={formik.values.salesChannel} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <Dropdown
+                            placeholder="Select Channel"
+                            id="salesChannel"
+                            className={classNames({ "p-invalid": isFormFieldValid("salesChannel") }, "input_text w-full mb-2")}
+                            options={salesChannelOptions}
+                            value={formik.values.salesChannel}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
                         {getFormErrorMessage("salesChannel")}
                     </div>
                 </div>
@@ -565,7 +583,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                     formik.handleChange(e);
 
                                     formik.handleChange(e);
-                                   
+
                                     setSelectedMonth(e.value);
                                 }}
                                 options={monthOptions}
