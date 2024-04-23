@@ -41,8 +41,8 @@ const NationalVerifier = () => {
         setIsLoading(false);
     };
     const handleBack = () => {
-       
-        navigate("/selfeligibile");
+        navigate("/prepaid-selfaddress");
+  
     };
     return (
         <>

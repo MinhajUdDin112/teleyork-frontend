@@ -22,7 +22,10 @@ function capitalizeSentence(sentence) {
     return capitalizedWords.join(" ");
 }
 const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
-    const [inventory, setInventory] = useState();
+    const [inventory, setInventory] = useState(); 
+    const [propectWithInvoice, setProspectWithInvoice] = useState(false);
+    const [propectWithOutInvoice, setProspectWithOutInvoice] = useState(false); 
+     const [paymentmethoderror,setpaymentmethoderror]=useState(false)
     const [current, setCurrentSelect] = useState("");
     const [currentPlanSelect, setCurrentPlanSelect] = useState("");
     const [currentScreen, setCurrentScreen] = useState(1);
@@ -32,7 +35,6 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
     const validationSchema = Yup.object().shape({
         billId: Yup.string().required("Product is required"),
-        paymentMode: Yup.string().required("Payment Mode are required"),
         plan: Yup.string().required("Plan is required"),
     });
     const onPlanSelect = (item) => {
@@ -76,23 +78,31 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             customerid: _id,
             type: "Sign Up ",
             discounts: "",
+            prospectwithinvoice:false,
+            prospectwithoutinvoice:false
         },
-        onSubmit: async (values, actions) => {
-            if (formik.values.paymentMode === "skip") {
-                localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values));
-                setActiveIndex(3);
-            } else {
-                localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values));
-                if (localStorage.getItem("paymentstatus")) {
-                    if (localStorage.getItem("paymentstatus") === "paid") {
-                        setActiveIndex(3);
-                    } else {
-                        setPaymentDialogVisibility(true);
-                    }
+        onSubmit: async (values, actions) => { 
+             if(formik.values.prospectwithoutinvoice || formik.values.prospectwithinvoice  ){  
+                localStorage.setItem("paymentscreendetails",JSON.stringify(formik.values))
+               setActiveIndex(3)
+             } 
+             else{   
+                if(formik.values.paymentMode === "card"){
+                localStorage.setItem("paymentscreendetails",JSON.stringify(formik.values))
+            if (localStorage.getItem("paymentstatus")) {
+                if (localStorage.getItem("paymentstatus") === "paid") {
+                    setActiveIndex(3);
                 } else {
                     setPaymentDialogVisibility(true);
                 }
-            }
+            } else {
+                setPaymentDialogVisibility(true);
+            } 
+        }  
+        else{ 
+            setpaymentmethoderror(true)
+        }
+        }
         },
     });
 
@@ -108,8 +118,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     }, []);
     const optionsForPayment = [
         { label: "Select ", value: "" },
-        { label: "Credit/Debit card", value: "card" },
-        { label: "Skip", value: "skip" },
+        { label: "Credit/Debit card", value: "card" }, 
     ];
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
@@ -252,6 +261,40 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     ) : undefined}
                     {currentScreen === 3 ? (
                         <div className="w-full flex flex-wrap flex-row justify-content-left w-full">
+                           
+                            <div className="flex w-full flex-wrap flex-row justify-content-left ">
+                                <p
+                                    className={`prospectbutton ${propectWithInvoice ? "prospectactive" : ""}`}
+                                    onClick={() => { 
+                                         formik.setFieldValue("paymentMode","")
+                                        formik.setFieldValue("prospectwithoutinvoice",false) 
+                                        setpaymentmethoderror(false)
+                                        formik.setFieldValue("prospectwithinvoice",true)
+                                        setProspectWithInvoice(true);
+                                        setProspectWithOutInvoice(false);
+                                    }}
+                                >
+                                    {" "}
+                                    Save As Prospect With Invoice
+                                </p>
+
+                                <p
+                                    onClick={() => {  
+                                        formik.setFieldValue("paymentMode","")   
+                                        setpaymentmethoderror(false)
+                                        setProspectWithOutInvoice(true);  
+                                        formik.setFieldValue("prospectwithoutinvoice",true) 
+                                        
+                                        formik.setFieldValue("prospectwithinvoice",false)
+                                        setProspectWithInvoice(false);
+                                    }}
+                                    className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""}`}
+                                >
+                                    {" "}
+                                    Save As Prospect WithOut Invoice
+                                </p>
+                            </div>
+                        
                             <div className="mt-2  fieldinpayment">
                                 <label className="block">Select Additional Feature</label>
                                 {inventory === "SIM" ? (
@@ -335,7 +378,10 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         {getFormErrorMessage("additional")}
                                     </>
                                 )}
-                            </div>
+                            </div>  
+                          
+                          
+                          
                             <div className="mt-2  fieldinpayment">
                                 <label className="block">Select Discounts</label>
                                 {inventory === "SIM" ? (
@@ -455,7 +501,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 ""
                             )}
 
-                            <div className="mt-2 fieldinpayment">
+<div className="mt-2 fieldinpayment">
                                 <label className="block">Select Payment Method</label>
                                 <Dropdown
                                     disabled={paymentInfo ? true : false}
@@ -466,19 +512,25 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     onChange={(e) => {
                                         formik.setFieldValue("paymentMode", e.value);
                                         formik.handleChange(e);
+                                        setpaymentmethoderror(false)
+                                        setProspectWithOutInvoice(false);  
+                                        formik.setFieldValue("prospectwithoutinvoice",false) 
+                                        
+                                        formik.setFieldValue("prospectwithinvoice",false)
+                                        setProspectWithInvoice(false);
                                         /* if (e.value === "card") {
                                     setPaymentDialogVisibility(true);
                                 }*/
                                     }}
                                 />
-                                {getFormErrorMessage("paymentMode")}
+                                {paymentmethoderror && (<p className="p-error">Payment Method Is Required</p>)}
                             </div>
                         </div>
                     ) : undefined}
                     {formik.values.paymentMode == "card" && !(localStorage.getItem("paymentstatus") === "paid") ? (
                         <>
                             <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} setPaymentDialogVisibility={setPaymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
-                                <PaymentStripModule paid={formik.values.paid} plan={formik.values.plan} amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
+                                <PaymentStripModule paid={formik.values.paid} plan={formik.values.plan} setPaymentDialogVisibility={setPaymentDialogVisibility}  amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
                             </Dialog>
                         </>
                     ) : undefined}
