@@ -379,61 +379,9 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     </>
                                 )}
                             </div>  
-                            { 
-                            formik.values.paymentMode === "card" ?
-                            <div className="mt-2 fieldinpayment">
-                                <label className="block">Paying Amount</label>
-                                <InputText
-                                    disabled={paymentInfo ? true : false}
-                                    className="w-full mt-2"
-                                    id="paid"
-                                    value={formik.values.paid}
-                                    onChange={(e) => {
-                                        formik.setFieldValue("paid", e.target.value);
-                                        // formik.handleChange(e);
-                                    }}
-                                />
-                                {getFormErrorMessage("paid")}
-                            </div>  :""   
-                    }
-                            <div className="mt-2 fieldinpayment">
-                                <label className="block">Net Amount</label>
-                                <InputText
-                                    disabled
-                                    className="w-full mt-2"
-                                    id="totalamount"
-                                    value={formik.values.totalamount}
-                                    onChange={(e) => {
-                                        formik.setFieldValue("totalpayment", e.value);
-                                        formik.handleChange(e);
-                                    }}
-                                />
-                                {getFormErrorMessage("totalpayment")}
-                            </div>
-                            <div className="mt-2 fieldinpayment">
-                                <label className="block">Select Payment Method</label>
-                                <Dropdown
-                                    disabled={paymentInfo ? true : false}
-                                    className="w-full mt-2"
-                                    id="paymentMode"
-                                    options={optionsForPayment}
-                                    value={formik.values.paymentMode}
-                                    onChange={(e) => {
-                                        formik.setFieldValue("paymentMode", e.value);
-                                        formik.handleChange(e);
-                                        setpaymentmethoderror(false)
-                                        setProspectWithOutInvoice(false);  
-                                        formik.setFieldValue("prospectwithoutinvoice",false) 
-                                        
-                                        formik.setFieldValue("prospectwithinvoice",false)
-                                        setProspectWithInvoice(false);
-                                        /* if (e.value === "card") {
-                                    setPaymentDialogVisibility(true);
-                                }*/
-                                    }}
-                                />
-                                {paymentmethoderror && (<p className="p-error">Payment Method Is Required</p>)}
-                            </div>
+                          
+                          
+                          
                             <div className="mt-2  fieldinpayment">
                                 <label className="block">Select Discounts</label>
                                 {inventory === "SIM" ? (
@@ -553,7 +501,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 ""
                             )}
 
-                            <div className="mt-2 fieldinpayment">
+<div className="mt-2 fieldinpayment">
                                 <label className="block">Select Payment Method</label>
                                 <Dropdown
                                     disabled={paymentInfo ? true : false}
@@ -564,12 +512,18 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     onChange={(e) => {
                                         formik.setFieldValue("paymentMode", e.value);
                                         formik.handleChange(e);
+                                        setpaymentmethoderror(false)
+                                        setProspectWithOutInvoice(false);  
+                                        formik.setFieldValue("prospectwithoutinvoice",false) 
+                                        
+                                        formik.setFieldValue("prospectwithinvoice",false)
+                                        setProspectWithInvoice(false);
                                         /* if (e.value === "card") {
                                     setPaymentDialogVisibility(true);
                                 }*/
                                     }}
                                 />
-                                {getFormErrorMessage("paymentMode")}
+                                {paymentmethoderror && (<p className="p-error">Payment Method Is Required</p>)}
                             </div>
                         </div>
                     ) : undefined}
