@@ -359,28 +359,19 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         <p className="m-0">
                             City <FontAwesomeIcon className="disable-icon-color icon-size" />{" "}
                         </p>
-                        <InputText
-                            type="text"
-                            value={formik.values.city}
-                            name="city"
-                            className="w-21rem disable-color"     
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
+                        <InputText type="text" value={formik.values.city} name="city" className="w-21rem disable-color" onChange={formik.handleChange} onBlur={formik.handleBlur} />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            State 
+                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />
                         </p>
-                        <InputText type="text" 
-                            onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.state} name="state"  className="w-21rem disable-color" />
+                        <InputText disabled type="text" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.state} name="state" className="w-21rem disable-color" />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Zip Code
+                            Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />
                         </p>
-                        <InputText value={formik.values.zip} name="zip" onChange={formik.handleChange} 
-                            onBlur={formik.handleBlur}  className="w-21rem disable-color" />
+                        <InputText disabled value={formik.values.zip} name="zip" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem disable-color" />
                     </div>
                 </div>
                 <p className="w-100rem mt-4">Is Your Mailling Address?</p>
