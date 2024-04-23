@@ -11,8 +11,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [isChecked, setIsChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(false);
-    const [propectWithInvoice, setProspectWithInvoice] = useState(false);
-    const [propectWithOutInvoice, setProspectWithOutInvoice] = useState(true);
     const [fromIncomplete, setFromIncomplete] = useState(false);
     //get preview  information from local storage
     const previewsRes = localStorage.getItem("prepaidaddress");
@@ -217,8 +215,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     planCharges: plancharges,
                     chargingType: "monthly",
                     invoicePaymentMethod: "Credit/Debit Card",
-                    printSetting: "Both",
-                    isInvoice: propectWithInvoice ? true : false,
+                    printSetting: "Both", 
+                    isInvoice: paymentInfo.prospectwithinvoice,
                     billingPeriod: {
                         from: "onActivation",
                         to: "onActivation",
@@ -292,33 +290,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                         </div>
 
-                        {localStorage.getItem("paymentstatus") ? (
-                            ""
-                        ) : (
-                            <div className="flex w-full flex-wrap flex-row justify-content-left ">
-                                <p
-                                    className={`prospectbutton ${propectWithInvoice ? "prospectactive" : ""}`}
-                                    onClick={() => {
-                                        setProspectWithInvoice(true);
-                                        setProspectWithOutInvoice(false);
-                                    }}
-                                >
-                                    {" "}
-                                    Save As Prospect With Invoice
-                                </p>
-
-                                <p
-                                    onClick={() => {
-                                        setProspectWithOutInvoice(true);
-                                        setProspectWithInvoice(false);
-                                    }}
-                                    className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""}`}
-                                >
-                                    {" "}
-                                    Save As Prospect WithOut Invoice
-                                </p>
-                            </div>
-                        )}
+                       
                         <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                         <br />
 

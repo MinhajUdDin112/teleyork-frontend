@@ -15,24 +15,19 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
     const [cardMonth,setCardMonth]=("")  
     const [cardYear,setCardYear]=useState("")
     const [autoPayDate,setAutoPayDate]=useState("")
-    const [alternatecardid, setalternatecardid] = useState();
     const [alternateCardDetailVisibility, setAlternateCardDetailVisibility] = useState(false);
     const [autoPay, setAutoPay] = useState(true);
     const stripe = useStripe();
     const [disableSubmit, setDisableSubmit] = useState(false);
     const toast = useRef(null);
     const elements = useElements();
-
     const handleSubmit = async (event) => { 
-      
         submitbuttonref.current.style.opacity = "0.5";
         setDisableSubmit(true);
         event.preventDefault();
-
         if (!stripe || !elements) {
             return;
         }      
-     
         const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: elements.getElement(CardElement),
@@ -42,9 +37,12 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
         if (error) {
             localStorage.setItem("paymentstatus", "pending");
 
-            submitbuttonref.current.style.opacity = "1";
-            setDisableSubmit(false);
             toast.current.show({ severity: "error", summary: "Payment Processing Error", detail: "An error occurred while processing the payment" });
+     
+             
+            setTimeout(()=>{ 
+                   setPaymentDialogVisibility(false)
+            },1000)
         } else {
             localStorage.setItem("paymentstatus", "paid");
 

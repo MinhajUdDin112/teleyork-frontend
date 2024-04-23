@@ -138,7 +138,6 @@ const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
     const loginPerms = localStorage.getItem("permissions");
-    console.log(useLocation().pathname);
     const parsedLoginPerms = JSON.parse(loginPerms);
     const [dynamicMenu, setDynamicMenu] = useState([]);
     //CallSearchApi when click on Search

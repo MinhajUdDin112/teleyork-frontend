@@ -12,19 +12,17 @@ const PrepaidSelfAddress = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isBillAddress, setIsBillAddress] = useState(false);
     const navigate = useNavigate();
-    let storedData = JSON.parse(localStorage.getItem("zip"))
+    let storedData = JSON.parse(localStorage.getItem("zip"));
     var id;
-   let homeData = JSON.parse(localStorage.getItem("initialInformation"))
-   if(storedData){
-      id =  storedData?.data?._id
-   }else{
-       id =  homeData?.data?._id
-   }
+    let homeData = JSON.parse(localStorage.getItem("initialInformation"));
+    if (storedData) {
+        id = storedData?.data?._id;
+    } else {
+        id = homeData?.data?._id;
+    }
 
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("This field is required"),
-
-      
     });
     const formik = useFormik({
         validationSchema,
@@ -34,13 +32,13 @@ const PrepaidSelfAddress = () => {
             city: "",
             state: "",
             zip: "",
-            isTerribleTerritory: false,
             isBillAddress: false,
             mallingAddress1: "",
             mallingAddress2: "",
             mallingZip: "",
             mallingCity: "",
-            mallingState: "",
+            mallingState: "", 
+            isTerribleTerritory:false
         },
         onSubmit: async (values) => {
             const newData = {
@@ -58,8 +56,8 @@ const PrepaidSelfAddress = () => {
                     if (response.status === 201) {
                         // Save the response data in local storage
                         localStorage.setItem("homeAddress", JSON.stringify(response.data));
-                        // Navigate to the next page
-                        navigate(`/prepaid-selfeligibile`);
+                        // Navigate to the next page 
+                        navigate(`/prepaid-selfnationalverifier`);
                         setIsLoading(false);
                     }
                 } catch (error) {
@@ -70,13 +68,11 @@ const PrepaidSelfAddress = () => {
         },
     });
     const zip = JSON.parse(localStorage.getItem("initialInformation"));
-
     useEffect(() => {
         formik.setFieldValue("zip", zip?.data?.zip);
         formik.setFieldValue("city", zip?.data?.city);
-        formik.setFieldValue("state",zip?.data?.state);
+        formik.setFieldValue("state", zip?.data?.state);
     }, []);
-
     useEffect(() => {
         const homeAddress = JSON.parse(localStorage.getItem("homeAddress"));
         if (homeAddress) {
@@ -98,7 +94,7 @@ const PrepaidSelfAddress = () => {
     const handleBack = () => {
         navigate("/prepaid-selfpersonalinfo");
     };
-   
+
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
@@ -112,14 +108,8 @@ const PrepaidSelfAddress = () => {
     };
 
     useEffect(() => {
-      
-       
-           
-            formik.setFieldValue("isBillAddress", isBillAddress);
-          
-       
+        formik.setFieldValue("isBillAddress", isBillAddress);
     }, [isBillAddress]);
-    
 
     return (
         <>
@@ -148,17 +138,9 @@ const PrepaidSelfAddress = () => {
                                     <InputText className="mb-3" placeholder="Enter Address 1" name="address1" value={formik.values.address1} onChange={formik.handleChange} style={{ textTransform: "uppercase" }} />
                                     {getFormErrorMessage("address1")}
                                     <InputText className="mb-3" placeholder="Enter Address 2" name="address2" value={formik.values.address2} onChange={formik.handleChange} style={{ textTransform: "uppercase" }} />
-
-                                    <InputText className="mb-3" placeholder="Enter City" name="city" value={formik.values.city} onChange={formik.handleChange} disabled />
-                                    <InputText className="mb-3" placeholder="Enter State" name="state" value={formik.values.state} onChange={formik.handleChange} disabled />
+                                    <InputText className="mb-3" placeholder="Enter City" name="city" value={formik.values.city} onChange={formik.handleChange}  />
+                                    <InputText className="mb-3" placeholder="Enter State" name="state" value={formik.values.state} onChange={formik.handleChange}  />
                                     <InputText className="mb-3" name="zip" value={formik.values.zip} onChange={formik.handleChange} disabled />
-
-                                    <div className="mb-2 flex justify-content-center">
-                                        <Checkbox inputId="isTerribleTerritory" name="isTerribleTerritory" checked={formik.values.isTerribleTerritory} onChange={formik.handleChange} />
-                                        <label htmlFor="isTerribleTerritory" className="text-xl flex align-items-center ml-2">
-                                            Is this tribal territory?
-                                        </label>
-                                    </div>
                                     <div className="mb-2 flex justify-content-center">
                                         <Checkbox inputId="isBillAddress" name="isBillAddress" checked={isBillAddress} onChange={handleBilling} />
                                         <label htmlFor="binary" className="text-xl flex align-items-center ml-2">
