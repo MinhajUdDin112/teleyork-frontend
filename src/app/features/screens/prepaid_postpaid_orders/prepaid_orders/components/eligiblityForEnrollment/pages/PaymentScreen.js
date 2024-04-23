@@ -81,9 +81,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             prospectwithinvoice:false,
             prospectwithoutinvoice:false
         },
-        onSubmit: async (values, actions) => {   
-            console.log("values is",values)
-
+        onSubmit: async (values, actions) => { 
              if(formik.values.prospectwithoutinvoice || formik.values.prospectwithinvoice  ){  
                 localStorage.setItem("paymentscreendetails",JSON.stringify(formik.values))
                setActiveIndex(3)
