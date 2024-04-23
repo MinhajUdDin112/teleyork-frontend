@@ -215,7 +215,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     planCharges: plancharges,
                     chargingType: "monthly",
                     invoicePaymentMethod: "Credit/Debit Card",
-                    printSetting: "Both", 
+                    printSetting: "Both",
                     isInvoice: paymentInfo.prospectwithinvoice,
                     billingPeriod: {
                         from: "onActivation",
@@ -290,7 +290,6 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
                         </div>
 
-                       
                         <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                         <br />
 
@@ -398,7 +397,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                 <strong>
                                                     {previewInfo && previewInfo.firstName ? previewInfo.firstName.toUpperCase() : "Unknown"} {previewInfo && previewInfo.lastName ? previewInfo.lastName.toUpperCase() : "User"}
                                                 </strong>
-                                                on {new Date().toLocaleDateString()}
+                                                on {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}
