@@ -230,7 +230,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 }}
                 className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4"
             />
-            {cpData?.esn === undefined && cpData?.isEnrollmentComplete === "true" && (
+            {cpData?.esn === undefined && cpData?.isEnrollmentComplete && (
                 <>
                     <Button
                         label="Assign ESN"
@@ -244,7 +244,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {cpData?.label === undefined && cpData?.isEnrollmentComplete === "true" && (
+            {cpData?.label === undefined && cpData?.isEnrollmentComplete && (
                 <>
                     <Button
                         label="Assign Label"
