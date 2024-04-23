@@ -41,7 +41,6 @@ const VerifyZip = () => {
             modifiedURL = modifiedURL.replace("login", "");
             modifiedURL = modifiedURL.replace("selfenrollment", "");
           
-          
         }
         const sendURl = async ()=>{
             try {
@@ -52,14 +51,11 @@ const VerifyZip = () => {
             }
         }
         sendURl();
-       
     }, []);
-
     const { verifyZip, verifyZipLoading, verifyZipError } = useSelector((state) => state.selfEnrollment);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
     const validationSchema = Yup.object().shape({
         zipCode: Yup.string()
             .required("ZIP Code is required")

@@ -196,13 +196,11 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 const trackingUrl = `https://tools.usps.com/go/TrackConfirmAction?&tLabels=${trackingId}`;
                 window.open(trackingUrl, "_blank");
             } else {
-                console.log("No tracking data found.");
             }
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
     };
-    console.log("cpdata", cpData);
     return (
         <div className="menubar-styling">
             <ToastContainer />
