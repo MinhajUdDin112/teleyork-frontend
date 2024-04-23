@@ -123,7 +123,18 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             }
         },
     });
-
+    useEffect(() => {
+        const data = {
+            accountType: formik.values.accountType,
+            contact: formik.values.contact,
+            alternateContact: formik.values.alternateContact,
+        };
+        const checkNumber = async () => {
+            const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+            console.log("res", response?.data);
+        };
+        checkNumber();
+    }, [formik.values.contact]);
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
     }, [eSim]);

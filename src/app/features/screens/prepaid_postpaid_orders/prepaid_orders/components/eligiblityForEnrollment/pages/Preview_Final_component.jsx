@@ -107,8 +107,12 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("invoiceData");
         navigate("/prepaid-allenrollment");
     };
+
     const handleNavigate = () => {
-        navigate("/customer-profile");
+        const data = localStorage.getItem("prepaidagreeData");
+        const parseData = JSON.parse(data);
+        navigate("/customer-profile", { state: { selectedId: parseData?.data?._id } });
+        localStorage.setItem("selectedId", JSON.stringify(parseData?.data?._id));
     };
     return (
         <>

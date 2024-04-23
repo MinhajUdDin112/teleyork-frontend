@@ -282,7 +282,7 @@ export const AppTopbar = (props) => {
                 <ul className={classNames("layout-topbar-menu   lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
                     <div className="flex  ">
                         <i className="pi pi-bell" style={{ cursor: "pointer", fontSize: "1.5rem", marginRight: "3rem", marginTop: "0.8rem" }} onClick={() => setVisibleRight(true)}>
-                            <span style={{ cursor: "pointer", color: "red", marginLeft: "0rem", fontSize: "1rem", fontWeight: "500", marginTop: "-0.6rem", position: "absolute" }}> {counter <= 9 ? counter : "9+"}</span>
+                            <span style={{ color: "red", marginLeft: "0rem", fontSize: "1rem", fontWeight: "600", marginTop: "-0.6rem", position: "absolute" }}> {counter <= 9 ? counter : "9+"}</span>
                         </i>
                         <Sidebar className="notification" style={{ width: "35rem" }} visible={visibleRight} position="right" onHide={() => setVisibleRight(false)}>
                             <h3>Notifications</h3>

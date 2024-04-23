@@ -38,6 +38,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [isEdit, setIsEdit] = useState(false);
     const [agents, setAgents] = useState([]);
     const [refreshNotes, setRefreshNotes] = useState(false);
+    const [resolvedNotes, setResolvedNotes] = useState([]);
     const location = useLocation();
 
     useEffect(() => {
@@ -225,6 +226,23 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
         fetchUser();
     }, []);
 
+    const handleResolve = async (noteId) => {
+        const data = {
+            noteId: noteId,
+        };
+
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/web/notes/resolveNote`, data);
+            if (response?.status === 200 || response?.status === 201) {
+                toast.success("Successfully Resolved");
+                setResolvedNotes([...resolvedNotes, noteId]);
+                getNotes();
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.msg);
+        }
+    };
+    const isResolved = (noteId) => resolvedNotes.includes(noteId);
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
     return (
@@ -816,6 +834,19 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                             }}
                                         ></Column>
                                         <Column header="Assigned To" field="assignTo.name"></Column>
+                                        <Column
+                                            header="Action Button"
+                                            field="_id"
+                                            body={(rowData) =>
+                                                isResolved(rowData._id) ? (
+                                                    <span>Resolved</span>
+                                                ) : (
+                                                    <Button onClick={() => handleResolve(rowData._id)} className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none">
+                                                        Resolve
+                                                    </Button>
+                                                )
+                                            }
+                                        />
                                     </DataTable>
                                 </div>
                             </div>
