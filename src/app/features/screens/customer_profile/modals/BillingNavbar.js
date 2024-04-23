@@ -22,7 +22,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const selectedid = localStorage.getItem("selectedId");
 
     const parseselectedid = JSON.parse(selectedid);
-
     const navigate = useNavigate();
     useEffect(() => {
         const data = {
@@ -231,7 +230,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 }}
                 className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4"
             />
-            {cpData?.esn === undefined && (
+            {cpData?.esn === undefined && cpData?.isEnrollmentComplete === "true" && (
                 <>
                     <Button
                         label="Assign ESN"
@@ -245,7 +244,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {cpData?.label === undefined && (
+            {cpData?.label === undefined && cpData?.isEnrollmentComplete === "true" && (
                 <>
                     <Button
                         label="Assign Label"
