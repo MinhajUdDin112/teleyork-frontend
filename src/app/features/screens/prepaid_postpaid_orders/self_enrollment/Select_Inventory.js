@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import "../css/payment_screen.css";
+import "./css/payment_screen.css";
 import { Dropdown } from "primereact/dropdown";
 import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
@@ -21,7 +21,7 @@ function capitalizeSentence(sentence) {
     // Join the words back into a sentence
     return capitalizedWords.join(" ");
 }
-const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
+const PrepaidSelectInventory = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [inventory, setInventory] = useState();
     const [propectWithInvoice, setProspectWithInvoice] = useState(false);
     const [propectWithOutInvoice, setProspectWithOutInvoice] = useState(false);
@@ -165,7 +165,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     }
     return (
         <form onSubmit={formik.handleSubmit}>
-            <div className="card">
+            <div className="card inventoryscreens">
                 <div className="flex flex-wrap flex-row justify-content-around">
                     <div className="w-full  flex flex-wrap flex-row justify-content-between ">
                         <Button
@@ -562,4 +562,4 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     );
 };
 
-export default PaymentScreen;
+export default PrepaidSelectInventory;

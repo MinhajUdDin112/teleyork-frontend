@@ -7,7 +7,6 @@ import DialogeForAuthPayment from "./DialogeForAuthPayment";
 import CustomerInvoice from "./customer_invoice/customer_invoice"
 import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
-import { ro } from "date-fns/locale";
 import CustomerInvoicePrepaid from "./customer_invoice/customer_invoice_prepaid";
 import PaymentStripModule from "./dialog/stripe_payment";
 const InvoiceTable = ({setRefresh, userDetails, invoiceData }) => {

@@ -584,7 +584,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 </tr>
                                                 <tr>
                                                     <td>MAKE</td>
-                                                    <td>{cpData?.esnId?.Make ? cpData?.esnId?.Make : "NIL"}</td>
+                                                    <td>{cpData?.esnId?.make ? cpData?.esnId?.make : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>MODEL</td>

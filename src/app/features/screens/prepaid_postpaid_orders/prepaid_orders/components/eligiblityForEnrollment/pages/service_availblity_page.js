@@ -98,7 +98,6 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                     setPwgDbCheck(false)   
                      setPwgDbCheckFound(true)                
                      localStorage.setItem("prepaidzipData", JSON.stringify(res.data)); 
-                     
                      Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
                         setUspsCheck(false)   
                          setUspsCheckFound(true)                    
@@ -183,15 +182,14 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                                    <div className="mt-4 flex flex-wrap flex-row justify-content-center">   
                                         <Button label="Yes" onClick={()=>{   
                                                 const serviceProvider = parseLoginRes?.company;
-                                                const department = parseLoginRes?.department;
+                                                const department = parseLoginRes?.department;  
+                                                
                                                 const csr = parseLoginRes?._id;
                                                 const carrier = "6455532566d6fad6eac59e34";
                                                 const dataToSend = { serviceProvider, csr, department, carrier, ...formik.values ,accountType:"Prepaid"};   
                                               
                                                Axios.post(`${BASE_URL}/api/user/withoutzip`,dataToSend).then((res)=>{ 
-                                                 
                                                  localStorage.setItem("prepaidzipData", JSON.stringify(res.data))   
-                                                  localStorage.setItem("zipnotverify","yes")
                                                  setZipVerified(true)
                                                  }).catch(err=>{ 
                                                   

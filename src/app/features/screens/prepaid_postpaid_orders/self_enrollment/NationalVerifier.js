@@ -77,7 +77,7 @@ const PrepaidSelfNationalVerifier = () => {
         try {
             const res = await axios.post(`${BASE_URL}/api/enrollment/termsAndConditions`, data);
             const responseData = res.data; // Assuming the API response contains the data you need
-            navigate("/prepaid-selfresumeapplication", { state: { responseData } });
+            navigate("/prepaid-selectinventory", { state: { responseData } });
             setIsLoading(false);
         } catch (error) {
             // Handle any errors here
