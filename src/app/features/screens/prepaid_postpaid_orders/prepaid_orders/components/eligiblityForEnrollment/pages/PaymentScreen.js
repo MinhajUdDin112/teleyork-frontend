@@ -221,8 +221,28 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     {currentScreen === 2 ? (
                         <div className="mt-2 w-full flex flex-wrap flex-row justify-content-left">
                             <h1 className="block w-full selectProduct">Select Plan</h1>
-                            {JSON.parse(localStorage.getItem("planprices"))?.map((item) => {
-                                return inventory === item?.inventoryType && item?.type === "PREPAID" ? (
+                            {JSON.parse(localStorage.getItem("planprices"))?.map((item) => {         
+                                   let include=false
+                                 if(inventory === "SIM"){ 
+                                 let plans=JSON.parse(localStorage.getItem("simplan"))   
+                                  for(let i=0;i<plans.length;i++){ 
+                                     if(plans[i].value === item?._id){ 
+                                        include=true 
+                                        break
+                                     }
+                                  }
+                                 } 
+                                 else if(inventory === "WIRELESS DEVICE"){ 
+                                    let plans=JSON.parse(localStorage.getItem("deviceplan"))   
+                                  for(let i=0;i<plans.length;i++){ 
+                                     if(plans[i].value === item?._id){ 
+                                        include=true 
+                                        break
+                                     }
+                                  }
+                                 }
+                                return   ( 
+                                    include?
                                     <>
                                         <div style={{ opacity: `${item._id === currentPlanSelect ? "0.5" : ""}` }} className="planSelect">
                                             <div className="planinfo">
@@ -254,8 +274,10 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                 Select
                                             </button>
                                         </div>
-                                    </>
-                                ) : undefined;
+                                    </> 
+                                    :undefined
+                                )  
+                                 
                             })}
                         </div>
                     ) : undefined}

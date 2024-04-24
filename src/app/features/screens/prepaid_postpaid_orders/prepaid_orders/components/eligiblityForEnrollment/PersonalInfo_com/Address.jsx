@@ -365,7 +365,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         <p className="m-0">
                             State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />
                         </p>
-                        <InputText disabled type="text" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.state} name="state" className="w-21rem disable-color" />
+                        <InputText  type="text" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.state} name="state" className="w-21rem disable-color" />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
