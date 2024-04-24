@@ -9,10 +9,8 @@ import ChangeCustomerStatus from "../../customer_profile/change_customer_status/
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { createContext } from "react";
-
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const onAPISuccess = createContext();
-
 const InvoicePage = () => {
     const [refresh, setRefresh] = useState(false);
     const [accountType, setAccountType] = useState("");

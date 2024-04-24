@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
-import { InputMask } from "primereact/inputmask";
 import { Calendar } from "primereact/calendar";
 import { useFormik } from "formik";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "axios"; 
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
@@ -59,6 +57,7 @@ const PrepaidSelfPersonalInfo = () => {
                 DOB: formattedDate, 
             };
             setIsLoading(true);
+            
             try {
                 const res = await axios.post(`${BASE_URL}/api/enrollment/initialInformation`, newData);
                 if (res.status === 201 || res.status === 200) {
@@ -85,7 +84,146 @@ const PrepaidSelfPersonalInfo = () => {
         { label: "III", value: "III" },
         { label: "IV", value: "IV" },
         { label: "V", value: "V" },
-    ];
+    ];           
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);  
+    useEffect(() => {
+        Axios.get(`${BASE_URL}/api/web/plan/all?serviceProvider=${parseLoginRes?.company}`)
+        .then((res) => {
+          
+             localStorage.setItem("planprices",JSON.stringify(res?.data?.data))
+        })
+        .catch((err) => {}); 
+    
+        Axios.get(`${BASE_URL}/api/web/billing/getall`)
+            .then((response) => {
+     
+                let inventoryType = []; 
+                for (let i = 0; i < response?.data?.data?.length; i++) {
+                    let plans = [];
+                    let discountobjectarray = [];     
+                    let discount= []
+                    let additionalfeature = []; 
+                    let paymentMethods = []; 
+                    let totaldiscounts=0    
+                    let additionaltotal=0;
+                    let additionalfeaturearray=[]
+                    if ((response?.data?.data[i]?.inventoryType === "SIM") &&  (response?.data?.data[i]?.billingmodel === "PREPAID") ) {
+                     
+                        let obj = { label: "SIM", value:response?.data?.data[i]?._id };
+                        //objectforpricing[response.data.data[i].inventoryType]["oneTimeCharge"]=response.data.data[i].inventoryType.oneTimeCharge
+                        inventoryType.push(obj);
+                        for (let k = 0; k < response?.data?.data[i]?.monthlyCharge?.length; k++) {
+                            let obj = {
+                                name: response?.data?.data[i]?.monthlyCharge[k]?.name,
+                                value: response?.data?.data[i]?.monthlyCharge[k]?._id,
+                            };
+                            plans.push(obj);
+                        } 
+                        for (let k = 0; k < response?.data?.data[i]?.paymentMethod?.length; k++) {
+                            let obj = {
+                                name: response?.data?.data[i]?.paymentMethod[k],
+                            };
+                            paymentMethods.push(obj);
+                        } 
+                        for (let z = 0; z < response?.data?.data[i]?.additionalFeature?.length; z++) {
+                            let obj = {
+                                name: response?.data?.data[i]?.additionalFeature[z]?.featureName,
+                                value: response?.data?.data[i]?.additionalFeature[z]?._id,
+                            };  
+                            additionaltotal+=parseFloat(response?.data?.data[i]?.additionalFeature[z]?.featureAmount)
+                             additionalfeaturearray.push((response?.data?.data[i]?.additionalFeature[z]?._id).toString())
+                            additionalfeature.push(obj);
+                        }  
+                        
+                        for (let y = 0; y < response.data.data[i].selectdiscount.length; y++) {
+                            discountobjectarray.push(response?.data?.data[i]?.selectdiscount[y]?._id.toString());
+                            totaldiscounts += parseFloat(response?.data?.data[i]?.selectdiscount[y]?.amount);  
+                        }
+                        //Additional Features 
+                               //_id array
+                        localStorage.setItem("simadditionalfeaturearray",JSON.stringify(additionalfeaturearray))   
+                        
+                               // Options array name and _id
+                        localStorage.setItem("simadditional", JSON.stringify(additionalfeature));  
+                        
+                        localStorage.setItem("simadditionalfeaturearraytotal",JSON.stringify(additionalfeaturearray))  
+                                //totalfeatureamount 
+                        localStorage.setItem("simadditionaltotal", JSON.stringify(additionaltotal));  
+                         localStorage.setItem("simdiscount",JSON.stringify(response.data.data[i].selectdiscount)) 
+                        
+                        //Discounts 
+                                //Total Discounts
+                        localStorage.setItem("totalsimdiscount", JSON.stringify(totaldiscounts)); 
+                                //discount _id array will send to backend 
+                        localStorage.setItem("simdiscountobjectarray", JSON.stringify(discountobjectarray));   
+                         localStorage.setItem("simdiscountobjectarraytotal",JSON.stringify(discountobjectarray))    
+                        //SIM Complete Object include additional discount and any other
+                        localStorage.setItem("simpricing", JSON.stringify(response.data.data[i]));
+                         //SIM Plans
+                        localStorage.setItem("simplan", JSON.stringify(plans));
+                        ///payments method
+                        localStorage.setItem("simPaymentMethod", JSON.stringify(paymentMethods));
+                    } else if (response?.data?.data[i]?.inventoryType === "WIRELESS DEVICE" && (response?.data?.data[i]?.billingmodel === "PREPAID")) {   
+                 
+                        let obj = { label: "WIRELESS DEVICE", value:response?.data?.data[i]?._id };
+                        inventoryType.push(obj);
+                        for (let k = 0; k < response?.data?.data[i]?.monthlyCharge?.length; k++) {
+                            let obj = {
+                                name: response?.data?.data[i]?.monthlyCharge[k]?.name,
+                                value: response?.data?.data[i]?.monthlyCharge[k]?._id,
+                            };
+                            plans.push(obj);
+                        }
+                        for (let k = 0; k < response?.data?.data[i]?.paymentMethod?.length; k++) {
+                            let obj = {
+                                name: response?.data?.data[i]?.paymentMethod[k],
+                            };
+                            paymentMethods.push(obj);
+                        } 
+                        for (let z = 0; z < response?.data?.data[i]?.additionalFeature?.length; z++) {
+                            let obj = {
+                                name: response?.data?.data[i]?.additionalFeature[z]?.featureName,
+                                value: response?.data?.data[i]?.additionalFeature[z]?._id,
+                            };
+                            additionaltotal+=parseFloat(response.data.data[i].additionalFeature[z].featureAmount) 
+                             additionalfeaturearray.push(response.data.data[i].additionalFeature[z]._id.toString())
+                            additionalfeature.push(obj);
+                        }
+                        for (let y = 0; y < response.data.data[i].selectdiscount.length; y++) {
+                            discountobjectarray.push(response.data.data[i].selectdiscount[y]._id.toString());
+                            totaldiscounts +=parseFloat(parseFloat(response.data.data[i].selectdiscount[y].amount))
+                        } 
+                        //Device Features 
+                              // additional feature value and name 
+                        localStorage.setItem("deviceadditional", JSON.stringify(additionalfeature)); 
+                        localStorage.setItem("deviceadditionalfeaturearraytotal",JSON.stringify(additionalfeaturearray))
+                              // additionalfeaturetotal 
+                        localStorage.setItem("deviceadditionaltotal",JSON.stringify(additionaltotal))  
+                              //additional feature array object  
+                        localStorage.setItem("deviceadditionalfeaturearray",JSON.stringify(additionalfeaturearray))  
+                        //Discounts 
+                             //total device discount
+                        localStorage.setItem("totaldevicediscount", JSON.stringify(totaldiscounts));    
+                        
+                        localStorage.setItem("devicediscount",JSON.stringify(response.data.data[i].selectdiscount))
+                            //discount _id sennding to backend
+                        localStorage.setItem("devicediscountobjectarray", JSON.stringify(discountobjectarray));  
+
+                        localStorage.setItem("devicediscountobjectarraytotal",JSON.stringify(discountobjectarray))  
+                        //Plans 
+                              //Device Plans 
+                        localStorage.setItem("deviceplan", JSON.stringify(plans)); 
+                        //Complete Device Pricing including additional feature and discount
+                        localStorage.setItem("devicepricing", JSON.stringify(response.data.data[i]));
+                         ///payments method
+                         localStorage.setItem("devicePaymentMethod", JSON.stringify(paymentMethods));
+                    }
+                }
+                 localStorage.setItem("inventoryType", JSON.stringify(inventoryType));
+            })
+            .catch((err) => {});
+    }, []);
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
