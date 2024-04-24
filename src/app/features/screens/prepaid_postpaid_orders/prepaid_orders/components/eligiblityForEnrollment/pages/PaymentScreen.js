@@ -222,7 +222,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                         <div className="mt-2 w-full flex flex-wrap flex-row justify-content-left">
                             <h1 className="block w-full selectProduct">Select Plan</h1>
                             {JSON.parse(localStorage.getItem("planprices"))?.map((item) => {
-                                return inventory === item?.inventoryType ? (
+                                return inventory === item?.inventoryType && item?.type === "PREPAID" ? (
                                     <>
                                         <div style={{ opacity: `${item._id === currentPlanSelect ? "0.5" : ""}` }} className="planSelect">
                                             <div className="planinfo">
