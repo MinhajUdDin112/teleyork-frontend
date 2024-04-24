@@ -369,28 +369,28 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         fetchData();
     }, [formik.values.contact]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (parsezipResponse && !basicResponse) {
-                if (formik.values.alternateContact.length > 9) {
-                    const data = {
-                        contact: "",
-                        accountType: "Postpaid",
-                        alternateContact: formik.values.alternateContact,
-                    };
-                    try {
-                        const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                        setIsDuplicate(false);
-                    } catch (error) {
-                        toast.error(error?.response?.data?.msg);
-                        setIsDuplicate(true);
-                    }
-                }
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (parsezipResponse && !basicResponse) {
+    //             if (formik.values.alternateContact.length > 9) {
+    //                 const data = {
+    //                     contact: "",
+    //                     accountType: "Postpaid",
+    //                     alternateContact: formik.values.alternateContact,
+    //                 };
+    //                 try {
+    //                     const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+    //                     setIsDuplicate(false);
+    //                 } catch (error) {
+    //                     toast.error(error?.response?.data?.msg);
+    //                     setIsDuplicate(true);
+    //                 }
+    //             }
+    //         }
+    //     };
 
-        fetchData();
-    }, [formik.values.alternateContact]);
+    //     fetchData();
+    // }, [formik.values.contact]);
     useEffect(() => {
         const dobString = parsebasicResponse?.data?.DOB;
 

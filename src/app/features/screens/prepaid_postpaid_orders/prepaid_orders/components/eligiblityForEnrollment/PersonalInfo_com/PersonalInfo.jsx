@@ -123,18 +123,18 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             }
         },
     });
-    useEffect(() => {
-        const data = {
-            accountType: formik.values.accountType,
-            contact: formik.values.contact,
-            alternateContact: formik.values.alternateContact,
-        };
-        const checkNumber = async () => {
-            const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-            console.log("res", response?.data);
-        };
-        checkNumber();
-    }, [formik.values.contact]);
+    // useEffect(() => {
+    //     const data = {
+    //         accountType: formik.values.accountType,
+    //         contact: formik.values.contact,
+    //         alternateContact: formik.values.alternateContact,
+    //     };
+    //     const checkNumber = async () => {
+    //         const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+    //         console.log("res", response?.data);
+    //     };
+    //     checkNumber();
+    // }, [formik.values.contact]);
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
     }, [eSim]);
@@ -290,26 +290,45 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     //check customer Duplication
     useEffect(() => {
         const fetchData = async () => {
-            if (parsezipResponse && !basicResponse) {
-                if (formik.values.contact.length > 9) {
-                    const data = {
-                        accountType: formik.values.accountType,
-                        contact: formik.values.contact,
-                        alternateContact: formik.values.alternateContact,
-                    };
+            const data = {
+                accountType: formik.values.accountType,
+                contact: formik.values.contact,
+                alternateContact: formik.values.alternateContact,
+            };
 
-                    try {
-                        const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                        setIsDuplicate(false);
-                    } catch (error) {
-                        toast.error(error?.response?.data?.msg);
-                        setIsDuplicate(true);
-                    }
-                }
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                console.log("responsii", response);
+                setIsDuplicate(false);
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setIsDuplicate(true);
             }
         };
         fetchData();
     }, [formik.values.contact]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (parsezipResponse && !basicResponse) {
+    //             if (formik.values.contact.length > 9) {
+    //                 const data = {
+    //                     accountType: formik.values.accountType,
+    //                     contact: formik.values.contact,
+    //                     alternateContact: formik.values.alternateContact,
+    //                 };
+
+    //                 try {
+    //                     const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+    //                     setIsDuplicate(false);
+    //                 } catch (error) {
+    //                     toast.error(error?.response?.data?.msg);
+    //                     setIsDuplicate(true);
+    //                 }
+    //             }
+    //         }
+    //     };
+    //     fetchData();
+    // }, [formik.values.contact]);
     useEffect(() => {
         const dobString = parsebasicResponse?.data?.DOB;
         if (dobString) {
