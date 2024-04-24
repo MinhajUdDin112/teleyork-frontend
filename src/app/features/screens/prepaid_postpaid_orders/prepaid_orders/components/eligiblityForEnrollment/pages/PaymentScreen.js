@@ -221,8 +221,28 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     {currentScreen === 2 ? (
                         <div className="mt-2 w-full flex flex-wrap flex-row justify-content-left">
                             <h1 className="block w-full selectProduct">Select Plan</h1>
-                            {JSON.parse(localStorage.getItem("planprices"))?.map((item) => {
-                                return inventory === item?.inventoryType ? (
+                            {JSON.parse(localStorage.getItem("planprices"))?.map((item) => {         
+                                   let include=false
+                                 if(inventory === "SIM"){ 
+                                 let plans=JSON.parse(localStorage.getItem("simplan"))   
+                                  for(let i=0;i<plans.length;i++){ 
+                                     if(plans[i].value === item?._id){ 
+                                        include=true 
+                                        break
+                                     }
+                                  }
+                                 } 
+                                 else if(inventory === "WIRELESS DEVICE"){ 
+                                    let plans=JSON.parse(localStorage.getItem("deviceplan"))   
+                                  for(let i=0;i<plans.length;i++){ 
+                                     if(plans[i].value === item?._id){ 
+                                        include=true 
+                                        break
+                                     }
+                                  }
+                                 }
+                                return   ( 
+                                    include?
                                     <>
                                         <div style={{ opacity: `${item._id === currentPlanSelect ? "0.5" : ""}` }} className="planSelect">
                                             <div className="planinfo">
@@ -254,8 +274,10 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                 Select
                                             </button>
                                         </div>
-                                    </>
-                                ) : undefined;
+                                    </> 
+                                    :undefined
+                                )  
+                                 
                             })}
                         </div>
                     ) : undefined}
@@ -407,7 +429,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                         }
                                                     }
                                                 }
-                                                totalamount -= prerviousdiscounttotal;
+                                                totalamount += prerviousdiscounttotal;
                                                 let discountnew = e.value;
                                                 let newdiscounttotal = 0;
                                                 for (let i = 0; i < discountnew.length; i++) {
@@ -417,7 +439,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                         }
                                                     }
                                                 }
-                                                totalamount += newdiscounttotal;
+                                                totalamount -= newdiscounttotal;
                                                 localStorage.setItem("simdiscountobjectarray", JSON.stringify(e.value));
                                                 formik.setFieldValue("discounts", e.value);
                                                 formik.setFieldValue("totalamount", totalamount.toString());
@@ -448,7 +470,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                         }
                                                     }
                                                 }
-                                                totalamount -= prerviousdiscounttotal;
+                                                totalamount += prerviousdiscounttotal;
                                                 let discountnew = e.value;
                                                 let newdiscounttotal = 0;
                                                 for (let i = 0; i < discountnew.length; i++) {
@@ -458,7 +480,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                         }
                                                     }
                                                 }
-                                                totalamount += newdiscounttotal;
+                                                totalamount -= newdiscounttotal;
                                                 localStorage.setItem("devicediscountobjectarray", JSON.stringify(e.value));
                                                 formik.setFieldValue("discounts", e.value);
                                                 formik.setFieldValue("totalamount", totalamount.toString());
