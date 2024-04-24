@@ -470,7 +470,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                         }
                                                     }
                                                 }
-                                                totalamount -= prerviousdiscounttotal;
+                                                totalamount += prerviousdiscounttotal;
                                                 let discountnew = e.value;
                                                 let newdiscounttotal = 0;
                                                 for (let i = 0; i < discountnew.length; i++) {
