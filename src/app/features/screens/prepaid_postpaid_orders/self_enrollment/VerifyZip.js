@@ -13,7 +13,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const loginRes = localStorage.getItem("userData");
 const parseLoginRes = JSON.parse(loginRes);
 const PrepaidSelfVerifyZip = () => {
-
     const [companyData, setcompanyData] = useState()
 
     useEffect( () => {

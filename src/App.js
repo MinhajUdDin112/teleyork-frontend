@@ -134,6 +134,7 @@ import PrepaidSelfAddress from "./app/features/screens/prepaid_postpaid_orders/s
 import PrepaidSelfEligibility from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Eligibility";
 import PrepaidSelfNationalVerifier from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/NationalVerifier";
 import PrepaidSelfResumeApplication from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/ResumeApplication";
+import PrepiadSelectInventory from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Select_Inventory";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -473,6 +474,7 @@ const App = () => {
                                             <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
                                             <Route path="/resumeapplication" element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
                                             <Route path="/prepaid-selfenrollment" element={isPermitted("/prepaid-selfenrollment") ? <PrepiadSelfVerifyZip /> : <Dashboard />} />
+                                             <Route path="/prepaid-selectinventory" element={isPermitted("/prepaid-selfenrollment") ? <PrepiadSelectInventory /> : <Dashboard />} />
                                             <Route path="/prepaid-selfpersonalinfo" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfPersonalInfo /> : <Dashboard />} />
                                             <Route path="/prepaid-selfaddress" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfAddress /> : <Dashboard />} />
                                             <Route path="/prepaid-selfeligibile" element={isPermitted("/prepaid-selfenrollment") ? <PrepaidSelfEligibility /> : <Dashboard />} />

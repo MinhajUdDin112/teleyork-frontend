@@ -32,13 +32,7 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
             payment_method: {
                 card: elements.getElement(CardElement),
             },
-        });   
-        stripe.createToken(elements.getElement(CardElement)).then(function(result) {
-            // Handle result.error or result.token 
-           console.log("toke data is",result)
-          }).catch(err=>{ 
-            
-          })
+        });
 
         if (error) {
             localStorage.setItem("paymentstatus", "pending");
