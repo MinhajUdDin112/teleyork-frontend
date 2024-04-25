@@ -81,11 +81,54 @@ const PrepaidSelfVerifyZip = () => {
             setIsButtonLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/enrollment/PWGverifyZip`, newData);
-                if (response?.status === 200 || response?.status === 201) {
+                   if (response?.status === 200 || response?.status === 201) {    
+                    localStorage.removeItem("prepaidbasicData");
+                    localStorage.removeItem("prepaidaddress");
+                    localStorage.removeItem("prepaidzipData");
+                    localStorage.removeItem("prepaidagreeData");
+                    localStorage.removeItem("prepaidprogrammeId");
+                    localStorage.removeItem("paymentmethod");
+                    localStorage.removeItem("paymentdetails");
+                    localStorage.removeItem("comingfromincomplete");
+                    localStorage.removeItem("comingforedit");
+                    localStorage.removeItem("paymentmethod");
+                    localStorage.removeItem("paymentdetails");
+                    localStorage.removeItem("inventoryType");
+                    //Payment Status
+                    localStorage.removeItem("paymentstatus");
+                    localStorage.removeItem("stripeId");
+                    //Device local
+                    localStorage.removeItem("deviceadditional");
+                    localStorage.removeItem("deviceadditionaltotal");
+                    localStorage.removeItem("deviceadditionalfeaturearray");
+                    localStorage.removeItem("totaldevicediscount");
+                    localStorage.removeItem("devicediscountobjectarray");
+                    localStorage.removeItem("deviceplan");
+                    localStorage.removeItem("devicepricing");
+                    //SIM Local
+                    localStorage.removeItem("simadditional");
+                    localStorage.removeItem("simadditionaltotal");
+                    localStorage.removeItem("simadditionalfeaturearray");
+                    localStorage.removeItem("totalsimdiscount");
+                    localStorage.removeItem("simdiscountobjectarray");
+                    localStorage.removeItem("simplan");
+                    localStorage.removeItem("simpricing");
+                    localStorage.removeItem("devicediscount");
+                    localStorage.removeItem("simPaymentMethod");
+                    localStorage.removeItem("deviceadditionalfeaturearraytotal");
+                    localStorage.removeItem("simadditionalfeaturearraytotal");
+                    localStorage.removeItem("devicediscountobjectarraytotal");
+                    localStorage.removeItem("simdiscountobjectarraytotal");
+                    localStorage.removeItem("simdiscount");
+                    localStorage.removeItem("planprices");
+                    localStorage.removeItem("devicePaymentMethod");
+                    localStorage.removeItem("datasendforinvoice");
+                    localStorage.removeItem("invoiceData");
                     localStorage.setItem("zip", JSON.stringify(response.data));
                     localStorage.removeItem("initialInformation");
                     localStorage.removeItem("homeAddress");
-                    localStorage.removeItem("selectProgram");
+                    localStorage.removeItem("selectProgram");    
+                    localStorage.removeItem("initialInformation")
                     navigate("/prepaid-selfpersonalinfo");
                 }
             } catch (error) {
@@ -95,14 +138,13 @@ const PrepaidSelfVerifyZip = () => {
             setIsButtonLoading(false);
         },
     });
-
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error mb-3">{formik.errors[name]}</small>;
     };
 
     useEffect(() => {
-        if (verifyZip) {
+        if (verifyZip) {     
             navigate("/prepaid-selfpersonalinfo");
         }
         if (verifyZipError) {
@@ -123,13 +165,13 @@ const PrepaidSelfVerifyZip = () => {
                 <div className="col-7">
                     <form onSubmit={formik.handleSubmit}>
                         <div className="card flex p-8">
-                            <div className="col-6">
+                          {/*  <div className="col-6">
                                 <p className="text-2xl font-bold">ACP Enrollment</p>
                                 <p className="mt-0 text-xl">What is ACP?</p>
                                 <p className="text-lg">The Affordable Connectivity Program (ACP), administered by the FCC, is a recently established federal initiative dedicated to providing internet access to low-income individuals and families.</p>
-                            </div>
-                            <div className="col-6">
-                                <p className="text-2xl font-bold">Let's see if you are eligible for this benefit</p>
+                            </div>     */}
+                            <div className="col-12">
+                                <p className="text-2xl font-bold">Let's see if you are eligible for Prepaid Program   </p>
                                 <div className="flex flex-column">
                                     <InputText className="mb-3" placeholder="ZIP Code" name="zipCode" value={formik.values.zipCode} onChange={formik.handleChange} onBlur={formik.handleBlur} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled={verifyZipLoading} />
                                     {getFormErrorMessage("zipCode")}

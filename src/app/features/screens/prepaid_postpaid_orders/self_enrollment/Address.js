@@ -129,7 +129,7 @@ const PrepaidSelfAddress = () => {
                                 <p className="text-2xl font-bold">Address</p>
                                 <p className="mt-0 text-xl">We'll also require some information about your location.</p>
                                 <p className="text-lg">
-                                    The service address is the location where your ACP service will be provided to you.
+                                    The service address is the location where your Prepaid service will be provided to you.
                                     <br></br>The billing address is where you will receive your bills.
                                 </p>
                             </div>
