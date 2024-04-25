@@ -162,11 +162,13 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     {checked ? (
                                         <p>
                                             <strong>
-                                                This form is electronically signed by{" "}
+                                                This form is electronically signed by <span> </span>
                                                 <strong>
                                                     {(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}
-                                                </strong>{" "}
-                                                on {ChangeIsoDateToECT(new Date().toISOString())}
+                                                </strong>
+                                                <span> </span>
+                                                on <span> </span>
+                                                {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}
@@ -188,7 +190,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     {checked ? (
                                         <p>
                                             <strong>
-                                                This form is electronically signed byn <span> </span>
+                                                This form is electronically signed by <span> </span>
                                                 <strong>
                                                     {(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}
                                                 </strong>{" "}

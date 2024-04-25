@@ -99,13 +99,13 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
             invoiceOneTimeCharges: cpData?.activeBillingConfiguration?.oneTimeCharge,
             lateFee: cpData?.activeBillingConfiguration?.applyLateFee,
             planName: cpData?.plan?.name,
-            //
+            //*********************//
             chargingType: "Monthly",
             printSetting: cpData?.currentPlan?.printSetting,
             paymentChannel: "Stripe",
             isInvoice: true,
             // isAutopay: true,
-            selectProduct: cpData?.billID,
+            selectProduct: cpData?.billId,
             // autopayChargeDate: "",
             // stripeTokenId: cpData?.currentPlan?.stripeTokenId,
             // stripeCustomerId: cpData?.currentPlan?.stripeCustomerId,
