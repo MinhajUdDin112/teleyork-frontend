@@ -19,6 +19,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const [refreshComponent, setRefreshComponent] = useState(false);
     const [refreshComp, setRefreshComp] = useState(false);
     const [trackingId, setTrackingId] = useState("");
+    const [assignLabel, setAssignLabel] = useState(false);
     const selectedid = localStorage.getItem("selectedId");
 
     const parseselectedid = JSON.parse(selectedid);
@@ -137,6 +138,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             const response = await Axios.post(`${BASE_URL}/api/user/esnAssingment`, data);
             toast.success(response?.data?.msg);
             setRefreshEsn((prev) => !prev);
+            setAssignLabel(true);
         } catch (error) {
             toast.error(error?.response?.data?.msg);
         }
@@ -242,7 +244,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {cpData?.label === undefined && cpData?.isEnrollmentComplete && (
+            {assignLabel && cpData?.label === undefined && cpData?.isEnrollmentComplete && (
                 <>
                     <Button
                         label="Assign Label"

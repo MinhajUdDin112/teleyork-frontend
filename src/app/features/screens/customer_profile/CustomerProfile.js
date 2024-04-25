@@ -39,6 +39,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [agents, setAgents] = useState([]);
     const [refreshNotes, setRefreshNotes] = useState(false);
     const [resolvedNotes, setResolvedNotes] = useState([]);
+    const [trackingNumber, setTrackingNumber] = useState("");
     const location = useLocation();
 
     useEffect(() => {
@@ -225,6 +226,19 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
 
         fetchUser();
     }, []);
+    useEffect(() => {
+        const fetchTrackingNumber = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/web/order/getTrackingNumber/?customerId=${selectedId}`);
+                if (response?.status === 200 || response?.status === 201) {
+                    setTrackingNumber(response?.data?.data);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchTrackingNumber();
+    });
 
     const handleResolve = async (noteId) => {
         const data = {
@@ -713,6 +727,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                         <table class="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
+                                                    <td>Tracking Number</td>
+                                                    <td>{trackingNumber ? trackingNumber : "NIL"}</td>
+                                                </tr>
+                                                <tr>
                                                     <td>Wallet Balance</td>
                                                     <td>NIL</td>
                                                 </tr>
@@ -880,7 +898,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                     />
                                     {getFormErrorMessage("noteType")}
                                     <div className="mr-3 mb-3 mt-3">
-                                        <p className="m-0">Agent Name</p>
+                                        <p className="m-0">Assign To</p>
 
                                         <Dropdown
                                             value={formik.values.assignTo}
