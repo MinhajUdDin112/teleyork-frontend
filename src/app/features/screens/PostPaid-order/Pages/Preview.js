@@ -307,7 +307,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                 <strong>
                                                     {(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}
                                                 </strong>{" "}
-                                                on {ChangeIsoDateToECT(new Date().toISOString())}
+                                                on <span> </span> {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}

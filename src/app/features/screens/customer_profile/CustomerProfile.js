@@ -416,7 +416,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                         <td>
                                                             {cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? (
                                                                 // If PO Box Address is available and not empty, render it
-                                                                <p>po box : cpData?.PoBoxAddress</p>
+                                                                <p>POBox : {cpData?.PoBoxAddress}</p>
                                                             ) : // If PO Box Address is empty, render the regular mailing address
                                                             cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? (
                                                                 cpData?.malingAddress1 && cpData?.malingAddress2 ? (
@@ -750,7 +750,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Source</td>
+                                                    <td>Role</td>
                                                     <td>{cpData?.source !== undefined ? cpData?.source : "NIL"}</td>
                                                 </tr>
                                                 <tr>
