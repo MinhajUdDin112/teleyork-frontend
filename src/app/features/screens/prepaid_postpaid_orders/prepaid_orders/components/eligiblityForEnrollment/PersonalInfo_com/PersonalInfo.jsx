@@ -294,6 +294,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 accountType: formik.values.accountType,
                 contact: formik.values.contact,
                 alternateContact: formik.values.alternateContact,
+                customerId: _id,
             };
 
             try {
