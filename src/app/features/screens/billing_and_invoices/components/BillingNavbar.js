@@ -3,7 +3,9 @@ import { Menubar } from "primereact/menubar";
 import Axios from "axios";
 import DialogeForWallet from "./dialogs/DialogeForWallet";
 import { Dialog } from "primereact/dialog";
-
+import { Button } from "primereact/button";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const [cpData, setCpData] = useState([]);
@@ -78,9 +80,49 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
             },
         ];
     }
+    const handleGenerateInvoice = async () => {
+        const dataToSend = {
+            customerId: cpData?._id,
+            planId: cpData?.plan?._id,
+            // stripeId: cpData?.stripeId,
+            accountId: cpData?.accountId,
+            invoiceType: "SignUp",
+            planCharges: cpData?.currentPlan?.planCharges,
+            additionalCharges: cpData?.currentPlan?.additionalCharges,
+            discount: cpData?.currentPlan?.discount,
+            totalAmount: cpData?.totalAmount,
+            amountPaid: "0",
+            invoiceDueDate: cpData?.activeBillingConfiguration?.dueDate,
+            billingPeriod: cpData?.currentPlan?.billingPeriod,
+            invoiceStatus: "Pending",
+            invoicePaymentMethod: "Credit/Debit Card",
+            invoiceOneTimeCharges: cpData?.activeBillingConfiguration?.oneTimeCharge,
+            lateFee: cpData?.activeBillingConfiguration?.applyLateFee,
+            planName: cpData?.plan?.name,
+            //*********************//
+            chargingType: "Monthly",
+            printSetting: cpData?.currentPlan?.printSetting,
+            paymentChannel: "Stripe",
+            isInvoice: true,
+            // isAutopay: true,
+            selectProduct: cpData?.billId,
+            // autopayChargeDate: "",
+            // stripeTokenId: cpData?.currentPlan?.stripeTokenId,
+            // stripeCustomerId: cpData?.currentPlan?.stripeCustomerId,
+        };
 
+        try {
+            const response = await Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend);
+            if (response?.status === 200 || response?.status === 201) {
+                toast.success(response?.data?.message);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        }
+    };
     return (
         <div className="menubar-styling">
+            <ToastContainer />
             <Dialog header={"Add Wallet"} visible={openDialogeForWallet} style={{ width: "60vw" }} onHide={() => setOpenDialogeForWallet(false)}>
                 <DialogeForWallet setOpenDialogeForWallet={setOpenDialogeForWallet} />
             </Dialog>
@@ -116,6 +158,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
                 }}
                 className="m-1  card border-none menubar border-noround  text-xl font-semibold mx-0 bg-white mx-0 pt-4 pb-4"
             />
+            <Button onClick={handleGenerateInvoice} style={{ marginTop: "1rem" }} label="Generate Invoice" />
         </div>
     );
 };

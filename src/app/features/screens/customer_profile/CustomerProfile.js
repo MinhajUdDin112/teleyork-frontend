@@ -414,15 +414,19 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>Mailing Address</td>
                                                     {isShow && isShow ? (
                                                         <td>
-                                                            {cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== ""
-                                                                ? // If PO Box Address is available and not empty, render it
-                                                                  cpData?.PoBoxAddress
-                                                                : // If PO Box Address is empty, render the regular mailing address
-                                                                cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ")
-                                                                ? cpData?.malingAddress1 && cpData?.malingAddress2
-                                                                    ? `${cpData?.malingAddress1}, ${cpData?.malingAddress2}`
-                                                                    : cpData?.malingAddress1
-                                                                : cpData?.address1}
+                                                            {cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? (
+                                                                // If PO Box Address is available and not empty, render it
+                                                                <p>POBox : {cpData?.PoBoxAddress}</p>
+                                                            ) : // If PO Box Address is empty, render the regular mailing address
+                                                            cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? (
+                                                                cpData?.malingAddress1 && cpData?.malingAddress2 ? (
+                                                                    `${cpData?.malingAddress1}, ${cpData?.malingAddress2}`
+                                                                ) : (
+                                                                    cpData?.malingAddress1
+                                                                )
+                                                            ) : (
+                                                                cpData?.address1
+                                                            )}
                                                         </td>
                                                     ) : (
                                                         // <td>{cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td>
@@ -746,7 +750,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Source</td>
+                                                    <td>Role</td>
                                                     <td>{cpData?.source !== undefined ? cpData?.source : "NIL"}</td>
                                                 </tr>
                                                 <tr>

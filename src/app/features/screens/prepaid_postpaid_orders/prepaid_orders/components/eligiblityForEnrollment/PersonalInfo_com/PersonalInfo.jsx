@@ -294,11 +294,11 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 accountType: formik.values.accountType,
                 contact: formik.values.contact,
                 alternateContact: formik.values.alternateContact,
+                customerId: _id,
             };
 
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                console.log("responsii", response);
                 setIsDuplicate(false);
             } catch (error) {
                 toast.error(error?.response?.data?.msg);

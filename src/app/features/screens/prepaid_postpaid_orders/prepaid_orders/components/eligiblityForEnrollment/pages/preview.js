@@ -393,11 +393,12 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     {checked ? (
                                         <p>
                                             <strong>
-                                                This form is electronically signed by{" "}
+                                                This form is electronically signed by <span> </span>
                                                 <strong>
                                                     {previewInfo && previewInfo.firstName ? previewInfo.firstName.toUpperCase() : "Unknown"} {previewInfo && previewInfo.lastName ? previewInfo.lastName.toUpperCase() : "User"}
-                                                </strong>
-                                                on {ChangeIsoDateToECT(new Date().toISOString())}
+                                                </strong>{" "}
+                                                <span> </span>
+                                                on <span> </span> {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}
@@ -419,11 +420,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     {checked ? (
                                         <p>
                                             <strong>
-                                                This form is electronically signed by{" "}
+                                                This form is electronically signed by <span> </span>
                                                 <strong>
                                                     {(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}
                                                 </strong>
-                                                <span> </span> on {ChangeIsoDateToECT(new Date().toISOString())}
+                                                <span> </span> on <span> </span> {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}
