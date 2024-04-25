@@ -3,7 +3,7 @@ import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import Axios from "axios";  
+import Axios from "axios";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,14 +14,14 @@ import DialogForReject from "./dialogs/DialogForReject";
 import DialogForActivateSim from "./dialogs/DialogForActivateSim";
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
-import DialogeForRemarks from "./dialogs/DialogeForRemarks";
-import DialogeForTransferUser from "./dialogs/DialogeForTransferUser";
-import DialogeForRemarksForIJ from "./dialogs/DialogeForRemarksForIJ";
+import DialogeForRemarks from "./DialogeForRemarks";
+import DialogeForTransferUser from "./DialogeForTransferUser";
+import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
 import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
-import DialogeForApprove from "./dialogs/DialogeForApprove";
+import DialogeForApprove from "./DialogeForApprove";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PrepaidAllEnrollments = () => {   
+const PrepaidAllEnrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -39,7 +39,7 @@ const PrepaidAllEnrollments = () => {
     const [checkType, setCheckType] = useState()  
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO}, 
         createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
     });
@@ -130,7 +130,7 @@ const PrepaidAllEnrollments = () => {
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=Prepaid`);
+            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
                 if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
@@ -194,13 +194,20 @@ const PrepaidAllEnrollments = () => {
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
                 if (response?.status === 201 || response?.status === 200) {
-                    localStorage.setItem("comingforedit",true)
-                   // localStorage.setItem("comingfromincomplete",true)
-                    localStorage.setItem("prepaidbasicData", JSON.stringify(response.data));
-                    localStorage.setItem("prepaidaddress", JSON.stringify(response.data));
-                    navigate("/prepaid-newenrollment");
-                    setisButtonLoading(false); 
-
+                    localStorage.removeItem("zipData"); // Use removeItem instead of clearItem
+                    localStorage.setItem("basicData", JSON.stringify(response.data));
+                    localStorage.setItem("address", JSON.stringify(response.data));
+                    localStorage.setItem("programmeId", JSON.stringify(response.data));
+                    let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
+                    if (storedData) {
+                        storedData = false; 
+                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                    } else {
+                         storedData = false;
+                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                    }
+                    navigate("/enrollment");
+                    setisButtonLoading(false);
                 }
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
@@ -233,8 +240,7 @@ const PrepaidAllEnrollments = () => {
        
     };
 
-    const approveRowByTl =async(rowData)=>{ 
-        
+    const approveRowByTl =async(rowData)=>{
         setisButtonLoading(true);
         const approvedBy = parseLoginRes?._id;
         const enrolmentId = rowData?._id;
@@ -250,24 +256,10 @@ const PrepaidAllEnrollments = () => {
             }
             else{
               
-                try {  
-                     
-
+                try {
                     const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
                     if (response?.status === 201 || response?.status === 200) {
-                        toast.success("Approved"); 
-                        Axios.post(`${BASE_URL}/api/web/order`, { orderNumber:rowData.enrollmentId}).then((response)=>{  
-                             
-                          toast.success("Order Displaced Successfully")           
-                          Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId:(response.data.data.orderId).toString(),userId:parseLoginRes._id, testLabel: true}).then(()=>{ 
-                            toast.success("Label Successfully")           
-                             
-                          }).catch(err=>{ 
-                              toast.success("Label Creation Failed")
-                          })  
-                        }).catch(err=>{ 
-                            toast.success("Order Displacing Failed")
-                        })   
+                        toast.success("Approved");
                         setisButtonLoading(false);
                     }
                 } catch (error) {
@@ -448,15 +440,9 @@ const PrepaidAllEnrollments = () => {
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
                 <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1"  text raised disabled={isButtonLoading} />
-                 
             </div>
         );
-    };   
-    const handleEnrollmentBill = (rowData) => {
-        navigate("/invoice", { state: { selectedId: rowData._id } });
-        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
     };
-    
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
@@ -466,9 +452,7 @@ const PrepaidAllEnrollments = () => {
                     <Button label="Add Remarks"  onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
-                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />  
-                <Button label="Billing" onClick={() => handleEnrollmentBill(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
-                
+                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
                 <Button label="Approve"   onClick={() =>{  
                     if(!rowData.QualityRemarks){
                         toast.error("Please Add Remarks")

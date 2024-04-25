@@ -21,7 +21,7 @@ import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
 import DialogeForApprove from "./dialogs/DialogeForApprove";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PrepaidAllEnrollments = () => {   
+const PrepaidAllSelfEnrollments = () => {   
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -39,7 +39,7 @@ const PrepaidAllEnrollments = () => {
     const [checkType, setCheckType] = useState()  
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO}, 
         createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
     });
@@ -130,7 +130,7 @@ const PrepaidAllEnrollments = () => {
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=Prepaid`);
+            const res = await Axios.get(`${BASE_URL}/api/enrollment/selfEnrollmentList?serviceProvider=${parseLoginRes?.company}&accountType=Prepaid`);
             if (res?.status === 200 || res?.status === 201) {
                 if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
@@ -743,13 +743,13 @@ const PrepaidAllEnrollments = () => {
                                 }
                             />
                             <Column field="contact" header="Contact" />
-                            <Column field="createdBy.name" header="Created By" />
+                           {/* <Column field="createdBy.name" header="Created By" />  */}
                             <Column field="createdDate" header="Created At" />
                             {
                             toCapital.includes("QA MANAGER") ? <Column field="assignToQa.name" header="Initial Assignee"/>:""
                             }
                           
-                            <Column
+                        {/*    <Column
     field="Phase"
     header="Phase"
     body={(rowData) => (
@@ -761,7 +761,8 @@ const PrepaidAllEnrollments = () => {
             ))}
         </span>
     )}
-/>
+/> 
+*/}
 
                             {toCapital == "CSR" || toCapital == "CS" ||toCapital == "TEAM LEAD" ||toCapital == "CS MANAGER" ? (
                                 ""
@@ -783,5 +784,5 @@ const PrepaidAllEnrollments = () => {
         </>
     );
 };
-export default PrepaidAllEnrollments;
+export default PrepaidAllSelfEnrollments;
  
