@@ -111,7 +111,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
             // stripeCustomerId: cpData?.currentPlan?.stripeCustomerId,
         };
 
-        console.log("dataToSend", dataToSend);
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend);
             if (response?.status === 200 || response?.status === 201) {
@@ -121,7 +120,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
             toast.error(error?.response?.data?.message);
         }
     };
-    console.log("cpData", cpData);
     return (
         <div className="menubar-styling">
             <ToastContainer />
