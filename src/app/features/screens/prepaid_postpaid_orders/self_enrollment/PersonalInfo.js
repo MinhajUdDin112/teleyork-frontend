@@ -257,7 +257,8 @@ const PrepaidSelfPersonalInfo = () => {
             const fetchData = async () => {
                 if (formik.values.contact.length > 9) {
                     const data = {
-                        contact: formik.values.contact,
+                        contact: formik.values.contact,      
+                        accountTyp:"Prepaid"
                     };
 
                     try {
@@ -291,7 +292,7 @@ const PrepaidSelfPersonalInfo = () => {
                                 <p className="text-2xl font-bold">Personal Information</p>
                                 <p className="mt-0 text-xl">
                                     To proceed, we require some personal information from you. Please provide the details exactly as they appear on your government-issued ID.<br></br> If you have a middle name, kindly include it. If you do not have a middle name, you may leave that field blank.
-                                    <br></br>The Benefit Qualifying Person (BQP) is an individual, such as a parent or guardian, through whom another person qualifies for the program benefits. The BQP is typically the person responsible for meeting the eligibility criteria of the program
+                                    <br></br>
                                 </p>
                             </div>
                             <div className="col-6">
@@ -299,10 +300,8 @@ const PrepaidSelfPersonalInfo = () => {
                                     <InputText className="mb-3" placeholder="First Name" name="firstName" value={formik.values.firstName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
                                     {getFormErrorMessage("firstName")}
                                     <InputText className="mb-3" placeholder="Middle Name" name="middleName" value={formik.values.middleName} onChange={formik.handleChange} style={{ textTransform: "uppercase" }} />
-
                                     <InputText className="mb-3" placeholder="Last Name" name="lastName" value={formik.values.lastName} onChange={formik.handleChange} keyfilter={/^[a-zA-Z\s]*$/} minLength={3} maxLength={20} style={{ textTransform: "uppercase" }} />
                                     {getFormErrorMessage("lastName")}
-
                                     <Dropdown
                                         className="mb-3"
                                         id="suffix"
@@ -314,7 +313,6 @@ const PrepaidSelfPersonalInfo = () => {
                                         options={options}
                                         placeholder="Suffix"
                                     />
-
                                     <InputText type="text" className="mb-3" placeholder="SSN(Last 4 Digit) " name="SSN" value={formik.values.SSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                     {getFormErrorMessage("SSN")}
                                     <Calendar onPaste={handlePaste} className="mb-3" name="DOB" placeholder="mm/dd/yyyy" value={formik.values.DOB} onChange={formik.handleChange} showIcon />

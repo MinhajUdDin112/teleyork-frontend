@@ -3,11 +3,13 @@ import { Button } from "primereact/button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "./css/payment_screen.css";
-import { Dropdown } from "primereact/dropdown";
+import { Dropdown } from "primereact/dropdown"; 
+import { useNavigate } from "react-router-dom";
 import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
+import PrepaidPreview from "./Preview_Prepaid";
 function capitalizeSentence(sentence) {
     // Split the sentence into words
     const words = sentence.split(" ");
@@ -21,8 +23,21 @@ function capitalizeSentence(sentence) {
     // Join the words back into a sentence
     return capitalizedWords.join(" ");
 }
-const PrepaidSelectInventory = ({ setActiveIndex, enrollment_id, _id, csr }) => {
-    const [inventory, setInventory] = useState();
+const PrepaidSelectInventory = ({ setActiveIndex}) => {    
+   const navigate=useNavigate()
+    const previewsRes = localStorage.getItem("homeAddress"); 
+    const parsepreviewsRes = JSON.parse(previewsRes);
+    const previewInfo = parsepreviewsRes?.data;     
+    if(previewInfo === undefined){   
+        navigate("/prepaid-selfenrollment")
+    }    
+    let enrollment_id= previewInfo?.enrollmentId       
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);   
+     let csr=parseLoginRes?._id
+    let _id=previewInfo?._id
+    const [inventory, setInventory] = useState();   
+    const [showPreview,setShowPreview]=useState(false)
     const [propectWithInvoice, setProspectWithInvoice] = useState(false);
     const [propectWithOutInvoice, setProspectWithOutInvoice] = useState(false);
     const [paymentmethoderror, setpaymentmethoderror] = useState(false)
@@ -84,14 +99,14 @@ const PrepaidSelectInventory = ({ setActiveIndex, enrollment_id, _id, csr }) => 
         onSubmit: async (values, actions) => {
             if (formik.values.prospectwithoutinvoice || formik.values.prospectwithinvoice) {
                 localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values))
-                setActiveIndex(3)
+                setShowPreview(true)
             }
             else {
                 if (formik.values.paymentMode === "card") {
                     localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values))
                     if (localStorage.getItem("paymentstatus")) {
                         if (localStorage.getItem("paymentstatus") === "paid") {
-                            setActiveIndex(3);
+                            setShowPreview(true)
                         } else {
                             setPaymentDialogVisibility(true);
                         }
@@ -163,19 +178,24 @@ const PrepaidSelectInventory = ({ setActiveIndex, enrollment_id, _id, csr }) => 
             setPreviousPlanPrice(0);
         }
     }
-    return (
+    return (     
+         <>     
+         
+         {
+            showPreview ? <PrepaidPreview setShowPreview={setShowPreview}/>:
         <form onSubmit={formik.handleSubmit}>
             <div className="card inventoryscreens">
                 <div className="flex flex-wrap flex-row justify-content-around">
-                    <div className="w-full  flex flex-wrap flex-row justify-content-between ">
+                    <div className="w-full pb-4 flex flex-wrap flex-row justify-content-between ">
                         <Button
                             label="Back"
                             type="button"
                             onClick={() => {
                                 if (currentScreen !== 1) {
                                     setCurrentScreen((prev) => (prev = prev - 1));
-                                } else {
-                                    setActiveIndex(1);
+                                } else { 
+                                     
+                        navigate(`/prepaid-selfnationalverifier`);
                                 }
                             }}
                         />
@@ -192,10 +212,8 @@ const PrepaidSelectInventory = ({ setActiveIndex, enrollment_id, _id, csr }) => 
                                 }
                             }}
                         />
-                    </div>
-                    <div>
-                        <h5 className="font-bold text-left">ENROLLMENT ID: {enrollment_id}</h5>
-                    </div>
+                    </div >
+                    
                     {currentScreen === 1 ? (
                         <div className="mt-2 w-full flex flex-wrap flex-row justify-content-around">
                             <h1 className="block w-full selectProduct">Select Product</h1>
@@ -206,6 +224,7 @@ const PrepaidSelectInventory = ({ setActiveIndex, enrollment_id, _id, csr }) => 
                                         <img src={`./${item.label}.jpg`} />
                                         <button
                                             type="button"
+
                                             disabled={item?.label === current || paymentInfo}
                                             onClick={() => {
                                                 onInventorySelect(item);
@@ -558,7 +577,8 @@ const PrepaidSelectInventory = ({ setActiveIndex, enrollment_id, _id, csr }) => 
                     ) : undefined}
                 </div>
             </div>
-        </form>
+        </form>   
+                }  </>
     );
 };
 

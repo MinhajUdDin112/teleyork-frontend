@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "primereact/button";
+import { Button } from "primereact/button"; 
 import { Calendar } from "primereact/calendar";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -14,14 +14,14 @@ import DialogForReject from "./dialogs/DialogForReject";
 import DialogForActivateSim from "./dialogs/DialogForActivateSim";
 import { InputText } from "primereact/inputtext";
 import { PrimeIcons } from "primereact/api";
-import DialogeForRemarks from "./dialogs/DialogeForRemarks";
-import DialogeForTransferUser from "./dialogs/DialogeForTransferUser";
-import DialogeForRemarksForIJ from "./dialogs/DialogeForRemarksForIJ";
+import DialogeForRemarks from "./DialogeForRemarks";
+import DialogeForTransferUser from "./DialogeForTransferUser";
+import DialogeForRemarksForIJ from "./DialogeForRemarksForIJ";
 import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
-import DialogeForApprove from "./dialogs/DialogeForApprove";
+import DialogeForApprove from "./DialogeForApprove";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PrepaidAllEnrollments = () => {
+const PrepaidAllEnrollments = () => {  
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
     const [isEnrolmentId, setIsEnrolmentId] = useState();
     const [CsrId, setCsrId] = useState();
@@ -34,12 +34,12 @@ const PrepaidAllEnrollments = () => {
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [link, setLink] = useState();
     const [allEnrollments, setAllEnrollments] = useState([]);
-    const [expandedRows, setExpandedRows] = useState([]);
-    const [createDateToFilterValue, setCreatedDateToFilterValue] = useState("");
-    const [checkType, setCheckType] = useState();
+    const [expandedRows, setExpandedRows] = useState([]);  
+    const [createDateToFilterValue,setCreatedDateToFilterValue]=useState("")
+    const [checkType, setCheckType] = useState()  
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO}, 
         createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
     });
@@ -53,7 +53,7 @@ const PrepaidAllEnrollments = () => {
     const [dialogeForApprove, setDialogeForApprove] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
     const [checkRemarks, setCheckRemarks] = useState();
-    const [selectedIdsForApprove, setSelectedIdsForApprove] = useState();
+    const [selectedIdsForApprove, setSelectedIdsForApprove] = useState()
 
     // const rowExpansionTemplate = (data) => {
     //     return (
@@ -91,6 +91,7 @@ const PrepaidAllEnrollments = () => {
     const parseLoginRes = JSON.parse(loginRes);
     const roleName = parseLoginRes?.role?.role;
     const toCapital = roleName.toUpperCase();
+   
 
     const onGlobalFilterValueChange = (e) => {
         const value = e.target.value;
@@ -107,25 +108,31 @@ const PrepaidAllEnrollments = () => {
             _filters["enrollment"].value = value;
             setFilters(_filters);
             setEnrollmentIdFilterValue(value);
-        } else if (field === "createdTo") {
-            setCreatedDateToFilterValue(e.value);
+        }   
+        else if(field === "createdTo"){ 
+            setCreatedDateToFilterValue(e.value)       
             const updatedDate = new Date(e.value);
-            updatedDate.setDate(updatedDate.getDate() + 1);
-            _filters["createdTo"].value = new Date(updatedDate).toISOString();
+      updatedDate.setDate(updatedDate.getDate() + 1);
+            _filters["createdTo"].value =new Date(updatedDate).toISOString() 
             setFilters(_filters);
-        } else {
-            setCreatedDateFilterValue(e.value);
-            _filters["createdAt"].value = new Date(e.value).toISOString();
-            setFilters(_filters);
-        }
+        } 
+
+        else {                
+           
+            setCreatedDateFilterValue(e.value);  
+            _filters["createdAt"].value =new Date(e.value).toISOString() 
+            setFilters(_filters);   
+        }    
+     
     };
+
 
     const getAllEnrollments = async () => {
         setIsLoading(true);
         try {
-            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}&accountType=Prepaid`);
+            const res = await Axios.get(`${BASE_URL}/api/user/EnrollmentApprovedByUser?userId=${parseLoginRes?._id}`);
             if (res?.status === 200 || res?.status === 201) {
-                if (!res?.data?.data) {
+                if (!(res?.data?.data)) {
                     toast.success(" No enrollments have been received from the previous department yet");
                 } else if (res?.data?.data) {
                     const updatedData = res?.data?.data.map((item) => ({
@@ -141,7 +148,9 @@ const PrepaidAllEnrollments = () => {
                             .replace(/\//g, "-"),
                         createdTo: item.createdAt,
                     }));
-
+    
+                   
+    
                     setAllEnrollments(updatedData);
                 }
                 setIsLoading(false);
@@ -153,15 +162,16 @@ const PrepaidAllEnrollments = () => {
     };
 
     useEffect(() => {
-        getAllEnrollments();
+        getAllEnrollments();  
+       
     }, []);
 
     const viewRow = async (rowData) => {
         setisButtonLoading(true);
         const _id = rowData._id;
-        const type = rowData?.enrollment;
-
-        if (type.includes("Self")) {
+        const type=rowData?.enrollment;
+     
+        if(type.includes("Self")){
             setSelectedEnrollmentId(_id);
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
@@ -177,16 +187,26 @@ const PrepaidAllEnrollments = () => {
                 toast.error(error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
-        } else {
+
+        }
+        else{
             setSelectedEnrollmentId(_id);
             try {
                 const response = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${_id}`);
                 if (response?.status === 201 || response?.status === 200) {
-                    localStorage.setItem("comingforedit", true);
-                    // localStorage.setItem("comingfromincomplete",true)
-                    localStorage.setItem("prepaidbasicData", JSON.stringify(response.data));
-                    localStorage.setItem("prepaidaddress", JSON.stringify(response.data));
-                    navigate("/prepaid-newenrollment");
+                    localStorage.removeItem("zipData"); // Use removeItem instead of clearItem
+                    localStorage.setItem("basicData", JSON.stringify(response.data));
+                    localStorage.setItem("address", JSON.stringify(response.data));
+                    localStorage.setItem("programmeId", JSON.stringify(response.data));
+                    let storedData = JSON.parse(localStorage.getItem("fromIncomplete")) || {};
+                    if (storedData) {
+                        storedData = false; 
+                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                    } else {
+                         storedData = false;
+                        localStorage.setItem("fromIncomplete", JSON.stringify(storedData));
+                    }
+                    navigate("/enrollment");
                     setisButtonLoading(false);
                 }
             } catch (error) {
@@ -194,6 +214,7 @@ const PrepaidAllEnrollments = () => {
                 setisButtonLoading(false);
             }
         }
+       
 
         setisButtonLoading(false);
     };
@@ -204,52 +225,41 @@ const PrepaidAllEnrollments = () => {
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-
-        try {
-            const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
-            if (response?.status === 201 || response?.status === 200) {
-                toast.success("Approved");
+       
+            try {
+                const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
+                if (response?.status === 201 || response?.status === 200) {
+                    toast.success("Approved");
+                    setisButtonLoading(false);
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-            setisButtonLoading(false);
-        }
-        getAllEnrollments();
+            getAllEnrollments();
+       
     };
 
-    const approveRowByTl = async (rowData) => {
+    const approveRowByTl =async(rowData)=>{
         setisButtonLoading(true);
         const approvedBy = parseLoginRes?._id;
         const enrolmentId = rowData?._id;
         const approved = true;
         const dataToSend = { approvedBy, enrolmentId, approved };
-
-        setCheckRemarks(rowData?.QualityRemarks);
-
-        if (rowData?.QualityRemarks) {
-            if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
-                toast.error("Declined sales can only rejected");
-                setisButtonLoading(false);
-            } else {
+       
+         setCheckRemarks(rowData?.QualityRemarks)
+        
+        if(rowData?.QualityRemarks ){
+           if (rowData && rowData.QualityRemarks && rowData.QualityRemarks.includes("declined")) {
+                   toast.error("Declined sales can only rejected")
+                   setisButtonLoading(false);              
+            }
+            else{
+              
                 try {
                     const response = await Axios.patch(`${BASE_URL}/api/user/approval`, dataToSend);
                     if (response?.status === 201 || response?.status === 200) {
                         toast.success("Approved");
-                        Axios.post(`${BASE_URL}/api/web/order`, { orderNumber: rowData.enrollmentId })
-                            .then((response) => {
-                                toast.success("Order Displaced Successfully");
-                                Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId: response.data.data.orderId.toString(), userId: parseLoginRes._id, testLabel: true })
-                                    .then(() => {
-                                        toast.success("Label Successfully");
-                                    })
-                                    .catch((err) => {
-                                        toast.success("Label Creation Failed");
-                                    });
-                            })
-                            .catch((err) => {
-                                toast.success("Order Displacing Failed");
-                            });
                         setisButtonLoading(false);
                     }
                 } catch (error) {
@@ -258,11 +268,14 @@ const PrepaidAllEnrollments = () => {
                 }
                 getAllEnrollments();
             }
-        } else {
+            }
+           
+        else{
+          
             toast.error("Please Add Remarks First");
-            setisButtonLoading(false);
+                 setisButtonLoading(false)
         }
-    };
+    }
 
     const runNLAD = async (rowData) => {
         setisButtonLoading(true);
@@ -328,18 +341,20 @@ const PrepaidAllEnrollments = () => {
             setisButtonLoading(false);
         }
     };
-
+    
     const enrollUser = async (rowData) => {
+       
         setisButtonLoading(true);
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/enrollVerifiedUser?userId=${parseLoginRes?._id}&enrollmentId=${rowData?._id}`);
-
+          
             if (response?.status == "200" || response?.status == "201") {
                 toast.success("Successfully Enrolled");
                 getAllEnrollments();
                 setisButtonLoading(false);
             }
         } catch (error) {
+          
             const body = error?.response?.data?.data?.body;
 
             const errorMessage = Array.isArray(body) ? body.toString() : body && typeof body === "object" ? JSON.stringify(body) : body;
@@ -395,7 +410,7 @@ const PrepaidAllEnrollments = () => {
         setisButtonLoading(true);
         if (allEnrollments) {
             const enrollmentIds = selectedRows.map((enrollment) => enrollment._id);
-
+           
             const dataToSend = {
                 approvedBy: parseLoginRes?._id,
                 enrolmentIds: enrollmentIds,
@@ -422,74 +437,66 @@ const PrepaidAllEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1" />
-                {/* <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
-                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} /> */}
+                <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1"  />
+                <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1"  text raised disabled={isButtonLoading} />
             </div>
         );
     };
-    const handleEnrollmentBill = (rowData) => {
-        navigate("/invoice", { state: { selectedId: rowData._id } });
-        localStorage.setItem("selectedId", JSON.stringify(rowData._id));
-    };
-
     const actionTemplateForTL = (rowData) => {
         return (
             <div>
                 {parseLoginRes?.companyName.includes("IJ") || parseLoginRes?.companyName.includes("ij") ? (
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarksForIJ(rowData)} className=" p-button-sucess mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 ) : (
-                    <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
+                    <Button label="Add Remarks"  onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
-                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1" text raised disabled={isButtonLoading} />
-                <Button label="Billing" onClick={() => handleEnrollmentBill(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1" />
+                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1"  text raised disabled={isButtonLoading} />
+                <Button label="Approve"   onClick={() =>{  
+                    if(!rowData.QualityRemarks){
+                        toast.error("Please Add Remarks")
+                    }
+                  else  if(rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average" ){
+                        approveRowByTl(rowData) 
+                         } 
+                         else{      
+                            if(rowData.QualityRemarks !== undefined){
+                            toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved") 
+                            } 
+                            else{ 
+                                toast.error("Please Add Remarks") 
+                            
+                            }
+                         }
+                 
+                 
+                 }} className=" p-button-success mr-2 ml-2  pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <Button label="Reject"  onClick={() => {
+                    if(!rowData?.QualityRemarks){
+                        toast.error("Please Add Remarks")
+                    }
+                   else   if(rowData.QualityRemarks === "declined"){
+                    handleOpenDialog(rowData);  
+                     } 
+                     else{    
+                        if(rowData.QualityRemarks !== undefined){
+                            toast.error("Only enrollment with call quality marked as declined will be rejected")  
 
-                <Button
-                    label="Approve"
-                    onClick={() => {
-                        if (!rowData.QualityRemarks) {
-                            toast.error("Please Add Remarks");
-                        } else if (rowData.QualityRemarks === "satisfactory" || rowData.QualityRemarks === "good" || rowData.QualityRemarks === "average") {
-                            approveRowByTl(rowData);
-                        } else {
-                            if (rowData.QualityRemarks !== undefined) {
-                                toast.error("Only enrollment with call quality marked as good, average or satisfactory will be Approved");
-                            } else {
-                                toast.error("Please Add Remarks");
+                        } 
+                            else{ 
+                                toast.error("Please Add Remarks") 
+                            
                             }
-                        }
-                    }}
-                    className=" p-button-success mr-2 ml-2  pt-1 pb-1 "
-                    text
-                    raised
-                    disabled={isButtonLoading}
-                />
-                <Button
-                    label="Reject"
-                    onClick={() => {
-                        if (!rowData?.QualityRemarks) {
-                            toast.error("Please Add Remarks");
-                        } else if (rowData.QualityRemarks === "declined") {
-                            handleOpenDialog(rowData);
-                        } else {
-                            if (rowData.QualityRemarks !== undefined) {
-                                toast.error("Only enrollment with call quality marked as declined will be rejected");
-                            } else {
-                                toast.error("Please Add Remarks");
-                            }
-                        }
-                    }}
-                    className=" p-button-danger pt-1 pb-1 mr-2 ml-2"
-                    text
-                    raised
-                    disabled={isButtonLoading}
-                />
+                       
+                     }
+                    
+                     }} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
             </div>
         );
     };
 
-    const actionTemplateForPR = (rowData) => {
+    const actionTemplateForPR = (rowData) => { 
         return (
             <div>
                 <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} />
@@ -511,17 +518,22 @@ const PrepaidAllEnrollments = () => {
                 <Button label="Enroll User" onClick={() => enrollUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 <Button label="Activate Sim" onClick={() => handleDialogeForActivate(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
                 {/* <Button label="Update User With NLAD" onClick={() => updateUser(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
-                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
+                <Button label="Transfer User" onClick={() => transferUser(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text  raised disabled={isButtonLoading} />
             </div>
         );
     };
     const handleOpenDialog = (rowData) => {
-        setisButtonLoading(true);
+
+                setisButtonLoading(true);
         setIsModalOpen(true);
         setIsEnrolmentId(rowData?._id);
         setCsrId(rowData?.csr);
-        setCheckType(rowData?.enrollment);
-        setisButtonLoading(false);
+        setCheckType(rowData?.enrollment)
+        setisButtonLoading(false);             
+         
+       
+
+       
     };
 
     const handleDialogeForActivate = (rowData) => {
@@ -544,7 +556,7 @@ const PrepaidAllEnrollments = () => {
 
     //     setSelectedIdsForApprove(enrollmentIds)
     //     setDialogeForApprove(true);
-
+        
     // }
     // const HnadleAllApproveForQa=()=>{
 
@@ -552,7 +564,8 @@ const PrepaidAllEnrollments = () => {
 
     const header = () => {
         return (
-            <div className="flex flex-wrap justify-content-center mt-2">
+            <div className="flex flex-wrap justify-content-center mt-2">    
+          
                 <Dropdown
                     className="mt-2 w-15rem ml-4"
                     options={[
@@ -561,37 +574,43 @@ const PrepaidAllEnrollments = () => {
                         { label: "All Enrollments", value: null },
                     ]}
                     value={enrollmentIdFilterValue}
-                    onChange={(e) => {
-                        onNameDateEnrollmentIdValueFilter(e, "enrollment");
+                    onChange={(e)=>{
+                        onNameDateEnrollmentIdValueFilter(e,"enrollment"); 
                     }}
                     placeholder="Enrollment Type"
                 />
-                <InputText value={globalFilterValue} onChange={onGlobalFilterValueChange} className="w-15rem ml-4 mt-2" placeholder="Search By Name or Enrollment ID" />
-                <div className="w-45rem ml-4 mt-2">
-                    <Calendar
-                        className="w-21rem"
-                        value={createDateFilterValue}
-                        dateFormat="mm/dd/yy"
-                        placeholder="Start Date"
-                        onChange={(e) => {
-                            onNameDateEnrollmentIdValueFilter(e, "createdAt");
-                        }}
-                        showIcon
-                    />
-                    <label className="p-2" style={{ fontSize: "19px", textAlign: "center", color: "grey" }}>
-                        To
-                    </label>
-                    <Calendar
-                        className="w-21rem"
-                        value={createDateToFilterValue}
-                        dateFormat="mm/dd/yy"
-                        placeholder="End Date"
-                        onChange={(e) => {
-                            onNameDateEnrollmentIdValueFilter(e, "createdTo");
-                        }}
-                        showIcon
-                    />
-                </div>
+                <InputText
+                    value={globalFilterValue}
+                    onChange={
+                        onGlobalFilterValueChange}
+                    className="w-15rem ml-4 mt-2"
+                    placeholder="Search By Name or Enrollment ID"
+                />     
+                <div className="w-45rem ml-4 mt-2" >
+                <Calendar
+                 className="w-21rem" 
+      value={createDateFilterValue}
+      dateFormat="mm/dd/yy"  
+      placeholder="Start Date"
+      onChange={(e) => {
+        onNameDateEnrollmentIdValueFilter(e, "createdAt");
+    }}  
+
+      showIcon
+    />     
+    <label className="p-2" style={{fontSize:"19px",textAlign:"center",color:"grey"}}>To</label>  
+    <Calendar
+              className="w-21rem"   
+      value={createDateToFilterValue}
+      dateFormat="mm/dd/yy"  
+      placeholder="End Date"
+      onChange={(e) => {
+        onNameDateEnrollmentIdValueFilter(e, "createdTo");
+    }}  
+
+      showIcon
+    />    
+    </div>
             </div>
         );
     };
@@ -605,16 +624,16 @@ const PrepaidAllEnrollments = () => {
             <div className="card ">
                 <form>
                     <Dialog visible={isModalOpen} style={{ width: "50vw" }} draggable={false} onHide={() => setIsModalOpen(false)}>
-                        <DialogForReject setIsModalOpen={setIsModalOpen} checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
+                        <DialogForReject   setIsModalOpen={setIsModalOpen} checkType={checkType} enrollmentId={isEnrolmentId} CSRid={CsrId} getAllEnrollments={getAllEnrollments} />
                     </Dialog>
                     <Dialog header={"Activate Sim"} visible={openDialogeForActivate} style={{ width: "70vw" }} onHide={() => setOpenDialogeForActivate(false)}>
                         <DialogForActivateSim enrollmentId={isEnrolmentId} setOpenDialogeForActivate={setOpenDialogeForActivate} zipCode={zipCode} />
                     </Dialog>
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarks} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarks(false)}>
-                        <DialogeForRemarks getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} />
+                        <DialogeForRemarks  getAllEnrollments={ getAllEnrollments} enrollmentId={isEnrolmentId} />
                     </Dialog>
                     <Dialog header={"Add Remarks"} visible={OpenDialogeForRemarksForIJ} style={{ width: "70vw" }} onHide={() => setOpenDialogeForRemarksForIJ(false)}>
-                        <DialogeForRemarksForIJ getAllEnrollments={getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
+                        <DialogeForRemarksForIJ  getAllEnrollments={ getAllEnrollments} enrollmentId={isEnrolmentId} setOpenDialogeForRemarksForIJ={setOpenDialogeForRemarksForIJ} />
                     </Dialog>
                     <Dialog header={"Transfer User"} visible={dialogeForTransfer} style={{ width: "30vw" }} onHide={() => setDialogeForTransfer(false)}>
                         <DialogeForTransferUser enrollmentId={isEnrolmentId} setDialogeForTransfer={setDialogeForTransfer} />
@@ -628,35 +647,35 @@ const PrepaidAllEnrollments = () => {
                     <div className="flex font-bold pt-2">
                         <div className="mt-2 ml-2 pt-2 pl-1">
                             <h3>
-                                <strong> All Enrollments</strong>
+                             <strong> All Enrollments</strong>
                             </h3>
                         </div>
 
                         <div className=" ml-auto flex">
-                            <div className="mr-5"></div>
+                            <div className="mr-5">
+                               
+                            </div>
                             <div className="  flex pr-4 ">
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
-                                    ""
-                                ) : (
-                                    //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
-                                    //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
-                                    // :
-                                    <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3 card " text disabled={isButtonLoading} />
-                                )}
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? "" 
+                                : 
+                                //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ? 
+                                //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                // :
+                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3 card " text  disabled={isButtonLoading} />
+                                }
 
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
-                                    ""
-                                ) : (
-                                    //  :
-                                    //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
-                                    //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />
-                                    <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3 card" text disabled={isButtonLoading || selectedRows.length === 0} />
-                                )}
+                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? ""
+                                //  :
+                                //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
+                                //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                : 
+                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3 card" text  disabled={isButtonLoading || selectedRows.length === 0} /> 
+                                }
                             </div>
                         </div>
                     </div>
                     <div>
-                        {isButtonLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+                        {isButtonLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" />: null}
 
                         <DataTable
                             value={filteredDates || allEnrollments}
@@ -671,7 +690,7 @@ const PrepaidAllEnrollments = () => {
                             rows={10}
                             rowsPerPageOptions={[25, 50]}
                             filters={filters}
-                            globalFilterFields={["name", "enrollmentId"]}
+                            globalFilterFields={["name","enrollmentId"]}
                             header={header}
                             emptyMessage="No customers found."
                         >
@@ -710,21 +729,25 @@ const PrepaidAllEnrollments = () => {
                             <Column field="contact" header="Contact" />
                             <Column field="createdBy.name" header="Created By" />
                             <Column field="createdDate" header="Created At" />
-                            {toCapital.includes("QA MANAGER") ? <Column field="assignToQa.name" header="Initial Assignee" /> : ""}
+                            {
+                            toCapital.includes("QA MANAGER") ? <Column field="assignToQa.name" header="Initial Assignee"/>:""
+                            }
+                          
+                            <Column
+    field="Phase"
+    header="Phase"
+    body={(rowData) => (
+        <span>
+            {rowData.assignedToUser.map((user) => (
+                <span key={user?.department?.department}>
+                    {user?.department?.department}
+                </span>
+            ))}
+        </span>
+    )}
+/>
 
-                            {/* <Column
-                                field="Phase"
-                                header="Phase"
-                                body={(rowData) => (
-                                    <span>
-                                        {rowData.assignedToUser.map((user) => (
-                                            <span key={user?.department?.department}>{user?.department?.department}</span>
-                                        ))}
-                                    </span>
-                                )}
-                            /> */}
-
-                            {toCapital == "CSR" || toCapital == "CS" || toCapital == "TEAM LEAD" || toCapital == "CS MANAGER" ? (
+                            {toCapital == "CSR" || toCapital == "CS" ||toCapital == "TEAM LEAD" ||toCapital == "CS MANAGER" ? (
                                 ""
                             ) : roleName.includes("provision") || roleName.includes("Provision") || roleName.includes("PROVISION") || roleName.includes("retention") || roleName.includes("RETENTION") || roleName.includes("Retention") ? (
                                 <Column header="Actions" body={actionTemplateForPR}></Column>
@@ -734,8 +757,10 @@ const PrepaidAllEnrollments = () => {
                                 <Column header="Actions" body={actionTemplate}></Column>
                             )}
                         </DataTable>
-                        {isLoading ? <ProgressSpinner className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
-                    </div>
+                        {isLoading ? <ProgressSpinner  className="flex flex-wrap justify-content-center flex-row mt-4" /> : null}
+              
+                    
+                     </div>
                 </div>
                 <br />
             </div>
@@ -743,3 +768,4 @@ const PrepaidAllEnrollments = () => {
     );
 };
 export default PrepaidAllEnrollments;
+ 
