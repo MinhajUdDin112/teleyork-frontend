@@ -299,7 +299,6 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
 
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                console.log("responsii", response);
                 setIsDuplicate(false);
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
