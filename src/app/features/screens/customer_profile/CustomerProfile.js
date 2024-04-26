@@ -238,7 +238,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             }
         };
         fetchTrackingNumber();
-    });
+    }, []);
 
     const handleResolve = async (noteId) => {
         const data = {

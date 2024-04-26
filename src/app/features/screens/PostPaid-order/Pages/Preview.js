@@ -178,7 +178,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{previewInfo?.address1.toUpperCase()}</p>
+                                    <p className="w-6">{previewInfo?.address1 ? previewInfo.address1.toUpperCase() : null}</p>
                                 </div>
 
                                 <div className="flex border-bottom-2 pt-2">
