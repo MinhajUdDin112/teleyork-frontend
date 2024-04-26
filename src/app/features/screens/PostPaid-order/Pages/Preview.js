@@ -170,7 +170,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="border-2 w-5 pt-2">
                                 <div className="flex border-bottom-2">
                                     <p className="w-6 ml-4">First Name:</p>
-                                    <p className="w-6">{previewInfo?.firstName}</p>
+                                    <p className="w-6">{previewInfo?.firstName.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Mother's Maiden Name:</p>
@@ -178,12 +178,12 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{previewInfo?.address1}</p>
+                                    <p className="w-6">{previewInfo?.address1 ? previewInfo.address1.toUpperCase() : null}</p>
                                 </div>
 
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">State:</p>
-                                    <p className="w-6">{previewInfo?.state}</p>
+                                    <p className="w-6">{previewInfo?.state.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">DOB:</p>
@@ -233,11 +233,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="border-2 w-5 ">
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">LastName:</p>
-                                    <p className="w-6">{previewInfo?.lastName}</p>
+                                    <p className="w-6">{previewInfo?.lastName.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city}</p>
+                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Address 2:</p>
@@ -332,7 +332,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                             <strong>
                                                 This form is electronically signed by <span> </span>
                                                 <strong>
-                                                    {(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}
+                                                    {previewInfo?.firstName.toUpperCase()} {previewInfo?.lastName.toUpperCase()}
                                                 </strong>
                                                 <span> </span>
                                                 on <span> </span> {ChangeIsoDateToECT(new Date().toISOString())}

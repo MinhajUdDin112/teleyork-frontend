@@ -98,16 +98,16 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="border-2 w-5 pt-2">
                                 <div className="flex border-bottom-2">
                                     <p className="w-6 ml-4">First Name:</p>
-                                    <p className="w-6">{previewInfo?.firstName}</p>
+                                    <p className="w-6">{previewInfo?.firstName.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{previewInfo?.address1}</p>
+                                    <p className="w-6">{previewInfo?.address1.toUpperCase()}</p>
                                 </div>
 
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">State:</p>
-                                    <p className="w-6">{previewInfo?.state}</p>
+                                    <p className="w-6">{previewInfo?.state.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">DOB:</p>
@@ -121,11 +121,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="border-2 w-5 ">
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">LastName:</p>
-                                    <p className="w-6">{previewInfo?.lastName}</p>
+                                    <p className="w-6">{previewInfo?.lastName.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city}</p>
+                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city.toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>
@@ -139,7 +139,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
                                 <div className="flex pt-2">
                                     <p className="w-6 ml-4">Email:</p>
-                                    <p className="w-6">{previewInfo?.email}</p>
+                                    <p className="w-6">{previewInfo?.email.toUpperCase()}</p>
                                 </div>
                             </div>
                         </div>

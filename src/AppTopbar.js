@@ -294,6 +294,7 @@ export const AppTopbar = (props) => {
                                     onClick={() => {
                                         handleNavigate(item?.customerId);
                                         setVisibleRight(false);
+                                        handleReadNotification(item?._id);
                                     }}
                                 >
                                     <h5>{item?.sender?.name}</h5>

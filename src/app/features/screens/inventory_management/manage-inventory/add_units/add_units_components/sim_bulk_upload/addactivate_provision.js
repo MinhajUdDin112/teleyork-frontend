@@ -8,9 +8,9 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import AddAgentDetail from "./dialogs/add_agent_detail";
-import InfoForUsers from "./InfoForUsers/info_for_users";  
-const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function SIMBulkUploadAddActivateProvision({permissions,unit,model}) {
+import InfoForUsers from "./InfoForUsers/info_for_users";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+export default function SIMBulkUploadAddActivateProvision({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -32,10 +32,9 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                         obj.value = res.data.data[i]._id;
                         departmentholder.push(obj);
                     }
-                   setDepartment(departmentholder);
+                    setDepartment(departmentholder);
                 })
-                .catch(() => {
-               });
+                .catch(() => {});
         }
     }, []);
     useEffect(() => {
@@ -52,8 +51,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
 
                     setAgent(agentholder);
                 })
-                .catch(() => {
-                });
+                .catch(() => {});
         }
     }, [departmentselected]);
     useEffect(() => {
@@ -69,8 +67,7 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
 
                 setCarrier(carrierholder);
             })
-            .catch(() => {
-            });
+            .catch(() => {});
     }, []);
 
     const formik = useFormik({
@@ -87,48 +84,39 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Bulk Add And Activate",
         },
 
-        onSubmit: (values,actions) => {
+        onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
-    }); 
-    function ApiResponseShow({res}){   
-        
-        return( 
-           <div className="flex flex-wrap justify-content-left"> 
-               <p>{res.msg}</p>  
-               <div >
-                <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
-                  <ul className="m-0 list-none"> 
-                       { 
-                          res.data.data.duplicateNumbers.map(item=>( 
-                           <li>{item}</li>
-                          ))
-                       }
-                  </ul>      
-                   </div>
-                  <div className="mt-3">
-                  <p >    
-                  Sim Numbers Added: {res.data.data.newSimNumbers.length}  
-                   
-                   </p> 
-                   <ul className=" m-0 list-none"> 
-                       { 
-                          res.data.data.newSimNumbers.map(item=>( 
-                           <li >{item}</li>
-                          ))
-                       }
-                  </ul>     
-                   </div>
-                   
-           </div>
-        )
-        }
+    });
+    function ApiResponseShow({ res }) {
+        return (
+            <div className="flex flex-wrap justify-content-left">
+                <p>{res.msg}</p>
+                <div>
+                    <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>
+                    <ul className="m-0 list-none">
+                        {res.data.data.duplicateNumbers.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="mt-3">
+                    <p>Sim Numbers Added: {res.data.data.newSimNumbers.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res.data.data.newSimNumbers.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        );
+    }
     function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file);
@@ -136,12 +124,12 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
         formData.append("agentType", formik.values.agentType);
-        formData.append("AgentName", formik.values.AgentName);       
-        formData.append("billingModel", formik.values.billingModel); 
+        formData.append("AgentName", formik.values.AgentName);
+        formData.append("billingModel", formik.values.billingModel);
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
         // Perform API call or other actions with the formData
- if (Object.keys(formik.errors).length === 0) {
+        if (Object.keys(formik.errors).length === 0) {
             if (formik.values.file !== "") {
                 formik.values.serviceProvider = parseLoginRes?.company;
                 Axios.post(`${BASE_URL}/api/web/simInventory/bulkAddAndActivate`, formData, {
@@ -150,18 +138,27 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                     },
                 })
                     .then((res) => {
-                        ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
-                        formik.setFieldValue("file", "");
-                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                        formik.setFieldValue("agentType", "");
-                        formik.setFieldValue("AgentName", "");
-                        formik.setFieldValue("SimNumber", ""); 
-                        formik.setFieldValue("unitType", "sim");
-                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                        formik.setFieldValue("provisionType", "Bulk Add And Activate Sims");
-                       setAgent([]) 
-                       setFilename(null)
-                        actions.resetForm();
+                        try {
+                            // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0) {
+                                ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            } else {
+                                ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            }
+                            formik.setFieldValue("file", "");
+                            formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                            formik.setFieldValue("agentType", "");
+                            formik.setFieldValue("AgentName", "");
+                            formik.setFieldValue("SimNumber", "");
+                            formik.setFieldValue("unitType", "sim");
+                            formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                            formik.setFieldValue("provisionType", "Bulk Add And Activate Sims");
+                            setAgent([]);
+                            setFilename(null);
+                            actions.resetForm();
+                        } catch (err) {
+                            console.log("error is here");
+                        }
                     })
                     .catch((error) => {
                         if (error.response && error.response.data && error.response.data.msg) {
@@ -180,8 +177,9 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                             });
                         }
                     });
-                    
-                formik.values.serviceProvider = parseLoginRes?.companyName; }   else {
+
+                formik.values.serviceProvider = parseLoginRes?.companyName;
+            } else {
                 setFileError(true);
             }
         }
@@ -217,8 +215,8 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value); 
-                                formik.setFieldValue("AgentName","")
+                                formik.setFieldValue("agentType", e.value);
+                                formik.setFieldValue("AgentName", "");
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -233,16 +231,15 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (  
-                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
-                              
-                                <i
-                                    onClick={() => {
-                                        setAddAgentDialogVisibility((prev) => !prev);
-                                    }}
-                                    className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i>  
+                            {formik.values.AgentName !== "" ? (
+                                <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
+                                    <i
+                                        onClick={() => {
+                                            setAddAgentDialogVisibility((prev) => !prev);
+                                        }}
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
                                 </Button>
                             ) : undefined}
                         </p>
@@ -258,8 +255,8 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                 <div className="flex justify-content-around align-item-center ">
                     <div>
                         {" "}
-                        <Button 
-                         className="field-width justify-content-center"
+                        <Button
+                            className="field-width justify-content-center"
                             onClick={() => {
                                 setFileError(false);
                                 let input = document.createElement("input");
@@ -282,16 +279,16 @@ export default function SIMBulkUploadAddActivateProvision({permissions,unit,mode
                             </p>
                         ) : undefined}
                     </div>
-                    <Button 
-                    style={{height:"40px"}}
-                     className="field-width justify-content-center"
+                    <Button
+                        style={{ height: "40px" }}
+                        className="field-width justify-content-center"
                         onClick={() => {
                             if (formik.values.file === "") {
                                 setFileError(true);
                             }
                             formik.handleSubmit();
-                        }}  
-                        disabled={!(permissions.isCreate)}
+                        }}
+                        disabled={!permissions.isCreate}
                     >
                         Submit{" "}
                     </Button>

@@ -6,28 +6,29 @@ import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
+const PrepaidPreview = ({ setActiveIndex, setShowPreview }) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
-    const previewsRes = localStorage.getItem("homeAddress"); 
+    const previewsRes = localStorage.getItem("homeAddress");
     const parsepreviewsRes = JSON.parse(previewsRes);
-    const previewInfo = parsepreviewsRes?.data;     
-   
-    let enrollment_id= previewInfo?.enrollmentId       
+    const previewInfo = parsepreviewsRes?.data;
+
+    let enrollment_id = previewInfo?.enrollmentId;
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);   
-     let csr=parseLoginRes?._id
-    let _id=previewInfo?._id
+    const parseLoginRes = JSON.parse(loginRes);
+    let csr = parseLoginRes?._id;
+    let _id = previewInfo?._id;
     const [isChecked, setIsChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(false);
     const [fromIncomplete, setFromIncomplete] = useState(false);
     //get preview  information from local storage
-    
+
     const zipRes = localStorage.getItem("prepaidzipData");
     //check that user come from incomplete or not
     const fromIncompl = localStorage.getItem("comingfromincomplete");
     const parsefromIncompl = JSON.parse(fromIncompl);
-    let paymentInfo = JSON.parse(localStorage.getItem("paymentscreendetails"));
+
+    const paymentInfo = JSON.parse(localStorage.getItem("paymentscreendetails"));
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
@@ -251,7 +252,7 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
 
                             setActiveIndex(3);
                         })
-                        .catch((err) => { });
+                        .catch((err) => {});
                     // toast.success("Label created Successfully");
                     setIsLoading(false);
                     setShowFinalComponent(true);
@@ -277,6 +278,7 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
         });
         return estTimeString;
     }
+
     return (
         <>
             <ToastContainer />
@@ -287,9 +289,9 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
                             label="Back"
                             onClick={() => {
                                 if (localStorage.getItem("comingforedit")) {
-                                    setShowPreview(false)
+                                    setShowPreview(false);
                                 } else {
-                                    setShowPreview(false)
+                                    setShowPreview(false);
                                 }
                             }}
                         />
@@ -298,8 +300,6 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
                     <br></br>
 
                     <div>
-
-
                         <h2 className="mt-4 flex flex-row justify-content-left">Preview Your Details</h2>
                         <br />
 
@@ -332,8 +332,9 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
                                 </div>
 
                                 <div className="flex  border-bottom-2  pt-2">
-                                    <p className="w-6 ml-4">One Time Charges: </p>
-                                    <p className="w-6">${oneTimeCharge || "-"}</p>
+                                    <p className="w-6 ml-4">Net Amount: </p>
+                                    {/* <p className="w-6">${oneTimeCharge || "-"}</p> */}
+                                    <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo.totalamount}` : "-"}</p>
                                 </div>
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Inventory: </p>
@@ -366,8 +367,9 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
                                     <p className="w-6">{planname || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Plan Charges: </p>
-                                    <p className="w-6">${plancharges || "-"}</p>
+                                    <p className="w-6 ml-4">Amount Paid: </p>
+                                    <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p>
+                                    {/* <p className="w-6">${plancharges || "-"}</p> */}
                                 </div>
 
                                 {/*  <div className="flex border-bottom-2 pt-2">
@@ -396,8 +398,8 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
                                     later. I understand this is not a condition of purchase.
                                 </p>
                                 <p>
-                                    I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined
-                                    in this form and any related documents.
+                                    I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined in
+                                    this form and any related documents.
                                 </p>
                                 <br />
                                 {checked ? (

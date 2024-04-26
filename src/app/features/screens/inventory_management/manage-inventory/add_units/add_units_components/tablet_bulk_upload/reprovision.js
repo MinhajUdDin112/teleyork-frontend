@@ -9,8 +9,8 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 
-const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function TabletBulkUploadReprovision({permissions,unit,model}) {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+export default function TabletBulkUploadReprovision({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -25,7 +25,7 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
                 .then((res) => {
-                  let departmentholder = [];
+                    let departmentholder = [];
                     for (let i = 0; i < res.data.data.length; i++) {
                         const obj = {};
                         obj.label = res.data.data[i].department;
@@ -34,8 +34,7 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
                     }
                     setDepartment(departmentholder);
                 })
-                .catch(() => {
-                });
+                .catch(() => {});
         }
     }, []);
     useEffect(() => {
@@ -52,8 +51,7 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
 
                     setAgent(agentholder);
                 })
-                .catch(() => {
-                });
+                .catch(() => {});
         }
     }, [departmentselected]);
     useEffect(() => {
@@ -69,8 +67,7 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
 
                 setCarrier(carrierholder);
             })
-            .catch(() => {
-           });
+            .catch(() => {});
     }, []);
 
     const formik = useFormik({
@@ -87,48 +84,39 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Tablet Reprovision",
         },
 
-        onSubmit: (values,actions) => {
+        onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
     });
-    function ApiResponseShow({res}){   
-        
-        return( 
-           <div className="flex flex-wrap justify-content-left"> 
-               <p>{res.msg}</p>  
-               <div >
-                <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
-                  <ul className="m-0 list-none"> 
-                       { 
-                          res.data.data.duplicateNumbers.map(item=>( 
-                           <li>{item}</li>
-                          ))
-                       }
-                  </ul>      
-                   </div>
-                  <div className="mt-3">
-                  <p >    
-                  Sim Numbers Added: {res.data.data.newSimNumbers.length}  
-                   
-                   </p> 
-                   <ul className=" m-0 list-none"> 
-                       { 
-                          res.data.data.newSimNumbers.map(item=>( 
-                           <li >{item}</li>
-                          ))
-                       }
-                  </ul>     
-                   </div>
-                   
-           </div>
-        )
-        }
+    function ApiResponseShow({ res }) {
+        return (
+            <div className="flex flex-wrap justify-content-left">
+                <p>{res.msg}</p>
+                <div>
+                    <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>
+                    <ul className="m-0 list-none">
+                        {res.data.data.duplicateNumbers.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="mt-3">
+                    <p>Sim Numbers Added: {res.data.data.newSimNumbers.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res.data.data.newSimNumbers.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        );
+    }
     function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file);
@@ -136,13 +124,13 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
         formData.append("agentType", formik.values.agentType);
-        formData.append("AgentName", formik.values.AgentName); 
-        
-        formData.append("billingModel", formik.values.billingModel); 
+        formData.append("AgentName", formik.values.AgentName);
+
+        formData.append("billingModel", formik.values.billingModel);
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
         // Perform API call or other actions with the formData
-      if (Object.keys(formik.errors).length === 0) {
+        if (Object.keys(formik.errors).length === 0) {
             if (formik.values.file !== "") {
                 formik.values.serviceProvider = parseLoginRes?.company;
                 Axios.post(`${BASE_URL}/api/web/tabletInventory/bulkAddReprovision`, formData, {
@@ -151,22 +139,31 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
                     },
                 })
                     .then((res) => {
-                        ref.current.show({ severity: "success", summary: "Info", detail: <ApiResponseShow res={res}/> });
-                        formik.setFieldValue("carrier", ""); 
-                        formik.setFieldValue("file", "");
-                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                        formik.setFieldValue("agentType", "");
-                        formik.setFieldValue("AgentName", "");
-                        formik.setFieldValue("SimNumber", ""); 
-                        formik.setFieldValue("unitType", "sim");
-                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                        formik.setFieldValue("provisionType", "Bulk Add And Assign Non Active Sims");
-                       setAgent([]) 
-                       setFilename(null)
-                        actions.resetForm();
+                        try {
+                            // ref.current.show({ severity: "success", summary: "Info", detail: <ApiResponseShow res={res} /> });
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0) {
+                                ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            } else {
+                                ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            }
+                            formik.setFieldValue("carrier", "");
+                            formik.setFieldValue("file", "");
+                            formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                            formik.setFieldValue("agentType", "");
+                            formik.setFieldValue("AgentName", "");
+                            formik.setFieldValue("SimNumber", "");
+                            formik.setFieldValue("unitType", "sim");
+                            formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                            formik.setFieldValue("provisionType", "Bulk Add And Assign Non Active Sims");
+                            setAgent([]);
+                            setFilename(null);
+                            actions.resetForm();
+                        } catch (err) {
+                            console.log("error is here");
+                        }
                     })
                     .catch(() => {
-                         ref.current.show({ severity: "error", summary: "Info", detail:"Bulk Upload Failed" });
+                        ref.current.show({ severity: "error", summary: "Info", detail: "Bulk Upload Failed" });
                     });
                 formik.values.serviceProvider = parseLoginRes?.companyName;
             } else {
@@ -205,8 +202,8 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value);  
-                                formik.setFieldValue("AgentName","")
+                                formik.setFieldValue("agentType", e.value);
+                                formik.setFieldValue("AgentName", "");
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -217,11 +214,11 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
                                 {formik.errors.agentType}
                             </div>
                         )}
-                    </div>  
+                    </div>
                     <div className="mr-3 mb-3 mt-4">
                         {" "}
-                        <Button 
-                        className="justify-content-center mt-4 field-width"
+                        <Button
+                            className="justify-content-center mt-4 field-width"
                             onClick={() => {
                                 setFileError(false);
                                 let input = document.createElement("input");
@@ -247,16 +244,15 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? ( 
-                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
-                              
-                                <i
-                                    onClick={() => {
-                                        setAddAgentDialogVisibility((prev) => !prev);
-                                    }}
-                                    className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i> 
+                            {formik.values.AgentName !== "" ? (
+                                <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
+                                    <i
+                                        onClick={() => {
+                                            setAddAgentDialogVisibility((prev) => !prev);
+                                        }}
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
                                 </Button>
                             ) : undefined}
                         </p>
@@ -267,24 +263,22 @@ export default function TabletBulkUploadReprovision({permissions,unit,model}) {
                                 {formik.errors.AgentName}
                             </div>
                         )}
-                    </div> 
+                    </div>
                     <div className="mr-3 mb-3 mt-4">
-                    
-                    <Button 
-                    className="justify-content-center mt-4 field-width"
-                        onClick={() => {
-                            if (formik.values.file === "") {
-                                setFileError(true);
-                            }
-                            formik.handleSubmit();
-                        }} 
-                        disabled={!(permissions.isCreate)}
-                    >
-                        Submit{" "}
-                    </Button>
+                        <Button
+                            className="justify-content-center mt-4 field-width"
+                            onClick={() => {
+                                if (formik.values.file === "") {
+                                    setFileError(true);
+                                }
+                                formik.handleSubmit();
+                            }}
+                            disabled={!permissions.isCreate}
+                        >
+                            Submit{" "}
+                        </Button>
+                    </div>
                 </div>
-                </div>
-               
 
                 <>
                     <p className="mt-4">

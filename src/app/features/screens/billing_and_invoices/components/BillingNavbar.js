@@ -6,8 +6,10 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const navigate = useNavigate();
     const [cpData, setCpData] = useState([]);
     const [openDialogeForWallet, setOpenDialogeForWallet] = useState(false);
     const [accountType, setAccountType] = useState(null);
@@ -40,7 +42,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
     } else {
         items = [
             {
-                label: `${cpData?.firstName} ${cpData?.lastName} (${cpData?.accountId})`,
+                label: `${cpData?.firstName} ${cpData?.lastName} (Account ID: ${cpData?.accountId})`,
                 icon: (
                     <svg className="custom-icon-user" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -51,6 +53,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
                         </g>
                     </svg>
                 ),
+                command: () => {
+                    navigate("/customer-profile", { state: { selectedId: parseselectedid } });
+                },
             },
             {
                 label: `MDN:${cpData?.phoneNumber === undefined ? "NIL" : cpData?.phoneNumber}`,
