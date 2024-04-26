@@ -10,8 +10,10 @@ import { Dropdown } from "primereact/dropdown";
 import moment from "moment/moment";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
+import WalletPaymentStripModule from "../dialog/stripe_wallet";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const DialogeForWallet = ({ setOpenDialogeForWallet }) => {
+const DialogeForWallet = ({ setOpenDialogeForWallet }) => {   
+     
     const [isLoading, setIsLoading] = useState();
     const [isSearch, setIsSearch] = useState(false);
     const [historyData, setHistoryData] = useState();
@@ -106,9 +108,17 @@ pin:"",
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-    };
+    }; 
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
     return (
-        <>
+        <>  
+         {    capitalCompanyName?.includes("IJ") ?  
+   
+           <></>
+           :
+          <>
             <div className="col-12  ">
                 <div className="p-3">
                     <div className=" h-full ">
@@ -331,8 +341,8 @@ Select Crad TYpe
             <div className="flex justify-content-between">
             <Button label="Close" onClick={()=>{setOpenDialogeForWallet(false)}} />
             <Button label="Submit" type="submit"/>
-            </div>
-           
+            </div></>
+                                } 
         </>
     );
 };

@@ -77,7 +77,8 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
                         </g>
                     </svg>
                 ),
-                command: () => handleWalletClick(),
+                command: () => {// handleWalletClick() 
+            },
             },
             {
                 label: accountType === "ACP" ? "ACP" : accountType === "Postpaid" ? "Post Paid" : accountType === "Prepaid" ? "Pre Paid" : "",
