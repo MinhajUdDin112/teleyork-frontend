@@ -123,7 +123,8 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                         </g>
                     </svg>
                 ),
-                command: () => handleWalletClick(),
+                command: () => {//handleWalletClick() 
+                },
             },
         ];
     }
