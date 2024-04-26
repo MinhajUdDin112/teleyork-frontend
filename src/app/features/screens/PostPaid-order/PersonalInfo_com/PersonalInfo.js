@@ -159,7 +159,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
                     if (response?.status === 200 || response?.status === 201) {
                         localStorage.setItem("basicData", JSON.stringify(response.data));
-                        toast.success("information saved Successfully");
+                        toast.success("Information Saved Successfully");
                         handleNext();
                     }
                 } catch (error) {

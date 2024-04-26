@@ -10,7 +10,7 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import InfoForUsers from "./InfoForUsers/info_for_users";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function SIMBulkUploadAddProvision({ permissions,unit,model }) {
+export default function SIMBulkUploadAddProvision({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -83,8 +83,8 @@ export default function SIMBulkUploadAddProvision({ permissions,unit,model }) {
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add Stock",
         },
@@ -124,9 +124,9 @@ export default function SIMBulkUploadAddProvision({ permissions,unit,model }) {
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
         formData.append("agentType", formik.values.agentType);
-        formData.append("AgentName", formik.values.AgentName);  
-        
-        formData.append("billingModel", formik.values.billingModel);  
+        formData.append("AgentName", formik.values.AgentName);
+
+        formData.append("billingModel", formik.values.billingModel);
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
         // Perform API call or other actions with the formData
@@ -140,18 +140,27 @@ export default function SIMBulkUploadAddProvision({ permissions,unit,model }) {
                     },
                 })
                     .then((res) => {
-                        ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
-                        formik.setFieldValue("file", "");
-                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                        formik.setFieldValue("agentType", "");
-                        formik.setFieldValue("AgentName", "");
-                        formik.setFieldValue("SimNumber", "");
-                        formik.setFieldValue("unitType", "sim");
-                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                        formik.setFieldValue("provisionType", "Bulk Add Sims Stock ");
-                        setAgent([]);
-                        setFilename(null);
-                        actions.resetForm();
+                        try {
+                            // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0) {
+                                ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            } else {
+                                ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            }
+                            formik.setFieldValue("file", "");
+                            formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                            formik.setFieldValue("agentType", "");
+                            formik.setFieldValue("AgentName", "");
+                            formik.setFieldValue("SimNumber", "");
+                            formik.setFieldValue("unitType", "sim");
+                            formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                            formik.setFieldValue("provisionType", "Bulk Add Sims Stock ");
+                            setAgent([]);
+                            setFilename(null);
+                            actions.resetForm();
+                        } catch (err) {
+                            console.log("error is here");
+                        }
                     })
                     .catch((error) => {
                         if (error.response && error.response.data && error.response.data.msg) {

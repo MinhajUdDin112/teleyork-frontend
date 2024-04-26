@@ -18,7 +18,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const [orderIdData, setOrderIdData] = useState("");
     const [refreshComponent, setRefreshComponent] = useState(false);
     const [refreshComp, setRefreshComp] = useState(false);
-    const [trackingId, setTrackingId] = useState("");
+    const [refreshTrakingId, setRefreshTrakingId] = useState(false);
     const [assignLabel, setAssignLabel] = useState(false);
     const selectedid = localStorage.getItem("selectedId");
 

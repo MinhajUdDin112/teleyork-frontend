@@ -31,6 +31,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         const dataToSend = {
             csr: csr,
             userId: _id,
+            isWithInvoice: paymentInfo?.prospectwithinvoice,
+            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
         };
         Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
             .then(() => {
@@ -194,6 +196,8 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         const dataToSend = {
             csr: csr,
             userId: _id,
+            isWithInvoice: paymentInfo?.prospectwithinvoice,
+            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
         };
 
         Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
@@ -201,7 +205,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 let dataToSend = {
                     customerId: paymentInfo.customerid,
                     invoiceType: "Sign Up",
-                    totalAmount: paymentInfo.totalamount,
+                    totalAmount: paymentInfo.totalasmount,
                     additionalCharges: additionalobjectsendin,
                     discount: discountobjectsendin,
                     amountPaid: 0,
@@ -324,7 +328,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 <div className="flex  border-bottom-2  pt-2">
                                     <p className="w-6 ml-4">Net Amount: </p>
                                     {/* <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p> */}
-                                    <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo.totalAmount}` : "-"}</p>
+                                    <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo.totalamount}` : "-"}</p>
                                 </div>
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Inventory: </p>

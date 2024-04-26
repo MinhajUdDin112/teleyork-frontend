@@ -11,7 +11,7 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./dialogs/add_agent_detail";
 import InfoForUsers from "./InfoForUsers/info_for_users";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit,model }) {
+export default function SIMBulkUploadAddPreActivatedProvision({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
@@ -85,13 +85,13 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
             agentType: "",
             AgentName: "",
             /*team:"",*/
-            unitType: unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Bulk Add Pre-Activate Sim",
         },
 
-        onSubmit: (values,actions) => {
+        onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
     });
@@ -124,9 +124,9 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
         formData.append("serviceProvider", parseLoginRes?.company);
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
-        formData.append("agentType", formik.values.agentType); 
-        
-        formData.append("billingModel", formik.values.billingModel); 
+        formData.append("agentType", formik.values.agentType);
+
+        formData.append("billingModel", formik.values.billingModel);
         formData.append("AgentName", formik.values.AgentName);
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
@@ -141,19 +141,28 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
                     },
                 })
                     .then((res) => {
-                        ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
-                        formik.setFieldValue("carrier", ""); 
-                     formik.setFieldValue("file", "");
-                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                     formik.setFieldValue("agentType", "");
-                     formik.setFieldValue("AgentName", "");
-                     formik.setFieldValue("SimNumber", ""); 
-                     formik.setFieldValue("unitType", "sim");
-                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                     formik.setFieldValue("provisionType", "Bulk Add Pre-Activate Sims");
-                    setAgent([]) 
-                    setFilename(null)
-                     actions.resetForm();
+                        try {
+                            // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0) {
+                                ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            } else {
+                                ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            }
+                            formik.setFieldValue("carrier", "");
+                            formik.setFieldValue("file", "");
+                            formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                            formik.setFieldValue("agentType", "");
+                            formik.setFieldValue("AgentName", "");
+                            formik.setFieldValue("SimNumber", "");
+                            formik.setFieldValue("unitType", "sim");
+                            formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                            formik.setFieldValue("provisionType", "Bulk Add Pre-Activate Sims");
+                            setAgent([]);
+                            setFilename(null);
+                            actions.resetForm();
+                        } catch (err) {
+                            console.log("error is here");
+                        }
                     })
                     .catch((error) => {
                         if (error.response && error.response.data && error.response.data.msg) {
@@ -276,7 +285,7 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
                         ) : undefined}
                     </div>
                     <Button
-                    style={{height:"40px"}}
+                        style={{ height: "40px" }}
                         className="field-width justify-content-center"
                         onClick={() => {
                             if (formik.values.file === "") {

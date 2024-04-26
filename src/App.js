@@ -63,10 +63,10 @@ import Draft from "./app/features/screens/sms_notification/Draft";
 import VerifyZip from "./app/features/screens/self_enrollment/VerifyZip";
 import PersonalInfo from "./app/features/screens/self_enrollment/PersonalInfo";
 import Address from "./app/features/screens/self_enrollment/Address";
-import Eligibility from "./app/features/screens/self_enrollment/Eligibility";       
+import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
 import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
-import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication"; 
- 
+import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
+
 import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
@@ -475,14 +475,14 @@ const App = () => {
                                             <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
                                             <Route path="/resumeapplication" element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
                                             <Route path="/new-selfenrollment" element={isPermitted("/new-selfenrollment") ? <PrepiadSelfVerifyZip /> : <Dashboard />} />
-                                             <Route path="/prepaid-selectinventory" element={isPermitted("/new-selfenrollment") ? <PrepiadSelectInventory /> : <Dashboard />} />
+                                            <Route path="/prepaid-selectinventory" element={isPermitted("/new-selfenrollment") ? <PrepiadSelectInventory /> : <Dashboard />} />
                                             <Route path="/prepaid-selfpersonalinfo" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfPersonalInfo /> : <Dashboard />} />
                                             <Route path="/prepaid-selfaddress" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfAddress /> : <Dashboard />} />
                                             <Route path="/prepaid-selfeligibile" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfEligibility /> : <Dashboard />} />
                                             <Route path="/prepaid-selfnationalverifier" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfNationalVerifier /> : <Dashboard />} />
                                             <Route path="/prepaid-selfresumeapplication" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfResumeApplication /> : <Dashboard />} />
-                                            <Route path="/all-selfenrollment" element={isPermitted("/all-selfenrollment") ? <PrepaidAllSelfEnrollments/> : <Dashboard />} />
-                                           
+                                            <Route path="/all-selfenrollment" element={isPermitted("/all-selfenrollment") ? <PrepaidAllSelfEnrollments /> : <Dashboard />} />
+
                                             <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
                                             <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                             <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
