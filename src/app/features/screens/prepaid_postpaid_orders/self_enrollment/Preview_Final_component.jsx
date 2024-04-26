@@ -52,7 +52,9 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("zip")     
         localStorage.removeItem("initialInformation")
         localStorage.removeItem("homeAddress")
-        localStorage.removeItem("invoiceData");
+        localStorage.removeItem("invoiceData");  
+         localStorage.removeItem("selfinventoryselect") 
+          localStorage.removeItem("selfplanselect")
     };
     const movepageToAll = () => {
         localStorage.removeItem("prepaidbasicData");
@@ -100,7 +102,9 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("invoiceData"); 
         localStorage.removeItem("zip")    
         localStorage.removeItem("initialInformation")
-        localStorage.removeItem("homeAddress")
+        localStorage.removeItem("homeAddress")   
+        localStorage.removeItem("selfinventoryselect") 
+        localStorage.removeItem("selfplanselect")
         navigate("/prepaid-allenrollment");
     };
 

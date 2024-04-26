@@ -128,7 +128,9 @@ const PrepaidSelfVerifyZip = () => {
                     localStorage.removeItem("initialInformation");
                     localStorage.removeItem("homeAddress");
                     localStorage.removeItem("selectProgram");    
-                    localStorage.removeItem("initialInformation")
+                    localStorage.removeItem("initialInformation")    
+                    localStorage.removeItem("selfinventoryselect") 
+                    localStorage.removeItem("selfplanselect")
                     navigate("/prepaid-selfpersonalinfo");
                 }
             } catch (error) {

@@ -37,7 +37,10 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
         setIsLoading(true);
         const dataToSend = {
             csr: csr,
-            userId: _id,
+            userId: _id,     
+            isWithInvoice: paymentInfo?.prospectwithinvoice,
+            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
+
         };
         Axios.post(`${BASE_URL}/api/enrollment/selfEnromentPrepaidSubmit`, dataToSend)
             .then(() => {
@@ -200,10 +203,12 @@ const PrepaidPreview = ({ setActiveIndex , setShowPreview }) => {
         setIsLoading(true);
         const dataToSend = {
             csr: csr,
-            userId: _id,
+            userId: _id, 
+            isWithInvoice: paymentInfo?.prospectwithinvoice,
+            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
         };
 
-        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
+        Axios.post(`${BASE_URL}/api/enrollment/selfEnromentPrepaidSubmit`, dataToSend)
             .then(() => {
                 let dataToSend = {
                     customerId: paymentInfo.customerid,
