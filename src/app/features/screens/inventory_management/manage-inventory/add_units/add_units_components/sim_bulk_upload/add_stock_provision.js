@@ -208,18 +208,20 @@ export default function SIMBulkUploadAddProvision({ permissions, unit, model }) 
                         <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
+                    <div   className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
                         <Dropdown
                             value={formik.values.agentType}
-                            options={department}
+                            options={department}  
+                            name="agentType"
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
                                 formik.setFieldValue("AgentName", "");
                                 setDepartmentSelected(e.value);
+                               formik.handleChange(e) 
                             }}
                             placeholder="Select an option"
                             className="field-width mt-2"

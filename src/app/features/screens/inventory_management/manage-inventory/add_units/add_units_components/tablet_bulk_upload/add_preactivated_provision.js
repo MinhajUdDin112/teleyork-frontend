@@ -200,11 +200,13 @@ export default function TabletBulkUploadAddPreActivatedProvision({ permissions, 
 
                         <Dropdown
                             value={formik.values.agentType}
-                            options={department}
+                            options={department}  
+                            name="agentType"
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
                                 formik.setFieldValue("AgentName", "");
                                 setDepartmentSelected(e.value);
+                               formik.handleChange()
                             }}
                             placeholder="Select an option"
                             className="field-width mt-2"
