@@ -201,7 +201,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                           
                         <Button label={"Submit"}   type="button"  onClick={()=>{  
                                 
-                             localStorage.setItem("isZipVerfied","yes")
+                             localStorage.setItem("izZipVerified","yes")
                             setZipVerified(true);  
                         }} className="col-12"  /> :
                         <Button label={"Check Coverage"}   type="submit" className="col-12" disabled={isLoading || !isCreate} />  
@@ -230,7 +230,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                                                Axios.post(`${BASE_URL}/api/user/withoutzip`,dataToSend).then((res)=>{ 
                                                  localStorage.setItem("prepaidzipData", JSON.stringify(res.data))            
                                                        
-                             localStorage.setItem("isZipVerfied","no")
+                             localStorage.setItem("izZipVerified","no")
                                                  setZipVerified(true)
                                                  }).catch(err=>{ 
                                                   
