@@ -108,11 +108,11 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     maidenMotherName: formik.values.maidenMotherName,
                     alternateContact: formik.values.alternateContact,
                 };  
-                 if(localStorage.getItem("isZipVerified") === "yes"){ 
-   dataToSend.isZipVerified=true
+                 if(localStorage.getItem("izZipVerified") === "yes"){ 
+   dataToSend.izZipVerified=true
                  } 
                  else{ 
-                    dataToSend.isZipVerified=false
+                    dataToSend.izZipVerified=false
                  }
                 setIsLoading(true);
                 try {
