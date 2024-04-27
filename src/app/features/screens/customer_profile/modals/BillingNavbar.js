@@ -254,7 +254,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {assignLabel && cpData?.label === undefined && cpData?.isEnrollmentComplete && (
+            {cpData?.esn !==undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && (
                 <>
                     <Button
                         label="Assign Label"
