@@ -7,8 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+import ChargeWallet from "../../billing_and_invoices/components/ChargeWallet";
 const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent, setRefreshEsn }) => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const BASE_URL = process.env.REACT_APP_BASE_URL;    
+    
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
     const [cpData, setCpData] = useState([]);
     const [openDialogeForWallet, setOpenDialogeForWallet] = useState(false);
     const [accountType, setAccountType] = useState(null);
@@ -123,7 +128,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                         </g>
                     </svg>
                 ),
-                command: () => {//handleWalletClick() 
+                command: () => {handleWalletClick() 
                 },
             },
         ];
@@ -207,7 +212,11 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
         <div className="menubar-styling">
             <ToastContainer />
             <Dialog header={"Add Wallet"} visible={openDialogeForWallet} style={{ width: "50vw" }} onHide={() => setOpenDialogeForWallet(false)}>
-                <DialogeForWallet userDetails={cpData} setOpenDialogeForWallet={setOpenDialogeForWallet} />
+            { 
+                   (capitalCompanyName.includes("IJ")) ?   <ChargeWallet userDetails={cpData} customerId={cpData?._id} setRefresh={setRefreshComponent} setOpenDialogeForWallet={setOpenDialogeForWallet} />      
+                   :
+                   <DialogeForWallet userDetails={cpData} customerId={cpData?._id} setRefresh={setRefreshComponent} setOpenDialogeForWallet={setOpenDialogeForWallet} />      
+                   }
             </Dialog>
             <Menubar
                 model={items}

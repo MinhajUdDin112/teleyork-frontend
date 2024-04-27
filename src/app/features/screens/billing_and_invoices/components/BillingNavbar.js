@@ -7,6 +7,7 @@ import { Button } from "primereact/button";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import ChargeWallet from "./ChargeWallet";
 const BillingNavbar = ({ refresh,setRefresh, setChangeCustomerStatus }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
@@ -16,7 +17,10 @@ const BillingNavbar = ({ refresh,setRefresh, setChangeCustomerStatus }) => {
 
     const selectedid = localStorage.getItem("selectedId");
     const parseselectedid = JSON.parse(selectedid);  
-    
+    // Get user data from localStorage
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
 
     const getCustomerProfileData = async () => {
         try {
@@ -78,7 +82,7 @@ const BillingNavbar = ({ refresh,setRefresh, setChangeCustomerStatus }) => {
                         </g>
                     </svg>
                 ),
-                command: () => {// handleWalletClick() 
+                command: () => { handleWalletClick() 
             },
             },
             {
@@ -133,8 +137,12 @@ const BillingNavbar = ({ refresh,setRefresh, setChangeCustomerStatus }) => {
         <div className="menubar-styling">
             <ToastContainer />
             <Dialog header={"Add Wallet"} visible={openDialogeForWallet} style={{ width: "60vw" }} onHide={() => setOpenDialogeForWallet(false)}>
-                <DialogeForWallet setOpenDialogeForWallet={setOpenDialogeForWallet} />
-            </Dialog>
+                   { 
+                   (capitalCompanyName.includes("IJ")) ?   <ChargeWallet customerId={cpData?._id} setRefresh={setRefresh} setOpenDialogeForWallet={setOpenDialogeForWallet} />      
+                   :
+                   <DialogeForWallet customerId={cpData?._id} setRefresh={setRefresh} setOpenDialogeForWallet={setOpenDialogeForWallet} />      
+                   }
+                   </Dialog>
             <Menubar
                 model={items}
                 end={() => {
