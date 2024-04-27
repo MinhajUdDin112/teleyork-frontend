@@ -514,7 +514,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             <Dropdown
                                 placeholder="Month"
                                 value={formik.values.month}
-                                id="month"
+                                id="month" 
+                                filter
                                 onChange={(e) => {
                                     if (selectedYear !== null && selectedDay !== null) {
                                         setCheckDOBError(false);
@@ -532,7 +533,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             <Dropdown
                                 placeholder="Day"
                                 value={formik.values.day}
-                                id="day"
+                                id="day" 
+                                filter
                                 onChange={(e) => {
                                     if (selectedYear !== null && selectedMonth !== null) {
                                         setCheckDOBError(false);
@@ -550,7 +552,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 className={classNames({ "p-invalid": dayerror }, "input_text md-col-3 col-4")}
                             />
                             <Dropdown
-                                placeholder="Year"
+                                placeholder="Year"  
+                                filter
                                 className={classNames({ "p-invalid": yearerror }, "input_text md-col-3 col-4")}
                                 value={formik.values.year}
                                 name="year"

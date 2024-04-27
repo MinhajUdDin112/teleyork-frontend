@@ -74,10 +74,11 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                      Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
                         setUspsCheck(false)   
                          setUspsCheckFound(true)                    
-                          
+                         setIsLoading(false);
                     }).catch(err=>{ 
                         setUspsCheck(false)   
-                         setUspsCheckFound(false)
+                         setUspsCheckFound(false) 
+                         setIsLoading(false);
                     })
                 }).catch(err=>{ 
                     setPwgDbCheck(false)   
@@ -100,24 +101,28 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                      localStorage.setItem("prepaidzipData", JSON.stringify(res.data)); 
                      Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
                         setUspsCheck(false)   
-                         setUspsCheckFound(true)                    
+                         setUspsCheckFound(true)      
+                         setIsLoading(false);                 
                           
                     }).catch(err=>{ 
                         setUspsCheck(false)   
-                         setUspsCheckFound(false)
+                         setUspsCheckFound(false) 
+                         setIsLoading(false);
                     })
                 }).catch(err=>{ 
                     setPwgDbCheck(false)   
                      setPwgDbCheckFound(false)  
                      Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
                         setUspsCheck(false)   
-                         setUspsCheckFound(true)                    
+                         setUspsCheckFound(true)                        
+                         setIsLoading(false);
                          localStorage.setItem("prepaidzipData", JSON.stringify(res.data)); 
               
                     }).catch(err=>{ 
                         setUspsCheck(false)   
-                         setUspsCheckFound(false)
-                    })
+                         setUspsCheckFound(false) 
+                         setIsLoading(false);
+                    }) 
                 })
             })
           /* setIsLoading(true);
@@ -148,9 +153,41 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                         </h5>  
                       
                         {isLoading ? (
-                            <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled />
+                            <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={  
+                                 (e)=>{   
+                                    formik.setFieldValue("zipCode",e.target.value)
+                                    if(pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending"){  
+                                         formik.setFieldValue("zipCode",e.value)
+                                        setShowCheckCoverage(false)  
+                                        setIsLoading(false)
+                                           setPwgApiCheck("pending") 
+                                           setPwgApiCheckFound(true)   
+                                           setPwgDbCheck("pending") 
+                                           setPwgDbCheckFound(true) 
+                                           setUspsCheck("pending") 
+                                           setUspsCheckFound(true)
+                                    }
+                                 } 
+                                 
+                                 } keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled={isLoading} />
                         ) : (
-                            <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={formik.handleChange} keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
+                            <InputText type="text" name="zipCode" 
+                               
+                             className="col-12 mb-3" value={formik.values.zipCode} onChange={ (e)=>{  
+                                formik.setFieldValue("zipCode",e.target.value)
+                                 if(pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending"){  
+                                formik.setFieldValue("zipCode",e.value)
+                               setShowCheckCoverage(false)  
+                               setIsLoading(false)
+                                  setPwgApiCheck("pending") 
+                                  setPwgApiCheckFound(true)   
+                                  setPwgDbCheck("pending") 
+                                  setPwgDbCheckFound(true) 
+                                  setUspsCheck("pending") 
+                                  setUspsCheckFound(true) 
+                             }
+                           }
+                        }  keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
                         )}
 
                         {formik.touched.zipCode && formik.errors.zipCode ? (
