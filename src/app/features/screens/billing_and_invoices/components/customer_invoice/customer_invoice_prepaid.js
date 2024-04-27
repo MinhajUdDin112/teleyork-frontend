@@ -101,7 +101,7 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
                                     <p>${parseFloat(invoiceData?.totalAmount).toFixed(2)}</p>
                                 </div>
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Amount Paid</p>
+                                    <p>Paid Amount</p>
                                     <p>${invoiceData?.amountPaid}</p>
                                 </div>
 
@@ -303,7 +303,20 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
                                 <p className="taxessurcharge">Taxes and Surcharges</p>
                                 <p className="taxesamount">$0.00</p>
                             </div>    
-                             </div>       
+                             </div>        
+                             <div>
+                        
+                            <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
+                            <p>Total Amount Payable</p>
+                                    <p>${parseFloat(invoiceData?.totalAmount).toFixed(2)}</p>
+                            </div>
+
+                            <div className="pl-2  flex flex-wrap justify-content-between ">
+                            <p>Paid Amount</p>
+                                    <p>${invoiceData?.amountPaid}</p>
+                            </div>
+                        
+                             </div>   
 
                         <div className="topline"></div>
                         <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
