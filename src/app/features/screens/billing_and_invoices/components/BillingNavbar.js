@@ -7,7 +7,7 @@ import { Button } from "primereact/button";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
+const BillingNavbar = ({ refresh,setRefresh, setChangeCustomerStatus }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
     const [cpData, setCpData] = useState([]);
@@ -15,7 +15,8 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
     const [accountType, setAccountType] = useState(null);
 
     const selectedid = localStorage.getItem("selectedId");
-    const parseselectedid = JSON.parse(selectedid);
+    const parseselectedid = JSON.parse(selectedid);  
+    
 
     const getCustomerProfileData = async () => {
         try {
@@ -120,7 +121,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend);
             if (response?.status === 200 || response?.status === 201) {
-                toast.success(response?.data?.message);
+                toast.success(response?.data?.message);   
+                 setRefresh(prev=>!prev)
+                 
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
@@ -163,8 +166,11 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
                     );
                 }}
                 className="m-1  card border-none menubar border-noround  text-xl font-semibold mx-0 bg-white mx-0 pt-4 pb-4"
-            />
-            <Button onClick={handleGenerateInvoice} style={{ marginTop: "1rem" }} label="Generate Invoice" />
+            />  
+            { 
+            cpData?.invoice?.length === 0 ?
+            <Button onClick={handleGenerateInvoice} style={{ marginTop: "1rem" }} label="Generate Invoice" /> :undefined
+}
         </div>
     );
 };

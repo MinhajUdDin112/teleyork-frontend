@@ -54,7 +54,7 @@ const InvoicePage = () => {
         <>
             <onAPISuccess.Provider value={{ handleAPISuccess }}>
                 <Card>
-                    <BillingNavbar refresh={refresh} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
+                    <BillingNavbar refresh={refresh}  setRefresh={setRefresh} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
                     <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
                         <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
                     </Dialog>
@@ -82,7 +82,7 @@ const InvoicePage = () => {
                                 •Rows in orange color are partially Paid Invoices
                             </p>
                         </div>
-                        <InvoiceTable setRefresh={setRefresh} userDetails={userDetails} className="mb-3" invoiceData={invoices} />
+                        <InvoiceTable setRefresh={setRefresh} refresh={refresh}  userDetails={userDetails} className="mb-3" invoiceData={invoices} />
                     </div>
                 </Card>
             </onAPISuccess.Provider>

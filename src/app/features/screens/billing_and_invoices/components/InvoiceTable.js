@@ -9,7 +9,7 @@ import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 import CustomerInvoicePrepaid from "./customer_invoice/customer_invoice_prepaid";
 import PaymentStripModule from "./dialog/stripe_payment";
-const InvoiceTable = ({ setRefresh, userDetails, invoiceData }) => {
+const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
     const cardData = invoiceData;
     const [isLoading, setIsLoading] = useState(false);
     const [singleInvoiceData, setInvoiceData] = useState();
