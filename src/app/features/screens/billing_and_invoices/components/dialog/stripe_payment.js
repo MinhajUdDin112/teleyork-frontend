@@ -26,7 +26,7 @@ export default function PaymentStripModule({setRefresh,setPaymentDialogVisibilit
         <Elements stripe={stripePromise} options={{
             clientSecret
         }}>
-           <PaymentStripeForm  setRefresh={setRefresh} setPaymentDialogVisibility={setPaymentDialogVisibility} clientSecret={clientSecret} userDetails={userDetails} invoiceId={invoiceId} paid={amountToPaid}/>
+           <PaymentStripeForm  setRefresh={setRefresh} dueAmount={dueAmount} setPaymentDialogVisibility={setPaymentDialogVisibility} clientSecret={clientSecret} userDetails={userDetails} invoiceId={invoiceId} paid={amountToPaid}/>
         </Elements>:<div>   
              <div className="flex flex-wrap flex-row justify-content-left"> 
               <div >
