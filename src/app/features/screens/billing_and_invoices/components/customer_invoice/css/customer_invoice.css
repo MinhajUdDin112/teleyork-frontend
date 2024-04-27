@@ -169,4 +169,11 @@ margin-top: -5px;
 }
 .onetimecharges td{ 
     border:none;
+ } 
+ .taxessurcharge,.taxesamount,.invoicenumber{ 
+     margin-top: -15px;
+ }  
+ .accountsummaryhere{ 
+    margin-top: 15px;  
+    padding-bottom: 15px;
  }
