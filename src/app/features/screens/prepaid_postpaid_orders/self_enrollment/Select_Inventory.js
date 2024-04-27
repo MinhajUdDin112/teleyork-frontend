@@ -675,7 +675,7 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                 {formik.values.paymentMode == "card" && !(localStorage.getItem("paymentstatus") === "paid") ? (
                                     <>
                                         <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} setPaymentDialogVisibility={setPaymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
-                                            <PaymentStripModule paid={formik.values.paid} plan={formik.values.plan} setPaymentDialogVisibility={setPaymentDialogVisibility} amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
+                                            <PaymentStripModule    setShowPreview={setShowPreview} paid={formik.values.paid} plan={formik.values.plan} setPaymentDialogVisibility={setPaymentDialogVisibility} amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
                                         </Dialog>
                                     </>
                                 ) : undefined}
