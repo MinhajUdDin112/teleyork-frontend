@@ -199,8 +199,10 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                          { 
                           pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending" ?        
                           
-                        <Button label={"Submit"}   type="button"  onClick={()=>{ 
-                            setZipVerified(true);
+                        <Button label={"Submit"}   type="button"  onClick={()=>{  
+                                
+                             localStorage.setItem("isZipVerfied","yes")
+                            setZipVerified(true);  
                         }} className="col-12"  /> :
                         <Button label={"Check Coverage"}   type="submit" className="col-12" disabled={isLoading || !isCreate} />  
 }
@@ -226,7 +228,9 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                                                 const dataToSend = { serviceProvider, csr, department, carrier, ...formik.values ,accountType:"Prepaid"};   
                                               
                                                Axios.post(`${BASE_URL}/api/user/withoutzip`,dataToSend).then((res)=>{ 
-                                                 localStorage.setItem("prepaidzipData", JSON.stringify(res.data))   
+                                                 localStorage.setItem("prepaidzipData", JSON.stringify(res.data))            
+                                                       
+                             localStorage.setItem("isZipVerfied","no")
                                                  setZipVerified(true)
                                                  }).catch(err=>{ 
                                                   

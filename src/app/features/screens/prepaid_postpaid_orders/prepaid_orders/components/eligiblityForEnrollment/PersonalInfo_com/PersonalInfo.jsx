@@ -107,7 +107,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     accountType: formik.values.accountType,
                     maidenMotherName: formik.values.maidenMotherName,
                     alternateContact: formik.values.alternateContact,
-                };
+                };  
+                 if(localStorage.getItem("isZipVerified") === "yes"){ 
+   dataToSend.isZipVerified=true
+                 } 
+                 else{ 
+                    dataToSend.isZipVerified=false
+                 }
                 setIsLoading(true);
                 try {
                     const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
