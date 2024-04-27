@@ -15,7 +15,8 @@ const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
     const [singleInvoiceData, setInvoiceData] = useState();
     const [dialogeForAuthPayment, setdialogeForAuthPayment] = useState(false);
     const [invoiceId, setInvoiceId] = useState();
-    const [dueAmount, setdueAmount] = useState();
+    const [dueAmount, setdueAmount] = useState();  
+    const [invoiceDownload,setInvoiceDownload]=useState(false)
 
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
@@ -191,8 +192,10 @@ const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
                     body={(rowData) => (
                         <Button
                             className="bg-green-700 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2"
-                            onClick={() => {
-                                setInvoiceData(rowData);
+                            onClick={() => {  
+
+                                setInvoiceData(rowData);  
+                                setInvoiceDownload(prev=>!prev)
                             }}
                             disabled={isLoading}
                         >
@@ -202,7 +205,7 @@ const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
                     header="Invoice Pdf"
                 />
             </DataTable>
-            {userDetails?.accountType === "Prepaid" ? <CustomerInvoicePrepaid userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} /> : <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />}
+            {userDetails?.accountType === "Prepaid" ? <CustomerInvoicePrepaid invoiceDownload={invoiceDownload} userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} /> : <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />}
         </div>
     );
 };
