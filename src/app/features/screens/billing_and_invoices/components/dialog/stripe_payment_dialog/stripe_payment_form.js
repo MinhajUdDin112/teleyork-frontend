@@ -4,7 +4,7 @@ import "./style/stripe_payment_form.css";
 import Axios from "axios";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function PaymentStripeForm({setRefresh,setPaymentDialogVisibility, userDetails, invoiceId, paid, clientSecret }) {
+export default function PaymentStripeForm({setRefresh,setPaymentDialogVisibility,dueAmount, userDetails, invoiceId, paid, clientSecret }) {
     const submitbuttonref = useRef(null);
     const stripe = useStripe();
     const [disableSubmit, setDisableSubmit] = useState(false);
@@ -32,10 +32,17 @@ export default function PaymentStripeForm({setRefresh,setPaymentDialogVisibility
             const dataToSend = {
                 customerId: userDetails?._id,
                 amountPaid: paid,
-                invoiceStatus: "Paid",
                 invoicePaymentMethod: "Credit Card",
             };
-
+      if(parseFloat(paid) >= parseFloat(dueAmount)){   
+         console.log("due amount",parseFloat(dueAmount))  
+           
+         console.log("Paid amount",parseFloat(paid))
+         dataToSend.invoiceStatus="Paid"
+      } 
+      else{ 
+        dataToSend.invoiceStatus="Partially Paid" 
+      }
             try {
                 const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
 
