@@ -105,12 +105,11 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("homeAddress")   
         localStorage.removeItem("selfinventoryselect") 
         localStorage.removeItem("selfplanselect")
-        navigate("/prepaid-allenrollment");
+        navigate("/all-selfenrollment");
     };
 
     const handleNavigate = () => {
-        const data = localStorage.getItem("prepaidagreeData");
-        const parseData = JSON.parse(data);
+        const parseData = JSON.parse(localStorage.getItem("initialInformation"));
         navigate("/customer-profile", { state: { selectedId: parseData?.data?._id } });
         localStorage.setItem("selectedId", JSON.stringify(parseData?.data?._id));
     };
