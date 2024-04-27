@@ -11,7 +11,7 @@ import InvoiceTypes from "../InvoiceTypes";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIsLoading }) {
+export default function CustomerInvoicePrepaid({ userDetails,invoiceDownload, invoiceData, setIsLoading }) {
     // const [isLoading, setIsLoading] = useState(false);
     const downloadref = useRef();
     const downloadButtonRef = useRef();
@@ -20,7 +20,7 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
         if (invoiceData !== undefined && invoiceData !== null) {
             downloadButtonRef.current.click();
         }
-    }, [invoiceData]);
+    }, [invoiceDownload]);
 
     const downloadInvoice = () => {
         setIsLoading(true);
