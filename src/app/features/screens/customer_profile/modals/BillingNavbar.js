@@ -55,7 +55,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
 
     useEffect(() => {
         getCustomerProfileData();
-    }, [changeCustomerStatusDialog, refreshNotificationcomponent, refresh, refreshComponent, refreshComp]);
+    }, [changeCustomerStatusDialog, refreshNotificationcomponent,refresh, refreshComponent, refreshComp]);
 
     function openPaymentScreen() {
         navigate("/invoice", { state: { selectedId: parseselectedid } });
@@ -149,7 +149,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             toast.error(error?.response?.data?.msg);
         }
         setVisible(false);
-        setRefreshComponent(true);
+        setRefreshComponent(prev=>!prev);
     };
     const handleLabel = async () => {
         const loginRes = localStorage.getItem("userData");
@@ -166,7 +166,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             toast.error(error?.response?.data?.msg);
         }
         setVisible(false);
-        setRefreshComponent((prev) => !prev);
+        setRefreshComponent((prev) => !prev); 
+        setRefreshEsn(prev=>!prev) 
+        
     };
     const downloadLabel = () => {
         const path = cpData?.label;
@@ -254,7 +256,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {cpData?.esn !==undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && (
+            {cpData?.esn !== undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && (
                 <>
                     <Button
                         label="Assign Label"
