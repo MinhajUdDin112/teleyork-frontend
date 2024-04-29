@@ -9,23 +9,22 @@ import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
-import PrepaidPreview from "./Preview_Prepaid";
+import PrepaidPreview from "./Preview_Prepaid";    
 function capitalizeSentence(sentence) {
     // Split the sentence into words
     const words = sentence.split(" ");
-
     // Capitalize the first letter of each word and convert the rest to lowercase
     const capitalizedWords = words.map((word) => {
         // Convert the first letter to uppercase and the rest to lowercase
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     });
-
     // Join the words back into a sentence
     return capitalizedWords.join(" ");
 }
-const PrepaidSelectInventory = ({ setActiveIndex }) => {
+const PrepaidSelectInventory = ({ setActiveIndex }) => { 
+    
+const [paidAmountRequired,setPaidAmountRequired]=useState(false)
     const navigate = useNavigate()
-
     const previewsRes = localStorage.getItem("homeAddress");
     const parsepreviewsRes = JSON.parse(previewsRes);
     const previewInfo = parsepreviewsRes?.data;
@@ -104,7 +103,8 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                 setShowPreview(true)
             }
             else {
-                if (formik.values.paymentMode === "card") {
+                if (formik.values.paymentMode === "card") {  
+                    if(formik.values.paid !== ""){
                     localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values))
                     if (localStorage.getItem("paymentstatus")) {
                         if (localStorage.getItem("paymentstatus") === "paid") {
@@ -114,7 +114,11 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                         }
                     } else {
                         setPaymentDialogVisibility(true);
-                    }
+                    } 
+                } 
+                 else{ 
+                    setPaidAmountRequired(false)
+                 }
                 }
                 else {
                     setpaymentmethoderror(true)
@@ -652,11 +656,20 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                                     className="w-full mt-2"
                                                     id="paid"
                                                     value={formik.values.paid}
-                                                    onChange={(e) => {
+                                                    onChange={(e) => {    
+                                                        if(e.target.value === ""){ 
+                                                            setPaidAmountRequired(true)
+                                                        } 
+                                                        else{ 
+                                                           setPaidAmountRequired(false)
+                                                        }
                                                         formik.setFieldValue("paid", e.target.value);
                                                         // formik.handleChange(e);
                                                     }}
-                                                />
+                                                /> 
+                                                    { 
+                                        paidAmountRequired  ? <p className="p-error mt-1 ml-1">Paying Amount Is Required</p>:""
+                                      }
                                                 {getFormErrorMessage("paid")}
                                             </div>
                                         ) : (
