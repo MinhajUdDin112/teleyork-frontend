@@ -70,7 +70,7 @@ const DialogeForOneNote = ({ enrollmentId, noteId, contact }) => {
                             <table className="cp_table w-full text-left" style={{ borderCollapse: "collapse" }}>
                                 <tbody>
                                     <tr style={{ border: "1px solid lightgrey" }}>
-                                        <td style={{ border: "1px solid lightgrey" }}>Customer ID</td>
+                                        <td style={{ border: "1px solid lightgrey"}}>Customer ID</td>
                                         <td style={{ border: "1px solid lightgrey", width: "0.4rem" }}>:</td>
                                         <td style={{ border: "1px solid lightgrey", width: "25vw" }}>{enrollmentId}</td>
                                     </tr>
