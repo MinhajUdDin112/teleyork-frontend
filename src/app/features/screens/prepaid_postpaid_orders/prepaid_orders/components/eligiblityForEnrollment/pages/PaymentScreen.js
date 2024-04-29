@@ -300,7 +300,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                          else{ 
                                                
                                         setProspectWithInvoice(true);  
-                                         
+                                        formik.setFieldValue("paid","")
                                         formik.setFieldValue("prospectwithinvoice", true) 
                                          }
                                         setProspectWithOutInvoice(false);
@@ -324,7 +324,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                              else{ 
                                                    
                                             setProspectWithOutInvoice(true);  
-                                             
+                                            formik.setFieldValue("paid","")
                                             formik.setFieldValue("prospectwithoutinvoice", true) 
                                              }
                                         setProspectWithInvoice(false);
