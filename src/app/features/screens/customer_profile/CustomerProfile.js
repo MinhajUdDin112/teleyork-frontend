@@ -38,7 +38,6 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [isEdit, setIsEdit] = useState(false);
     const [agents, setAgents] = useState([]);
     const [refreshNotes, setRefreshNotes] = useState(false);
-    const [resolvedNotes, setResolvedNotes] = useState([]);
     const [trackingNumber, setTrackingNumber] = useState("");
     const location = useLocation();
 
@@ -240,23 +239,6 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
         fetchTrackingNumber();
     }, []);
 
-    const handleResolve = async (noteId) => {
-        const data = {
-            noteId: noteId,
-        };
-
-        try {
-            const response = await Axios.post(`${BASE_URL}/api/web/notes/resolveNote`, data);
-            if (response?.status === 200 || response?.status === 201) {
-                toast.success("Successfully Resolved");
-                setResolvedNotes([...resolvedNotes, noteId]);
-                getNotes();
-            }
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-        }
-    };
-    const isResolved = (noteId) => resolvedNotes.includes(noteId);
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
     return (
@@ -843,11 +825,12 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                             }
                                         }}
                                     >
-                                        <Column header="Created By" field="user.name"></Column>
-                                        <Column header="Note" field="note"></Column>
-                                        <Column header="Note Type" field="noteType"></Column>
-                                        <Column header="Priority" field="priority"></Column>
+                                        <Column header="Created By" field="user.name" className="hover-blue"></Column>
+                                        <Column header="Note" field="note" className="hover-blue"></Column>
+                                        {/* <Column header="Note Type" field="noteType"></Column>
+                                        <Column header="Priority" field="priority"></Column> */}
                                         <Column
+                                            className="hover-blue"
                                             header="Creation Date"
                                             field="createdAt"
                                             body={(rowData) => {
@@ -855,20 +838,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 return <p>{ChangeIsoDateToECT(rowData.createdAt)}</p>;
                                             }}
                                         ></Column>
-                                        <Column header="Assigned To" field="assignTo.name"></Column>
-                                        <Column
-                                            header="Action Button"
-                                            field="_id"
-                                            body={(rowData) =>
-                                                isResolved(rowData._id) ? (
-                                                    <span>Resolved</span>
-                                                ) : (
-                                                    <Button onClick={() => handleResolve(rowData._id)} className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none">
-                                                        Resolve
-                                                    </Button>
-                                                )
-                                            }
-                                        />
+                                        {/* <Column header="Assigned To" field="assignTo.name"></Column> */}
+                                        <Column field="i" className="hover-blue" body={() => <span>ℹ️</span>}></Column>
                                     </DataTable>
                                 </div>
                             </div>
