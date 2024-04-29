@@ -444,7 +444,7 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                                          else{ 
                                                                
                                                         setProspectWithOutInvoice(true);  
-                                                         
+                                                        formik.setFieldValue("paid","")
                                                         formik.setFieldValue("prospectwithoutinvoice", true) 
                                                          }
                                                     setProspectWithInvoice(false);
