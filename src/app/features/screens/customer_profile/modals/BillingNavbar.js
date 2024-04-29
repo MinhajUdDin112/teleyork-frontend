@@ -10,7 +10,6 @@ import { ToastContainer } from "react-toastify";
 import ChargeWallet from "../../billing_and_invoices/components/ChargeWallet";
 const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent, setRefreshEsn }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;    
-    
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
@@ -26,7 +25,6 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     const [refreshTrakingId, setRefreshTrakingId] = useState(false);
     const [assignLabel, setAssignLabel] = useState(false);
     const selectedid = localStorage.getItem("selectedId");
-
     const parseselectedid = JSON.parse(selectedid);
     const navigate = useNavigate();
     useEffect(() => {
@@ -242,7 +240,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 }}
                 className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4"
             />
-            {cpData?.esn === undefined && cpData?.isEnrollmentComplete && (
+            {cpData?.esn === undefined && cpData?.isEnrollmentComplete  && (
                 <>
                     <Button
                         label="Assign ESN"
@@ -256,7 +254,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {cpData?.esn !== undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && (
+            {cpData?.esn !== undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && accountType !== "ACP" && (
                 <>
                     <Button
                         label="Assign Label"
