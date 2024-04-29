@@ -144,8 +144,8 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                     ref.current.show({ severity: "success", summary: "Inventory", detail: "Successfully Added" });
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    formik.setFieldValue("agentType", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
+                    ;
                     formik.setFieldValue("Esn", "");
                     formik.setFieldValue("box", "");
                     formik.setFieldValue("Model", "");
@@ -157,7 +157,7 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                     actions.resetForm();
                     setSelectedMakeId(null);
                     setModel([]);
-                    setAgent([]);
+                    ;
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;
@@ -230,7 +230,7 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"

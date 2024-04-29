@@ -133,24 +133,24 @@ export default function EsnSimSingleUpload({ permissions }) {
 
                     toast.error("Inventory Not Exist");
                     setEsnExist(null);
-                    formik.setFieldValue("agentType", "");
+                    ;
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("status", "");
                     formik.setFieldValue("Model", "");
                     formik.setFieldValue("box", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
                     formik.setFieldValue("SimNumber", "");
                     setDefaultSelectedAgent(null);
                     setDepartmentSelected(null);
                 });
         } else {
             setEsnExist(null);
-            formik.setFieldValue("agentType", "");
+            ;
             formik.setFieldValue("carrier", "");
             formik.setFieldValue("status", "");
             formik.setFieldValue("Model", "");
             formik.setFieldValue("box", "");
-            formik.setFieldValue("AgentName", "");
+            ;
             formik.setFieldValue("SimNumber", "");
             setDefaultSelectedAgent(null);
             setDepartmentSelected(null);
@@ -255,7 +255,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDefaultSelectedAgent(null);
                                 setDepartmentSelected(e.value);
                             }}

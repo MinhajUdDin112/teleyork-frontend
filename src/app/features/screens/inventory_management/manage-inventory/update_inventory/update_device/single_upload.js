@@ -136,13 +136,13 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                 .catch((err) => {
                     //Setting this to null so Api Not call if ESN Not found in Inventory
                     setEsnExist(null);
-                    formik.setFieldValue("agentType", "");
+                    ;
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("status", "");
                     formik.setFieldValue("Model", "");
                     formik.setFieldValue("box", "");
                     formik.setFieldValue("IMEI", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
                     formik.setFieldValue("SimNumber", "");
                     setDefaultSelectedAgent(null);
                     setDepartmentSelected(null);
@@ -152,12 +152,12 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                 });
         } else {
             setEsnExist(null);
-            formik.setFieldValue("agentType", "");
+            ;
             formik.setFieldValue("carrier", "");
             formik.setFieldValue("status", "");
             formik.setFieldValue("Model", "");
             formik.setFieldValue("box", "");
-            formik.setFieldValue("AgentName", "");
+            ;
             formik.setFieldValue("SimNumber", "");
             formik.setFieldValue("IMEI", "");
             setDefaultSelectedAgent(null);
@@ -328,7 +328,7 @@ export default function UpdateDeviceSingleUpload({ permissions }) {
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder=" Select "

@@ -130,8 +130,8 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                     ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    formik.setFieldValue("agentType", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
+                    ;
                     formik.setFieldValue("SimNumber", "");
 
                     formik.setFieldValue("box", "");
@@ -142,7 +142,7 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                     formik.setFieldValue("provisionType", "Add Pre-Activated");
                     actions.resetForm();
-                    setAgent([]);
+                    ;
                 
                 })
                 .catch((error) => {  
@@ -217,7 +217,7 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName","")
+                                
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
