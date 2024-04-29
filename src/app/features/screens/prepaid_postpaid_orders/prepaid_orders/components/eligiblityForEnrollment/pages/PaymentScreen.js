@@ -88,7 +88,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 setActiveIndex(3)
             }
             else {
-                if (formik.values.paymentMode === "card") {
+                if (formik.values.paymentMode === "card" ) {  
+                       if(formik.values.paid !== ""){
                     localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values))
                     if (localStorage.getItem("paymentstatus")) {
                         if (localStorage.getItem("paymentstatus") === "paid") {
@@ -98,7 +99,11 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                         }
                     } else {
                         setPaymentDialogVisibility(true);
-                    }
+                    } 
+                } 
+                else{ 
+                    setPaidAmountRequired(true)
+                }
                 }
                 else {
                     setpaymentmethoderror(true)
@@ -533,7 +538,12 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         id="paid"
                                         value={formik.values.paid}
                                         onChange={(e) => {  
-                                             
+                                             if(e.target.value === ""){ 
+                                                 setPaidAmountRequired(true)
+                                             } 
+                                             else{ 
+                                                setPaidAmountRequired(false)
+                                             }
                                             formik.setFieldValue("paid", e.target.value);
                                             // formik.handleChange(e);
                                         }}
