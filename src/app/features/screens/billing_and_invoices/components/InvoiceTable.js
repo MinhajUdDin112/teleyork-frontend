@@ -9,13 +9,14 @@ import "./css/invoicetable.css";
 import { Dialog } from "primereact/dialog";
 import CustomerInvoicePrepaid from "./customer_invoice/customer_invoice_prepaid";
 import PaymentStripModule from "./dialog/stripe_payment";
-const InvoiceTable = ({ setRefresh, userDetails, invoiceData }) => {
+const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
     const cardData = invoiceData;
     const [isLoading, setIsLoading] = useState(false);
     const [singleInvoiceData, setInvoiceData] = useState();
     const [dialogeForAuthPayment, setdialogeForAuthPayment] = useState(false);
     const [invoiceId, setInvoiceId] = useState();
-    const [dueAmount, setdueAmount] = useState();
+    const [dueAmount, setdueAmount] = useState();  
+    const [invoiceDownload,setInvoiceDownload]=useState(false)
 
     const rowClassName = (rowData) => {
         // Example condition: apply different classes based on status
@@ -191,8 +192,10 @@ const InvoiceTable = ({ setRefresh, userDetails, invoiceData }) => {
                     body={(rowData) => (
                         <Button
                             className="bg-green-700 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2"
-                            onClick={() => {
-                                setInvoiceData(rowData);
+                            onClick={() => {  
+
+                                setInvoiceData(rowData);  
+                                setInvoiceDownload(prev=>!prev)
                             }}
                             disabled={isLoading}
                         >
@@ -202,7 +205,7 @@ const InvoiceTable = ({ setRefresh, userDetails, invoiceData }) => {
                     header="Invoice Pdf"
                 />
             </DataTable>
-            {userDetails?.accountType === "Prepaid" ? <CustomerInvoicePrepaid userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} /> : <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />}
+            {userDetails?.accountType === "Prepaid" ? <CustomerInvoicePrepaid invoiceDownload={invoiceDownload} userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} /> : <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />}
         </div>
     );
 };

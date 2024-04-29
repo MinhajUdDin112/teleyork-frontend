@@ -17,8 +17,8 @@ export default function SIMBulkUploadAddProvision({ permissions, unit, model }) 
     const loginRes = localStorage.getItem("userData");
     const [agent, setAgent] = useState(null);
     const [department, setDepartment] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
-    const parseLoginRes = JSON.parse(loginRes);
+    const parseLoginRes = JSON.parse(loginRes); 
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [carrier, setCarrier] = useState(null);
     const [fileerror, setFileError] = useState(false);
     useEffect(() => {
@@ -80,8 +80,8 @@ export default function SIMBulkUploadAddProvision({ permissions, unit, model }) 
             carrier: "",
             file: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             /*team:"",*/
             unitType: unit,
             billingModel: model,
@@ -208,18 +208,21 @@ export default function SIMBulkUploadAddProvision({ permissions, unit, model }) 
                         <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
+                    <div   className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown 
+                        disabled
                             value={formik.values.agentType}
-                            options={department}
+                            options={department}  
+                            name="agentType"
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
                                 formik.setFieldValue("AgentName", "");
                                 setDepartmentSelected(e.value);
+                               formik.handleChange(e) 
                             }}
                             placeholder="Select an option"
                             className="field-width mt-2"
@@ -246,7 +249,7 @@ export default function SIMBulkUploadAddProvision({ permissions, unit, model }) 
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}

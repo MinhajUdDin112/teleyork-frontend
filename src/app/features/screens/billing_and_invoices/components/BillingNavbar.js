@@ -7,7 +7,8 @@ import { Button } from "primereact/button";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
+import ChargeWallet from "./ChargeWallet";
+const BillingNavbar = ({ refresh,setRefresh, setChangeCustomerStatus }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
     const [cpData, setCpData] = useState([]);
@@ -15,7 +16,11 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
     const [accountType, setAccountType] = useState(null);
 
     const selectedid = localStorage.getItem("selectedId");
-    const parseselectedid = JSON.parse(selectedid);
+    const parseselectedid = JSON.parse(selectedid);  
+    // Get user data from localStorage
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
 
     const getCustomerProfileData = async () => {
         try {
@@ -62,14 +67,14 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
             },
 
             {
-                label: `Wallet Balance: $0`,
+                label:`Wallet:  ${cpData?.wallet !== undefined ? parseFloat(cpData?.wallet).toFixed(2) : "0"}`,
                 icon: (
                     <svg className="custom-icon-plus" viewBox="0 0 8 8" id="meteor-icon-kit__regular-plus-xxs" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                         <g id="SVGRepo_iconCarrier">
                             <path
-                                fill-rule="evenodd"
+                                fill-rule="evenodd" 
                                 clip-rule="evenodd"
                                 d="M3 3V0.83333C3 0.3731 3.4477 0 4 0C4.5523 0 5 0.3731 5 0.83333V3H7.1667C7.6269 3 8 3.4477 8 4C8 4.5523 7.6269 5 7.1667 5H5V7.1667C5 7.6269 4.5523 8 4 8C3.4477 8 3 7.6269 3 7.1667V5H0.83333C0.3731 5 0 4.5523 0 4C0 3.4477 0.3731 3 0.83333 3H3z"
                                 fill="#758CA3"
@@ -77,7 +82,8 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
                         </g>
                     </svg>
                 ),
-                command: () => handleWalletClick(),
+                command: () => { handleWalletClick() 
+            },
             },
             {
                 label: accountType === "ACP" ? "ACP" : accountType === "Postpaid" ? "Post Paid" : accountType === "Prepaid" ? "Pre Paid" : "",
@@ -119,7 +125,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
         try {
             const response = await Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend);
             if (response?.status === 200 || response?.status === 201) {
-                toast.success(response?.data?.message);
+                toast.success(response?.data?.message);   
+                 setRefresh(prev=>!prev)
+                 
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
@@ -129,8 +137,12 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
         <div className="menubar-styling">
             <ToastContainer />
             <Dialog header={"Add Wallet"} visible={openDialogeForWallet} style={{ width: "60vw" }} onHide={() => setOpenDialogeForWallet(false)}>
-                <DialogeForWallet setOpenDialogeForWallet={setOpenDialogeForWallet} />
-            </Dialog>
+                   { 
+                   (capitalCompanyName.includes("IJ")) ?   <ChargeWallet customerId={cpData?._id} setRefresh={setRefresh} setOpenDialogeForWallet={setOpenDialogeForWallet} />      
+                   :
+                   <DialogeForWallet customerId={cpData?._id} setRefresh={setRefresh} setOpenDialogeForWallet={setOpenDialogeForWallet} />      
+                   }
+                   </Dialog>
             <Menubar
                 model={items}
                 end={() => {
@@ -162,8 +174,11 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus }) => {
                     );
                 }}
                 className="m-1  card border-none menubar border-noround  text-xl font-semibold mx-0 bg-white mx-0 pt-4 pb-4"
-            />
-            <Button onClick={handleGenerateInvoice} style={{ marginTop: "1rem" }} label="Generate Invoice" />
+            />  
+            { 
+            cpData?.invoice?.length === 0 ?
+            <Button onClick={handleGenerateInvoice} style={{ marginTop: "1rem" }} label="Generate Invoice" /> :undefined
+}
         </div>
     );
 };

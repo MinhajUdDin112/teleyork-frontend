@@ -19,8 +19,9 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
     const loginRes = localStorage.getItem("userData");
     const [agent, setAgent] = useState(null);
     const [department, setDepartment] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
     const parseLoginRes = JSON.parse(loginRes);
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
+   
     const [carrier, setCarrier] = useState(null);
     const [fileerror, setFileError] = useState(false);
     useEffect(() => {
@@ -84,8 +85,8 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
             carrier: "",
             file: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             /*team:"",*/
             unitType: unit,
             billingModel: model,
@@ -93,8 +94,10 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
             provisionType: "Add And Assign Non Active",
         },
 
-        onSubmit: (values, actions) => {
-            handlesubmit(actions);
+        onSubmit: (values, actions) => { 
+           
+            handlesubmit(actions); 
+          
         },
     });
     function ApiResponseShow({ res }) {
@@ -162,7 +165,6 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             setFilename(null);
                             actions.resetForm();
                         } catch (err) {
-                            console.log("Error is here");
                         }
                     })
                     .catch((error) => {
@@ -197,7 +199,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                         <p className="m-0">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown name="carrier" value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -216,13 +218,18 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown 
+                        disabled
                             value={formik.values.agentType}
-                            options={department}
+                            options={department}  
+                            name="agentType" 
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
-                                setDepartmentSelected(e.value);
+                                setDepartmentSelected(e.value); 
+                                
+                                formik.setFieldValue("AgentName", "");    
+                                 
+                                formik.handleChange(e)
                             }}
                             placeholder="Select an option"
                             className="field-width mt-2"
@@ -249,7 +256,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled name="AgentName" value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -268,7 +275,8 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                                 input.type = "file";
                                 input.accept = ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                                 input.click();
-                                input.onchange = (e) => {
+                                input.onchange = (e) => {      
+                                    setFileError(false)
                                     setFilename(e.target.files[0].name);
 
                                     formik.setFieldValue("file", e.target.files[0]);
@@ -293,6 +301,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             }
                             formik.handleSubmit();
                         }}
+                       
                         disabled={!permissions.isCreate}
                     >
                         Submit{" "}

@@ -19,7 +19,7 @@ export default function SIMSingleUploadAddActivateProvision({ permissions,unit,m
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [Model, setModel] = useState(null);
     useEffect(() => {
         if (department === null) {
@@ -99,8 +99,8 @@ export default function SIMSingleUploadAddActivateProvision({ permissions,unit,m
         initialValues: {
             carrier: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             SimNumber: "",
             /* team: "",*/
             box: "",
@@ -206,7 +206,8 @@ export default function SIMSingleUploadAddActivateProvision({ permissions,unit,m
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown 
+                        disabled
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
@@ -239,7 +240,7 @@ export default function SIMSingleUploadAddActivateProvision({ permissions,unit,m
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}

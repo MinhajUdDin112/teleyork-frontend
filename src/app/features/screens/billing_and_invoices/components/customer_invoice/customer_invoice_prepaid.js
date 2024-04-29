@@ -11,7 +11,7 @@ import InvoiceTypes from "../InvoiceTypes";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIsLoading }) {
+export default function CustomerInvoicePrepaid({ userDetails,invoiceDownload, invoiceData, setIsLoading }) {
     // const [isLoading, setIsLoading] = useState(false);
     const downloadref = useRef();
     const downloadButtonRef = useRef();
@@ -20,7 +20,7 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
         if (invoiceData !== undefined && invoiceData !== null) {
             downloadButtonRef.current.click();
         }
-    }, [invoiceData]);
+    }, [invoiceDownload]);
 
     const downloadInvoice = () => {
         setIsLoading(true);
@@ -101,7 +101,7 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
                                     <p>${parseFloat(invoiceData?.totalAmount).toFixed(2)}</p>
                                 </div>
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
-                                    <p>Amount Paid</p>
+                                    <p>Paid Amount</p>
                                     <p>${invoiceData?.amountPaid}</p>
                                 </div>
 
@@ -251,11 +251,11 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
                     <div className="dashed-line"></div>
                     <div className="account-summary mt-4 ">
                         <p className="text-center font-bold line2">ACCOUNT SUMMARY</p>
-                        <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line">
+                        <div className="pl-2 w-full font-bold  flex flex-wrap justify-content-between line accountsummaryhere">
                             <p>Account No</p>
                             <p> {userDetails?.accountId}</p>
                         </div>
-                        <div className="pl-2 w-full   flex flex-wrap justify-content-between line">
+                        <div className="pl-2 w-full   flex flex-wrap justify-content-between line ">
                             <p>Customer Name</p>
                             <p>
                                 {userDetails?.firstName} {userDetails?.lastName}
@@ -266,7 +266,7 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
                             <p>{invoiceData?.createdAt}</p>
                         </div>
 
-                        <div className=" pl-2  flex flex-wrap justify-content-between line">
+                        <div className=" pl-2  flex flex-wrap justify-content-between line invoicenumber">
                             <p>Invoice Number</p>
                             <p>{invoiceData?.invoiceNo}</p>
                         </div>
@@ -300,23 +300,23 @@ export default function CustomerInvoicePrepaid({ userDetails, invoiceData, setIs
                                 <p>${invoiceData?.invoiceOneTimeCharges}</p>
                             </div>
                             <div className="pl-2  flex flex-wrap justify-content-between ">
-                                <p>Taxes and Surcharges</p>
-                                <p>$0.00</p>
+                                <p className="taxessurcharge">Taxes and Surcharges</p>
+                                <p className="taxesamount">$0.00</p>
+                            </div>    
+                             </div>        
+                             <div>
+                        
+                            <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
+                            <p>Total Amount Payable</p>
+                                    <p>${parseFloat(invoiceData?.totalAmount).toFixed(2)}</p>
                             </div>
-                            <h5 className="font-bold line2">CURRENT SERVICES</h5>
-                            <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
-                                <p>Total Recurring Charges</p>
-                                <p>${invoiceData?.recurringCharges}</p>
-                            </div>
+
                             <div className="pl-2  flex flex-wrap justify-content-between ">
-                                <p>One Time Charge</p>
-                                <p>${invoiceData?.invoiceOneTimeCharges}</p>
+                            <p>Paid Amount</p>
+                                    <p>${invoiceData?.amountPaid}</p>
                             </div>
-                            <div className="pl-2  flex flex-wrap justify-content-between ">
-                                <p>Taxes and Surcharges</p>
-                                <p>$0.00</p>
-                            </div>
-                        </div>
+                        
+                             </div>   
 
                         <div className="topline"></div>
                         <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">

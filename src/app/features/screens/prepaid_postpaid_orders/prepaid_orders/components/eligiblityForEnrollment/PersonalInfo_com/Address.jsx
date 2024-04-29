@@ -21,7 +21,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [isPoBox, setIsPoBox] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const zipDataLs = localStorage.getItem("prepaidbasicData");
-    const zipDataParsed = JSON.parse(zipDataLs);
+    const zipDataParsed = JSON.parse(zipDataLs);     
+    
     const zipCode = zipDataParsed?.data?.zip;
     const zipCity = zipDataParsed?.data?.city;
     const zipState = zipDataParsed?.data?.state;
@@ -124,7 +125,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             formik.setFieldValue("mailingState", zipState);
             formik.setFieldValue("poBoxZip", zipCode);
             formik.setFieldValue("poBoxCity", zipCity);
-            formik.setFieldValue("poBoxState", zipState);
+            formik.setFieldValue("poBoxState", zipState);        
         }
     }, [zipCode]);
 
@@ -363,15 +364,15 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            State <FontAwesomeIcon className="disable-icon-color icon-size" />
+                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={zipDataParsed?.data?.izZipVerified ? faBan:false} />
                         </p>
-                        <InputText type="text" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.state} name="state" className="w-21rem disable-color" />
+                        <InputText type="text" onBlur={formik.handleBlur} onChange={formik.handleChange}   disabled={zipDataParsed?.data?.izZipVerified === true ? true:false } value={formik.values.state} name="state" className="w-21rem disable-color" />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
                             Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />
                         </p>
-                        <InputText disabled value={formik.values.zip} name="zip" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem disable-color" />
+                        <InputText disabled value={formik.values.zip} name="zip" onChange={formik.handleChange}  onBlur={formik.handleBlur} className="w-21rem disable-color" />
                     </div>
                 </div>
                 <p className="w-100rem mt-4">Is Your Mailling Address?</p>

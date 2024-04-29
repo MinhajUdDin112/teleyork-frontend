@@ -10,7 +10,7 @@ import PaymentStripeForm from "./stripe_payment_dialog/stripe_payment_form";
 import { InputText } from "primereact/inputtext";
 const BASE_URL = process.env.REACT_APP_BASE_URL;      
 let stripePromise;
-export default function PaymentStripModule({setRefresh,setPaymentDialogVisibility,userDetails,invoiceId,dueAmount}) {   
+export default function WalletPaymentStripModule({setRefresh,setPaymentDialogVisibility,userDetails,invoiceId,dueAmount}) {   
   let buttonref=useRef()  
   const [buttonDisabled,setDisabled]=useState(false)
   let [clientSecret,setClientSecret]=useState(null)  
@@ -26,7 +26,7 @@ export default function PaymentStripModule({setRefresh,setPaymentDialogVisibilit
         <Elements stripe={stripePromise} options={{
             clientSecret
         }}>
-           <PaymentStripeForm  setRefresh={setRefresh} dueAmount={dueAmount} setPaymentDialogVisibility={setPaymentDialogVisibility} clientSecret={clientSecret} userDetails={userDetails} invoiceId={invoiceId} paid={amountToPaid}/>
+           <PaymentStripeForm  setRefresh={setRefresh} setPaymentDialogVisibility={setPaymentDialogVisibility} clientSecret={clientSecret} userDetails={userDetails} invoiceId={invoiceId} paid={amountToPaid}/>
         </Elements>:<div>   
              <div className="flex flex-wrap flex-row justify-content-left"> 
               <div >
@@ -35,10 +35,7 @@ export default function PaymentStripModule({setRefresh,setPaymentDialogVisibilit
                 setAmountToPaid(e.target.value)
               }} />       
               </div> 
-              <div className="ml-2">
-             <label className="block font-semibold">Total Amount To Paid </label>    
-              <InputText className="block mt-2" disabled value={dueAmount} />       
-              </div>
+             
                  </div>
               <Button ref={buttonref} disabled={buttonDisabled ? true:false} className="block mt-2" onClick={()=>{    
                   setDisabled(true)

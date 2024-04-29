@@ -34,11 +34,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             isWithInvoice: paymentInfo?.prospectwithinvoice,
             isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
         };
-        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
+        Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
             .then(() => {
-                Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
+                toast.success("Esn Successfully Assigned");
+                Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
                     .then((res) => {
-                        toast.success("Esn Successfully Assigned");
 
                         Axios.post(`${BASE_URL}/api/web/order`, { orderNumber: enrollment_id })
                             .then((response) => {
@@ -61,13 +61,14 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             });
                     })
                     .catch((error) => {
-                        setIsLoading(false);
                         toast.error(error?.response?.data?.msg);
+                        setIsLoading(false); 
                     });
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.msg);
+                
                 setIsLoading(false);
+                toast.error(error?.response?.data?.msg);
             });
     };
     useEffect(() => {
@@ -205,7 +206,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                 let dataToSend = {
                     customerId: paymentInfo.customerid,
                     invoiceType: "Sign Up",
-                    totalAmount: paymentInfo.totalasmount,
+                    totalAmount: paymentInfo.totalamount,
                     additionalCharges: additionalobjectsendin,
                     discount: discountobjectsendin,
                     amountPaid: 0,
@@ -301,16 +302,16 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="border-2 w-5 pt-2">
                                 <div className="flex border-bottom-2">
                                     <p className="w-6 ml-4">First Name:</p>
-                                    <p className="w-6">{previewInfo?.firstName.toUpperCase() || "-"}</p>
+                                    <p className="w-6">{previewInfo?.firstName?.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{previewInfo?.address1.toUpperCase() || "-"}</p>
+                                    <p className="w-6">{previewInfo?.address1?.toUpperCase() || "-"}</p>
                                 </div>
 
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">State:</p>
-                                    <p className="w-6">{previewInfo?.state.toUpperCase() || "-"}</p>
+                                    <p className="w-6">{previewInfo?.state?.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">DOB:</p>
@@ -322,13 +323,13 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Discounts:</p>
-                                    <p className="w-6"> {discount.toUpperCase() || "-"}</p>
+                                    <p className="w-6"> {discount?.toUpperCase() || "-"}</p>
                                 </div>
 
                                 <div className="flex  border-bottom-2  pt-2">
                                     <p className="w-6 ml-4">Net Amount: </p>
                                     {/* <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p> */}
-                                    <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo.totalamount}` : "-"}</p>
+                                    <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo?.totalamount}` : "-"}</p>
                                 </div>
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Inventory: </p>
@@ -342,7 +343,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city.toUpperCase() || "-"}</p>
+                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city?.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>

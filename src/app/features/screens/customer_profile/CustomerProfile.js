@@ -39,7 +39,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [agents, setAgents] = useState([]);
     const [refreshNotes, setRefreshNotes] = useState(false);
     const [trackingNumber, setTrackingNumber] = useState("");
-    const location = useLocation();
+    const location = useLocation(); 
+    const [refresh,setRefresh]=useState(false)
 
     useEffect(() => {
         if (customerServicesIndex !== undefined) {
@@ -56,7 +57,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
         }
     }, [location, customerServicesIndex]);
 
-    const [refresh, setRefresh] = useState(false);
+    const [refreshwholecustomerdata, setRefreshWholeCustomerData] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
@@ -135,7 +136,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     useEffect(() => {
         getCustomerProfileData();
         getNotes();
-    }, [refreshNotificationcomponent, refreshEsn]);
+    }, [refreshNotificationcomponent, refreshEsn,refreshwholecustomerdata]);
 
     useEffect(() => {
         getCustomerProfileData();
@@ -237,7 +238,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             }
         };
         fetchTrackingNumber();
-    }, []);
+    }, [refreshEsn]);
 
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
@@ -245,7 +246,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} setRefreshEsn={setRefreshEsn} />
+                <BillingNavbar setRefreshWholeCustomerData={setRefreshWholeCustomerData} refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} setRefreshEsn={setRefreshEsn} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} setRefreshNotes={setRefreshNotes} />
                 </Dialog>
