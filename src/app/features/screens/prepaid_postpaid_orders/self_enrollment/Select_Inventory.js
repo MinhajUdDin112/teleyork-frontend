@@ -413,8 +413,17 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                                     formik.setFieldValue("paymentMode", "")
                                                     formik.setFieldValue("prospectwithoutinvoice", false)
                                                     setpaymentmethoderror(false)
-                                                    formik.setFieldValue("prospectwithinvoice", true)
-                                                    setProspectWithInvoice(true);
+                                                    if(propectWithInvoice){
+                                                        setProspectWithInvoice(false);  
+                                                        
+                                                        formik.setFieldValue("prospectwithinvoice", false) 
+                                                         } 
+                                                         else{ 
+                                                               
+                                                        setProspectWithInvoice(true);  
+                                                         
+                                                        formik.setFieldValue("prospectwithinvoice", true) 
+                                                         }
                                                     setProspectWithOutInvoice(false);
                                                 }}
                                             >
@@ -426,10 +435,18 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                                 onClick={() => {
                                                     formik.setFieldValue("paymentMode", "")
                                                     setpaymentmethoderror(false)
-                                                    setProspectWithOutInvoice(true);
-                                                    formik.setFieldValue("prospectwithoutinvoice", true)
-
                                                     formik.setFieldValue("prospectwithinvoice", false)
+                                                    if(propectWithOutInvoice){
+                                                        setProspectWithOutInvoice(false);  
+                                                        
+                                                        formik.setFieldValue("prospectwithoutinvoice", false) 
+                                                         } 
+                                                         else{ 
+                                                               
+                                                        setProspectWithOutInvoice(true);  
+                                                         
+                                                        formik.setFieldValue("prospectwithoutinvoice", true) 
+                                                         }
                                                     setProspectWithInvoice(false);
                                                 }}
                                                 className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""}`}
