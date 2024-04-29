@@ -567,16 +567,16 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 </tr>
                                                 <tr>
                                                     <td>SIM/ESN</td>
-                                                    <td>{cpData?.esn !== undefined ? cpData?.esn : "NIL"}</td>
+                                                    <td>{cpData?.esn !== undefined ? cpData?.esn :cpData?.esnId?.esn !== undefined ? cpData?.esnId?.esn : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IMEI</td>
-                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : "NIL"}</td>
+                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : cpData?.esnId?.IMEI !== undefined ? cpData?.esnId?.IMEI : "NIL" }</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>IMEI2</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.IMEI2 !== undefined ? cpData?.IMEI2 : cpData?.esnId?.IMEI2 !== undefined ? cpData?.esnId?.IMEI2 : "NIL" }</td>
                                                 </tr>
 
                                                 <tr>

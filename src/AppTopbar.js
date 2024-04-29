@@ -93,15 +93,17 @@ export const AppTopbar = (props) => {
     // counter notification API
     useEffect(() => {
         const getCounter = async () => {
-            try {
-                const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
-                const data = response?.data?.unreadCount;
-                const note = response?.data?.notifications;
-                setNotification(note);
-                setCounter(data);
-            } catch (error) {
-                toast.error(error?.response?.data?.msg);
-            }
+            setInterval(async () => {
+                try {
+                    const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
+                    const data = response?.data?.unreadCount;
+                    const note = response?.data?.notifications;
+                    setNotification(note);
+                    setCounter(data);
+                } catch (error) {
+                    toast.error(error?.response?.data?.msg);
+                }
+            }, 1000);
         };
         getCounter();
     }, [props.refreshBell]);
