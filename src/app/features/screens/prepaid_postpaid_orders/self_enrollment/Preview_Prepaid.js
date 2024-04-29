@@ -43,11 +43,12 @@ const PrepaidPreview = ({ setActiveIndex, setShowPreview }) => {
             isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
 
         };
-        Axios.post(`${BASE_URL}/api/enrollment/selfEnromentPrepaidSubmit`, dataToSend)
-            .then(() => {
-                Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
+        Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
+            .then(() => { 
+                
+                toast.success("Esn Successfully Assigned");
+                Axios.post(`${BASE_URL}/api/enrollment/selfEnromentPrepaidSubmit`, dataToSend)
                     .then((res) => {
-                        toast.success("Esn Successfully Assigned");
 
                         Axios.post(`${BASE_URL}/api/web/order`, { orderNumber: enrollment_id })
                             .then((response) => {
@@ -69,14 +70,15 @@ const PrepaidPreview = ({ setActiveIndex, setShowPreview }) => {
                                 toast.error("Order Placing Failed");
                             });
                     })
-                    .catch((error) => {
-                        setIsLoading(false);
+                    .catch((error) => { 
                         toast.error(error?.response?.data?.msg);
+                        setIsLoading(false);
+                      
                     });
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
+                toast.error(error?.response?.data?.msg);
             });
     };
     useEffect(() => {
