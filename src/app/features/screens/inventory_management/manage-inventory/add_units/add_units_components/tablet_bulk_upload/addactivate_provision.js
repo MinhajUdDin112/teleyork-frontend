@@ -150,13 +150,13 @@ export default function TabletBulkUploadAddActivateProvision({ permissions, unit
                             formik.setFieldValue("carrier", "");
                             formik.setFieldValue("file", "");
                             formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                            formik.setFieldValue("agentType", "");
-                            formik.setFieldValue("AgentName", "");
+                            ;
+                            ;
                             formik.setFieldValue("SimNumber", "");
                             formik.setFieldValue("unitType", unit);
                             formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                             formik.setFieldValue("provisionType", "Bulk Add And Activate Tablets");
-                            setAgent([]);
+                            ;
                             setFilename(null);
                             actions.resetForm();
                         } catch (err) {
@@ -206,7 +206,7 @@ export default function TabletBulkUploadAddActivateProvision({ permissions, unit
                             name="agentType"
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDepartmentSelected(e.value); 
                                 formik.handleChange(e)
                             }}

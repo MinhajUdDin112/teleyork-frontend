@@ -129,8 +129,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
 
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    formik.setFieldValue("agentType", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
+                    ;
                     formik.setFieldValue("SimNumber", "");
 
                     formik.setFieldValue("box", "");
@@ -141,7 +141,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                     formik.setFieldValue("provisionType", "Add And Assign Non Active");
                     actions.resetForm();
-                    setAgent([]);
+                    ;
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;
@@ -214,7 +214,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
