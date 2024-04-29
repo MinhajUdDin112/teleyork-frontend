@@ -63,7 +63,7 @@ export default function LoginScreen({ setRefreshApp }) {
             <div className="flex justify-center items-center" style={{ minHeight: "100vh" }}>
                 <div className="card col-4 m-auto" style={{ height: "50vh" }}>
                     <div className="flex justify-content-center">
-                        <p className="text-xl font-semibold mb-3 pt-3">Login</p>
+                        <p className="text-2xl font-bold mb-3 pt-3">LOGIN</p>
                     </div>
                     {errormsg ? (
                         <div className="flex justify-content-center mb-2">
@@ -78,14 +78,16 @@ export default function LoginScreen({ setRefreshApp }) {
                             {formik.touched.email && formik.errors.email ? <p className="text-red-500 p-error ml-1 text-sm mt-0">{formik.errors.email}</p> : null}
                             <div className="mt-2 passworddiv" >
                             <Password  type="password"  feedback={false} tabIndex={1} name="password" className="  mb-2 " placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
-                                <i className="pi pi-eye" onClick={(e)=>{ 
-                                    setShowPassword(prev=>!prev)       
-                                          if(showPassowrd){
-                                        e.target.previousElementSibling.children[0].type="text" 
+                                <i className={`${showPassowrd ? "pi-eye":"pi-eye-slash"} pi`} onClick={(e)=>{ 
+                                       
+                                          if(
+                                            e.target.previousElementSibling.children[0].type === "text" ){
+                                        e.target.previousElementSibling.children[0].type="password" 
                                           } 
                                            else{     
-                                            e.target.previousElementSibling.children[0].type="password" 
-                                           }
+                                            e.target.previousElementSibling.children[0].type="text" 
+                                           } 
+                                           setShowPassword(prev=>!prev)  
                                 }}/>
                              </div>
                             {formik.touched.password && formik.errors.password ? <p className="text-red-500 p-error ml-1 text-sm mt-0">{formik.errors.password}</p> : null}
