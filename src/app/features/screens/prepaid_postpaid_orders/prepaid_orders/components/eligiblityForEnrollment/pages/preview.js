@@ -34,11 +34,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             isWithInvoice: paymentInfo?.prospectwithinvoice,
             isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
         };
-        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
+        Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
             .then(() => {
-                Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
+                toast.success("Esn Successfully Assigned");
+                Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
                     .then((res) => {
-                        toast.success("Esn Successfully Assigned");
 
                         Axios.post(`${BASE_URL}/api/web/order`, { orderNumber: enrollment_id })
                             .then((response) => {
@@ -61,13 +61,14 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             });
                     })
                     .catch((error) => {
-                        setIsLoading(false);
                         toast.error(error?.response?.data?.msg);
+                        setIsLoading(false); 
                     });
             })
             .catch((error) => {
-                toast.error(error?.response?.data?.msg);
+                
                 setIsLoading(false);
+                toast.error(error?.response?.data?.msg);
             });
     };
     useEffect(() => {
