@@ -30,7 +30,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [currentPlanSelect, setCurrentPlanSelect] = useState("");
     const [currentScreen, setCurrentScreen] = useState(1);
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);   
+    const [paidAmountRequired,setPaidAmountRequired]=useState(false)
     const [previousPlanPrice, setPreviousPlanPrice] = useState(0);
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
     const validationSchema = Yup.object().shape({
@@ -531,11 +532,15 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                         className="w-full mt-2"
                                         id="paid"
                                         value={formik.values.paid}
-                                        onChange={(e) => {
+                                        onChange={(e) => {  
+                                             
                                             formik.setFieldValue("paid", e.target.value);
                                             // formik.handleChange(e);
                                         }}
-                                    />
+                                    /> 
+                                     { 
+                                        paidAmountRequired  ? <p className="p-error mt-1 ml-1">Paying Amount Is Required</p>:""
+                                      }
                                     {getFormErrorMessage("paid")}
                                 </div>
                             ) : (

@@ -148,13 +148,13 @@ export default function SIMBulkUploadAddActivateProvision({ permissions, unit, m
                             }
                             formik.setFieldValue("file", "");
                             formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                            formik.setFieldValue("agentType", "");
-                            formik.setFieldValue("AgentName", "");
+                            ;
+                            ;
                             formik.setFieldValue("SimNumber", "");
                             formik.setFieldValue("unitType", "sim");
                             formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                             formik.setFieldValue("provisionType", "Bulk Add And Activate Sims");
-                            setAgent([]);
+                            ;
                             setFilename(null);
                             actions.resetForm();
                         } catch (err) {
@@ -219,7 +219,7 @@ export default function SIMBulkUploadAddActivateProvision({ permissions, unit, m
                             name="agentType"
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDepartmentSelected(e.value);
                                 formik.handleChange(e)
                             }}
