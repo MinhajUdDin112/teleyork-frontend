@@ -23,7 +23,7 @@ export default function CustomerInvoicePrepaid({ userDetails,invoiceDownload, in
     }, [invoiceDownload]);
 
     const downloadInvoice = () => {
-        setIsLoading(true);
+       // setIsLoading(true);
         document.querySelector(".downloadtemp").style.width = "1050px";
         html2canvas(document.querySelector(".downloadtemp"), { scale: 1.5 }).then((canvas) => {
             const pdf = new jsPDF();
@@ -33,7 +33,7 @@ export default function CustomerInvoicePrepaid({ userDetails,invoiceDownload, in
             pdf.setFont("Roboto-Black-normal");
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
             pdf.save(`${formattedDate}-${userDetails?.lastName}-${userDetails?.accountId}.pdf`);
-            setIsLoading(false);
+           // setIsLoading(false);
         });
     };
 
@@ -342,7 +342,7 @@ export default function CustomerInvoicePrepaid({ userDetails,invoiceDownload, in
                                 <tr>
                                     <td>{userDetails?.selectProduct}</td>
 
-                                    <td>${invoiceData?.invoiceOneTimeCharges}</td>
+                                    <td>{invoiceData?.invoiceOneTimeCharges === "0" ?  "NIL":<p>${invoiceData?.invoiceOneTimeCharges}</p>}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -357,7 +357,7 @@ export default function CustomerInvoicePrepaid({ userDetails,invoiceDownload, in
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{userDetails?.currentPlan?.planName}</td>
+                                    <td>{userDetails?.currentPlan?.planName !== undefined ? userDetails?.currentPlan?.planName : invoiceData?.planName }</td>
 
                                     <td>${userDetails?.currentPlan?.planCharges}</td>
                                 </tr>
