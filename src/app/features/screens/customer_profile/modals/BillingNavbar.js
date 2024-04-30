@@ -254,7 +254,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {cpData?.esn !== undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && cpData?.accountType === "Prepaid" && cpData?.accountType !== "ACP" && !cpData?.AcptoPrepaid (
+            {cpData?.esn !== undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && cpData?.accountType === "Prepaid" && cpData?.accountType !== "ACP" && !(cpData?.AcptoPrepaid) && (
                 <>
                     <Button
                         label="Assign Label"
