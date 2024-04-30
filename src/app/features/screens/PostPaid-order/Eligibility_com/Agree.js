@@ -24,7 +24,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName
     const toCapitalCompanyName = companyName.toUpperCase()
-   
+    const [paidAmountRequired,setPaidAmountRequired]=useState(false)
+  
     //Handle Back
     let paymentInfo = JSON.parse(localStorage.getItem("dataToSend"));
     
@@ -101,7 +102,12 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                 setdialogForCardAuth(true);
         }  
         else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="IJ WIRELESS") {   
-        setPaymentDialogVisibility(true)
+           if(formik.values.paid !== ""){
+            setPaymentDialogVisibility(true) 
+           } 
+            else{ 
+                setPaidAmountRequired(true)
+            }
     } 
 
            
@@ -237,7 +243,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         <label className="block">Select Product</label>
                         <Dropdown
                             disabled={paymentInfo && paymentInfo}
-                            className="field-width mt-2"
+                            className="field-width mt-2"           
+                             name="billId"
                             value={formik.values.billId}
                             onChange={(e) => {
                                 formik.setFieldValue("billId", e.value);
@@ -481,10 +488,19 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                             id="paid"
                             value={formik.values.paid}
                             onChange={(e) => {
-                                formik.setFieldValue("paid", e.target.value);
-                               // formik.handleChange(e);
+                                if(e.target.value === ""){ 
+                                    setPaidAmountRequired(true)
+                                } 
+                                else{ 
+                                   setPaidAmountRequired(false)
+                                }
+                               formik.setFieldValue("paid", e.target.value);
+                            
                             }}
-                        />
+                        />    
+                          { 
+                                        paidAmountRequired  ? <p className="p-error mt-1 ml-1">Paying Amount Is Required</p>:""
+                                      }
                         {getFormErrorMessage("paid")}
                     </div> 
                      :undefined} 
