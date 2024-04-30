@@ -21,6 +21,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
+import DisplayAllHighPriorityNotes from "./dialogs/display_priority_notes/PriorityNotes";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent }) => {
     const [cpData, setCpData] = useState([]);
@@ -31,6 +32,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [addNewType, setAddNewType] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [isOneNote, setIsOneNote] = useState(false);
+    const [refreshHighPriorityNotes, setRefreshHighPriorityNotes] = useState(false);
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
@@ -41,7 +43,6 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [trackingNumber, setTrackingNumber] = useState("");
     const location = useLocation();
     const [refresh, setRefresh] = useState(false);
-
     useEffect(() => {
         if (customerServicesIndex !== undefined) {
             if (activeTab !== undefined) {
@@ -59,6 +60,20 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
 
     const [refreshwholecustomerdata, setRefreshWholeCustomerData] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
+    const [showHighPriorityNotes, setShowHighPriorityNotes] = useState(false);
+    const [highestPriorityNotes, setHighestPriorityNotes] = useState([]);
+    useEffect(() => {
+        Axios.get(`${BASE_URL}/api/web/notes/getnotebypriority?user=${parseLoginRes?._id}`)
+            .then((res) => {
+                setHighestPriorityNotes(res?.data);
+                if (res?.data.length > 0) {
+                    setShowHighPriorityNotes(true);
+                } else {
+                    setShowHighPriorityNotes(false);
+                }
+            })
+            .catch((err) => {});
+    }, [refreshHighPriorityNotes]);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
@@ -567,16 +582,16 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 </tr>
                                                 <tr>
                                                     <td>SIM/ESN</td>
-                                                    <td>{cpData?.esn !== undefined ? cpData?.esn : "NIL"}</td>
+                                                    <td>{cpData?.esn !== undefined ? cpData?.esn : cpData?.esnId?.esn !== undefined ? cpData?.esnId?.esn : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IMEI</td>
-                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : "NIL"}</td>
+                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : cpData?.esnId?.IMEI !== undefined ? cpData?.esnId?.IMEI : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>IMEI2</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.IMEI2 !== undefined ? cpData?.IMEI2 : cpData?.esnId?.IMEI2 !== undefined ? cpData?.esnId?.IMEI2 : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -935,6 +950,9 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 <CustomerInvoice />
             </div>   
              */}
+            <Dialog style={{ width: "60vw" }} visible={showHighPriorityNotes} onHide={() => {}}>
+                <DisplayAllHighPriorityNotes setRefreshHighPriorityNotes={setRefreshHighPriorityNotes} BASE_URL={BASE_URL} notes={highestPriorityNotes} />
+            </Dialog>
         </div>
     );
 };
