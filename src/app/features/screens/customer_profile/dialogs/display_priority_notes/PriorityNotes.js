@@ -1,7 +1,6 @@
 import React, { useRef } from "react"; 
 import { useState } from "react";
 import { FilterMatchMode } from "primereact/api";
-import { Paginator } from "primereact/paginator";
 import { Column } from "primereact/column";  
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
@@ -46,13 +45,7 @@ export default function DisplayAllHighPriorityNotes({setRefreshHighPriorityNotes
     const header=()=>{ 
          return(   
              <div className="flex flex-wrap justify-content-center">
-            <InputText
-            value={globalFilterValue}
-            onChange={
-                onGlobalFilterValueChange}
-            className="w-15rem ml-4 mt-2"
-            placeholder="Search By Posted By"
-        />    
+      
          <InputText
             value={noteFilterValue}
             onChange={
@@ -62,7 +55,7 @@ export default function DisplayAllHighPriorityNotes({setRefreshHighPriorityNotes
         />        
                
                <Dropdown value={priorityFilterValue}   className="w-15rem ml-4 mt-2"
-               placeholder="Search By Priority"  options={[{label:"Highest",value:"highest"},{label:"Low",value:"low"},{label:"Medium",value:"medium"},{label:"Lowest",value:"lowest"},{label:"High",value:"high"}]} onChange={onPriorityFilterValueChange}/>  
+               placeholder="Search By Priority"  options={[{label:"Highest",value:"highest"},{label:"High",value:"high"}]} onChange={onPriorityFilterValueChange}/>  
         </div> 
          )
     }

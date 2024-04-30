@@ -50,7 +50,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
                                         setShowFinalComponent(true);
                                         setFromIncomplete(false);
-                                        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                                       localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
                                     })
                                     .catch((err) => {
                                         toast.error("Label Creation Failed");
