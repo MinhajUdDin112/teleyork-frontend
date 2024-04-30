@@ -363,24 +363,24 @@ export default function CustomerInvoicePrepaid({ userDetails,invoiceDownload, in
                                 </tr>
                                 <tr>
                                     <td>
-                                        {userDetails?.currentPlan.additionalCharges.map((charge, index) => (
-                                            <div key={index}>{charge.name}</div>
+                                        {userDetails?.currentPlan?.additionalCharges?.map((charge, index) => (
+                                            <div key={index}>{charge?.name}</div>
                                         ))}
                                     </td>
                                     <td>
-                                        {userDetails?.currentPlan.additionalCharges.map((charge, index) => (
-                                            <div key={index}>${charge.amount}</div>
+                                        {userDetails?.currentPlan?.additionalCharges?.map((charge, index) => (
+                                            <div key={index}>${charge?.amount}</div>
                                         ))}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        {userDetails?.currentPlan.discount.map((discount, index) => (
-                                            <div key={index}>{discount.name}</div>
+                                        {userDetails?.currentPlan?.discount?.map((discount, index) => (
+                                            <div key={index}>{discount?.name}</div>
                                         ))}
                                     </td>
                                     <td>
-                                        {userDetails?.currentPlan.discount.map((discount, index) => (
+                                        {userDetails?.currentPlan?.discount?.map((discount, index) => (
                                             <div key={index}>-${discount.amount}</div>
                                         ))}
                                     </td>
