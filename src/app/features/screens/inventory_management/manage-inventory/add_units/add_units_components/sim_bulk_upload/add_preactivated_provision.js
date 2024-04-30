@@ -161,7 +161,6 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions, uni
                             setFilename(null);
                             actions.resetForm();
                         } catch (err) {
-                            console.log("error is here");
                         }
                     })
                     .catch((error) => {

@@ -24,7 +24,9 @@ import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 import DisplayAllHighPriorityNotes from "./dialogs/display_priority_notes/PriorityNotes";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent, handleHighlight }) => {
-    const [cpData, setCpData] = useState([]);
+    const [cpData, setCpData] = useState([]);  
+     const [mvno,setmvno]=useState("") 
+
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
@@ -57,6 +59,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             setActiveTab(customerServicesIndex);
         }
     }, [location, customerServicesIndex]);
+   
 
     const [refreshwholecustomerdata, setRefreshWholeCustomerData] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
@@ -73,7 +76,17 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 }
             })
             .catch((err) => {});
-    }, [refreshHighPriorityNotes]);
+    }, [refreshHighPriorityNotes]);    
+     
+   useEffect(()=>{ 
+   Axios.get(`${BASE_URL}/api/user/getServiceProvider?serviceProvider=${cpData?.serviceProvider}`).then((res)=>{ 
+     
+       setmvno(res?.data?.data?.name)
+   }).catch(err=>{ 
+
+   }) 
+    
+    },[cpData])  
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
@@ -250,7 +263,6 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                     setTrackingNumber(response?.data?.data);
                 }
             } catch (error) {
-                console.log(error);
             }
         };
         fetchTrackingNumber();
@@ -258,12 +270,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
 
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
-    console.log("handleHighlight", handleHighlight);
     const rowClassName = (rowData) => {
         if (rowData.void) {
             return "custom-row";
         } else if (rowData._id === handleHighlight) {
-            console.log("equels here");
             return "highlight-row";
         } else {
             return ""; // Default class when no condition matches
@@ -705,7 +715,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 </tr>
                                                 <tr>
                                                     <td>MVNO</td>
-                                                    <td>NIL</td>
+                                                    <td>{mvno}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Sim Status</td>

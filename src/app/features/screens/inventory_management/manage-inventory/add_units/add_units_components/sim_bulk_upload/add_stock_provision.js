@@ -159,7 +159,6 @@ export default function SIMBulkUploadAddProvision({ permissions, unit, model }) 
                             setFilename(null);
                             actions.resetForm();
                         } catch (err) {
-                            console.log("error is here");
                         }
                     })
                     .catch((error) => {

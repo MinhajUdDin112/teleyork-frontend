@@ -174,11 +174,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             };
             const checkNumber = async () => {
                 const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                console.log("res", response?.data);
             };
             checkNumber();
         } catch (error) {
-            console.log(error);
         }
     }, [formik.values.contact]);
     useEffect(() => {
