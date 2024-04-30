@@ -80,7 +80,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
      
    useEffect(()=>{ 
    Axios.get(`${BASE_URL}/api/user/getServiceProvider?serviceProvider=${cpData?.serviceProvider}`).then((res)=>{ 
-       console.log(res) 
+     
        setmvno(res?.data?.data?.name)
    }).catch(err=>{ 
 
@@ -263,7 +263,6 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                     setTrackingNumber(response?.data?.data);
                 }
             } catch (error) {
-                console.log(error);
             }
         };
         fetchTrackingNumber();
@@ -271,12 +270,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
 
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
-    console.log("handleHighlight", handleHighlight);
     const rowClassName = (rowData) => {
         if (rowData.void) {
             return "custom-row";
         } else if (rowData._id === handleHighlight) {
-            console.log("equels here");
             return "highlight-row";
         } else {
             return ""; // Default class when no condition matches

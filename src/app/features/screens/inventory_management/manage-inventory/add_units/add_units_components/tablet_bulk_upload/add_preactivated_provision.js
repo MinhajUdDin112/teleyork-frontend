@@ -160,7 +160,6 @@ export default function TabletBulkUploadAddPreActivatedProvision({ permissions, 
                             setFilename(null);
                             actions.resetForm();
                         } catch (err) {
-                            console.log("error is here");
                         }
                     })
                     .catch(() => {

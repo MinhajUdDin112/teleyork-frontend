@@ -20,8 +20,7 @@ export default function PaymentStripeFormAlternateCard({setAlternateCardToken,se
         }      
        
         stripe.createToken(elements.getElement(CardElement)).then(function(result) {
-            // Handle result.error or result.token 
-           console.log("toke data is",result)         
+            // Handle result.error or result.token       
            setAlternateCardToken(result.token.id)  
             setAlternateCardDetailVisibility(false)
           }).catch(err=>{ 

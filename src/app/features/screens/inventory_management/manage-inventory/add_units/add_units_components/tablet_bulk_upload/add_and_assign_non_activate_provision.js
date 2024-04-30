@@ -160,11 +160,9 @@ export default function TabletBulkUploadAddAndAssignNonActivateProvision({ permi
                             setFilename(null);
                             actions.resetForm();
                         } catch (err) {
-                            console.log("error is here");
                         }
                     })
                     .catch((err) => {
-                        console.log("error is", err);
                         ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
                     });
                 formik.values.serviceProvider = parseLoginRes?.companyName;
