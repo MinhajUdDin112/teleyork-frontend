@@ -650,8 +650,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>{cpData?.carrier !== undefined ? (cpData?.carrier?.name !== undefined ? cpData?.carrier?.name : "NIL") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Plan Activation Date</td>
-                                                    <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>
+                                                    <td>Plan Activation Date</td> 
+                            
+                                                    <td>{cpData?.activatedAt !== undefined ? ChangeIsoDateToECT(cpData?.activatedAt) : "NIL"}</td>
+                                                  {/*  <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>*/}
                                                 </tr>
                                                 <tr>
                                                     <td>TMB Live Status</td>
@@ -746,9 +748,14 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>NIL</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Order by</td>
-                                                    <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td>
-                                                </tr>
+                                                    <td>Order by</td> 
+                                                     {cpData?.AcptoPrepaid === undefined ?
+                                                      <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td> 
+                                                       : <td>System Imported</td> 
+                                                     
+                                                     }
+                                                  
+                                                    </tr>
                                                 <tr>
                                                     <td>Account ID</td>
                                                     <td>{cpData?.accountId !== undefined ? cpData?.accountId : "NIL"}</td>
@@ -782,9 +789,22 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>Role</td>
                                                     <td>{cpData?.source !== undefined ? cpData?.source : "NIL"}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Order Create Date</td>
-                                                    <td>{cpData?.labelCreatedAt ? ChangeIsoDateToECT(cpData?.labelCreatedAt) : "NIL"}</td>
+                                                <tr>  
+                                                     { 
+                                                      cpData?.AcptoPrepaid !== undefined  ?   cpData?.AcptoPrepaid ?  
+                                                      <> 
+                                                      <td>Converted To Prepaid On</td>  
+                                             <td>{cpData?.convertToPrepaidDate ? ChangeIsoDateToECT(cpData?.convertToPrepaidDate) : "NIL"}</td> 
+                                                </>
+                                                        :<> 
+                                                             <td>Order Create Date</td>  
+                                                    <td>{cpData?.orderCreateDate ? ChangeIsoDateToECT(cpData?.orderCreateDate) : "NIL"}</td> 
+                                                       </> :       
+                                                       <> 
+                                                    <td>Order Create Date</td>  
+                                                    <td>{cpData?.labelCreatedAt ? ChangeIsoDateToECT(cpData?.labelCreatedAt) : "NIL"}</td>  
+                                                     </>
+                                                     }
                                                 </tr>
 
                                                 <tr>
