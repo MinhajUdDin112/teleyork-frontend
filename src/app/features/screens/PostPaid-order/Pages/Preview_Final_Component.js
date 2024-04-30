@@ -22,8 +22,12 @@ const Preview_Final_component = ({ enrollment_id }) => {
         localStorage.removeItem("agreeData");
         localStorage.removeItem("programmeId");
     };
-    const handleNavigate = () => {
-        navigate("/customer-profile");
+    const handleNavigate = () => {  
+        const data = localStorage.getItem("basicData");
+        const parseData = JSON.parse(data);
+        navigate("/customer-profile", { state: { selectedId: parseData?.data?._id } });
+        localStorage.setItem("selectedId", JSON.stringify(parseData?.data?._id));
+       
     };
     return (
         <>
