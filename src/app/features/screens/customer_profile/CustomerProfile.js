@@ -31,8 +31,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [allNotes, setAllNotes] = useState([]);
     const [addNewType, setAddNewType] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
-    const [isOneNote, setIsOneNote] = useState(false);  
-    const [refreshHighPriorityNotes,setRefreshHighPriorityNotes]=useState(false)
+    const [isOneNote, setIsOneNote] = useState(false);
+    const [refreshHighPriorityNotes, setRefreshHighPriorityNotes] = useState(false);
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
@@ -41,8 +41,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [agents, setAgents] = useState([]);
     const [refreshNotes, setRefreshNotes] = useState(false);
     const [trackingNumber, setTrackingNumber] = useState("");
-    const location = useLocation(); 
-    const [refresh,setRefresh]=useState(false)
+    const location = useLocation();
+    const [refresh, setRefresh] = useState(false);
     useEffect(() => {
         if (customerServicesIndex !== undefined) {
             if (activeTab !== undefined) {
@@ -57,25 +57,23 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             setActiveTab(customerServicesIndex);
         }
     }, [location, customerServicesIndex]);
-    
+
     const [refreshwholecustomerdata, setRefreshWholeCustomerData] = useState(false);
-    const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false); 
-     const [showHighPriorityNotes,setShowHighPriorityNotes]=useState(false)  
-     const [highestPriorityNotes,setHighestPriorityNotes]=useState([])    
-     useEffect(()=>{    
-        Axios.get(`${BASE_URL}/api/web/notes/getnotebypriority?user=${parseLoginRes?._id}`).then((res)=>{ 
-                    
-               setHighestPriorityNotes(res?.data)  
-                      if(res?.data.length > 0){
-                    setShowHighPriorityNotes(true) 
-                      } 
-                       else{ 
-                        setShowHighPriorityNotes(false)
-                       }
-        }).catch(err=>{ 
-             
-        })
-        },[refreshHighPriorityNotes])
+    const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
+    const [showHighPriorityNotes, setShowHighPriorityNotes] = useState(false);
+    const [highestPriorityNotes, setHighestPriorityNotes] = useState([]);
+    useEffect(() => {
+        Axios.get(`${BASE_URL}/api/web/notes/getnotebypriority?user=${parseLoginRes?._id}`)
+            .then((res) => {
+                setHighestPriorityNotes(res?.data);
+                if (res?.data.length > 0) {
+                    setShowHighPriorityNotes(true);
+                } else {
+                    setShowHighPriorityNotes(false);
+                }
+            })
+            .catch((err) => {});
+    }, [refreshHighPriorityNotes]);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
@@ -153,7 +151,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     useEffect(() => {
         getCustomerProfileData();
         getNotes();
-    }, [refreshNotificationcomponent, refreshEsn,refreshwholecustomerdata]);
+    }, [refreshNotificationcomponent, refreshEsn, refreshwholecustomerdata]);
 
     useEffect(() => {
         getCustomerProfileData();
@@ -584,16 +582,16 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 </tr>
                                                 <tr>
                                                     <td>SIM/ESN</td>
-                                                    <td>{cpData?.esn !== undefined ? cpData?.esn :cpData?.esnId?.esn !== undefined ? cpData?.esnId?.esn : "NIL"}</td>
+                                                    <td>{cpData?.esn !== undefined ? cpData?.esn : cpData?.esnId?.esn !== undefined ? cpData?.esnId?.esn : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IMEI</td>
-                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : cpData?.esnId?.IMEI !== undefined ? cpData?.esnId?.IMEI : "NIL" }</td>
+                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : cpData?.esnId?.IMEI !== undefined ? cpData?.esnId?.IMEI : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>IMEI2</td>
-                                                    <td>{cpData?.IMEI2 !== undefined ? cpData?.IMEI2 : cpData?.esnId?.IMEI2 !== undefined ? cpData?.esnId?.IMEI2 : "NIL" }</td>
+                                                    <td>{cpData?.IMEI2 !== undefined ? cpData?.IMEI2 : cpData?.esnId?.IMEI2 !== undefined ? cpData?.esnId?.IMEI2 : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -857,7 +855,14 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                             }}
                                         ></Column>
                                         {/* <Column header="Assigned To" field="assignTo.name"></Column> */}
-                                        <Column field="i" className="hover-blue" body={() => <span>ℹ️</span>}></Column>
+                                        <Column
+                                            className="hover-blue"
+                                            body={() => (
+                                                <p className="ibutton" style={{ position: "relative" }}>
+                                                    i
+                                                </p>
+                                            )}
+                                        ></Column>
                                     </DataTable>
                                 </div>
                             </div>
@@ -944,12 +949,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             {/*<div>
                 <CustomerInvoice />
             </div>   
-             */}   
-                <Dialog  style={{width:"60vw"}} visible={showHighPriorityNotes} onHide={()=>{ 
-
-                }}     > 
-                   <DisplayAllHighPriorityNotes  setRefreshHighPriorityNotes={setRefreshHighPriorityNotes}  BASE_URL={BASE_URL} notes={highestPriorityNotes} />
-                      </Dialog>
+             */}
+            <Dialog style={{ width: "60vw" }} visible={showHighPriorityNotes} onHide={() => {}}>
+                <DisplayAllHighPriorityNotes setRefreshHighPriorityNotes={setRefreshHighPriorityNotes} BASE_URL={BASE_URL} notes={highestPriorityNotes} />
+            </Dialog>
         </div>
     );
 };
