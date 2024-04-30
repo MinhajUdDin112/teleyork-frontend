@@ -9,6 +9,8 @@ const DialogeForOneNote = ({ enrollmentId, noteId, contact }) => {
     const [cpData, setCpData] = useState([]);
     const [resolvedNotes, setResolvedNotes] = useState(() => JSON.parse(localStorage.getItem("resolvedNotes")) || []);
     const navigate = useNavigate();
+    const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
     useEffect(() => {
         const getOneNote = async () => {
             try {
@@ -36,6 +38,19 @@ const DialogeForOneNote = ({ enrollmentId, noteId, contact }) => {
                 toast.error("Failed To Mark Void");
             });
     }
+    // useEffect(() => {
+    //     const getAllNotes = async () => {
+    //         try {
+    //             const response = await Axios.get(`${BASE_URL}/api/web/notes/all?serviceProvider=${parseLoginRes?.company}`);
+    //             if (response?.status === 200 || response?.status === 201) {
+    //                 setCpData(response?.data);
+    //             }
+    //         } catch (error) {
+    //             toast.error(error?.response?.data?.msg);
+    //         }
+    //     };
+    //     getAllNotes();
+    // },[]);
 
     const handleResolve = async (noteId) => {
         const data = {
@@ -109,15 +124,15 @@ const DialogeForOneNote = ({ enrollmentId, noteId, contact }) => {
                         </div>
                     </div>
                     {isPreviouslyResolved(noteId) || resolvedNotes.includes(noteId) ? (
-                        <Button className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none" label="Resolved" disabled />
+                        <Button className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none mt-4" label="Resolved" disabled />
                     ) : (
-                        <Button onClick={() => handleResolve(noteId)} className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none">
+                        <Button onClick={() => handleResolve(noteId)} className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none mt-4">
                             Resolve
                         </Button>
                     )}
 
                     {isPreviouslyResolved(noteId) || resolvedNotes.includes(noteId) ? null : <Button style={{ marginLeft: "0.5rem" }} className="bg-yellow-400 pl-2 pr-2 pt-1 pb-1 border-none" label="Pending" />}
-                    <Button style={{ marginLeft: "24rem", marginTop: "1.3rem" }} label="Mark Void" onClick={markVoid} />
+                    <Button style={{ marginLeft: "24rem" }} label="Mark Void" onClick={markVoid} />
                 </div>
             </div>
         </>

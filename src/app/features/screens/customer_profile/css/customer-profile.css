@@ -93,3 +93,15 @@
 .hover-blue:hover {
     color: blue;
 }
+.ibutton {
+    background-color: rgba(0, 0, 255, 0.715);
+    color: rgb(245, 245, 245);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding-left: 5px;
+    margin-top: 5px;
+    font-size: 18px;
+    padding-left: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.127);
+}
