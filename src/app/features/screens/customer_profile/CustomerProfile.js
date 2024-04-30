@@ -112,7 +112,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data);
                 if (response?.status == "200" || response?.status == "201") {
-                    toast.success("Successfully Added");
+                    toast.success("Successfully Added"); 
+                    setRefreshHighPriorityNotes(prev=>!prev)
                     setisButtonLoading(false);
                     actions.resetForm();
                     getNotes();
