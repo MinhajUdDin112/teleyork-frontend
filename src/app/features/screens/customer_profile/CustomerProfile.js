@@ -23,7 +23,7 @@ import ChangeCustomerStatus from "./change_customer_status/change_customer_statu
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 import DisplayAllHighPriorityNotes from "./dialogs/display_priority_notes/PriorityNotes";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent }) => {
+const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent, handleHighlight }) => {
     const [cpData, setCpData] = useState([]);
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -152,7 +152,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     useEffect(() => {
         getCustomerProfileData();
         getNotes();
-    }, [refreshNotificationcomponent, refreshEsn, refreshwholecustomerdata]);
+    }, [refreshNotificationcomponent, refreshEsn, refreshwholecustomerdata, handleHighlight]);
 
     useEffect(() => {
         getCustomerProfileData();
@@ -258,6 +258,18 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
 
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
+    console.log("handleHighlight", handleHighlight);
+    const rowClassName = (rowData) => {
+        if (rowData.void) {
+            return "custom-row";
+        } else if (rowData._id === handleHighlight) {
+            console.log("equels here");
+            return "highlight-row";
+        } else {
+            return ""; // Default class when no condition matches
+        }
+    };
+
     return (
         <div className="card">
             <ToastContainer />
@@ -842,8 +854,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                             }
                                         }}
                                     >
-                                        <Column header="Created By" field="user.name" className="hover-blue"></Column>
-                                        <Column header="Note" field="note" className="hover-blue"></Column>
+                                        <Column header="Created By" body={(rowData) => <div className={` ${rowData._id === handleHighlight ? "highlight-row" : ""}`}>{rowData.user.name}</div>} />
+                                        <Column header="Note" body={(rowData) => <div className={` ${rowData._id === handleHighlight ? "highlight-row" : ""}`}>{rowData.note}</div>} />
                                         {/* <Column header="Note Type" field="noteType"></Column>
                                         <Column header="Priority" field="priority"></Column> */}
                                         <Column
@@ -852,14 +864,14 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                             field="createdAt"
                                             body={(rowData) => {
                                                 let createdAt = new Date(rowData.createdAt);
-                                                return <p>{ChangeIsoDateToECT(rowData.createdAt)}</p>;
+                                                return <p className={` ${rowData._id === handleHighlight ? "highlight-row" : ""}`}>{ChangeIsoDateToECT(rowData.createdAt)}</p>;
                                             }}
                                         ></Column>
                                         {/* <Column header="Assigned To" field="assignTo.name"></Column> */}
                                         <Column
                                             className="hover-blue"
-                                            body={() => (
-                                                <p className="ibutton" style={{ position: "relative" }}>
+                                            body={(rowData) => (
+                                                <p className={`ibutton ${rowData._id === handleHighlight ? "highlight-row" : ""}`} style={{ position: "relative" }}>
                                                     i
                                                 </p>
                                             )}
@@ -961,13 +973,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     );
 };
 export default CustomerProfile;
-const rowClassName = (rowData) => {
-    if (rowData.void) {
-        return "custom-row";
-    } else {
-        return;
-    }
-};
+
 function ChangeIsoDateToECT(date) {
     // Given ISO formatted date/time
     const isoDate = date;
