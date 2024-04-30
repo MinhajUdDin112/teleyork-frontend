@@ -39,8 +39,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [agents, setAgents] = useState([]);
     const [refreshNotes, setRefreshNotes] = useState(false);
     const [trackingNumber, setTrackingNumber] = useState("");
-    const location = useLocation(); 
-    const [refresh,setRefresh]=useState(false)
+    const location = useLocation();
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         if (customerServicesIndex !== undefined) {
@@ -136,7 +136,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     useEffect(() => {
         getCustomerProfileData();
         getNotes();
-    }, [refreshNotificationcomponent, refreshEsn,refreshwholecustomerdata]);
+    }, [refreshNotificationcomponent, refreshEsn, refreshwholecustomerdata]);
 
     useEffect(() => {
         getCustomerProfileData();
@@ -840,7 +840,14 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                             }}
                                         ></Column>
                                         {/* <Column header="Assigned To" field="assignTo.name"></Column> */}
-                                        <Column field="i" className="hover-blue" body={() => <span>ℹ️</span>}></Column>
+                                        <Column
+                                            className="hover-blue"
+                                            body={() => (
+                                                <p className="ibutton" style={{ position: "relative" }}>
+                                                    i
+                                                </p>
+                                            )}
+                                        ></Column>
                                     </DataTable>
                                 </div>
                             </div>
