@@ -103,7 +103,7 @@ export const AppTopbar = (props) => {
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
                 }
-            }, 5000);
+            }, 1000);
         };
         getCounter();
     }, [props.refreshBell]);
@@ -297,6 +297,7 @@ export const AppTopbar = (props) => {
                                         handleNavigate(item?.customerId);
                                         setVisibleRight(false);
                                         handleReadNotification(item?._id);
+                                        props.setHandleHighlight(item?.noteId);
                                     }}
                                 >
                                     <h5>{item?.sender?.name}</h5>

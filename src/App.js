@@ -11,7 +11,7 @@
 //import { menuNavigation } from "./navigation";
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
 import { AppTopbar } from "./AppTopbar";
 import { CSSTransition } from "react-transition-group";
 import { AppFooter } from "./AppFooter";
@@ -161,6 +161,7 @@ const App = () => {
     const [refreshNotificationcomponent, setRefreshNotificationComponent] = useState(false);
     const [refreshEsn, setRefreshEsn] = useState(false);
     const [refreshBell, setRefreshBell] = useState(false);
+    const [handleHighlight, setHandleHighlight] = useState("");
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();
@@ -381,6 +382,7 @@ const App = () => {
                         onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
                         setRefreshNotificationComponent={setRefreshNotificationComponent}
                         refreshBell={refreshBell}
+                        setHandleHighlight={setHandleHighlight}
                     />
                     <div className="layout-sidebar">
                         <AppMenu model={dynamicMenu} activeTab={activeTab} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
@@ -509,6 +511,7 @@ const App = () => {
                                                                 refreshEsn={refreshEsn}
                                                                 setRefreshEsn={setRefreshEsn}
                                                                 setRefreshBell={setRefreshBell}
+                                                                handleHighlight={handleHighlight}
                                                             />
                                                         ) : (
                                                             <Dashboard />
