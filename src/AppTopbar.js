@@ -103,7 +103,7 @@ export const AppTopbar = (props) => {
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
                 }
-            }, 5000);
+            }, 1000);
         };
         getCounter();
     }, [props.refreshBell]);

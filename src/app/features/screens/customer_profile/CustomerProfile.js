@@ -951,7 +951,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 <CustomerInvoice />
             </div>   
              */}
-            <Dialog style={{ width: "60vw" }} visible={showHighPriorityNotes} onHide={() => {}}>
+            <Dialog style={{ width: "60vw" }} visible={showHighPriorityNotes} onHide={() => {     
+                 
+                 setShowHighPriorityNotes(prev=>!prev)
+            }}>
                 <DisplayAllHighPriorityNotes setRefreshHighPriorityNotes={setRefreshHighPriorityNotes} BASE_URL={BASE_URL} notes={highestPriorityNotes} />
             </Dialog>
         </div>
