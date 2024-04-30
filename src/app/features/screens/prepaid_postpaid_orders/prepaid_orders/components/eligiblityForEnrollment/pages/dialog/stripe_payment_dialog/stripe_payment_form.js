@@ -207,10 +207,10 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
                             customerId: object?.customerid,
                             noteType: "Sign Up Plan Activation",
                             note: "Sign Up Plan  Activated Successfully",
-                            priority: "highest",
+                            priority: "medium",
                         };
 
-                        Axios.post(`${BASE_URL}/api/web/notes/`, data)
+                        Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data)
                             .then(() => {
                                 toast.current.show({ severity: "success", summary: "Sign Up Plan Note", detail: "Customer Plan Is Successfully Activated" });
 

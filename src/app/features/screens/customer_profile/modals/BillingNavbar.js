@@ -240,7 +240,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 }}
                 className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4"
             />
-            {cpData?.esn === undefined && cpData?.isEnrollmentComplete  && (
+            {cpData?.esn === undefined && cpData?.isEnrollmentComplete && accountType === "Prepaid"  && (
                 <>
                     <Button
                         label="Assign ESN"
@@ -254,7 +254,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 </>
             )}
 
-            {cpData?.esn !== undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && accountType !== "ACP" && (
+            {cpData?.esn !== undefined && cpData?.label === undefined && cpData?.isEnrollmentComplete && cpData?.accountType === "Prepaid" && cpData?.accountType !== "ACP" && !(cpData?.AcptoPrepaid) && (
                 <>
                     <Button
                         label="Assign Label"

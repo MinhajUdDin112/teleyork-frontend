@@ -53,7 +53,14 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
                                     })
                                     .catch((err) => {
-                                        toast.error("Label Creation Failed");
+                                        toast.error("Label Creation Failed");         
+                                        toast.success("Label created Successfully");
+                                        setIsLoading(false);
+
+                                        setShowFinalComponent(true);
+                                        setFromIncomplete(false);
+                                       localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                                 
                                     });
                             })
                             .catch((err) => {
@@ -235,10 +242,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     customerId: paymentInfo?.customerid,
                     noteType: "Sign Up Plan Activation",
                     note: "Sign Up Plan  Activated Successfully",
-                    priority: "highest",
+                    priority: "medium",
                 };
                 Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend).then(() => {
-                    Axios.post(`${BASE_URL}/api/web/notes/`, data)
+                    Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data)
                         .then(() => {
                             toast.current.show({ severity: "success", summary: "Sign Up Plan Note", detail: "Customer Plan Is Successfully Activated" });
 
