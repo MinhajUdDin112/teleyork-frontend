@@ -24,15 +24,14 @@ import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 import DisplayAllHighPriorityNotes from "./dialogs/display_priority_notes/PriorityNotes";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent, handleHighlight }) => {
-    const [cpData, setCpData] = useState([]);   
+    const [cpData, setCpData] = useState([]);
     const { state } = useLocation();
-    const selectedId = state?.selectedId; 
-    const navigate=useNavigate()  
-    if(selectedId === undefined) 
-    { 
-       navigate("/")
+    const selectedId = state?.selectedId;
+    const navigate = useNavigate();
+    if (selectedId === undefined) {
+        navigate("/");
     }
-     const [mvno,setmvno]=useState("") 
+    const [mvno, setmvno] = useState("");
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
@@ -65,7 +64,6 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             setActiveTab(customerServicesIndex);
         }
     }, [location, customerServicesIndex]);
-   
 
     const [refreshwholecustomerdata, setRefreshWholeCustomerData] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
@@ -82,21 +80,19 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 }
             })
             .catch((err) => {});
-    }, [refreshHighPriorityNotes]);    
-     
-   useEffect(()=>{ 
-   Axios.get(`${BASE_URL}/api/user/getServiceProvider?serviceProvider=${cpData?.serviceProvider}`).then((res)=>{ 
-     
-       setmvno(res?.data?.data?.name)
-   }).catch(err=>{ 
+    }, [refreshHighPriorityNotes]);
 
-   }) 
-    
-    },[cpData])  
+    useEffect(() => {
+        Axios.get(`${BASE_URL}/api/user/getServiceProvider?serviceProvider=${cpData?.serviceProvider}`)
+            .then((res) => {
+                setmvno(res?.data?.data?.name);
+            })
+            .catch((err) => {});
+    }, [cpData]);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
-    const [displayAllNotesDialogVisibility, setDisplayAllNotesDialogVisibility] = useState(false);  
+    const [displayAllNotesDialogVisibility, setDisplayAllNotesDialogVisibility] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     // Validation Schema
@@ -266,8 +262,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 if (response?.status === 200 || response?.status === 201) {
                     setTrackingNumber(response?.data?.data);
                 }
-            } catch (error) {
-            }
+            } catch (error) {}
         };
         fetchTrackingNumber();
     }, [refreshEsn]);
@@ -300,7 +295,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                     <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
                 <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status (Current Status: ${toCapitalCustomerStatus})`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
-                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
+                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} setRefreshEsn={setRefreshEsn} />
                 </Dialog>
                 <Dialog draggable={false} visible={isEdit} header={"Update Personal Info"} style={{ width: "70vw" }} onHide={() => setIsEdit((prev) => !prev)}>
                     <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit} />
@@ -664,10 +659,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>{cpData?.carrier !== undefined ? (cpData?.carrier?.name !== undefined ? cpData?.carrier?.name : "NIL") : "NIL"}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Plan Activation Date</td> 
-                            
+                                                    <td>Plan Activation Date</td>
+
                                                     <td>{cpData?.activatedAt !== undefined ? ChangeIsoDateToECT(cpData?.activatedAt) : "NIL"}</td>
-                                                  {/*  <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>*/}
+                                                    {/*  <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>*/}
                                                 </tr>
                                                 <tr>
                                                     <td>TMB Live Status</td>
@@ -762,14 +757,9 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>NIL</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Order by</td> 
-                                                     {cpData?.AcptoPrepaid === undefined ?
-                                                      <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td> 
-                                                       : <td>System Imported</td> 
-                                                     
-                                                     }
-                                                  
-                                                    </tr>
+                                                    <td>Order by</td>
+                                                    {cpData?.AcptoPrepaid === undefined ? <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td> : <td>System Imported</td>}
+                                                </tr>
                                                 <tr>
                                                     <td>Account ID</td>
                                                     <td>{cpData?.accountId !== undefined ? cpData?.accountId : "NIL"}</td>
@@ -803,22 +793,25 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>Role</td>
                                                     <td>{cpData?.source !== undefined ? cpData?.source : "NIL"}</td>
                                                 </tr>
-                                                <tr>  
-                                                     { 
-                                                      cpData?.AcptoPrepaid !== undefined  ?   cpData?.AcptoPrepaid ?  
-                                                      <> 
-                                                      <td>Converted To Prepaid On</td>  
-                                             <td>{cpData?.convertToPrepaidDate ? cpData?.convertToPrepaidDate : "NIL"}</td> 
-                                                </>
-                                                        :<> 
-                                                             <td>Order Create Date</td>  
-                                                    <td>{cpData?.orderCreateDate ? cpData?.orderCreateDate : "NIL"}</td> 
-                                                       </> :       
-                                                       <> 
-                                                    <td>Order Create Date</td>  
-                                                    <td>{cpData?.labelCreatedAt ? cpData?.labelCreatedAt : "NIL"}</td>  
-                                                     </>
-                                                     }
+                                                <tr>
+                                                    {cpData?.AcptoPrepaid !== undefined ? (
+                                                        cpData?.AcptoPrepaid ? (
+                                                            <>
+                                                                <td>Converted To Prepaid On</td>
+                                                                <td>{cpData?.convertToPrepaidDate ? cpData?.convertToPrepaidDate : "NIL"}</td>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <td>Order Create Date</td>
+                                                                <td>{cpData?.orderCreateDate ? cpData?.orderCreateDate : "NIL"}</td>
+                                                            </>
+                                                        )
+                                                    ) : (
+                                                        <>
+                                                            <td>Order Create Date</td>
+                                                            <td>{cpData?.labelCreatedAt ? cpData?.labelCreatedAt : "NIL"}</td>
+                                                        </>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
