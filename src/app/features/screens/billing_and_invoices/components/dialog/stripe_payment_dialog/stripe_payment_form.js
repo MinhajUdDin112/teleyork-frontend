@@ -35,9 +35,7 @@ export default function PaymentStripeForm({setRefresh,setPaymentDialogVisibility
                 invoicePaymentMethod: "Credit Card",
             };
       if(parseFloat(paid) >= parseFloat(dueAmount)){   
-         console.log("due amount",parseFloat(dueAmount))  
            
-         console.log("Paid amount",parseFloat(paid))
          dataToSend.invoiceStatus="Paid"
       } 
       else{ 

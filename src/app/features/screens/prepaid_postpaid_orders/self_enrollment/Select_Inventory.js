@@ -51,7 +51,6 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
     });
 
     const onPlanSelect = (item) => {
-        console.log("plan select function is called ", item)
         setCurrentPlanSelect(item._id);
         if (formik.values.plan === "") {
             let devicepricing = JSON.parse(localStorage.getItem("planprices"));
@@ -186,17 +185,11 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
      function SelectPlan(){ 
          if (localStorage.getItem("selfplanselect")) {
             setCurrentPlanSelect(localStorage.getItem("selfplanselect"));
-            console.log("current plan select  is", currentPlanSelect)
             if (formik.values.plan === "") {
                 let devicepricing = JSON.parse(localStorage.getItem("planprices"));
                 for (let i = 0; i < devicepricing?.length; i++) {
                     if (devicepricing[i]._id === localStorage.getItem("selfplanselect")) {
-                        console.log("check has been made")
-                        console.log("total amount is", formik.values.totalamount)
-                        console.log("devicepricing", devicepricing[i].price)
                         formik.setFieldValue("totalamount", (parseFloat(formik.values.totalamount) + devicepricing[i].price).toString());
-
-                        console.log("formik total amount is", formik.values.totalamount)
                         setPreviousPlanPrice(devicepricing[i].price);
                     }
                 }
@@ -207,14 +200,10 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
 
                 for (let i = 0; i < devicepricing?.length; i++) {
                     if (devicepricing[i]._id === localStorage.getItem("selfplanselect")) {
-                        console.log("check has been made")
                         let currentamount = parseFloat(formik.values.totalamount);
-                        console.log("current amount is", currentamount)
                         let currentafterremovingprevious = currentamount - previousPlanPrice;
-                        console.log("currentafter removingprevious", currentafterremovingprevious)
                         formik.setFieldValue("totalamount", (currentafterremovingprevious + devicepricing[i].price).toString());
 
-                        console.log("formik total amount is", formik.values.totalamount)
                         setPreviousPlanPrice(devicepricing[i].price);
 
                     }

@@ -205,7 +205,7 @@ const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
                     header="Invoice Pdf"
                 />
             </DataTable>
-            {userDetails?.accountType === "Prepaid" ? <CustomerInvoicePrepaid invoiceDownload={invoiceDownload} userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} /> : <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />}
+            {userDetails?.accountType === "Prepaid" || userDetails?.accountType === "ACP" ? <CustomerInvoicePrepaid invoiceDownload={invoiceDownload} userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} /> : <CustomerInvoice userDetails={userDetails} invoiceData={singleInvoiceData} setIsLoading={setIsLoading} />}
         </div>
     );
 };
