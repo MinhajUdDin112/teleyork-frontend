@@ -96,26 +96,54 @@ export default function SIMBulkUploadAddActivateProvision({ permissions, unit, m
         },
     });
     function ApiResponseShow({ res }) {
+        console.log("Response of data is", res)
         return (
-            <div className="flex flex-wrap justify-content-left">
-                <p>{res.msg}</p>
-                <div>
-                    <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>
-                    <ul className="m-0 list-none">
-                        {res.data.data.duplicateNumbers.map((item) => (
-                            <li>{item}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="mt-3">
-                    <p>Sim Numbers Added: {res.data.data.newSimNumbers.length}</p>
-                    <ul className=" m-0 list-none">
-                        {res.data.data.newSimNumbers.map((item) => (
-                            <li>{item}</li>
-                        ))}
-                    </ul>
-                </div>
+            <div className="flex flex-wrap justify-content-left ">
+            <p>{res?.msg}</p>
+            <div>
+                <p> Duplicate Numbers : {res?.data?.data?.duplicateNumbers?.length}</p>
+                <ul className="m-0 list-none errormsg  ">
+                    {res?.data?.data?.duplicateNumbers?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
             </div>
+            <div className="mt-3 w-full">
+                <p>Sim Numbers Added: {res?.data?.data?.newSimNumbers?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.newSimNumbers?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div> 
+            <div className="mt-3 w-full">
+                <p>Invalid SIMS: {res?.data?.data?.invalidSIMs?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.invalidSIMs?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div>    
+            <div className="mt-3 w-full">
+                <p>No BoxNo Added For SIMS: {res?.data?.data?.noBoxNoAddedForSIMS?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.noBoxNoAddedForSIMS?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div> 
+            <div className="mt-3 w-full">
+                <p>No Model Added For SIMs: {res?.data?.data?.noModelAddedForSIMs?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.noModelAddedForSIMs?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div> 
+   
+
+            
+        </div>
         );
     }
     function handlesubmit(actions) {
