@@ -73,11 +73,12 @@ export default function LoginScreen({ setRefreshApp }) {
                         </div>
                     ) : null}
                     <div className="flex justify-content-center  w-full">
-                        <form onSubmit={formik.handleSubmit}>
-                            <InputText type="text" name="email" className="mt-2  block mb-2 w-20rem" placeholder="Enter email" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                        <form onSubmit={formik.handleSubmit}> 
+                             
+                            <InputText type="text" name="email" style={{height:"40px"}} className="mt-2  block mb-2 w-20rem" placeholder="Enter email" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} />
                             {formik.touched.email && formik.errors.email ? <p className="text-red-500 p-error ml-1 text-sm mt-0">{formik.errors.email}</p> : null}
-                            <div className="mt-2 passworddiv" >
-                            <Password  type="password"  feedback={false} tabIndex={1} name="password" className="  mb-2 " placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                            <div className="mt-2 passworddiv" style={{height:"40px"}} >
+                            <Password  type="password"  style={{height:"35px"}} feedback={false} tabIndex={1} name="password" className="" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
                                 <i className={`${showPassowrd ? "pi-eye":"pi-eye-slash"} pi`} onClick={(e)=>{ 
                                        
                                           if(
