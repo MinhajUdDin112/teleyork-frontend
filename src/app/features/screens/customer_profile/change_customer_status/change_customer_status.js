@@ -171,7 +171,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
             setIsLoading(false);
         } else if (statusTo === "reconnect" && connectionType === "Externally") {
             setIsLoading(true);
-            Axios.post(`${BASE_URL}/api/user/reConnectMdnByPwg`, { enrollmentId: cpData?._id, planId: cpData?.plan?.planId })
+            Axios.post(`${BASE_URL}/api/user/reConnectMdn`, { enrollmentId: cpData?._id })
                 .then(() => {
                     toast.success("Successfully Reconnected");
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
@@ -186,7 +186,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
             setIsLoading(false);
         } else if (statusTo === "reconnect" && connectionType === "Internally") {
             setIsLoading(true);
-            Axios.post(`${BASE_URL}/api/user/reConnectMdnByPwg`, { enrollmentId: cpData?._id, planId: cpData?.plan?.planId })
+            Axios.post(`${BASE_URL}/api/user/reConnectMdn`, { enrollmentId: cpData?._id })
                 .then(() => {
                     toast.success("Successfully Reconnected");
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
