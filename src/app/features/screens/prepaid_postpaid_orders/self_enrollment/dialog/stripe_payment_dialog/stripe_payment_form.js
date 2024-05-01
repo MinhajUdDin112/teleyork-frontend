@@ -175,7 +175,7 @@ export default function PaymentStripeForm({ plan, clientSecret,setShowPreview, p
                     invoiceDueDate: dueDate,
                     lateFee: applyLateFee,
                     invoiceOneTimeCharges: oneTimeCharge,
-                    invoiceStatus: object.totalAmount === paid ? "Paid" : "Partial",
+                    invoiceStatus: object.totalamount === paid ? "Paid" : "Partial",
                     planId: plan,
                     planName: planName,
                     planCharges: planCharges,
