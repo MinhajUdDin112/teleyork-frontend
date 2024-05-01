@@ -56,7 +56,10 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
     }, [changeCustomerStatusDialog, refreshNotificationcomponent, refresh, refreshComponent, refreshComp]);
 
     function openPaymentScreen() {
-        navigate("/invoice", { state: { selectedId: parseselectedid } });
+        navigate("/invoice", { state: { selectedId: parseselectedid } });    
+        //navigate("/customer-profile", { state: { selectedId: rowData._id } });
+        localStorage.setItem("selectedId", JSON.stringify(parseselectedid));
+    
     }
     const goToProfile = () => {
         navigate("/customer-profile", { state: { selectedId: parseselectedid } });

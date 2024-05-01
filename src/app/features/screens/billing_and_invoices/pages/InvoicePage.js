@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import InvoiceTable from "../components/InvoiceTable";
 import AdHocModal from "../components/modals/AdHocModal";
 import BillingNavbar from "../components/BillingNavbar";
-import Axios from "axios";
+import Axios from "axios"; 
+import { useNavigate } from "react-router-dom";
 import { Card } from "primereact/card";
 import { useLocation } from "react-router-dom";
 import ChangeCustomerStatus from "../../customer_profile/change_customer_status/change_customer_status";
@@ -20,9 +21,21 @@ const InvoicePage = () => {
     const [currentPlan, setCurrentPlan] = useState([]);
     const [userDetails, setUserDetails] = useState();
     const [cpData, setCpData] = useState([]);
-    const location = useLocation();
-    const selectedId = location?.state && location?.state?.selectedId;
-
+    const {state} = useLocation();  
+    
+    const selectedId = state?.selectedId;
+    const navigate=useNavigate()  
+    if(selectedId === undefined) 
+    { 
+       navigate("/customer-profile")  
+       setTimeout(()=>{ 
+     
+        setRefresh(prev=>!prev)
+     },2)
+     
+    }   
+ 
+  
     const handleAPISuccess = (responseData) => {
         window.location.reload();
     };
