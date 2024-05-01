@@ -195,12 +195,11 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     const successMessage = response?.data?.msg || "Successfully reconnected";
                     toast.success(successMessage);
                     setRefreshEsn((prev) => !prev);
-
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    const errorMessage = error.response?.data?.error?.message || "Reconnecting Failed";
                     toast.error(errorMessage);
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Reconnection Failed" });
                     setIsLoading(false);
@@ -317,7 +316,6 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
             toast.error("Please Select Status OR Type");
         }
     };
-    console.log("statusto ", statusTo);
     return (
         <div className="flex flex-wrap flex-row justify-content-around ">
             {/* <div>
