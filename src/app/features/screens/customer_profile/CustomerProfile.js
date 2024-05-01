@@ -123,8 +123,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             try {
                 const response = await Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data);
                 if (response?.status == "200" || response?.status == "201") {
-                    toast.success("Successfully Added"); 
-                    setRefreshHighPriorityNotes(prev=>!prev)
+                    toast.success("Successfully Added");
+                    setRefreshHighPriorityNotes((prev) => !prev);
                     setisButtonLoading(false);
                     actions.resetForm();
                     getNotes();
@@ -993,10 +993,13 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 <CustomerInvoice />
             </div>   
              */}
-            <Dialog style={{ width: "60vw" }} visible={showHighPriorityNotes} onHide={() => {     
-                 
-                 setShowHighPriorityNotes(prev=>!prev)
-            }}>
+            <Dialog
+                style={{ width: "60vw" }}
+                visible={showHighPriorityNotes}
+                onHide={() => {
+                    setShowHighPriorityNotes((prev) => !prev);
+                }}
+            >
                 <DisplayAllHighPriorityNotes setRefreshHighPriorityNotes={setRefreshHighPriorityNotes} BASE_URL={BASE_URL} notes={highestPriorityNotes} />
             </Dialog>
         </div>
