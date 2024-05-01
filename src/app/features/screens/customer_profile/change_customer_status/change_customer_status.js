@@ -245,43 +245,37 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                 customerId: cpData?._id,
                 status: statusTo,
             };
-            if (disconnectReason !== "") {
-                Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
-                    .then(() => {
-                        toast.success("Successfully Disconnected");
-                        setIsLoading(false);
-                    })
-                    .catch((error) => {
-                        const errorMessage = error.response?.data?.msg || "Disconnection Failed";
-                        toast.error(errorMessage);
-                        // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
-                        setIsLoading(false);
-                    });
-            } else {
-                setExceptionError(true);
-            }
+
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                .then(() => {
+                    toast.success("Successfully Disconnected");
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
+                    // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
+                    setIsLoading(false);
+                });
         } else if (statusTo === "suspended" && connectionType === "Externally") {
             setIsLoading(true);
             const dataToSend = {
                 customerId: cpData?._id,
                 status: statusTo,
             };
-            if (disconnectReason !== "") {
-                Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
-                    .then(() => {
-                        toast.success("Successfully Disconnected");
-                        // toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Disconnected" });
-                        setIsLoading(false);
-                    })
-                    .catch((error) => {
-                        const errorMessage = error.response?.data?.msg || "Disconnection Failed";
-                        toast.error(errorMessage);
-                        // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
-                        setIsLoading(false);
-                    });
-            } else {
-                setExceptionError(true);
-            }
+
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                .then(() => {
+                    toast.success("Successfully Disconnected");
+                    // toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Disconnected" });
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
+                    // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
+                    setIsLoading(false);
+                });
         } else {
             toast.error("Please Select Status OR Type");
         }
