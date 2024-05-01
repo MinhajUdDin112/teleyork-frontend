@@ -148,29 +148,29 @@ const BillingNavbar = ({ refresh,setRefresh, setChangeCustomerStatus }) => {
                 end={() => {
                     return (
                         <span
-                            className="text-white p-3 cursor-pointer spanstyle"
-                            style={{
-                                borderRadius: "10px",
-                                backgroundColor: `${
-                                    cpData?.status === "active"
-                                        ? "rgba(21, 119, 11, 1)"
-                                        : cpData?.status === "inactive"
-                                        ? "rgba(174, 0, 0, 1)"
-                                        : cpData?.status === "suspended" || cpData?.status === "Suspended"
-                                        ? "rgba(255, 191, 0, 1)"
-                                        : cpData?.status === "prospected" || cpData?.status === "prospect"
-                                        ? "rgba(120, 4, 89, 0.82)"
-                                        : cpData?.status === "unfitProspect" || cpData?.status === "UnfitProspect"
-                                        ? "rgba(0, 0, 0, 1)"
-                                        : "orangered"
-                                }`,
-                            }}
-                            /*onClick={async () => {
-                setChangeCustomerStatus(true);
-              }}*/
-                        >
-                            {cpData?.status === "prospect" || cpData?.status === "prospected" ? "Prospect" : cpData?.status}
-                        </span>
+                        className="text-white p-3 cursor-pointer spanstyle"
+                        style={{
+                            borderRadius: "10px",
+                            backgroundColor: `${
+                                cpData?.status === "active"
+                                    ? "rgb(60, 179, 113)"
+                                    : cpData?.status === "inactive"
+                                    ? "rgba(174, 0, 0, 1)"
+                                    : cpData?.status === "suspended"
+                                    ? "rgba(255, 191, 0, 1)"
+                                    : cpData?.status === "prospected"
+                                    ? "rgba(120, 4, 89, 0.82)"
+                                    : cpData?.status === "rejected"
+                                    ? "rgba(0, 0, 0, 1)"
+                                    : "orangered"
+                            }`,
+                        }}
+                        /*onClick={async () => {
+            setChangeCustomerStatus(true);
+          }}*/
+                    >
+                        {cpData?.status}
+                    </span>
                     );
                 }}
                 className="m-1  card border-none menubar border-noround  text-xl font-semibold mx-0 bg-white mx-0 pt-4 pb-4"

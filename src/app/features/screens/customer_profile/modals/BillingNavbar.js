@@ -227,19 +227,34 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 end={() => {
                     return (
                         <span
-                            className={`text-white p-3 cursor-pointer spanstyle }`}
-                            style={{
-                                borderRadius: "10px",
-                                backgroundColor: `${cpData?.status === "prospected" || cpData?.status === "prospect" ? "rgba(120, 4, 89, 0.82)" : "orangered"}`,
-                            }}
-                            onClick={async () => {
-                                if (cpData?.status !== "rejected") {
-                                    setChangeCustomerStatus(true);
-                                }
-                            }}
-                        >
-                            {cpData?.status}
-                        </span>
+                        className="text-white p-3 cursor-pointer spanstyle"
+                        style={{
+                            borderRadius: "10px",
+                            backgroundColor: `${
+                                cpData?.status === "active"
+                                    ? "rgb(60, 179, 113)"
+                                    : cpData?.status === "inactive"
+                                    ? "rgba(174, 0, 0, 1)"
+                                    : cpData?.status === "suspended"
+                                    ? "rgba(255, 191, 0, 1)"
+                                    : cpData?.status === "prospected"
+                                    ? "rgba(120, 4, 89, 0.82)"
+                                    : cpData?.status === "rejected"
+                                    ? "rgba(0, 0, 0, 1)"
+                                    : "orangered"
+                            }`,
+                        }}
+                        /*onClick={async () => {
+            setChangeCustomerStatus(true);
+          }}*/  
+          onClick={async () => {
+            if (cpData?.status !== "rejected") {
+                setChangeCustomerStatus(true);
+            }
+        }}
+                    >
+                        {cpData?.status}
+                    </span>
                     );
                 }}
                 className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4"
