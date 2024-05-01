@@ -15,43 +15,42 @@ const TransferException = [
         label: "Other",
         value: "Other",
     },
-   
 ];
 const statusOption = [
     { label: "Select Status", value: "" },
-    {
-        label: "Label Printed",
-        value: "labelPrinted",
-    },
+    // {
+    //     label: "Label Printed",
+    //     value: "labelPrinted",
+    // },
     {
         label: "Pre-Shipment",
         value: "preShipment",
     },
-    {
-        label: "In-Transit",
-        value: "inTransit",
-    },
+    // {
+    //     label: "In-Transit",
+    //     value: "inTransit",
+    // },
     {
         label: "Evaluation",
         value: "evaluation",
     },
-    {
-        label: "Delivered",
-        value: "delivered",
-    },
+    // {
+    //     label: "Delivered",
+    //     value: "delivered",
+    // },
     {
         label: "Active",
         value: "active",
     },
-   
+
     // {
     //     label: "Reconnect",
     //     value: "reconnect",
     // },
-    // {
-    //     label: "Suspend",
-    //     value: "suspend",
-    // },
+    {
+        label: "Suspend",
+        value: "suspend",
+    },
     {
         label: "Disconnect",
         value: "disconnect",
