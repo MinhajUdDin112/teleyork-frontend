@@ -389,7 +389,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     />
                 </div>
             )}
-            {statusTo === "disconnected" || statusTo === "reconnect" ? (
+            {statusTo === "disconnected" ? (
                 <>
                     <div>
                         <label className="block mt-4">
