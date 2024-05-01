@@ -16,6 +16,42 @@ const TransferException = [
         value: "Other",
     },
 ];
+const prospectStatusOptions = [
+    {
+        label: "Active",
+        value: "active",
+    },
+    {
+        label: "Disconnect",
+        value: "disconnected",
+    },
+];
+const activeStatusOptions = [
+    {
+        label: "Suspend",
+        value: "suspended",
+    },
+    {
+        label: "Disconnect",
+        value: "disconnected",
+    },
+];
+const suspendStatusOptions = [
+    {
+        label: "Active",
+        value: "active",
+    },
+    {
+        label: "Disconnect",
+        value: "disconnected",
+    },
+];
+const disconnectStatusOptions = [
+    {
+        label: "Reconnect",
+        value: "reconnect",
+    },
+];
 const statusOption = [
     { label: "Select Status", value: "" },
     // {
@@ -49,11 +85,11 @@ const statusOption = [
     // },
     {
         label: "Suspend",
-        value: "suspend",
+        value: "suspended",
     },
     {
         label: "Disconnect",
-        value: "disconnect",
+        value: "disconnected",
     },
 ];
 const connection = [
@@ -70,4 +106,4 @@ const connection = [
         value: "Internally",
     },
 ];
-export { TransferException, statusOption, connection };
+export { TransferException, statusOption, prospectStatusOptions, activeStatusOptions, suspendStatusOptions, disconnectStatusOptions, connection };

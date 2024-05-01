@@ -6,7 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import React, { useState, useRef, useEffect } from "react";
-import { TransferException, statusOption, connection } from "./dropdown_options/options";
+import { TransferException, statusOption, prospectStatusOptions, activeStatusOptions, suspendStatusOptions, disconnectStatusOptions, connection } from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
     const [connectionType, setConnectionType] = useState("");
     const [disconnectReason, setdisconnectReason] = useState("");
     //StatusType State
-    const [statusTo, setStatusTo] = useState("");
+    const [statusTo, setStatusTo] = useState(cpData?.status);
     //Option for TransferException
     const transferExceptionOption = TransferException;
     //Option for Status
@@ -36,11 +36,13 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
             Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
                 .then(() => {
                     setChangeCustomerStatus(false);
+
                     toast.success("Successfully Changed");
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                 })
-                .catch((err) => {
-                    toast.error("Disconnection Failed");
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
                 });
         } else if (statusTo === "preShipment") {
@@ -56,8 +58,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
                 })
-                .catch((err) => {
-                    toast.error(" Disconnection Failed");
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
                     setIsLoading(false);
                 });
@@ -75,8 +78,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
                 })
-                .catch((err) => {
-                    toast.error("Disconnection Failed");
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
                     setIsLoading(false);
                 });
@@ -94,8 +98,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
                 })
-                .catch((err) => {
-                    toast.error("Disconnection Failed");
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
                     setIsLoading(false);
                 });
@@ -115,7 +120,8 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                     setIsLoading(false);
                 }
             } catch (error) {
-                toast.error("Disconnection Failed");
+                const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                toast.error(errorMessage);
                 // toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
                 setIsLoading(false);
             }
@@ -152,7 +158,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
 
                 if (response?.status === 200 || response?.status === 201) {
                     toast.success("Successfully Activated");
-                    toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
+                    // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
                     setIsLoading(false);
                 }
             } catch (error) {
@@ -163,21 +169,37 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
             }
 
             setIsLoading(false);
-        } else if (statusTo === "reconnect") {
+        } else if (statusTo === "reconnect" && connectionType === "Externally") {
             setIsLoading(true);
-            Axios.post(`${BASE_URL}/api/user/reConnectMdnByPwg`, { enrollmentId: cpData?._id, planId: cpData?.plan?.planId, zip: cpData?.zip, esn: cpData?.esn })
+            Axios.post(`${BASE_URL}/api/user/reConnectMdnByPwg`, { enrollmentId: cpData?._id, planId: cpData?.plan?.planId })
                 .then(() => {
                     toast.success("Successfully Reconnected");
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
                     setIsLoading(false);
                 })
-                .catch((err) => {
-                    toast.error("Reconnection Failed");
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Reconnection Failed" });
                     setIsLoading(false);
                 });
             setIsLoading(false);
-        } else if (statusTo === "disconnect" && connectionType === "Externally") {
+        } else if (statusTo === "reconnect" && connectionType === "Internally") {
+            setIsLoading(true);
+            Axios.post(`${BASE_URL}/api/user/reConnectMdnByPwg`, { enrollmentId: cpData?._id, planId: cpData?.plan?.planId })
+                .then(() => {
+                    toast.success("Successfully Reconnected");
+                    // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
+                    // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Reconnection Failed" });
+                    setIsLoading(false);
+                });
+            setIsLoading(false);
+        } else if (statusTo === "disconnected" && connectionType === "Externally") {
             setIsLoading(true);
             if (disconnectReason !== "") {
                 Axios.post(`${BASE_URL}/api/user/disconnectMdnByPwg`, { enrollmentId: cpData?._id, disconnectReason: disconnectReason })
@@ -195,7 +217,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
             } else {
                 setExceptionError(true);
             }
-        } else if (statusTo === "disconnect" && connectionType === "Internally") {
+        } else if (statusTo === "disconnected" && connectionType === "Internally") {
             setIsLoading(true);
             const dataToSend = {
                 customerId: cpData?._id,
@@ -210,22 +232,64 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                     })
                     .catch((error) => {
                         const errorMessage = error.response?.data?.msg || "Disconnection Failed";
-                        // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
                         toast.error(errorMessage);
+                        // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
+                        setIsLoading(false);
+                    });
+            } else {
+                setExceptionError(true);
+            }
+        } else if (statusTo === "suspended" && connectionType === "Internally") {
+            setIsLoading(true);
+            const dataToSend = {
+                customerId: cpData?._id,
+                status: statusTo,
+            };
+            if (disconnectReason !== "") {
+                Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                    .then(() => {
+                        toast.success("Successfully Disconnected");
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                        toast.error(errorMessage);
+                        // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
+                        setIsLoading(false);
+                    });
+            } else {
+                setExceptionError(true);
+            }
+        } else if (statusTo === "suspended" && connectionType === "Externally") {
+            setIsLoading(true);
+            const dataToSend = {
+                customerId: cpData?._id,
+                status: statusTo,
+            };
+            if (disconnectReason !== "") {
+                Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                    .then(() => {
+                        toast.success("Successfully Disconnected");
+                        // toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Disconnected" });
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                        toast.error(errorMessage);
+                        // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
                         setIsLoading(false);
                     });
             } else {
                 setExceptionError(true);
             }
         } else {
-            toast.error("Please Select Staus OR Type");
-            // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Please Select Status OR Type" });
+            toast.error("Please Select Status OR Type");
         }
     };
-
+    console.log("statusto ", statusTo);
     return (
         <div className="flex flex-wrap flex-row justify-content-around ">
-            <div>
+            {/* <div>
                 <label className="block mt-4">Change Account Status To:</label>
                 <Dropdown
                     value={statusTo}
@@ -236,8 +300,65 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                     className="field-width mt-3"
                     placeholder="Select Status"
                 />
-            </div>
-            {statusTo === "disconnect" ? (
+            </div> */}
+            {cpData?.status === "prospect" && (
+                <div>
+                    <label className="block mt-4">Change Account Status To:</label>
+
+                    <Dropdown
+                        value={statusTo}
+                        onChange={(e) => {
+                            setStatusTo(e.value);
+                        }}
+                        options={prospectStatusOptions}
+                        className="field-width mt-3"
+                        placeholder="Select Status"
+                    />
+                </div>
+            )}
+            {cpData?.status === "active" && (
+                <div>
+                    <label className="block mt-4">Change Account Status To:</label>
+                    <Dropdown
+                        value={statusTo}
+                        onChange={(e) => {
+                            setStatusTo(e.value);
+                        }}
+                        options={activeStatusOptions}
+                        className="field-width mt-3"
+                        placeholder="Select Status"
+                    />
+                </div>
+            )}
+            {cpData?.status === "suspended" && (
+                <div>
+                    <label className="block mt-4">Change Account Status To:</label>
+                    <Dropdown
+                        value={statusTo}
+                        onChange={(e) => {
+                            setStatusTo(e.value);
+                        }}
+                        options={suspendStatusOptions}
+                        className="field-width mt-3"
+                        placeholder="Select Status"
+                    />
+                </div>
+            )}
+            {cpData?.status === "disconnected" && (
+                <div>
+                    <label className="block mt-4">Change Account Status To:</label>
+                    <Dropdown
+                        value={statusTo}
+                        onChange={(e) => {
+                            setStatusTo(e.value);
+                        }}
+                        options={disconnectStatusOptions}
+                        className="field-width mt-3"
+                        placeholder="Select Status"
+                    />
+                </div>
+            )}
+            {statusTo === "disconnected" || statusTo === "reconnect" ? (
                 <>
                     <div>
                         <label className="block mt-4">
@@ -257,7 +378,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus }
                     </div>
                 </>
             ) : undefined}
-            {statusTo === "disconnect" || statusTo === "active" || statusTo === "suspend" || statusTo === "reconnect" ? (
+            {statusTo === "prospect" || statusTo === "disconnected" || statusTo === "active" || statusTo === "suspended" || statusTo === "reconnect" ? (
                 <div>
                     <label className="block mt-4">Connection Type:</label>
                     <Dropdown
