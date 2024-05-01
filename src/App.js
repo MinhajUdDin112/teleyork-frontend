@@ -167,15 +167,6 @@ const App = () => {
     const navigate = useNavigate();
     let menuClick = false;
     let mobileTopbarMenuClick = false;
-    //get selected id from local storage
-    const selectedid = localStorage.getItem("selectedId");
-    let parseselectedid;
-    if (selectedid) {
-        parseselectedid = JSON.parse(localStorage.getItem("selectedId"));
-    } else {
-        parseselectedid = "";
-    }
-    //MobileMenu When ACTIVE
     useEffect(() => {
         if (mobileMenuActive) {
             addClass(document.body, "body-overflow-hidden");
@@ -433,7 +424,7 @@ const App = () => {
                                             <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                             <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                             <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
-                                            {parseselectedid ? <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> : <Route path="/invoice" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
+                                            <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> 
                                             <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
                                             <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
                                             <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
@@ -497,7 +488,7 @@ const App = () => {
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                            {parseselectedid ? (
+                                            
                                                 <Route
                                                     exact
                                                     path="/customer-profile"
@@ -518,9 +509,7 @@ const App = () => {
                                                         )
                                                     }
                                                 />
-                                            ) : (
-                                                <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />
-                                            )}
+                                            
                                             <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                             <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
                                             <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />

@@ -6,7 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
 import Axios from "axios";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { DialogeForAddNewType } from "./dialogs/DialogeForAddNewType";
 import { Dialog } from "primereact/dialog";
 import { useFormik } from "formik";
@@ -24,9 +24,15 @@ import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 import DisplayAllHighPriorityNotes from "./dialogs/display_priority_notes/PriorityNotes";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent, handleHighlight }) => {
-    const [cpData, setCpData] = useState([]);  
+    const [cpData, setCpData] = useState([]);   
+    const { state } = useLocation();
+    const selectedId = state?.selectedId; 
+    const navigate=useNavigate()  
+    if(selectedId === undefined) 
+    { 
+       navigate("/")
+    }
      const [mvno,setmvno]=useState("") 
-
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
@@ -90,9 +96,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
-    const [displayAllNotesDialogVisibility, setDisplayAllNotesDialogVisibility] = useState(false);
-    const { state } = useLocation();
-    const selectedId = state?.selectedId;
+    const [displayAllNotesDialogVisibility, setDisplayAllNotesDialogVisibility] = useState(false);  
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     // Validation Schema
