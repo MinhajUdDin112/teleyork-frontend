@@ -189,7 +189,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             setVisible(false);
             setRefreshComp(true);
             setRefreshComponent(true);
-
+            setRefreshEsn((prev) => !prev);
             toast.success(response?.data?.message);
         } catch (error) {
             toast.error(error?.response?.data?.msg);
