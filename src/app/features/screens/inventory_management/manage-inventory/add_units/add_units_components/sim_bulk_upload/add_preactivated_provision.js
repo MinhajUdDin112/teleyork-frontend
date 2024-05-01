@@ -170,7 +170,7 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions, uni
                     .then((res) => {
                         try {
                             // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
-                            if (res?.data?.data?.duplicateNumbers?.length !== 0) {
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.invalidSIMs?.length !== 0 ||    res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0) {
                                 ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
                             } else {
                                 ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });

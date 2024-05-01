@@ -191,28 +191,33 @@ export default function TabletBulkUploadAddStock({ permissions, unit, model }) {
                         "Content-Type": "multipart/form-data",
                     },
                 })
-                    .then((res) => {
-                        try {
+                .then((res) => {
+                    try {
+                        // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                        if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.emptySIMRows?.length !== 0 ||  res?.data?.data?.newSimNumbers?.length !== 0 ||  res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0 ||  res?.data?.data?.noIMEIAddedForSIMS?.length !==0 ||  res?.data?.data?.noMakeForSIMS?.length !== 0 ) {
+                            ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                        } else {
                             ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
-                            formik.setFieldValue("carrier", "");
-                            formik.setFieldValue("file", "");
-                            formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                            ;
-                            ;
-                            formik.setFieldValue("SimNumber", "");
-                            formik.setFieldValue("unitType", unit);
-                            formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                            formik.setFieldValue("provisionType", "Bulk Add Tablet Stocks");
-                            ;
-                            setFilename(null);
-                            actions.resetForm();
-                        } catch (err) {
                         }
-                    })
-                    .catch(() => {
-                        ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
-                    });
-                formik.values.serviceProvider = parseLoginRes?.companyName;
+                        formik.setFieldValue("carrier", "");
+                        formik.setFieldValue("file", "");
+                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                        ;
+                        ;
+                        formik.setFieldValue("SimNumber", "");
+                        formik.setFieldValue("unitType", unit);
+                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                        formik.setFieldValue("provisionType", "Bulk Add PrecActive Tablets");
+                        ;
+                        setFilename(null);
+                        actions.resetForm();
+                    } catch (err) {
+                    }
+                })
+                .catch(() => {
+                    ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
+                });
+            formik.values.serviceProvider = parseLoginRes?.companyName;
             } else {
                 setFileError(true);
             }
