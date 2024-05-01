@@ -95,26 +95,77 @@ export default function TabletBulkUploadAddStock({ permissions, unit, model }) {
             handlesubmit(actions);
         },
     });
-    function ApiResponseShow({ res }) {
+    function ApiResponseShow({ res }) { 
         return (
-            <div className="flex flex-wrap justify-content-left">
-                <p>{res.msg}</p>
+            <div className="flex flex-wrap justify-content-left ">
+                <p>{res?.msg}</p>
                 <div>
-                    <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>
-                    <ul className="m-0 list-none">
-                        {res.data.data.duplicateNumbers.map((item) => (
+                    <p> Duplicate Numbers : {res?.data?.data?.duplicateNumbers?.length}</p>
+                    <ul className="m-0 list-none errormsg  ">
+                        {res?.data?.data?.duplicateNumbers?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+                <div>
+                    <p> Empty SIMS Rows : {res?.data?.data?.emptySIMRows?.length}</p>
+                    <ul className="m-0 list-none errormsg  ">
+                        {res?.data?.data?.emptySIMRows?.map((item) => (
                             <li>{item}</li>
                         ))}
                     </ul>
                 </div>
-                <div className="mt-3">
-                    <p>Sim Numbers Added: {res.data.data.newSimNumbers.length}</p>
+                <div className="mt-3 w-full">
+                    <p>Sim Numbers Added: {res?.data?.data?.newSimNumbers?.length}</p>
                     <ul className=" m-0 list-none">
-                        {res.data.data.newSimNumbers.map((item) => (
+                        {res?.data?.data?.newSimNumbers?.map((item) => (
                             <li>{item}</li>
                         ))}
                     </ul>
-                </div>
+                </div> 
+                <div className="mt-3 w-full">
+                    <p>Invalid SIMS: {res?.data?.data?.invalidSIMs?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.invalidSIMs?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>    
+                <div className="mt-3 w-full">
+                    <p>No BoxNo Added For SIMS: {res?.data?.data?.noBoxNoAddedForSIMS?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noBoxNoAddedForSIMS?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+                <div className="mt-3 w-full">
+                    <p>No Model Added For SIMs: {res?.data?.data?.noModelAddedForSIMs?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noModelAddedForSIMs?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>  
+                <div className="mt-3 w-full">
+                    <p>No IMEI Added For SIMs: {res?.data?.data?.noIMEIAddedForSIMS?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noIMEIAddedForSIMS?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>  
+                <div className="mt-3 w-full">
+                    <p>No Make Added For SIMs: {res?.data?.data?.noMakeForSIMS?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noMakeForSIMS?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+       
+
+                
             </div>
         );
     }
@@ -140,28 +191,33 @@ export default function TabletBulkUploadAddStock({ permissions, unit, model }) {
                         "Content-Type": "multipart/form-data",
                     },
                 })
-                    .then((res) => {
-                        try {
+                .then((res) => {
+                    try {
+                        // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                        if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.emptySIMRows?.length !== 0 ||  res?.data?.data?.newSimNumbers?.length !== 0 ||  res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0 ||  res?.data?.data?.noIMEIAddedForSIMS?.length !==0 ||  res?.data?.data?.noMakeForSIMS?.length !== 0 ) {
+                            ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                        } else {
                             ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
-                            formik.setFieldValue("carrier", "");
-                            formik.setFieldValue("file", "");
-                            formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                            ;
-                            ;
-                            formik.setFieldValue("SimNumber", "");
-                            formik.setFieldValue("unitType", unit);
-                            formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                            formik.setFieldValue("provisionType", "Bulk Add Tablet Stocks");
-                            ;
-                            setFilename(null);
-                            actions.resetForm();
-                        } catch (err) {
                         }
-                    })
-                    .catch(() => {
-                        ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
-                    });
-                formik.values.serviceProvider = parseLoginRes?.companyName;
+                        formik.setFieldValue("carrier", "");
+                        formik.setFieldValue("file", "");
+                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                        ;
+                        ;
+                        formik.setFieldValue("SimNumber", "");
+                        formik.setFieldValue("unitType", unit);
+                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                        formik.setFieldValue("provisionType", "Bulk Add PrecActive Tablets");
+                        ;
+                        setFilename(null);
+                        actions.resetForm();
+                    } catch (err) {
+                    }
+                })
+                .catch(() => {
+                    ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
+                });
+            formik.values.serviceProvider = parseLoginRes?.companyName;
             } else {
                 setFileError(true);
             }

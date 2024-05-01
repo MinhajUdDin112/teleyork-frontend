@@ -808,22 +808,22 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                       cpData?.AcptoPrepaid !== undefined  ?   cpData?.AcptoPrepaid ?  
                                                       <> 
                                                       <td>Converted To Prepaid On</td>  
-                                             <td>{cpData?.convertToPrepaidDate ? ChangeIsoDateToECT(cpData?.convertToPrepaidDate) : "NIL"}</td> 
+                                             <td>{cpData?.convertToPrepaidDate ? cpData?.convertToPrepaidDate : "NIL"}</td> 
                                                 </>
                                                         :<> 
                                                              <td>Order Create Date</td>  
-                                                    <td>{cpData?.orderCreateDate ? ChangeIsoDateToECT(cpData?.orderCreateDate) : "NIL"}</td> 
+                                                    <td>{cpData?.orderCreateDate ? cpData?.orderCreateDate : "NIL"}</td> 
                                                        </> :       
                                                        <> 
                                                     <td>Order Create Date</td>  
-                                                    <td>{cpData?.labelCreatedAt ? ChangeIsoDateToECT(cpData?.labelCreatedAt) : "NIL"}</td>  
+                                                    <td>{cpData?.labelCreatedAt ? cpData?.labelCreatedAt : "NIL"}</td>  
                                                      </>
                                                      }
                                                 </tr>
 
                                                 <tr>
                                                     <td>Activation Date</td>
-                                                    <td>{cpData?.activatedAt !== undefined ? ChangeIsoDateToECT(cpData?.activatedAt) : "NIL"}</td>
+                                                    <td>{cpData?.activatedAt !== undefined ? cpData?.activatedAt : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>

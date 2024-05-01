@@ -100,7 +100,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
           
         },
     });
-    function ApiResponseShow({ res }) {
+    function ApiResponseShow({ res }) { 
         return (
             <div className="flex flex-wrap justify-content-left ">
                 <p>{res?.msg}</p>
@@ -112,14 +112,41 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                         ))}
                     </ul>
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 w-full">
                     <p>Sim Numbers Added: {res?.data?.data?.newSimNumbers?.length}</p>
                     <ul className=" m-0 list-none">
                         {res?.data?.data?.newSimNumbers?.map((item) => (
                             <li>{item}</li>
                         ))}
                     </ul>
-                </div>
+                </div> 
+                <div className="mt-3 w-full">
+                    <p>Invalid SIMS: {res?.data?.data?.invalidSIMs?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.invalidSIMs?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>    
+                <div className="mt-3 w-full">
+                    <p>No BoxNo Added For SIMS: {res?.data?.data?.noBoxNoAddedForSIMS?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noBoxNoAddedForSIMS?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+                <div className="mt-3 w-full">
+                    <p>No Model Added For SIMs: {res?.data?.data?.noModelAddedForSIMs?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noModelAddedForSIMs?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+       
+
+                
             </div>
         );
     }
@@ -147,7 +174,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                 })
                     .then((res) => {
                         try {
-                            if (res?.data?.data?.duplicateNumbers?.length !== 0) {
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.invalidSIMs?.length !== 0 ||    res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0 ) {
                                 ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
                             } else {
                                 ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Menubar } from "primereact/menubar";
-import Axios from "axios";
+import Axios from "axios"; 
+import "./Navbar.css"
 import DialogeForWallet from "../dialogs/DialogeForWallet";
 import { Dialog } from "primereact/dialog";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +9,11 @@ import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import ChargeWallet from "../../billing_and_invoices/components/ChargeWallet";
+import { ProgressSpinner } from "primereact/progressspinner";
 const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent, setRefreshEsn }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
-    const loginRes = localStorage.getItem("userData");
+    const loginRes = localStorage.getItem("userData"); 
+    const [showSpinnerConvertToPrepaid,setShowSpinnerConvertToPrepaid]=useState(false)
     const parseLoginRes = JSON.parse(loginRes);
     const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
     const [cpData, setCpData] = useState([]);
@@ -182,8 +185,9 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    };
-    const handleConvertToPrepaid = async () => {
+    }; 
+    const handleConvertToPrepaid = async () => {     
+          setShowSpinnerConvertToPrepaid(true)
         try {
             const data = {
                 accountType: "Prepaid",
@@ -193,9 +197,11 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
             setRefreshComp(true);
             setRefreshComponent(true);
             setRefreshEsn((prev) => !prev);
-            toast.success(response?.data?.message);
+            toast.success(response?.data?.message);    
+           setShowSpinnerConvertToPrepaid(false)
         } catch (error) {
-            toast.error(error?.response?.data?.msg);
+            toast.error(error?.response?.data?.msg); 
+            setShowSpinnerConvertToPrepaid(false)
         }
     };
     const handleTrackingPackage = async (customerId) => {
@@ -227,19 +233,34 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 end={() => {
                     return (
                         <span
-                            className={`text-white p-3 cursor-pointer spanstyle }`}
-                            style={{
-                                borderRadius: "10px",
-                                backgroundColor: `${cpData?.status === "prospected" || cpData?.status === "prospect" ? "rgba(120, 4, 89, 0.82)" : "orangered"}`,
-                            }}
-                            onClick={async () => {
-                                if (cpData?.status !== "rejected") {
-                                    setChangeCustomerStatus(true);
-                                }
-                            }}
-                        >
-                            {cpData?.status}
-                        </span>
+                        className="text-white p-3 cursor-pointer spanstyle"
+                        style={{
+                            borderRadius: "10px",
+                            backgroundColor: `${
+                                cpData?.status === "active"
+                                    ? "rgb(60, 179, 113)"
+                                    : cpData?.status === "inactive"
+                                    ? "rgba(174, 0, 0, 1)"
+                                    : cpData?.status === "suspended"
+                                    ? "rgba(255, 191, 0, 1)"
+                                    : cpData?.status === "prospected"
+                                    ? "rgba(120, 4, 89, 0.82)"
+                                    : cpData?.status === "rejected"
+                                    ? "rgba(0, 0, 0, 1)"
+                                    : "orangered"
+                            }`,
+                        }}
+                        /*onClick={async () => {
+            setChangeCustomerStatus(true);
+          }}*/  
+          onClick={async () => {
+            if (cpData?.status !== "rejected") {
+                setChangeCustomerStatus(true);
+            }
+        }}
+                    >
+                        {cpData?.status}
+                    </span>
                     );
                 }}
                 className="mt-4 card border-none menubar text-xl font-semibold mx-0 bg-white mx-0 p-4"
@@ -319,18 +340,27 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
                 />
             )}
             <Dialog
-                visible={visible && cpData.accountType === "ACP"}
+                visible={visible && cpData.accountType === "ACP"}   
                 style={{ width: "30rem" }}
                 onHide={() => setVisible(false)}
                 footer={
-                    <div style={{ marginLeft: "-10rem" }}>
+                    <div style={{ marginLeft: "-10rem" }}>    
+                          
                         <Button label="Yes" onClick={handleConvertToPrepaid} />
                         <Button label="No" onClick={() => setVisible(false)} />
                     </div>
                 }
-            >
-                <p className="m-0">{confirmationMessage}</p>
-            </Dialog>
+            >   
+               {  
+                showSpinnerConvertToPrepaid ? 
+                 <div className="spinnercenter"> <ProgressSpinner/> 
+                    </div>
+                 : undefined
+                 }
+                  
+                <p className="m-0">{confirmationMessage}</p>  
+            </Dialog> 
+    
         </div>
     );
 };
