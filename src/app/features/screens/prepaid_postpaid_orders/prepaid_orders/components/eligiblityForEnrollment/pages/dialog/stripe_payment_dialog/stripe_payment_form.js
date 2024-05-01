@@ -10,7 +10,9 @@ import PaymentStripModuleAlternateCard from "../../Alternate card Dialogs/stripe
 //import AlternateCardPaymentStripModule from "../../AlternateCardAutoPay/stripe_payment_dialog/stripe_payment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function PaymentStripeForm({ plan, clientSecret, paid, object, setActiveIndex, setPaymentDialogVisibility }) {
-    const submitbuttonref = useRef(null); 
+    const submitbuttonref = useRef(null);   
+     
+      console.log("Paid is ",paid)
     const [cardNumber,setCardNumber]=useState("") 
     const [cvcNumber,setCvcNumber]=useState("") 
     const [cardMonth,setCardMonth]=("")  
@@ -352,7 +354,7 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
            invoiceDueDate: dueDate,
            lateFee: applyLateFee,
            invoiceOneTimeCharges: oneTimeCharge,
-           invoiceStatus: object.totalAmount === paid ? "Paid" : "Partial",
+           invoiceStatus: object.totalamount === paid ? "Paid" : "Partial",
            planId: plan,
            planName: planName,
            planCharges: planCharges,
