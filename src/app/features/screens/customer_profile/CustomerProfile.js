@@ -69,10 +69,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     const [showHighPriorityNotes, setShowHighPriorityNotes] = useState(false);
     const [highestPriorityNotes, setHighestPriorityNotes] = useState([]);
-    useEffect(() => { 
-
-
-        
+    useEffect(() => {         
         Axios.get(`${BASE_URL}/api/web/notes/getnotebypriority?user=${parseLoginRes?._id}&customerId=${selectedId}`)
             .then((res) => {
                 setHighestPriorityNotes(res?.data);
@@ -664,7 +661,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 <tr>
                                                     <td>Plan Activation Date</td>
 
-                                                    <td>{cpData?.activatedAt !== undefined ? ChangeIsoDateToECT(cpData?.activatedAt) : "NIL"}</td>
+                                                    <td>{cpData?.activatedAt !== undefined ? cpData?.activatedAt : "NIL"}</td>
                                                     {/*  <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>*/}
                                                 </tr>
                                                 <tr>
