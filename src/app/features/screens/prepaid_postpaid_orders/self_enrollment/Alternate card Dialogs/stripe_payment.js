@@ -11,7 +11,7 @@ export default function PaymentStripModuleAlternateCard({setAlternateCardToken,s
   let [clientSecret,setClientSecret]=useState(null)  
    
   useEffect(()=>{  
-  stripePromise  = loadStripe(process.env.REACT_APP_BASE_URL); 
+  stripePromise  = loadStripe(process.env.REACT_APP_STRIPE_KEY); 
     Axios.post(`${BASE_URL}/api/web/billing/paymentintent`,{amount:1200}).then((response)=>{ 
         
          setClientSecret(response.data.clientSecret)
