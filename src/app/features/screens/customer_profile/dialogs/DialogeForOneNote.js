@@ -123,16 +123,27 @@ const DialogeForOneNote = ({ enrollmentId, noteId, contact }) => {
                             </table>
                         </div>
                     </div>
-                    {isPreviouslyResolved(noteId) || resolvedNotes.includes(noteId) ? (
+                    {/* {isPreviouslyResolved(noteId) || resolvedNotes.includes(noteId) ? (
                         <Button className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none mt-4" label="Resolved" disabled />
                     ) : (
                         <Button onClick={() => handleResolve(noteId)} className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none mt-4">
                             Resolve
                         </Button>
+                    )} */}
+                    {parseLoginRes?.role?.role === "Admin" ? null : (
+                        <>
+                            {isPreviouslyResolved(noteId) || resolvedNotes.includes(noteId) ? (
+                                <Button className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none mt-4" label="Resolved" disabled />
+                            ) : (
+                                <Button onClick={() => handleResolve(noteId)} className="bg-blue-700 pl-2 pr-2 pt-1 pb-1 border-none mt-4">
+                                    Resolve
+                                </Button>
+                            )}
+                            {isPreviouslyResolved(noteId) || resolvedNotes.includes(noteId) ? null : <Button style={{ marginLeft: "0.5rem" }} className="bg-yellow-400 pl-2 pr-2 pt-1 pb-1 border-none" label="Pending" />}
+                        </>
                     )}
 
-                    {isPreviouslyResolved(noteId) || resolvedNotes.includes(noteId) ? null : <Button style={{ marginLeft: "0.5rem" }} className="bg-yellow-400 pl-2 pr-2 pt-1 pb-1 border-none" label="Pending" />}
-                    <Button style={{ marginLeft: "24rem" }} label="Mark Void" onClick={markVoid} />
+                    <Button style={{ marginLeft: "26rem", marginTop: "1rem" }} label="Mark Void" onClick={markVoid} />
                 </div>
             </div>
         </>
