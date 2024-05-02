@@ -111,17 +111,18 @@ const parseLoginRes = JSON.parse(loginRes);
                                     raised
                                 />
                                 <Button
-                                    label="InActivate"
+                                    label="Deactivate"
                                     onClick={() => {
                                         Axios.put(`${BASE_URL}/api/billingModel/statusUpdate`,{"billingModelId":rowData._id,
     "active": false})
                                             .then((res) => {
-                                                toast.success("Billing Model InActivated Successfully");
+                                                toast.success(res?.data?.msg !== undefined ? res?.data?.msg :"Billing Model Deactivate Successfully");
 
                                                 setRefresh((prev) => !prev);
                                             })
-                                            .catch((err) => {
-                                                toast.error("Billing Model InActivation Failed");
+                                            .catch((err) => {  
+                                                 
+                                                toast.error(err?.response?.data?.msg !== undefined ? err?.response?.data?.msg :"Billing Model Deactivation Failed" );
                                             });
                                     }}
                                     className=" p-button-primary mr-2 ml-2 pt-1 pb-1"
