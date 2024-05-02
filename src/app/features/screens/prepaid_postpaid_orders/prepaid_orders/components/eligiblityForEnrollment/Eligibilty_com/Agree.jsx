@@ -11,7 +11,6 @@ import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const dispatch = useDispatch();
-
     const [checkAll, setCheckAll] = useState(false);
     const [buttonClicked, setButtonClicked] = useState(false);
     const [isBack, setIsBack] = useState(0);
@@ -24,7 +23,6 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             .of(Yup.boolean())
             .test("at-least-one-checked", "Please Select all CheckBox", (value) => value.some((val) => val === true)),
     });
-
     const initialValues = {
         checkAll: "",
         checkbox: new Array(14).fill(false),
