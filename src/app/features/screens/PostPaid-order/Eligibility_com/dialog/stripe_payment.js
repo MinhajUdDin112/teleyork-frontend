@@ -11,7 +11,7 @@ export default function PaymentStripModule({paid,amount,object,handleNext}) {
 
   useEffect(()=>{   
      
-  stripePromise = loadStripe("pk_test_51OcirDLVLQnJs4K0bDuAGI0kOqwpv7EPz8QAHP1ck2233eZ1EtPjZHT1CWgPamZKCAlEZdhPSAQwtjBKQXgpm9zF00t20QE6EZ");
+  stripePromise = loadStripe(process.env.REACT_APP_BASE_URL);
     Axios.post(`${BASE_URL}/api/web/billing/paymentintent`,{amount:parseFloat(paid).toFixed(2)}).then((response)=>{ 
      
      setClientSecret(response.data.clientSecret)
