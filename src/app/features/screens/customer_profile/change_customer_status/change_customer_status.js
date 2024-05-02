@@ -363,7 +363,6 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
             toast.error("Please Select Status OR Type");
         }
     };
-    console.log("cpdata", cpData);
     return (
         <div className="flex flex-wrap flex-row justify-content-around ">
             {/* <div>
@@ -464,7 +463,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     onChange={(e) => {
                         setConnectionType(e.value);
                     }}
-                    options={statusTo === "suspended" && cpData?.status === "active" ? connectionExternally : connectionTypeOption}
+                    options={(statusTo === "suspended" && cpData?.status === "active") || statusTo === "disconnected" ? connectionExternally : connectionTypeOption}
                     placeholder="Select Account Type"
                 />
             </div>
