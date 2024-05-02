@@ -92,6 +92,12 @@ const statusOption = [
         value: "disconnected",
     },
 ];
+const connectionExternally = [
+    {
+        label: "Externally",
+        value: "Externally",
+    },
+];
 const connection = [
     {
         label: "Select Account Type",
@@ -106,4 +112,4 @@ const connection = [
         value: "Internally",
     },
 ];
-export { TransferException, statusOption, prospectStatusOptions, activeStatusOptions, suspendStatusOptions, disconnectStatusOptions, connection };
+export { TransferException, statusOption, prospectStatusOptions, activeStatusOptions, suspendStatusOptions, disconnectStatusOptions, connection, connectionExternally };
