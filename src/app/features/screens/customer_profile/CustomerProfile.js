@@ -283,7 +283,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar setRefreshWholeCustomerData={setRefreshWholeCustomerData} refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} setRefreshEsn={setRefreshEsn} />
+                <BillingNavbar setRefreshWholeCustomerData={setRefreshWholeCustomerData} refreshNotificationcomponent={refreshNotificationcomponent} refreshEsn={refreshEsn} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} setRefreshEsn={setRefreshEsn} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
                     <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} setRefreshNotes={setRefreshNotes} />
                 </Dialog>
@@ -802,7 +802,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                             </>
                                                         ) : (
                                                             <>
-                                                                <td>Order Create Date</td>
+                                                                <td>Order Create Date</td> 
                                                                 <td>{cpData?.orderCreateDate ? cpData?.orderCreateDate : "NIL"}</td>
                                                             </>
                                                         )
