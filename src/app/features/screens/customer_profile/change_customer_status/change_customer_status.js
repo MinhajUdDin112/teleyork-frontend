@@ -6,7 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import React, { useState, useRef, useEffect } from "react";
-import { TransferException, statusOption, prospectStatusOptions, activeStatusOptions, suspendStatusOptions, disconnectStatusOptions, connection } from "./dropdown_options/options";
+import { TransferException, statusOption, prospectStatusOptions, activeStatusOptions, suspendStatusOptions, disconnectStatusOptions, connection, connectionExternally } from "./dropdown_options/options";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, setRefreshEsn }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +38,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     setChangeCustomerStatus(false);
                     const successMessage = response?.data?.msg || "Success label Printed";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                 })
                 .catch((error) => {
@@ -57,7 +59,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     setChangeCustomerStatus(false);
                     const successMessage = response?.data?.msg || "Successfully Pre shipped";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
@@ -80,7 +84,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     setChangeCustomerStatus(false);
                     const successMessage = response?.data?.msg || "Success In ";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
@@ -103,7 +109,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     setChangeCustomerStatus(false);
                     const successMessage = response?.data?.msg || "Successfully delivered";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
@@ -115,7 +123,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     setIsLoading(false);
                 });
             setIsLoading(false);
-        } else if (statusTo === "active" && connectionType == "Internally") {
+        } else if (statusTo === "active" && cpData?.status === "prospect" && connectionType == "Internally") {
             setIsLoading(true);
             const dataToSend = {
                 customerId: cpData?._id,
@@ -127,7 +135,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     setChangeCustomerStatus(false);
                     const successMessage = response?.data?.msg || "Successfully Active";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
@@ -151,7 +161,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     setChangeCustomerStatus(false);
                     const successMessage = response?.data?.msg || "Successfully evaluated";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
                     setIsLoading(false);
@@ -161,7 +173,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                 // toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
                 setIsLoading(false);
             }
-        } else if (statusTo === "active" && connectionType === "Externally") {
+        } else if (statusTo === "active" && cpData?.status === "prospect" && connectionType === "Externally") {
             setIsLoading(true);
             const dataToSend = {
                 enrollmentId: cpData?._id,
@@ -175,7 +187,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                 if (response?.status === 200 || response?.status === 201) {
                     const successMessage = response?.data?.msg || "Successfully active";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Activated" });
                     setIsLoading(false);
@@ -194,7 +208,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                 .then((response) => {
                     const successMessage = response?.data?.msg || "Successfully reconnected";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
                     setIsLoading(false);
                 })
@@ -211,7 +227,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                 .then((response) => {
                     const successMessage = response?.data?.msg || "Success reconnected";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
                     setIsLoading(false);
@@ -230,7 +248,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     .then((response) => {
                         const successMessage = response?.data?.msg || "Successfully disconnected";
                         toast.success(successMessage);
-                        setRefreshEsn((prev) => !prev);
+                        setTimeout(() => {
+                            setRefreshEsn((prev) => !prev);
+                        }, 1000);
 
                         // toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Disconnected" });
                         setIsLoading(false);
@@ -255,7 +275,9 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     .then((response) => {
                         const successMessage = response?.data?.msg || "Successfully Disconnected";
                         toast.success(successMessage);
-                        setRefreshEsn((prev) => !prev);
+                        setTimeout(() => {
+                            setRefreshEsn((prev) => !prev);
+                        }, 1000);
 
                         // toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Disconnected" });
                         setIsLoading(false);
@@ -272,15 +294,16 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
         } else if (statusTo === "suspended" && connectionType === "Internally") {
             setIsLoading(true);
             const dataToSend = {
-                customerId: cpData?._id,
-                status: statusTo,
+                enrollmentId: cpData?._id,
             };
 
-            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+            Axios.post(`${BASE_URL}/api/user/HotlineMdnByPwg`, dataToSend)
                 .then((response) => {
                     const successMessage = response?.data?.msg || "Successfully Suspended";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     setIsLoading(false);
                 })
@@ -293,15 +316,39 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
         } else if (statusTo === "suspended" && connectionType === "Externally") {
             setIsLoading(true);
             const dataToSend = {
-                customerId: cpData?._id,
-                status: statusTo,
+                enrollmentId: cpData?._id,
             };
 
-            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+            Axios.post(`${BASE_URL}/api/user/HotlineMdnByPwg`, dataToSend)
                 .then((response) => {
                     const successMessage = response?.data?.msg || "Successfully suspended";
                     toast.success(successMessage);
-                    setRefreshEsn((prev) => !prev);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
+
+                    // toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Disconnected" });
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
+                    // toast.current.show({ severity: "error", summary: "Customer Status", detail: errorMessage });
+                    setIsLoading(false);
+                });
+        } else if (cpData?.status === "suspended" && statusTo === "active" && connectionType === "Externally") {
+            setIsLoading(true);
+            const dataToSend = {
+                enrollmentId: cpData?._id,
+            };
+
+            Axios.post(`${BASE_URL}/api/user/removeHotline`, dataToSend)
+                .then((response) => {
+                    const successMessage = response?.data?.msg || "Successfully suspended";
+                    toast.success(successMessage);
+                    setTimeout(() => {
+                        setRefreshEsn((prev) => !prev);
+                    }, 10);
 
                     // toast.current.show({ severity: "Success", summary: "Customer Status", detail: "Successfully Disconnected" });
                     setIsLoading(false);
@@ -316,6 +363,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
             toast.error("Please Select Status OR Type");
         }
     };
+    console.log("cpdata", cpData);
     return (
         <div className="flex flex-wrap flex-row justify-content-around ">
             {/* <div>
@@ -407,7 +455,20 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     </div>
                 </>
             ) : undefined}
-            {statusTo === "prospect" || statusTo === "disconnected" || statusTo === "active" || statusTo === "suspended" || statusTo === "reconnect" ? (
+            {statusTo === "suspended" && cpData?.status === "active" ? (
+                <div>
+                    <label className="block mt-4">Connection Type:</label>
+                    <Dropdown
+                        className="field-width mt-3"
+                        value={connectionExternally}
+                        onChange={(e) => {
+                            setConnectionType(e.value);
+                        }}
+                        options={connectionTypeOption}
+                        placeholder="Select Account Type"
+                    />
+                </div>
+            ) : (
                 <div>
                     <label className="block mt-4">Connection Type:</label>
                     <Dropdown
@@ -420,8 +481,6 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                         placeholder="Select Account Type"
                     />
                 </div>
-            ) : (
-                ""
             )}
 
             <div className="align-self-center mt-4">
