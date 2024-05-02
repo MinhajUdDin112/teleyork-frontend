@@ -16,7 +16,7 @@ export default function WalletPaymentStripModule({setRefresh,setPaymentDialogVis
   let [clientSecret,setClientSecret]=useState(null)  
   let [amountToPaid,setAmountToPaid]=useState("")
   useEffect(()=>{   
-    stripePromise = loadStripe(process.env.REACT_APP_BASE_URL);
+    stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
                
 
   },[])

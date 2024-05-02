@@ -208,19 +208,19 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                 .then((response) => {
                     const successMessage = response?.data?.msg || "Successfully reconnected";
                     toast.success(successMessage);
+                    setIsLoading(false);
                     setTimeout(() => {
                         setRefreshEsn((prev) => !prev);
                     }, 10);
                     // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Reconnected" });
-                    setIsLoading(false);
                 })
                 .catch((error) => {
-                    const errorMessage = error.response?.data?.error?.message || "Reconnecting Failed";
+                    console.log(error);
+                    const errorMessage = error.response?.data?.error?.message ? error.response?.data?.error?.message : error.response?.data?.msg ? error.response?.data?.msg : "Reconnecting Failed";
                     toast.error(errorMessage);
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Reconnection Failed" });
                     setIsLoading(false);
                 });
-            setIsLoading(false);
         } else if (statusTo === "reconnect" && connectionType === "Internally") {
             setIsLoading(true);
             Axios.post(`${BASE_URL}/api/user/reConnectMdn`, { enrollmentId: cpData?._id })
@@ -455,33 +455,19 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     </div>
                 </>
             ) : undefined}
-            {statusTo === "suspended" && cpData?.status === "active" ? (
-                <div>
-                    <label className="block mt-4">Connection Type:</label>
-                    <Dropdown
-                        className="field-width mt-3"
-                        value={connectionExternally}
-                        onChange={(e) => {
-                            setConnectionType(e.value);
-                        }}
-                        options={connectionTypeOption}
-                        placeholder="Select Account Type"
-                    />
-                </div>
-            ) : (
-                <div>
-                    <label className="block mt-4">Connection Type:</label>
-                    <Dropdown
-                        className="field-width mt-3"
-                        value={connectionType}
-                        onChange={(e) => {
-                            setConnectionType(e.value);
-                        }}
-                        options={connectionTypeOption}
-                        placeholder="Select Account Type"
-                    />
-                </div>
-            )}
+
+            <div>
+                <label className="block mt-4">Connection Type:</label>
+                <Dropdown
+                    className="field-width mt-3"
+                    value={connectionType}
+                    onChange={(e) => {
+                        setConnectionType(e.value);
+                    }}
+                    options={statusTo === "suspended" && cpData?.status === "active" ? connectionExternally : connectionTypeOption}
+                    placeholder="Select Account Type"
+                />
+            </div>
 
             <div className="align-self-center mt-4">
                 <Button onClick={UpdateStatus} label="Update Status " className="field-width mt-4" disabled={isLoading} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
