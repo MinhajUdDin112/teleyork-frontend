@@ -69,8 +69,11 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
     const [showHighPriorityNotes, setShowHighPriorityNotes] = useState(false);
     const [highestPriorityNotes, setHighestPriorityNotes] = useState([]);
-    useEffect(() => {
-        Axios.get(`${BASE_URL}/api/web/notes/getnotebypriority?user=${parseLoginRes?._id}`)
+    useEffect(() => { 
+
+
+        
+        Axios.get(`${BASE_URL}/api/web/notes/getnotebypriority?user=${parseLoginRes?._id}&customerId=${selectedId}`)
             .then((res) => {
                 setHighestPriorityNotes(res?.data);
                 if (res?.data.length > 0) {
