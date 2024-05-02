@@ -489,7 +489,7 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     onChange={(e) => {
                         setConnectionType(e.value);
                     }}
-                    options={(statusTo === "suspended" && statusTo === "disconnected") || (statusTo === "disconnected" ) ? connectionExternally : connectionTypeOption}
+                    options={statusTo === "suspended" && cpData?.status === "active" ? connectionExternally : connectionTypeOption}
                     placeholder="Select Account Type"
                 />
             </div>
