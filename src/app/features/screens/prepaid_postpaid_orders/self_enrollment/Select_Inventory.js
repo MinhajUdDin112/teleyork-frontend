@@ -93,8 +93,6 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
             customerid: _id,
             type: "Sign Up ",
             discounts: "",
-            prospectwithinvoice: false,
-            prospectwithoutinvoice: false
         },
         onSubmit: async (values, actions) => {
             if (formik.values.prospectwithoutinvoice || formik.values.prospectwithinvoice) {
@@ -224,7 +222,9 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
             formik.setFieldValue("totalamount", paymentInfo.totalAmount);
         }
     }, []); 
-
+   useEffect(()=>{ 
+         formik.setFieldValue("paid",formik.values.totalamount)
+   },[formik.values.totalamount])
     const optionsForPayment = [
         { label: "Select ", value: "" },
         { label: "Credit/Debit card", value: "card" },
@@ -399,55 +399,7 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
                                 {currentScreen === 3 ? (
                                     <div className="w-full flex flex-wrap flex-row justify-content-left w-full">
 
-                                        <div className="flex w-full flex-wrap flex-row justify-content-left ">
-                                            <p
-                                                className={`prospectbutton ${propectWithInvoice ? "prospectactive" : ""}`}
-                                                onClick={() => {
-                                                    formik.setFieldValue("paymentMode", "")
-                                                    formik.setFieldValue("prospectwithoutinvoice", false)
-                                                    setpaymentmethoderror(false)
-                                                    if(propectWithInvoice){
-                                                        setProspectWithInvoice(false);  
-                                                        
-                                                        formik.setFieldValue("prospectwithinvoice", false) 
-                                                         } 
-                                                         else{ 
-                                                               
-                                                        setProspectWithInvoice(true);  
-                                                         
-                                                        formik.setFieldValue("prospectwithinvoice", true) 
-                                                         }
-                                                    setProspectWithOutInvoice(false);
-                                                }}
-                                            >
-                                                {" "}
-                                                Save As Prospect With Invoice
-                                            </p>
-
-                                            <p
-                                                onClick={() => {
-                                                    formik.setFieldValue("paymentMode", "")
-                                                    setpaymentmethoderror(false)
-                                                    formik.setFieldValue("prospectwithinvoice", false)
-                                                    if(propectWithOutInvoice){
-                                                        setProspectWithOutInvoice(false);  
-                                                        
-                                                        formik.setFieldValue("prospectwithoutinvoice", false) 
-                                                         } 
-                                                         else{ 
-                                                               
-                                                        setProspectWithOutInvoice(true);  
-                                                        formik.setFieldValue("paid","")
-                                                        formik.setFieldValue("prospectwithoutinvoice", true) 
-                                                         }
-                                                    setProspectWithInvoice(false);
-                                                }}
-                                                className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""}`}
-                                            >
-                                                {" "}
-                                                Save As Prospect WithOut Invoice
-                                            </p>
-                                        </div>
+                                      
 
                                         <div className="mt-2  fieldinpayment">
                                             <label className="block">Select Additional Feature</label>
@@ -641,7 +593,7 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
                                             <div className="mt-2 fieldinpayment">
                                                 <label className="block">Paying Amount</label>
                                                 <InputText
-                                                    disabled={paymentInfo ? true : false}
+                                                    disabled={true}
                                                     className="w-full mt-2"
                                                     id="paid"
                                                     value={formik.values.paid}
@@ -677,11 +629,7 @@ const [paidAmountRequired,setPaidAmountRequired]=useState(false)
                                                     formik.setFieldValue("paymentMode", e.value);
                                                     formik.handleChange(e);
                                                     setpaymentmethoderror(false)
-                                                    setProspectWithOutInvoice(false);
-                                                    formik.setFieldValue("prospectwithoutinvoice", false)
-
-                                                    formik.setFieldValue("prospectwithinvoice", false)
-                                                    setProspectWithInvoice(false);
+                                              
                                                     /* if (e.value === "card") {
                                                 setPaymentDialogVisibility(true);
                                             }*/
