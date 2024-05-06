@@ -143,8 +143,8 @@ export const AppTopbar = (props) => {
             >
                 {capitalCompanyName?.includes("IJ") ? (
                     <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
-                        <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                        <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+                        <img className="w-13rem h-8rem ml-4" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
+                    
                     </Link>
                 ) : capitalCompanyName.includes("ZISFONE") ? (
                     <Link
@@ -153,7 +153,6 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-
                             props.setSearchByValueClick(false);
                         }}
                     >
@@ -178,8 +177,8 @@ export const AppTopbar = (props) => {
                             props.setSearchByValueClick(false);
                         }}
                     >
-                        <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                        <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+                        <img className="w-9rem h-4rem ml-4" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
+                        
                     </Link>
                 ) : capitalCompanyName.includes("ZISFONE") ? (
                     <Link
