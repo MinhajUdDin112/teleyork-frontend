@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {  useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -8,13 +8,13 @@ import { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
-import {  ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import classNames from "classnames";
 import moment from "moment/moment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const DialogeForInfoEdit=({cpData,setRefresh,setIsEdit})=>{
+const DialogeForInfoEdit = ({ cpData, setRefresh, setIsEdit }) => {
     const [checkdoberror, setCheckDOBError] = useState(false);
     const startYear = 1900;
     const endYear = new Date().getFullYear();
@@ -40,9 +40,8 @@ const DialogeForInfoEdit=({cpData,setRefresh,setIsEdit})=>{
         { label: "Nov-11", value: 11 },
         { label: "Dec-12", value: 12 },
     ];
-  
+
     const [isLoading, setIsLoading] = useState(false);
-    const [isDuplicate, setIsDuplicate] = useState(false);
     const [dayerror, setDayError] = useState(false);
     const [montherror, setMonthError] = useState(false);
     const [yearerror, setYearError] = useState(false);
@@ -70,8 +69,8 @@ const DialogeForInfoEdit=({cpData,setRefresh,setIsEdit})=>{
             day: null,
             contact: "",
             email: "",
-            maidenMotherName:"",
-            alternateContact:"",
+            maidenMotherName: "",
+            alternateContact: "",
             address1: "",
             address2: " ",
             zip: "",
@@ -88,19 +87,18 @@ const DialogeForInfoEdit=({cpData,setRefresh,setIsEdit})=>{
             } else {
                 const dateObject = new Date(selectedYear, formik.values.month - 1, formik.values.day);
                 const isoString = dateObject.toISOString();
-                const selectedDate = isoString; 
+                const selectedDate = isoString;
                 const formattedDate = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : "";
-              
+
                 const dataToSend = {
-                   
                     firstName: formik.values.firstName,
                     lastName: formik.values.lastName,
                     SSN: formik.values.SSN,
                     DOB: formattedDate,
                     contact: formik.values.contact,
                     email: formik.values.email,
-                    maidenMotherName:formik.values.maidenMotherName,
-                    alternateContact:formik.values.alternateContact,
+                    maidenMotherName: formik.values.maidenMotherName,
+                    alternateContact: formik.values.alternateContact,
                     address1: formik.values.address1,
                     address2: formik.values.address2,
                     zip: formik.values.zip,
@@ -115,17 +113,16 @@ const DialogeForInfoEdit=({cpData,setRefresh,setIsEdit})=>{
                 setIsLoading(true);
                 try {
                     const response = await Axios.patch(`${BASE_URL}/api/user?enrollmentId=${cpData?._id}`, dataToSend);
-                    if (response?.status === 200 || response?.status === 201) {  
-                        toast.success("information Updated Successfully"); 
-                        localStorage.removeItem("basicData")
-                        localStorage.removeItem("address")
-                        setTimeout(()=>{
-setRefresh(true)
-setIsEdit(false)
-                        },[1000])
+                    if (response?.status === 200 || response?.status === 201) {
+                        toast.success("information Updated Successfully");
+                        localStorage.removeItem("basicData");
+                        localStorage.removeItem("address");
+                        setTimeout(() => {
+                            setRefresh(true);
+                            setIsEdit(false);
+                        }, [1000]);
                     }
                 } catch (error) {
-                    
                     toast.error(error?.response?.data?.msg[0]);
                     setIsLoading(false);
                 }
@@ -138,7 +135,7 @@ setIsEdit(false)
     const getFormErrorMessage = (name) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
-  
+
     const [dayoption, setDayOptions] = useState(null);
     useEffect(() => {
         if (formik.values.month === 1 || formik.values.month === 3 || formik.values.month === 5 || formik.values.month === 7 || formik.values.month === 8 || formik.values.month === 10 || formik.values.month === 12) {
@@ -212,9 +209,8 @@ setIsEdit(false)
                             setSelectedDay(28);
                         }
 
-                      
                         const dateObject = new Date(formik.values.year, formik.values.month - 1, formik.values.day);
-                      
+
                         const isoString = dateObject.toISOString();
                         formik.setFieldValue("DOB", isoString);
                     } else {
@@ -265,14 +261,13 @@ setIsEdit(false)
         }
     }
 
-
     //check customer Duplication
 
     // useEffect(() => {
     //     const fetchData = async () => {
-          
+
     //         if (parsezipResponse && !basicResponse) {
-    //             if (formik.values.contact.length > 9 ) {           
+    //             if (formik.values.contact.length > 9 ) {
     //         const data = {
     //             contact: formik.values.contact,
     //             accountType:"Postpaid",
@@ -283,9 +278,9 @@ setIsEdit(false)
     //             setIsDuplicate(false);
     //         } catch (error) {
     //             toast.error(error?.response?.data?.msg);
-    //         setIsDuplicate(true);        
+    //         setIsDuplicate(true);
     //     }
-                  
+
     //             }
     //         }
     //     };
@@ -295,9 +290,9 @@ setIsEdit(false)
 
     // useEffect(() => {
     //     const fetchData = async () => {
-          
+
     //         if (parsezipResponse && !basicResponse) {
-    //             if (formik.values.alternateContact.length > 9 ) {           
+    //             if (formik.values.alternateContact.length > 9 ) {
     //         const data = {
     //             contact: "",
     //             accountType:"Postpaid",
@@ -308,9 +303,9 @@ setIsEdit(false)
     //             setIsDuplicate(false);
     //         } catch (error) {
     //             toast.error(error?.response?.data?.msg);
-    //         setIsDuplicate(true);        
+    //         setIsDuplicate(true);
     //     }
-                  
+
     //             }
     //         }
     //     };
@@ -339,8 +334,8 @@ setIsEdit(false)
             formik.setFieldValue("year", new Date(parsebasicResponse?.DOB).getFullYear());
             formik.setFieldValue("email", parsebasicResponse?.email);
             formik.setFieldValue("contact", parsebasicResponse?.contact);
-            formik.setFieldValue("maidenMotherName",parsebasicResponse?.maidenMotherName);
-            formik.setFieldValue("alternateContact",parsebasicResponse?.alternateContact)
+            formik.setFieldValue("maidenMotherName", parsebasicResponse?.maidenMotherName);
+            formik.setFieldValue("alternateContact", parsebasicResponse?.alternateContact);
         }
     }, []);
     useEffect(() => {
@@ -357,15 +352,13 @@ setIsEdit(false)
             formik.setFieldValue("mailingState", parseaddressResponse?.mailingState);
         }
     }, []);
-    
 
-    return(
+    return (
         <>
-        <form onSubmit={formik.handleSubmit}>
-            <ToastContainer/>
-          <div className="p-fluid p-formgrid grid mb-3">
-        
-          <div className="field col-12 md:col-3">
+            <form onSubmit={formik.handleSubmit}>
+                <ToastContainer />
+                <div className="p-fluid p-formgrid grid mb-3">
+                    <div className="field col-12 md:col-3">
                         <label className="field_label">
                             First Name <span className="steric">*</span>
                         </label>
@@ -401,7 +394,7 @@ setIsEdit(false)
                         />
                         {getFormErrorMessage("lastName")}
                     </div>
-                    
+
                     <div className="field col-12 md:col-3">
                         <label className="field_label">
                             SSN <span className="steric">*</span> <small>(Last 4 Digits)</small>
@@ -410,24 +403,14 @@ setIsEdit(false)
                         {getFormErrorMessage("SSN")}
                     </div>
                     <div className="field col-12 md:col-3">
-                        <label className="field_label">
-                        Mother's Maiden Name 
-                        </label>
-                        <InputText
-                            id="maidenMotherName"
-                            value={formik.values.maidenMotherName}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            style={{ textTransform: "uppercase" }}
-                        />
-                        
+                        <label className="field_label">Mother's Maiden Name</label>
+                        <InputText id="maidenMotherName" value={formik.values.maidenMotherName} onChange={formik.handleChange} onBlur={formik.handleBlur} style={{ textTransform: "uppercase" }} />
                     </div>
                     <div className="field col-12 md:col-6">
                         <label className="field_label">
                             DOB <span className="steric">*</span> <small>(MM/DD/YYYY)</small>
                         </label>
                         <div className="flex flex-wrap  justify-content-center flex-row">
-
                             <Dropdown
                                 placeholder="Month"
                                 value={formik.values.month}
@@ -441,7 +424,7 @@ setIsEdit(false)
                                     formik.handleChange(e);
 
                                     formik.handleChange(e);
-                                   
+
                                     setSelectedMonth(e.value);
                                 }}
                                 options={monthOptions}
@@ -559,26 +542,16 @@ setIsEdit(false)
                     </div>
                     <div className="field col-12 md:col-3">
                         <label className="field_label" htmlFor="contact">
-                           Alternate Contact 
+                            Alternate Contact
                         </label>
 
-                        <InputText
-                            onChange={formik.handleChange}
-                            id="alternateContact"
-                            value={formik.values.alternateContact}
-                            onBlur={formik.handleBlur}
-                            
-                            minLength={10}
-                            maxLength={10}
-                            keyfilter={/^[0-9]*$/}
-                            pattern="^(?!1|0|800|888|877|866|855|844|833).*$"
-                        />
+                        <InputText onChange={formik.handleChange} id="alternateContact" value={formik.values.alternateContact} onBlur={formik.handleBlur} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} pattern="^(?!1|0|800|888|877|866|855|844|833).*$" />
                     </div>
                     <div className="field col-12 md:col-3">
-                    <label className="field_label" htmlFor="address1">
+                        <label className="field_label" htmlFor="address1">
                             Address 1 <span style={{ color: "red" }}>*</span>
-                            </label>
-                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur}  minLength={10} autoComplete="new-password" />
+                        </label>
+                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} minLength={10} autoComplete="new-password" />
                         {formik.touched.address1 && formik.errors.address1 ? (
                             <p className="mt-0" style={{ color: "red" }}>
                                 {formik.errors.address1}
@@ -586,69 +559,58 @@ setIsEdit(false)
                         ) : null}
                     </div>
                     <div className="field col-12 md:col-3">
-                    <label className="field_label" htmlFor="address2">Address 2 </label>
+                        <label className="field_label" htmlFor="address2">
+                            Address 2{" "}
+                        </label>
                         <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} autoComplete="new-password" />
                     </div>
                     <div className="field col-12 md:col-3">
                         <label className="field_label" htmlFor="city">
                             City <span style={{ color: "red" }}>*</span>
                         </label>
-                        <InputText type="text" value={formik.values.city} className={classNames({ "p-invalid": isFormFieldValid("city") }, "input_text")}  onChange={formik.handleChange} name="city"   />
+                        <InputText type="text" value={formik.values.city} className={classNames({ "p-invalid": isFormFieldValid("city") }, "input_text")} onChange={formik.handleChange} name="city" />
                         {getFormErrorMessage("city")}
                     </div>
-                    
-                          <div className="field col-12 md:col-3">
-                                <label  className="field_label" htmlFor="state">
-                                    State <span style={{ color: "red" }}>*</span>
-                                </label>
-                                <InputText type="text" value={formik.values.state} name="state"  className={classNames({ "p-invalid": isFormFieldValid("state") }, "input_text")} onChange={formik.handleChange} />
-                                {getFormErrorMessage("state")}
-                            </div> 
 
-                            
-                           <div className="field col-12 md:col-3">
-                           <label  className="field_label" htmlFor="zip">
-                                    Zip Code <span style={{ color: "red" }}>*</span>
-                                </label>
-                                <InputText value={formik.values.zip} name="zip" className={classNames({ "p-invalid": isFormFieldValid("zip") }, "input_text")}   onChange={formik.handleChange} />
-                                {getFormErrorMessage("zip")}
-                            </div> 
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                   Maiiling Address 1 
-                                </label>
-                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className= "input_text"autoComplete="new-password" />
-                               
-                            </div>
-                           
-                       <div className="field col-12 md:col-3">
-                            <label className="field_label">
-                                City 
-                            </label>
-                            <InputText id="mailingCity" value={formik.values.mailingCity}    className="" />
-                        </div>
-                           <div className="field col-12 md:col-3">
-                            <label className="field_label">
-                                State 
-                            </label>
-                            <InputText id="mailingState" value={formik.values.mailingState} onChange={formik.handleChange}  className="" />
-                        </div> 
-                
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
-                                    Zip Code 
-                                </label>
-                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className ="input_text" keyfilter={/^\d{0,5}$/} maxLength={5} />
-                              
-                            </div>
-                            
-         
-          </div>
-          <div className="text-right">
-                                <Button label="Update" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading}/>
-                            </div>
-                            </form>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label" htmlFor="state">
+                            State <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <InputText type="text" value={formik.values.state} name="state" className={classNames({ "p-invalid": isFormFieldValid("state") }, "input_text")} onChange={formik.handleChange} />
+                        {getFormErrorMessage("state")}
+                    </div>
+
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label" htmlFor="zip">
+                            Zip Code <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <InputText value={formik.values.zip} name="zip" className={classNames({ "p-invalid": isFormFieldValid("zip") }, "input_text")} onChange={formik.handleChange} />
+                        {getFormErrorMessage("zip")}
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">Maiiling Address 1</label>
+                        <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className="input_text" autoComplete="new-password" />
+                    </div>
+
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">City</label>
+                        <InputText id="mailingCity" value={formik.values.mailingCity} className="" />
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">State</label>
+                        <InputText id="mailingState" value={formik.values.mailingState} onChange={formik.handleChange} className="" />
+                    </div>
+
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">Zip Code</label>
+                        <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className="input_text" keyfilter={/^\d{0,5}$/} maxLength={5} />
+                    </div>
+                </div>
+                <div className="text-right">
+                    <Button label="Update" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
+                </div>
+            </form>
         </>
-    )
-}
-export default DialogeForInfoEdit
+    );
+};
+export default DialogeForInfoEdit;

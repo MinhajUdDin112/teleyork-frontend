@@ -12,12 +12,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
 import moment from "moment/moment";
-
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-
 const PersonalInfo = () => {
     const navigate = useNavigate();
-
      let storedData = JSON.parse(localStorage.getItem("zip"))
      var id;
     let homeData = JSON.parse(localStorage.getItem("initialInformation"))

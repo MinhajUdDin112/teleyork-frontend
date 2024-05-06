@@ -7,7 +7,6 @@ import { Dropdown } from "primereact/dropdown";
 import { Column } from "primereact/column"; 
 let objforfields=[]
 export default function FormConfigure(){    
-     console.log("Obj For Fields",objforfields)
     
    const [showAddNewField,setShowAddNewField]=useState(false)  
    const [refresh,setRefresh]=useState(false)   

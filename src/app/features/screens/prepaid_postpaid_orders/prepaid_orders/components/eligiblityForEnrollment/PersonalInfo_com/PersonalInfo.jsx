@@ -74,8 +74,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             ESim: "",
             bestWayToReach: "",
             salesChannel: "",
-            accountType: "Prepaid", 
-            isACP:false
+            accountType: "Prepaid",
+            maidenMotherName: "",
+            alternateContact: "",
+            isACP: false,
         },
         onSubmit: async (values, actions) => {
             if (selectedDay === null || selectedYear === null || selectedMonth === null) {
@@ -88,8 +90,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 const userId = _id;
                 const dataToSend = {
                     csr: csr,
-                    userId: userId, 
-                    isACP:formik.values.isACP,
+                    userId: userId,
+                    isACP: formik.values.isACP,
                     firstName: formik.values.firstName,
                     middleName: formik.values.middleName,
                     lastName: formik.values.lastName,
@@ -103,13 +105,21 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     bestWayToReach: formik.values.bestWayToReach,
                     salesChannel: formik.values.salesChannel,
                     accountType: formik.values.accountType,
-                };
+                    maidenMotherName: formik.values.maidenMotherName,
+                    alternateContact: formik.values.alternateContact,
+                };  
+                 if(localStorage.getItem("izZipVerified") === "yes"){ 
+   dataToSend.izZipVerified=true
+                 } 
+                 else{ 
+                    dataToSend.izZipVerified=false
+                 }
                 setIsLoading(true);
                 try {
                     const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
                     if (response?.status === 200 || response?.status === 201) {
                         localStorage.setItem("prepaidbasicData", JSON.stringify(response.data));
-                        toast.success("information saved Successfully");
+                        toast.success("Information Saved Successfully");
                         handleNext();
                     }
                 } catch (error) {
@@ -119,7 +129,18 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             }
         },
     });
-
+    // useEffect(() => {
+    //     const data = {
+    //         accountType: formik.values.accountType,
+    //         contact: formik.values.contact,
+    //         alternateContact: formik.values.alternateContact,
+    //     };
+    //     const checkNumber = async () => {
+    //         const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+    //         console.log("res", response?.data);
+    //     };
+    //     checkNumber();
+    // }, [formik.values.contact]);
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
     }, [eSim]);
@@ -275,24 +296,45 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
     //check customer Duplication
     useEffect(() => {
         const fetchData = async () => {
-            if (parsezipResponse && !basicResponse) {
-                if (formik.values.contact.length > 9) {
-                    const data = {
-                        contact: formik.values.contact,
-                    };
+            const data = {
+                accountType: formik.values.accountType,
+                contact: formik.values.contact,
+                alternateContact: formik.values.alternateContact,
+                customerId: _id,
+            };
 
-                    try {
-                        const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                        setIsDuplicate(false);
-                    } catch (error) {
-                        toast.error(error?.response?.data?.msg);
-                        setIsDuplicate(true);
-                    }
-                }
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                setIsDuplicate(false);
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+                setIsDuplicate(true);
             }
         };
         fetchData();
     }, [formik.values.contact]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (parsezipResponse && !basicResponse) {
+    //             if (formik.values.contact.length > 9) {
+    //                 const data = {
+    //                     accountType: formik.values.accountType,
+    //                     contact: formik.values.contact,
+    //                     alternateContact: formik.values.alternateContact,
+    //                 };
+
+    //                 try {
+    //                     const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+    //                     setIsDuplicate(false);
+    //                 } catch (error) {
+    //                     toast.error(error?.response?.data?.msg);
+    //                     setIsDuplicate(true);
+    //                 }
+    //             }
+    //         }
+    //     };
+    //     fetchData();
+    // }, [formik.values.contact]);
     useEffect(() => {
         const dobString = parsebasicResponse?.data?.DOB;
         if (dobString) {
@@ -315,6 +357,9 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("ESim", parsebasicResponse?.data?.ESim);
             formik.setFieldValue("bestWayToReach", parsebasicResponse?.data?.bestWayToReach);
             formik.setFieldValue("salesChannel", parsebasicResponse?.data?.salesChannel);
+            formik.setFieldValue("maidenMotherName", parsebasicResponse?.data?.maidenMotherName);
+            formik.setFieldValue("alternateContact", parsebasicResponse?.data?.alternateContact);
+
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
         }
@@ -394,7 +439,7 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         {getFormErrorMessage("salesChannel")}
                     </div>
                 </div>
-                <p>To apply for the Affordable Connectivity program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
+                <p>To apply for the Prepaid Program, complete all sections of this form, initial each agreement statement, and sign the final page.</p>
                 <p className="text-xl font-semibold">What is your full legal name?</p>
                 <p>Please provide the name that appears on official documents such as your Social Security Card or State ID, not a nickname.</p>
 
@@ -462,6 +507,10 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         <InputText type="text" id="SSN" value={formik.values.SSN} onChange={formik.handleChange} onBlur={formik.handleBlur} className={classNames({ "p-invalid": isFormFieldValid("SSN") }, "input_text")} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                         {getFormErrorMessage("SSN")}
                     </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label">Mother's Maiden Name</label>
+                        <InputText id="maidenMotherName" value={formik.values.maidenMotherName} onChange={formik.handleChange} onBlur={formik.handleBlur} style={{ textTransform: "uppercase" }} />
+                    </div>
 
                     <div className="field col-12 md:col-6">
                         <label className="field_label">
@@ -471,7 +520,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             <Dropdown
                                 placeholder="Month"
                                 value={formik.values.month}
-                                id="month"
+                                id="month" 
+                                filter
                                 onChange={(e) => {
                                     if (selectedYear !== null && selectedDay !== null) {
                                         setCheckDOBError(false);
@@ -489,7 +539,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             <Dropdown
                                 placeholder="Day"
                                 value={formik.values.day}
-                                id="day"
+                                id="day" 
+                                filter
                                 onChange={(e) => {
                                     if (selectedYear !== null && selectedMonth !== null) {
                                         setCheckDOBError(false);
@@ -507,7 +558,8 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                 className={classNames({ "p-invalid": dayerror }, "input_text md-col-3 col-4")}
                             />
                             <Dropdown
-                                placeholder="Year"
+                                placeholder="Year"  
+                                filter
                                 className={classNames({ "p-invalid": yearerror }, "input_text md-col-3 col-4")}
                                 value={formik.values.year}
                                 name="year"
@@ -599,6 +651,13 @@ const PersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                             pattern="^(?!1|0|800|888|877|866|855|844|833).*$"
                         />
                         {getFormErrorMessage("contact")}
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="field_label" htmlFor="contact">
+                            Alternate Contact
+                        </label>
+
+                        <InputText onChange={formik.handleChange} id="alternateContact" value={formik.values.alternateContact} onBlur={formik.handleBlur} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} pattern="^(?!1|0|800|888|877|866|855|844|833).*$" />
                     </div>
                 </div>
             </form>

@@ -11,15 +11,15 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./dialogs/add_agent_detail";
 import InfoForUsers from "./InfoForUsers/info_for_users";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit,model }) {
+export default function SIMBulkUploadAddPreActivatedProvision({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const [agent, setAgent] = useState(null);
     const [department, setDepartment] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
-    const parseLoginRes = JSON.parse(loginRes);
+    const parseLoginRes = JSON.parse(loginRes); 
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [carrier, setCarrier] = useState(null);
     const [fileerror, setFileError] = useState(false);
     useEffect(() => {
@@ -82,40 +82,67 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
             carrier: "",
             file: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             /*team:"",*/
-            unitType: unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Bulk Add Pre-Activate Sim",
         },
 
-        onSubmit: (values,actions) => {
+        onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
     });
     function ApiResponseShow({ res }) {
         return (
-            <div className="flex flex-wrap justify-content-left">
-                <p>{res.msg}</p>
-                <div>
-                    <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>
-                    <ul className="m-0 list-none">
-                        {res.data.data.duplicateNumbers.map((item) => (
-                            <li>{item}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="mt-3">
-                    <p>Sim Numbers Added: {res.data.data.newSimNumbers.length}</p>
-                    <ul className=" m-0 list-none">
-                        {res.data.data.newSimNumbers.map((item) => (
-                            <li>{item}</li>
-                        ))}
-                    </ul>
-                </div>
+            <div className="flex flex-wrap justify-content-left ">
+            <p>{res?.msg}</p>
+            <div>
+                <p> Duplicate Numbers : {res?.data?.data?.duplicateNumbers?.length}</p>
+                <ul className="m-0 list-none errormsg  ">
+                    {res?.data?.data?.duplicateNumbers?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
             </div>
+            <div className="mt-3 w-full">
+                <p>Sim Numbers Added: {res?.data?.data?.newSimNumbers?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.newSimNumbers?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div> 
+            <div className="mt-3 w-full">
+                <p>Invalid SIMS: {res?.data?.data?.invalidSIMs?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.invalidSIMs?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div>    
+            <div className="mt-3 w-full">
+                <p>No BoxNo Added For SIMS: {res?.data?.data?.noBoxNoAddedForSIMS?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.noBoxNoAddedForSIMS?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div> 
+            <div className="mt-3 w-full">
+                <p>No Model Added For SIMs: {res?.data?.data?.noModelAddedForSIMs?.length}</p>
+                <ul className=" m-0 list-none">
+                    {res?.data?.data?.noModelAddedForSIMs?.map((item) => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div> 
+   
+
+            
+        </div>
         );
     }
     function handlesubmit(actions) {
@@ -124,9 +151,9 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
         formData.append("serviceProvider", parseLoginRes?.company);
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
-        formData.append("agentType", formik.values.agentType); 
-        
-        formData.append("billingModel", formik.values.billingModel); 
+        formData.append("agentType", formik.values.agentType);
+
+        formData.append("billingModel", formik.values.billingModel);
         formData.append("AgentName", formik.values.AgentName);
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
@@ -141,19 +168,27 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
                     },
                 })
                     .then((res) => {
-                        ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
-                        formik.setFieldValue("carrier", ""); 
-                     formik.setFieldValue("file", "");
-                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                     formik.setFieldValue("agentType", "");
-                     formik.setFieldValue("AgentName", "");
-                     formik.setFieldValue("SimNumber", ""); 
-                     formik.setFieldValue("unitType", "sim");
-                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                     formik.setFieldValue("provisionType", "Bulk Add Pre-Activate Sims");
-                    setAgent([]) 
-                    setFilename(null)
-                     actions.resetForm();
+                        try {
+                            // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.invalidSIMs?.length !== 0 ||    res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0) {
+                                ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            } else {
+                                ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                            }
+                            formik.setFieldValue("carrier", "");
+                            formik.setFieldValue("file", "");
+                            formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                            ;
+                            ;
+                            formik.setFieldValue("SimNumber", "");
+                            formik.setFieldValue("unitType", "sim");
+                            formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                            formik.setFieldValue("provisionType", "Bulk Add Pre-Activate Sims");
+                            ;
+                            setFilename(null);
+                            actions.resetForm();
+                        } catch (err) {
+                        }
                     })
                     .catch((error) => {
                         if (error.response && error.response.data && error.response.data.msg) {
@@ -206,13 +241,16 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown  
+                        disabled
                             value={formik.values.agentType}
-                            options={department}
+                            options={department}   
+                            name="agentType"
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
-                                setDepartmentSelected(e.value);
+                                ;
+                                setDepartmentSelected(e.value); 
+                                formik.handleChange(e)
                             }}
                             placeholder="Select an option"
                             className="field-width mt-2"
@@ -238,8 +276,9 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
                                 </Button>
                             ) : undefined}
                         </p>
-
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown 
+                          disabled
+                         value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -276,7 +315,7 @@ export default function SIMBulkUploadAddPreActivatedProvision({ permissions,unit
                         ) : undefined}
                     </div>
                     <Button
-                    style={{height:"40px"}}
+                        style={{ height: "40px" }}
                         className="field-width justify-content-center"
                         onClick={() => {
                             if (formik.values.file === "") {

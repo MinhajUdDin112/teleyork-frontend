@@ -113,7 +113,6 @@ export default function EsnSimSingleUpload({ permissions }) {
         },
     });
     function handlePopulateDataByEsn(e) {
-        console.log(formik.values);
         if (e.target.value.length === 18 || e.target.value.length === 19) {
             //Getting SIM Details
             Axios.get(`${BASE_URL}/api/web/simInventory/getByESN?esn=${e.target.value}`)
@@ -134,24 +133,24 @@ export default function EsnSimSingleUpload({ permissions }) {
 
                     toast.error("Inventory Not Exist");
                     setEsnExist(null);
-                    formik.setFieldValue("agentType", "");
+                    ;
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("status", "");
                     formik.setFieldValue("Model", "");
                     formik.setFieldValue("box", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
                     formik.setFieldValue("SimNumber", "");
                     setDefaultSelectedAgent(null);
                     setDepartmentSelected(null);
                 });
         } else {
             setEsnExist(null);
-            formik.setFieldValue("agentType", "");
+            ;
             formik.setFieldValue("carrier", "");
             formik.setFieldValue("status", "");
             formik.setFieldValue("Model", "");
             formik.setFieldValue("box", "");
-            formik.setFieldValue("AgentName", "");
+            ;
             formik.setFieldValue("SimNumber", "");
             setDefaultSelectedAgent(null);
             setDepartmentSelected(null);
@@ -159,7 +158,6 @@ export default function EsnSimSingleUpload({ permissions }) {
         formik.setFieldValue("SimNumberToUpdate", e.target.value);
     }
     function handlesubmit() {
-        console.log(formik.values.SimNumber.length);
         let obj = formik.values;
         let currentvalue = obj.SimNumberToUpdate;
         Object.keys(obj).map((item) => {
@@ -233,7 +231,6 @@ export default function EsnSimSingleUpload({ permissions }) {
                             value={formik.values.SimNumber}
                             name="SimNumber"
                             onChange={(e) => {
-                                console.log(formik.values);
                                 formik.setFieldValue("SimNumber", e.target.value);
                                 setSimNumberError(false);
                             }}
@@ -258,7 +255,7 @@ export default function EsnSimSingleUpload({ permissions }) {
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDefaultSelectedAgent(null);
                                 setDepartmentSelected(e.value);
                             }}

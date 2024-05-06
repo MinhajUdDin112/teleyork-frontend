@@ -13,14 +13,11 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const CardAuthPayment =({amount,handleNext,object})=>{
     const [formattedCardNumber, setFormattedCardNumber] = useState("");
-    
     amount = parseFloat(amount).toFixed(2);
     const basicData = localStorage.getItem("basicData");
     const parsebasicData = JSON.parse(basicData);
     const userDetails = parsebasicData?.data
-   
     const [isLoading, setIsLoading] = useState(false)
-    
     const validationSchema = Yup.object().shape({
         cardNumber: Yup.string().required("Please Enter Card Number"),
         cardCode: Yup.string().required("Please Enter CVC"),
@@ -38,25 +35,114 @@ const CardAuthPayment =({amount,handleNext,object})=>{
         },
 
         onSubmit: async (values, actions) => {
-
-            setIsLoading(true)
+            setIsLoading(true) 
+             let serviceprovider=JSON.parse(localStorage.getItem("userData")).company  
+               let Modules=JSON.parse(localStorage.getItem("permissions"))   
+               let moduleid;
+                for(let i=0;i<Modules.length;i++){ 
+                     if(Modules[i].module === "Postpaid Orders"){  
+                         moduleid=Modules[i].moduleId
+                     }
+                } 
             const dataToSend = {
                 amount: formik.values.totalAmount,
                 cardNumber: formattedCardNumber.replace(/-/g, ""),
                 cardCode: formik.values.cardCode,
                 expirationDate: formik.values.expirationDate,
                 invoiceNo: formik.values.accountId,
-                customerId:userDetails?._id
+                customerId:userDetails?._id, 
+                serviceProvider:serviceprovider, 
+                modules:moduleid, 
+                paymentGateway:"Authorize"
             };
             try {
     
-                const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);
+                const response = await Axios.post(`${BASE_URL}/api/web/invoices/chargeCreditCard`, dataToSend);  
                 if (response?.data?.messages?.resultCode == "Ok" || response?.data?.messages?.resultCode == "OK" || response?.data?.msg?.resultCode == "Ok") {
-
+                    let additionalFeature = [];
+                    let discounts = [];
+        
+                    let devicepricing = JSON.parse(localStorage.getItem("devicepricing"));
+                    let simpricing = JSON.parse(localStorage.getItem("simpricing"));
+                    let dueDate = "";
+                    let applyLateFee = "";
+                    let oneTimeCharge = "";
+                    let planName = "";
+                    let planId = "";
+                    let planCharges = "";
+                    if (object?.billId === simpricing?._id) {
+                        dueDate = simpricing?.dueDate;
+                        oneTimeCharge = simpricing?.oneTimeCharge;
+                        applyLateFee = simpricing?.applyLateFee;
+                        for (let i = 0; i < simpricing?.selectdiscount?.length; i++) {
+                            let obj = {
+                                name: simpricing.selectdiscount[i]?.discountname,
+                                amount: simpricing.selectdiscount[i]?.amount,
+                            };
+                            discounts.push(obj);
+                        }   
+                        let plandata=JSON.parse(localStorage.getItem("planprices"))  
+                        for (let i = 0; i < plandata?.length; i++) {
+                            if (object.plan === plandata[i]?._id) {
+                                planName = plandata[i]?.name;
+                                planCharges = plandata[i]?.price;
+        
+                                planId = plandata[i]?._id;
+                            }
+                        }
+                       
+                        let simadditional = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
+                        for (let k = 0; k < simadditional?.length; k++) {
+                            for (let i = 0; i < simpricing?.additionalFeature?.length; i++) {
+                                if (simpricing?.additionalFeature[i]?._id === simadditional[k]) {
+                                    let obj = {
+                                        name: simpricing?.additionalFeature[i]?.featureName,
+                                        amount: simpricing?.additionalFeature[i]?.featureAmount,
+                                    };
+                                    additionalFeature.push(obj);
+                                }
+                            }
+                        }
+                    } else { 
+                         let plandata=JSON.parse(localStorage.getItem("planprices"))
+                        dueDate = devicepricing?.dueDate;
+                        applyLateFee = devicepricing?.applyLateFee;
+                        oneTimeCharge = devicepricing?.oneTimeCharge;
+                        for (let i = 0; i < devicepricing?.selectdiscount?.length; i++) {
+                            let obj = {
+                                name: devicepricing?.selectdiscount[i]?.discountname,
+                                amount: devicepricing?.selectdiscount[i]?.amount,
+                            };
+                            discounts.push(obj);
+                        }
+                        for (let i = 0; i < plandata?.length; i++) {
+                            if (object.plan === plandata[i]?._id) {
+                                planName = plandata[i]?.name;
+                                planCharges = plandata[i]?.price;
+        
+                                planId = plandata[i]?._id;
+                            }
+                        }
+                        let deviceadditional = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"));
+                        for (let k = 0; k < deviceadditional?.length; k++) {
+                            for (let i = 0; i < devicepricing?.additionalFeature?.length; i++) {
+                                if (deviceadditional[k] === devicepricing?.additionalFeature[i]?._id) {
+                                    let obj = {
+                                        name: devicepricing?.additionalFeature[i]?.featureName,
+                                        amount: devicepricing?.additionalFeature[i]?.featureAmount,
+                                    };
+                                    additionalFeature.push(obj);
+                                }
+                            }
+                        }
+                    }
+                    
                     const dataToSend = {
                         invoiceType: "Sign Up",
                         customerId: userDetails?._id,
-                        planId: object.plan,
+                        planId: object.plan, 
+                        additionalCharges: additionalFeature,
+                        discount: discounts,
                         totalAmount: amount,
                         amountPaid: formik.values.totalAmount,
                         billingPeriod: {
@@ -67,7 +153,7 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                         paymentMethod: "Credit Card",
                         chargingType: "Monthly",
                         printSetting: "Both",
-                        selectProduct: object.billId,        
+                        selectProduct: object.billId,            
                     }
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/user/postpaidpaymentDetails`, dataToSend)
@@ -84,7 +170,6 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                     setIsLoading(false)   
                 }
                 else {
-                    console.log("error is ",response?.data?.data)
                     toast.error(response?.data?.data?.message[0]?.text)
                 }
             } catch (error) {

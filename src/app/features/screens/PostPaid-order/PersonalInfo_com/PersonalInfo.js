@@ -112,8 +112,8 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             BenifitDOB: "",
             isACP: acp,
             salesChannel: "",
-            maidenMotherName:"",
-            alternateContact:""
+            maidenMotherName: "",
+            alternateContact: "",
         },
         onSubmit: async (values, actions) => {
             if (selectedDay === null || selectedYear === null || selectedMonth === null) {
@@ -123,13 +123,12 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                 const isoString = dateObject.toISOString();
 
                 const selectedDate = isoString;
-              
+
                 const formattedDate = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : "";
-              
 
                 const userId = _id;
                 const dataToSend = {
-                    accountType:"Postpaid",
+                    accountType: "Postpaid",
                     csr: csr,
                     userId: userId,
                     firstName: formik.values.firstName,
@@ -149,19 +148,18 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     BenifitLastName: formik.values.BenifitLastName,
                     BenifitSSN: formik.values.BenifitSSN,
                     BenifitDOB: formik.values.BenifitDOB,
-                    isACP: acp, 
-                    salesChannel:formik.values.salesChannel,
-                    maidenMotherName:formik.values.maidenMotherName,
-                    alternateContact:formik.values.alternateContact
+                    isACP: acp,
+                    salesChannel: formik.values.salesChannel,
+                    maidenMotherName: formik.values.maidenMotherName,
+                    alternateContact: formik.values.alternateContact,
                 };
 
                 setIsLoading(true);
                 try {
                     const response = await Axios.post(`${BASE_URL}/api/user/initialInformation`, dataToSend);
                     if (response?.status === 200 || response?.status === 201) {
-                       
                         localStorage.setItem("basicData", JSON.stringify(response.data));
-                        toast.success("information saved Successfully");
+                        toast.success("Information Saved Successfully");
                         handleNext();
                     }
                 } catch (error) {
@@ -171,7 +169,17 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             }
         },
     });
-
+    useEffect(() => {
+        const data = {
+            accountType: formik.values.accountType,
+            contact: formik.values.contact,
+            alternateContact: formik.values.alternateContact,
+        };
+        const checkNumber = async () => {
+            const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+        };
+        checkNumber();
+    }, [formik.values.contact]);
     useEffect(() => {
         formik.setFieldValue("ESim", eSim);
     }, [eSim]);
@@ -191,8 +199,6 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         seteSim(e.target.value);
     };
 
-   
-    
     const options = [
         { label: "Select", value: "" },
         { label: "JR.", value: "JR." },
@@ -342,53 +348,49 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-          
             if (parsezipResponse && !basicResponse) {
-                if (formik.values.contact.length > 9 ) {           
-            const data = {
-                contact: formik.values.contact,
-                accountType:"Postpaid",
-                alternateContact:""
-            };
-            try {
-                const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                setIsDuplicate(false);
-            } catch (error) {
-                toast.error(error?.response?.data?.msg);
-            setIsDuplicate(true);        
-        }
-                  
+                if (formik.values.contact.length > 9) {
+                    const data = {
+                        contact: formik.values.contact,
+                        accountType: "Postpaid",
+                        alternateContact: "",
+                    };
+                    try {
+                        const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+                        setIsDuplicate(false);
+                    } catch (error) {
+                        toast.error(error?.response?.data?.msg);
+                        setIsDuplicate(true);
+                    }
                 }
             }
         };
 
         fetchData();
-    }, [formik.values.contact  ]);
+    }, [formik.values.contact]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          
-            if (parsezipResponse && !basicResponse) {
-                if (formik.values.alternateContact.length > 9 ) {           
-            const data = {
-                contact: "",
-                accountType:"Postpaid",
-                alternateContact:formik.values.alternateContact
-            };
-            try {
-                const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                setIsDuplicate(false);
-            } catch (error) {
-                toast.error(error?.response?.data?.msg);
-            setIsDuplicate(true);        
-        }
-                  
-                }
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (parsezipResponse && !basicResponse) {
+    //             if (formik.values.alternateContact.length > 9) {
+    //                 const data = {
+    //                     contact: "",
+    //                     accountType: "Postpaid",
+    //                     alternateContact: formik.values.alternateContact,
+    //                 };
+    //                 try {
+    //                     const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
+    //                     setIsDuplicate(false);
+    //                 } catch (error) {
+    //                     toast.error(error?.response?.data?.msg);
+    //                     setIsDuplicate(true);
+    //                 }
+    //             }
+    //         }
+    //     };
 
-        fetchData();
-    }, [formik.values.alternateContact  ]);
+    //     fetchData();
+    // }, [formik.values.contact]);
     useEffect(() => {
         const dobString = parsebasicResponse?.data?.DOB;
 
@@ -418,9 +420,9 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
             formik.setFieldValue("BenifitDOB", new Date(parsebasicResponse?.data?.BenifitDOB));
             formik.setFieldValue("BenifitSSN", parsebasicResponse?.data?.BenifitSSN);
             formik.setFieldValue("isACP", parsebasicResponse?.data?.isACP);
-            formik.setFieldValue("salesChannel",parsebasicResponse?.data?.salesChannel)
-            formik.setFieldValue("maidenMotherName",parsebasicResponse?.data?.maidenMotherName);
-            formik.setFieldValue("alternateContact",parsebasicResponse?.data?.alternateContact)
+            formik.setFieldValue("salesChannel", parsebasicResponse?.data?.salesChannel);
+            formik.setFieldValue("maidenMotherName", parsebasicResponse?.data?.maidenMotherName);
+            formik.setFieldValue("alternateContact", parsebasicResponse?.data?.alternateContact);
             //chnage state
             seteSim(parsebasicResponse?.data?.ESim);
             setSelectedOption(parsebasicResponse?.data?.bestWayToReach);
@@ -429,7 +431,6 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
         }
     }, []);
 
-   
     //salesChannel Channel Options
     const salesChannelOptions = [
         {
@@ -490,7 +491,15 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         <label className="field_label mb-2 font-semibold">
                             Sales Channel <span className="steric">*</span>
                         </label>
-                        <Dropdown placeholder="Select Channel" id="salesChannel" className={classNames({ "p-invalid": isFormFieldValid("salesChannel") }, "input_text w-full mb-2")} options={salesChannelOptions} value={formik.values.salesChannel} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <Dropdown
+                            placeholder="Select Channel"
+                            id="salesChannel"
+                            className={classNames({ "p-invalid": isFormFieldValid("salesChannel") }, "input_text w-full mb-2")}
+                            options={salesChannelOptions}
+                            value={formik.values.salesChannel}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
                         {getFormErrorMessage("salesChannel")}
                     </div>
                 </div>
@@ -563,17 +572,8 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                         {getFormErrorMessage("SSN")}
                     </div>
                     <div className="field col-12 md:col-3">
-                        <label className="field_label">
-                        Mother's Maiden Name 
-                        </label>
-                        <InputText
-                            id="maidenMotherName"
-                            value={formik.values.maidenMotherName}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            style={{ textTransform: "uppercase" }}
-                        />
-                        
+                        <label className="field_label">Mother's Maiden Name</label>
+                        <InputText id="maidenMotherName" value={formik.values.maidenMotherName} onChange={formik.handleChange} onBlur={formik.handleBlur} style={{ textTransform: "uppercase" }} />
                     </div>
 
                     <div className="field col-12 md:col-6">
@@ -594,7 +594,7 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                                     formik.handleChange(e);
 
                                     formik.handleChange(e);
-                                   
+
                                     setSelectedMonth(e.value);
                                 }}
                                 options={monthOptions}
@@ -718,20 +718,10 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     </div>
                     <div className="field col-12 md:col-3">
                         <label className="field_label" htmlFor="contact">
-                           Alternate Contact 
+                            Alternate Contact
                         </label>
 
-                        <InputText
-                            onChange={formik.handleChange}
-                            id="alternateContact"
-                            value={formik.values.alternateContact}
-                            onBlur={formik.handleBlur}
-                            
-                            minLength={10}
-                            maxLength={10}
-                            keyfilter={/^[0-9]*$/}
-                            pattern="^(?!1|0|800|888|877|866|855|844|833).*$"
-                        />
+                        <InputText onChange={formik.handleChange} id="alternateContact" value={formik.values.alternateContact} onBlur={formik.handleBlur} minLength={10} maxLength={10} keyfilter={/^[0-9]*$/} pattern="^(?!1|0|800|888|877|866|855|844|833).*$" />
                     </div>
                 </div>
             </form>
@@ -798,9 +788,6 @@ const PostPersonalInfo = ({ handleNext, enrollment_id, _id, csr }) => {
                     </div>
                 </div>
             </div> */}
-
-         
-          
         </>
     );
 };

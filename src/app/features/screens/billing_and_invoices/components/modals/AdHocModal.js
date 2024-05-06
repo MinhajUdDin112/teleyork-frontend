@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import { Calendar } from "primereact/calendar";
 import classNames from "classnames";
 
-const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISuccess }) => {
+const AdHocModal = ({ setRefresh,cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISuccess }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const [selectedCity1, setSelectedCity1] = useState(null);
     const [city, setCity] = useState("");
@@ -37,8 +37,7 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISucce
             invoiceType: "",
             isTax: "",
             amount: "",
-            taxAmount: "",
-            taxBreakup: "",
+         
             typeName: "",
             dueDate:""
         },
@@ -51,7 +50,6 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISucce
                 invoiceOneTimeCharges:formik.values.amount,
                 totalAmount:formik.values.amount,
                 invoicetype:formik.values.invoiceType,
-                includeTaxes:city,
                 invoiceDueDate:formik.values.dueDate,
                 amountPaid:"0",
                 invoicePaymentMethod:"Skip"
@@ -62,8 +60,10 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISucce
                 if (response?.status === 201 || response?.status === 200) {
                     toast.success("Successfully Created");
                     setisButtonLoading(false);
-                    actions.resetForm();
-                    onAPISuccess(true)
+                    actions.resetForm();     
+                    setAdHocInvoiceModal(false)
+                    setRefresh(prev=>!prev)  
+                    // onAPISuccess(true)
                 }
             } catch (error) {
               toast.error(error?.response?.data?.error);
@@ -174,40 +174,12 @@ const AdHocModal = ({ cpData, adHocInvoiceModal, setAdHocInvoiceModal,onAPISucce
                             {getFormErrorMessage("dueDate")}
                         </p>
                     </div>
-                    <div className="flex mt-2 mb-2">
-                        <p className="col-4 font-semibold m-0 p-1">Do You want to include tax?:</p>
-                        <p className="col-8 m-0 p-1">
-                            <div>
-                                <RadioButton inputId="isTax" name="pizza" value="yes" onChange={(e) => setCity(e.value)} checked={city === "yes"} />
-                                <label htmlFor="isTax" className="mr-2 px-2">
-                                    Yes
-                                </label>
-                                <RadioButton inputId="ingredient2" name="pizza" value="no" onChange={(e) => setCity(e.value)} checked={city === "no"} />
-                                <label htmlFor="isTax" className="mr-2 px-2">
-                                    No
-                                </label>
-                                
-                            </div>
-                        </p>
-                    </div>
-                    <div className="flex">
-                        <p className="col-4 font-semibold m-0 p-1">Tax Amount($):</p>
-                        <p className="col-8 m-0 p-1">
-                            <InputText id="taxAmount" placeholder="Enter Tax Amount" value={formik.values.taxAmount} onChange={formik.handleChange}    className= "h-3rem w-21rem border-round-xs"/>
-                           
-                        </p>
-                    </div>
-                    <div className="flex">
-                        <p className="col-4 font-semibold m-0 p-1">Tax Breakup($):</p>
-                        <p className="col-8 m-0 p-1">
-                            <InputText id="taxBreakup" placeholder="Enter Tax Breakup" value={formik.values.taxBreakup} onChange={formik.handleChange}  className= "h-3rem w-21rem border-round-xs mr-3" />
-                           
-                        </p>
-                    </div>
+                   
+                 
                     <div className="flex">
                         <p className="col-4 font-semibold m-0 p-1">Invoice Amount($):</p>
                         <p className="col-8 m-0 p-1">
-                            <InputText id="invoiceAmount" placeholder="Enter Invoice Amount" value={formik.values.invoiceAmount} onChange={formik.handleChange}  className= "h-3rem w-21rem border-round-xs mr-3"/>
+                            <InputText id="invoiceAmount" disabled placeholder="Enter Invoice Amount" value={formik.values.amount} onChange={formik.handleChange}  className= "h-3rem w-21rem border-round-xs mr-3"/>
                            
                         </p>
                     </div>

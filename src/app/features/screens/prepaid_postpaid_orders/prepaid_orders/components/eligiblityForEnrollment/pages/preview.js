@@ -19,32 +19,65 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const zipRes = localStorage.getItem("prepaidzipData");
     //check that user come from incomplete or not
     const fromIncompl = localStorage.getItem("comingfromincomplete");
-
     const parsefromIncompl = JSON.parse(fromIncompl);
-    let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
+    let paymentInfo = JSON.parse(localStorage.getItem("paymentscreendetails"));
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
     };
+
     const postData = async () => {
         setIsLoading(true);
         const dataToSend = {
             csr: csr,
             userId: _id,
+            isWithInvoice: paymentInfo?.prospectwithinvoice,
+            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
         };
+        Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
+            .then(() => {
+                toast.success("Esn Successfully Assigned");
+                Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
+                    .then((res) => {
 
-        try {
-            const response = await Axios.post(`${BASE_URL}/api/user/handOverEnrollment`, dataToSend);
-            setIsLoading(false);
-        } catch (error) {
-            toast.error(error?.response?.data?.msg);
-            setIsLoading(false);
-        }
-        setShowFinalComponent(true);
-        setFromIncomplete(false);
-        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                        Axios.post(`${BASE_URL}/api/web/order`, { orderNumber: enrollment_id })
+                            .then((response) => {
+                                toast.success("Order Placed Successfully");
+                                Axios.post(`${BASE_URL}/api/web/order/createLable`, { orderId: response.data.data.orderId.toString(), userId: _id, testLabel: true })
+                                    .then(() => {
+                                        toast.success("Label created Successfully");
+                                        setIsLoading(false);
+
+                                        setShowFinalComponent(true);
+                                        setFromIncomplete(false);
+                                       localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                                    })
+                                    .catch((err) => {
+                                        toast.error("Label Creation Failed");         
+                                        toast.success("Label created Successfully");
+                                        setIsLoading(false);
+
+                                        setShowFinalComponent(true);
+                                        setFromIncomplete(false);
+                                       localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                                 
+                                    });
+                            })
+                            .catch((err) => {
+                                toast.error("Order Placing Failed");
+                            });
+                    })
+                    .catch((error) => {
+                        toast.error(error?.response?.data?.msg);
+                        setIsLoading(false); 
+                    });
+            })
+            .catch((error) => {
+                
+                setIsLoading(false);
+                toast.error(error?.response?.data?.msg);
+            });
     };
-
     useEffect(() => {
         if (!zipRes && parsefromIncompl == false) {
             setIsChecked(true);
@@ -53,51 +86,197 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         }
     }, []);
     let inventory;
+    let oneTimeCharge;
     let discount = "";
     let additional = "";
+    let discountobjectsendin = [];
+    let additionalobjectsendin = [];
+    let productName;
+    let dueDate;
+    let applyLateFee;
+    let planname;
+    let plancharges;
+    let plandata = JSON.parse(localStorage.getItem("planprices"));
+    for (let i = 0; i < plandata?.length; i++) {
+        if (paymentInfo?.plan === plandata[i]?._id) {
+            planname = plandata[i]?.name;
+            plancharges = plandata[i]?.price;
+            //planId = plandata[i]?._id;
+        }
+    }
     let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
     for (let i = 0; i < inventoryType?.length; i++) {
         if (paymentInfo?.billId === inventoryType[i].value) {
             inventory = inventoryType[i].label;
-
             break;
         }
     }
-    if (inventory === "Sim Card") {
-        let selecteddiscount = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
-        let simalladditional = JSON.parse(localStorage.getItem("simadditional"));
-
+    if (inventory === "SIM") {
+        productName = "SIM";
+        let selectdiscount = JSON.parse(localStorage.getItem("simdiscountobjectarray"));
+        let alldiscounts = JSON.parse(localStorage.getItem("simpricing"))?.selectdiscount;
+        applyLateFee = JSON.parse(localStorage.getItem("simpricing"))?.applyLateFee;
+        dueDate = JSON.parse(localStorage.getItem("simpricing"))?.dueDate;
+        oneTimeCharge = JSON.parse(localStorage.getItem("simpricing"))?.oneTimeCharge;
+        let simalladditional = JSON.parse(localStorage.getItem("simpricing"))?.additionalFeature;
         let additionallocal = JSON.parse(localStorage.getItem("simadditionalfeaturearray"));
-
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < simalladditional?.length; k++) {
-                if (additionallocal[i] === simalladditional[k].value) {
-                    additional += `${simalladditional[k].name},`;
+                if (additionallocal[i] === simalladditional[k]._id) {
+                    let obj = {
+                        name: simalladditional[k]?.featureName,
+                        amount: simalladditional[k]?.featureAmount,
+                    };
+                    additionalobjectsendin.push(obj);
+                    if (i + 1 === additionallocal?.length) {
+                        additional += `${simalladditional[k].featureName}`;
+                    } else {
+                        additional += `${simalladditional[k].featureName},`;
+                    }
                 }
             }
         }
-        for (let i = 0; i < selecteddiscount?.length; i++) {
-            discount += `${selecteddiscount[i].discountname},`;
+
+        for (let k = 0; k < selectdiscount?.length; k++) {
+            for (let i = 0; i < alldiscounts?.length; i++) {
+                if (selectdiscount[k] === alldiscounts[i]._id) {
+                    let obj = {
+                        name: alldiscounts[i]?.discountname,
+                        amount: alldiscounts[i]?.amount,
+                    };
+                    discountobjectsendin.push(obj);
+                    if (k + 1 === selectdiscount?.length) {
+                        discount += `${alldiscounts[i].discountname}`;
+                    } else {
+                        discount += `${alldiscounts[i].discountname},`;
+                    }
+                }
+            }
         }
-    } else if (inventory === "Wireless Device") {
-        let selecteddiscount = JSON.parse(localStorage.getItem("devicepricing"))?.selectdiscount;
-        let devicealladditional = JSON.parse(localStorage.getItem("deviceadditional"));
+    } else if (inventory === "WIRELESS DEVICE") {
+        productName = "WIRELESS DEVICE";
+        let selectdiscount = JSON.parse(localStorage.getItem("devicediscountobjectarray"));
+        let alldiscounts = JSON.parse(localStorage.getItem("devicepricing"))?.selectdiscount;
+        oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing"))?.oneTimeCharge;
+        applyLateFee = JSON.parse(localStorage.getItem("devicepricing"))?.applyLateFee;
+        dueDate = JSON.parse(localStorage.getItem("devicepricing"))?.dueDate;
+        let devicealladditional = JSON.parse(localStorage.getItem("devicepricing"))?.additionalFeature;
         let additionallocal = JSON.parse(localStorage.getItem("deviceadditionalfeaturearray"));
         for (let i = 0; i < additionallocal?.length; i++) {
             for (let k = 0; k < devicealladditional?.length; k++) {
-                if (additionallocal[i] === devicealladditional[k].value) {
-                    additional += `${devicealladditional[k].name}`;
+                if (additionallocal[i] === devicealladditional[k]._id) {
+                    let obj = {
+                        name: devicealladditional[k]?.featureName,
+                        amount: devicealladditional[k]?.featureAmount,
+                    };
+                    additionalobjectsendin.push(obj);
+                    if (i + 1 === additionallocal?.length) {
+                        additional += `${devicealladditional[k].featureName}`;
+                    } else {
+                        additional += `${devicealladditional[k].featureName},`;
+                    }
                 }
             }
         }
-        for (let i = 0; i < selecteddiscount?.length; i++) {
-            discount += `${selecteddiscount[i].discountname},`;
+        for (let k = 0; k < selectdiscount?.length; k++) {
+            for (let i = 0; i < alldiscounts?.length; i++) {
+                if (selectdiscount[k] === alldiscounts[i]._id) {
+                    let obj = {
+                        name: alldiscounts[i]?.discountname,
+                        amount: alldiscounts[i]?.amount,
+                    };
+                    discountobjectsendin.push(obj);
+                    if (k + 1 === selectdiscount?.length) {
+                        discount += `${alldiscounts[i].discountname}`;
+                    } else {
+                        discount += `${alldiscounts[i].discountname},`;
+                    }
+                }
+            }
         }
     }
 
     const handleSign = () => {
         setChecked(true);
     };
+    const postDataWithinvoice = () => {
+        setIsLoading(true);
+        const dataToSend = {
+            csr: csr,
+            userId: _id,
+            isWithInvoice: paymentInfo?.prospectwithinvoice,
+            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
+        };
+
+        Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
+            .then(() => {
+                let dataToSend = {
+                    customerId: paymentInfo.customerid,
+                    invoiceType: "Sign Up",
+                    totalAmount: paymentInfo.totalamount,
+                    additionalCharges: additionalobjectsendin,
+                    discount: discountobjectsendin,
+                    amountPaid: 0,
+                    selectProduct: paymentInfo.billId,
+                    invoiceDueDate: dueDate,
+                    lateFee: applyLateFee,
+                    invoiceOneTimeCharges: oneTimeCharge,
+                    invoiceStatus: "Unpaid",
+                    planId: paymentInfo?.plan,
+                    planName: planname,
+                    planCharges: plancharges,
+                    chargingType: "monthly",
+                    invoicePaymentMethod: "Credit/Debit Card",
+                    printSetting: "Both",
+                    isInvoice: paymentInfo.prospectwithinvoice,
+                    billingPeriod: {
+                        from: "onActivation",
+                        to: "onActivation",
+                    },
+                };
+                const loginRes = localStorage.getItem("userData");
+                const parseLoginRes = JSON.parse(loginRes);
+                const data = {
+                    serviceProvider: parseLoginRes?.company,
+                    userId: parseLoginRes?._id,
+                    customerId: paymentInfo?.customerid,
+                    noteType: "Sign Up Plan Activation",
+                    note: "Sign Up Plan  Activated Successfully",
+                    priority: "medium",
+                };
+                Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend).then(() => {
+                    Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data)
+                        .then(() => {
+                            toast.current.show({ severity: "success", summary: "Sign Up Plan Note", detail: "Customer Plan Is Successfully Activated" });
+
+                            setActiveIndex(3);
+                        })
+                        .catch((err) => {});
+                    // toast.success("Label created Successfully");
+                    setIsLoading(false);
+                    setShowFinalComponent(true);
+                    setFromIncomplete(false);
+                    localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                });
+            })
+            .catch((error) => {
+                toast.error(error?.response?.data?.msg);
+                setIsLoading(false);
+            });
+    };
+    function ChangeIsoDateToECT(date) {
+        // Given ISO formatted date/time
+        const isoDate = date;
+
+        // Convert ISO string to Date object
+        const utcDate = new Date(isoDate);
+
+        // Format the date according to Eastern Time Zone (EST/EDT)
+        const estTimeString = utcDate.toLocaleString("en-US", {
+            timeZone: "America/New_York",
+        });
+        return estTimeString;
+    }
     return (
         <>
             <ToastContainer />
@@ -114,7 +293,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 }
                             }}
                         />
-                        <Button label="Submit" onClick={postData} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
                     </div>
                     <br></br>
 
@@ -130,77 +309,68 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="border-2 w-5 pt-2">
                                 <div className="flex border-bottom-2">
                                     <p className="w-6 ml-4">First Name:</p>
-                                    <p className="w-6">{previewInfo?.firstName}</p>
+                                    <p className="w-6">{previewInfo?.firstName?.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{previewInfo?.address1}</p>
+                                    <p className="w-6">{previewInfo?.address1?.toUpperCase() || "-"}</p>
                                 </div>
 
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">State:</p>
-                                    <p className="w-6">{previewInfo?.state}</p>
+                                    <p className="w-6">{previewInfo?.state?.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">DOB:</p>
-                                    <p className="w-6">{formatDate(previewInfo?.DOB)}</p>
+                                    <p className="w-6">{formatDate(previewInfo?.DOB || "-")}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Telephone:</p>
-                                    <p className="w-6">{previewInfo?.contact}</p>
+                                    <p className="w-6">{previewInfo?.contact || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Discounts:</p>
-                                    <p className="w-6">
-                                        {" "}
-                                        {paymentInfo?.discount.map((item) => (
-                                            <div>
-                                                <p className="inline">
-                                                    {item.name}: ${item.amount}
-                                                </p>
-                                            </div>
-                                        ))}
-                                    </p>
+                                    <p className="w-6"> {discount?.toUpperCase() || "-"}</p>
                                 </div>
 
-                                <div className="flex  pt-2">
-                                    <p className="w-6 ml-4">One Time Charges: </p>
-                                    <p className="w-6">${paymentInfo?.invoiceOneTimeCharges}</p>
+                                <div className="flex  border-bottom-2  pt-2">
+                                    <p className="w-6 ml-4">Net Amount: </p>
+                                    {/* <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p> */}
+                                    <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo?.totalamount}` : "-"}</p>
                                 </div>
-                                <div className="flex border-bottom-2 pt-2">
+                                <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Inventory: </p>
-                                    <p className="w-6">{inventory}</p>
+                                    <p className="w-6">{(localStorage.getItem("product") || "-").toUpperCase()}</p>
                                 </div>
                             </div>
                             <div className="border-2 w-5 ">
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">LastName:</p>
-                                    <p className="w-6">{previewInfo?.lastName}</p>
+                                    <p className="w-6">{previewInfo?.lastName.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">City:</p>
-                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city}</p>
+                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city?.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Zip Code:</p>
-                                    <p className="w-6">{previewInfo?.zip}</p>
+                                    <p className="w-6">{previewInfo?.zip || "-"}</p>
                                 </div>
-
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">SSN:</p>
-                                    <p className="w-6">{previewInfo?.SSN}</p>
+                                    <p className="w-6">{previewInfo?.SSN || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Email:</p>
-                                    <p className="w-6">{previewInfo?.email}</p>
+                                    <p className="w-6">{previewInfo?.email.toUpperCase() || "-"}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Plan:</p>
-                                    <p className="w-6">{paymentInfo?.planName}</p>
+                                    <p className="w-6">{(planname || "-").toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Plan Charges: </p>
-                                    <p className="w-6">${paymentInfo?.planCharges}</p>
+                                    <p className="w-6 ml-4">Amount Paid: </p>
+                                    <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p>
                                 </div>
 
                                 {/*  <div className="flex border-bottom-2 pt-2">
@@ -210,13 +380,9 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 <div className="flex  pt-2">
                                     <p className="w-6 ml-4">Additional Feature:</p>
                                     <p className="w-6">
-                                        {paymentInfo?.additionalCharges.map((item) => (
-                                            <div>
-                                                <p className="inline">
-                                                    {item.name} :${item.amount}
-                                                </p>
-                                            </div>
-                                        ))}
+                                        <div>
+                                            <p className="inline">{additional.toUpperCase() || "-"}</p>
+                                        </div>
                                     </p>
                                 </div>
                             </div>
@@ -240,11 +406,12 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     {checked ? (
                                         <p>
                                             <strong>
-                                                This form is electronically signed by{" "}
+                                                This form is electronically signed by <span> </span>
                                                 <strong>
-                                                    {/*(previewInfo?.firstName).toUpperCase()*/} {/*(previewInfo?.lastName).toUpperCase()*/}
+                                                    {previewInfo && previewInfo.firstName ? previewInfo.firstName.toUpperCase() : "Unknown"} {previewInfo && previewInfo.lastName ? previewInfo.lastName.toUpperCase() : "User"}
                                                 </strong>{" "}
-                                                on {/*new Date().toLocaleDateString()*/}
+                                                <span> </span>
+                                                on <span> </span> {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}
@@ -266,11 +433,11 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     {checked ? (
                                         <p>
                                             <strong>
-                                                This form is electronically signed by{" "}
+                                                This form is electronically signed by <span> </span>
                                                 <strong>
-                                                    {/*(previewInfo?.firstName).toUpperCase()*/} {/*(previewInfo?.lastName).toUpperCase()*/}
-                                                </strong>{" "}
-                                                on {/*new Date().toLocaleDateString()*/}
+                                                    {(previewInfo?.firstName).toUpperCase()} {(previewInfo?.lastName).toUpperCase()}
+                                                </strong>
+                                                <span> </span> on <span> </span> {ChangeIsoDateToECT(new Date().toISOString())}
                                             </strong>
                                         </p>
                                     ) : null}

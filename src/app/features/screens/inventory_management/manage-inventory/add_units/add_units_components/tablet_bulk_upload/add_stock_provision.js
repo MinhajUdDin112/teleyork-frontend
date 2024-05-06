@@ -1,26 +1,27 @@
-import React, { useRef, useState ,useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import { Dropdown } from "primereact/dropdown";
 import Axios from "axios";
-import * as Yup from "yup";  
+import * as Yup from "yup";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
+import { parse } from "date-fns";
 
-const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function TabletBulkUploadAddStock({permissions,unit,model}) {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+export default function TabletBulkUploadAddStock({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const [agent, setAgent] = useState(null);
     const [department, setDepartment] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
-    const parseLoginRes = JSON.parse(loginRes);
-    const [carrier, setCarrier] = useState(null);  
-    const [fileerror,setFileError]=useState(false)
+    const parseLoginRes = JSON.parse(loginRes); 
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department)
+    const [carrier, setCarrier] = useState(null);
+    const [fileerror, setFileError] = useState(false);
     useEffect(() => {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
@@ -33,9 +34,8 @@ export default function TabletBulkUploadAddStock({permissions,unit,model}) {
                         departmentholder.push(obj);
                     }
                     setDepartment(departmentholder);
-                 })
-                .catch(() => {
-               });
+                })
+                .catch(() => {});
         }
     }, []);
     useEffect(() => {
@@ -52,8 +52,7 @@ export default function TabletBulkUploadAddStock({permissions,unit,model}) {
 
                     setAgent(agentholder);
                 })
-                .catch(() => {
-                 });
+                .catch(() => {});
         }
     }, [departmentselected]);
     useEffect(() => {
@@ -69,8 +68,7 @@ export default function TabletBulkUploadAddStock({permissions,unit,model}) {
 
                 setCarrier(carrierholder);
             })
-            .catch(() => {
-            });
+            .catch(() => {});
     }, []);
 
     const formik = useFormik({
@@ -84,51 +82,93 @@ export default function TabletBulkUploadAddStock({permissions,unit,model}) {
             carrier: "",
             file: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             /*team:"",*/
-            unitType:unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add Tablet Stock",
         },
 
-        onSubmit: (values,actions) => {
+        onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
-    }); 
-    function ApiResponseShow({res}){   
-        
-        return( 
-           <div className="flex flex-wrap justify-content-left"> 
-               <p>{res.msg}</p>  
-               <div >
-                <p> Duplicate Numbers : {res.data.data.duplicateNumbers.length}</p>     
-                  <ul className="m-0 list-none"> 
-                       { 
-                          res.data.data.duplicateNumbers.map(item=>( 
-                           <li>{item}</li>
-                          ))
-                       }
-                  </ul>      
-                   </div>
-                  <div className="mt-3">
-                  <p >    
-                  Sim Numbers Added: {res.data.data.newSimNumbers.length}  
-                   
-                   </p> 
-                   <ul className=" m-0 list-none"> 
-                       { 
-                          res.data.data.newSimNumbers.map(item=>( 
-                           <li >{item}</li>
-                          ))
-                       }
-                  </ul>     
-                   </div>
-                   
-           </div>
-        )
-        }
+    });
+    function ApiResponseShow({ res }) { 
+        return (
+            <div className="flex flex-wrap justify-content-left ">
+                <p>{res?.msg}</p>
+                <div>
+                    <p> Duplicate Numbers : {res?.data?.data?.duplicateNumbers?.length}</p>
+                    <ul className="m-0 list-none errormsg  ">
+                        {res?.data?.data?.duplicateNumbers?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+                <div>
+                    <p> Empty SIMS Rows : {res?.data?.data?.emptySIMRows?.length}</p>
+                    <ul className="m-0 list-none errormsg  ">
+                        {res?.data?.data?.emptySIMRows?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="mt-3 w-full">
+                    <p>Sim Numbers Added: {res?.data?.data?.newSimNumbers?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.newSimNumbers?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+                <div className="mt-3 w-full">
+                    <p>Invalid SIMS: {res?.data?.data?.invalidSIMs?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.invalidSIMs?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>    
+                <div className="mt-3 w-full">
+                    <p>No BoxNo Added For SIMS: {res?.data?.data?.noBoxNoAddedForSIMS?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noBoxNoAddedForSIMS?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+                <div className="mt-3 w-full">
+                    <p>No Model Added For SIMs: {res?.data?.data?.noModelAddedForSIMs?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noModelAddedForSIMs?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>  
+                <div className="mt-3 w-full">
+                    <p>No IMEI Added For SIMs: {res?.data?.data?.noIMEIAddedForSIMS?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noIMEIAddedForSIMS?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div>  
+                <div className="mt-3 w-full">
+                    <p>No Make Added For SIMs: {res?.data?.data?.noMakeForSIMS?.length}</p>
+                    <ul className=" m-0 list-none">
+                        {res?.data?.data?.noMakeForSIMS?.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
+                </div> 
+       
+
+                
+            </div>
+        );
+    }
     function handlesubmit(actions) {
         const formData = new FormData();
         formData.append("file", formik.values.file);
@@ -136,43 +176,50 @@ export default function TabletBulkUploadAddStock({permissions,unit,model}) {
         formData.append("Uploaded_by", formik.values.Uploaded_by);
         formData.append("carrier", formik.values.carrier);
         formData.append("agentType", formik.values.agentType);
-        formData.append("AgentName", formik.values.AgentName);   
-        
-        formData.append("billingModel", formik.values.billingModel); 
+        formData.append("AgentName", formik.values.AgentName);
+
+        formData.append("billingModel", formik.values.billingModel);
         formData.append("unitType", formik.values.unitType);
         formData.append("provisionType", formik.values.provisionType);
         // Perform API call or other actions with the formData
 
-      if (Object.keys(formik.errors).length === 0 ) {  
-            if(formik.values.file !== ""){
-            formik.values.serviceProvider = parseLoginRes?.company;
-            Axios.post(`${BASE_URL}/api/web/tabletInventory/bulkAddStockTablet`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            })
+        if (Object.keys(formik.errors).length === 0) {
+            if (formik.values.file !== "") {
+                formik.values.serviceProvider = parseLoginRes?.company;
+                Axios.post(`${BASE_URL}/api/web/tabletInventory/bulkAddStockTablet`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
                 .then((res) => {
-                   ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res}/> });
-                   formik.setFieldValue("carrier", ""); 
-                   formik.setFieldValue("file", "");
-                   formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                   formik.setFieldValue("agentType", "");
-                   formik.setFieldValue("AgentName", "");
-                   formik.setFieldValue("SimNumber", ""); 
-                   formik.setFieldValue("unitType", unit);
-                   formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                   formik.setFieldValue("provisionType", "Bulk Add Tablet Stocks");
-                  setAgent([]) 
-                  setFilename(null)
-                   actions.resetForm();
+                    try {
+                        // ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                        if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.emptySIMRows?.length !== 0 ||  res?.data?.data?.newSimNumbers?.length !== 0 ||  res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0 ||  res?.data?.data?.noIMEIAddedForSIMS?.length !==0 ||  res?.data?.data?.noMakeForSIMS?.length !== 0 ) {
+                            ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                        } else {
+                            ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
+                        }
+                        formik.setFieldValue("carrier", "");
+                        formik.setFieldValue("file", "");
+                        formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
+                        ;
+                        ;
+                        formik.setFieldValue("SimNumber", "");
+                        formik.setFieldValue("unitType", unit);
+                        formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
+                        formik.setFieldValue("provisionType", "Bulk Add PrecActive Tablets");
+                        ;
+                        setFilename(null);
+                        actions.resetForm();
+                    } catch (err) {
+                    }
                 })
                 .catch(() => {
-                ref.current.show({ severity: "error", summary: "Inventory", detail:"Bulk Upload Failed"});
-               
-                 });
-            formik.values.serviceProvider = parseLoginRes?.companyName; }  
-            else{ 
-                setFileError(true)
+                    ref.current.show({ severity: "error", summary: "Inventory", detail: "Bulk Upload Failed" });
+                });
+            formik.values.serviceProvider = parseLoginRes?.companyName;
+            } else {
+                setFileError(true);
             }
         }
     }
@@ -203,13 +250,16 @@ export default function TabletBulkUploadAddStock({permissions,unit,model}) {
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown 
+                             disabled
                             value={formik.values.agentType}
-                            options={department}
+                            options={department}  
+                            name="agentType"
                             onChange={(e) => {
-                                formik.setFieldValue("agentType", e.value); 
-                                formik.setFieldValue("AgentName","")
-                                setDepartmentSelected(e.value);
+                                formik.setFieldValue("agentType", e.value);
+                                ;
+                                setDepartmentSelected(e.value);       
+                                formik.handleChange(e)
                             }}
                             placeholder="Select an option"
                             className="field-width mt-2"
@@ -219,87 +269,96 @@ export default function TabletBulkUploadAddStock({permissions,unit,model}) {
                                 {formik.errors.agentType}
                             </div>
                         )}
-                    </div>  
-                    <div className="mr-3 mb-3 mt-4"> <Button 
-                    className="field-width justify-content-center mt-4"
-                        onClick={() => {  
-                            setFileError(false)
-                            let input = document.createElement("input");
-                            input.type = "file";
-                            input.accept = ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                            input.click();
-                            input.onchange = (e) => {
-                                setFilename(e.target.files[0].name);
-
-                                formik.setFieldValue("file", e.target.files[0]);
-                            };
-                        }}
-                    >
+                    </div>
+                    <div className="mr-3 mb-3 mt-4">
                         {" "}
-                        {filename === null ? "Add File" : filename}
-                    </Button>    
-                     { fileerror ? <p className="mt-2" style={{color:"red"}}> 
-                          File is required
-                    </p>  :undefined
-}
+                        <Button
+                            className="field-width justify-content-center mt-4"
+                            onClick={() => {
+                                setFileError(false);
+                                let input = document.createElement("input");
+                                input.type = "file";
+                                input.accept = ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                                input.click();
+                                input.onchange = (e) => {
+                                    setFilename(e.target.files[0].name);
+
+                                    formik.setFieldValue("file", e.target.files[0]);
+                                };
+                            }}
+                        >
+                            {" "}
+                            {filename === null ? "Add File" : filename}
+                        </Button>
+                        {fileerror ? (
+                            <p className="mt-2" style={{ color: "red" }}>
+                                File is required
+                            </p>
+                        ) : undefined}
                     </div>
                     <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (  
-                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
-                              
-                                <i
-                                    onClick={() => {
-                                        setAddAgentDialogVisibility((prev) => !prev);
-                                    }}
-                                    className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i>  
+                            {formik.values.AgentName !== "" ? (
+                                <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
+                                    <i
+                                        onClick={() => {
+                                            setAddAgentDialogVisibility((prev) => !prev);
+                                        }}
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
                                 </Button>
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown 
+                          disabled
+                         value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
                             </div>
                         )}
-                    </div>  
+                    </div>
                     <div className="mr-3 mb-3 mt-4 ">
-                  
-                    <Button  
-                       className="mt-4 justify-content-center field-width"
-                        onClick={() => {   
-                             if(formik.values.file === ""){ 
-                                 setFileError(true)
-                             }
-                            formik.handleSubmit();
-                        }}  
-                        disabled={!(permissions.isCreate)}
-                    >
-                        Submit{" "}
-                    </Button>
+                        <Button
+                            className="mt-4 justify-content-center field-width"
+                            onClick={() => {
+                                if (formik.values.file === "") {
+                                    setFileError(true);
+                                }
+                                formik.handleSubmit();
+                            }}
+                            disabled={!permissions.isCreate}
+                        >
+                            Submit{" "}
+                        </Button>
+                    </div>
                 </div>
-                </div>
-                
-           
+
                 <>
                     <p className="mt-4">
                         <strong>Notes:</strong>
-                        SIM, MDN, Model ID (STANDARD/MICRO/NANO), MSL/PUK,Puk2, PO#,BOX#, Wholesale/Cost Price for SIM, Selling/Retail Price for SIM, UICCID, Zipcode, Activation Fee , MSID,Device ID/IMEI,ACP Co-Pay Amount,ACP Device Reimbursement Amount,Device Retail Price   
-                        {formik.values.carrier === ""? <p className="font-bold" style={{display:"inline-block"}}> &nbsp; (Sample file)</p>
-                        : <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold"> &nbsp; (Sample file)</a>
-                        }
+                        SIM, MDN, Model ID (STANDARD/MICRO/NANO), MSL/PUK,Puk2, PO#,BOX#, Wholesale/Cost Price for SIM, Selling/Retail Price for SIM, UICCID, Zipcode, Activation Fee , MSID,Device ID/IMEI,ACP Co-Pay Amount,ACP Device Reimbursement Amount,Device Retail Price
+                        {formik.values.carrier === "" ? (
+                            <p className="font-bold" style={{ display: "inline-block" }}>
+                                {" "}
+                                &nbsp; (Sample file)
+                            </p>
+                        ) : (
+                            <a download={true} href="/images/inventory Sample File.xlsx" className="font-bold">
+                                {" "}
+                                &nbsp; (Sample file)
+                            </a>
+                        )}
                     </p>
                     <p className="mt-4">
                         <strong>Notes:-</strong>
-                        Please select carrier to download the (Sample File)    
-                       
-                         </p>    
-                </>        
-               {/*<InfoForUsers ProvisionType={"AddStock"}/>*/}
+                        Please select carrier to download the (Sample File)
+                    </p>
+                </>
+                {/*<InfoForUsers ProvisionType={"AddStock"}/>*/}
                 <Dialog
                     style={{ width: "90vw" }}
                     visible={addAgentDialogVisibility}

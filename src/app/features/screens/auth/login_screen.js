@@ -3,10 +3,13 @@ import { Button } from "primereact/button";
 import { NavLink } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+import * as Yup from "yup"; 
+import "./login.css"
 import Axios from "axios";
+import {Password} from "primereact/password"
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function LoginScreen({ setRefreshApp }) {
+export default function LoginScreen({ setRefreshApp }) { 
+    const [showPassowrd,setShowPassword]=useState(false)
     const [loading, setLoading] = useState(false);
     const [errormsg, setErrorMsg] = useState(null);
     const formik = useFormik({
@@ -60,7 +63,7 @@ export default function LoginScreen({ setRefreshApp }) {
             <div className="flex justify-center items-center" style={{ minHeight: "100vh" }}>
                 <div className="card col-4 m-auto" style={{ height: "50vh" }}>
                     <div className="flex justify-content-center">
-                        <p className="text-xl font-semibold mb-3 pt-3">Login</p>
+                        <p className="text-2xl font-bold mb-3 pt-3">LOGIN</p>
                     </div>
                     {errormsg ? (
                         <div className="flex justify-content-center mb-2">
@@ -70,12 +73,26 @@ export default function LoginScreen({ setRefreshApp }) {
                         </div>
                     ) : null}
                     <div className="flex justify-content-center  w-full">
-                        <form onSubmit={formik.handleSubmit}>
-                            <InputText type="text" name="email" className="p-inputtext-sm block mb-4 w-20rem" placeholder="Enter email" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} />
-                            {formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm mt-0">{formik.errors.email}</p> : null}
-                            <InputText type="password" name="password" className="p-inputtext-sm block mb-2 w-20rem" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
-                            {formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm mt-0">{formik.errors.password}</p> : null}
-                            <Button type="submit" className="w-20rem mt-3" label="Login" disabled={loading} icon={loading === true ? "pi pi-spin pi-spinner " : ""} />
+                        <form onSubmit={formik.handleSubmit}> 
+                             
+                            <InputText type="text" name="email" style={{height:"40px"}} className="mt-2  block mb-2 w-20rem" placeholder="Enter email" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                            {formik.touched.email && formik.errors.email ? <p className="text-red-500 p-error ml-1 text-sm mt-0">{formik.errors.email}</p> : null}
+                            <div className="mt-2 passworddiv" style={{height:"40px"}} >
+                            <Password  type="password"  style={{height:"35px"}} feedback={false} tabIndex={1} name="password" className="" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                                <i className={`${showPassowrd ? "pi-eye":"pi-eye-slash"} pi`} onClick={(e)=>{ 
+                                       
+                                          if(
+                                            e.target.previousElementSibling.children[0].type === "text" ){
+                                        e.target.previousElementSibling.children[0].type="password" 
+                                          } 
+                                           else{     
+                                            e.target.previousElementSibling.children[0].type="text" 
+                                           } 
+                                           setShowPassword(prev=>!prev)  
+                                }}/>
+                             </div>
+                            {formik.touched.password && formik.errors.password ? <p className="text-red-500 p-error ml-1 text-sm mt-0">{formik.errors.password}</p> : null}
+                            <Button type="submit" className="w-20rem mt-2" label="Login" disabled={loading} icon={loading === true ? "pi pi-spin pi-spinner " : ""} />
                             <div>
                                 <NavLink className="font-semibold mt-3 justify-content-center flex " to={{ pathname: "/sendotp", state: { email: formik.values.email } }}>
                                     Forgot Password?

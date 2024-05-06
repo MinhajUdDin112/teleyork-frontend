@@ -15,46 +15,87 @@ const TransferException = [
         label: "Other",
         value: "Other",
     },
-   
 ];
-const statusOption = [
-    { label: "Select Status", value: "" },
-    {
-        label: "Label Printed",
-        value: "labelPrinted",
-    },
-    {
-        label: "Pre-Shipment",
-        value: "preShipment",
-    },
-    {
-        label: "In-Transit",
-        value: "inTransit",
-    },
-    {
-        label: "Evaluation",
-        value: "evaluation",
-    },
-    {
-        label: "Delivered",
-        value: "delivered",
-    },
+const prospectStatusOptions = [
     {
         label: "Active",
         value: "active",
     },
-   
+    {
+        label: "Disconnect",
+        value: "disconnected",
+    },
+];
+const activeStatusOptions = [
+    {
+        label: "Suspend",
+        value: "suspended",
+    },
+    {
+        label: "Disconnect",
+        value: "disconnected",
+    },
+];
+const suspendStatusOptions = [
+    {
+        label: "Active",
+        value: "active",
+    },
+    {
+        label: "Disconnect",
+        value: "disconnected",
+    },
+];
+const disconnectStatusOptions = [
+    {
+        label: "Reconnect",
+        value: "reconnect",
+    },
+];
+const statusOption = [
+    { label: "Select Status", value: "" },
+    // {
+    //     label: "Label Printed",
+    //     value: "labelPrinted",
+    // },
+    {
+        label: "Pre-Shipment",
+        value: "preShipment",
+    },
+    // {
+    //     label: "In-Transit",
+    //     value: "inTransit",
+    // },
+    {
+        label: "Evaluation",
+        value: "evaluation",
+    },
+    // {
+    //     label: "Delivered",
+    //     value: "delivered",
+    // },
+    {
+        label: "Active",
+        value: "active",
+    },
+
     // {
     //     label: "Reconnect",
     //     value: "reconnect",
     // },
-    // {
-    //     label: "Suspend",
-    //     value: "suspend",
-    // },
+    {
+        label: "Suspend",
+        value: "suspended",
+    },
     {
         label: "Disconnect",
-        value: "disconnect",
+        value: "disconnected",
+    },
+];
+const connectionExternally = [
+    {
+        label: "Externally",
+        value: "Externally",
     },
 ];
 const connection = [
@@ -71,4 +112,4 @@ const connection = [
         value: "Internally",
     },
 ];
-export { TransferException, statusOption, connection };
+export { TransferException, statusOption, prospectStatusOptions, activeStatusOptions, suspendStatusOptions, disconnectStatusOptions, connection, connectionExternally };

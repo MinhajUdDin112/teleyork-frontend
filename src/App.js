@@ -12,8 +12,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { useLocation } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
 import { AppTopbar } from "./AppTopbar";
+import { CSSTransition } from "react-transition-group";
 import { AppFooter } from "./AppFooter";
 import MainPrepaidOrders from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/prepaid_orders_main";
 import ShippingQueue from "./app/features/screens/inventory_management/shipping_queue/shipping_queue";
@@ -66,6 +66,7 @@ import Address from "./app/features/screens/self_enrollment/Address";
 import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
 import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
 import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
+
 import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
@@ -123,6 +124,18 @@ import Invoices_Downloads from "./app/features/screens/Bulk_Downloads/Invoices_D
 import Inventory_Downloads from "./app/features/screens/Bulk_Downloads/Inventory_Downloads/Inventory_Downloads";
 import PostpaidActivatedBulkUpload from "./app/features/screens/PostPaid-order/PostOrder-Screens/BulkActivatedUpload/Bulk_Activated_Upload";
 
+// importing Reports
+import Reports from "./app/features/screens/Reports_Downloads/Reports";
+//import Roles_Permission from "./app/features/screens/user_management/Manage_Role_RIghts_Permission/Roles_Permission";
+import BillingNavbar from "./app/features/screens/customer_profile/modals/BillingNavbar";
+import PrepiadSelfVerifyZip from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/VerifyZip";
+import PrepaidSelfPersonalInfo from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/PersonalInfo";
+import PrepaidSelfAddress from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Address";
+import PrepaidSelfEligibility from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Eligibility";
+import PrepaidSelfNationalVerifier from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/NationalVerifier";
+import PrepaidSelfResumeApplication from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/ResumeApplication";
+import PrepiadSelectInventory from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Select_Inventory";
+import PrepaidAllSelfEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_Self_enrollments.js/all_enrollment";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -145,15 +158,15 @@ const App = () => {
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const [permittedRoutes, setPermittedRoutes] = useState([]);
+    const [refreshNotificationcomponent, setRefreshNotificationComponent] = useState(false);
+    const [refreshEsn, setRefreshEsn] = useState(false);
+    const [refreshBell, setRefreshBell] = useState(false);
+    const [handleHighlight, setHandleHighlight] = useState("");
     const copyTooltipRef = useRef();
     const location = useLocation();
     const navigate = useNavigate();
     let menuClick = false;
     let mobileTopbarMenuClick = false;
-    //get selected id from local storage
-    const selectedid = localStorage.getItem("selectedId");
-    const parseselectedid = JSON.parse(selectedid);
-    //MobileMenu When ACTIVE
     useEffect(() => {
         if (mobileMenuActive) {
             addClass(document.body, "body-overflow-hidden");
@@ -325,7 +338,21 @@ const App = () => {
         let permedRoutes = permittedRoutes;
         return permedRoutes.includes(route);
     };
+    const [customerServicesIndex, setCustomerServicesIndex] = useState();
+    const [activeTab, setActiveTab] = useState();
 
+    // Function to activate a specific tab
+
+    useEffect(() => {
+        for (let i = 0; i < dynamicMenu[0]?.items?.length; i++) {
+            if (dynamicMenu[0]?.items[i]?.label === "Customer Service") {
+                if (customerServicesIndex === undefined) {
+                    setCustomerServicesIndex(i);
+                }
+                //setActiveTab(i)
+            }
+        }
+    }, [dynamicMenu]);
     return (
         <>
             {protectedRoute === true ? (
@@ -344,9 +371,12 @@ const App = () => {
                         mobileTopbarMenuActive={mobileTopbarMenuActive}
                         onMobileTopbarMenuClick={onMobileTopbarMenuClick}
                         onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
+                        setRefreshNotificationComponent={setRefreshNotificationComponent}
+                        refreshBell={refreshBell}
+                        setHandleHighlight={setHandleHighlight}
                     />
                     <div className="layout-sidebar">
-                        <AppMenu model={dynamicMenu} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
+                        <AppMenu model={dynamicMenu} activeTab={activeTab} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
                     </div>
                     <div className="layout-main-container ">
                         <div className="layout-main">
@@ -394,7 +424,7 @@ const App = () => {
                                             <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                             <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                             <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
-                                            {parseselectedid ? <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> : <Route path="/invoice" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
+                                            <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> 
                                             <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
                                             <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
                                             <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
@@ -422,14 +452,14 @@ const App = () => {
                                             <Route path="/prepaid-allenrollment" element={isPermitted("/prepaid-allenrollment") ? <PrepaidAllEnrollments /> : <Dashboard />} />
                                             <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                             <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
-                                            <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} /> 
-                                            
+                                            <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
+
                                             <Route path="/postpaid-activated-bulkupload" element={isPermitted("/postpaid-activated-bulkupload") ? <PostpaidActivatedBulkUpload /> : <Dashboard />} />
                                             <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue") ? <Provisioning_queue /> : <Dashboard />} />
                                             <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments") ? <Approved_Enrollments /> : <Dashboard />} />
                                             <Route path="/billing-model-configuration" element={<BillingModelConfigurations />} />
                                             <Route path="/draftall/:id" element={<ShowDraftAll />} />
-                                            <Route path="/sentall/:id" element={<ShowSentAll />} /> 
+                                            <Route path="/sentall/:id" element={<ShowSentAll />} />
 
                                             <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
                                             <Route path="/personalinfo" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
@@ -437,6 +467,15 @@ const App = () => {
                                             <Route path="/selfeligibile" element={isPermitted("/selfenrollment") ? <Eligibility /> : <Dashboard />} />
                                             <Route path="/nationalverifier" element={isPermitted("/selfenrollment") ? <NationalVerifier /> : <Dashboard />} />
                                             <Route path="/resumeapplication" element={isPermitted("/selfenrollment") ? <ResumeApplication /> : <Dashboard />} />
+                                            <Route path="/new-selfenrollment" element={isPermitted("/new-selfenrollment") ? <PrepiadSelfVerifyZip /> : <Dashboard />} />
+                                            <Route path="/prepaid-selectinventory" element={isPermitted("/new-selfenrollment") ? <PrepiadSelectInventory /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfpersonalinfo" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfPersonalInfo /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfaddress" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfAddress /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfeligibile" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfEligibility /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfnationalverifier" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfNationalVerifier /> : <Dashboard />} />
+                                            <Route path="/prepaid-selfresumeapplication" element={isPermitted("/new-selfenrollment") ? <PrepaidSelfResumeApplication /> : <Dashboard />} />
+                                            <Route path="/all-selfenrollment" element={isPermitted("/all-selfenrollment") ? <PrepaidAllSelfEnrollments /> : <Dashboard />} />
+
                                             <Route path="/createtemplate" element={isPermitted("/createtemplate") ? <CreateTemplate /> : <Dashboard />} />
                                             <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                             <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
@@ -450,7 +489,28 @@ const App = () => {
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                            {parseselectedid ? <Route exact path="/customer-profile" element={isPermitted("/customer-profile") ? <CustomerProfile /> : <Dashboard />} /> : <Route path="/customer-profile" element={<Dashboard permittedRoutes={permittedRoutes} />} />}
+                                            
+                                                <Route
+                                                    exact
+                                                    path="/customer-profile"
+                                                    element={
+                                                        isPermitted("/customer-profile") ? (
+                                                            <CustomerProfile
+                                                                activeTab={activeTab}
+                                                                customerServicesIndex={customerServicesIndex}
+                                                                setActiveTab={setActiveTab}
+                                                                refreshNotificationcomponent={refreshNotificationcomponent}
+                                                                refreshEsn={refreshEsn}
+                                                                setRefreshEsn={setRefreshEsn}
+                                                                setRefreshBell={setRefreshBell}
+                                                                handleHighlight={handleHighlight}
+                                                            />
+                                                        ) : (
+                                                            <Dashboard />
+                                                        )
+                                                    }
+                                                />
+                                            
                                             <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                             <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
                                             <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />
@@ -460,11 +520,14 @@ const App = () => {
                                             <Route exact path="postpaid-approvedenrollment" element={isPermitted("/postpaid-approvedenrollment") ? <ApprovedEnrollments /> : <Dashboard />} />
                                             <Route exact path="postpaid-dispatchinsight" element={isPermitted("/postpaid-dispatchinsight") ? <Post_Dispatch_Insight /> : <Dashboard />} />
                                             <Route path="/Postpersonalinfo" element={<PostPersonalInfo />} />
-
+                                            <Route path="/roles-permissions" element={<Roles_Permission />} />
                                             {/* handling Bulk Downloads Routes */}
                                             <Route path="/label-downloads" element={isPermitted("/label-downloads") ? <Label_Downloads /> : <Dashboard />} />
                                             <Route path="/invoices-downloads" element={isPermitted("/invoices-downloads") ? <Invoices_Downloads /> : <Dashboard />} />
                                             <Route path="/inventory-downloads" element={isPermitted("/inventory-downloads") ? <Inventory_Downloads /> : <Dashboard />} />
+
+                                            {/* Reports Route */}
+                                            <Route path="/reports-downloads" element={isPermitted("/reports-downloads") ? <Reports /> : <Dashboard />} />
                                         </Routes>
                                     ) : undefined}
                                 </>

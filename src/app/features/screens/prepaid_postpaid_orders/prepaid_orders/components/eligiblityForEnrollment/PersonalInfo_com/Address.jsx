@@ -21,7 +21,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [isPoBox, setIsPoBox] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const zipDataLs = localStorage.getItem("prepaidbasicData");
-    const zipDataParsed = JSON.parse(zipDataLs);
+    const zipDataParsed = JSON.parse(zipDataLs);     
+    
     const zipCode = zipDataParsed?.data?.zip;
     const zipCity = zipDataParsed?.data?.city;
     const zipState = zipDataParsed?.data?.state;
@@ -51,15 +52,15 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             poBoxState: "",
             poBoxCity: "",
         },
-        onSubmit: async (values, actions) => {    
-            checkEligiblity();
+        onSubmit: async (values, actions) => {
+            // checkEligiblity();
             const userId = _id;
             const dataToSend = {
                 address1: formik.values.address1,
                 address2: formik.values.address2,
-                zip: zipCode,
-                city: zipCity,
-                state: zipState,
+                zip: formik.values.zip,
+                city: formik.values.city,
+                state: formik.values.state,
                 isSameServiceAddress: formik.values.isSameServiceAddress,
                 isNotSameServiceAddress: formik.values.isNotSameServiceAddress,
                 isPoBoxAddress: formik.values.isPoBoxAddress,
@@ -75,7 +76,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                 userId: userId,
                 csr: csr,
             };
-            
+
             setIsLoading(true);
             try {
                 const response = await Axios.post(`${BASE_URL}/api/user/homeAddress`, dataToSend);
@@ -87,7 +88,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             } catch (error) {
                 toast.error(error?.response?.data?.msg);
                 setIsLoading(false);
-            }  
+            }
         },
     });
 
@@ -103,14 +104,14 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     };
 
     // useEffect(() => {
-    //    
+    //
     //     if (isDifferent == "false") {
     //         formik.setFieldValue("mailingAddress1", formik.values.address1);
     //         formik.setFieldValue("mailingAddress2", formik.values.address2); // Corrected line
     //         formik.setFieldValue("mailingZip", zipCode);
     //         formik.setFieldValue("mailingCity", zipCity);
     //         formik.setFieldValue("mailingState", zipState);
-    //        
+    //
     //     }
     // }, []);
 
@@ -124,7 +125,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             formik.setFieldValue("mailingState", zipState);
             formik.setFieldValue("poBoxZip", zipCode);
             formik.setFieldValue("poBoxCity", zipCity);
-            formik.setFieldValue("poBoxState", zipState);
+            formik.setFieldValue("poBoxState", zipState);        
         }
     }, [zipCode]);
 
@@ -299,7 +300,13 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             }
         }
     };
-
+    useEffect(() => {
+        // Retrieve the city value from localStorage and set it to formik state
+        const cityValue = localStorage.getItem("cityValue");
+        if (cityValue) {
+            formik.setFieldValue("city", cityValue);
+        }
+    }, []);
     return (
         <>
             <ToastContainer />
@@ -351,26 +358,26 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            City <FontAwesomeIcon className="disable-icon-color icon-size" />{" "}
                         </p>
-                        <InputText type="text" value={formik.values.city} name="city" disabled className="w-21rem disable-color" />
+                        <InputText type="text" value={formik.values.city} name="city" className="w-21rem disable-color" onChange={formik.handleChange} onBlur={formik.handleBlur} />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={zipDataParsed?.data?.izZipVerified ? faBan:false} />
                         </p>
-                        <InputText type="text" value={formik.values.state} name="state" disabled className="w-21rem disable-color" />
+                        <InputText type="text" onBlur={formik.handleBlur} onChange={formik.handleChange}   disabled={zipDataParsed?.data?.izZipVerified === true ? true:false } value={formik.values.state} name="state" className="w-21rem disable-color" />
                     </div>
                     <div className="mr-3 mb-3">
                         <p className="m-0">
-                            Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
+                            Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />
                         </p>
-                        <InputText value={formik.values.zip} name="zip" disabled className="w-21rem disable-color" />
+                        <InputText disabled value={formik.values.zip} name="zip" onChange={formik.handleChange}  onBlur={formik.handleBlur} className="w-21rem disable-color" />
                     </div>
                 </div>
                 <p className="w-100rem mt-4">Is Your Mailling Address?</p>
-                   
-                <div className="flex flex-wrap mt-4">     
+
+                <div className="flex flex-wrap mt-4">
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
                         <label htmlFor="sameAdress" className="ml-2">

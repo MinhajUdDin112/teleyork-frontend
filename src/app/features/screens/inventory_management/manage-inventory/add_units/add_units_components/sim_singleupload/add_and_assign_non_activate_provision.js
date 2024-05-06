@@ -15,13 +15,14 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,model }) {
     let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes);
+    const parseLoginRes = JSON.parse(loginRes); 
+    
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
+    const [departmentselected, setDepartmentSelected] = useState( parseLoginRes?.department);
     const [Model, setModel] = useState(null);
     useEffect(() => {
         if (department === null) {
@@ -51,7 +52,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                         agentholder.push(obj);
                     }
 
-                    setAgent(agentholder);
+                    setAgent(agentholder);   
+                
                 })
                 .catch(() => {});
         }
@@ -84,7 +86,6 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
             })
             .catch(() => {});
     }, []);
-    console.log("department is ", department);
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
@@ -102,8 +103,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
         initialValues: {
             carrier: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             SimNumber: "",
             box: "",
             Model: "",
@@ -112,11 +113,11 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add And Assign Non Active",
         },
-
+        
         onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
-    });
+    });    
     function handlesubmit(actions) {
         let obj = formik.values;
         obj.serviceProvider = parseLoginRes.company;
@@ -128,8 +129,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
 
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    formik.setFieldValue("agentType", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
+                    ;
                     formik.setFieldValue("SimNumber", "");
 
                     formik.setFieldValue("box", "");
@@ -140,7 +141,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                     formik.setFieldValue("provisionType", "Add And Assign Non Active");
                     actions.resetForm();
-                    setAgent([]);
+                    ;
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;
@@ -207,12 +208,13 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown 
+                        disabled
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -240,7 +242,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}

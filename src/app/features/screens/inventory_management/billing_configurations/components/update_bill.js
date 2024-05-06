@@ -11,7 +11,6 @@ import "./billingmodel_configurations/css/updatebill.css";
 import AddNewFeature from "./add_newfeature";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefresh, optionsForInventoryType }) {
-    console.log(rowData);
     //const toast=Toast
     const [currentBillingId, setCurrentBillingId] = useState("");
     const [newDiscount, setNewDiscount] = useState(false);
@@ -22,16 +21,20 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     const [inventoryTypeOptions, setInventoryTypeOptions] = useState([]);
     let additionalFeature = [];
     for (let i = 0; i < rowData.additionalFeature.length; i++) {
-        additionalFeature.push(rowData.additionalFeature[i]._id);
+        additionalFeature.push(rowData?.additionalFeature[i]?._id);
     }
+    additionalFeature = additionalFeature.filter((item) => item !== undefined);
     let oneTimeCharge = [];
     for (let i = 0; i < rowData.monthlyCharge.length; i++) {
-        oneTimeCharge.push(rowData.monthlyCharge[i]._id);
+        oneTimeCharge.push(rowData?.monthlyCharge[i]?._id);
     }
+
+    oneTimeCharge = oneTimeCharge.filter((item) => item !== undefined);
     let selecteddiscount = [];
     for (let i = 0; i < rowData.selectdiscount.length; i++) {
-        selecteddiscount.push(rowData.selectdiscount[i]._id);
+        selecteddiscount.push(rowData?.selectdiscount[i]?._id);
     }
+    selecteddiscount = selecteddiscount.filter((item) => item !== undefined);
     const formik = useFormik({
         // validationSchema: validationSchema,
         initialValues: {
@@ -47,9 +50,10 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             latefeeCharge: rowData.latefeeCharge,
             applyLateFee: rowData.applyLateFee,
             subsequentBillCreateDate: rowData.subsequentBillCreateDate,
+            applyToCustomer: rowData?.applyToCustomer,
         },
         onSubmit: async (values, actions) => {
-            let selectdiscount = [];
+            /*  let selectdiscount = [];
             for (let i = 0; i < Object.keys(formik.values.selectdiscount).length; i++) {
                 selectdiscount.push(formik.values.selectdiscount[i]._id);
             }
@@ -60,7 +64,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
             let paymentMethod = [];
             for (let i = 0; i < Object.keys(formik.values.paymentMethod).length; i++) {
                 paymentMethod.push(formik.values.paymentMethod[i]._id);
-            }
+            }*/
             const dataToSend = {
                 ServiceProvider: parseLoginRes?.company,
                 oneTimeCharge: formik.values.oneTimeCharge,
@@ -73,6 +77,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                 latefeeCharge: formik.values.latefeeCharge,
                 applyLateFee: formik.values.applyLateFee,
                 subsequentBillCreateDate: formik.values.subsequentBillCreateDate,
+                applyToCustomer: formik.values.applyToCustomer,
             };
 
             try {
@@ -120,10 +125,8 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
         { label: "Skip Payment", value: "Skip Payment" },
     ];
     const optionsForCreation = [
-   
-            { label: "On Activation", value: "On Activation" },
-            { label: "After QA Approval ", value: "On QA Approval" },
-       
+        { label: "On Activation", value: "On Activation" },
+        { label: "After QA Approval ", value: "On QA Approval" },
     ];
 
     const getDiscount = async () => {
@@ -150,7 +153,7 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
     }, []);
     useEffect(() => {
         if (formik.values.inventoryType !== "") {
-            Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}`).then((res) => {
+            Axios.get(`${BASE_URL}/api/web/plan/getByInventoryType?inventoryType=${formik.values.inventoryType}&serviceProvider=${parseLoginRes.company}&billingModel=${formik.values.billingmodel}`).then((res) => {
                 setAllPlan(res?.data?.data || []);
             });
         }
@@ -280,7 +283,35 @@ export default function UpdateBill({ rowData, setUpdatePlanVisibility, setRefres
                         <p>Days After the Due Date</p>
                     </div>
                 </div>
-
+                <div className="mt-3 field-width  ">
+                    <label className="field_label mb-2 text-md">Apply To Customers</label>
+                    <Dropdown
+                        className="w-full"
+                        id="applyToCustomer"
+                        options={[
+                            {
+                                label: "Existing",
+                                value: "existing",
+                            },
+                            {
+                                label: "Both",
+                                value: "both",
+                            },
+                            {
+                                label: "New Customer",
+                                value: "newCustomer",
+                            },
+                        ]}
+                        value={formik.values.applyToCustomer}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.applyToCustomer && formik.errors.applyToCustomer ? (
+                        <p className="mt-2 ml-2" style={{ color: "red" }}>
+                            {formik.errors.applyToCustomer}
+                        </p>
+                    ) : null}
+                </div>
                 <div className="mt-3 field-width  ">
                     <label className="field_label mb-2 text-md">Payment Method</label>
 

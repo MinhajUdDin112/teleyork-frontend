@@ -19,7 +19,7 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [Model, setModel] = useState(null);    
      //Make Options   
      const [makeOptions,setMakeOption]=useState(null) 
@@ -126,15 +126,18 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
-              IMEI:Yup.string().required("IMEI is required").min(14, "IMEI must be at least 14 characters").max(15, "IMEI Number must be at most 15 characters"),
+              IMEI:Yup.string()
+              .required("IMEI is required")
+              .matches(/^\d+$/, 'ESN must contain only digits') 
+              . length(15, "IMEI must be exactly 15 digits"),
             AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
         initialValues: {
             carrier: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             Esn: "",
             /* team: "",*/
             box: "",
@@ -164,8 +167,8 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
                    formik.setFieldValue("carrier", "");
                    formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                   formik.setFieldValue("agentType", "");
-                   formik.setFieldValue("AgentName", "");
+                   ;
+                   ;
                    formik.setFieldValue("Esn", "");
                    formik.setFieldValue("box", "");
                    formik.setFieldValue("Model", "");
@@ -178,7 +181,7 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
                    actions.resetForm();  
                    setSelectedMakeId(null)
                    setModel([])
-                   setAgent([]);
+                   ;
                 })
                 .catch((error) => {  
                  
@@ -247,12 +250,13 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown 
+                         disabled
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);   
-                                formik.setFieldValue("AgentName","")
+                                
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -281,7 +285,7 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -335,7 +339,7 @@ export default function TabletSingleUploadAddProvision({permissions,unit,model})
                         <p className="m-0">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" keyfilter="int"  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText type="text" keyfilter="int" maxLength={15} minLength={15}  value={formik.values.IMEI} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}

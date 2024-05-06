@@ -9,7 +9,6 @@ import { carrierdisconnect, disconnectreasons, makeabbchildasparent, nlad, vcare
 import { Dropdown } from "primereact/dropdown";
 export default function ClearMdn({ setPage }) {
     function handleDeactivateMdnSubmit() {
-        console.log("form will submit here");
     }
     const formik = useFormik({
         initialValues: {

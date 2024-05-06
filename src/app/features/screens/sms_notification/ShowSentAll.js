@@ -2,67 +2,56 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate ,useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSentByTemplateIdAction } from "../../../store/notification/NotificationAction";
 import CustomLoading from "../../components/custom_spinner";
-import { Dialog } from "primereact/dialog";  
+import { Dialog } from "primereact/dialog";
 import { useState } from "react";
-const ShowSentAll = () => {  
+const ShowSentAll = () => {
     const location = useLocation();
-    const currentPath = location?.pathname  
+    const currentPath = location?.pathname;
     const actionBasedChecks = () => {
+        const loginPerms = localStorage.getItem("permissions");
+        const parsedLoginPerms = JSON.parse(loginPerms);
 
-        const loginPerms = localStorage.getItem("permissions")
-        const parsedLoginPerms = JSON.parse(loginPerms)
-    
-        const isCreate = parsedLoginPerms.some((node) =>
-          node?.subModule.some((subNode) =>
-            subNode?.route === currentPath && subNode?.actions.some((action) =>
-              action?.name === "create"
-            )
-          )
-        );
-        setIsCreate(isCreate)
-    
-        const isManage = parsedLoginPerms.some((node) =>
-          node?.subModule.some((subNode) =>
-            subNode?.route === currentPath && subNode?.actions.some((action) =>
-              action?.name === "manage"
-            )
-          )
-        );
-        setIsManage(isManage)
-    
-      }; 
-      const [isManage,setIsManage]=useState(null)  
-      const [isCreate,setIsCreate]=useState(null) 
-    
-     useEffect(()=>{ 
-       actionBasedChecks()
-     },[])
+        const isCreate = parsedLoginPerms.some((node) => node?.subModule.some((subNode) => subNode?.route === currentPath && subNode?.actions.some((action) => action?.name === "create")));
+        setIsCreate(isCreate);
+
+        const isManage = parsedLoginPerms.some((node) => node?.subModule.some((subNode) => subNode?.route === currentPath && subNode?.actions.some((action) => action?.name === "manage")));
+        setIsManage(isManage);
+    };
+    const [isManage, setIsManage] = useState(null);
+    const [isCreate, setIsCreate] = useState(null);
+
+    useEffect(() => {
+        actionBasedChecks();
+    }, []);
     const [visible, setVisible] = useState(false);
     const [templatebody, setTemplatebody] = useState("");
-    const messageBody=(rowData) => {
+    const messageBody = (rowData) => {
         let template = rowData.message;
         let shortline = template.substring(0, 10);
-        
+
         return (
             <div id="template">
-                {template.length > 10 ?<p>
-                    {shortline}
-                    <span
-                        style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
-                        onClick={(e) => {
-                            setTemplatebody(rowData.message);
-                            setVisible(true);
-                        }}
-                    >
-                        {" "}
-                        See more
-                    </span>
-                </p>:<p>{template}</p> 
-    }
+                {template.length > 10 ? (
+                    <p>
+                        {shortline}
+                        <span
+                            style={{ color: "red", cursor: "pointer", fontSize: "12px" }}
+                            onClick={(e) => {
+                                setTemplatebody(rowData.message);
+                                setVisible(true);
+                            }}
+                        >
+                            {" "}
+                            See more
+                        </span>
+                    </p>
+                ) : (
+                    <p>{template}</p>
+                )}
             </div>
         );
     };
@@ -70,14 +59,9 @@ const ShowSentAll = () => {
     const dispatch = useDispatch();
     const { getSentByTemplateId, getSentByTemplateIdLoading } = useSelector((state) => state.notification);
     const navigate = useNavigate();
-
-    const { loginData } = useSelector((state) => state.login);
-
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
-    const companyId = parseLoginRes?.company
-
+    const companyId = parseLoginRes?.company;
     useEffect(() => {
         let body = {
             userId: parseLoginRes?._id,
@@ -115,11 +99,11 @@ const ShowSentAll = () => {
                         </div>
                     </>
                 )}
-            </div>   
+            </div>
             <Dialog
                 header="Message Body"
                 visible={visible}
-                style={{ width: "50vw" }}   
+                style={{ width: "50vw" }}
                 draggable={false}
                 onHide={() => {
                     setVisible(false);

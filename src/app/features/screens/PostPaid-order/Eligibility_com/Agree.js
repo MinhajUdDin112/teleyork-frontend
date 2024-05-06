@@ -3,14 +3,14 @@ import { Button } from "primereact/button";
 import { useFormik, } from "formik";
 import * as Yup from "yup";
 import { Dropdown } from "primereact/dropdown";
-import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import CardAuthPayment from "./dialog/CardAuthPayment";
-import EcheckAuthPayment from "./dialog/EcheckAuthPayment";
+import EcheckAuthPayment from "./dialog/EcheckAuthPayment"; 
+import PaymentStripModule from "./dialog/stripe_payment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
@@ -24,7 +24,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const parseLoginRes = JSON.parse(loginRes);
     const companyName = parseLoginRes?.companyName
     const toCapitalCompanyName = companyName.toUpperCase()
-   
+    const [paidAmountRequired,setPaidAmountRequired]=useState(false)
+  
     //Handle Back
     let paymentInfo = JSON.parse(localStorage.getItem("dataToSend"));
     
@@ -33,7 +34,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
     const validationSchema = Yup.object().shape({
         //billId: Yup.string().required("Product is required"),
         paymentMode: Yup.string().required("Payment Mode are required"),
-        plan: Yup.string().required("Please Select it first"),
+        plan: Yup.string().required("Please Select it first"),  
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -45,7 +46,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             additional: [],
             totalamount: "",
             customerid: _id,
-            type: "Sign Up ",
+            type: "Sign Up ",         
+             paid:"", 
             productName:"",
         },
         onSubmit: async (values, actions) => {
@@ -98,7 +100,15 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
             }
             else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="ZISFONE LLC") {   
                 setdialogForCardAuth(true);
-        } 
+        }  
+        else if (formik.values.paymentMode=="Credit Card" && toCapitalCompanyName=="IJ WIRELESS") {   
+           if(formik.values.paid !== ""){
+            setPaymentDialogVisibility(true) 
+           } 
+            else{ 
+                setPaidAmountRequired(true)
+            }
+    } 
 
            
         },
@@ -233,7 +243,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         <label className="block">Select Product</label>
                         <Dropdown
                             disabled={paymentInfo && paymentInfo}
-                            className="field-width mt-2"
+                            className="field-width mt-2"           
+                             name="billId"
                             value={formik.values.billId}
                             onChange={(e) => {
                                 formik.setFieldValue("billId", e.value);
@@ -251,7 +262,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("simpricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("simadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totalsimdiscount")))).toString();
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearray")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearray")) : []);
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")).length > 0 ? JSON.parse(localStorage.getItem("simadditionalfeaturearraytotal")) : []);
+                                   
                                     formik.setFieldValue("totalamount", amountafterdiscount);
                                     formik.setFieldValue("plan", "")
                                     // Inside the inventory selection handler
@@ -260,7 +272,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 } else if (inventory === "WIRELESS DEVICE") {
                                     formik.setFieldValue("additional", JSON.parse(localStorage.getItem("devicediscountobjectarray")).length > 0 ? JSON.parse(localStorage.getItem("devicediscountobjectarray")) : []);
                                     formik.setFieldValue("discount", JSON.parse(localStorage.getItem("devicediscountobjectarray")));
-                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearray")));
+                                    formik.setFieldValue("additional", JSON.parse(localStorage.getItem("deviceadditionalfeaturearraytotal")));
                                     let oneTimeCharge = JSON.parse(localStorage.getItem("devicepricing")).oneTimeCharge;
                                     let amountafteradditionalfeature = parseFloat(JSON.parse(localStorage.getItem("deviceadditionaltotal")));
                                     let amountafterdiscount = (parseFloat(oneTimeCharge) + amountafteradditionalfeature - parseFloat(JSON.parse(localStorage.getItem("totaldevicediscount")))).toString();
@@ -325,7 +337,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                     {getFormErrorMessage("plan")}
                                 </>
                             </>
-                        ) : (
+                        ) :  (
                             <>
                                 <Dropdown
                                     disabled={paymentInfo ? true : false}
@@ -450,7 +462,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                                 {getFormErrorMessage("additional")}
                             </>
                         )}
-                    </div>
+                    </div>     
+
                     <div className="mt-2">
     <label className="block">Net Amount</label>
     <InputText
@@ -464,8 +477,33 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
         }}
     />
     {getFormErrorMessage("totalpayment")}
-</div>
-
+</div>    
+{ (formik.values.paymentMode ==="Credit Card" && toCapitalCompanyName=="IJ WIRELESS")  ?  
+     
+<div className="mt-2">
+                        <label className="block">Paying Amount</label>
+                        <InputText
+                    
+                            className="field-width mt-2"
+                            id="paid"
+                            value={formik.values.paid}
+                            onChange={(e) => {
+                                if(e.target.value === ""){ 
+                                    setPaidAmountRequired(true)
+                                } 
+                                else{ 
+                                   setPaidAmountRequired(false)
+                                }
+                               formik.setFieldValue("paid", e.target.value);
+                            
+                            }}
+                        />    
+                          { 
+                                        paidAmountRequired  ? <p className="p-error mt-1 ml-1">Paying Amount Is Required</p>:""
+                                      }
+                        {getFormErrorMessage("paid")}
+                    </div> 
+                     :undefined} 
                     <div className="mt-2">
                         <label className="block">Select Payment Method</label>
                        {  inventory === "SIM" ?  <Dropdown
@@ -514,13 +552,11 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                         
                         {getFormErrorMessage("paymentMode")}
                     </div>
-                    {formik.values.paymentMode == "card" ? (
-                        <>
+                 
                             <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
-                                <PaymentStripModule amount={formik.values.totalamount} object={formik.values} handleNext={handleNext} />
+                                <PaymentStripModule amount={formik.values.totalamount} paid={formik.values.paid} object={formik.values} handleNext={handleNext} />
                             </Dialog>
-                        </>
-                    ) : undefined}
+                      
                 </div>
             </div>
         </form>

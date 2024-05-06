@@ -6,7 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
 import Axios from "axios";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { DialogeForAddNewType } from "./dialogs/DialogeForAddNewType";
 import { Dialog } from "primereact/dialog";
 import { useFormik } from "formik";
@@ -21,9 +21,17 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
+import DisplayAllHighPriorityNotes from "./dialogs/display_priority_notes/PriorityNotes";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const CustomerProfile = () => {
+const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent, handleHighlight }) => {
     const [cpData, setCpData] = useState([]);
+    const { state } = useLocation();
+    const selectedId = state?.selectedId;
+    const navigate = useNavigate();
+    if (selectedId === undefined) {
+        navigate("/");
+    }
+    const [mvno, setmvno] = useState("");
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
     const [allNotesTypes, setAllNotesTypes] = useState([]);
@@ -31,19 +39,60 @@ const CustomerProfile = () => {
     const [addNewType, setAddNewType] = useState(false);
     const [isButtonLoading, setisButtonLoading] = useState(false);
     const [isOneNote, setIsOneNote] = useState(false);
+    const [refreshHighPriorityNotes, setRefreshHighPriorityNotes] = useState(false);
     const [isNoteId, setisNoteId] = useState();
     const [isEnrollmentId, setisEnrollmentId] = useState();
     const [isContact, setisContact] = useState();
     const [isShow, setIsShow] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const [agents, setAgents] = useState([]);
+    const [refreshNotes, setRefreshNotes] = useState(false);
+    const [trackingNumber, setTrackingNumber] = useState("");
+    const location = useLocation();
     const [refresh, setRefresh] = useState(false);
+    useEffect(() => {
+        if (customerServicesIndex !== undefined) {
+            if (activeTab !== undefined) {
+                setActiveTab();
+                setTimeout(() => {
+                    setActiveTab(customerServicesIndex);
+                }, 200);
+            } else {
+                setActiveTab(customerServicesIndex);
+            }
+        } else {
+            setActiveTab(customerServicesIndex);
+        }
+    }, [location, customerServicesIndex]);
+
+    const [refreshwholecustomerdata, setRefreshWholeCustomerData] = useState(false);
     const [changeCustomerStatusDialog, setChangeCustomerStatus] = useState(false);
+    const [showHighPriorityNotes, setShowHighPriorityNotes] = useState(false);
+    const [highestPriorityNotes, setHighestPriorityNotes] = useState([]);
+    useEffect(() => {         
+        Axios.get(`${BASE_URL}/api/web/notes/getnotebypriority?user=${parseLoginRes?._id}&customerId=${selectedId}`)
+            .then((res) => {
+                setHighestPriorityNotes(res?.data);
+                if (res?.data.length > 0) {
+                    setShowHighPriorityNotes(true);
+                } else {
+                    setShowHighPriorityNotes(false);
+                }
+            })
+            .catch((err) => {});
+    }, [refreshHighPriorityNotes]);
+
+    useEffect(() => {
+        Axios.get(`${BASE_URL}/api/user/getServiceProvider?serviceProvider=${cpData?.serviceProvider}`)
+            .then((res) => {
+                setmvno(res?.data?.data?.name);
+            })
+            .catch((err) => {});
+    }, [cpData]);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
     //To Display All Notes in Seperate Dialog
     const [displayAllNotesDialogVisibility, setDisplayAllNotesDialogVisibility] = useState(false);
-    const { state } = useLocation();
-    const selectedId = state?.selectedId;
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     // Validation Schema
@@ -51,6 +100,8 @@ const CustomerProfile = () => {
         noteType: Yup.string().required("Note Type is Required"),
         note: Yup.string().required("Please Write Note"),
         priority: Yup.string().required("Please Select Priority"),
+
+        //AgentName: Yup.string().required("Agent Name is required"),
     });
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -58,6 +109,7 @@ const CustomerProfile = () => {
             noteType: "",
             note: "",
             priority: "low",
+            AgentName: "",
         },
         onSubmit: async (values, actions) => {
             // Prepare the data to send to the server
@@ -67,12 +119,12 @@ const CustomerProfile = () => {
                 customerId: selectedId,
                 ...values,
             };
-
             setisButtonLoading(true);
             try {
-                const response = await Axios.post(`${BASE_URL}/api/web/notes/`, data);
+                const response = await Axios.post(`${BASE_URL}/api/web/notes/addnotifcationNote`, data);
                 if (response?.status == "200" || response?.status == "201") {
                     toast.success("Successfully Added");
+                    setRefreshHighPriorityNotes((prev) => !prev);
                     setisButtonLoading(false);
                     actions.resetForm();
                     getNotes();
@@ -81,16 +133,17 @@ const CustomerProfile = () => {
                 toast.error("Error is " + error?.response?.data?.msg);
                 setisButtonLoading(false);
             }
+            setRefreshBell((prev) => !prev);
         },
     });
+
     const getCustomerProfileData = async () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
-               
                 setCpData(res?.data?.data || []);
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const getNotesType = async () => {
@@ -106,23 +159,20 @@ const CustomerProfile = () => {
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
             setAllNotes(res?.data?.data || []);
-        } catch (error) {
-
-        }
+        } catch (error) {}
     };
 
     useEffect(() => {
         getCustomerProfileData();
         getNotes();
-    }, []);
+    }, [refreshNotificationcomponent, refreshEsn, refreshwholecustomerdata, handleHighlight]);
 
-useEffect(() => {
+    useEffect(() => {
         getCustomerProfileData();
-        
     }, [refresh]);
     useEffect(() => {
         getNotesType();
-    }, [newNoteTypeAdded]);
+    }, [newNoteTypeAdded, refreshNotes]);
 
     const handleDialogeForAddType = () => {
         setAddNewType(true);
@@ -158,7 +208,6 @@ useEffect(() => {
     //For Showing SOCS Which is Comma Seperated array
     function showsocs(socarray) {
         if (socarray !== undefined) {
-
             var commaSeparatedString = "";
             for (let i = 0; i < socarray.length; i++) {
                 if (i === 0) {
@@ -175,45 +224,68 @@ useEffect(() => {
 
     const handleView = () => {
         if (isShow == true) {
-            setIsShow(false)
+            setIsShow(false);
+        } else {
+            setIsShow(true);
         }
-        else {
-            setIsShow(true)
-        }
-    }
-    const handleEdit =()=>{
+    };
+    const handleEdit = () => {
         localStorage.setItem("basicData", JSON.stringify(cpData));
         localStorage.setItem("address", JSON.stringify(cpData));
-        setIsEdit(true)
-        
-    }
-    const downloadLabel = () => {
-        const path = cpData?.label;
-        const trimmedPath = path.replace(/^uploads\//, "");
-        const fileUrl = `${BASE_URL}/${trimmedPath}`;
-        const link = document.createElement("a");
-        link.href = fileUrl;
-        link.setAttribute("target", "_blank"); // Open in new tab
-        link.setAttribute("download", ""); // Indicate that the file should be downloaded
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        setIsEdit(true);
     };
+
     let toCapitalCustomerStatus;
     const customerStatus = cpData?.status;
     if (customerStatus) {
-        toCapitalCustomerStatus = customerStatus.toUpperCase()
+        toCapitalCustomerStatus = customerStatus.toUpperCase();
     }
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/web/user/all?company=${parseLoginRes.company}`);
+
+                const users = response?.data?.data;
+                const agentNames = users.map((user) => ({ label: user.name, value: user._id }));
+                setAgents(agentNames);
+            } catch (error) {
+                toast.error(error?.response?.data?.msg);
+            }
+        };
+
+        fetchUser();
+    }, []);
+    useEffect(() => {
+        const fetchTrackingNumber = async () => {
+            try {
+                const response = await Axios.get(`${BASE_URL}/api/web/order/getTrackingNumber/?customerId=${selectedId}`);
+                if (response?.status === 200 || response?.status === 201) {
+                    setTrackingNumber(response?.data?.data);
+                }
+            } catch (error) {}
+        };
+        fetchTrackingNumber();
+    }, [refreshEsn]);
 
     const activateDate = new Date(cpData?.activatedAt);
     const formattedDate = activateDate.toLocaleDateString();
+    const rowClassName = (rowData) => {
+        if (rowData.void) {
+            return "custom-row";
+        } else if (rowData._id === handleHighlight) {
+            return "highlight-row";
+        } else {
+            return ""; // Default class when no condition matches
+        }
+    };
+
     return (
         <div className="card">
             <ToastContainer />
             <div className="p-0 customer-profile">
-                <BillingNavbar setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} />
+                <BillingNavbar setRefreshWholeCustomerData={setRefreshWholeCustomerData} refreshNotificationcomponent={refreshNotificationcomponent} setChangeCustomerStatus={setChangeCustomerStatus} changeCustomerStatusDialog={changeCustomerStatusDialog} setRefreshEsn={setRefreshEsn} />
                 <Dialog draggable={false} visible={addNewType} header="Add New Note Type" style={{ width: "50vw" }} onHide={() => setAddNewType(false)}>
-                    <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} />
+                    <DialogeForAddNewType setNewNoteTypeAdded={setNewNoteTypeAdded} setAddNewType={setAddNewType} setRefreshNotes={setRefreshNotes} />
                 </Dialog>
 
                 <Dialog draggable={false} visible={isOneNote} header="View Customer Notes" style={{ width: "40vw" }} onHide={() => setIsOneNote(false)}>
@@ -223,41 +295,25 @@ useEffect(() => {
                     <DisplayAllNotesDialog notes={allNotes} />
                 </Dialog>
                 <Dialog draggable={false} visible={changeCustomerStatusDialog} header={`Change Customer Status (Current Status: ${toCapitalCustomerStatus})`} style={{ width: "70vw" }} onHide={() => setChangeCustomerStatus((prev) => !prev)}>
-                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} />
+                    <ChangeCustomerStatus cpData={cpData} setChangeCustomerStatus={setChangeCustomerStatus} setRefreshEsn={setRefreshEsn} />
                 </Dialog>
-                <Dialog draggable={false} visible={isEdit} header={"Update Personal Info" } style={{ width: "70vw" }} onHide={() => setIsEdit((prev) => !prev)}>
-                    <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit}/>
+                <Dialog draggable={false} visible={isEdit} header={"Update Personal Info"} style={{ width: "70vw" }} onHide={() => setIsEdit((prev) => !prev)}>
+                    <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit} />
                 </Dialog>
                 <div className="pt-3">
-                    {
-                        cpData?.label ? <> <div className="ml-5">
-                            <Button label="Download Label" onClick={downloadLabel} />
-                        </div></> : ""
-                    }
-
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
                                 <div className="card h-full flex flex-column overflow-x">
                                     <div className="flex justify-content-between">
-
                                         <div className="text-900 font-medium text-lg p-3">Customer Information </div>
                                         <div className="flex">
                                             <div>
-                                                <i className="pi pi-user-edit p-3" style={{ fontSize: '2rem', cursor:"pointer" }} onClick={handleEdit}></i>
+                                                <i className="pi pi-user-edit p-3" style={{ fontSize: "2rem", cursor: "pointer" }} onClick={handleEdit}></i>
                                             </div>
-                                            <div>
-                                                {
-                                                    isShow == true ? <i className="pi pi-eye-slash p-3" style={{ fontSize: '2rem' , cursor:"pointer" }} onClick={handleView}></i>
-                                                        : <i className="pi pi-eye p-3" style={{ fontSize: '2rem', cursor:"pointer" }} onClick={handleView}></i>
-                                                }
-
-                                            </div>
-
-
+                                            <div>{isShow == true ? <i className="pi pi-eye-slash p-3" style={{ fontSize: "2rem", cursor: "pointer" }} onClick={handleView}></i> : <i className="pi pi-eye p-3" style={{ fontSize: "2rem", cursor: "pointer" }} onClick={handleView}></i>}</div>
                                         </div>
                                     </div>
-
 
                                     <hr className="m-0" />
 
@@ -266,68 +322,152 @@ useEffect(() => {
                                         <table className="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
-                                                    <td >First Name</td>
-                                                    {isShow && isShow ? <td>{cpData?.firstName !== undefined ? cpData?.firstName.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
-
+                                                    <td>First Name</td>
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.firstName !== undefined ? cpData?.firstName.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.lastName !== undefined ? cpData?.lastName.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.lastName !== undefined ? cpData?.lastName.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Address 1</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>*******</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.address1 !== undefined ? cpData?.address1.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*******</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Address 2</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.address2 !== undefined && cpData?.address2.trim() !== "" ? cpData?.address2.toUpperCase() : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.address2 !== undefined && cpData?.address2.trim() !== "" ? cpData?.address2.toUpperCase() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>City</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td> : <div className="mt-3"><h3>***</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.city !== undefined ? cpData?.city : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>***</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>State</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.state !== undefined ? cpData?.state : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Zip</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.zip !== undefined ? cpData?.zip : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Password</td>
 
-                                                    {isShow && isShow ? <td>NIL</td> : <div className="mt-3"><h3>***</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>NIL</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>***</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Contact</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.contact !== undefined ? cpData?.contact : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Alternate Ph</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.alternateContact !== undefined ? cpData?.alternateContact : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.alternateContact !== undefined ? cpData?.alternateContact : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Email</td>
 
-                                                    {isShow && isShow ? <td>{cpData?.email !== undefined ? cpData?.email : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.email !== undefined ? cpData?.email : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing Address</td>
-                                                    {isShow && isShow ? <td>{cpData?.malingAddress1 !== undefined || cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " " ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td> : <div className="mt-3"><h3>*****</h3></div>}
-
-
+                                                    {isShow && isShow ? (
+                                                        <td>
+                                                            {cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? (
+                                                                // If PO Box Address is available and not empty, render it
+                                                                <p>POBox : {cpData?.PoBoxAddress}</p>
+                                                            ) : // If PO Box Address is empty, render the regular mailing address
+                                                            cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? (
+                                                                cpData?.malingAddress1 && cpData?.malingAddress2 ? (
+                                                                    `${cpData?.malingAddress1}, ${cpData?.malingAddress2}`
+                                                                ) : (
+                                                                    cpData?.malingAddress1
+                                                                )
+                                                            ) : (
+                                                                cpData?.address1
+                                                            )}
+                                                        </td>
+                                                    ) : (
+                                                        // <td>{cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td>
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mailing City</td>
@@ -368,6 +508,19 @@ useEffect(() => {
                                                 </tr>
 
                                                 {/* <tr>
+                                                    <td>PO Box Address</td>
+                                                    {isShow ? (
+                                                        <td>{cpData?.PoBoxAddress && cpData?.PoBoxAddress.trim() !== "" ? cpData?.PoBoxAddress : ""}</td>
+                                                    ) : (
+                                                        <td>
+                                                            <div className="mt-3">
+                                                                <h3>*****</h3>
+                                                            </div>
+                                                        </td>
+                                                    )}
+                                                </tr> */}
+
+                                                {/* <tr>
                                                     <td>Tribal (Y/N)</td>
                                                     <td>
                                                         --
@@ -376,28 +529,48 @@ useEffect(() => {
                                                 <tr>
                                                     <td>Customer SSN</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.SSN !== undefined ? cpData?.SSN : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Mother's Maiden Name</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.maidenMotherName !== undefined ? cpData?.maidenMotherName : "NIL"}</td> : <div className="mt-3"><h3>****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.maidenMotherName !== undefined ? cpData?.maidenMotherName : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Customer DOB</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : "NIL"}</td> : <div className="mt-3"><h3>*****</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.DOB ? new Date(cpData.DOB).toLocaleDateString() : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>*****</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
 
                                                 <tr>
                                                     <td>Tribal</td>
 
-
-                                                    {isShow && isShow ? <td>{cpData?.isTerribleTerritory !== undefined ? (cpData?.isTerribleTerritory === true ? "Yes" : "No") : "NIL"}</td> : <div className="mt-3"><h3>***</h3></div>}
+                                                    {isShow && isShow ? (
+                                                        <td>{cpData?.isTerribleTerritory !== undefined ? (cpData?.isTerribleTerritory === true ? "Yes" : "No") : "NIL"}</td>
+                                                    ) : (
+                                                        <div className="mt-3">
+                                                            <h3>***</h3>
+                                                        </div>
+                                                    )}
                                                 </tr>
                                                 <tr>
                                                     <td>Company</td>
@@ -431,16 +604,16 @@ useEffect(() => {
                                                 </tr>
                                                 <tr>
                                                     <td>SIM/ESN</td>
-                                                    <td>{cpData?.esn !== undefined ? cpData?.esn : "NIL"}</td>
+                                                    <td>{cpData?.esn !== undefined ? cpData?.esn : cpData?.esnId?.esn !== undefined ? cpData?.esnId?.esn : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IMEI</td>
-                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : "NIL"}</td>
+                                                    <td>{cpData?.IMEI !== undefined ? cpData?.IMEI : cpData?.esnId?.IMEI !== undefined ? cpData?.esnId?.IMEI : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>IMEI2</td>
-                                                    <td>NIL</td>
+                                                    <td>{cpData?.IMEI2 !== undefined ? cpData?.IMEI2 : cpData?.esnId?.IMEI2 !== undefined ? cpData?.esnId?.IMEI2 : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -449,7 +622,7 @@ useEffect(() => {
                                                 </tr>
                                                 <tr>
                                                     <td>MAKE</td>
-                                                    <td>{cpData?.esnId?.Make ? cpData?.esnId?.Make : "NIL"}</td>
+                                                    <td>{cpData?.esnId?.make ? cpData?.esnId?.make : "NIL"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>MODEL</td>
@@ -487,7 +660,9 @@ useEffect(() => {
                                                 </tr>
                                                 <tr>
                                                     <td>Plan Activation Date</td>
-                                                    <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>
+
+                                                    <td>{cpData?.activatedAt !== undefined ? cpData?.activatedAt : "NIL"}</td>
+                                                    {/*  <td>{cpData?.planEffectiveDate !== undefined ? convertDateToRequiredFormat(cpData?.planEffectiveDate) : "NIL"}</td>*/}
                                                 </tr>
                                                 <tr>
                                                     <td>TMB Live Status</td>
@@ -539,7 +714,7 @@ useEffect(() => {
                                                 </tr>
                                                 <tr>
                                                     <td>MVNO</td>
-                                                    <td>NIL</td>
+                                                    <td>{mvno}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Sim Status</td>
@@ -574,12 +749,16 @@ useEffect(() => {
                                         <table class="cp_table w-full text-left">
                                             <tbody>
                                                 <tr>
+                                                    <td>Tracking Number</td>
+                                                    <td>{trackingNumber ? trackingNumber : "NIL"}</td>
+                                                </tr>
+                                                <tr>
                                                     <td>Wallet Balance</td>
                                                     <td>NIL</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Order by</td>
-                                                    <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td>
+                                                    {cpData?.AcptoPrepaid === undefined ? <td>{cpData?.createdBy !== undefined ? (cpData?.createdBy?.name !== undefined ? cpData?.createdBy?.name : "NIL") : "NIL"}</td> : <td>System Imported</td>}
                                                 </tr>
                                                 <tr>
                                                     <td>Account ID</td>
@@ -589,16 +768,21 @@ useEffect(() => {
                                                     <td>Enrollment ID</td>
                                                     <td>{cpData?.enrollmentId !== undefined ? cpData?.enrollmentId : "NIL"}</td>
                                                 </tr>
-                                                {
-                                                    cpData?.accountType == "ACP" ? <> <tr>
-                                                        <td>NV Application ID</td>
-                                                        <td>{cpData?.applicationId !== undefined ? cpData?.applicationId : "NIL"}</td>
-                                                    </tr>
+                                                {cpData?.accountType == "ACP" ? (
+                                                    <>
+                                                        {" "}
+                                                        <tr>
+                                                            <td>NV Application ID</td>
+                                                            <td>{cpData?.applicationId !== undefined ? cpData?.applicationId : "NIL"}</td>
+                                                        </tr>
                                                         <tr>
                                                             <td>NLAD Subscriber ID</td>
                                                             <td>{cpData?.subscriberId !== undefined ? cpData?.subscriberId : "NIL"}</td>
-                                                        </tr></> : ""
-                                                }
+                                                        </tr>
+                                                    </>
+                                                ) : (
+                                                    ""
+                                                )}
 
                                                 <tr>
                                                     <td>PWG Customer ID</td>
@@ -606,18 +790,33 @@ useEffect(() => {
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Source</td>
+                                                    <td>Role</td>
                                                     <td>{cpData?.source !== undefined ? cpData?.source : "NIL"}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Fulfillment Method</td>
-                                                    <td>NIL</td>
+                                                    {cpData?.AcptoPrepaid !== undefined ? (
+                                                        cpData?.AcptoPrepaid ? (
+                                                            <>
+                                                                <td>Converted To Prepaid On</td>
+                                                                <td>{cpData?.convertToPrepaidDate ? cpData?.convertToPrepaidDate : "NIL"}</td>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <td>Order Create Date</td>
+                                                                <td>{cpData?.orderCreateDate ? cpData?.orderCreateDate : "NIL"}</td>
+                                                            </>
+                                                        )
+                                                    ) : (
+                                                        <>
+                                                            <td>Order Create Date</td>
+                                                            <td>{cpData?.labelCreatedAt ? cpData?.labelCreatedAt : "NIL"}</td>
+                                                        </>
+                                                    )}
                                                 </tr>
 
-
                                                 <tr>
-                                                    <td>Enrollment Date</td>
-                                                    <td>{cpData?.activatedAt !== undefined ? formattedDate : "NIL"}</td>
+                                                    <td>Activation Date</td>
+                                                    <td>{cpData?.activatedAt !== undefined ? cpData?.activatedAt : "NIL"}</td>
                                                 </tr>
 
                                                 <tr>
@@ -628,13 +827,14 @@ useEffect(() => {
                                                     <td>Disconnection Reason</td>
                                                     <td>NIL</td>
                                                 </tr>
-                                                {
-                                                    cpData?.accountType == "ACP" ? (<tr>
+                                                {cpData?.accountType == "ACP" ? (
+                                                    <tr>
                                                         <td>Lifeline Program Participation</td>
                                                         <td>{cpData?.acpProgram !== undefined ? (cpData?.acpProgram?.name !== undefined ? cpData?.acpProgram.name : "NIL") : "NIL"}</td>
-                                                    </tr>) : ""
-                                                }
-
+                                                    </tr>
+                                                ) : (
+                                                    ""
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
@@ -681,22 +881,27 @@ useEffect(() => {
                                             }
                                         }}
                                     >
-                                        <Column header="Created By" field="user.name"></Column>
-                                        <Column header="Note" field="note"></Column>
-                                        <Column header="Note Type" field="noteType"></Column>
-                                        <Column header="Priority" field="priority"></Column>
+                                        <Column header="Created By" body={(rowData) => <div className={` ${rowData._id === handleHighlight ? "highlight-row" : ""}`}>{rowData.user.name}</div>} />
+                                        <Column header="Note" body={(rowData) => <div className={` ${rowData._id === handleHighlight ? "highlight-row" : ""}`}>{rowData.note}</div>} />
+                                        {/* <Column header="Note Type" field="noteType"></Column>
+                                        <Column header="Priority" field="priority"></Column> */}
                                         <Column
+                                            className="hover-blue"
                                             header="Creation Date"
                                             field="createdAt"
                                             body={(rowData) => {
                                                 let createdAt = new Date(rowData.createdAt);
-                                                return (
-                                                    <p>{`${(createdAt.getMonth() + 1).toString().padStart(2, "0")}-${createdAt.getDate().toString().padStart(2, "0")}-${createdAt.getFullYear()} ${createdAt.getHours().toString().padStart(2, "0")}:${createdAt
-                                                        .getMinutes()
-                                                        .toString()
-                                                        .padStart(2, "0")}:${createdAt.getSeconds().toString().padStart(2, "0")}`}</p>
-                                                );
+                                                return <p className={` ${rowData._id === handleHighlight ? "highlight-row" : ""}`}>{ChangeIsoDateToECT(rowData.createdAt)}</p>;
                                             }}
+                                        ></Column>
+                                        {/* <Column header="Assigned To" field="assignTo.name"></Column> */}
+                                        <Column
+                                            className="hover-blue"
+                                            body={(rowData) => (
+                                                <p className={`ibutton ${rowData._id === handleHighlight ? "highlight-row" : ""}`} style={{ position: "relative" }}>
+                                                    i
+                                                </p>
+                                            )}
                                         ></Column>
                                     </DataTable>
                                 </div>
@@ -710,7 +915,6 @@ useEffect(() => {
                             </div>
                             <hr className="m-0 mb-2" />
                             <Button label="Add New Note type" icon="pi pi-plus" size="small" className="mt-2 mb-3" onClick={handleDialogeForAddType} />
-
                             <form onSubmit={formik.handleSubmit}>
                                 <div>
                                     <Dropdown
@@ -727,7 +931,27 @@ useEffect(() => {
                                         className={classNames({ "p-invalid": isFormFieldValid("noteType") }, "input_text w-full mb-3")}
                                     />
                                     {getFormErrorMessage("noteType")}
+                                    <div className="mr-3 mb-3 mt-3">
+                                        <p className="m-0">Assign To</p>
 
+                                        <Dropdown
+                                            value={formik.values.assignTo}
+                                            optionLabel="label"
+                                            optionValue="value"
+                                            options={agents} // Use agents state here
+                                            onChange={(e) => {
+                                                formik.setFieldValue("assignTo", e.value); // Set the selected agent's ID
+                                                //formik.setFieldValue("AgentName", e.label); // Set the selected agent's name
+                                            }}
+                                            placeholder="Select an option"
+                                            className="field-width mt-2"
+                                        />
+                                        {/* {formik.errors.AgentName && formik.touched.AgentName && (
+                                            <div className="mt-2" style={{ color: "red" }}>
+                                                {formik.errors.AgentName}
+                                            </div>
+                                        )} */}
+                                    </div>
                                     <div className="mb-4">
                                         <InputTextarea
                                             id="note"
@@ -762,19 +986,34 @@ useEffect(() => {
                     </div>
                 </div>
             </div>
-            {
-             /*<div>
+            {/*<div>
                 <CustomerInvoice />
             </div>   
              */}
+            <Dialog
+                style={{ width: "60vw" }}
+                visible={showHighPriorityNotes}
+                onHide={() => {
+                    setShowHighPriorityNotes((prev) => !prev);
+                }}
+            >
+                <DisplayAllHighPriorityNotes setRefreshHighPriorityNotes={setRefreshHighPriorityNotes} BASE_URL={BASE_URL} notes={highestPriorityNotes} />
+            </Dialog>
         </div>
     );
 };
 export default CustomerProfile;
-const rowClassName = (rowData) => {
-    if (rowData.void) {
-        return "custom-row";
-    } else {
-        return;
-    }
-};
+
+function ChangeIsoDateToECT(date) {
+    // Given ISO formatted date/time
+    const isoDate = date;
+
+    // Convert ISO string to Date object
+    const utcDate = new Date(isoDate);
+
+    // Format the date according to Eastern Time Zone (EST/EDT)
+    const estTimeString = utcDate.toLocaleString("en-US", {
+        timeZone: "America/New_York",
+    });
+    return estTimeString;
+}

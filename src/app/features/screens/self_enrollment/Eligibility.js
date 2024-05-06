@@ -23,7 +23,6 @@ const Eligibility = () => {
 
     const eligId = "65142a7ed74a5a9ef93ba53b";
     const navigate = useNavigate();
-
     const handleBack = () => {
         navigate("/selfaddress");
     };
@@ -46,20 +45,17 @@ const Eligibility = () => {
             setIsLoading(true);
             try {
                 const res = await axios.post(`${BASE_URL}/api/enrollment/selectProgram`, newData);
-
                 // Check if the POST request was successful
                 if (res.status === 200 || res.status === 201) {
                     // Save the response data in local storage
                     localStorage.setItem("selectProgram", JSON.stringify(res.data));
-
                     // Navigate to the next page
                     if(storedData){
                         navigate(`/nationalverifier`);
                     }
                     else{
                         navigate(`/resumeapplication`);
-                    }
-                   
+                    }                   
                     setIsLoading(false);
                 }
             } catch (error) {

@@ -11,7 +11,9 @@ import moment from "moment/moment";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+const loginRes = localStorage.getItem("userData");
+    const parseLoginRes = JSON.parse(loginRes);
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
 const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
     const [isLoading, setIsLoading] = useState();
     const [isSearch, setIsSearch] = useState(false);
@@ -29,7 +31,9 @@ const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
         routingNumber: Yup.string().required("This is required"),
         AccountNumber: Yup.string().required("This is required"),
         paymentMethod: Yup.string().required("Please Select Paymet Method")
-    });
+    });  
+    const parseLoginRes = JSON.parse(loginRes);
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -92,7 +96,6 @@ const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
                 // }
             }
             else {
-                console.log("error is ",response?.data?.data)
                 toast.error(response?.data?.data?.message[0]?.text)
             }
         } catch (error) {
@@ -138,7 +141,6 @@ const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
                 // }
             }
             else {
-                console.log("error is ",response?.data?.transactionResponse)
                 toast.error(response?.data?.transactionResponse?.errors?.error[0].errorText)
             }
         } catch (error) {
@@ -178,7 +180,11 @@ const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
     return (
-        <>
+        <> 
+            {    capitalCompanyName?.includes("IJ") ?  
+   
+   <></>
+   :   <>
             <div className="col-12  ">
                 <div className="p-3">
                     <div className=" h-full ">
@@ -347,8 +353,8 @@ const DialogeForWallet = ({ setOpenDialogeForWallet,userDetails }) => {
                 </div>
             </div>
             <div className="flex justify-content-between">
-            </div>
-           
+            </div></>
+            }
         </>
     );
 };

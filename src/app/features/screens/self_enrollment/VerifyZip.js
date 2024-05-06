@@ -10,7 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 import { useState } from "react";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+const loginRes = localStorage.getItem("userData");
+const parseLoginRes = JSON.parse(loginRes);
 const VerifyZip = () => {
 
     const [companyData, setcompanyData] = useState()
@@ -40,7 +41,6 @@ const VerifyZip = () => {
             modifiedURL = modifiedURL.replace("login", "");
             modifiedURL = modifiedURL.replace("selfenrollment", "");
           
-          
         }
         const sendURl = async ()=>{
             try {
@@ -48,23 +48,19 @@ const VerifyZip = () => {
                     setcompanyData(response?.data)
                     localStorage.setItem("companyName", JSON.stringify(response?.data?.data?.name));
             } catch (error) {
-                console.log("error is", error?.response?.data?.msg);
             }
         }
         sendURl();
-       
     }, []);
-
     const { verifyZip, verifyZipLoading, verifyZipError } = useSelector((state) => state.selfEnrollment);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
     const validationSchema = Yup.object().shape({
         zipCode: Yup.string()
             .required("ZIP Code is required")
             .matches(/^\d{5}$/, "ZIP Code must be a 5-digit number"),
-        email: Yup.string().required("Email is required").email("Invalid email address"),
+        email: Yup.string().required("Email is required").email("Invalid email address"), 
     });
     const formik = useFormik({
         validationSchema,
@@ -75,12 +71,13 @@ const VerifyZip = () => {
         onSubmit: async (values) => {
             const newData = {
                 ...values,
-                serviceProvider: companyData?.data?._id,
-                carrier: companyData?.data?.carrier,
+                serviceProvider: parseLoginRes?.company,  
+                accountType:"Prepaid",
+                carrier:"6455532566d6fad6eac59e34",
             };
             setIsButtonLoading(true);
             try {
-                const response = await Axios.post(`${BASE_URL}/api/enrollment/verifyZip`, newData);
+                const response = await Axios.post(`${BASE_URL}/api/enrollment/PWGverifyZip`, newData);
                 if (response?.status === 200 || response?.status === 201) {
                     localStorage.setItem("zip", JSON.stringify(response.data));
                     localStorage.removeItem("initialInformation");

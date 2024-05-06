@@ -19,7 +19,7 @@ export default function SIMSingleUploadAddProvision({ permissions,unit,model }) 
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState(null);
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [Model, setModel] = useState(null);
     useEffect(() => {
         if (department === null) {
@@ -98,8 +98,8 @@ export default function SIMSingleUploadAddProvision({ permissions,unit,model }) 
         initialValues: {
             carrier: "",
             serviceProvider: parseLoginRes?.companyName,
-            agentType: "",
-            AgentName: "",
+            agentType: parseLoginRes?.department,
+            AgentName: parseLoginRes?._id,
             SimNumber: "",
             box: "",
             Model: "",
@@ -123,8 +123,8 @@ export default function SIMSingleUploadAddProvision({ permissions,unit,model }) 
                     ref.current.show({ severity: "success", summary: "Inventory", detail: "Successfully Added" });
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    formik.setFieldValue("agentType", "");
-                    formik.setFieldValue("AgentName", "");
+                    ;
+                    ;
                     formik.setFieldValue("SimNumber", "");
 
                     formik.setFieldValue("box", "");
@@ -135,7 +135,7 @@ export default function SIMSingleUploadAddProvision({ permissions,unit,model }) 
                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                     formik.setFieldValue("provisionType", "Add Stock");
                     actions.resetForm();
-                    setAgent([]);
+                    ;
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;
@@ -202,12 +202,13 @@ export default function SIMSingleUploadAddProvision({ permissions,unit,model }) 
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown
+                        <Dropdown 
+                        disabled
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                formik.setFieldValue("AgentName", "");
+                                ;
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
@@ -233,7 +234,9 @@ export default function SIMSingleUploadAddProvision({ permissions,unit,model }) 
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown 
+                          disabled
+                         value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}

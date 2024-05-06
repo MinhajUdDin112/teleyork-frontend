@@ -249,7 +249,9 @@ const All_Enrollments = () => {
                                                     invoiceType: "Sign Up",
                                                     totalAmount: res?.data?.paymentDetails?.totalAmount,
                                                     additionalCharges: res?.data?.paymentDetails?.additionalCharges,
-                                                    discount: res?.data?.paymentDetails?.discount,
+                                                    discount: res?.data?.paymentDetails?.discount,       
+                                                    paymentChannel:res?.data?.paymentDetails?.paymentChannel, 
+                                                    paymentId:res?.data?.paymentDetails?.paymentId,
                                                     amountPaid: "0",
                                                     invoiceDueDate: res?.data?.paymentDetails?.invoiceDueDate,
                                                     lateFee: res?.data?.paymentDetails?.lateFee,
@@ -270,7 +272,7 @@ const All_Enrollments = () => {
                                                 try {
                                                     const response = await Axios.post(`${BASE_URL}/api/web/invoices/generateInvoice`, dataToSend);
                                                     if (response?.status == 200 || response?.status == 201) {
-                                                        toast.success("Device Generated");
+                                                        toast.success("Invoice Generated");
                                                     }
                                                 } catch (error) {
                                                     toast.error(error?.response?.data?.message);
@@ -347,7 +349,8 @@ const All_Enrollments = () => {
                                                         totalAmount: res?.data?.paymentDetails?.totalAmount,
                                                         amountPaid: res?.data?.paymentDetails?.amountPaid,
                                                         invoiceStatus: res?.data?.paymentDetails?.invoiceStatus,
-                                                       
+                                                       stripeId:res?.data?.paymentDetails?.paymentId, 
+                                                        paymentChannel:res?.data?.paymentDetails?.paymentChannel,
                                                         chargingType: "monthly",
                                                         invoicePaymentMethod: res?.data?.paymentDetails?.paymentMethod,
                                                         printSetting: "Both",
@@ -654,7 +657,12 @@ const All_Enrollments = () => {
                     text
                     raised
                     disabled={isButtonLoading}
-                />
+                />     {/*  <Button label="Files" onClick={() => {
+                       localStorage.setItem("selectedId",JSON.stringify(rowData?._id))
+                      navigate("/viewfile")
+                }} className="pt-1 pb-1" text raised disabled={isButtonLoading} /> 
+            */}
+              
             </div>
         );
     };

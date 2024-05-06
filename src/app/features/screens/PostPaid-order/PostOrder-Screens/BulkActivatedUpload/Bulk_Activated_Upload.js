@@ -4,7 +4,21 @@ import "./css/bulk_activated_upload.css";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import Axios from "axios";
-import { EnrollmentSvg } from "./assets";
+import { EnrollmentSvg } from "./assets";   
+const ErrorDetails=({error})=>{ 
+  return( <>
+     <p className="font-bold underline">{error.error}</p> 
+       { 
+        error?.skippedRows.map(item=>{ 
+            return( 
+                <p>{item}</p>
+            )
+        }) 
+
+       } 
+        </>
+  )
+}
 export default function PostpaidActivatedBulkUpload() {
     const toast = useRef(null);
     const [disableSubmit, setDisableSubmit] = useState(false);
@@ -33,7 +47,7 @@ export default function PostpaidActivatedBulkUpload() {
                   
                 })
                 .catch((err) => {
-                    toast.current.show({ severity: "error", summary: "Bulk Upload Activated Enrollments", detail: err?.response?.data?.msg });
+                    toast.current.show({ severity: "error", summary: "Bulk Upload Activated Enrollments",detail:<ErrorDetails error={err?.response?.data}/> });
                     setDisableSubmit(false);
                 });
         } else {
@@ -60,7 +74,6 @@ export default function PostpaidActivatedBulkUpload() {
                             create.type = "file";
                             create.onchange = (e) => {
                                 setFileError(false);
-                                console.log(e.target.files[0]);
                                 setButtonLabel(e.target.files[0].name);
                                 setSelectedFile(e.target.files[0]);
                             };

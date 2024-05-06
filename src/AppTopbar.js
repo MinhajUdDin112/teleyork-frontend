@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +7,20 @@ import { ConfirmPopup } from "primereact/confirmpopup";
 import { logout } from "./app/store/auth/AuthSlice";
 import { InputText } from "primereact/inputtext";
 import { ListBox } from "primereact/listbox";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { Sidebar } from "primereact/sidebar";
+import Axios from "axios";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const AppTopbar = (props) => {
+    const [visibleRight, setVisibleRight] = useState(false);
+    const location = useLocation();
+    const [counter, setCounter] = useState("");
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
     });
     const [visibleSearch, setVisibleSearch] = useState(false);
+    const [notification, setNotification] = useState([]);
     function docOnClick(e) {
         setVisibleSearch(false);
     }
@@ -22,17 +31,18 @@ export const AppTopbar = (props) => {
         { name: "Recent Searches", code: "recentsearches" },
         { name: "Advance Search", code: "advance search" },
     ];
+
     const countryTemplate = (option) => {
         return (
             <div className="flex align-items-center">
                 {option.name === "Payment Search" ? (
-                    <img src="/images/Dashboard-Search/payment-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/payment-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Recent Searches" ? (
-                    <img src="/images/Dashboard-Search/recent-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/recent-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : option.name === "Advance Search" ? (
-                    <img src="/images/Dashboard-Search/advance-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/advance-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 ) : (
-                    <img src="/images/Dashboard-Search/inventory-search.png" style={{ width: "1.25rem", marginRight: ".5rem" }} />
+                    <img src="/images/Dashboard-Search/inventory-search.png" alt="none" style={{ width: "1.25rem", marginRight: ".5rem" }} />
                 )}
                 <div>{option.name}</div>
             </div>
@@ -44,7 +54,7 @@ export const AppTopbar = (props) => {
     // Get user data from localStorage
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-    const capitalCompanyName = parseLoginRes?.companyName.toUpperCase();
+    const capitalCompanyName = parseLoginRes?.companyName?.toUpperCase();
     const handleLogout = () => {
         props.setSearchValue("");
         props.setSearchByValueClick(false);
@@ -67,10 +77,10 @@ export const AppTopbar = (props) => {
     );
     function capitalizeEveryWord(sentence) {
         // Split the sentence into an array of words
-        var words = sentence.split(" ");
+        var words = sentence?.split(" ");
 
         // Capitalize the first letter of each word
-        var capitalizedWords = words.map(function (word) {
+        var capitalizedWords = words?.map(function (word) {
             return word.charAt(0).toUpperCase() + word.slice(1);
         });
 
@@ -79,8 +89,50 @@ export const AppTopbar = (props) => {
 
         return capitalizedSentence;
     }
+
+    // counter notification API
+    useEffect(() => {
+        const getCounter = async () => {
+            setInterval(async () => {
+                try {
+                    const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
+                    const data = response?.data?.unreadCount;
+                    const note = response?.data?.notifications;
+                    setNotification(note);
+                    setCounter(data);
+                } catch (error) {
+                    toast.error(error?.response?.data?.msg);
+                }
+            }, 1000);
+        };
+        getCounter();
+    }, [props.refreshBell]);
+
+    const handleReadNotification = async (notificationId) => {
+        try {
+            await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
+            // const response = await Axios.put(`${BASE_URL}/api/web/notes/markReadnotifications?notificationId=${notificationId}&userId=${parseLoginRes?._id}`);
+
+            const res = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
+            const { unreadCount, notifications } = res?.data;
+            setNotification(notifications);
+            setCounter(unreadCount);
+        } catch (error) {
+            toast(error?.response?.data?.msg);
+        }
+    };
+    const handleNavigate = (customerId) => {
+        if (customerId !== undefined) {
+            localStorage.setItem("selectedId", JSON.stringify(customerId));
+            navigate("/customer-profile", { state: { selectedId: customerId } });
+            if (location.pathname === "/customer-profile") {
+                props.setRefreshNotificationComponent((prev) => !prev);
+            }
+        }
+    };
     return (
         <div>
+            <ToastContainer />
             <div
                 className="logodisplay "
                 onClick={(e) => {
@@ -89,7 +141,7 @@ export const AppTopbar = (props) => {
                     props.setSearchByValueClick(false);
                 }}
             >
-                {capitalCompanyName.includes("IJ") ? (
+                {capitalCompanyName?.includes("IJ") ? (
                     <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                         <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                         <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
@@ -123,7 +175,6 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-
                             props.setSearchByValueClick(false);
                         }}
                     >
@@ -137,7 +188,6 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-
                             props.setSearchByValueClick(false);
                         }}
                     >
@@ -170,7 +220,6 @@ export const AppTopbar = (props) => {
                         value={props.searchValue}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                                console.log(props.searchValue);
                                 e.stopPropagation();
                                 if (props.searchValue !== "") {
                                     props.setSearchByValueClick(true);
@@ -180,7 +229,6 @@ export const AppTopbar = (props) => {
                             }
                         }}
                         onClick={(e) => {
-                            console.log(props.searchValue);
                             e.stopPropagation();
                             if (props.searchValue !== "") {
                                 props.setSearchByValueClick(true);
@@ -198,7 +246,6 @@ export const AppTopbar = (props) => {
                             props.setSearchBy(null);
                             props.setSearchByValueClick(true);
                             if (props.searchByValueClick === true) {
-                                console.log(true);
                                 props.setCallSearchApi((prev) => !prev);
                             }
                         }}
@@ -217,8 +264,8 @@ export const AppTopbar = (props) => {
                         onChange={(e) => {
                             if (e.value !== null) {
                                 props.setSearchByValueClick(false);
-                                props.setSearchBy(e.value);  
-                                 setVisibleSearch(false)
+                                props.setSearchBy(e.value);
+                                setVisibleSearch(false);
                             }
                         }}
                         options={countries}
@@ -234,12 +281,45 @@ export const AppTopbar = (props) => {
                     />
                 </div>
                 <ConfirmPopup target={document.getElementById("li")} visible={visible} onHide={() => setVisible(false)} message={<CustomMessage />} acceptLabel="Logout" accept={handleLogout} />
-                <ul className={classNames("layout-topbar-menu lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
+                <ul className={classNames("layout-topbar-menu   lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
                     <div className="flex  ">
+                        <i className="pi pi-bell" style={{ cursor: "pointer", fontSize: "1.5rem", marginRight: "3rem", marginTop: "0.8rem" }} onClick={() => setVisibleRight(true)}>
+                            <span style={{ color: "red", marginLeft: "0rem", fontSize: "1rem", fontWeight: "600", marginTop: "-0.6rem", position: "absolute" }}> {counter <= 9 ? counter : "9+"}</span>
+                        </i>
+                        <Sidebar className="notification" style={{ width: "35rem" }} visible={visibleRight} position="right" onHide={() => setVisibleRight(false)}>
+                            <h3>Notifications</h3>
+                            <hr />
+                            {notification.map((item, index) => (
+                                <div
+                                    key={index}
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => {
+                                        handleNavigate(item?.customerId);
+                                        setVisibleRight(false);
+                                        handleReadNotification(item?._id);
+                                        props.setHandleHighlight(item?.noteId);
+                                    }}
+                                >
+                                    <h5>{item?.sender?.name}</h5>
+                                    <p>{item.message}</p>
+
+                                    <span style={{ cursor: "pointer" }}>
+                                        <h5
+                                            style={{ fontSize: "1rem", marginLeft: "24rem" }}
+                                            onClick={() => {
+                                                handleReadNotification(item?._id);
+                                            }}
+                                        >
+                                            {item.read ? "" : "Mark as read"}
+                                        </h5>
+                                    </span>
+                                    <hr />
+                                </div>
+                            ))}
+                        </Sidebar>
                         <p className="mr-7 mt-2" style={{ fontSize: "1.3rem" }}>
                             {parseLoginRes?.role?.role}
                         </p>
-
                         <div
                             className="flex"
                             onClick={(e) => {
@@ -250,8 +330,7 @@ export const AppTopbar = (props) => {
                                 <i style={{ cursor: "pointer", fontSize: "1.5rem", marginTop: "5px" }} className="pi pi-user" onClick={() => setVisible(true)} />
                             </li>
                             <p className="" id="li" style={{ cursor: "pointer", fontSize: "1.5rem", marginLeft: "10px" }} onClick={() => setVisible(true)}>
-                                {" "}
-                                {parseLoginRes?.userName ? parseLoginRes?.userName.toUpperCase() : ""}{" "}
+                                {parseLoginRes?.userName ? parseLoginRes?.userName.toUpperCase() : ""}
                             </p>
                         </div>
                     </div>

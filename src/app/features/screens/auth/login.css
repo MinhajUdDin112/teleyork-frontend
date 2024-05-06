@@ -1,0 +1,21 @@
+.passworddiv{ 
+    background-color: red;  
+     display: flex; 
+     flex-wrap: wrap; 
+     flex-direction: row; 
+     justify-content: space-between;        
+     align-items: center; 
+     background-color: white;  
+    border: 1px solid #ced4da; 
+    padding: 0px; 
+    border-radius: 6px; 
+    height: 40px;
+}  
+.passworddiv .p-component{ 
+    border: none; 
+     width:85%; 
+}
+.passworddiv i{ 
+    cursor: pointer; 
+    width:15%;
+}
