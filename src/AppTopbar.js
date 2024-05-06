@@ -20,7 +20,7 @@ export const AppTopbar = (props) => {
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
     }); 
-    const [socket, setSocket] = useState(null);
+  /*  const [socket, setSocket] = useState(null);
     const [message, setMessage] = useState('');
     const [receivedMessage, setReceivedMessage] = useState('');
   
@@ -43,13 +43,13 @@ export const AppTopbar = (props) => {
       return () => {
         newSocket.disconnect();
       };
-    }, []);
+    }, []);  
     const sendMessage = () => {
         if (socket) {
           socket.emit('message', message);
           setMessage('');
         }
-      };
+      };*/
     const [visibleSearch, setVisibleSearch] = useState(false);
     const [notification, setNotification] = useState([]);
     function docOnClick(e) {
@@ -124,7 +124,7 @@ export const AppTopbar = (props) => {
     // counter notification API
     useEffect(() => {
         const getCounter = async () => {
-          setInterval(async () => {
+         // setInterval(async () => {
                 try {
                     const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
                     const data = response?.data?.unreadCount;
@@ -134,7 +134,7 @@ export const AppTopbar = (props) => {
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
                 }
-            }, 1000);
+           // }, 1000);
         };   
         getCounter();
     }, [props.refreshBell]);
