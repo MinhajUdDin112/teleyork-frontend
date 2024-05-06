@@ -10,7 +10,8 @@ import { ListBox } from "primereact/listbox";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { Sidebar } from "primereact/sidebar";
-import Axios from "axios";
+import Axios from "axios";      
+import io from 'socket.io-client';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const AppTopbar = (props) => {
     const [visibleRight, setVisibleRight] = useState(false);
@@ -18,7 +19,37 @@ export const AppTopbar = (props) => {
     const [counter, setCounter] = useState("");
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
-    });
+    }); 
+  /*  const [socket, setSocket] = useState(null);
+    const [message, setMessage] = useState('');
+    const [receivedMessage, setReceivedMessage] = useState('');
+  
+    useEffect(() => {
+      // Connect to WebSocket server
+      const newSocket = io('ws://localhost:3001');
+  
+      // Set up event listeners
+      newSocket.on('connect', () => {
+        console.log('Connected to WebSocket server');
+      });
+  
+      newSocket.on('message', (message) => {
+        setReceivedMessage(message);
+      });
+  
+      setSocket(newSocket);
+  
+      // Clean up the WebSocket connection when component unmounts
+      return () => {
+        newSocket.disconnect();
+      };
+    }, []);  
+    const sendMessage = () => {
+        if (socket) {
+          socket.emit('message', message);
+          setMessage('');
+        }
+      };*/
     const [visibleSearch, setVisibleSearch] = useState(false);
     const [notification, setNotification] = useState([]);
     function docOnClick(e) {
@@ -93,7 +124,7 @@ export const AppTopbar = (props) => {
     // counter notification API
     useEffect(() => {
         const getCounter = async () => {
-            setInterval(async () => {
+          setInterval(async () => {
                 try {
                     const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
                     const data = response?.data?.unreadCount;
@@ -103,8 +134,8 @@ export const AppTopbar = (props) => {
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
                 }
-            }, 1000);
-        };
+     }, 1000);
+        };   
         getCounter();
     }, [props.refreshBell]);
 
