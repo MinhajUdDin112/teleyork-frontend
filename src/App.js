@@ -116,7 +116,7 @@ import PrepaidEvaluatedEnrollments from "./app/features/screens/prepaid_postpaid
 import Manage_Vendors from "./app/features/screens/user_management/ManageVendors/Manage_Vendors";
 import Add_Vendors from "./app/features/screens/user_management/ManageVendors/components/Add_Vendors";
 import Update_Vendors from "./app/features/screens/user_management/ManageVendors/components/Update_Vendors";
-
+import Roles_Permission from "./app/features/screens/user_management/Manage__Role_Right_Permission.js/Roles_Permission";
 // importing Bulk Downloads
 import Label_Downloads from "./app/features/screens/Bulk_Downloads/Label_Downloads/Label_Downloads";
 import Invoices_Downloads from "./app/features/screens/Bulk_Downloads/Invoices_Downloads/Invoices_Downloads";
@@ -125,7 +125,7 @@ import PostpaidActivatedBulkUpload from "./app/features/screens/PostPaid-order/P
 
 // importing Reports
 import Reports from "./app/features/screens/Reports_Downloads/Reports";
-import Roles_Permission from "./app/features/screens/user_management/Manage_Role_RIghts_Permission/Roles_Permission";
+//import Roles_Permission from "./app/features/screens/user_management/Manage_Role_RIghts_Permission/Roles_Permission";
 import BillingNavbar from "./app/features/screens/customer_profile/modals/BillingNavbar";
 import PrepiadSelfVerifyZip from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/VerifyZip";
 import PrepaidSelfPersonalInfo from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/PersonalInfo";
@@ -477,6 +477,7 @@ const App = () => {
                                             <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                             <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
                                             <Route path="/manage-user" element={isPermitted("/manage-user") ? <ManageUser /> : <Dashboard />} />
+                                            <Route path="/roles-permissions" element={isPermitted("/roles-permissions") ? <Roles_Permission /> : <Dashboard />} />
                                             <Route path="/create-user" element={<CreateUser />} />
                                             <Route path="/edit-user" element={isPermitted("/edit-user") ? <EditUser /> : <Dashboard />} />
                                             <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />

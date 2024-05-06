@@ -474,3 +474,10 @@ input:disabled {
         margin-left: 0rem;
     }
 }
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  cursor: pointer;
+}
