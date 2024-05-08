@@ -36,7 +36,7 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
 
         setbillingData()
     }, [])
-
+      const [newinvenotoryselect,setNewInventorySelect]=useState(false)
     const checkinvenyory = JSON.parse(localStorage.getItem("inventoryselect"))
     const checkplan = JSON.parse(localStorage.getItem("planselect"))
     const [paidAmountRequired, setPaidAmountRequired] = useState(false)
@@ -188,8 +188,19 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
     function onInventorySelect(item) {
         setCurrentPlanSelect("");
         setCurrentSelect(item.label);
-        localStorage.setItem("product", item.label);
-        formik.setFieldValue("totalamount", 0);
+        localStorage.setItem("product", item.label);       
+         
+        setPreviousPlanPrice(0) 
+        if(checkinvenyory){ 
+             formik.values.totalamount="0" 
+              formik.values.plan=""
+        } 
+        else{
+ 
+            formik.setFieldValue("totalamount", 0);   
+            formik.setFieldValue("plan","")   
+
+        }
         formik.setFieldValue("billId", item.value);
         let inventory;
         let inventoryType = JSON.parse(localStorage.getItem("inventoryType"));
@@ -238,7 +249,7 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
         if (checkplan) {
             let item2 = {}
             let id = checkplan?.data?.plan
-            item2._id = id
+            item2._id = id             
             onPlanSelect(item2)
         }    
 
@@ -415,14 +426,15 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                         label="Continue"
                                         type={currentScreen < 4 ? "button" : "submit"}
                                         icon={isLoading ? "pi pi-spinner" : ""}
-                                        disabled={(current === "" && currentScreen === 1) || (currentPlanSelect === "" && currentScreen === 2)}
+                                        disabled={(current === "" && currentScreen === 1) || (newinvenotoryselect && currentScreen === 2)}
                                         onClick={() => {
                                             if (currentScreen === 1) {
                                                 Axios.post(`${BASE_URL}/api/enrollment/selectInventory`, {
                                                     "userId": previewInfo?._id,
                                                     "inventoryId": formik.values.billId
                                                 }).then((res) => {
-                                                    localStorage.setItem("inventoryselect", JSON.stringify(res?.data))
+                                                    localStorage.setItem("inventoryselect", JSON.stringify(res?.data))     
+                                                    
                                                 }).catch(err => {
 
                                                 })
@@ -458,7 +470,8 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                                         type="button"
 
                                                         disabled={item?.label === current || paymentInfo}
-                                                        onClick={() => {
+                                                        onClick={() => {   
+                                                             setNewInventorySelect(true)
                                                             onInventorySelect(item);
                                                         }}
                                                     >
@@ -518,7 +531,8 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                                             <button
                                                                 type="button"
                                                                 disabled={item?._id === currentPlanSelect || paymentInfo}
-                                                                onClick={() => {
+                                                                onClick={() => { 
+                                                                     setNewInventorySelect(false)
                                                                     onPlanSelect(item);
                                                                 }}
                                                             >
