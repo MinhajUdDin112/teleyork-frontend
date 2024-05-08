@@ -22,6 +22,8 @@ import { Column } from "primereact/column";
 import ChangeCustomerStatus from "./change_customer_status/change_customer_status";
 import DialogeForInfoEdit from "./dialogs/DialogeForInfoEdit";
 import DisplayAllHighPriorityNotes from "./dialogs/display_priority_notes/PriorityNotes";
+import DialogeForSwapEsn from "./dialogs/DialogeForSwapEsn";
+import DialogeForSwapMdn from "./dialogs/DialogeForSwapMdn";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveTab, activeTab, customerServicesIndex, refreshNotificationcomponent, handleHighlight }) => {
     const [cpData, setCpData] = useState([]);
@@ -50,6 +52,8 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [trackingNumber, setTrackingNumber] = useState("");
     const location = useLocation();
     const [refresh, setRefresh] = useState(false);
+    const [isSwapEsn,setIsSwapEsn]=useState()
+    const [isSwapMdn,setIsSwapMdn]=useState()
     useEffect(() => {
         if (customerServicesIndex !== undefined) {
             if (activeTab !== undefined) {
@@ -79,7 +83,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                     setShowHighPriorityNotes(false);
                 }
             })
-            .catch((err) => {});
+            .catch((err) => { });
     }, [refreshHighPriorityNotes]);
 
     useEffect(() => {
@@ -87,7 +91,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             .then((res) => {
                 setmvno(res?.data?.data?.name);
             })
-            .catch((err) => {});
+            .catch((err) => { });
     }, [cpData]);
     //state to refresh Note Type when new note type is added
     const [newNoteTypeAdded, setNewNoteTypeAdded] = useState(false);
@@ -143,7 +147,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             if (res?.status == 200 || res?.status == 201) {
                 setCpData(res?.data?.data || []);
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const getNotesType = async () => {
@@ -159,7 +163,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
         try {
             const res = await Axios.get(`${BASE_URL}/api/web/notes/getbyCustomer?customerId=${selectedId}`);
             setAllNotes(res?.data?.data || []);
-        } catch (error) {}
+        } catch (error) { }
     };
 
     useEffect(() => {
@@ -262,7 +266,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 if (response?.status === 200 || response?.status === 201) {
                     setTrackingNumber(response?.data?.data);
                 }
-            } catch (error) {}
+            } catch (error) { }
         };
         fetchTrackingNumber();
     }, [refreshEsn]);
@@ -278,6 +282,17 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
             return ""; // Default class when no condition matches
         }
     };
+
+    const cursor ={
+        cursor:'pointer'
+    }
+
+    const swapMdn =()=>{
+        setIsSwapMdn(true)
+    }
+    const swapEsn =()=>{
+         setIsSwapEsn(true)
+    }
 
     return (
         <div className="card">
@@ -299,6 +314,12 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                 </Dialog>
                 <Dialog draggable={false} visible={isEdit} header={"Update Personal Info"} style={{ width: "70vw" }} onHide={() => setIsEdit((prev) => !prev)}>
                     <DialogeForInfoEdit cpData={cpData} setRefresh={setRefresh} setIsEdit={setIsEdit} />
+                </Dialog>
+                <Dialog draggable={false} visible={isSwapEsn} header={"Swap ESN"} style={{ width: "40vw" }} onHide={() => setIsSwapEsn((prev) => !prev)}>
+                    <DialogeForSwapEsn cpData={cpData} setRefresh={setRefresh}  />
+                </Dialog>
+                <Dialog draggable={false} visible={isSwapMdn} header={"Swap MDN"} style={{ width: "30vw" }} onHide={() => setIsSwapMdn((prev) => !prev)}>
+                    <DialogeForSwapMdn cpData={cpData} setRefresh={setRefresh} setIsSwapMdn={setIsSwapMdn} />
                 </Dialog>
                 <div className="pt-3">
                     <div className="grid">
@@ -452,15 +473,15 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                                 // If PO Box Address is available and not empty, render it
                                                                 <p>POBox : {cpData?.PoBoxAddress}</p>
                                                             ) : // If PO Box Address is empty, render the regular mailing address
-                                                            cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? (
-                                                                cpData?.malingAddress1 && cpData?.malingAddress2 ? (
-                                                                    `${cpData?.malingAddress1}, ${cpData?.malingAddress2}`
+                                                                cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? (
+                                                                    cpData?.malingAddress1 && cpData?.malingAddress2 ? (
+                                                                        `${cpData?.malingAddress1}, ${cpData?.malingAddress2}`
+                                                                    ) : (
+                                                                        cpData?.malingAddress1
+                                                                    )
                                                                 ) : (
-                                                                    cpData?.malingAddress1
-                                                                )
-                                                            ) : (
-                                                                cpData?.address1
-                                                            )}
+                                                                    cpData?.address1
+                                                                )}
                                                         </td>
                                                     ) : (
                                                         // <td>{cpData?.malingAddress1 !== undefined || (cpData?.malingAddress2 !== undefined && cpData?.malingAddress1 !== " " && cpData?.malingAddress2 !== " ") ? cpData?.malingAddress12 && cpData?.malingAddress : cpData?.address1}</td>
@@ -601,10 +622,13 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                 <tr>
                                                     <td>MDN</td>
                                                     <td>{cpData?.phoneNumber !== undefined ? cpData?.phoneNumber : "NIL"}</td>
+                                                    <td>{cpData?.phoneNumber !== undefined ? <i style={cursor} className="pi pi-arrow-right-arrow-left " onClick={swapMdn} title="Swap MDN"></i> :" "}</td>
                                                 </tr>
+
                                                 <tr>
                                                     <td>SIM/ESN</td>
                                                     <td>{cpData?.esn !== undefined ? cpData?.esn : cpData?.esnId?.esn !== undefined ? cpData?.esnId?.esn : "NIL"}</td>
+                                                    <td>{cpData?.esn !== undefined ? <i style={cursor} className="pi pi-arrow-right-arrow-left" title="Swap ESN" onClick={swapEsn}></i> :""}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IMEI</td>
@@ -802,7 +826,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                             </>
                                                         ) : (
                                                             <>
-                                                                <td>Order Create Date</td> 
+                                                                <td>Order Create Date</td>
                                                                 <td>{cpData?.orderCreateDate ? cpData?.orderCreateDate : "NIL"}</td>
                                                             </>
                                                         )
