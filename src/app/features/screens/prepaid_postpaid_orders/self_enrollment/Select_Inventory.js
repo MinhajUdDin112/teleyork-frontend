@@ -469,7 +469,7 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
                                                     <button
                                                         type="button"
 
-                                                        disabled={item?.label === current || paymentInfo}
+                                                        disabled={item?.label === current || localStorage.getItem("paymentallinfoself")}
                                                         onClick={() => {   
                                                              setNewInventorySelect(true)
                                                             onInventorySelect(item);
@@ -530,7 +530,7 @@ const PrepaidSelectInventory = ({ setActiveIndex }) => {
 
                                                             <button
                                                                 type="button"
-                                                                disabled={item?._id === currentPlanSelect || paymentInfo}
+                                                        disabled={item?.label === current ||  localStorage.getItem("paymentallinfoself")}
                                                                 onClick={() => { 
                                                                      setNewInventorySelect(false)
                                                                     onPlanSelect(item);
