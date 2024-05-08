@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox } from "primereact/checkbox"; 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -39,7 +39,15 @@ const PrepaidSelfNationalVerifier = () => {
         onSubmit: async (values, actions) => {  
              handleNext()
         },
-    });  
+    });    
+    useEffect(()=>{ 
+        if(localStorage.getItem("homeAddress")){ 
+
+        }   
+        else{ 
+            navigate("/prepaid-selfaddress")
+        }     
+    },[])
     const handleCheckBox = (index) => {
         const newCheckBoxes = [...formik.values.checkbox]; 
        
@@ -67,7 +75,12 @@ const PrepaidSelfNationalVerifier = () => {
         
         formik.setFieldValue("checkbox", newCheckBoxes);
         setCheckAll(!checkAll);
-    };
+    }; 
+    useEffect(()=>{ 
+         if(localStorage.getItem("termsandcondition")){ 
+                handleAll()
+         }
+    },[])
     const handleNext = async () => {   
 
         setIsLoading(true);
@@ -75,7 +88,8 @@ const PrepaidSelfNationalVerifier = () => {
             userId: id,
         };
         try {
-            const res = await axios.post(`${BASE_URL}/api/enrollment/termsAndConditions`, data);
+            const res = await axios.post(`${BASE_URL}/api/enrollment/termsAndConditions`, data); 
+             localStorage.setItem("termsandcondition",JSON.stringify(res?.data))
             const responseData = res.data; // Assuming the API response contains the data you need
             navigate("/prepaid-selectinventory", { state: { responseData } });
             setIsLoading(false);

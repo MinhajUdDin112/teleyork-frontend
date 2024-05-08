@@ -20,19 +20,22 @@ export const AppTopbar = (props) => {
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
     }); 
-  /*  const [socket, setSocket] = useState(null);
+   /* const [socket, setSocket] = useState(null);
     const [message, setMessage] = useState('');
     const [receivedMessage, setReceivedMessage] = useState('');
   
     useEffect(() => {
       // Connect to WebSocket server
-      const newSocket = io('ws://localhost:3001');
+      const newSocket = io(BASE_URL);
   
       // Set up event listeners
       newSocket.on('connect', () => {
         console.log('Connected to WebSocket server');
       });
-  
+       newSocket.on("error",(err)=>{ 
+         console.log(err) 
+
+       })
       newSocket.on('message', (message) => {
         setReceivedMessage(message);
       });
@@ -49,7 +52,8 @@ export const AppTopbar = (props) => {
           socket.emit('message', message);
           setMessage('');
         }
-      };*/
+      }; 
+       */
     const [visibleSearch, setVisibleSearch] = useState(false);
     const [notification, setNotification] = useState([]);
     function docOnClick(e) {
@@ -134,7 +138,7 @@ export const AppTopbar = (props) => {
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
                 }
-     }, 1000);
+     }, 5000);
         };   
         getCounter();
     }, [props.refreshBell]);
