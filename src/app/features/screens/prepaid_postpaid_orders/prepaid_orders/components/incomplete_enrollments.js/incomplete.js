@@ -158,7 +158,7 @@ const PrepaidInCompleteEnrollments = () => {
                 localStorage.removeItem("programmeId");
             }
         } catch (error) {
-            toast.error(`Error fetching module data: ${error?.response?.data?.msg}`);
+            toast.error(`Error Fetching Enrollment data: ${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
     };
