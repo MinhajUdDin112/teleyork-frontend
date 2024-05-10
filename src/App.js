@@ -135,6 +135,7 @@ import PrepaidSelfNationalVerifier from "./app/features/screens/prepaid_postpaid
 import PrepaidSelfResumeApplication from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/ResumeApplication";
 import PrepiadSelectInventory from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Select_Inventory";
 import PrepaidAllSelfEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_Self_enrollments.js/all_enrollment";
+import Prepaid_Completed_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/CompletedEnrollment/Completed_enrollment";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -407,6 +408,7 @@ const App = () => {
                                             <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
                                             <Route path="/plan-configurations" element={isPermitted("/plan-configurations") ? <ListAllPlans /> : <Dashboard />} />
                                             <Route path="/prepaid-newenrollment" element={isPermitted("/prepaid-newenrollment") ? <MainPrepaidOrders /> : <Dashboard />} />
+                                            <Route path="/prepaid-completeenrollments" element={isPermitted("/prepaid-completeenrollments") ? <Prepaid_Completed_Enrollments /> : <Dashboard />} /> 
                                             <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
                                             <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />
                                             <Route path="/emei-drawer" element={isPermitted("/emei-drawer") ? <ImeiDrawer /> : <Dashboard />} />

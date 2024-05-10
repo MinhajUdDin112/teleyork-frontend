@@ -6,7 +6,8 @@ import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
+const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {       
+     
     const [showFinalComponent, setShowFinalComponent] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -24,15 +25,28 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
-    };
-
+    }; 
+    const [fromlocal,setLocal]=useState(false)   
+    const [basicData,setBasicData]=useState()
+  useEffect(()=>{ 
+     if(localStorage.getItem("comingfromincomplete")){ 
+        let prepaidbasicData=JSON.parse(localStorage.getItem("prepaidbasicData"))
+          if(prepaidbasicData?.data?.activeBillingConfiguration){ 
+                setLocal(true)   
+                setBasicData(prepaidbasicData?.data)
+          } 
+          else{ 
+        
+          }
+    }
+  },[])
     const postData = async () => {
         setIsLoading(true);
         const dataToSend = {
             csr: csr,
             userId: _id,
-            isWithInvoice: paymentInfo?.prospectwithinvoice,
-            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
+            isWithInvoice: paymentInfo?.prospectwithinvoice ? paymentInfo?.prospectwithinvoice : false,
+            isWithoutInvoice: paymentInfo?.prospectwithinvoice ? paymentInfo?.prospectwithinvoice  : false,
         };
         Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
             .then(() => {
@@ -287,13 +301,24 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             label="Back"
                             onClick={() => {
                                 if (localStorage.getItem("comingforedit")) {
-                                    setActiveIndex(1);
-                                } else {
+                                    setActiveIndex(1); 
+                                     
+                                }
+                                else if(localStorage.getItem("comingfromincomplete")){ 
+                                    let prepaidbasicData=JSON.parse(localStorage.getItem("prepaidbasicData"))
+                                      if(prepaidbasicData?.data?.activeBillingConfiguration){ 
+                                         setActiveIndex(1)
+                                      } 
+                                      else{ 
+                                       setActiveIndex(2)
+                                      }
+                                }
+                                else {
                                     setActiveIndex(2);
                                 }
                             }}
                         />
-                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") || fromlocal ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
                     </div>
                     <br></br>
 
@@ -366,7 +391,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Plan:</p>
-                                    <p className="w-6">{(planname || "-").toUpperCase()}</p>
+                                    <p className="w-6">{(planname ? planname : fromlocal ?   basicData?.currentPlan?.planName: "-").toUpperCase()}</p>
                                 </div>
                                 <div className="flex border-bottom-2 pt-2">
                                     <p className="w-6 ml-4">Amount Paid: </p>

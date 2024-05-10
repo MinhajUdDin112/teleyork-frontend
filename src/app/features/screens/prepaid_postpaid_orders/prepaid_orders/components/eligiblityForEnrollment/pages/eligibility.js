@@ -4,7 +4,16 @@ const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const handleNext = () => {  
         if(localStorage.getItem("comingforedit")){
         setActiveIndex(3); 
-        } 
+        }  
+        else if(localStorage.getItem("comingfromincomplete")){ 
+            let prepaidbasicData=JSON.parse(localStorage.getItem("prepaidbasicData"))
+              if(prepaidbasicData?.data?.activeBillingConfiguration){ 
+                 setActiveIndex(3)
+              } 
+              else{ 
+               setActiveIndex(2)
+              }
+        }
         else{ 
             setActiveIndex(2)
         }

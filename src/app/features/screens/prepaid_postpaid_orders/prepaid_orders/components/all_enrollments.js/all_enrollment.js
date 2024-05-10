@@ -147,7 +147,7 @@ const PrepaidAllEnrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
+            toast.error(`${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
     };
