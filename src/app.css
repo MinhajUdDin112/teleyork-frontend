@@ -14,8 +14,7 @@
     border: solid rgb(206, 212, 218) 1px;
     z-index: 999;
     height: 40px;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
+    border-radius: 5px;
 }
 .search-customer input {
     border: none;
@@ -474,10 +473,11 @@ input:disabled {
         margin-left: 0rem;
     }
 }
-.password-toggle {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 10px;
-  cursor: pointer;
+
+/* SearchBar */
+.searchbar {
+    width: 100rem;
+}
+.p-datatable .p-datatable-tbody > tr > td {
+    padding-top: 20px !important;
 }

@@ -19,7 +19,9 @@ import DialogeForTransferUser from "./dialogs/DialogeForTransferUser";
 import DialogeForRemarksForIJ from "./dialogs/DialogeForRemarksForIJ";
 import { FilterMatchMode } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
+import "./styles.css";
 import DialogeForApprove from "./dialogs/DialogeForApprove";
+import { Actions, Editbutton } from "../../../../../../../utility";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PrepaidAllEnrollments = () => {
     const [selectedEnrollmentId, setSelectedEnrollmentId] = useState();
@@ -40,8 +42,8 @@ const PrepaidAllEnrollments = () => {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         enrollment: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO}, 
-        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO}
+        createdAt: { value: null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
+        createdTo: { value: null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO },
     });
     const [globalFilterValue, setGlobalFilterValue] = useState("");
     const [enrollmentIdFilterValue, setEnrollmentIdFilterValue] = useState("");
@@ -422,8 +424,12 @@ const PrepaidAllEnrollments = () => {
     const actionTemplate = (rowData) => {
         return (
             <div>
-               {/* <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1" />
-                 <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
+                <div className="flex flex-wrap justify-content-center" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading}>
+                    <Editbutton />
+                </div>
+                {/* <Actions label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1" /> */}
+                {/* <Button label="Edit" onClick={() => viewRow(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1" /> */}
+                {/* <Button label="Approve" onClick={() => approveRow(rowData)} className=" p-button-success mr-2 ml-2 pt-1 pb-1 " text raised disabled={isButtonLoading} />
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} /> */}
             </div>
         );
@@ -492,7 +498,7 @@ const PrepaidAllEnrollments = () => {
     const actionTemplateForPR = (rowData) => {
         return (
             <div>
-               {/* <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} /> */}
+                {/* <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} /> */}
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
                 {/* <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
                 <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />
@@ -552,45 +558,59 @@ const PrepaidAllEnrollments = () => {
 
     const header = () => {
         return (
-            <div className="flex flex-wrap justify-content-center mt-2">
-                <Dropdown
-                    className="mt-2 w-15rem ml-4"
-                    options={[
-                        { label: "Self Enrollment", value: "Self Enrollments" },
-                        { label: "Enrollment", value: "Enrollment" },
-                        { label: "All Enrollments", value: null },
-                    ]}
-                    value={enrollmentIdFilterValue}
-                    onChange={(e) => {
-                        onNameDateEnrollmentIdValueFilter(e, "enrollment");
-                    }}
-                    placeholder="Enrollment Type"
-                />
-                <InputText value={globalFilterValue} onChange={onGlobalFilterValueChange} className="w-15rem ml-4 mt-2" placeholder="Search By Name or Enrollment ID" />
-                <div className="w-45rem ml-4 mt-2">
-                    <Calendar
-                        className="w-21rem"
-                        value={createDateFilterValue}
-                        dateFormat="mm/dd/yy"
-                        placeholder="Start Date"
+            <div className="flex flex-wrap justify-content-left mt-2 w-full maindiv" style={{ backgroundColor: "white" }}>
+                <div className="flex flex-wrap w-full inputtext" style={{ height: "45px", border: "none", alignItems: "center", backgroundColor: "white" }}>
+                    <InputText className="searchh" value={globalFilterValue} onChange={onGlobalFilterValueChange} placeholder="Search..." style={{ height: "35px", marginLeft: "5px", width: "20%" }} />
+                    <Dropdown
+                        className="enrollment"
+                        options={[
+                            { label: "Self Enrollment", value: "Self Enrollments" },
+                            { label: "Enrollment", value: "Enrollment" },
+                            { label: "All Enrollments", value: null },
+                        ]}
+                        value={enrollmentIdFilterValue}
                         onChange={(e) => {
-                            onNameDateEnrollmentIdValueFilter(e, "createdAt");
+                            onNameDateEnrollmentIdValueFilter(e, "enrollment");
                         }}
-                        showIcon
+                        placeholder="Enrollment Type"
                     />
-                    <label className="p-2" style={{ fontSize: "19px", textAlign: "center", color: "grey" }}>
-                        To
-                    </label>
-                    <Calendar
-                        className="w-21rem"
-                        value={createDateToFilterValue}
-                        dateFormat="mm/dd/yy"
-                        placeholder="End Date"
-                        onChange={(e) => {
-                            onNameDateEnrollmentIdValueFilter(e, "createdTo");
+                    <div
+                        className="cal"
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            width: "43%",
                         }}
-                        showIcon
-                    />
+                    >
+                        <span style={{ fontWeight: "400", paddingLeft: "2%" }}>From</span>
+                        <Calendar
+                            value={createDateFilterValue}
+                            dateFormat="mm/dd/yy"
+                            // placeholder="Start Date"
+                            onChange={(e) => {
+                                onNameDateEnrollmentIdValueFilter(e, "createdAt");
+                            }}
+                            showIcon
+                            style={{ height: "30px", width: "40%" }}
+                        />
+                        <span style={{ fontWeight: "400" }}>To</span>
+                        <Calendar
+                            value={createDateToFilterValue}
+                            dateFormat="mm/dd/yy"
+                            // placeholder="End Date"
+                            onChange={(e) => {
+                                onNameDateEnrollmentIdValueFilter(e, "createdTo");
+                            }}
+                            showIcon
+                            style={{ height: "30px", border: "none", width: "40%", color: "red" }}
+                        />
+                    </div>
+
+                    {/* <div className="w-20rem ml-4 mt-2">
+                        <label className="p-2" style={{ fontSize: "19px", textAlign: "center", color: "grey" }}>
+                            To
+                        </label>
+                    </div> */}
                 </div>
             </div>
         );
@@ -623,36 +643,30 @@ const PrepaidAllEnrollments = () => {
                         <DialogeForApprove enrollmentIds={selectedIdsForApprove} />
                     </Dialog> */}
                 </form>
-
+                <div className="text-center w-full h-4 heading">
+                    <h3>ALL ENROLLMENTS</h3>
+                </div>
                 <div className="card mx-5 p-0 ">
-                    <div className="flex font-bold pt-2">
-                        <div className="mt-2 ml-2 pt-2 pl-1">
-                            <h3>
-                                <strong> All Enrollments</strong>
-                            </h3>
-                        </div>
+                    <div className=" ml-auto flex">
+                        <div className="mr-5"></div>
+                        <div className="  flex pr-4 ">
+                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
+                                ""
+                            ) : (
+                                //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
+                                //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
+                                // :
+                                <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3 card " text disabled={isButtonLoading} />
+                            )}
 
-                        <div className=" ml-auto flex">
-                            <div className="mr-5"></div>
-                            <div className="  flex pr-4 ">
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
-                                    ""
-                                ) : (
-                                    //  roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
-                                    //   <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApproveForQa()} className=" p-button-success  ml-3  " text raised disabled={isButtonLoading} />
-                                    // :
-                                    <Button label="Approve All Enrollments" icon={PrimeIcons.CHECK} onClick={() => HnadleAllApprove()} className=" p-button-success  ml-3 card " text disabled={isButtonLoading} />
-                                )}
-
-                                {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
-                                    ""
-                                ) : (
-                                    //  :
-                                    //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
-                                    //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />
-                                    <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3 card" text disabled={isButtonLoading || selectedRows.length === 0} />
-                                )}
-                            </div>
+                            {roleName == "CSR" || roleName == "csr" || roleName == "Csr" ? (
+                                ""
+                            ) : (
+                                //  :
+                                //   roleName == "QA" || roleName == "qa" || roleName == "Qa" ?
+                                //   <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelectedForQa} className="p-button-success ml-3" text raised disabled={isButtonLoading || selectedRows.length === 0} />
+                                <Button label="Approve Selected" icon={PrimeIcons.CHECK} onClick={handleApproveSelected} className="p-button-success ml-3 card" text disabled={isButtonLoading || selectedRows.length === 0} />
+                            )}
                         </div>
                     </div>
                     <div>
@@ -677,7 +691,7 @@ const PrepaidAllEnrollments = () => {
                         >
                             {/* <Column expander style={{ width: "3em" }} /> */}
                             {/* <Column header="SNo" style={{ width: "3em" }} body={(rowData, rowIndex) => (rowIndex + 1).toString()} /> */}
-                            <Column selectionMode="multiple" style={{ width: "3em" }} />
+                            <Column selectionMode="multiple" style={{ width: "10rem" }} />
                             <Column
                                 header="Enrollment ID"
                                 field="enrollmentId"

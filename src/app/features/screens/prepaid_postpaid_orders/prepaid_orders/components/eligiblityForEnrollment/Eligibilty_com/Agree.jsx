@@ -6,7 +6,6 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import Axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
@@ -32,39 +31,38 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: initialValues,
-        onSubmit: async (values, actions) => {  
+        onSubmit: async (values, actions) => {
             postdata();
         },
     });
     const agreeRes = localStorage.getItem("prepaidagreeData");
     const parseagreeRes = JSON.parse(agreeRes);
-    //get ZipData data from local storage  
-    
+    //get ZipData data from local storage
+
     const zipdata = localStorage.getItem("prepaidzipData");
-    const parseZipData = JSON.parse(zipdata);   
+    const parseZipData = JSON.parse(zipdata);
     useEffect(() => {
-        if(parseagreeRes)
-        {
+        if (parseagreeRes) {
             handleAll();
         }
-     }, [isBack]) 
+    }, [isBack]);
     const postdata = async () => {
         setIsLoading(true);
         const userId = _id;
         csr = csr;
-        const dataToSend = { csr, userId };    
+        const dataToSend = { csr, userId };
         try {
             const response = await Axios.post(`${BASE_URL}/api/user/termsAndConditions`, dataToSend);
-            if(response?.status===201 || response?.status===200){
-               localStorage.setItem("prepaidagreeData",JSON.stringify(response?.data))
-               setIsBack(isBack+1);
-               handleNext();
-               setIsLoading(false)
+            if (response?.status === 201 || response?.status === 200) {
+                localStorage.setItem("prepaidagreeData", JSON.stringify(response?.data));
+                setIsBack(isBack + 1);
+                handleNext();
+                setIsLoading(false);
             }
         } catch (error) {
-            toast.error(error?.response?.data?.msg)
-            setIsLoading(false)
-        }  
+            toast.error(error?.response?.data?.msg);
+            setIsLoading(false);
+        }
     };
 
     const handleAll = (comingfromlocal) => {
@@ -121,13 +119,12 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         setButtonClicked(true);
     };
     //`I hereby consent to enroll with ${companyName}, Inc for the selected services under the following terms and conditions: `,
-    
+
     const checkBoxLabels = [
         `${companyName}, Inc agrees to provide the selected equipment and services to the customer at the rates discussed with the customer`,
         `The service provided is pre-paid, and the customer agrees to pay the monthly bill at the start of each service month.`,
         `The customer agrees to switch their home phone or cell phone services to ${companyName}, Inc from their current service provider.`,
-       `${companyName}, Inc will make reasonable efforts to ensure that the customer retains their existing phone number. In cases where number portability is not possible, the customer will be notified`
-    ,
+        `${companyName}, Inc will make reasonable efforts to ensure that the customer retains their existing phone number. In cases where number portability is not possible, the customer will be notified`,
         `If the customer chooses not to utilize the selected services and equipment, without encountering any technical issues, the customer agrees to pay the specified monthly bill, including taxes.`,
         `The customer can choose any desired date for the monthly bill within the days provided by ${companyName}, Inc for the due date. In the event that the customer is unable to make the monthly payment on time, late fees, if applicable, will be applied to the bill.`,
         `By enrolling with ${companyName}, Inc., the customer consents to receive communications, including bills, notices, and updates, electronically.`,
@@ -135,28 +132,22 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         `${companyName}, Inc will take reasonable measures to protect customer information and maintain data security.`,
         `${companyName}, Inc will provide customer support to the customer for any service-related queries or technical issues.`,
         `This agreement shall be governed by and construed in accordance with the laws of the applicable jurisdiction.`,
-        <strong>I hereby certify that I have thoroughly read and agree to this disclosure.</strong>
+        <strong>I hereby certify that I have thoroughly read and agree to this disclosure.</strong>,
     ];
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
                 <ToastContainer />
-                <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons">
-                    <Button label="Back" type="button" onClick={handleBack} />
-                    <Button label="Continue" type="submit"  
-                        disabled={ buttonClicked || formik.errors.checkbox || formik.values.checkbox.some((isChecked) => !isChecked)}
-                        icon={isLoading ? "pi pi-spin pi-spinner" : ""}
-                       
-                    />
-                </div>
-                <div>
+
+                {/* <div>
                     <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
-                </div>
+                </div> */}
+                <br />
                 <br />
                 <div>
-                    <p className="font-normal my-3 text-xl ">Please carefully read and agree by initialing all the boxes for the following statements. By clicking the boxes below, you agree to e-sign the statements with your initials and acknowledge that the initialed statements are enforceable</p>
-                    <p className="font-semibold" style={{ color: "red" }}>
-                        Please carefully read and mark all the statements and accept the Terms and Conditions
+                    <p className="para">Please carefully read and agree by initialing all the boxes for the following statements. By clicking the boxes below, you agree to e-sign the statements with your initials and acknowledge that the initialed statements are enforceable</p>
+                    <p className="font-semibold" style={{ fontFamily: "Inter", color: "#c68301" }}>
+                        PLEASE CAREFULLY READ AND MARK ALL THE STATEMENTS AND ACCEPT THE TERMS AND CONDITIONS
                     </p>
                     <div className="field-checkbox ">
                         <Checkbox inputId="checkAll" onChange={handleAll} checked={checkAll} />
@@ -181,8 +172,8 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                     <div className="mt-5">
                         <p>Request the user for additional documents</p>
                         <div className="flex ">
-                            <Button label={buttonClicked ? "Sent" : "Send an SMS"} className="p-button-success mr-2" type="button" disabled={buttonClicked} />
-                            <Button label={buttonClicked ? "Sent" : "Send an Email"} className="p-button-success" type="button" disabled={buttonClicked} />
+                            <Button label={buttonClicked ? "Sent" : "Send an SMS"} className=" mr-2 btn1" type="button" disabled={buttonClicked} />
+                            <Button label={buttonClicked ? "Sent" : "Send an Email"} className=" btn2" type="button" disabled={buttonClicked} />
                             {/* {buttonClicked ? (
                                 <div className=" ml-2">
                                     <Button label="ReSend" type="button" className="p-button-success" />
@@ -190,6 +181,10 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                             ) : null} */}
                         </div>
                     </div>
+                </div>
+                <div style={{ marginLeft: "77%" }} className="flex flex-row justify-content-right align-items-center mb-2 sticky-buttons ">
+                    <Button className="btn" label="Back" type="button" onClick={handleBack} />
+                    <Button className="btn ml-2" label="Continue" type="submit" disabled={buttonClicked || formik.errors.checkbox || formik.values.checkbox.some((isChecked) => !isChecked)} icon={isLoading ? "pi pi-spin pi-spinner" : ""} />
                 </div>
             </form>
         </>

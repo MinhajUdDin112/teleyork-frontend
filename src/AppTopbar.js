@@ -10,8 +10,10 @@ import { ListBox } from "primereact/listbox";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { Sidebar } from "primereact/sidebar";
-import Axios from "axios";      
-import io from 'socket.io-client';
+import "./app.css";
+import { DropdownIcon, NotificationIcon } from "./utility";
+import Axios from "axios";
+import io from "socket.io-client";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const AppTopbar = (props) => {
     const [visibleRight, setVisibleRight] = useState(false);
@@ -19,8 +21,8 @@ export const AppTopbar = (props) => {
     const [counter, setCounter] = useState("");
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
-    }); 
-   /* const [socket, setSocket] = useState(null);
+    });
+    /* const [socket, setSocket] = useState(null);
     const [message, setMessage] = useState('');
     const [receivedMessage, setReceivedMessage] = useState('');
   
@@ -128,7 +130,7 @@ export const AppTopbar = (props) => {
     // counter notification API
     useEffect(() => {
         const getCounter = async () => {
-          setInterval(async () => {
+            setInterval(async () => {
                 try {
                     const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
                     const data = response?.data?.unreadCount;
@@ -138,8 +140,8 @@ export const AppTopbar = (props) => {
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
                 }
-     }, 5000);
-        };   
+            }, 5000);
+        };
         getCounter();
     }, [props.refreshBell]);
 
@@ -179,7 +181,6 @@ export const AppTopbar = (props) => {
                 {capitalCompanyName?.includes("IJ") ? (
                     <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
                         <img className="w-13rem h-8rem ml-4" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                    
                     </Link>
                 ) : capitalCompanyName.includes("ZISFONE") ? (
                     <Link
@@ -213,7 +214,6 @@ export const AppTopbar = (props) => {
                         }}
                     >
                         <img className="w-9rem h-4rem ml-4" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                        
                     </Link>
                 ) : capitalCompanyName.includes("ZISFONE") ? (
                     <Link
@@ -245,9 +245,8 @@ export const AppTopbar = (props) => {
                 >
                     <i className="pi pi-ellipsis-v" />
                 </button>
-                <div className="search-customer">
+                <div className="search-customer" style={{ width: "30%" }}>
                     <InputText
-                        className=""
                         onChange={(e) => {
                             props.setSearchValue(e.target.value);
                         }}
@@ -283,6 +282,7 @@ export const AppTopbar = (props) => {
                                 props.setCallSearchApi((prev) => !prev);
                             }
                         }}
+                        style={{ border: "none" }}
                     />
                 </div>
 
@@ -317,9 +317,30 @@ export const AppTopbar = (props) => {
                 <ConfirmPopup target={document.getElementById("li")} visible={visible} onHide={() => setVisible(false)} message={<CustomMessage />} acceptLabel="Logout" accept={handleLogout} />
                 <ul className={classNames("layout-topbar-menu   lg:flex origin-top", { "layout-topbar-menu-mobile-active": props.mobileTopbarMenuActive })}>
                     <div className="flex  ">
-                        <i className="pi pi-bell" style={{ cursor: "pointer", fontSize: "1.5rem", marginRight: "3rem", marginTop: "0.8rem" }} onClick={() => setVisibleRight(true)}>
-                            <span style={{ color: "red", marginLeft: "0rem", fontSize: "1rem", fontWeight: "600", marginTop: "-0.6rem", position: "absolute" }}> {counter <= 9 ? counter : "9+"}</span>
-                        </i>
+                        <div className="notificationbell" style={{ cursor: "pointer", fontSize: "1.5rem", marginRight: "3rem", marginTop: "1rem" }} onClick={() => setVisibleRight(true)}>
+                            <NotificationIcon />
+                            <span
+                                style={{
+                                    fontFamily: "Inter",
+                                    color: "white",
+                                    fontSize: "0.8rem",
+                                    marginLeft: "-0.3rem",
+                                    paddingLeft: "3.7px",
+                                    fontWeight: "300",
+                                    marginTop: "-0.3rem",
+                                    position: "absolute",
+                                    width: "15px",
+                                    height: "15px",
+                                    backgroundColor: "#FF0000",
+                                    borderRadius: "50%",
+                                    border: "1px solid white",
+                                }}
+                            >
+                                {" "}
+                                {counter <= 9 ? counter : "9+"}
+                            </span>
+                        </div>
+                        {/* <i className="pi pi-bell"></i> */}
                         <Sidebar className="notification" style={{ width: "35rem" }} visible={visibleRight} position="right" onHide={() => setVisibleRight(false)}>
                             <h3>Notifications</h3>
                             <hr />
@@ -351,21 +372,24 @@ export const AppTopbar = (props) => {
                                 </div>
                             ))}
                         </Sidebar>
-                        <p className="mr-7 mt-2" style={{ fontSize: "1.3rem" }}>
+                        {/* <p className="mr-7" style={{ fontSize: "1.3rem", marginLeft: "-2rem", marginTop: "10px" }}>
                             {parseLoginRes?.role?.role}
-                        </p>
+                        </p> */}
                         <div
                             className="flex"
                             onClick={(e) => {
                                 e.stopPropagation();
                             }}
                         >
-                            <li>
-                                <i style={{ cursor: "pointer", fontSize: "1.5rem", marginTop: "5px" }} className="pi pi-user" onClick={() => setVisible(true)} />
-                            </li>
-                            <p className="" id="li" style={{ cursor: "pointer", fontSize: "1.5rem", marginLeft: "10px" }} onClick={() => setVisible(true)}>
+                            <p className="" id="li" style={{ cursor: "pointer", fontSize: "1.2rem", marginTop: "14px", marginLeft: "-20px", fontFamily: "Almarai" }} onClick={() => setVisible(true)}>
                                 {parseLoginRes?.userName ? parseLoginRes?.userName.toUpperCase() : ""}
                             </p>
+                            <div style={{ cursor: "pointer", fontSize: "1.5rem", marginTop: "12px", marginLeft: "10px" }} onClick={() => setVisible(true)}>
+                                <DropdownIcon />
+                            </div>
+                            {/* <li style={{ marginTop: "10px" }}>
+                                <i style={{ cursor: "pointer", fontSize: "1.5rem", marginTop: "5px" }} className="pi pi-user" onClick={() => setVisible(true)} />
+                            </li> */}
                         </div>
                     </div>
                 </ul>
