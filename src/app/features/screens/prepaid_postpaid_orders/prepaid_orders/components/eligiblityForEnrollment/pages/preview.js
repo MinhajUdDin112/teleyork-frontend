@@ -26,14 +26,25 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
     };
-
+    const [fromlocal, setLocal] = useState(false);
+    const [basicData, setBasicData] = useState();
+    useEffect(() => {
+        if (localStorage.getItem("comingfromincomplete")) {
+            let prepaidbasicData = JSON.parse(localStorage.getItem("prepaidbasicData"));
+            if (prepaidbasicData?.data?.activeBillingConfiguration) {
+                setLocal(true);
+                setBasicData(prepaidbasicData?.data);
+            } else {
+            }
+        }
+    }, []);
     const postData = async () => {
         setIsLoading(true);
         const dataToSend = {
             csr: csr,
             userId: _id,
-            isWithInvoice: paymentInfo?.prospectwithinvoice,
-            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
+            isWithInvoice: paymentInfo?.prospectwithinvoice ? paymentInfo?.prospectwithinvoice : false,
+            isWithoutInvoice: paymentInfo?.prospectwithinvoice ? paymentInfo?.prospectwithinvoice : false,
         };
         Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
             .then(() => {
@@ -279,7 +290,27 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         <>
             <ToastContainer />
             {!showFinalComponent ? (
-                <div>
+                <div className="card ">
+                    <div className="flex flex-row justify-content-between sticky-buttons">
+                        <Button
+                            label="Back"
+                            onClick={() => {
+                                if (localStorage.getItem("comingforedit")) {
+                                    setActiveIndex(1);
+                                } else if (localStorage.getItem("comingfromincomplete")) {
+                                    let prepaidbasicData = JSON.parse(localStorage.getItem("prepaidbasicData"));
+                                    if (prepaidbasicData?.data?.activeBillingConfiguration) {
+                                        setActiveIndex(1);
+                                    } else {
+                                        setActiveIndex(2);
+                                    }
+                                } else {
+                                    setActiveIndex(2);
+                                }
+                            }}
+                        />
+                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") || fromlocal ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                    </div>
                     <br></br>
 
                     <div>

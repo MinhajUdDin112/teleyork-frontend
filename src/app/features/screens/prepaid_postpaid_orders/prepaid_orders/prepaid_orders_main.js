@@ -1,17 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; 
+import { useLocation } from "react-router-dom";
 import ServiceAvailabilityPage from "./components/eligiblityForEnrollment/pages/service_availblity_page";
 import EnrollmentFlowPage from "./components/eligiblityForEnrollment/pages/enrollment_flow_page";
-export default function MainPrepaidOrders() {
-    const [zipVerified, setZipVerified] = useState(false);
+export default function MainPrepaidOrders() {  
+      const location=useLocation()   
+      const [counter,setcounter]=useState(0)
+    let fromIncomplete = localStorage.getItem("comingfromincomplete");
+    const [zipVerified, setZipVerified] = useState(fromIncomplete || localStorage.getItem("comingforedit")  ? true :false);
     useEffect(() => {
-        let fromIncomplete = localStorage.getItem("comingfromincomplete");
-        if (fromIncomplete || localStorage.getItem("comingforedit")) {
-            setZipVerified(true);
-        }
+     
         return () => {
             cleanLocalStorage();
         };
-    }, []);
+    }, []);     
+    useEffect(() => {
+      const handleRouteChange = (newLocation) => {  
+          if (newLocation.pathname === '/prepaid-newenrollment') {   
+              if(counter === 0){
+              } 
+              else{ 
+              
+             setZipVerified(false) 
+              } 
+              setcounter(prev=>prev=prev+1)
+          }
+        };
+        handleRouteChange(location);
+        window.addEventListener('popstate', handleRouteChange);
+        return () => {
+          window.removeEventListener('popstate', handleRouteChange);  
+        };  
+      }, [location]);  
+
     return <>{!zipVerified ? <ServiceAvailabilityPage setZipVerified={setZipVerified} /> : <EnrollmentFlowPage />}</>;
     // return (
     //     <>

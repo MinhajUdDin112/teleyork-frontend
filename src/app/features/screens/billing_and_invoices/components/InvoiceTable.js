@@ -162,7 +162,7 @@ const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
                             </Button>
                         )}
                         header="Payment"
-                        style={{ minWidth: "250px" }}
+                    
                     />
                 ) : companyNameToCapital.includes("IJ") ? (
                     <Column
@@ -180,19 +180,20 @@ const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
                             </Button>
                         )}
                         header="Payment"
-                        style={{ minWidth: "250px" }}
+                        
                     />
                 ) : undefined}
-
+   {/*
                 <Column field="Action" body={<Button className="bg-green-400 rounded-none pl-2 pr-2 pt-2 pr-3  pb-2 border-none">Void</Button>} header="Void " />
                 <Column field="Invoice Refund" body={<Button className="bg-green-400  pr-2 pt-2 pl-3 pr-3  pb-2 border-none">Refund </Button>} header="Invoice Refund" />
                 <Column field="Invoice_Ebill" body={<Button className="bg-green-400 pr-2 pt-2 pl-3 pr-3  pb-2 border-none">Ebill </Button>} header="Invoice EBill" />
-                {/* icon={isLoading ? "pi pi-spin pi-spinner" : ""} */}
+                  */}
+                 {/* icon={isLoading ? "pi pi-spin pi-spinner" : ""} */}
                 <Column
                     field="Invoice_Pdf"
                     body={(rowData) => (
                         <Button
-                            className="bg-green-700 pr-2 pt-2 pl-3 pr-3 pb-2 border-none ml-2"
+                            className="bg-green-700 pr-2 pt-2 pl-3 pr-3 pb-2 border-none "
                             onClick={() => {  
 
                                 setInvoiceData(rowData);  

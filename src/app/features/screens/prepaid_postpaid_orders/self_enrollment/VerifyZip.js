@@ -122,15 +122,21 @@ const PrepaidSelfVerifyZip = () => {
                     localStorage.removeItem("simdiscount");
                     localStorage.removeItem("planprices");
                     localStorage.removeItem("devicePaymentMethod");
-                    localStorage.removeItem("datasendforinvoice");
+                    localStorage.removeItem("datasendforinvoice"); 
+                    localStorage.removeItem('inventoryselect') 
+                    localStorage.removeItem("planselect")
                     localStorage.removeItem("invoiceData");
                     localStorage.setItem("zip", JSON.stringify(response.data));
                     localStorage.removeItem("initialInformation");
                     localStorage.removeItem("homeAddress");
                     localStorage.removeItem("selectProgram");    
                     localStorage.removeItem("initialInformation")    
-                    localStorage.removeItem("selfinventoryselect") 
-                    localStorage.removeItem("selfplanselect")
+                    localStorage.removeItem("selfinventoryselect")    
+                     
+        localStorage.removeItem("termsandcondition")
+                    localStorage.removeItem("selfplanselect")   
+                    
+        localStorage.removeItem("paymentallinfoself")
                     navigate("/prepaid-selfpersonalinfo");
                 }
             } catch (error) {

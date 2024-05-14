@@ -198,7 +198,7 @@ export default function PaymentStripeForm({ plan, clientSecret,setShowPreview, p
                 localStorage.setItem("datasendforinvoice", JSON.stringify(dataToSend));
                 Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend)
                     .then((response) => {
-                        localStorage.setItem("paymentallinfo", JSON.stringify(response.data));
+                        localStorage.setItem("paymentallinfoself", JSON.stringify(response.data));
                         const loginRes = localStorage.getItem("userData");
                         const parseLoginRes = JSON.parse(loginRes);
                         const data = {
@@ -374,7 +374,7 @@ export default function PaymentStripeForm({ plan, clientSecret,setShowPreview, p
        localStorage.setItem("datasendforinvoice", JSON.stringify(dataToSend));
        Axios.post(`${BASE_URL}/api/web/invoices/prepaidgenerateInvoice`, dataToSend)
            .then((response) => {
-               localStorage.setItem("paymentallinfo", JSON.stringify(response.data));
+               localStorage.setItem("paymentallinfoself", JSON.stringify(response.data));
                const loginRes = localStorage.getItem("userData");
                const parseLoginRes = JSON.parse(loginRes);
                const data = {

@@ -10,9 +10,10 @@ import { ListBox } from "primereact/listbox";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { Sidebar } from "primereact/sidebar";
-import Axios from "axios";
 import "./app.css";
 import { DropdownIcon, NotificationIcon } from "./utility";
+import Axios from "axios";
+import io from "socket.io-client";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const AppTopbar = (props) => {
     const [visibleRight, setVisibleRight] = useState(false);
@@ -21,6 +22,40 @@ export const AppTopbar = (props) => {
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
     });
+    /* const [socket, setSocket] = useState(null);
+    const [message, setMessage] = useState('');
+    const [receivedMessage, setReceivedMessage] = useState('');
+  
+    useEffect(() => {
+      // Connect to WebSocket server
+      const newSocket = io(BASE_URL);
+  
+      // Set up event listeners
+      newSocket.on('connect', () => {
+        console.log('Connected to WebSocket server');
+      });
+       newSocket.on("error",(err)=>{ 
+         console.log(err) 
+
+       })
+      newSocket.on('message', (message) => {
+        setReceivedMessage(message);
+      });
+  
+      setSocket(newSocket);
+  
+      // Clean up the WebSocket connection when component unmounts
+      return () => {
+        newSocket.disconnect();
+      };
+    }, []);  
+    const sendMessage = () => {
+        if (socket) {
+          socket.emit('message', message);
+          setMessage('');
+        }
+      }; 
+       */
     const [visibleSearch, setVisibleSearch] = useState(false);
     const [notification, setNotification] = useState([]);
     function docOnClick(e) {
@@ -105,7 +140,7 @@ export const AppTopbar = (props) => {
                 } catch (error) {
                     toast.error(error?.response?.data?.msg);
                 }
-            }, 1000);
+            }, 5000);
         };
         getCounter();
     }, [props.refreshBell]);
@@ -145,8 +180,7 @@ export const AppTopbar = (props) => {
             >
                 {capitalCompanyName?.includes("IJ") ? (
                     <Link to="/" className="layout-topbar-logo flex flex-wrap  flex-row justify-content-center">
-                        <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                        <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+                        <img className="w-13rem h-8rem ml-4" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     </Link>
                 ) : capitalCompanyName.includes("ZISFONE") ? (
                     <Link
@@ -155,7 +189,6 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-
                             props.setSearchByValueClick(false);
                         }}
                     >
@@ -180,8 +213,7 @@ export const AppTopbar = (props) => {
                             props.setSearchByValueClick(false);
                         }}
                     >
-                        <img className="w-13rem h-8rem" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
-                        <span>{capitalizeEveryWord(parseLoginRes?.companyName)}</span>
+                        <img className="w-9rem h-4rem ml-4" src={process.env.PUBLIC_URL + "/companyLogo1.png"} alt="Logo" />
                     </Link>
                 ) : capitalCompanyName.includes("ZISFONE") ? (
                     <Link

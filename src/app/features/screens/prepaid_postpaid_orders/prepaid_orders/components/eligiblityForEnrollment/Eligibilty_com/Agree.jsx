@@ -65,19 +65,28 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         }
     };
 
-    const handleAll = () => {
-        const newCheckBoxes = formik.values.checkbox.map(() => !checkAll);
-        formik.setFieldValue("checkbox", newCheckBoxes);
-        setCheckAll(!checkAll);
+    const handleAll = (comingfromlocal) => {
+      
+         if(comingfromlocal){ 
+            const newCheckBoxes=formik.values.checkbox.map(()=> true) 
+            formik.setFieldValue("checkbox",newCheckBoxes)    
+         
+         } 
+         else{ 
+            const newCheckBoxes = formik.values.checkbox.map(() => !checkAll);
+            formik.setFieldValue("checkbox", newCheckBoxes);
+         } 
+         setCheckAll(prev=>!prev)
+         
     };
     useEffect(() => {
-        if (parseagreeRes) {
-            handleAll();
+        if (parseagreeRes) { 
+            let comingfromlocal=true
+            handleAll(comingfromlocal);
         }
     }, [isBack]);
 
     useEffect(() => {
-        if (parseZipData) {
             /*
       //get checkEligiblity data from local storage 
      const checkEligiblity= localStorage.getItem("parsedcheckEligiblity");
@@ -88,8 +97,16 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     } else{
         toast.success(parseCheckEligiblity?.data?.Message)
     }        
-      */
-        }
+      */       
+      if(localStorage.getItem("comingfromincomplete")){ 
+             if(localStorage.getItem("prepaidbasicData")){  
+                 if(JSON.parse(localStorage.getItem("prepaidbasicData"))?.data?.isAgreeToTerms){
+                let comingfromlocal=true
+            handleAll(comingfromlocal); 
+                 }
+             }
+      }
+        
     }, []);
 
     const handleCheckBox = (index) => {

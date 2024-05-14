@@ -11,7 +11,6 @@ const PrepaidPreview = ({ setActiveIndex, setShowPreview }) => {
     const previewsRes = localStorage.getItem("homeAddress");
     const parsepreviewsRes = JSON.parse(previewsRes);
     const previewInfo = parsepreviewsRes?.data;
-
     let enrollment_id = previewInfo?.enrollmentId;
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -22,18 +21,15 @@ const PrepaidPreview = ({ setActiveIndex, setShowPreview }) => {
     const [checked, setChecked] = useState(false);
     const [fromIncomplete, setFromIncomplete] = useState(false);
     //get preview  information from local storage
-
     const zipRes = localStorage.getItem("prepaidzipData");
     //check that user come from incomplete or not
     const fromIncompl = localStorage.getItem("comingfromincomplete");
     const parsefromIncompl = JSON.parse(fromIncompl);
-
     const paymentInfo = JSON.parse(localStorage.getItem("paymentscreendetails"));
     const formatDate = (date) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
     };
-
     const postData = async () => {
         setIsLoading(true);
         const dataToSend = {
@@ -304,7 +300,7 @@ const PrepaidPreview = ({ setActiveIndex, setShowPreview }) => {
                                 }
                             }}
                         />
-                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                        <Button label="Submit" onClick={postData} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
                     </div>
                     <br></br>
 

@@ -22,9 +22,12 @@ package-lock.json
 .env.development.local
 .env.test.local
 .env.production.local
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
 layout.css
 pages.css
+
 .env

@@ -66,7 +66,6 @@ import Address from "./app/features/screens/self_enrollment/Address";
 import Eligibility from "./app/features/screens/self_enrollment/Eligibility";
 import NationalVerifier from "./app/features/screens/self_enrollment/NationalVerifier";
 import ResumeApplication from "./app/features/screens/self_enrollment/ResumeApplication";
-
 import CreateTemplate from "./app/features/screens/sms_notification/CreateTemplate";
 import ManageTemplate from "./app/features/screens/sms_notification/ManageTemplate";
 import ShowDraftAll from "./app/features/screens/sms_notification/ShowDraftAll";
@@ -117,7 +116,7 @@ import PrepaidEvaluatedEnrollments from "./app/features/screens/prepaid_postpaid
 import Manage_Vendors from "./app/features/screens/user_management/ManageVendors/Manage_Vendors";
 import Add_Vendors from "./app/features/screens/user_management/ManageVendors/components/Add_Vendors";
 import Update_Vendors from "./app/features/screens/user_management/ManageVendors/components/Update_Vendors";
-
+import Roles_Permission from "./app/features/screens/user_management/Manage__Role_Right_Permission.js/Roles_Permission";
 // importing Bulk Downloads
 import Label_Downloads from "./app/features/screens/Bulk_Downloads/Label_Downloads/Label_Downloads";
 import Invoices_Downloads from "./app/features/screens/Bulk_Downloads/Invoices_Downloads/Invoices_Downloads";
@@ -126,7 +125,7 @@ import PostpaidActivatedBulkUpload from "./app/features/screens/PostPaid-order/P
 
 // importing Reports
 import Reports from "./app/features/screens/Reports_Downloads/Reports";
-import Roles_Permission from "./app/features/screens/user_management/Manage_Role_RIghts_Permission/Roles_Permission";
+//import Roles_Permission from "./app/features/screens/user_management/Manage_Role_RIghts_Permission/Roles_Permission";
 import BillingNavbar from "./app/features/screens/customer_profile/modals/BillingNavbar";
 import PrepiadSelfVerifyZip from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/VerifyZip";
 import PrepaidSelfPersonalInfo from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/PersonalInfo";
@@ -136,6 +135,7 @@ import PrepaidSelfNationalVerifier from "./app/features/screens/prepaid_postpaid
 import PrepaidSelfResumeApplication from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/ResumeApplication";
 import PrepiadSelectInventory from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Select_Inventory";
 import PrepaidAllSelfEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_Self_enrollments.js/all_enrollment";
+import Prepaid_Completed_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/CompletedEnrollment/Completed_enrollment";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -409,6 +409,7 @@ const App = () => {
                                             <Route path="/bulkprocesses/bulk-clear-esn" element={isPermitted("/bulkprocesses") ? <ClearEsnReportFlowPage /> : <Dashboard />} />
                                             <Route path="/plan-configurations" element={isPermitted("/plan-configurations") ? <ListAllPlans /> : <Dashboard />} />
                                             <Route path="/prepaid-newenrollment" element={isPermitted("/prepaid-newenrollment") ? <MainPrepaidOrders /> : <Dashboard />} />
+                                            <Route path="/prepaid-completeenrollments" element={isPermitted("/prepaid-completeenrollments") ? <Prepaid_Completed_Enrollments /> : <Dashboard />} /> 
                                             <Route path="/bulkprocesses/bulk-deactivate-mdn" element={isPermitted("/bulkprocesses") ? <DeactivateMdnFlowPage /> : <Dashboard />} />
                                             <Route path="/bulkprocesses/bulk-swap-esn" element={isPermitted("/bulkprocesses") ? <SwapEsnReportFlowPage /> : <Dashboard />} />
                                             <Route path="/emei-drawer" element={isPermitted("/emei-drawer") ? <ImeiDrawer /> : <Dashboard />} />
@@ -454,14 +455,12 @@ const App = () => {
                                             <Route path="/smsnotification" element={isPermitted("/smsnotification") ? <Upload /> : <Dashboard />} />
                                             <Route path="/sent" element={isPermitted("/sent") ? <Sent /> : <Dashboard />} />
                                             <Route path="/draft" element={isPermitted("/draft") ? <Draft /> : <Dashboard />} />
-
                                             <Route path="/postpaid-activated-bulkupload" element={isPermitted("/postpaid-activated-bulkupload") ? <PostpaidActivatedBulkUpload /> : <Dashboard />} />
                                             <Route path="/provisioning-queue" element={isPermitted("/provisioning-queue") ? <Provisioning_queue /> : <Dashboard />} />
                                             <Route path="/approved-enrollments" element={isPermitted("/approved-enrollments") ? <Approved_Enrollments /> : <Dashboard />} />
                                             <Route path="/billing-model-configuration" element={<BillingModelConfigurations />} />
                                             <Route path="/draftall/:id" element={<ShowDraftAll />} />
                                             <Route path="/sentall/:id" element={<ShowSentAll />} />
-
                                             <Route path="/selfenrollment" element={isPermitted("/selfenrollment") ? <VerifyZip /> : <Dashboard />} />
                                             <Route path="/personalinfo" element={isPermitted("/selfenrollment") ? <PersonalInfo /> : <Dashboard />} />
                                             <Route path="/selfaddress" element={isPermitted("/selfenrollment") ? <Address /> : <Dashboard />} />
@@ -481,6 +480,7 @@ const App = () => {
                                             <Route path="/managetemplate/*" element={isPermitted("/managetemplate") ? <ManageTemplate /> : <Dashboard />} />
                                             <Route path="/createrole" element={isPermitted("/createrole") ? <CreateRole /> : <Dashboard />} />
                                             <Route path="/manage-user" element={isPermitted("/manage-user") ? <ManageUser /> : <Dashboard />} />
+                                            <Route path="/roles-permissions" element={isPermitted("/roles-permissions") ? <Roles_Permission /> : <Dashboard />} />
                                             <Route path="/create-user" element={<CreateUser />} />
                                             <Route path="/edit-user" element={isPermitted("/edit-user") ? <EditUser /> : <Dashboard />} />
                                             <Route path="/manage-department" element={isPermitted("/manage-department") ? <Manage_Department /> : <Dashboard />} />

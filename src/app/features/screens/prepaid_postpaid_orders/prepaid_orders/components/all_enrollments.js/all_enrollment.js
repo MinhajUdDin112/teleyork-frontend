@@ -149,7 +149,7 @@ const PrepaidAllEnrollments = () => {
                 setIsLoading(false);
             }
         } catch (error) {
-            toast.error(`Error fetching All Enrollment: ${error?.response?.data?.msg}`);
+            toast.error(`${error?.response?.data?.msg}`);
             setIsLoading(false);
         }
     };
@@ -448,7 +448,7 @@ const PrepaidAllEnrollments = () => {
                     <Button label="Add Remarks" onClick={() => handleOpenDialogForRemarks(rowData)} className="pt-1 pb-1 p-button-sucess mr-2 ml-2" text raised disabled={isButtonLoading} />
                 )}
 
-                <Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1" text raised disabled={isButtonLoading} />
+                {/*<Button label="Edit" onClick={() => viewRow(rowData)} className="pt-1 pb-1" text raised disabled={isButtonLoading} />*/}
                 <Button label="Billing" onClick={() => handleEnrollmentBill(rowData)} text raised disabled={isButtonLoading} className="pt-1 pb-1" />
 
                 <Button
@@ -498,7 +498,7 @@ const PrepaidAllEnrollments = () => {
     const actionTemplateForPR = (rowData) => {
         return (
             <div>
-                <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} />
+                {/* <Button label="Edit" onClick={() => viewRow(rowData)} text raised className="pt-1 pb-1" disabled={isButtonLoading} /> */}
                 <Button label="Reject" onClick={() => handleOpenDialog(rowData)} className=" p-button-danger pt-1 pb-1 mr-2 ml-2" text raised disabled={isButtonLoading} />
                 {/* <Button label="Run NLAD" onClick={() => runNLAD(rowData)} className=" mr-2 ml-2" text raised disabled={isButtonLoading} /> */}
                 <Button label="Run NV" onClick={() => runNV(rowData)} className=" mr-2 ml-2 pt-1 pb-1" text raised disabled={isButtonLoading} />

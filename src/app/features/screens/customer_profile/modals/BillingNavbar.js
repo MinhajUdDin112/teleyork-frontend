@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import ChargeWallet from "../../billing_and_invoices/components/ChargeWallet";
 import { ProgressSpinner } from "primereact/progressspinner";
-const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusDialog, refreshNotificationcomponent, setRefreshEsn }) => {
+const BillingNavbar = ({ refresh, setChangeCustomerStatus,refreshEsn, changeCustomerStatusDialog, refreshNotificationcomponent, setRefreshEsn }) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const loginRes = localStorage.getItem("userData"); 
     const [showSpinnerConvertToPrepaid,setShowSpinnerConvertToPrepaid]=useState(false)
@@ -56,7 +56,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus, changeCustomerStatusD
 
     useEffect(() => {
         getCustomerProfileData();
-    }, [changeCustomerStatusDialog, refreshNotificationcomponent, refresh, refreshComponent, refreshComp]);
+    }, [changeCustomerStatusDialog, refreshNotificationcomponent, refresh, refreshComponent, refreshComp,refreshEsn]);
 
     function openPaymentScreen() {
         navigate("/invoice", { state: { selectedId: parseselectedid } });    
