@@ -375,6 +375,7 @@ const App = () => {
                         refreshBell={refreshBell}
                         setHandleHighlight={setHandleHighlight}
                     />
+
                     <div className="layout-sidebar">
                         <AppMenu model={dynamicMenu} activeTab={activeTab} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
                     </div>
@@ -424,7 +425,7 @@ const App = () => {
                                             <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                             <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                             <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
-                                            <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> 
+                                            <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
                                             <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
                                             <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
                                             <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />
@@ -488,28 +489,28 @@ const App = () => {
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                            
-                                                <Route
-                                                    exact
-                                                    path="/customer-profile"
-                                                    element={
-                                                        isPermitted("/customer-profile") ? (
-                                                            <CustomerProfile
-                                                                activeTab={activeTab}
-                                                                customerServicesIndex={customerServicesIndex}
-                                                                setActiveTab={setActiveTab}
-                                                                refreshNotificationcomponent={refreshNotificationcomponent}
-                                                                refreshEsn={refreshEsn}
-                                                                setRefreshEsn={setRefreshEsn}
-                                                                setRefreshBell={setRefreshBell}
-                                                                handleHighlight={handleHighlight}
-                                                            />
-                                                        ) : (
-                                                            <Dashboard />
-                                                        )
-                                                    }
-                                                />
-                                            
+
+                                            <Route
+                                                exact
+                                                path="/customer-profile"
+                                                element={
+                                                    isPermitted("/customer-profile") ? (
+                                                        <CustomerProfile
+                                                            activeTab={activeTab}
+                                                            customerServicesIndex={customerServicesIndex}
+                                                            setActiveTab={setActiveTab}
+                                                            refreshNotificationcomponent={refreshNotificationcomponent}
+                                                            refreshEsn={refreshEsn}
+                                                            setRefreshEsn={setRefreshEsn}
+                                                            setRefreshBell={setRefreshBell}
+                                                            handleHighlight={handleHighlight}
+                                                        />
+                                                    ) : (
+                                                        <Dashboard />
+                                                    )
+                                                }
+                                            />
+
                                             <Route exact path="/billingconfiguration" element={isPermitted("/billingconfiguration") ? <BillingConfiguration /> : <Dashboard />} />
                                             <Route exact path="postpaid-newenrollment" element={isPermitted("/postpaid-newenrollment") ? <Post_service_availbilty /> : <Dashboard />} />
                                             <Route exact path="postpaid-complete" element={isPermitted("/postpaid-complete") ? <Completed_Enrollments /> : <Dashboard />} />

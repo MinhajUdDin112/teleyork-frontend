@@ -13,6 +13,11 @@ export default function MainPrepaidOrders() {
         };
     }, []);
     return <>{!zipVerified ? <ServiceAvailabilityPage setZipVerified={setZipVerified} /> : <EnrollmentFlowPage />}</>;
+    // return (
+    //     <>
+    //         {/*!zipVerified ? <ServiceAvailabilityPage setZipVerified={setZipVerified} /> :*/} <EnrollmentFlowPage />
+    //     </>
+    // );
 }
 function cleanLocalStorage() {
     localStorage.removeItem("comingforedit");

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Agree from "../Eligibilty_com/Agree";
 const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
-    const handleNext = () => {  
-        if(localStorage.getItem("comingforedit")){
-        setActiveIndex(3); 
-        } 
-        else{ 
-            setActiveIndex(2)
+    const handleNext = () => {
+        if (localStorage.getItem("comingforedit")) {
+            setActiveIndex(3);
+        } else {
+            setActiveIndex(2);
         }
     };
     const handleBack = () => {
@@ -14,7 +13,7 @@ const Eligibility = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     };
     return (
         <>
-            <div className="card">
+            <div>
                 <br></br>
                 <Agree handleNext={handleNext} handleBack={handleBack} enrollment_id={enrollment_id} _id={_id} csr={csr} />
             </div>
