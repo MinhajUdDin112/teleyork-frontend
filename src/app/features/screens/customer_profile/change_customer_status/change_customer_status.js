@@ -131,7 +131,35 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                     // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
                     setIsLoading(false);
                 });
-        } else if (statusTo === "active" && cpData?.status === "prospect" && connectionType == "Internally") {
+        } 
+        else if (statusTo === "labelCreated") {
+            setIsLoading(true);
+            const dataToSend = {
+                customerId: cpData?._id,
+                status: statusTo,
+            };
+            Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend)
+                .then((response) => {
+                    const successMessage = response?.data?.msg || "Successfully delivered";
+                 
+                    setTimeout(() => {    
+                        setIsLoading(false);
+                        toast.success(successMessage);
+                        setRefreshEsn((prev) => !prev); 
+                         setChangeCustomerStatus(prev=>!prev)
+                    }, 50);
+
+                    // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                  
+                })
+                .catch((error) => {
+                    const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                    toast.error(errorMessage);
+                    // toast.current.show({ severity: "error", summary: "Customer Status", detail: "Disconnection Failed" });
+                    setIsLoading(false);
+                });
+        }
+        else if (statusTo === "active" && cpData?.status === "prospect" && connectionType == "Internally") {
             setIsLoading(true);
             const dataToSend = {
                 customerId: cpData?._id,
@@ -160,7 +188,98 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                 // toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
                 setIsLoading(false);
             }
-        } else if (statusTo === "evaluation") {
+        }
+        else if (statusTo === "active" && cpData?.status === "labelCreated" && connectionType == "Externally") {
+            setIsLoading(true);
+            const dataToSend = {
+                customerId: cpData?._id,
+                status: statusTo,
+            };
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend);
+                if (response?.status == "200" || response?.status == "201") {
+                    setChangeCustomerStatus(false);
+                    const successMessage = response?.data?.msg || "Successfully Active";
+                    
+                    setTimeout(() => {   
+                        toast.success(successMessage);    
+                        setIsLoading(false);
+                        setRefreshEsn((prev) => !prev);   
+                        setChangeCustomerStatus(prev=>!prev)
+
+                    }, 50);
+
+                    // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                  
+                }
+            } catch (error) {
+                const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                toast.error(errorMessage);
+                // toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+                setIsLoading(false);
+            }
+        }
+        else if (statusTo === "active" && cpData?.status === "labelCreated" && connectionType == "Internally") {
+            setIsLoading(true);
+            const dataToSend = {
+                customerId: cpData?._id,
+                status: statusTo,
+            };
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend);
+                if (response?.status == "200" || response?.status == "201") {
+                    setChangeCustomerStatus(false);
+                    const successMessage = response?.data?.msg || "Successfully Active";
+                    
+                    setTimeout(() => {   
+                        toast.success(successMessage);    
+                        setIsLoading(false);
+                        setRefreshEsn((prev) => !prev);   
+                        setChangeCustomerStatus(prev=>!prev)
+
+                    }, 50);
+
+                    // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                  
+                }
+            } catch (error) {
+                const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                toast.error(errorMessage);
+                // toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+                setIsLoading(false);
+            }
+        }
+        else if (statusTo === "active" && cpData?.status === "prospect" && connectionType == "Internally") {
+            setIsLoading(true);
+            const dataToSend = {
+                customerId: cpData?._id,
+                status: statusTo,
+            };
+            try {
+                const response = await Axios.post(`${BASE_URL}/api/user/statusnonelectronically`, dataToSend);
+                if (response?.status == "200" || response?.status == "201") {
+                    setChangeCustomerStatus(false);
+                    const successMessage = response?.data?.msg || "Successfully Active";
+                    
+                    setTimeout(() => {   
+                        toast.success(successMessage);    
+                        setIsLoading(false);
+                        setRefreshEsn((prev) => !prev);   
+                        setChangeCustomerStatus(prev=>!prev)
+
+                    }, 50);
+
+                    // toast.current.show({ severity: "success", summary: "Customer Status", detail: "Successfully Changed" });
+                  
+                }
+            } catch (error) {
+                const errorMessage = error.response?.data?.msg || "Disconnection Failed";
+                toast.error(errorMessage);
+                // toast.current.show({ severity: "error", summary: "Customer Status", detail: error.response.data.msg || "Disconnection Failed" });
+                setIsLoading(false);
+            }
+        }
+         else if (statusTo === "evaluation") {
             setIsLoading(true);
             const dataToSend = {
                 customerId: cpData?._id,
@@ -427,6 +546,20 @@ export default function ChangeCustomerStatus({ cpData, setChangeCustomerStatus, 
                             setStatusTo(e.value);
                         }}
                         options={activeStatusOptions}
+                        className="field-width mt-3"
+                        placeholder="Select Status"
+                    />
+                </div>
+            )}
+             {cpData?.status === "labelCreated" && (
+                <div>
+                    <label className="block mt-4">Change Account Status To:</label>
+                    <Dropdown
+                        value={statusTo}
+                        onChange={(e) => {
+                            setStatusTo(e.value);
+                        }}
+                        options={suspendStatusOptions}
                         className="field-width mt-3"
                         placeholder="Select Status"
                     />
