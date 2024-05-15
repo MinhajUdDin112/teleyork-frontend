@@ -121,23 +121,23 @@ export const AppTopbar = (props) => {
         return capitalizedSentence;
     }
 
-    // counter notification API
-    useEffect(() => {
-        const getCounter = async () => {
-          setInterval(async () => {
-                try {
-                    const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
-                    const data = response?.data?.unreadCount;
-                    const note = response?.data?.notifications;
-                    setNotification(note);
-                    setCounter(data);
-                } catch (error) {
-                    toast.error(error?.response?.data?.msg);
-                }
-     }, 1000);
-        };   
-        getCounter();
-    }, [props.refreshBell]);
+   // counter notification API
+    // useEffect(() => {
+    //     const getCounter = async () => {
+    //       setInterval(async () => {
+    //             try {
+    //                 const response = await Axios.get(`${BASE_URL}/api/web/notes/notifications?userId=${parseLoginRes?._id}`);
+    //                 const data = response?.data?.unreadCount;
+    //                 const note = response?.data?.notifications;
+    //                 setNotification(note);
+    //                 setCounter(data);
+    //             } catch (error) { 
+    //                 toast.error(error?.response?.data?.msg);
+    //             }
+    //  }, 1000);
+    //     };   
+    //     getCounter();
+    // }, [props.refreshBell]);
 
     const handleReadNotification = async (notificationId) => {
         try {
@@ -184,7 +184,7 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-                            props.setSearchByValueClick(false);
+                            props.setSearchByValueClick(false); 
                         }}
                     >
                         <img className="w-8rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
