@@ -81,7 +81,7 @@ export default function LoginScreen({ setRefreshApp }) {
                         </div>
                     </div>
 
-                    <div className="card1" style={{ height: "65vh", width: "400px", paddingLeft: "30px" }}>
+                    <div className="card1" style={{ height: "auto", width: "400px", paddingLeft: "30px" }}>
                         <div className="flex flex-start" style={{ marginTop: "24px" }}>
                             <p className="p">WELCOME!</p>
                         </div>
@@ -99,7 +99,7 @@ export default function LoginScreen({ setRefreshApp }) {
                                 </p>
                             </div>
                         ) : null}
-                        <div>
+                        <div className="flex flex-wrap ">
                             <form onSubmit={formik.handleSubmit}>
                                 <label className="labell">Email</label>
                                 <br />
@@ -116,7 +116,7 @@ export default function LoginScreen({ setRefreshApp }) {
                                     </>
                                 ) : null}
                                 <label className="labell">Password</label>
-                                <div className="passworddiv" style={{ height: "40px", marginTop: "10px", width: "350px" }}>
+                                <div className="passworddiv" style={{ height: "40px", marginTop: "10px", width: "335px" }}>
                                     <Password type="password" style={{ height: "35px" }} feedback={false} tabIndex={1} name="password" className="" placeholder="Enter password" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
                                     <i
                                         className={`${showPassowrd ? "pi-eye" : "pi-eye-slash"} pi`}
@@ -137,7 +137,7 @@ export default function LoginScreen({ setRefreshApp }) {
                                         Forgot Password?
                                     </NavLink>
                                 </div>
-                                <Button type="submit" className="login" label="Login" disabled={loading} icon={loading === true ? "pi pi-spin pi-spinner " : ""} />
+                                <Button type="submit" className="login" label="Login" disabled={loading} icon={loading === true ? "pi pi-spin pi-spinner " : ""} style={{ marginBottom: "5%" }} />
                             </form>
                         </div>
                     </div>
