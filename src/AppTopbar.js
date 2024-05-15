@@ -189,7 +189,7 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-                            props.setSearchByValueClick(false);
+                            props.setSearchByValueClick(false); 
                         }}
                     >
                         <img className="w-8rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
