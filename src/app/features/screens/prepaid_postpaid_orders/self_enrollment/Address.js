@@ -23,7 +23,17 @@ const PrepaidSelfAddress = () => {
 
     const validationSchema = Yup.object().shape({
         address1: Yup.string().required("This field is required"),
-    });
+    }); 
+    
+        useEffect(()=>{ 
+            if(localStorage.getItem("initialInformation")){ 
+    
+            }   
+            else{ 
+                navigate("/prepaid-selfpersonalinfo")
+            }     
+        },[])
+    
     const formik = useFormik({
         validationSchema,
         initialValues: {

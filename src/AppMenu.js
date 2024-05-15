@@ -4,7 +4,6 @@ import { CSSTransition } from "react-transition-group";
 import classNames from "classnames";
 import { Ripple } from "primereact/ripple";
 import { Badge } from "primereact/badge";
-
 const AppSubmenu = (props) => {
     const [activeIndex, setActiveIndex] = useState();
     useEffect(() => {
@@ -33,13 +32,23 @@ const AppSubmenu = (props) => {
     };
 
     const renderLinkContent = (item) => {
-        let submenuIcon = item.items && <i className="pi pi-fw pi-angle-down menuitem-toggle-icon"></i>;
+        let submenuIcon = item.items && <i style={{ color: "#C68301", marginTop: "13px" }} className="pi pi-fw pi-angle-down menuitem-toggle-icon"></i>;
         let badge = item.badge && <Badge value={item.badge} />;
 
         return (
             <React.Fragment>
                 <i className={item.icon}></i>
-                <span>{item.label}</span>
+                <span
+                    style={{
+                        color: "#777777",
+                        fontFamily: "Inter",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginTop: "10px",
+                    }}
+                >
+                    {item.label}
+                </span>
                 {submenuIcon}
                 {badge}
                 <Ripple />
@@ -88,7 +97,7 @@ const AppSubmenu = (props) => {
                 return (
                     <li className={styleClass} key={i} role="none">
                         {renderLink(item, i)}
-                        <CSSTransition classNames="layout-submenu-wrapper" timeout={{ enter: 1000, exit: 450 }} in={active} unmountOnExit>
+                        <CSSTransition classNames="layout-submenu-wrapper " timeout={{ enter: 1000, exit: 450 }} in={active} unmountOnExit>
                             <AppSubmenu items={item.items} activeTab={props.activeTab} />
                         </CSSTransition>
                     </li>
@@ -107,6 +116,7 @@ export const AppMenu = (props) => {
     return (
         <div className="layout-menu-container ">
             <AppSubmenu items={props.model} activeTab={props.activeTab} className="layout-menu" root={true} role="menu" />
+
             {/* <a href="https://www.primefaces.org/primeblocks-react" className="block mt-3">
                 <img alt="primeblocks" className="w-full"
                      src={props.layoutColorMode === 'light' ? 'assets/layout/images/banner-primeblocks.png' : 'assets/layout/images/banner-primeblocks-dark.png'}/>

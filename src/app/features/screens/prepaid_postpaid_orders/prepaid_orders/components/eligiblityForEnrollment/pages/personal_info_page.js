@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import PersonalInfo from "../PersonalInfo_com/PersonalInfo";
 import Address from "../PersonalInfo_com/Address";
 export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id, csr }) {
-      
-     
     const [currentComponent, setCurrentComponent] = useState(1);
     const handleNext = () => {
         if (currentComponent < 2) {
@@ -39,7 +37,7 @@ export default function PersonalInfoPage({ setActiveIndex, enrollment_id, _id, c
 
     return (
         <>
-            <div className="card">
+            <div className="">
                 <br></br>
                 {render}
             </div>
