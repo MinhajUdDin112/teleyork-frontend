@@ -156,6 +156,7 @@ const BillingNavbar = ({ refresh, setChangeCustomerStatus,refreshEsn, changeCust
         setVisible(false);
         setRefreshComponent((prev) => !prev);
     };
+    
     const handleLabel = async () => {
         const loginRes = localStorage.getItem("userData");
         const parseLoginRes = JSON.parse(loginRes);
