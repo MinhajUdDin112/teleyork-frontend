@@ -21,7 +21,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
     const [department, setDepartment] = useState(null);
     const parseLoginRes = JSON.parse(loginRes);
     const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
-   
+
     const [carrier, setCarrier] = useState(null);
     const [fileerror, setFileError] = useState(false);
     useEffect(() => {
@@ -94,13 +94,11 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
             provisionType: "Add And Assign Non Active",
         },
 
-        onSubmit: (values, actions) => { 
-           
-            handlesubmit(actions); 
-          
+        onSubmit: (values, actions) => {
+            handlesubmit(actions);
         },
     });
-    function ApiResponseShow({ res }) { 
+    function ApiResponseShow({ res }) {
         return (
             <div className="flex flex-wrap justify-content-left ">
                 <p>{res?.msg}</p>
@@ -119,7 +117,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             <li>{item}</li>
                         ))}
                     </ul>
-                </div> 
+                </div>
                 <div className="mt-3 w-full">
                     <p>Invalid SIMS: {res?.data?.data?.invalidSIMs?.length}</p>
                     <ul className=" m-0 list-none">
@@ -127,7 +125,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             <li>{item}</li>
                         ))}
                     </ul>
-                </div>    
+                </div>
                 <div className="mt-3 w-full">
                     <p>No BoxNo Added For SIMS: {res?.data?.data?.noBoxNoAddedForSIMS?.length}</p>
                     <ul className=" m-0 list-none">
@@ -135,7 +133,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             <li>{item}</li>
                         ))}
                     </ul>
-                </div> 
+                </div>
                 <div className="mt-3 w-full">
                     <p>No Model Added For SIMs: {res?.data?.data?.noModelAddedForSIMs?.length}</p>
                     <ul className=" m-0 list-none">
@@ -143,10 +141,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             <li>{item}</li>
                         ))}
                     </ul>
-                </div> 
-       
-
-                
+                </div>
             </div>
         );
     }
@@ -174,7 +169,7 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                 })
                     .then((res) => {
                         try {
-                            if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.invalidSIMs?.length !== 0 ||    res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0 ) {
+                            if (res?.data?.data?.duplicateNumbers?.length !== 0 || res?.data?.data?.invalidSIMs?.length !== 0 || res?.data?.data?.noBoxNoAddedForSIMS?.length !== 0 || res?.data?.data?.noModelAddedForSIMs?.length !== 0) {
                                 ref.current.show({ severity: "error", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
                             } else {
                                 ref.current.show({ severity: "success", summary: "Inventory", detail: <ApiResponseShow res={res} /> });
@@ -182,17 +177,13 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                             formik.setFieldValue("carrier", "");
                             formik.setFieldValue("file", "");
                             formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                            ;
-                            ;
                             formik.setFieldValue("SimNumber", "");
                             formik.setFieldValue("unitType", "sim");
                             formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                             formik.setFieldValue("provisionType", "Bulk Add And Assign Non Active Sims");
-                            ;
                             setFilename(null);
                             actions.resetForm();
-                        } catch (err) {
-                        }
+                        } catch (err) {}
                     })
                     .catch((error) => {
                         if (error.response && error.response.data && error.response.data.msg) {
@@ -221,54 +212,52 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
     return (
         <>
             <div>
-                <div className="flex flex-wrap mb-3 justify-content-around ">
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                <div className="flex flex-wrap mb-3 justify-content-left ">
+                    <div className="calendar_field">
+                        <p className="field_label mt-2">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown name="carrier" value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown name="carrier" value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-full mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-2">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-full ml-2 mt-2" />
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-2">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown 
-                        disabled
+                        <Dropdown
+                            disabled
                             value={formik.values.agentType}
-                            options={department}  
-                            name="agentType" 
+                            options={department}
+                            name="agentType"
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                setDepartmentSelected(e.value); 
-                                
-                                ;    
-                                 
-                                formik.handleChange(e)
+                                setDepartmentSelected(e.value);
+
+                                formik.handleChange(e);
                             }}
                             placeholder="Select an option"
-                            className="field-width mt-2"
+                            className="w-full mt-2 ml-3"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
-                            <div className="mt-2" style={{ color: "red" }}>
+                            <div className="mt-2 ml-3" style={{ color: "red" }}>
                                 {formik.errors.agentType}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label  mt-4">
                             Agent Name <span style={{ color: "red" }}>* </span>
                             {formik.values.AgentName !== "" ? (
                                 <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
@@ -277,83 +266,63 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                                             setAddAgentDialogVisibility((prev) => !prev);
                                         }}
                                         className="pi pi pi-plus"
-                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                        style={{ marginLeft: "5px", fontSize: "10px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
                                     ></i>
                                 </Button>
                             ) : undefined}
                         </p>
 
-                        <Dropdown disabled name="AgentName" value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled name="AgentName" value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-full mt-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
                             </div>
                         )}
                     </div>
-                </div>
-                <div className="flex justify-content-around align-item-center ">
-                    <div>
-                        {" "}
+                    <div className="calendar_field">
+                        <p className="field_label mt-4 ml-2">Upload File</p>
                         <Button
-                            className="field-width justify-content-center"
+                            className="field-width justify-content-center ml-2 mt-2"
                             onClick={() => {
                                 setFileError(false);
                                 let input = document.createElement("input");
                                 input.type = "file";
                                 input.accept = ".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                                 input.click();
-                                input.onchange = (e) => {      
-                                    setFileError(false)
+                                input.onchange = (e) => {
                                     setFilename(e.target.files[0].name);
 
                                     formik.setFieldValue("file", e.target.files[0]);
                                 };
                             }}
                         >
-                            {" "}
                             {filename === null ? "Add File" : filename}
                         </Button>
                         {fileerror ? (
-                            <p className="mt-2" style={{ color: "red" }}>
+                            <p className="mt-2 ml-2" style={{ color: "red" }}>
                                 File is required
                             </p>
                         ) : undefined}
                     </div>
-                    <Button
-                        style={{ height: "40px" }}
-                        className="field-width  justify-content-center"
-                        onClick={() => {
-                            if (formik.values.file === "") {
-                                setFileError(true);
-                            }
-                            formik.handleSubmit();
-                        }}
-                       
-                        disabled={!permissions.isCreate}
-                    >
-                        Submit{" "}
-                    </Button>
                 </div>
 
                 <>
-                    <p className="mt-4">
-                        <strong>Notes:</strong>
+                    <p style={{ marginTop: "14%" }}>
+                        <strong>Notes: </strong>
                         SIM, MDN, Model ID (STANDARD/MICRO/NANO), MSL/PUK,Puk2, PO#,BOX#, Wholesale/Cost Price for SIM, Selling/Retail Price for SIM, UICCID, Zipcode, Activation Fee , MSID,Device ID/IMEI,ACP Co-Pay Amount,ACP Device Reimbursement Amount,Device Retail Price
                         {formik.values.carrier === "" ? (
                             <p className="font-bold" style={{ display: "inline-block" }}>
-                                {" "}
-                                &nbsp; (Sample file)
+                                (Sample file)
                             </p>
                         ) : (
                             <a download={true} href="/images/Sample File(Sim Bulk Upload).xlsx" className="font-bold">
-                                {" "}
-                                &nbsp; (Sample file)
+                                (Sample file)
                             </a>
                         )}
                     </p>
                     <p className="mt-4">
-                        <strong>Notes:-</strong>
-                        Please select carrier to download the (Sample File)
+                        <strong>Notes: </strong>
+                        Please select carrier to download the <strong>(Sample File)</strong>
                     </p>
                 </>
                 <InfoForUsers ProvisionType={"AddAndAssignNonActive"} />
@@ -367,6 +336,34 @@ export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissi
                     <AddAgentDetail AgentName={"Dummy"} />
                 </Dialog>
                 <Toast ref={ref} />
+                {/* <Button
+                    style={{ height: "40px" }}
+                    className="field-width  justify-content-center"
+                    onClick={() => {
+                        if (formik.values.file === "") {
+                            setFileError(true);
+                        }
+                        formik.handleSubmit();
+                    }}
+                    disabled={!permissions.isCreate}
+                >
+                    Submit{" "}
+                </Button> */}
+                <div className="flex flex-wrap justify-content-end w-full">
+                    <Button
+                        style={{ marginTop: "3rem", position: "absolute" }}
+                        className="btn"
+                        onClick={() => {
+                            if (formik.values.file === "") {
+                                setFileError(true);
+                            }
+                            formik.handleSubmit();
+                        }}
+                        disabled={!permissions.isCreate}
+                    >
+                        Submit{" "}
+                    </Button>
+                </div>
             </div>
         </>
     );
