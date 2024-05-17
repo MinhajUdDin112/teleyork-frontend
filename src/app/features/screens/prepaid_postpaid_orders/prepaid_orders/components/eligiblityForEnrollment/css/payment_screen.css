@@ -25,13 +25,7 @@
     transition: background-color color 500ms ease-in-out;
     color: #0475b4;
 }
-.prospectbutton:hover {
-    background-color: #0476b42e !important;
-}
 
-.prospectactive {
-    background-color: #4f46e5;
-}
 .prospectbutton:nth-of-type(2) {
     margin-left: 10px;
 }

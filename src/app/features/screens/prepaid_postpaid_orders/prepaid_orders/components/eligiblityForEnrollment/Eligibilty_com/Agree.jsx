@@ -66,28 +66,28 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     };
 
     const handleAll = (comingfromlocal) => {
-      
-         if(comingfromlocal){ 
-            const newCheckBoxes=formik.values.checkbox.map(()=> true) 
-            formik.setFieldValue("checkbox",newCheckBoxes)    
-         
-         } 
-         else{ 
+        setCheckAll((prev) => !prev);
+        if (comingfromlocal) {
+            const newCheckBoxes = formik.values.checkbox.map(() => true);
+            formik.setFieldValue("checkbox", newCheckBoxes);
+        } else {
             const newCheckBoxes = formik.values.checkbox.map(() => !checkAll);
             formik.setFieldValue("checkbox", newCheckBoxes);
-         } 
-         setCheckAll(prev=>!prev)
-         
+        }
     };
     useEffect(() => {
-        if (parseagreeRes) { 
-            let comingfromlocal=true
+        if (parseagreeRes) {
+            let comingfromlocal = true;
             handleAll(comingfromlocal);
         }
     }, [isBack]);
-
+    const handleAllNew = () => {
+        const newCheckBoxes = formik.values.checkbox.map(() => !checkAll);
+        formik.setFieldValue("checkbox", newCheckBoxes);
+        setCheckAll(!checkAll);
+    };
     useEffect(() => {
-            /*
+        /*
       //get checkEligiblity data from local storage 
      const checkEligiblity= localStorage.getItem("parsedcheckEligiblity");
      const parseCheckEligiblity = JSON.parse(checkEligiblity);
@@ -97,16 +97,15 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     } else{
         toast.success(parseCheckEligiblity?.data?.Message)
     }        
-      */       
-      if(localStorage.getItem("comingfromincomplete")){ 
-             if(localStorage.getItem("prepaidbasicData")){  
-                 if(JSON.parse(localStorage.getItem("prepaidbasicData"))?.data?.isAgreeToTerms){
-                let comingfromlocal=true
-            handleAll(comingfromlocal); 
-                 }
-             }
-      }
-        
+      */
+        if (localStorage.getItem("comingfromincomplete")) {
+            if (localStorage.getItem("prepaidbasicData")) {
+                if (JSON.parse(localStorage.getItem("prepaidbasicData"))?.data?.isAgreeToTerms) {
+                    let comingfromlocal = true;
+                    handleAll(comingfromlocal);
+                }
+            }
+        }
     }, []);
 
     const handleCheckBox = (index) => {
@@ -150,7 +149,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         PLEASE CAREFULLY READ AND MARK ALL THE STATEMENTS AND ACCEPT THE TERMS AND CONDITIONS
                     </p>
                     <div className="field-checkbox ">
-                        <Checkbox inputId="checkAll" onChange={handleAll} checked={checkAll} />
+                        <Checkbox inputId="checkAll" onChange={handleAllNew} checked={checkAll} />
                         <label htmlFor="checkAll"> Select/Unselect All.</label>
                     </div>
                     <div className="p-3 ml-3">

@@ -110,6 +110,9 @@ export const AppTopbar = (props) => {
             <p className="text-center mt-2" style={{ fontSize: "1.5rem" }}>
                 {parseLoginRes?.userName ? parseLoginRes?.userName.toUpperCase() : ""}
             </p>
+            <p className="flex flex-wrap justify-content-center" style={{ fontSize: "1rem" }}>
+                {parseLoginRes?.role?.role}
+            </p>
         </div>
     );
     function capitalizeEveryWord(sentence) {

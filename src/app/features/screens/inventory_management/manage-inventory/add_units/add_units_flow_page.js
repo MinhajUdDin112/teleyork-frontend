@@ -97,20 +97,13 @@ const AddUnits = ({ setActiveComponent }) => {
 
     return (
         <>
-            <Button
-                label="Back"
-                style={{ position: "absolute", marginLeft: "25px", fontSize: "16px", marginTop: "25px" }}
-                onClick={() => {
-                    setActiveComponent("");
-                }}
-            />
-            <div style={{ marginTop: "90px" }}>
+            <div style={{ marginTop: "0px" }} className="heading">
                 <Header unit={formik.values.unit} />
             </div>
             <div>
-                <div className="flex flex-wrap mb-3  justify-content-around">
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">Billing Model</p>
+                <div className="flex flex-wrap mb-1   justify-content-left">
+                    <div className="calendar_field">
+                        <p className="field_label">Billing Model</p>
                         <Dropdown
                             value={formik.values.billingModel}
                             name="billingModel"
@@ -128,26 +121,26 @@ const AddUnits = ({ setActiveComponent }) => {
                                 setCurrentBillingId(id);
                             }}
                             placeholder="Select an option"
-                            className="field-width mt-2"
+                            className="w-full "
                         />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0 ">Inventory Type</p>
-                        <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                    <div className="calendar_field">
+                        <p className="field_label ml-2">Inventory Type</p>
+                        <Dropdown optionLabel="inventoryType" optionValue="inventoryType" value={formik.values.unit} name="unit" options={unitOptions} onChange={formik.handleChange} placeholder="Select an option" className="w-full ml-2" />
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3">
                             Upload Type <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.upload} name="upload" options={type} onChange={formik.handleChange} placeholder="Select an option" className="w-full ml-3" />
                     </div>
                     {formik.values.unit !== "Cell Phone" ? (
-                        <div className="mr-3 mb-3 mt-3">
-                            <p className="m-0">
+                        <div className="calendar_field mt-6">
+                            <p className="field_label">
                                 Provision Type <span style={{ color: "red" }}>*</span>
                             </p>
-                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ? simprovision : provision} onChange={formik.handleChange} placeholder="Select an option" className="field-width mt-2" />
+                            <Dropdown value={formik.values.provision} name="provision" options={formik.values.unit === "SIM" ? simprovision : provision} onChange={formik.handleChange} placeholder="Select an option" className="w-full" />
                         </div>
                     ) : undefined}
                 </div>
@@ -199,6 +192,15 @@ const AddUnits = ({ setActiveComponent }) => {
                     <TabletSingleUploadAddPreActivatedProvision unit={formik.values.unit} model={formik.values.billingModel} permissions={{ isCreate: isCreate }} />
                 ) : undefined
             ) : undefined}
+            <div className="flex flex-wrap w-full justify-content-end mt-6 " style={{ marginLeft: "-7rem" }}>
+                <Button
+                    className="btn"
+                    label="Back"
+                    onClick={() => {
+                        setActiveComponent("");
+                    }}
+                />
+            </div>
         </>
     );
 };

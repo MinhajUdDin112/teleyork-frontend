@@ -79,3 +79,6 @@
     text-align: center;
     font-size: 16px;
 }
+.p-dropdown .p-dropdown-trigger {
+    color: #c68301 !important;
+}

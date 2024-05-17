@@ -133,24 +133,20 @@ export default function EsnSimSingleUpload({ permissions }) {
 
                     toast.error("Inventory Not Exist");
                     setEsnExist(null);
-                    ;
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("status", "");
                     formik.setFieldValue("Model", "");
                     formik.setFieldValue("box", "");
-                    ;
                     formik.setFieldValue("SimNumber", "");
                     setDefaultSelectedAgent(null);
                     setDepartmentSelected(null);
                 });
         } else {
             setEsnExist(null);
-            ;
             formik.setFieldValue("carrier", "");
             formik.setFieldValue("status", "");
             formik.setFieldValue("Model", "");
             formik.setFieldValue("box", "");
-            ;
             formik.setFieldValue("SimNumber", "");
             setDefaultSelectedAgent(null);
             setDepartmentSelected(null);
@@ -203,9 +199,9 @@ export default function EsnSimSingleUpload({ permissions }) {
         <>
             <div>
                 <ToastContainer />
-                <div className="flex flex-wrap mb-3 justify-content-around ">
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                <div className="flex flex-wrap mb-3 justify-content-left ">
+                    <div className="calendar_field">
+                        <p className="field_label mt-4">
                             ESN/SIM Number To Update <span style={{ color: "red" }}>*</span>
                         </p>
                         <InputText
@@ -216,16 +212,16 @@ export default function EsnSimSingleUpload({ permissions }) {
                                 handlePopulateDataByEsn(e);
                             }}
                             onBlur={formik.handleBlur}
-                            className="field-width mt-2"
+                            className="w-full"
                         />
                         {formik.errors.SimNumberToUpdate && formik.touched.SimNumberToUpdate && (
-                            <div className="mt-2" style={{ color: "red" }}>
+                            <div className="mt-2 ml-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumberToUpdate}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">ESN/SIM Number</p>
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-4">ESN/SIM Number</p>
                         <InputText
                             keyfilter="int"
                             value={formik.values.SimNumber}
@@ -235,36 +231,35 @@ export default function EsnSimSingleUpload({ permissions }) {
                                 setSimNumberError(false);
                             }}
                             onBlur={formik.handleBlur}
-                            className="field-width  mt-2"
+                            className="w-full ml-2 "
                         />
                         {simNumberError === true ? (
-                            <p className="w-15rem mt-2" style={{ color: "red" }}>
+                            <p className="w-15rem mt-4 ml-3" style={{ color: "red" }}>
                                 Sim Number must be at least 18 and at most 19 characters
                             </p>
                         ) : undefined}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">Carrier</p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder=" -- Select -- " className="field-width  mt-2" />
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-4">Carrier</p>
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder=" -- Select -- " className="w-full ml-3 " />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">Department/Vendor Name</p>
+                    <div className="calendar_field">
+                        <p className="field_label  mt-4">Department/Vendor Name</p>
 
                         <Dropdown
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                ;
                                 setDefaultSelectedAgent(null);
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder=" Select "
-                            className="field-width  mt-2"
+                            className="w-full"
                         />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-4">
                             Agent Name
                             {formik.values.agentType !== "" ? (
                                 <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
@@ -273,17 +268,17 @@ export default function EsnSimSingleUpload({ permissions }) {
                                             setAddAgentDialogVisbility((prev) => !prev);
                                         }}
                                         className="pi pi pi-plus"
-                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                        style={{ marginLeft: "5px", fontSize: "10px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
                                     ></i>
                                 </Button>
                             ) : undefined}
                         </p>
 
-                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select" className="field-width  mt-2" />
+                        <Dropdown value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select" className="w-full ml-2" />
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-4">
                             Model<span style={{ fontSize: "12px" }}>(MICRO/NANO/SIM)</span>
                             <span style={{ color: "red" }}>
                                 <i
@@ -291,14 +286,14 @@ export default function EsnSimSingleUpload({ permissions }) {
                                         setAddSimModelDialogVisbility((prev) => !prev);
                                     }}
                                     className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    style={{ marginLeft: "5px", fontSize: "10px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder=" -- Select --" className="field-width  mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder=" -- Select --" className="w-full ml-3" />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">Status</p>
+                    <div className="calendar_field">
+                        <p className="field_label mt-4">Status</p>
 
                         <Dropdown
                             value={formik.values.status}
@@ -309,16 +304,16 @@ export default function EsnSimSingleUpload({ permissions }) {
                             ]}
                             onChange={(e) => formik.setFieldValue("status", e.value)}
                             placeholder="Select"
-                            className="field-width  mt-2"
+                            className="w-full"
                         />
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">Box#</p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width  mt-2" />
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-4">Box#</p>
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full ml-2" />
                     </div>
-                    <div className="mt-4 mr-3 mb-3 ">
+                    <div style={{ marginTop: "15%", marginLeft: "30px" }}>
                         <Button
-                            className="field-width jusitfy-content-center mt-4"
+                            className="btn"
                             label="Submit"
                             onClick={() => {
                                 formik.handleSubmit();
