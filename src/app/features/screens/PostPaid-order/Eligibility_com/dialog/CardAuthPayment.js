@@ -141,7 +141,7 @@ const CardAuthPayment =({amount,handleNext,object})=>{
                         invoiceType: "Sign Up",
                         customerId: userDetails?._id,
                         planId: object.plan, 
-                        additionalCharges: additionalFeature,
+                        additionalCharges: object.additional,
                         discount: discounts,
                         totalAmount: amount,
                         amountPaid: formik.values.totalAmount,
