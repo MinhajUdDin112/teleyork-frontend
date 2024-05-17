@@ -57,7 +57,7 @@ const Agree = ({ handleNext, handleBack, enrollment_id, _id }) => {
                     customerId: _id,
                     planId: formik.values.plan,
                     planCharges: planCharges,
-                    additionalCharges: additionalFeature,
+                    additionalCharges: formik.values.additional,
                     discount: discounts,
                     totalAmount: formik.values.totalamount,
                     amountPaid: "0",
