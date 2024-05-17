@@ -10,7 +10,7 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddCellPhoneModelDialog from "./Dialogs/add_cell_phone_model_dialog";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
+export default function CellPhoneSingleUpload({ permissions, unit, model }) {
     let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
@@ -107,9 +107,7 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
             Esn: Yup.string().required("Esn Number Is require").min(18, "Esn Number must be at least 18 characters").max(19, "Esn Number must be at most 19 characters"),
             box: Yup.string().required("Box is required"),
             Model: Yup.string().required("Model is required"),
-            IMEI: Yup.string()
-            .required("IMEI is required")
-            .matches(/^\d+$/, 'ESN must contain only digits').length(15, "IMEI must be exactly 15 digits"),
+            IMEI: Yup.string().required("IMEI is required").matches(/^\d+$/, "ESN must contain only digits").length(15, "IMEI must be exactly 15 digits"),
             agentType: Yup.string().required("Department is required"),
         }),
         initialValues: {
@@ -121,8 +119,8 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
             /* team: "",*/
             box: "",
             Model: "",
-            unitType: unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add Stock",
             IMEI: "",
@@ -144,8 +142,6 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                     ref.current.show({ severity: "success", summary: "Inventory", detail: "Successfully Added" });
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    ;
-                    ;
                     formik.setFieldValue("Esn", "");
                     formik.setFieldValue("box", "");
                     formik.setFieldValue("Model", "");
@@ -157,7 +153,6 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                     actions.resetForm();
                     setSelectedMakeId(null);
                     setModel([]);
-                    ;
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;
@@ -168,12 +163,12 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
     return (
         <>
             <div>
-                <div className="flex flex-wrap mb-3 justify-content-around ">
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                <div className="flex flex-wrap mb-3 justify-content-left ">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-full ml-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -181,22 +176,22 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                         )}
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2">
                             ESN <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2"  maxLength={19} minLength={19}/>
+                        <InputText keyfilter="int" value={formik.values.Esn} name="Esn" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full ml-2" maxLength={19} minLength={19} />
                         {formik.errors.Esn && formik.touched.Esn && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Esn}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-full ml-2" />
                     </div>
                     {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -219,22 +214,21 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                             </div>
                         )}
                     </div>    */}
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown 
-                        disabled
+                        <Dropdown
+                            disabled
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                ;
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="field-width mt-2"
+                            className="w-full ml-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -242,8 +236,8 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label">
                             Agent Name <span style={{ color: "red" }}>* </span>
                             {formik.values.AgentName !== "" ? (
                                 <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
@@ -258,17 +252,15 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                             ) : undefined}
                         </p>
 
-                        <Dropdown 
-                          disabled
-                         value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-full ml-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label">
                             Make <span style={{ color: "red" }}>*</span>
                         </p>
                         <Dropdown
@@ -285,7 +277,7 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                                 setSelectedMakeId(e.value);
                             }}
                             placeholder="Select an option"
-                            className="field-width mt-2"
+                            className="w-full ml-2"
                         />
                         {formik.errors.make && formik.touched.make && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -293,8 +285,8 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label">
                             Model
                             <span style={{ color: "red" }}>
                                 *
@@ -307,36 +299,36 @@ export default function CellPhoneSingleUpload({ permissions ,unit,model}) {
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-full ml-2" />
                         {formik.errors.Model && formik.touched.Model && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Model}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="filed_label">
                             IMEI<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" keyfilter="int" value={formik.values.IMEI} maxLength={15} minLength={15} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText type="text" keyfilter="int" value={formik.values.IMEI} maxLength={15} minLength={15} name="IMEI" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full ml-2" />
                         {formik.errors.IMEI && formik.touched.IMEI && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.IMEI}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full ml-2" />
                         {formik.errors.box && formik.touched.box && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.box}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-4">
+                    <div className="calendar_field">
                         <Button
                             label="Submit"
                             className="field-width mt-4"

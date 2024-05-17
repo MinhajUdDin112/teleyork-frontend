@@ -219,8 +219,8 @@ export default function EnrollmentFlowPage() {
 
     return (
         <>
-            <div style={{ fontFamily: "Inter" }}>
-                <h5 style={{ paddingTop: "30px", marginLeft: "350px" }} className="h5">
+            <div className="flex flex-wrap justify-content-center" style={{ fontFamily: "Inter" }}>
+                <h5 style={{ paddingTop: "30px" }} className="h5">
                     ENROLLMENT ID: {basicRes ? enrollmentid : enrollment_id}
                 </h5>
             </div>

@@ -30,9 +30,12 @@
 }
 
 .prospectactive {
-    background-color: #4f46e5;
+    background-color: #c68301;
     color: white;
-    border: solid #4f46e5 1px;
+    border: none !important;
+}
+.prospectbutton:hover {
+    background-color: #c6840146 !important;
 }
 .prospectbutton:nth-of-type(2) {
     margin-left: 10px;

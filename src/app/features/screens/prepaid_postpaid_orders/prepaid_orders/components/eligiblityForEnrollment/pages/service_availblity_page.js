@@ -23,6 +23,43 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
     const [isManage, setIsManage] = useState(false);
     const location = useLocation();
     const currentPath = location?.pathname;
+    function cleanLocalStorage() {
+        localStorage.removeItem("comingforedit");
+        localStorage.removeItem("comingfromincomplete");
+        localStorage.removeItem("paymentallinfo");
+        localStorage.removeItem("prepaidbasicData");
+        localStorage.removeItem("prepaidaddress");
+        localStorage.removeItem("simpricing");
+        localStorage.removeItem("devicepricing");
+        localStorage.removeItem("prepaidcheckEligibility");
+        localStorage.removeItem("prepaidagreeData");
+        localStorage.removeItem("prepaidprogrammeId");
+        localStorage.removeItem("comingfromincomplete");
+        localStorage.removeItem("paymentmethod");
+        localStorage.removeItem("paymentdetails");
+        localStorage.removeItem("inventoryType");
+        //Payment Status
+        localStorage.removeItem("paymentstatus");
+
+        localStorage.removeItem("stripeId");
+        //Device local
+        localStorage.removeItem("deviceadditional");
+        localStorage.removeItem("deviceadditionaltotal");
+        localStorage.removeItem("deviceadditionalfeaturearray");
+        localStorage.removeItem("totaldevicediscount");
+        localStorage.removeItem("devicediscountobjectarray");
+        localStorage.removeItem("deviceplan");
+        localStorage.removeItem("devicepricing");
+        //SIM Local
+        localStorage.removeItem("simadditional");
+        localStorage.removeItem("simadditionaltotal");
+        localStorage.removeItem("simadditionalfeaturearray");
+        localStorage.removeItem("totalsimdiscount");
+        localStorage.removeItem("simdiscountobjectarray");
+        localStorage.removeItem("simplan");
+        localStorage.removeItem("simpricing");
+    }
+
     const actionBasedChecks = () => {
         const loginPerms = localStorage.getItem("permissions");
         const parsedLoginPerms = JSON.parse(loginPerms);
@@ -74,6 +111,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                             setPwgDbCheckFound(true);
                             Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
                                 .then((res) => {
+                                    cleanLocalStorage();
                                     setUspsCheck(false);
                                     setUspsCheckFound(true);
                                     setIsLoading(false);
@@ -89,6 +127,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                             setPwgDbCheckFound(false);
                             Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
                                 .then((res) => {
+                                    cleanLocalStorage();
                                     setUspsCheck(false);
                                     setUspsCheckFound(true);
                                 })
@@ -108,6 +147,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                             localStorage.setItem("prepaidzipData", JSON.stringify(res.data));
                             Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
                                 .then((res) => {
+                                    cleanLocalStorage();
                                     setUspsCheck(false);
                                     setUspsCheckFound(true);
                                     setIsLoading(false);
@@ -123,6 +163,7 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
                             setPwgDbCheckFound(false);
                             Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
                                 .then((res) => {
+                                    cleanLocalStorage();
                                     setUspsCheck(false);
                                     setUspsCheckFound(true);
                                     setIsLoading(false);

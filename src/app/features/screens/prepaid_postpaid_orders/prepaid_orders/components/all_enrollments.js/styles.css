@@ -50,8 +50,8 @@
 .inputtext .p-dropdown .p-dropdown-label.p-placeholder {
     color: white;
 }
-.p-dropdown .p-dropdown-trigger {
-    color: white;
+.maindiv .p-dropdown .p-dropdown-trigger {
+    color: white !important;
 }
 .enrollment {
     color: white;
@@ -86,12 +86,12 @@
 .p-button:enabled:focus {
     box-shadow: none;
 }
-.p-dropdown:not(.p-disabled).p-focus {
+/* .p-dropdown:not(.p-disabled).p-focus {
     outline: none;
     outline-offset: 0;
     box-shadow: none;
     border: none;
-}
+} */
 .cal .p-calendar-w-btn-right .p-datepicker-trigger {
     background-color: white;
     border: none;

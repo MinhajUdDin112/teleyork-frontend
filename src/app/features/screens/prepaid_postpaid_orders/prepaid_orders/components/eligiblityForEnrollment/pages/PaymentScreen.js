@@ -281,7 +281,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                         </div>
                     ) : undefined}
                     {currentScreen === 3 ? (
-                        <div className="w-full flex flex-wrap flex-row justify-content-left w-full">
+                        <div className="w-full flex flex-wrap flex-row justify-content-left w-full prospdiv">
                             <div className="flex w-full flex-wrap flex-row justify-content-left  mt-6 ">
                                 <p
                                     className={`prospectbutton ${propectWithInvoice ? "prospectactive" : ""}`}

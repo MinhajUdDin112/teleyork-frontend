@@ -290,27 +290,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         <>
             <ToastContainer />
             {!showFinalComponent ? (
-                <div className="card ">
-                    <div className="flex flex-row justify-content-between sticky-buttons">
-                        <Button
-                            label="Back"
-                            onClick={() => {
-                                if (localStorage.getItem("comingforedit")) {
-                                    setActiveIndex(1);
-                                } else if (localStorage.getItem("comingfromincomplete")) {
-                                    let prepaidbasicData = JSON.parse(localStorage.getItem("prepaidbasicData"));
-                                    if (prepaidbasicData?.data?.activeBillingConfiguration) {
-                                        setActiveIndex(1);
-                                    } else {
-                                        setActiveIndex(2);
-                                    }
-                                } else {
-                                    setActiveIndex(2);
-                                }
-                            }}
-                        />
-                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") || fromlocal ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
-                    </div>
+                <div>
                     <br></br>
 
                     <div>
@@ -465,7 +445,7 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             ""
                         )}
                     </div>
-                    <div className="flex flex-row justify-content-between sticky-buttons">
+                    {/* <div className="flex flex-row justify-content-between sticky-buttons">
                         <Button
                             style={{ marginLeft: "80%" }}
                             className="btn"
@@ -479,6 +459,28 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             }}
                         />
                         <Button className="btn" label="Submit" onClick={localStorage.getItem("paymentstatus") ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                    </div> */}
+                    <div className="flex flex-row justify-content-between sticky-buttons">
+                        <Button
+                            style={{ marginLeft: "80%" }}
+                            label="Back"
+                            className="btn"
+                            onClick={() => {
+                                if (localStorage.getItem("comingforedit")) {
+                                    setActiveIndex(1);
+                                } else if (localStorage.getItem("comingfromincomplete")) {
+                                    let prepaidbasicData = JSON.parse(localStorage.getItem("prepaidbasicData"));
+                                    if (prepaidbasicData?.data?.activeBillingConfiguration) {
+                                        setActiveIndex(1);
+                                    } else {
+                                        setActiveIndex(2);
+                                    }
+                                } else {
+                                    setActiveIndex(2);
+                                }
+                            }}
+                        />
+                        <Button className="btn" label="Submit" onClick={localStorage.getItem("paymentstatus") || fromlocal ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
                     </div>
                 </div>
             ) : (

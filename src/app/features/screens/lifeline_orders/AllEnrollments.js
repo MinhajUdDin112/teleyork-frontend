@@ -604,9 +604,9 @@ const AllEnrollments = () => {
 
     const header = () => {
         return (
-            <div className="flex flex-wrap justify-content-center mt-2">
+            <div className="flex flex-wrap justify-content-center mt-2 ">
                 <Dropdown
-                    className="mt-2 w-15rem ml-4"
+                    className="mt-2 w-15rem ml-4 enrolll"
                     options={[
                         { label: "Self Enrollment", value: "Self Enrollments" },
                         { label: "Enrollment", value: "Enrollment" },
