@@ -57,7 +57,7 @@ const BillingConfiguration = () => {
           
           latefeeCharge:Yup.string().required("Late Fee Charge Is Required") ,   
           
-          applyLateFee:Yup.string().required("Late Fee Charge Is Required") ,   
+          applyLateFee:Yup.string().required("This is required") ,   
           
           subsequentBillCreateDate:Yup.string().required("Subsequent Bill Create Date Is Required") , 
             

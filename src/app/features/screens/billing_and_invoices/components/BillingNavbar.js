@@ -171,7 +171,7 @@ const BillingNavbar = ({ refresh, setRefresh, setChangeCustomerStatus }) => {
                 }}
                 className="m-1  card border-none menubar border-noround  text-xl font-semibold mx-0 bg-white mx-0 pt-4 pb-4"
             />
-            {cpData?.invoice?.length === 0 ? <Button onClick={handleGenerateInvoice} style={{ marginTop: "1rem" }} label="Generate Invoice" /> : undefined}
+            {cpData?.invoice?.length === 0 && cpData?.accountType === "Prepaid" ? <Button onClick={handleGenerateInvoice} style={{ marginTop: "1rem" }} label="Generate Invoice" /> : undefined}
         </div>
     );
 };

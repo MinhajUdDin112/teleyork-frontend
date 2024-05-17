@@ -420,18 +420,18 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                         </div>
                                                     )}
                                                 </tr>
-
                                                 <tr>
                                                     <td>Password</td>
 
                                                     {isShow && isShow ? (
-                                                        <td>NIL</td>
+                                                        <td>{cpData?.pwgPassword !== undefined ? cpData?.pwgPassword : "NIL"}</td>
                                                     ) : (
                                                         <div className="mt-3">
-                                                            <h3>***</h3>
+                                                            <h3>*****</h3>
                                                         </div>
                                                     )}
                                                 </tr>
+                                              
                                                 <tr>
                                                     <td>Contact</td>
 
