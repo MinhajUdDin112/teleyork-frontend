@@ -169,7 +169,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                         <p className="m-0">
                             ESN/SIM Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.SimNumber} maxLength={19} minLength={19} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText value={formik.values.SimNumber} keyfilter="int"  maxLength={19} minLength={19} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
                         {formik.errors.SimNumber && formik.touched.SimNumber && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumber}

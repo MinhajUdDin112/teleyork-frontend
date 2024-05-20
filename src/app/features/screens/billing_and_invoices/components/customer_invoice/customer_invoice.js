@@ -107,7 +107,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData?.netPrice}</p>
+                                    <p>${invoiceData?.dueAmount}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
@@ -159,7 +159,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                         <div className="mt-3 pl-2 remittancesec font-bold flex flex-wrap justify-content-between " style={{ marginBottom: 250 }}>
                             <p>Total Amount Due</p>
-                            <p>${invoiceData?.netPrice}</p>
+                            <p>${invoiceData?.dueAmount}</p>
                         </div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                                 <div className="pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+                                    <p>${parseFloat(invoiceData?.dueAmount).toFixed(2)}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
@@ -322,7 +322,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <div className="topline"></div>
                         <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                             <p>Total Amount Due</p>
-                            <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+                            <p>${parseFloat(invoiceData?.dueAmount).toFixed(2)}</p>
                         </div>
                     </div>
                     <div className="center-line">

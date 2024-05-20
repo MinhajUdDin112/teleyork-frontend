@@ -136,6 +136,7 @@ import PrepaidSelfResumeApplication from "./app/features/screens/prepaid_postpai
 import PrepiadSelectInventory from "./app/features/screens/prepaid_postpaid_orders/self_enrollment/Select_Inventory";
 import PrepaidAllSelfEnrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/all_Self_enrollments.js/all_enrollment";
 import Prepaid_Completed_Enrollments from "./app/features/screens/prepaid_postpaid_orders/prepaid_orders/components/CompletedEnrollment/Completed_enrollment";
+import Porting from "./app/features/screens/Porting/Porting";
 const App = () => {
     // cleanLocalStorage()
     const [refreshApp, setRefreshApp] = useState(false);
@@ -488,6 +489,7 @@ const App = () => {
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
+                                            <Route path="/Porting" element={isPermitted("/Porting") ? <Porting /> : <Dashboard />} />
                                             
                                                 <Route
                                                     exact

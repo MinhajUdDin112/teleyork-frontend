@@ -1,0 +1,13 @@
+.submit-buttonmsisdn{ 
+    font-weight:500;   
+    background-color: #6366F1; 
+    border:solid #6366F1 1px;  
+    font-family: "Inter";
+    color: white;  
+    padding: 5px; 
+    border-radius: 5px;
+    padding-left: 10px;  
+    cursor: pointer;
+    padding-right: 10px; 
+
+}
