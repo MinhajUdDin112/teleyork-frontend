@@ -481,3 +481,7 @@ input:disabled {
 .p-datatable .p-datatable-tbody > tr > td {
     padding-top: 20px !important;
 }
+.PWG-button{
+    text-align: end;
+    align-items: end;
+}
