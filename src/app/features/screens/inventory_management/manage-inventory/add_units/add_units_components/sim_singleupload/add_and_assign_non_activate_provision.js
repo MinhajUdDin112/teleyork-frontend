@@ -16,14 +16,18 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions, unit, m
     let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
-
+     
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
     const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
-    const [Model, setModel] = useState(null);
+    const [Model, setModel] = useState(null); 
+     useEffect(()=>{  
+              formik.values.billingModel=model
+             console.log(formik.values)
+     },[model])
     useEffect(() => {
         if (department === null) {
             Axios.get(`${BASE_URL}/api/deparments/getDepartments?company=${parseLoginRes.company}`)
@@ -110,17 +114,17 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions, unit, m
             provisionType: "Add And Assign Non Active",
         },
 
-        onSubmit: (values, actions) => {
-            handlesubmit(actions);
+        onSubmit: (values, {resetForm}) => {
+            handlesubmit(resetForm);
         },
     });
-    function handlesubmit(actions) {
+    function handlesubmit(resetForm) {
         let obj = formik.values;
         obj.serviceProvider = parseLoginRes.company;
         if (Object.keys(formik.errors).length === 0) {
             Axios.post(`${BASE_URL}/api/web/simInventory/addAndAssignNonActivate`, obj)
                 .then((res) => {
-                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                  /*  formik.values.serviceProvider = parseLoginRes?.companyName;
                     ref.current.show({ severity: "success", summary: "Inventory", detail: "Inventory Successfully Added" });
 
                     formik.setFieldValue("carrier", "");
@@ -133,8 +137,9 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions, unit, m
 
                     formik.setFieldValue("unitType", "sim");
                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
-                    formik.setFieldValue("provisionType", "Add And Assign Non Active");
-                    actions.resetForm();
+                    formik.setFieldValue("provisionType", "Add And Assign Non Active");*/
+                    resetForm();     
+
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;

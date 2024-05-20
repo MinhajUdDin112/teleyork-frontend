@@ -13,6 +13,10 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function TabletBulkUploadAddAndAssignNonActivateProvision({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const [agent, setAgent] = useState(null);

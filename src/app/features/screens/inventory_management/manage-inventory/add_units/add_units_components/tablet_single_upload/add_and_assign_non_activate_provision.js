@@ -17,6 +17,10 @@ export default function TabletSingleUploadAddAndAssignNonActivateProvision({perm
     const [addTablet_Model_dialog_visibility, setAddTabletModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
     const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);

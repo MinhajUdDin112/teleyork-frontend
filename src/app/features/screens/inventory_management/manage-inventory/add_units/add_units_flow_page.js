@@ -111,13 +111,15 @@ const AddUnits = ({ setActiveComponent }) => {
                             optionValue="billingModel"
                             options={billingModelList}
                             onChange={(e) => {
-                                formik.setFieldValue("billingModel", e.value);
                                 let id;
                                 billingModelList.map((item) => {
                                     if (item.billingModel === e.value) {
                                         id = item._id;
                                     }
-                                });
+                                });  
+                                  
+                                formik.setFieldValue("billingModel", e.value);
+                                  formik.handleChange(e)
                                 setCurrentBillingId(id);
                             }}
                             placeholder="Select an option"

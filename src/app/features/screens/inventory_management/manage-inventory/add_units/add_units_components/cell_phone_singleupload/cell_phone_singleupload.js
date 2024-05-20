@@ -11,7 +11,11 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddCellPhoneModelDialog from "./Dialogs/add_cell_phone_model_dialog";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function CellPhoneSingleUpload({ permissions, unit, model }) {
-    let ref = useRef(null);
+    let ref = useRef(null); 
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const [add_cellphone_model_dialog_visibility, setAddCellPhoneModelDialogVisbility] = useState(false);
