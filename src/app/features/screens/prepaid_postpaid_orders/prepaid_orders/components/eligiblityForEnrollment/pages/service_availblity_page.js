@@ -2,30 +2,67 @@ import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "primereact/button";
-import { useState } from "react"; 
-import {Dialog} from "primereact/dialog"
+import { useState } from "react";
+import { Dialog } from "primereact/dialog";
 import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
-import Axios from "axios";  
-import "../css/service_availability.css"
+import Axios from "axios";
+import "../css/service_availability.css";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function ServiceAvailabilityPage({ setZipVerified }) {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const [isCreate, setIsCreate] = useState(false);             
-    const [pwgApiCheck,setPwgApiCheck]=useState("pending") 
-    const [pwgApiCheckFound,setPwgApiCheckFound]=useState(false)  
-    const [pwgDbCheck,setPwgDbCheck]=useState("pending") 
-    const [pwgDbCheckFound,setPwgDbCheckFound]=useState(false)         
-    const [uspsCheck,setUspsCheck]=useState("pending") 
-    const [uspsCheckFound,setUspsCheckFound]=useState(false)      
-    const [showCheckCoverage,setShowCheckCoverage]=useState(false)
+    const [isCreate, setIsCreate] = useState(false);
+    const [pwgApiCheck, setPwgApiCheck] = useState("pending");
+    const [pwgApiCheckFound, setPwgApiCheckFound] = useState(false);
+    const [pwgDbCheck, setPwgDbCheck] = useState("pending");
+    const [pwgDbCheckFound, setPwgDbCheckFound] = useState(false);
+    const [uspsCheck, setUspsCheck] = useState("pending");
+    const [uspsCheckFound, setUspsCheckFound] = useState(false);
+    const [showCheckCoverage, setShowCheckCoverage] = useState(false);
     const [isManage, setIsManage] = useState(false);
     const location = useLocation();
     const currentPath = location?.pathname;
+    function cleanLocalStorage() {
+        localStorage.removeItem("comingforedit");
+        localStorage.removeItem("comingfromincomplete");
+        localStorage.removeItem("paymentallinfo");
+        localStorage.removeItem("prepaidbasicData");
+        localStorage.removeItem("prepaidaddress");
+        localStorage.removeItem("simpricing");
+        localStorage.removeItem("devicepricing");
+        localStorage.removeItem("prepaidcheckEligibility");
+        localStorage.removeItem("prepaidagreeData");
+        localStorage.removeItem("prepaidprogrammeId");
+        localStorage.removeItem("comingfromincomplete");
+        localStorage.removeItem("paymentmethod");
+        localStorage.removeItem("paymentdetails");
+        localStorage.removeItem("inventoryType");
+        //Payment Status
+        localStorage.removeItem("paymentstatus");
+
+        localStorage.removeItem("stripeId");
+        //Device local
+        localStorage.removeItem("deviceadditional");
+        localStorage.removeItem("deviceadditionaltotal");
+        localStorage.removeItem("deviceadditionalfeaturearray");
+        localStorage.removeItem("totaldevicediscount");
+        localStorage.removeItem("devicediscountobjectarray");
+        localStorage.removeItem("deviceplan");
+        localStorage.removeItem("devicepricing");
+        //SIM Local
+        localStorage.removeItem("simadditional");
+        localStorage.removeItem("simadditionaltotal");
+        localStorage.removeItem("simadditionalfeaturearray");
+        localStorage.removeItem("totalsimdiscount");
+        localStorage.removeItem("simdiscountobjectarray");
+        localStorage.removeItem("simplan");
+        localStorage.removeItem("simpricing");
+    }
+
     const actionBasedChecks = () => {
         const loginPerms = localStorage.getItem("permissions");
-        const parsedLoginPerms = JSON.parse(loginPerms);            
+        const parsedLoginPerms = JSON.parse(loginPerms);
         const isCreate = parsedLoginPerms.some((node) => node?.subModule.some((subNode) => subNode?.route === currentPath && subNode?.actions.some((action) => action?.name === "create")));
         setIsCreate(isCreate);
 
@@ -35,7 +72,6 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
 
     useEffect(() => {
         actionBasedChecks();
-      
     }, []);
 
     // Get user data from localStorage
@@ -60,72 +96,87 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
             const department = parseLoginRes?.department;
             const csr = parseLoginRes?._id;
             const carrier = "6455532566d6fad6eac59e34";
-            const dataToSend = { serviceProvider, csr, department, carrier, ...values ,accountType:"Prepaid"};   
+            const dataToSend = { serviceProvider, csr, department, carrier, ...values, accountType: "Prepaid" };
             setIsLoading(true);
-            setShowCheckCoverage(true)   
-            Axios.post(`${BASE_URL}/api/user/PWGverifyZip`,dataToSend).then((res)=>{ 
-                setPwgApiCheck(false)   
-                 setPwgApiCheckFound(true)     
-                 localStorage.setItem("prepaidzipData", JSON.stringify(res.data)); 
-                 
-                 Axios.post(`${BASE_URL}/api/user/DBverifyzip`,dataToSend).then((res)=>{ 
-                    setPwgDbCheck(false)   
-                     setPwgDbCheckFound(true)                    
-                     Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(true)                    
-                         setIsLoading(false);
-                    }).catch(err=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(false) 
-                         setIsLoading(false);
-                    })
-                }).catch(err=>{ 
-                    setPwgDbCheck(false)   
-                     setPwgDbCheckFound(false)   
-                     Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(true)                    
-                          
-                    }).catch(err=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(false)
-                    })
+            setShowCheckCoverage(true);
+            Axios.post(`${BASE_URL}/api/user/PWGverifyZip`, dataToSend)
+                .then((res) => {
+                    setPwgApiCheck(false);
+                    setPwgApiCheckFound(true);
+                    localStorage.setItem("prepaidzipData", JSON.stringify(res.data));
+
+                    Axios.post(`${BASE_URL}/api/user/DBverifyzip`, dataToSend)
+                        .then((res) => {
+                            setPwgDbCheck(false);
+                            setPwgDbCheckFound(true);
+                            Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
+                                .then((res) => {
+                                    cleanLocalStorage();
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(true);
+                                    setIsLoading(false);
+                                })
+                                .catch((err) => {
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(false);
+                                    setIsLoading(false);
+                                });
+                        })
+                        .catch((err) => {
+                            setPwgDbCheck(false);
+                            setPwgDbCheckFound(false);
+                            Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
+                                .then((res) => {
+                                    cleanLocalStorage();
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(true);
+                                })
+                                .catch((err) => {
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(false);
+                                });
+                        });
                 })
-            }).catch(err=>{ 
-                setPwgApiCheck(false)   
-                 setPwgApiCheckFound(false)    
-                 Axios.post(`${BASE_URL}/api/user/DBverifyzip`,dataToSend).then((res)=>{ 
-                    setPwgDbCheck(false)   
-                     setPwgDbCheckFound(true)                
-                     localStorage.setItem("prepaidzipData", JSON.stringify(res.data)); 
-                     Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(true)      
-                         setIsLoading(false);                 
-                          
-                    }).catch(err=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(false) 
-                         setIsLoading(false);
-                    })
-                }).catch(err=>{ 
-                    setPwgDbCheck(false)   
-                     setPwgDbCheckFound(false)  
-                     Axios.post(`${BASE_URL}/api/user/verifyZip`,dataToSend).then((res)=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(true)                        
-                         setIsLoading(false);
-                         localStorage.setItem("prepaidzipData", JSON.stringify(res.data)); 
-              
-                    }).catch(err=>{ 
-                        setUspsCheck(false)   
-                         setUspsCheckFound(false) 
-                         setIsLoading(false);
-                    }) 
-                })
-            })
-          /* setIsLoading(true);
+                .catch((err) => {
+                    setPwgApiCheck(false);
+                    setPwgApiCheckFound(false);
+                    Axios.post(`${BASE_URL}/api/user/DBverifyzip`, dataToSend)
+                        .then((res) => {
+                            setPwgDbCheck(false);
+                            setPwgDbCheckFound(true);
+                            localStorage.setItem("prepaidzipData", JSON.stringify(res.data));
+                            Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
+                                .then((res) => {
+                                    cleanLocalStorage();
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(true);
+                                    setIsLoading(false);
+                                })
+                                .catch((err) => {
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(false);
+                                    setIsLoading(false);
+                                });
+                        })
+                        .catch((err) => {
+                            setPwgDbCheck(false);
+                            setPwgDbCheckFound(false);
+                            Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend)
+                                .then((res) => {
+                                    cleanLocalStorage();
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(true);
+                                    setIsLoading(false);
+                                    localStorage.setItem("prepaidzipData", JSON.stringify(res.data));
+                                })
+                                .catch((err) => {
+                                    setUspsCheck(false);
+                                    setUspsCheckFound(false);
+                                    setIsLoading(false);
+                                });
+                        });
+                });
+            /* setIsLoading(true);
      try {
                 const response = await Axios.post(`${BASE_URL}/api/user/verifyZip`, dataToSend);
 
@@ -146,110 +197,163 @@ export default function ServiceAvailabilityPage({ setZipVerified }) {
     return (
         <div className="flex flex-column justify-content-center">
             <div className="grid justify-content-center align-content-center my-5">
-                <div className="card col-4 ">
+                <div className="cardnewenrollment ">
+                    <h1 className="heading">NEW ENROLLMENT</h1>
+                    <hr className="hr" />
                     <form className="my-4" onSubmit={formik.handleSubmit}>
-                        <h5>
-                            <strong>Please Enter The Zip Code To Check Service Availability</strong>
-                        </h5>  
-                      
+                        <p style={{ fontFamily: "Inter", fontSize: "16px", fontWeight: "500", paddingLeft: "20px", color: "black" }}>Please Enter The Zip Code To Check Service Availability</p>
+
                         {isLoading ? (
-                            <InputText type="text" name="zipCode" className="col-12 mb-3" value={formik.values.zipCode} onChange={  
-                                 (e)=>{   
-                                    formik.setFieldValue("zipCode",e.target.value)
-                                    if(pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending"){  
-                                         formik.setFieldValue("zipCode",e.value)
-                                        setShowCheckCoverage(false)  
-                                        setIsLoading(false)
-                                           setPwgApiCheck("pending") 
-                                           setPwgApiCheckFound(true)   
-                                           setPwgDbCheck("pending") 
-                                           setPwgDbCheckFound(true) 
-                                           setUspsCheck("pending") 
-                                           setUspsCheckFound(true)
+                            <InputText
+                                type="text"
+                                name="zipCode"
+                                className="col-11 mb-3"
+                                value={formik.values.zipCode}
+                                style={{ marginLeft: "20px", width: "900px" }}
+                                onChange={(e) => {
+                                    formik.setFieldValue("zipCode", e.target.value);
+                                    if (pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending") {
+                                        formik.setFieldValue("zipCode", e.value);
+                                        setShowCheckCoverage(false);
+                                        setIsLoading(false);
+                                        setPwgApiCheck("pending");
+                                        setPwgApiCheckFound(true);
+                                        setPwgDbCheck("pending");
+                                        setPwgDbCheckFound(true);
+                                        setUspsCheck("pending");
+                                        setUspsCheckFound(true);
                                     }
-                                 } 
-                                 
-                                 } keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} disabled={isLoading} />
+                                }}
+                                keyfilter={/^\d{0,5}$/}
+                                minLength={5}
+                                maxLength={5}
+                                disabled={isLoading}
+                            />
                         ) : (
-                            <InputText type="text" name="zipCode" 
-                               
-                             className="col-12 mb-3" value={formik.values.zipCode} onChange={ (e)=>{  
-                                formik.setFieldValue("zipCode",e.target.value)
-                                 if(pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending"){  
-                                formik.setFieldValue("zipCode",e.value)
-                               setShowCheckCoverage(false)  
-                               setIsLoading(false)
-                                  setPwgApiCheck("pending") 
-                                  setPwgApiCheckFound(true)   
-                                  setPwgDbCheck("pending") 
-                                  setPwgDbCheckFound(true) 
-                                  setUspsCheck("pending") 
-                                  setUspsCheckFound(true) 
-                             }
-                           }
-                        }  keyfilter={/^\d{0,5}$/} minLength={5} maxLength={5} />
+                            <InputText
+                                type="text"
+                                name="zipCode"
+                                className="col-11 mb-3"
+                                value={formik.values.zipCode}
+                                style={{ marginLeft: "20px", width: "900px" }}
+                                onChange={(e) => {
+                                    formik.setFieldValue("zipCode", e.target.value);
+                                    if (pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending") {
+                                        formik.setFieldValue("zipCode", e.value);
+                                        setShowCheckCoverage(false);
+                                        setIsLoading(false);
+                                        setPwgApiCheck("pending");
+                                        setPwgApiCheckFound(true);
+                                        setPwgDbCheck("pending");
+                                        setPwgDbCheckFound(true);
+                                        setUspsCheck("pending");
+                                        setUspsCheckFound(true);
+                                    }
+                                }}
+                                keyfilter={/^\d{0,5}$/}
+                                minLength={5}
+                                maxLength={5}
+                            />
                         )}
 
                         {formik.touched.zipCode && formik.errors.zipCode ? (
-                            <p className="mt-0" style={{ color: "red" }}>
+                            <p className="mt-0" style={{ color: "red", fontFamily: "Inter", marginLeft: "20px" }}>
                                 {formik.errors.zipCode}
                             </p>
                         ) : null}
                         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-                         { 
-                          pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending" ?        
-                          
-                        <Button label={"Submit"}   type="button"  onClick={()=>{  
-                                
-                             localStorage.setItem("izZipVerified","yes")
-                            setZipVerified(true);  
-                        }} className="col-12"  /> :
-                        <Button label={"Check Coverage"}   type="submit" className="col-12" disabled={isLoading || !isCreate} />  
-}
-                           { showCheckCoverage ?    
-                              <div> 
-                                   <Button iconPos="right" className="w-full mt-2 text-left" type="button" icon={pwgApiCheck === "pending" ?"pi pi-spin pi-spinner":pwgApiCheckFound ? "pi coverage-found pi-check":"pi coverage-notfound pi-times"}  label="Checking Through Pwg Apis "/>
-                                   <Button iconPos="right" className="w-full mt-2 text-left"  type="button" icon={pwgDbCheck === "pending" ?"pi pi-spin pi-spinner":pwgDbCheckFound ? "pi coverage-found pi-check":"pi coverage-notfound pi-times"}  label="Checking Through Pwg Database Data "/> 
-                                   
-                                   <Button iconPos="right" className="w-full mt-2 text-left" type="button" icon={uspsCheck === "pending" ?"pi pi-spin pi-spinner":uspsCheckFound ? "pi coverage-found pi-check":"pi coverage-notfound pi-times"}  label="Checking Through USPS "/>
-                              </div> 
-                              :""
-                            }          
-                             <Dialog  header="Proceeding Confirmation" style={{width:"50vw"}}  visible={ pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending" &&  !pwgApiCheckFound && !pwgDbCheckFound && !uspsCheckFound} >  
-                                
-                                   <p className="text-center">Still  Want To Proceed</p> 
-                                   <div className="mt-4 flex flex-wrap flex-row justify-content-center">   
-                                        <Button label="Yes" onClick={()=>{   
-                                                const serviceProvider = parseLoginRes?.company;
-                                                const department = parseLoginRes?.department;  
-                                                
-                                                const csr = parseLoginRes?._id;
-                                                const carrier = "6455532566d6fad6eac59e34";
-                                                const dataToSend = { serviceProvider, csr, department, carrier, ...formik.values ,accountType:"Prepaid"};   
-                                              
-                                               Axios.post(`${BASE_URL}/api/user/withoutzip`,dataToSend).then((res)=>{ 
-                                                 localStorage.setItem("prepaidzipData", JSON.stringify(res.data))            
-                                                       
-                             localStorage.setItem("izZipVerified","no")
-                                                 setZipVerified(true)
-                                                 }).catch(err=>{ 
-                                                  
-                                                 }) 
-                                                 
-                                             }}/> 
-                                         <Button label="No" className="ml-4" onClick={()=>{ 
-                                            setShowCheckCoverage(false)  
-                                            setIsLoading(false)
-                                               setPwgApiCheck("pending") 
-                                               setPwgApiCheckFound(true)   
-                                               setPwgDbCheck("pending") 
-                                               setPwgDbCheckFound(true) 
-                                               setUspsCheck("pending") 
-                                               setUspsCheckFound(true)
-                                               }}/>
-                                   </div> 
-                                    
-                              </Dialog> 
+                        {pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending" ? (
+                            <Button
+                                style={{ marginLeft: "20px" }}
+                                label={"Submit"}
+                                type="button"
+                                onClick={() => {
+                                    localStorage.setItem("izZipVerified", "yes");
+                                    setZipVerified(true);
+                                }}
+                                className="checkbutton"
+                            />
+                        ) : (
+                            <Button style={{ marginLeft: "20px" }} label={"Check Coverage"} type="submit" className="checkbutton" disabled={isLoading || !isCreate} />
+                        )}
+                        {showCheckCoverage ? (
+                            <div>
+                                <Button
+                                    style={{ marginLeft: "20px", marginTop: "20px" }}
+                                    iconPos="right"
+                                    className="chkbtn"
+                                    type="button"
+                                    icon={pwgApiCheck === "pending" ? "pi pi-spin pi-spinner" : pwgApiCheckFound ? "pi coverage-found pi-check" : "pi coverage-notfound pi-times"}
+                                    label="Checking Through Pwg Apis "
+                                />
+                                <Button
+                                    style={{ marginLeft: "20px", marginTop: "20px" }}
+                                    iconPos="right"
+                                    className="chkbtn"
+                                    type="button"
+                                    icon={pwgDbCheck === "pending" ? "pi pi-spin pi-spinner" : pwgDbCheckFound ? "pi coverage-found pi-check" : "pi coverage-notfound pi-times"}
+                                    label="Checking Through Pwg Database Data "
+                                />
+
+                                <Button
+                                    style={{ marginLeft: "20px", marginTop: "20px" }}
+                                    iconPos="right"
+                                    className="chkbtn"
+                                    type="button"
+                                    icon={uspsCheck === "pending" ? "pi pi-spin pi-spinner" : uspsCheckFound ? "pi coverage-found pi-check" : "pi coverage-notfound pi-times"}
+                                    label="Checking Through USPS "
+                                />
+                            </div>
+                        ) : (
+                            ""
+                        )}
+                        <Dialog className="proceed" header="PROCEEDING CONFIRMATION" headerClassName="dialogHeader" style={{ width: "40vw" }} visible={pwgApiCheck !== "pending" && pwgDbCheck !== "pending" && uspsCheck !== "pending" && !pwgApiCheckFound && !pwgDbCheckFound && !uspsCheckFound}>
+                            <p>Still Want To Proceed</p>
+                            <div className="mt-4 flex flex-wrap flex-row justify-content-center">
+                                <Button
+                                    label="Yes"
+                                    style={{ backgroundColor: "#C68301", color: "white", border: "none", height: "40px", width: "70px" }}
+                                    onClick={() => {
+                                        const serviceProvider = parseLoginRes?.company;
+                                        const department = parseLoginRes?.department;
+
+                                        const csr = parseLoginRes?._id;
+                                        const carrier = "6455532566d6fad6eac59e34";
+                                        const dataToSend = { serviceProvider, csr, department, carrier, ...formik.values, accountType: "Prepaid" };
+
+                                        Axios.post(`${BASE_URL}/api/user/withoutzip`, dataToSend)
+                                            .then((res) => {
+                                                localStorage.setItem("prepaidzipData", JSON.stringify(res.data));
+
+                                                localStorage.setItem("izZipVerified", "no");
+                                                setZipVerified(true);
+                                            })
+                                            .catch((err) => {});
+                                    }}
+                                />
+                                <Button
+                                    label="No"
+                                    className="ml-4"
+                                    style={{
+                                        backgroundColor: "#C68301",
+                                        color: "white",
+                                        border: "none",
+                                        height: "40px",
+                                        width: "70px",
+                                    }}
+                                    onClick={() => {
+                                        setShowCheckCoverage(false);
+                                        setIsLoading(false);
+                                        setPwgApiCheck("pending");
+                                        setPwgApiCheckFound(true);
+                                        setPwgDbCheck("pending");
+                                        setPwgDbCheckFound(true);
+                                        setUspsCheck("pending");
+                                        setUspsCheckFound(true);
+                                    }}
+                                />
+                            </div>
+                        </Dialog>
                     </form>
                 </div>
             </div>

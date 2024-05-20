@@ -1,0 +1,84 @@
+.h5 {
+    color: #c68301;
+    position: absolute;
+    text-align: center;
+}
+.fname {
+    font-weight: 600;
+    font-family: Inter;
+    font-size: 20px;
+    color: #c68301;
+    margin-top: 30px;
+}
+.para {
+    margin-top: -10px;
+}
+.field_label {
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    color: black;
+}
+.btn {
+    background-color: #c68301;
+    color: white;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #c68401c8 !important;
+}
+.calendarmain {
+    width: 33%;
+    margin-top: 40px;
+}
+.calendar_field {
+    width: 33%;
+    height: 40px;
+    margin-top: 40px;
+}
+.calendar_field1 {
+    width: 33%;
+    height: 40px;
+    margin-top: 60px;
+}
+.calendar_field_date {
+    width: 33%;
+    height: 40px;
+}
+
+.space {
+    margin-left: 3px;
+}
+.btn1 {
+    background-color: #0475b4;
+    border: none;
+    font-family: Inter;
+    font-size: 14px;
+    border-radius: 12px;
+}
+.btn1:hover {
+    background-color: #0476b4d9 !important;
+}
+.btn2 {
+    background-color: #00c9bd;
+    border: none;
+    font-family: Inter;
+    font-size: 14px;
+    border-radius: 12px;
+}
+.btn2:hover {
+    background-color: #00c9bcde !important;
+}
+.h4 {
+    color: #c68301;
+    text-align: center;
+    font-size: 16px;
+}
+.p-dropdown .p-dropdown-trigger {
+    color: #c68301 !important;
+}

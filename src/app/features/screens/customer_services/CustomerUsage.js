@@ -112,10 +112,7 @@ const CustomerUsage = () => {
                                     
                                     />
                                 </div>
-        
     </div>
-
-   
 
 </div>
 

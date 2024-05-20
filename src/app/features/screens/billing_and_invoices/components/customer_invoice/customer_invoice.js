@@ -107,7 +107,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                                 <div className=" pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${invoiceData?.netPrice}</p>
+                                    <p>${invoiceData?.dueAmount}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
@@ -159,7 +159,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                         <div className="mt-3 pl-2 remittancesec font-bold flex flex-wrap justify-content-between " style={{ marginBottom: 250 }}>
                             <p>Total Amount Due</p>
-                            <p>${invoiceData?.netPrice}</p>
+                            <p>${invoiceData?.dueAmount}</p>
                         </div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
 
                                 <div className="pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                                     <p>Total Amount Due</p>
-                                    <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+                                    <p>${parseFloat(invoiceData?.dueAmount).toFixed(2)}</p>
                                 </div>
 
                                 <div className=" pl-2 remittancesec  flex flex-wrap justify-content-between line1">
@@ -290,20 +290,6 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         </div>
 
                         <div>
-                            <p className="font-bold  mt-0 pt-1 pl-1">CURRENT SERVICES</p>
-                            <div className="pl-2 w-full mt-2 flex flex-wrap justify-content-between line">
-                                <p>Total Recurring Charges</p>
-                                <p>${invoiceData?.recurringCharges}</p>
-                            </div>
-
-                            <div className="pl-2  flex flex-wrap justify-content-between ">
-                                <p>One Time Charge</p>
-                                <p>${userDetails?.invoiceOneTimeCharges}</p>
-                            </div>
-                            <div className="pl-2  flex flex-wrap justify-content-between ">
-                                <p>Taxes and Surcharges</p>
-                                <p>$0.00</p>
-                            </div>
                             <h5 className="font-bold line2">CURRENT SERVICES</h5>
                             <div className="pl-2 w-full  mt-2 flex flex-wrap justify-content-between line ">
                                 <p>Total Recurring Charges</p>
@@ -322,7 +308,7 @@ export default function CustomerInvoice({ userDetails, invoiceData, setIsLoading
                         <div className="topline"></div>
                         <div className="mt-2 pl-2 remittancesec font-bold flex flex-wrap justify-content-between">
                             <p>Total Amount Due</p>
-                            <p>${parseFloat(invoiceData?.netPrice).toFixed(2)}</p>
+                            <p>${parseFloat(invoiceData?.dueAmount).toFixed(2)}</p>
                         </div>
                     </div>
                     <div className="center-line">

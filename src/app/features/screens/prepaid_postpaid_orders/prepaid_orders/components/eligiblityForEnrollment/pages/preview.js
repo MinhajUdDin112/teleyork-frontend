@@ -5,6 +5,7 @@ import Preview_Final_component from "./Preview_Final_component";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react";
+import "../css/preview.css";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [showFinalComponent, setShowFinalComponent] = useState(false);
@@ -25,21 +26,31 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         if (!date) return ""; // Handle null or undefined dates
         return new Date(date).toLocaleDateString("en-US");
     };
-
+    const [fromlocal, setLocal] = useState(false);
+    const [basicData, setBasicData] = useState();
+    useEffect(() => {
+        if (localStorage.getItem("comingfromincomplete")) {
+            let prepaidbasicData = JSON.parse(localStorage.getItem("prepaidbasicData"));
+            if (prepaidbasicData?.data?.activeBillingConfiguration) {
+                setLocal(true);
+                setBasicData(prepaidbasicData?.data);
+            } else {
+            }
+        }
+    }, []);
     const postData = async () => {
         setIsLoading(true);
         const dataToSend = {
             csr: csr,
             userId: _id,
-            isWithInvoice: paymentInfo?.prospectwithinvoice,
-            isWithoutInvoice: paymentInfo?.prospectwithoutinvoice,
+            isWithInvoice: paymentInfo?.prospectwithinvoice ? paymentInfo?.prospectwithinvoice : false,
+            isWithoutInvoice: paymentInfo?.prospectwithinvoice ? paymentInfo?.prospectwithinvoice : false,
         };
         Axios.post(`${BASE_URL}/api/user/esnAssingment`, dataToSend)
             .then(() => {
                 toast.success("Esn Successfully Assigned");
                 Axios.post(`${BASE_URL}/api/user/prepaidHandOver`, dataToSend)
                     .then((res) => {
-
                         Axios.post(`${BASE_URL}/api/web/order`, { orderNumber: enrollment_id })
                             .then((response) => {
                                 toast.success("Order Placed Successfully");
@@ -50,17 +61,16 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
 
                                         setShowFinalComponent(true);
                                         setFromIncomplete(false);
-                                       localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
+                                        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
                                     })
                                     .catch((err) => {
-                                        toast.error("Label Creation Failed");         
+                                        toast.error("Label Creation Failed");
                                         toast.success("Label created Successfully");
                                         setIsLoading(false);
 
                                         setShowFinalComponent(true);
                                         setFromIncomplete(false);
-                                       localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
-                                 
+                                        localStorage.setItem("comingfromincomplete", JSON.stringify(fromIncomplete));
                                     });
                             })
                             .catch((err) => {
@@ -69,11 +79,10 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                     })
                     .catch((error) => {
                         toast.error(error?.response?.data?.msg);
-                        setIsLoading(false); 
+                        setIsLoading(false);
                     });
             })
             .catch((error) => {
-                
                 setIsLoading(false);
                 toast.error(error?.response?.data?.msg);
             });
@@ -281,109 +290,98 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
         <>
             <ToastContainer />
             {!showFinalComponent ? (
-                <div className="card ">
-                    <div className="flex flex-row justify-content-between sticky-buttons">
-                        <Button
-                            label="Back"
-                            onClick={() => {
-                                if (localStorage.getItem("comingforedit")) {
-                                    setActiveIndex(1);
-                                } else {
-                                    setActiveIndex(2);
-                                }
-                            }}
-                        />
-                        <Button label="Submit" onClick={localStorage.getItem("paymentstatus") ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
-                    </div>
+                <div>
                     <br></br>
 
                     <div>
-                        <div>
-                            <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
+                        <div style={{ marginTop: "20px" }}>
+                            {/* <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5> */}
+                            <h2 className="prev">Preview Your Details</h2>
                         </div>
 
-                        <h2 className="flex flex-row justify-content-center">Preview Your Details</h2>
                         <br />
 
-                        <div className="flex justify-content-around">
-                            <div className="border-2 w-5 pt-2">
-                                <div className="flex border-bottom-2">
-                                    <p className="w-6 ml-4">First Name:</p>
-                                    <p className="w-6">{previewInfo?.firstName?.toUpperCase() || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Service Address:</p>
-                                    <p className="w-6">{previewInfo?.address1?.toUpperCase() || "-"}</p>
-                                </div>
+                        <div className="previewdiv">
+                            <div className="flex justify-content-around">
+                                <div className="pt-2" style={{ borderRight: "1px solid #0475B4", width: "45%", borderStyle: "dashed", borderLeft: "none", borderBottom: "none", height: "280px", borderTop: "none", marginTop: "20px", marginBottom: "20px" }}>
+                                    <div className="flex ">
+                                        <p className="w-6 ml-4">First Name:</p>
+                                        <p className="w-6">{previewInfo?.firstName?.toUpperCase() || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Service Address:</p>
+                                        <p className="w-6">{previewInfo?.address1?.toUpperCase() || "-"}</p>
+                                    </div>
 
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">State:</p>
-                                    <p className="w-6">{previewInfo?.state?.toUpperCase() || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">DOB:</p>
-                                    <p className="w-6">{formatDate(previewInfo?.DOB || "-")}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Telephone:</p>
-                                    <p className="w-6">{previewInfo?.contact || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Discounts:</p>
-                                    <p className="w-6"> {discount?.toUpperCase() || "-"}</p>
-                                </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">State:</p>
+                                        <p className="w-6">{previewInfo?.state?.toUpperCase() || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">DOB:</p>
+                                        <p className="w-6">{formatDate(previewInfo?.DOB || "-")}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Telephone:</p>
+                                        <p className="w-6">{previewInfo?.contact || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Discounts:</p>
+                                        <p className="w-6"> {discount?.toUpperCase() || "-"}</p>
+                                    </div>
 
-                                <div className="flex  border-bottom-2  pt-2">
-                                    <p className="w-6 ml-4">Net Amount: </p>
-                                    {/* <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p> */}
-                                    <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo?.totalamount}` : "-"}</p>
+                                    <div className="flex    ">
+                                        <p className="w-6 ml-4">Net Amount: </p>
+                                        {/* <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p> */}
+                                        <p className="w-6">{paymentInfo?.totalamount ? `$${paymentInfo?.totalamount}` : "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Inventory: </p>
+                                        <p className="w-6">{(localStorage.getItem("product") || "-").toUpperCase()}</p>
+                                    </div>
                                 </div>
-                                <div className="flex  pt-2">
-                                    <p className="w-6 ml-4">Inventory: </p>
-                                    <p className="w-6">{(localStorage.getItem("product") || "-").toUpperCase()}</p>
-                                </div>
-                            </div>
-                            <div className="border-2 w-5 ">
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">LastName:</p>
-                                    <p className="w-6">{previewInfo?.lastName.toUpperCase() || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">City:</p>
-                                    <p style={{ marginLeft: "-10px" }}>{previewInfo?.city?.toUpperCase() || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Zip Code:</p>
-                                    <p className="w-6">{previewInfo?.zip || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">SSN:</p>
-                                    <p className="w-6">{previewInfo?.SSN || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Email:</p>
-                                    <p className="w-6">{previewInfo?.email.toUpperCase() || "-"}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Plan:</p>
-                                    <p className="w-6">{(planname || "-").toUpperCase()}</p>
-                                </div>
-                                <div className="flex border-bottom-2 pt-2">
-                                    <p className="w-6 ml-4">Amount Paid: </p>
-                                    <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p>
-                                </div>
+                                <div className=" w-5 pt-4 " style={{ paddingLeft: "20px" }}>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">LastName:</p>
+                                        <p className="w-6">{previewInfo?.lastName.toUpperCase() || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">City:</p>
+                                        <p style={{ marginLeft: "-10px" }}>{previewInfo?.city?.toUpperCase() || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Zip Code:</p>
+                                        <p className="w-6">{previewInfo?.zip || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">SSN:</p>
+                                        <p className="w-6">{previewInfo?.SSN || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Email:</p>
+                                        <p className="w-6">{previewInfo?.email.toUpperCase() || "-"}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Plan:</p>
+                                        <p className="w-6">{(planname || "-").toUpperCase()}</p>
+                                    </div>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Amount Paid: </p>
+                                        <p className="w-6">{paymentInfo?.paid ? `$${paymentInfo.paid}` : "-"}</p>
+                                    </div>
 
-                                {/*  <div className="flex border-bottom-2 pt-2">
+                                    {/*  <div className="flex  ">
                                     <p className="w-6 ml-4">Inventory:</p>
                                     <p className="w-6">{inventory}</p>
                                 </div>     */}
-                                <div className="flex  pt-2">
-                                    <p className="w-6 ml-4">Additional Feature:</p>
-                                    <p className="w-6">
-                                        <div>
-                                            <p className="inline">{additional.toUpperCase() || "-"}</p>
-                                        </div>
-                                    </p>
+                                    <div className="flex  ">
+                                        <p className="w-6 ml-4">Additional Feature:</p>
+                                        <p className="w-6">
+                                            <div>
+                                                <p className="inline">{additional.toUpperCase() || "-"}</p>
+                                            </div>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -394,17 +392,17 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="flex">
                                 <Checkbox inputId="cb1" value="New York" checked={isChecked} onClick={handleSign} onChange={(e) => setIsChecked(e.checked)}></Checkbox>
                                 <label htmlFor="cb1" className="p-checkbox-label mx-2">
-                                    <p>
+                                    <p style={{ fontFamily: "Inter", fontSize: "14px" }}>
                                         I further consent to receive calls, emails and/or text messages that may deliver auto-dialed or pre-recorded messages from IJ Wireless, Inc or its duly appointed agent, either using my telephone number assigned by IJ Wireless, Inc or provided by me herein or
                                         later. I understand this is not a condition of purchase.
                                     </p>
-                                    <p>
+                                    <p style={{ fontFamily: "Inter", fontSize: "14px" }}>
                                         I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined
                                         in this form and any related documents.
                                     </p>
                                     <br />
                                     {checked ? (
-                                        <p>
+                                        <p style={{ fontFamily: "Inter", fontSize: "14px" }}>
                                             <strong>
                                                 This form is electronically signed by <span> </span>
                                                 <strong>
@@ -421,17 +419,17 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                             <div className="flex">
                                 <Checkbox inputId="cb1" value="New York" checked={isChecked} onClick={handleSign} onChange={(e) => setIsChecked(e.checked)}></Checkbox>
                                 <label htmlFor="cb1" className="p-checkbox-label mx-2">
-                                    <p>
+                                    <p style={{ fontFamily: "Inter", fontSize: "14px" }}>
                                         I further consent to receive calls, emails and/or text messages that may deliver auto-dialed or pre-recorded messages from IJ Wireless, Inc or its duly appointed agent, either using my telephone number assigned by IJ Wireless, Inc or provided by me herein or
                                         later. I understand this is not a condition of purchase.
                                     </p>
-                                    <p>
+                                    <p style={{ fontFamily: "Inter", fontSize: "14px" }}>
                                         I hereby give my informed consent to electronically sign this form, and I acknowledge that this electronic signature has the same legal effect as a handwritten signature. I understand that this action signifies my agreement to the terms and conditions outlined
                                         in this form and any related documents.
                                     </p>
                                     <br />
                                     {checked ? (
-                                        <p>
+                                        <p style={{ fontFamily: "Inter", fontSize: "14px" }}>
                                             <strong>
                                                 This form is electronically signed by <span> </span>
                                                 <strong>
@@ -446,6 +444,43 @@ const Preview = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                         ) : (
                             ""
                         )}
+                    </div>
+                    {/* <div className="flex flex-row justify-content-between sticky-buttons">
+                        <Button
+                            style={{ marginLeft: "80%" }}
+                            className="btn"
+                            label="Back"
+                            onClick={() => {
+                                if (localStorage.getItem("comingforedit")) {
+                                    setActiveIndex(1);
+                                } else {
+                                    setActiveIndex(2);
+                                }
+                            }}
+                        />
+                        <Button className="btn" label="Submit" onClick={localStorage.getItem("paymentstatus") ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
+                    </div> */}
+                    <div className="flex flex-row justify-content-between sticky-buttons">
+                        <Button
+                            style={{ marginLeft: "80%" }}
+                            label="Back"
+                            className="btn"
+                            onClick={() => {
+                                if (localStorage.getItem("comingforedit")) {
+                                    setActiveIndex(1);
+                                } else if (localStorage.getItem("comingfromincomplete")) {
+                                    let prepaidbasicData = JSON.parse(localStorage.getItem("prepaidbasicData"));
+                                    if (prepaidbasicData?.data?.activeBillingConfiguration) {
+                                        setActiveIndex(1);
+                                    } else {
+                                        setActiveIndex(2);
+                                    }
+                                } else {
+                                    setActiveIndex(2);
+                                }
+                            }}
+                        />
+                        <Button className="btn" label="Submit" onClick={localStorage.getItem("paymentstatus") || fromlocal ? postData : postDataWithinvoice} disabled={!isChecked} icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} />
                     </div>
                 </div>
             ) : (

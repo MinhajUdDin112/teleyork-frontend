@@ -57,7 +57,7 @@ const BillingConfiguration = () => {
           
           latefeeCharge:Yup.string().required("Late Fee Charge Is Required") ,   
           
-          applyLateFee:Yup.string().required("Late Fee Charge Is Required") ,   
+          applyLateFee:Yup.string().required("This is required") ,   
           
           subsequentBillCreateDate:Yup.string().required("Subsequent Bill Create Date Is Required") , 
             
@@ -118,7 +118,6 @@ const BillingConfiguration = () => {
     const [optionsForInventoryType, setOptionForInventoryType] = useState([]);
     const [onChangeBillingModel, setOnChangeBillingModel] = useState(false);
     const optionsForPayment = [
-        { label: "Select Payment Method", value: "" },
         { label: "Cash", value: "Cash" },
         { label: "Credit Card", value: "Credit Card" },
         { label: "Money Order", value: "Money Order" },

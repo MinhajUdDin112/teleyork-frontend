@@ -15,7 +15,11 @@ export default function TabletBulkUploadAddStock({ permissions, unit, model }) {
     const ref = useRef(null);
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
-    const loginRes = localStorage.getItem("userData");
+    const loginRes = localStorage.getItem("userData"); 
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [agent, setAgent] = useState(null);
     const [department, setDepartment] = useState(null);
     const parseLoginRes = JSON.parse(loginRes); 

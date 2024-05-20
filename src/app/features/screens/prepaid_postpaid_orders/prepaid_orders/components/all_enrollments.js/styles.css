@@ -1,0 +1,108 @@
+.p-datatable .p-datatable-header {
+    background-color: white;
+}
+.p-datatable .p-datatable-header {
+    border: none;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 20px;
+}
+.p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    border: 1px solid #dee2e6;
+    border-width: 0 0 1px 0;
+    font-weight: 600;
+    color: #343a40;
+    background: rgba(4, 117, 180, 0.1);
+
+    color: #0475b4;
+    transition: box-shadow 0.2s;
+    font-family: Inter;
+}
+.p-checkbox .p-component {
+    display: inline-flex;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    vertical-align: bottom;
+    position: relative;
+    border: 1px solid #979797;
+    border-radius: 8px;
+}
+.p-datatable .p-datatable-thead > tr > th,
+.p-datatable .p-datatable-tbody > tr > td {
+    border: none;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    border-bottom: none;
+    border-top: red;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+    border-bottom: none;
+}
+.heading {
+    font-family: Inter;
+}
+.p-column-header-content {
+    margin-left: 0px;
+}
+.inputtext .p-dropdown .p-dropdown-label.p-placeholder {
+    color: white;
+}
+.maindiv .p-dropdown .p-dropdown-trigger {
+    color: white !important;
+}
+.enrollment {
+    color: white;
+    font-family: Inter;
+    background-color: #c68301;
+    height: 35px;
+    width: 18%;
+    margin-left: 12%;
+}
+.p-dropdown .p-dropdown-label.p-placeholder {
+    padding-top: 8px;
+    font-size: 12px;
+    padding-left: 5px;
+}
+.cal {
+    height: 35px;
+    border: 1px solid #c68301;
+    color: #c68301;
+    background-color: white;
+    border-radius: 10px;
+    margin-left: 5%;
+}
+.maindiv .p-inputtext {
+    border: none;
+}
+.inputtext .p-inputtext:enabled:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: none;
+    border: none;
+}
+.p-button:enabled:focus {
+    box-shadow: none;
+}
+/* .p-dropdown:not(.p-disabled).p-focus {
+    outline: none;
+    outline-offset: 0;
+    box-shadow: none;
+    border: none;
+} */
+.cal .p-calendar-w-btn-right .p-datepicker-trigger {
+    background-color: white;
+    border: none;
+}
+.cal .p-calendar-w-btn-right .p-datepicker-trigger:hover {
+    background-color: white !important;
+}
+.cal .p-button-icon-only {
+    color: #c68301;
+}
+.cal .p-button-icon-only:hover {
+    color: #c68301 !important;
+    border: none;
+}

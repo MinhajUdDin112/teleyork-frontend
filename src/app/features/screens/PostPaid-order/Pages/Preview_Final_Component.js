@@ -32,13 +32,13 @@ const Preview_Final_component = ({ enrollment_id }) => {
     return (
         <>
             <div className="card final-pre">
-                <h3>
-                    Enrollement is successfully saved against Enrollment ID:
-                    <i className="steric" onClick={handleNavigate} style={{ cursor: "pointer" }}>
+                <h3 className="mr-2">
+                    Enrollement is successfully saved against Enrollment ID: 
+                    <i className="steric" onClick={handleNavigate} style={{ cursor: "pointer" , marginLeft:"10px" }}>
                         {enrollment_id}
                     </i>
                 </h3>
-                <Button label="OK" onClick={zipRes ? movePage : movepageToAll} className="final-btn" />
+                <Button style={{marginLeft:"45rem"}} label="OK" onClick={zipRes ? movePage : movepageToAll} className="final-btn" />
             </div>
         </>
     );

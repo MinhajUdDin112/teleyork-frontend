@@ -116,14 +116,14 @@ const Preview_Final_component = ({ enrollment_id }) => {
     };
     return (
         <>
-            <div className="card final-pre">
-                <h3>
-                    Enrollement is successfully saved against Enrollment ID:{" "}
-                    <span onClick={handleNavigate} style={{ cursor: "pointer" }} className="steric">
+            <div className="final-pre" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <h3 style={{ fontSize: "18px", fontFamily: "Inter", fontWeight: "600" }}>
+                    Enrollement is successfully saved against Enrollment ID:
+                    <span onClick={handleNavigate} style={{ cursor: "pointer", color: "#0475B4", marginLeft: "10px" }} className="steric">
                         {enrollment_id}
                     </span>
                 </h3>
-                <Button label="OK" onClick={zipRes ? movePage : movepageToAll} className="final-btn" />
+                <Button style={{ alignItems: "center" }} label="OK" onClick={zipRes ? movePage : movepageToAll} className="btn" />
             </div>
         </>
     );

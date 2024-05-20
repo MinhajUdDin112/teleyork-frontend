@@ -56,45 +56,42 @@ export default function InfoForUsers({ ProvisionType }) {
             <>
                 {ProvisionType === "AddStock" || ProvisionType === "AddAndAssignNonActive"
                     ? InfoForUsersAddAndAssignNonActivatedProvision.map((infoitem) => (
-                          <div className="flex flex-wrap justify-content-around mt-8 card">
-                              <div style={{ width: "20%" }}>
+                          <div className="flex flex-wrap flex-column mt-3 ">
+                              <div>
                                   <span>
-                                      {" "}
                                       <strong>{infoitem.label}:</strong>
                                   </span>
                               </div>
-                              <div style={{ width: "60%" }} className="flex card p-5">
-                                  {" "}
+                              <br />
+                              <div style={{ width: "96%" }} className="flex card p-5">
                                   <p>{infoitem.value}</p>
                               </div>
                           </div>
                       ))
                     : ProvisionType === "AddPreActivated"
                     ? InfoForUserAddPreActivatedProvision.map((infoitem) => (
-                          <div className="flex flex-wrap justify-content-around mt-8 card">
-                              <div style={{ width: "20%" }}>
+                          <div className="flex flex-wrap flex-column mt-3 ">
+                              <div>
                                   <span>
-                                      {" "}
                                       <strong>{infoitem.label}:</strong>
                                   </span>
                               </div>
-                              <div style={{ width: "60%" }} className="flex card p-5">
-                                  {" "}
+                              <br />
+                              <div style={{ width: "96%" }} className="flex card p-5">
                                   <p>{infoitem.value}</p>
                               </div>
                           </div>
                       ))
                     : ProvisionType === "AddAndActivate"
                     ? InfoForUsersAddAndActivate.map((infoitem) => (
-                          <div className="flex flex-wrap justify-content-around mt-8 card">
-                              <div style={{ width: "20%" }}>
+                          <div className="flex flex-wrap flex-column mt-3 ">
+                              <div>
                                   <span>
-                                      {" "}
                                       <strong>{infoitem.label}:</strong>
                                   </span>
                               </div>
-                              <div style={{ width: "60%" }} className="flex card p-5">
-                                  {" "}
+                              <br />
+                              <div style={{ width: "96%" }} className="flex card p-5">
                                   <p>{infoitem.value}</p>
                               </div>
                           </div>

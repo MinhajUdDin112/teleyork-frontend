@@ -16,6 +16,10 @@ export default function TabletBulkUploadReprovision({ permissions, unit, model }
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
     const loginRes = localStorage.getItem("userData");
     const [agent, setAgent] = useState(null);
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [department, setDepartment] = useState(null);
     const parseLoginRes = JSON.parse(loginRes); 
     const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);

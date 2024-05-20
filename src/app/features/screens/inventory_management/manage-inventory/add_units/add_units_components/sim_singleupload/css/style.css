@@ -1,38 +1,39 @@
-.field-width{ 
-     width:25vw;
-}  
-.card-sub{ 
-    width:23%;
+.field-width {
+    width: 25vw;
 }
-@media(max-width:1860px){ 
-    .field-width{  
-         
-        width:23vw;
+.card-sub {
+    width: 23%;
+}
+@media (max-width: 1860px) {
+    .field-width {
+        width: 23vw;
     }
-}    
-@media(max-width:1560px){ 
-    .field-width{  
-         
-        width:23vw;
+}
+@media (max-width: 1560px) {
+    .field-width {
+        width: 23vw;
     }
-} 
+}
 
-@media(max-width:1154px){ 
-    .field-width{  
-         
-        width:45vw;
+@media (max-width: 1154px) {
+    .field-width {
+        width: 45vw;
     }
-}  
-.manage-inventory{ 
-    width:23%;
-} 
-@media(max-width:1300px){ 
-    .manage-inventory{ 
-        width:40%;
-    }   
-} 
-@media(max-width:800px){ 
-    .manage-inventory{ 
-        width:70%;
-    }   
+}
+.manage-inventory {
+    width: 23%;
+}
+@media (max-width: 1300px) {
+    .manage-inventory {
+        width: 40%;
+    }
+}
+@media (max-width: 800px) {
+    .manage-inventory {
+        width: 70%;
+    }
+}
+
+.addunitdiv .card {
+    box-shadow: none !important;
 }

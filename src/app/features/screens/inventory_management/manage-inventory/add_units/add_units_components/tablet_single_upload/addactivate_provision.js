@@ -13,7 +13,11 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
 const BASE_URL=process.env.REACT_APP_BASE_URL
 export default function TabletSingleUploadAddActivateProvision({permissions,unit,model}) {
     let ref=useRef(null)
-    const loginRes = localStorage.getItem("userData");
+    const loginRes = localStorage.getItem("userData"); 
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const parseLoginRes = JSON.parse(loginRes);
     const [addTablet_Model_dialog_visibility, setAddTabletModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);

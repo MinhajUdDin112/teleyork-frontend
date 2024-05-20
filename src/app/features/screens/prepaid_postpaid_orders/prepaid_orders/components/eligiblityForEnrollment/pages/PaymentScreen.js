@@ -8,6 +8,8 @@ import PaymentStripModule from "./dialog/stripe_payment";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
+import { RadioButton } from "primereact/radiobutton";
+import { Tickbtn } from "../../../../../../../../utility";
 function capitalizeSentence(sentence) {
     // Split the sentence into words
     const words = sentence.split(" ");
@@ -25,13 +27,13 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     const [inventory, setInventory] = useState();
     const [propectWithInvoice, setProspectWithInvoice] = useState(false);
     const [propectWithOutInvoice, setProspectWithOutInvoice] = useState(false);
-    const [paymentmethoderror, setpaymentmethoderror] = useState(false)
+    const [paymentmethoderror, setpaymentmethoderror] = useState(false);
     const [current, setCurrentSelect] = useState("");
     const [currentPlanSelect, setCurrentPlanSelect] = useState("");
     const [currentScreen, setCurrentScreen] = useState(1);
     const [paymentDialogVisibility, setPaymentDialogVisibility] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);   
-    const [paidAmountRequired,setPaidAmountRequired]=useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [paidAmountRequired, setPaidAmountRequired] = useState(false);
     const [previousPlanPrice, setPreviousPlanPrice] = useState(0);
     let paymentInfo = JSON.parse(localStorage.getItem("paymentallinfo"))?.data;
     const validationSchema = Yup.object().shape({
@@ -80,33 +82,30 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
             type: "Sign Up ",
             discounts: "",
             prospectwithinvoice: false,
-            prospectwithoutinvoice: false
+            prospectwithoutinvoice: false,
         },
         onSubmit: async (values, actions) => {
             if (formik.values.prospectwithoutinvoice || formik.values.prospectwithinvoice) {
-                localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values))
-                setActiveIndex(3)
-            }
-            else {
-                if (formik.values.paymentMode === "card" ) {  
-                       if(formik.values.paid !== ""){
-                    localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values))
-                    if (localStorage.getItem("paymentstatus")) {
-                        if (localStorage.getItem("paymentstatus") === "paid") {
-                            setActiveIndex(3);
+                localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values));
+                setActiveIndex(3);
+            } else {
+                if (formik.values.paymentMode === "card") {
+                    if (formik.values.paid !== "") {
+                        localStorage.setItem("paymentscreendetails", JSON.stringify(formik.values));
+                        if (localStorage.getItem("paymentstatus")) {
+                            if (localStorage.getItem("paymentstatus") === "paid") {
+                                setActiveIndex(3);
+                            } else {
+                                setPaymentDialogVisibility(true);
+                            }
                         } else {
                             setPaymentDialogVisibility(true);
                         }
                     } else {
-                        setPaymentDialogVisibility(true);
-                    } 
-                } 
-                else{ 
-                    setPaidAmountRequired(true)
-                }
-                }
-                else {
-                    setpaymentmethoderror(true)
+                        setPaidAmountRequired(true);
+                    }
+                } else {
+                    setpaymentmethoderror(true);
                 }
             }
         },
@@ -171,46 +170,35 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
     }
     return (
         <form onSubmit={formik.handleSubmit}>
-            <div className="card">
+            <div>
                 <div className="flex flex-wrap flex-row justify-content-around">
-                    <div className="w-full  flex flex-wrap flex-row justify-content-between ">
-                        <Button
-                            label="Back"
-                            type="button"
-                            onClick={() => {
-                                if (currentScreen !== 1) {
-                                    setCurrentScreen((prev) => (prev = prev - 1));
-                                } else {
-                                    setActiveIndex(1);
-                                }
-                            }}
-                        />
-                        <Button
-                            label="Continue"
-                            type={currentScreen < 4 ? "button" : "submit"}
-                            icon={isLoading ? "pi pi-spinner" : ""}
-                            disabled={(current === "" && currentScreen === 1) || (currentPlanSelect === "" && currentScreen === 2)}
-                            onClick={() => {
-                                if (currentScreen !== 3) {
-                                    setCurrentScreen((prev) => (prev = prev + 1));
-                                } else {
-                                    formik.handleSubmit();
-                                }
-                            }}
-                        />
-                    </div>
-                    <div>
+                    {/* <div>
                         <h5 className="font-bold text-left">ENROLLMENT ID: {enrollment_id}</h5>
-                    </div>
+                    </div> */}
                     {currentScreen === 1 ? (
                         <div className="mt-2 w-full flex flex-wrap flex-row justify-content-around">
-                            <h1 className="block w-full selectProduct">Select Product</h1>
+                            <h1 style={{ fontSize: "16px" }} className="h5 selectProduct mt-6">
+                                SELECT PRODUCT
+                            </h1>
                             {JSON.parse(localStorage.getItem("inventoryType"))?.map((item) => {
                                 return (
-                                    <div style={{ opacity: `${item.label === current ? "0.5" : ""}` }} className="inventorySelect">
-                                        <h1>{capitalizeSentence(item?.label)}</h1>
-                                        <img src={`./${item.label}.jpg`} />
-                                        <button
+                                    <div style={{ opacity: `${item.label === current ? "0.5" : ""}`, marginTop: "11rem" }} className="inventorySelect">
+                                        <div style={{ display: "flex", alignItems: "center" }}>
+                                            <RadioButton
+                                                style={{ zIndex: "0" }}
+                                                type="button"
+                                                disabled={item?.label === current || paymentInfo}
+                                                onClick={() => {
+                                                    onInventorySelect(item);
+                                                }}
+                                            />
+                                            <h1 className="w-full h4" style={{ marginLeft: "-20px", textTransform: "uppercase" }}>
+                                                {capitalizeSentence(item?.label)}
+                                            </h1>
+                                        </div>
+
+                                        <img className="simimg" src={`./${item.label}.jpg`} />
+                                        {/* <button
                                             type="button"
                                             disabled={item?.label === current || paymentInfo}
                                             onClick={() => {
@@ -218,58 +206,45 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                             }}
                                         >
                                             Select
-                                        </button>
+                                        </button> */}
                                     </div>
                                 );
                             })}
                         </div>
                     ) : undefined}
                     {currentScreen === 2 ? (
-                        <div className="mt-2 w-full flex flex-wrap flex-row justify-content-left">
-                            <h1 className="block w-full selectProduct">Select Plan</h1>
+                        <div style={{ marginTop: "3.5rem" }} className=" w-full flex flex-wrap flex-row justify-content-evenly">
+                            <h1 className="w-full selectplan "> SELECT PLAN</h1>
                             {JSON.parse(localStorage.getItem("planprices"))?.map((item) => {
-                                let include = false
+                                let include = false;
                                 if (inventory === "SIM") {
-                                    let plans = JSON.parse(localStorage.getItem("simplan"))
+                                    let plans = JSON.parse(localStorage.getItem("simplan"));
                                     for (let i = 0; i < plans.length; i++) {
                                         if (plans[i].value === item?._id) {
-                                            include = true
-                                            break
+                                            include = true;
+                                            break;
+                                        }
+                                    }
+                                } else if (inventory === "WIRELESS DEVICE") {
+                                    let plans = JSON.parse(localStorage.getItem("deviceplan"));
+                                    for (let i = 0; i < plans.length; i++) {
+                                        if (plans[i].value === item?._id) {
+                                            include = true;
+                                            break;
                                         }
                                     }
                                 }
-                                else if (inventory === "WIRELESS DEVICE") {
-                                    let plans = JSON.parse(localStorage.getItem("deviceplan"))
-                                    for (let i = 0; i < plans.length; i++) {
-                                        if (plans[i].value === item?._id) {
-                                            include = true
-                                            break
-                                        }
-                                    }
-                                }
-                                return (
-                                    include ?
-                                        <>
-                                            <div style={{ opacity: `${item._id === currentPlanSelect ? "0.5" : ""}` }} className="planSelect">
-                                                <div className="planinfo">
-                                                    <h1>{capitalizeSentence(item?.name)}</h1>
-                                                    <h1>No Hidden Fees / No Contracts</h1>
-                                                </div>
-                                                <h1 className="planprice">
-                                                    <span>$</span>
-                                                    <span>{item?.price}</span>
+                                return include ? (
+                                    <>
+                                        <div className="planSelect " style={{ opacity: `${item._id === currentPlanSelect ? "0.5" : ""} ` }}>
+                                            <div className="planinfo">
+                                                <h1 style={{ marginLeft: "15px", marginTop: "10px" }}>{capitalizeSentence(item?.name)}</h1>
+                                                <h1 style={{ marginLeft: "15px" }}>No Hidden Fees / No Contracts</h1>
+                                                <h1 style={{ marginLeft: "15px" }} className="planprice">
+                                                    <span style={{ fontFamily: "Inter", fontSize: "38px", fontWeight: "600", marginTop: "1px" }}>$</span>
+                                                    <span style={{ marginLeft: "36px" }}>{item?.price}</span>
+                                                    <span style={{ fontWeight: "600", fontFamily: "Inter", fontSize: "18px", marginLeft: "10px" }}>Monthly</span>
                                                 </h1>
-                                                <p className="chargetype">Monthly</p>
-                                                <p className="voiceallowance">
-                                                    Voice Allowance {item?.voiceAllowance} <span>{item.voiceAllowanceUnit}</span>
-                                                </p>
-                                                <p className="dataallowance">
-                                                    Data Allowance {item?.dataAllowance} <span>{item.dataAllowanceUnit}</span>
-                                                </p>
-                                                <p className="textallowance">
-                                                    Text Allowance {item?.textAllowance} <span>{item.textAllowanceUnit}</span>
-                                                </p>
-
                                                 <button
                                                     type="button"
                                                     disabled={item?._id === currentPlanSelect || paymentInfo}
@@ -277,78 +252,91 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                                         onPlanSelect(item);
                                                     }}
                                                 >
-                                                    Select
+                                                    GET STARTED
                                                 </button>
                                             </div>
-                                        </>
-                                        : undefined
-                                )
 
+                                            <p className="voiceallowance">
+                                                <Tickbtn />
+                                                <span style={{ marginLeft: "6px" }}>
+                                                    Voice Allowance {item?.voiceAllowance} <span>{item.voiceAllowanceUnit}</span>
+                                                </span>
+                                            </p>
+                                            <p className="dataallowance">
+                                                <Tickbtn />
+                                                <span style={{ marginLeft: "10px" }}>
+                                                    Data Allowance {item?.dataAllowance} <span>{item.dataAllowanceUnit}</span>
+                                                </span>
+                                            </p>
+                                            <p className="textallowance">
+                                                <Tickbtn />
+                                                <span style={{ marginLeft: "10px" }}>
+                                                    Text Allowance {item?.textAllowance} <span>{item.textAllowanceUnit}</span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </>
+                                ) : undefined;
                             })}
                         </div>
                     ) : undefined}
                     {currentScreen === 3 ? (
-                        <div className="w-full flex flex-wrap flex-row justify-content-left w-full">
-
-                            <div className="flex w-full flex-wrap flex-row justify-content-left ">
+                        <div className="w-full flex flex-wrap flex-row justify-content-left w-full prospdiv">
+                            <div className="flex w-full flex-wrap flex-row justify-content-left  mt-6 ">
                                 <p
                                     className={`prospectbutton ${propectWithInvoice ? "prospectactive" : ""}`}
                                     onClick={() => {
-                                        
-                                        formik.setFieldValue("paymentMode", "")
-                                        formik.setFieldValue("prospectwithoutinvoice", false)
-                                        setpaymentmethoderror(false)
-                                         if(propectWithInvoice){
-                                        setProspectWithInvoice(false);  
-                                        
-                                        formik.setFieldValue("prospectwithinvoice", false) 
-                                         } 
-                                         else{ 
-                                               
-                                        setProspectWithInvoice(true);  
-                                        formik.setFieldValue("paid","")
-                                        formik.setFieldValue("prospectwithinvoice", true) 
-                                         }
+                                        formik.setFieldValue("paymentMode", "");
+                                        formik.setFieldValue("prospectwithoutinvoice", false);
+                                        setpaymentmethoderror(false);
+                                        if (propectWithInvoice) {
+                                            setProspectWithInvoice(false);
+
+                                            formik.setFieldValue("prospectwithinvoice", false);
+                                        } else {
+                                            setProspectWithInvoice(true);
+                                            formik.setFieldValue("paid", "");
+                                            formik.setFieldValue("prospectwithinvoice", true);
+                                        }
                                         setProspectWithOutInvoice(false);
                                     }}
+                                    style={{ border: " 1px solid #0475b4", borderRadius: "8px", fontWeight: "600", fontSize: "14px", fontFamily: "Inter" }}
                                 >
-                                    {" "}
                                     Save As Prospect With Invoice
                                 </p>
 
                                 <p
                                     onClick={() => {
-                                        formik.setFieldValue("paymentMode", "")
-                                        setpaymentmethoderror(false)
+                                        formik.setFieldValue("paymentMode", "");
+                                        setpaymentmethoderror(false);
 
-                                        formik.setFieldValue("prospectwithinvoice", false) 
-                                        if(propectWithOutInvoice){
-                                            setProspectWithOutInvoice(false);  
-                                            
-                                            formik.setFieldValue("prospectwithoutinvoice", false) 
-                                             } 
-                                             else{ 
-                                                   
-                                            setProspectWithOutInvoice(true);  
-                                            formik.setFieldValue("paid","")
-                                            formik.setFieldValue("prospectwithoutinvoice", true) 
-                                             }
+                                        formik.setFieldValue("prospectwithinvoice", false);
+                                        if (propectWithOutInvoice) {
+                                            setProspectWithOutInvoice(false);
+
+                                            formik.setFieldValue("prospectwithoutinvoice", false);
+                                        } else {
+                                            setProspectWithOutInvoice(true);
+                                            formik.setFieldValue("paid", "");
+                                            formik.setFieldValue("prospectwithoutinvoice", true);
+                                        }
                                         setProspectWithInvoice(false);
                                     }}
-                                    className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""}`}
+                                    className={`prospectbutton ${propectWithOutInvoice ? "prospectactive" : ""} `}
+                                    style={{ border: " 1px solid #0475b4", borderRadius: "8px", fontWeight: "600", fontSize: "14px", fontFamily: "Inter" }}
                                 >
                                     {" "}
                                     Save As Prospect WithOut Invoice
                                 </p>
                             </div>
 
-                            <div className="mt-2  fieldinpayment">
-                                <label className="block">Select Additional Feature</label>
+                            <div className="mt-2  calendar_field">
+                                <label className="field_label">Select Additional Feature</label>
                                 {inventory === "SIM" ? (
                                     <>
                                         <MultiSelect
                                             disabled={paymentInfo ? true : false}
-                                            className="w-full mt-2"
+                                            className="w-full mt-2  discountmultiselect .p-multiselect-trigger "
                                             id="additional"
                                             placeholder="Select Additional Feature"
                                             optionLabel="name"
@@ -388,7 +376,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <>
                                         <MultiSelect
                                             disabled={paymentInfo ? true : false}
-                                            className="w-full mt-2"
+                                            className="w-full mt-2 discountmultiselect .p-multiselect-trigger"
                                             placeholder="Select Additional Feature"
                                             id="additional"
                                             optionLabel="name"
@@ -427,15 +415,13 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 )}
                             </div>
 
-
-
-                            <div className="mt-2  fieldinpayment">
-                                <label className="block">Select Discounts</label>
+                            <div style={{ marginLeft: "4px" }} className="mt-2  calendar_field">
+                                <label className="field_label">Select Discounts</label>
                                 {inventory === "SIM" ? (
                                     <>
                                         <MultiSelect
                                             disabled={paymentInfo ? true : false}
-                                            className="w-full mt-2"
+                                            className="w-full mt-2 discountmultiselect .p-multiselect-trigger"
                                             id="discount"
                                             placeholder="Select Discounts"
                                             optionLabel="discountname"
@@ -476,7 +462,7 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     <>
                                         <MultiSelect
                                             disabled={paymentInfo ? true : false}
-                                            className="w-full mt-2"
+                                            className="w-full mt-2 discountmultiselect .p-multiselect-trigger"
                                             placeholder="Select Discounts"
                                             id="discount"
                                             optionLabel="discountname"
@@ -515,8 +501,8 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                     </>
                                 )}
                             </div>
-                            <div className="mt-2 fieldinpayment">
-                                <label className="block">Net Amount</label>
+                            <div style={{ marginLeft: "4px" }} className="mt-2 calendar_field">
+                                <label className="field_label">Net Amount</label>
                                 <InputText
                                     disabled
                                     className="w-full mt-2"
@@ -530,67 +516,93 @@ const PaymentScreen = ({ setActiveIndex, enrollment_id, _id, csr }) => {
                                 {getFormErrorMessage("totalpayment")}
                             </div>
                             {formik.values.paymentMode === "card" ? (
-                                <div className="mt-2 fieldinpayment">
-                                    <label className="block">Paying Amount</label>
+                                <div className="mt-6 calendar_field">
+                                    <label className="field_label">Paying Amount</label>
                                     <InputText
                                         disabled={paymentInfo ? true : false}
                                         className="w-full mt-2"
                                         id="paid"
                                         value={formik.values.paid}
-                                        onChange={(e) => {  
-                                             if(e.target.value === ""){ 
-                                                 setPaidAmountRequired(true)
-                                             } 
-                                             else{ 
-                                                setPaidAmountRequired(false)
-                                             }
+                                        onChange={(e) => {
+                                            if (e.target.value === "") {
+                                                setPaidAmountRequired(true);
+                                            } else {
+                                                setPaidAmountRequired(false);
+                                            }
                                             formik.setFieldValue("paid", e.target.value);
                                             // formik.handleChange(e);
                                         }}
-                                    /> 
-                                     { 
-                                        paidAmountRequired  ? <p className="p-error mt-1 ml-1">Paying Amount Is Required</p>:""
-                                      }
+                                    />
+                                    {paidAmountRequired ? <p className="p-error mt-1 ml-1">Paying Amount Is Required</p> : ""}
                                     {getFormErrorMessage("paid")}
                                 </div>
                             ) : (
                                 ""
                             )}
 
-                            <div className="mt-2 fieldinpayment">
-                                <label className="block">Select Payment Method</label>
+                            <div style={{ marginLeft: "4px" }} className="mt-6 calendar_field">
+                                <label className="field_label">Select Payment Method</label>
                                 <Dropdown
                                     disabled={paymentInfo ? true : false}
-                                    className="w-full mt-2"
+                                    className="w-full mt-2 p-dropdown .p-dropdown-trigger"
                                     id="paymentMode"
                                     options={optionsForPayment}
                                     value={formik.values.paymentMode}
                                     onChange={(e) => {
                                         formik.setFieldValue("paymentMode", e.value);
                                         formik.handleChange(e);
-                                        setpaymentmethoderror(false)
+                                        setpaymentmethoderror(false);
                                         setProspectWithOutInvoice(false);
-                                        formik.setFieldValue("prospectwithoutinvoice", false)
+                                        formik.setFieldValue("prospectwithoutinvoice", false);
 
-                                        formik.setFieldValue("prospectwithinvoice", false)
+                                        formik.setFieldValue("prospectwithinvoice", false);
                                         setProspectWithInvoice(false);
                                         /* if (e.value === "card") {
                                     setPaymentDialogVisibility(true);
                                 }*/
                                     }}
                                 />
-                                {paymentmethoderror && (<p className="p-error">Payment Method Is Required</p>)}
+                                {paymentmethoderror && <p className="p-error">Payment Method Is Required</p>}
                             </div>
                         </div>
                     ) : undefined}
                     {formik.values.paymentMode == "card" && !(localStorage.getItem("paymentstatus") === "paid") ? (
                         <>
-                            <Dialog className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} setPaymentDialogVisibility={setPaymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
+                            <Dialog style={{ textAlign: "center" }} className="stripe-dialog-width" header="Stripe Payment" visible={paymentDialogVisibility} setPaymentDialogVisibility={setPaymentDialogVisibility} onHide={() => setPaymentDialogVisibility(false)}>
                                 <PaymentStripModule paid={formik.values.paid} plan={formik.values.plan} setPaymentDialogVisibility={setPaymentDialogVisibility} amount={formik.values.totalamount} object={formik.values} setActiveIndex={setActiveIndex} />
                             </Dialog>
                         </>
                     ) : undefined}
                 </div>
+            </div>
+            <div className=" flex justify-content-right mt-8 ">
+                <Button
+                    style={{ marginLeft: "80%" }}
+                    className="btn"
+                    label="Back"
+                    type="button"
+                    onClick={() => {
+                        if (currentScreen !== 1) {
+                            setCurrentScreen((prev) => (prev = prev - 1));
+                        } else {
+                            setActiveIndex(1);
+                        }
+                    }}
+                />
+                <Button
+                    className="btn ml-2"
+                    label="Continue"
+                    type={currentScreen < 4 ? "button" : "submit"}
+                    icon={isLoading ? "pi pi-spinner" : ""}
+                    disabled={(current === "" && currentScreen === 1) || (currentPlanSelect === "" && currentScreen === 2)}
+                    onClick={() => {
+                        if (currentScreen !== 3) {
+                            setCurrentScreen((prev) => (prev = prev + 1));
+                        } else {
+                            formik.handleSubmit();
+                        }
+                    }}
+                />
             </div>
         </form>
     );

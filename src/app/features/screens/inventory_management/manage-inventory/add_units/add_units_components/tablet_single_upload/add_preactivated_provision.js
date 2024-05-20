@@ -19,6 +19,10 @@ export default function TabletSingleUploadAddPreActivatedProvision({permissions,
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [Model, setModel] = useState(null);   
     //Make Option 

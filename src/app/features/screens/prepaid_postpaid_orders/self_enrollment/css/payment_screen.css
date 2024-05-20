@@ -1,142 +1,153 @@
-.inventorySelect,.planSelect{ 
-    width:350px; 
-    padding:10px;   
+.inventorySelect,
+.planSelect {
+    width: 350px;
+    padding: 10px;
     height: 350px;
-    overflow: hidden;  
-     border: solid rgba(0,0,0,.1) 1px; 
-     border-radius: 10px; 
-     margin-top: 10px;    
-     font-size: 12px;
-     transition: opacity 250ms ease-in-out;
-     position: relative;
-}     
-.inventorySelect{ 
-     width: 220px; 
-     height: 240px;
+    overflow: hidden;
+    border: solid rgba(0, 0, 0, 0.1) 1px;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-size: 12px;
+    transition: opacity 250ms ease-in-out;
+    position: relative;
 }
-.prospectbutton{  
+.inventorySelect {
+    width: 220px;
+    height: 240px;
+}
+.prospectbutton {
     padding: 6px;
-  padding-left: 10px; 
-  padding-right: 10px;         
- border-radius: 4px; 
- cursor: pointer;
- background-color: white;  
- border:solid rgba(177, 176, 176, 0.8) 1px; 
- height: 35px;
- font-weight: normal;
-  margin-left: 1%; 
-  transition: background-color color  500ms ease-in-out;
-}  
-
-.prospectactive{ 
-    background-color: #4F46E5; 
-    color: white;
-    border: solid #4F46E5 1px ;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: white;
+    border: solid rgba(177, 176, 176, 0.8) 1px;
+    height: 35px;
+    font-weight: normal;
+    margin-left: 1%;
+    transition: background-color color 500ms ease-in-out;
 }
-.prospectbutton:nth-of-type(2){ 
+
+.prospectactive {
+    background-color: #c68301;
+    color: white;
+    border: none !important;
+}
+.prospectbutton:hover {
+    background-color: #c6840146 !important;
+}
+.prospectbutton:nth-of-type(2) {
     margin-left: 10px;
 }
-.inventorySelect h1,.selectProduct{ 
-    font-size: 14px; 
-margin-top: 10px;
-}    
-.planSelect{ 
-    padding: 0px; 
-     width: 32%; 
-     margin-left: 1%;
+.inventorySelect h1,
+.selectProduct {
+    font-size: 14px;
+    margin-top: 10px;
 }
-.planSelect .planinfo{ 
-    width: 100%;
-    background-color: #336EF9;   
-    padding: 12px;  
-
-     
-} 
-.planSelect .planinfo h1{ 
-    text-align: center; 
-    font-size: 18px;  
-    color: white;
-} 
-.planSelect .planinfo h1:nth-of-type(2){ 
-    font-size: 14px; 
-    font-weight: normal;
-}
-.selectProduct{ 
-    font-weight: 600;  
-   font-size: 14px;
-}
-.inventorySelect img{ 
-     width:120px; 
-     margin-left: 50%; 
-     transform: translate(-50%);
-     height: auto;  
-     border-radius:5px ;
-} 
-.inventorySelect button{ 
-     background-color:rgba(14, 151, 4, 0.8);  
-     color: white; 
-     border: none ; 
-     border-radius: 5px; 
-      margin-left: 50%; 
-      transform: translate(-50%);  
-     padding: 10px; 
-     padding-left: 15px; 
-     padding-right: 15px;   
-     position: absolute; 
-    bottom: 15px;  
-    cursor: pointer;
-}     
-.fieldinpayment{ 
-    width: 32%; 
+.planSelect {
+    padding: 0px;
+    width: 32%;
     margin-left: 1%;
 }
-.planSelect  button{ 
-    background-color:rgba(14, 151, 4, 0.8);  
-     color: white; 
-     border: none ; 
-     border-radius: 5px; 
-      margin-left: 50%; 
-      transform: translate(-50%);  
-     padding: 10px; 
-     padding-left: 15px; 
-     padding-right: 15px;   
-     position: absolute; 
-    bottom: 15px;    
-
-    cursor: pointer;
-} 
-.planSelect .planprice{ 
-    text-align: center;
-} 
-.planSelect .planprice span:nth-of-type(1){ 
-    font-size: 14px; 
-    position: absolute;
-} 
-.planSelect .planprice span:nth-of-type(2){ 
-    margin-left: 10px; 
-    font-weight: 900;
-} 
-.planSelect .chargetype{ 
-    text-align: center; 
-    margin-left: 10px; 
-    margin-top: -15px;
+.planSelect .planinfo {
+    width: 100%;
+    background-color: #336ef9;
+    padding: 12px;
 }
-.voiceallowance,.dataallowance,.textallowance{ 
-    font-weight: 900; 
-    width: 80%; 
-    margin-left: 50%;  
-    text-align: center;
-    transform: translate(-50%);
-} 
-.voiceallowance span,.dataallowance span,.textallowance span{ 
-  font-size: 10px; 
-  font-weight: 900;  
-  margin-left: -1px;
-  text-transform: uppercase;
-} 
-.inventoryscreens{  
-    width:95%;    
+.planSelect .planinfo h1 {
+    text-align: left;
+    font-size: 22px;
+    color: white;
+    font-weight: bold;
+}
+.planSelect .planinfo h1:nth-of-type(2) {
+    font-size: 16px;
+    font-weight: 300;
+    text-align: left;
+}
+.selectProduct {
+    font-weight: 600;
+    font-size: 14px;
+}
+.inventorySelect img {
+    width: 120px;
     margin-left: 50%;
-    margin-top: 10vh; 
+    transform: translate(-50%);
+    height: auto;
+    border-radius: 5px;
+}
+.inventorySelect button {
+    background-color: white;
+    color: #073170;
+    border: none;
+    border-radius: 5px;
+    margin-left: 50%;
+    transform: translate(-50%);
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    bottom: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.fieldinpayment {
+    width: 32%;
+    margin-left: 1%;
+}
+.planSelect button {
+    background-color: white;
+    color: #073170;
+    border: none;
+    border-radius: 5px;
+    margin-left: 50%;
+    transform: translate(-50%);
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    bottom: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.planSelect .planprice {
+    text-align: center;
+}
+.planSelect .planprice span:nth-of-type(1) {
+    font-size: 24px;
+    position: absolute;
+}
+.planSelect .planprice span:nth-of-type(2) {
+    margin-left: 22px;
+    font-size: 38px;
+    font-weight: 700;
+}
+.planSelect .chargetype {
+    text-align: center;
+    margin-left: 10px;
+    margin-top: -35px;
+}
+.voiceallowance,
+.dataallowance,
+.textallowance {
+    font-weight: 300;
+    width: 80%;
+    font-size: 12px;
+    text-align: left;
+    transform: translate(-50%);
+}
+.voiceallowance span,
+.dataallowance span,
+.textallowance span {
+    font-size: 12px;
+    font-weight: 300;
+}
+.inventoryscreens {
+    width: 95%;
+    margin-left: 50%;
+    margin-top: 10vh;
     transform: translate(-50%);
 }

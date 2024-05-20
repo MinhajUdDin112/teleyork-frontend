@@ -1,17 +1,21 @@
-import React, { useState ,useRef,useEffect} from "react";
-import { useFormik } from "formik"; 
-import * as Yup from "yup";  
-import Axios  from "axios";    
+import React, { useState, useRef, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Axios from "axios";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
-import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";  
-const BASE_URL=process.env.REACT_APP_BASE_URL
-export default function SIMSingleUploadAddPreActivatedProvision({permissions,unit,model}) {
-    let ref=useRef(null)
+import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+export default function SIMSingleUploadAddPreActivatedProvision({ permissions, unit, model }) {
+    let ref = useRef(null); 
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
@@ -19,7 +23,7 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState( parseLoginRes?.department);
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [Model, setModel] = useState(null);
     useEffect(() => {
         if (department === null) {
@@ -33,9 +37,8 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                         departmentholder.push(obj);
                     }
                     setDepartment(departmentholder);
-                 })
-                .catch(() => {
-                });
+                })
+                .catch(() => {});
         }
     }, []);
     useEffect(() => {
@@ -52,8 +55,7 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
 
                     setAgent(agentholder);
                 })
-                .catch(() => {
-                });
+                .catch(() => {});
         }
     }, [departmentselected]);
     useEffect(() => {
@@ -69,8 +71,7 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
 
                 setCarrier(carrierholder);
             })
-            .catch(() => {
-            });
+            .catch(() => {});
         Axios.get(`${BASE_URL}/api/simType/all`)
             .then((res) => {
                 let Modelholder = [];
@@ -83,19 +84,15 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
 
                 setModel(Modelholder);
             })
-            .catch(() => {
-            });
+            .catch(() => {});
     }, []);
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-            SimNumber: Yup.string()
-            .required("ESN is required")
-            .matches(/^\d+$/, 'ESN must contain only digits')
-            .length(19, "ESN must be exactly 19 digits"),
+            SimNumber: Yup.string().required("ESN is required").matches(/^\d+$/, "ESN must contain only digits").length(19, "ESN must be exactly 19 digits"),
             box: Yup.string().required("Box is required"),
             Model: Yup.string().required("Model is required"),
-         AgentName: Yup.string().required("Agent Name is required"),
+            AgentName: Yup.string().required("Agent Name is required"),
             agentType: Yup.string().required("Department is required"),
         }),
         initialValues: {
@@ -107,31 +104,28 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
             /* team: "",*/
             box: "",
             Model: "",
-            unitType:unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
-            provisionType: "Add Pre-Activated", 
-   
+            provisionType: "Add Pre-Activated",
         },
 
-        onSubmit: (values,actions) => {
+        onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
     });
     function handlesubmit(actions) {
-         let obj=formik.values; 
-         obj.serviceProvider=parseLoginRes.company 
+        let obj = formik.values;
+        obj.serviceProvider = parseLoginRes.company;
         if (Object.keys(formik.errors).length === 0) {
-            //formik.values.serviceProvider = parseLoginRes?.company;  
-            
+            //formik.values.serviceProvider = parseLoginRes?.company;
+
             Axios.post(`${BASE_URL}/api/web/simInventory/AddPreSimActivated`, obj)
                 .then((res) => {
-                    formik.values.serviceProvider = parseLoginRes?.companyName;  
-                    ref.current.show({ severity: "success", summary: "Inventory", detail:"Successfully Added"});
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    ref.current.show({ severity: "success", summary: "Inventory", detail: "Successfully Added" });
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    ;
-                    ;
                     formik.setFieldValue("SimNumber", "");
 
                     formik.setFieldValue("box", "");
@@ -142,25 +136,22 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                     formik.setFieldValue("provisionType", "Add Pre-Activated");
                     actions.resetForm();
-                    ;
-                
                 })
-                .catch((error) => {  
-                    formik.values.serviceProvider = parseLoginRes?.companyName; 
-                    ref.current.show({ severity: "error", summary: "Inventory", detail:error.response.data.msg});
-                });  
-                  
-        }           
+                .catch((error) => {
+                    formik.values.serviceProvider = parseLoginRes?.companyName;
+                    ref.current.show({ severity: "error", summary: "Inventory", detail: error.response.data.msg });
+                });
+        }
     }
     return (
         <>
-           <div>
-                <div className="flex flex-wrap mb-3 justify-content-around ">
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+            <div>
+                <div className="flex flex-wrap mb-3 justify-content-left ">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-2">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-full mt-1 ml-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -168,24 +159,24 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                         )}
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-2">
                             ESN/SIM Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText keyfilter="int" value={formik.values.SimNumber}maxLength={19} minLength={19} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText keyfilter="int" value={formik.values.SimNumber} maxLength={19} minLength={19} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full ml-3 mt-1" />
                         {formik.errors.SimNumber && formik.touched.SimNumber && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumber}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-4 mt-2">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-full ml-4 mt-1" />
                     </div>
-                  {/*  <div className="mr-3 mb-3 mt-3">
+                    {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
                             Team <span style={{ color: "red" }}>* </span>
                         </p>
@@ -206,22 +197,22 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                             </div>
                         )}
                     </div>    */}
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-5">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
- 
-                        <Dropdown 
-                        disabled
+
+                        <Dropdown
+                            disabled
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                
+
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="field-width mt-2"
+                            className="w-full ml-2 mt-1"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -229,24 +220,23 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-5">
                             Agent Name <span style={{ color: "red" }}>* </span>
-                            {formik.values.AgentName !== "" ? (  
-                                     <Button style={{border:"none",padding:"0px",backgroundColor:"transparent"}} disabled={!(permissions.isCreate)}>
-                              
-                                <i
-                                    onClick={() => {
-                                        setAddAgentDialogVisbility((prev) => !prev);
-                                    }}
-                                    className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
-                                ></i>  
+                            {formik.values.AgentName !== "" ? (
+                                <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
+                                    <i
+                                        onClick={() => {
+                                            setAddAgentDialogVisbility((prev) => !prev);
+                                        }}
+                                        className="pi pi pi-plus"
+                                        style={{ marginLeft: "5px", fontSize: "10px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    ></i>
                                 </Button>
                             ) : undefined}
                         </p>
 
-                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-full ml-3 mt-1" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -254,8 +244,8 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                         )}
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-5">
                             Model<span style={{ fontSize: "12px" }}>(MICRO/NANO/SIM)</span>
                             <span style={{ color: "red" }}>
                                 *
@@ -264,23 +254,23 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                                         setAddSimModelDialogVisbility((prev) => !prev);
                                     }}
                                     className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    style={{ marginLeft: "5px", fontSize: "10px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-full ml-4 mt-1" />
                         {formik.errors.Model && formik.touched.Model && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Model}
                             </div>
                         )}
                     </div>
-                
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-6">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full ml-2 mt-1" />
                         {formik.errors.box && formik.touched.box && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.box}
@@ -288,15 +278,16 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                         )}
                     </div>
                 </div>
-                <div className="flex flex-wrap justify-content-center align-item-center">
+                <div className="flex flex-wrap justify-content-end w-full">
                     <Button
-                        label="Submit" 
-                        className="field-width"
+                        style={{ marginTop: "3rem", position: "absolute" }}
+                        label="Submit"
+                        className="btn"
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()
-                        }}  
-                        disabled={!(permissions.isCreate)}
+                        }}
+                        disabled={!permissions.isCreate}
                     />
                 </div>
             </div>
@@ -315,8 +306,8 @@ export default function SIMSingleUploadAddPreActivatedProvision({permissions,uni
                 }}
             >
                 <AddAgentDetail agent={"Dummy"} />
-            </Dialog>   
-            <Toast ref={ref}/>
+            </Dialog>
+            <Toast ref={ref} />
         </>
     );
 }
