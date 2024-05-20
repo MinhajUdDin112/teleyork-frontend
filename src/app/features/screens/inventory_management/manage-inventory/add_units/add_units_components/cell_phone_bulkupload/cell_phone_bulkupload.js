@@ -11,7 +11,11 @@ import { Button } from "primereact/button";
 import InfoForUsers from "./InfoForUsers/info_for_users";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function CellPhoneBulkUpload({ permissions, unit, model }) {
-    const ref = useRef(null);
+    const ref = useRef(null); 
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
     const loginRes = localStorage.getItem("userData");

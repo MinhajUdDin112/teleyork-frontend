@@ -12,6 +12,10 @@ import AddAgentDetail from "./Dialogs/add_agent_detail";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function SIMSingleUploadAddProvision({ permissions, unit, model }) {
     let ref = useRef(null);
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const loginRes = localStorage.getItem("userData");
     const parseLoginRes = JSON.parse(loginRes);
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);

@@ -18,7 +18,10 @@ export default function SIMBulkUploadAddActivateProvision({ permissions, unit, m
     const [agent, setAgent] = useState(null);
     const [department, setDepartment] = useState(null);
     const parseLoginRes = JSON.parse(loginRes);
-
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [carrier, setCarrier] = useState(null);
     const [fileerror, setFileError] = useState(false);

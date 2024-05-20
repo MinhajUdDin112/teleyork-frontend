@@ -13,7 +13,11 @@ import { Dialog } from "primereact/dialog";
 import InfoForUsers from "./InfoForUsers/info_for_users";
 export default function SIMBulkUploadAddAndAssignNonActivateProvision({ permissions, unit, model }) {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
-    const ref = useRef(null);
+    const ref = useRef(null);   
+    useEffect(()=>{  
+        formik.values.billingModel=model
+       console.log(formik.values)
+},[model])
     const [filename, setFilename] = useState(null);
     const [addAgentDialogVisibility, setAddAgentDialogVisibility] = useState(false);
     const loginRes = localStorage.getItem("userData");
