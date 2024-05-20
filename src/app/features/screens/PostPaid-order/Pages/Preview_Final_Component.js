@@ -38,7 +38,7 @@ const Preview_Final_component = ({ enrollment_id }) => {
                         {enrollment_id}
                     </i>
                 </h3>
-                <Button label="OK" onClick={zipRes ? movePage : movepageToAll} className="final-btn" />
+                <Button style={{marginLeft:"45rem"}} label="OK" onClick={zipRes ? movePage : movepageToAll} className="final-btn" />
             </div>
         </>
     );

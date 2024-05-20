@@ -12,6 +12,7 @@ import classNames from "classnames";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+import "./personalInfo.css";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
@@ -21,8 +22,8 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
     const [isPoBox, setIsPoBox] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const zipDataLs = localStorage.getItem("prepaidbasicData");
-    const zipDataParsed = JSON.parse(zipDataLs);     
-    
+    const zipDataParsed = JSON.parse(zipDataLs);
+
     const zipCode = zipDataParsed?.data?.zip;
     const zipCity = zipDataParsed?.data?.city;
     const zipState = zipDataParsed?.data?.state;
@@ -125,7 +126,7 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
             formik.setFieldValue("mailingState", zipState);
             formik.setFieldValue("poBoxZip", zipCode);
             formik.setFieldValue("poBoxCity", zipCity);
-            formik.setFieldValue("poBoxState", zipState);        
+            formik.setFieldValue("poBoxState", zipState);
         }
     }, [zipCode]);
 
@@ -311,43 +312,34 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
         <>
             <ToastContainer />
             <form onSubmit={formik.handleSubmit}>
-                <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
-                    <div>
-                        <Button label="Back" type="button" onClick={handleBack} />
-                    </div>
-                    <div className="fixed-button-container">
-                        {" "}
-                        <Button label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
-                    </div>
-                </div>
-                <div>
+                {/* <div>
                     <h5 className="font-bold">ENROLLMENT ID: {enrollment_id}</h5>
-                </div>
+                </div> */}
 
                 <br></br>
-                <p className="text-xl">What is your home address?</p>
-                <p>Please provide the address at which you will receive service; P.O. Box addresses are not acceptable.</p>
+                <p className="fname" style={{ marginTop: "-2px" }}>
+                    WHAT IS YOUR HOME ADDRESS?
+                </p>
+                <p className="para">Please provide the address at which you will receive service; P.O. Box addresses are not acceptable.</p>
 
-                <div className="flex flex-wrap mb-3">
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">
+                <div className="flex flex-wrap flex-row justify-content-between">
+                    <div className="calendar_field">
+                        <p className="field_label ">
                             Address 1 <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" minLength={10} autoComplete="new-password" />
+                        <InputText type="text" value={formik.values.address1} name="address1" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full" minLength={10} autoComplete="new-password" />
                         {formik.touched.address1 && formik.errors.address1 ? (
-                            <p className="mt-0" style={{ color: "red" }}>
+                            <p className="field_label" style={{ color: "red" }}>
                                 {formik.errors.address1}
                             </p>
                         ) : null}
                     </div>
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">Address 2</p>
-                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-21rem" autoComplete="new-password" />
+                    <div className="calendar_field">
+                        <p className="field_label">Address 2</p>
+                        <InputText type="text" value={formik.values.address2} name="address2" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full" autoComplete="new-password" />
                     </div>
-                    <div className=" mr-3 w-21rem  ">
-                        <p className="m-0">
-                            <code>Google Auto</code> Complete Address
-                        </p>
+                    <div className="calendar_field">
+                        <p className="field_label">Google Auto Complete Address</p>
                         <GooglePlacesAutocomplete
                             apiKey="AIzaSyDa1KFekZkev2CAqrcrU_nYDe_1jC-PHA0"
                             selectProps={{
@@ -356,43 +348,47 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         />
                     </div>
 
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label mt-4">
                             City <FontAwesomeIcon className="disable-icon-color icon-size" />{" "}
                         </p>
-                        <InputText type="text" value={formik.values.city} name="city" className="w-21rem disable-color" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <InputText type="text" value={formik.values.city} name="city" className="w-full disable-color" onChange={formik.handleChange} onBlur={formik.handleBlur} />
                     </div>
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">
-                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={zipDataParsed?.data?.izZipVerified ? faBan:false} />
+                    <div className="calendar_field">
+                        <p className="field_label mt-4">
+                            State <FontAwesomeIcon className="disable-icon-color icon-size" icon={zipDataParsed?.data?.izZipVerified ? faBan : false} />
                         </p>
-                        <InputText type="text" onBlur={formik.handleBlur} onChange={formik.handleChange}   disabled={zipDataParsed?.data?.izZipVerified === true ? true:false } value={formik.values.state} name="state" className="w-21rem disable-color" />
+                        <InputText type="text" onBlur={formik.handleBlur} onChange={formik.handleChange} disabled={zipDataParsed?.data?.izZipVerified === true ? true : false} value={formik.values.state} name="state" className="w-full disable-color" />
                     </div>
-                    <div className="mr-3 mb-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label mt-4">
                             Zip Code <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />
                         </p>
-                        <InputText disabled value={formik.values.zip} name="zip" onChange={formik.handleChange}  onBlur={formik.handleBlur} className="w-21rem disable-color" />
+                        <InputText disabled value={formik.values.zip} name="zip" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full disable-color" />
                     </div>
                 </div>
-                <p className="w-100rem mt-4">Is Your Mailling Address?</p>
+                <div className="calendar_field1">
+                    <p className="field_label" style={{ fontWeight: "600" }}>
+                        Is Your Mailling Address?
+                    </p>
+                </div>
 
-                <div className="flex flex-wrap mt-4">
+                <div className="flex flex-wrap mt-1">
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="same" onClick={handleSame} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "same"} />
-                        <label htmlFor="sameAdress" className="ml-2">
+                        <label htmlFor="sameAdress" className="ml-2" style={{ color: "#A0A0A0", fontWeight: "400" }}>
                             Same As Service Address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="different" onClick={handleDifferent} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "different"} />
-                        <label htmlFor="differentAddress" className="ml-2">
+                        <label htmlFor="differentAddress" className="ml-2" style={{ color: "#A0A0A0", fontWeight: "400" }}>
                             Different from Service Address
                         </label>
                     </div>
                     <div className="mr-3 flex alignitem-center">
                         <RadioButton inputId="confrimAddress" name="address" value="pobox" onClick={handlePobox} onChange={(e) => setConfrimAddress(e.value)} checked={confrimAddress === "pobox"} />
-                        <label htmlFor="poboxAddress" className="ml-2">
+                        <label htmlFor="poboxAddress" className="ml-2" style={{ color: "#A0A0A0", fontWeight: "400" }}>
                             My mailing address is a PO BOX
                         </label>
                     </div>
@@ -400,37 +396,37 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
 
                 {isDifferent && (
                     <>
-                        <div className="mt-3">Mailing Address</div>
-                        <div className="p-fluid formgrid grid mt-3">
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
+                        <div className="field_label mt-5">Mailing Address</div>
+                        <div className="flex flex-wrap flex-row justify-content-left">
+                            <div className="calendar_field  ">
+                                <label className="field_label mb-2">
                                     Address 1 <span className="steric">*</span>
                                 </label>
-                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text")} autoComplete="new-password" />
+                                <InputText id="mailingAddress1" value={formik.values.mailingAddress1} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingAddress1") }, "input_text", "w-full")} autoComplete="new-password" />
                                 {getFormErrorMessage("mailingAddress1")}
                             </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label"> Address 2 </label>
-                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} autoComplete="new-password" />
+                            <div className="calendar_field space">
+                                <label className="field_label mb-2"> Address 2 </label>
+                                <InputText id="mailingAddress2" value={formik.values.mailingAddress2} onChange={formik.handleChange} autoComplete="new-password" className="w-full" />
                             </div>
 
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
+                            <div className="calendar_field space">
+                                <label className="field_label  mt-2">
                                     City <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
-                                <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color" />
+                                <InputText id="mailingCity" value={formik.values.mailingCity} disabled className="disable-color w-full" />
                             </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
+                            <div className="calendar_field space">
+                                <label className="field_label mt-2">
                                     State <FontAwesomeIcon className="disable-icon-color icon-size" icon={faBan} />{" "}
                                 </label>
-                                <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color" />
+                                <InputText id="mailingState" value={formik.values.mailingState} disabled className="disable-color w-full mt-2" />
                             </div>
-                            <div className="field col-12 md:col-3">
-                                <label className="field_label">
+                            <div className="calendar_field space " style={{ marginBottom: "3rem" }}>
+                                <label className="field_label mt-2 ">
                                     Zip Code <span className="steric">*</span>
                                 </label>
-                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "input_text")} keyfilter={/^\d{0,5}$/} maxLength={5} />
+                                <InputText id="mailingZip" value={formik.values.mailingZip} onChange={formik.handleChange} className={classNames({ "p-invalid": isFormFieldValid("mailingZip") }, "w-full", "mt-2")} keyfilter={/^\d{0,5}$/} maxLength={5} />
                                 {getFormErrorMessage("mailingZip")}
                             </div>
                         </div>
@@ -470,6 +466,17 @@ const Address = ({ handleNext, handleBack, enrollment_id, _id, csr }) => {
                         </div>
                     </>
                 )}
+                <div>
+                    <div className="flex flex-row justify-content-between align-items-center mb-2 sticky-buttons ">
+                        {/* <div style={{ marginLeft: "80%", marginTop: "2rem" }}>
+                        <Button className="btn" label="Back" type="button" onClick={handleBack} />
+                    </div> */}
+                        <div style={{ marginLeft: "80%" }} className="fixed-button-container">
+                            <Button className="btn " label="Back" type="button" onClick={handleBack} />
+                            <Button style={{ marginTop: "2rem" }} className="btn ml-1" label="Continue" type="submit" icon={isLoading === true ? "pi pi-spin pi-spinner " : ""} disabled={isLoading} />
+                        </div>
+                    </div>
+                </div>
             </form>
         </>
     );

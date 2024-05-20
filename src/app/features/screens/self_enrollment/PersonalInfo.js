@@ -15,21 +15,19 @@ import moment from "moment/moment";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PersonalInfo = () => {
     const navigate = useNavigate();
-     let storedData = JSON.parse(localStorage.getItem("zip"))
-     var id;
-    let homeData = JSON.parse(localStorage.getItem("initialInformation"))
-    if(storedData){
-       id =  storedData?.data?._id
-    }else{
-        id =  homeData?.data?._id
+    let storedData = JSON.parse(localStorage.getItem("zip"));
+    var id;
+    let homeData = JSON.parse(localStorage.getItem("initialInformation"));
+    if (storedData) {
+        id = storedData?.data?._id;
+    } else {
+        id = homeData?.data?._id;
     }
-   
-   
 
     const location = useLocation();
     const stateData = location.state;
     const [isLoading, setIsLoading] = useState(false);
-    const [isDuplicate, setIsDuplicate] = useState(false)
+    const [isDuplicate, setIsDuplicate] = useState(false);
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string().required("This field is required"),
@@ -55,9 +53,8 @@ const PersonalInfo = () => {
             then: () => Yup.string().required("This field is required"),
             otherwise: () => Yup.string().notRequired(),
         }),
-       
     });
-           
+
     const formik = useFormik({
         validationSchema,
         initialValues: {
@@ -76,24 +73,24 @@ const PersonalInfo = () => {
             BenifitDOB: "",
         },
         onSubmit: async (values) => {
-            const selectedDate = formik.values.DOB;   
-            const formattedDate = selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : '';
+            const selectedDate = formik.values.DOB;
+            const formattedDate = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : "";
 
             const newData = {
                 userId: id,
-                 firstName: formik.values.firstName,
-            middleName: formik.values.middleName,
-            lastName: formik.values.lastName,
-            SSN: formik.values.SSN,
-            suffix: formik.values.suffix,
-            contact: formik.values.contact,
-            DOB: formattedDate,
-            isDifferentPerson:  formik.values.isDifferentPerson,
-            BenifitFirstName:  formik.values.BenifitFirstName,
-            BenifitMiddleName:  formik.values.BenifitMiddleName,
-            BenifitLastName:  formik.values.BenifitLastName,
-            BenifitSSN:  formik.values.BenifitSSN,
-            BenifitDOB:  formik.values.BenifitDOB,
+                firstName: formik.values.firstName,
+                middleName: formik.values.middleName,
+                lastName: formik.values.lastName,
+                SSN: formik.values.SSN,
+                suffix: formik.values.suffix,
+                contact: formik.values.contact,
+                DOB: formattedDate,
+                isDifferentPerson: formik.values.isDifferentPerson,
+                BenifitFirstName: formik.values.BenifitFirstName,
+                BenifitMiddleName: formik.values.BenifitMiddleName,
+                BenifitLastName: formik.values.BenifitLastName,
+                BenifitSSN: formik.values.BenifitSSN,
+                BenifitDOB: formik.values.BenifitDOB,
             };
             setIsLoading(true);
             if (formik.values.SSN === formik.values.BenifitSSN || (formik.values.firstName === formik.values.BenifitFirstName && formik.values.lastName === formik.values.BenifitLastName)) {
@@ -117,9 +114,9 @@ const PersonalInfo = () => {
         },
     });
 
- //get zipData
- const infoResponse = localStorage.getItem("initialInformation");
- const parseinfoResponse= JSON.parse(infoResponse);
+    //get zipData
+    const infoResponse = localStorage.getItem("initialInformation");
+    const parseinfoResponse = JSON.parse(infoResponse);
 
     const options = [
         { label: "Suffix", value: "" },
@@ -151,43 +148,35 @@ const PersonalInfo = () => {
             formik.setFieldValue("BenifitMiddleName", initialInformation?.data?.BenifitMiddleName);
             formik.setFieldValue("BenifitLastName", initialInformation?.data?.BenifitLastName);
             formik.setFieldValue("BenifitSSN", initialInformation?.data?.BenifitSSN);
-            formik.setFieldValue("BenifitDOB", new Date(initialInformation?.data?.BenifitDOB))
-            
+            formik.setFieldValue("BenifitDOB", new Date(initialInformation?.data?.BenifitDOB));
         }
     }, []);
     const handlePaste = (event) => {
         event.preventDefault();
         toast.warning("Pasting is not allowed in this field.");
-       
-      };
+    };
 
-      //check customer Duplication
-      useEffect(() => {
-        if(!parseinfoResponse){
+    //check customer Duplication
+    useEffect(() => {
+        if (!parseinfoResponse) {
             const fetchData = async () => {
                 if (formik.values.contact.length > 9) {
                     const data = {
-                        contact: formik.values.contact    
+                        contact: formik.values.contact,
                     };
-                   
+
                     try {
                         const response = await Axios.post(`${BASE_URL}/api/user/checkCustomerDuplication`, data);
-                       
+
                         setIsDuplicate(false);
-                    }
-                     catch (error) {
+                    } catch (error) {
                         toast.error(error?.response?.data?.msg);
                         setIsDuplicate(true);
                     }
-                  
                 }
-            
-        };
-        fetchData();
+            };
+            fetchData();
         }
-       
-    
-       
     }, [formik.values.contact]);
     return (
         <>
@@ -255,10 +244,8 @@ const PersonalInfo = () => {
                                                 <InputText type="password" className="mb-3" placeholder="SSN(Last 4 Digit)" name="BenifitSSN" value={formik.values.BenifitSSN} onChange={formik.handleChange} keyfilter={/^\d{0,4}$/} maxLength={4} minLength={4} />
                                                 {getFormErrorMessage("BenifitSSN")}
 
-
-                                                <Calendar  onPaste={handlePaste} className="mb-3" id="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon  />
-                        {getFormErrorMessage("BenifitDOB")}
-
+                                                <Calendar onPaste={handlePaste} className="mb-3" id="BenifitDOB" value={formik.values.BenifitDOB} onChange={formik.handleChange} onBlur={formik.handleBlur} showIcon />
+                                                {getFormErrorMessage("BenifitDOB")}
                                             </div>
                                         )}
                                     </div>

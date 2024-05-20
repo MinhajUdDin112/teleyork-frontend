@@ -376,6 +376,7 @@ const App = () => {
                         refreshBell={refreshBell}
                         setHandleHighlight={setHandleHighlight}
                     />
+
                     <div className="layout-sidebar">
                         <AppMenu model={dynamicMenu} activeTab={activeTab} onMenuItemClick={onMenuItemClick} setCallSearchApi={setCallSearchApi} searchByValueClick={searchByValueClick} onSidebarClick={onSidebarClick} layoutColorMode={layoutColorMode} />
                     </div>
@@ -426,7 +427,7 @@ const App = () => {
                                             <Route path="/enrollment" element={<EnrollmentFlowPage />} />
                                             <Route path="/post-enrollment" element={<Post_enrollment_Flow />} />
                                             <Route path="/managerolesandrights/*" element={isPermitted("/managerolesandrights") ? <ManageRolesAndRights /> : <Dashboard />} />
-                                            <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} /> 
+                                            <Route path="/invoice" element={isPermitted("/invoice") ? <InvoicePage /> : <Dashboard />} />
                                             <Route path="/all-enrollments" element={isPermitted("/all-enrollments") ? <AllEnrollments /> : <Dashboard />} />
                                             <Route path="/bulk-upload" element={isPermitted("/bulk-upload") ? <UploadBulk /> : <Dashboard />} />
                                             <Route path="/completedenrollments" element={isPermitted("/completedenrollments") ? <CompletedEnrollments /> : <Dashboard />} />

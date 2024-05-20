@@ -12,17 +12,17 @@ import { Dialog } from "primereact/dialog";
 import AddAgentDetail from "./Dialogs/add_agent_detail";
 import AddSimModelDialog from "./Dialogs/add_sim_model_dialog";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,model }) {
+function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions, unit, model }) {
     let ref = useRef(null);
     const loginRes = localStorage.getItem("userData");
-    const parseLoginRes = JSON.parse(loginRes); 
-    
+    const parseLoginRes = JSON.parse(loginRes);
+
     const [addsim_Model_dialog_visibility, setAddSimModelDialogVisbility] = useState(false);
     const [add_agent_detail_dialog_visibility, setAddAgentDialogVisbility] = useState(false);
     const [carrier, setCarrier] = useState(null);
     const [department, setDepartment] = useState(null);
     const [agent, setAgent] = useState(null);
-    const [departmentselected, setDepartmentSelected] = useState( parseLoginRes?.department);
+    const [departmentselected, setDepartmentSelected] = useState(parseLoginRes?.department);
     const [Model, setModel] = useState(null);
     useEffect(() => {
         if (department === null) {
@@ -52,8 +52,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                         agentholder.push(obj);
                     }
 
-                    setAgent(agentholder);   
-                
+                    setAgent(agentholder);
                 })
                 .catch(() => {});
         }
@@ -89,10 +88,7 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
     const formik = useFormik({
         validationSchema: Yup.object({
             carrier: Yup.string().required("Carrier is required"),
-            SimNumber:  Yup.string()
-            .required("ESN is required")
-            .matches(/^\d+$/, 'ESN must contain only digits')
-            .length(19, "ESN must be exactly 19 digits"),
+            SimNumber: Yup.string().required("ESN is required").matches(/^\d+$/, "ESN must contain only digits").length(19, "ESN must be exactly 19 digits"),
             box: Yup.string().required("Box is required"),
 
             Model: Yup.string().required("Model is required"),
@@ -108,16 +104,16 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
             SimNumber: "",
             box: "",
             Model: "",
-            unitType: unit, 
-            billingModel:model,
+            unitType: unit,
+            billingModel: model,
             Uploaded_by: parseLoginRes?._id,
             provisionType: "Add And Assign Non Active",
         },
-        
+
         onSubmit: (values, actions) => {
             handlesubmit(actions);
         },
-    });    
+    });
     function handlesubmit(actions) {
         let obj = formik.values;
         obj.serviceProvider = parseLoginRes.company;
@@ -129,8 +125,6 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
 
                     formik.setFieldValue("carrier", "");
                     formik.setFieldValue("serviceProvider", parseLoginRes?.companyName);
-                    ;
-                    ;
                     formik.setFieldValue("SimNumber", "");
 
                     formik.setFieldValue("box", "");
@@ -141,7 +135,6 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                     formik.setFieldValue("Uploaded_by", parseLoginRes?._id);
                     formik.setFieldValue("provisionType", "Add And Assign Non Active");
                     actions.resetForm();
-                    ;
                 })
                 .catch((error) => {
                     formik.values.serviceProvider = parseLoginRes?.companyName;
@@ -152,12 +145,12 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
     return (
         <>
             <div>
-                <div className="flex flex-wrap mb-3 justify-content-around ">
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                <div className="flex flex-wrap mb-3 justify-content-left ">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-2">
                             Carrier <span style={{ color: "red" }}>*</span>
                         </p>
-                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.carrier} options={carrier} onChange={(e) => formik.setFieldValue("carrier", e.value)} placeholder="Select an option" className="w-full mt-2" />
                         {formik.errors.carrier && formik.touched.carrier && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.carrier}
@@ -165,22 +158,22 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                         )}
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-2">
                             ESN/SIM Number <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.SimNumber} keyfilter="int"  maxLength={19} minLength={19} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText keyfilter="int" value={formik.values.SimNumber} maxLength={19} minLength={19} name="SimNumber" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full mt-2 ml-2" />
                         {formik.errors.SimNumber && formik.touched.SimNumber && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.SimNumber}
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-2">
                             Company Name <span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="field-width mt-2" />
+                        <InputText value={formik.values.serviceProvider} name="serviceProvider" disabled className="w-full mt-2 ml-3" />
                     </div>
                     {/*  <div className="mr-3 mb-3 mt-3">
                         <p className="m-0">
@@ -203,22 +196,21 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                             </div>
                         )}
                     </div>    */}
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-6">
                             Department/Vendor Name <span style={{ color: "red" }}>* </span>
                         </p>
 
-                        <Dropdown 
-                        disabled
+                        <Dropdown
+                            disabled
                             value={formik.values.agentType}
                             options={department}
                             onChange={(e) => {
                                 formik.setFieldValue("agentType", e.value);
-                                ;
                                 setDepartmentSelected(e.value);
                             }}
                             placeholder="Select an option"
-                            className="field-width mt-2"
+                            className="w-full mt-2"
                         />
                         {formik.errors.agentType && formik.touched.agentType && (
                             <div className="mt-2" style={{ color: "red" }}>
@@ -226,8 +218,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                             </div>
                         )}
                     </div>
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-6">
                             Agent Name <span style={{ color: "red" }}>* </span>
                             {formik.values.agentType !== "" ? (
                                 <Button style={{ border: "none", padding: "0px", backgroundColor: "transparent" }} disabled={!permissions.isCreate}>
@@ -236,13 +228,13 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                                             setAddAgentDialogVisbility((prev) => !prev);
                                         }}
                                         className="pi pi pi-plus"
-                                        style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                        style={{ marginLeft: "5px", fontSize: "10px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
                                     ></i>
                                 </Button>
                             ) : undefined}
                         </p>
 
-                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown disabled value={formik.values.AgentName} options={agent} onChange={(e) => formik.setFieldValue("AgentName", e.value)} placeholder="Select an option" className="w-full mt-2 ml-2" />
                         {formik.errors.AgentName && formik.touched.AgentName && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.AgentName}
@@ -250,8 +242,8 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                         )}
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-3 mt-6">
                             Model<span style={{ fontSize: "12px" }}>(MICRO/NANO/SIM)</span>
                             <span style={{ color: "red" }}>
                                 *
@@ -260,11 +252,11 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                                         setAddSimModelDialogVisbility((prev) => !prev);
                                     }}
                                     className="pi pi pi-plus"
-                                    style={{ marginLeft: "5px", fontSize: "14px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
+                                    style={{ marginLeft: "5px", fontSize: "10px", color: "#fff", padding: "5px", cursor: "pointer", paddingLeft: "10px", borderRadius: "5px", paddingRight: "10px", background: "#00c0ef" }}
                                 ></i>
                             </span>
                         </p>
-                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="field-width mt-2" />
+                        <Dropdown value={formik.values.Model} options={Model} onChange={(e) => formik.setFieldValue("Model", e.value)} placeholder="Select an option" className="w-full mt-2 ml-3" />
                         {formik.errors.Model && formik.touched.Model && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.Model}
@@ -272,11 +264,11 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                         )}
                     </div>
 
-                    <div className="mr-3 mb-3 mt-3">
-                        <p className="m-0">
+                    <div className="calendar_field">
+                        <p className="field_label ml-2 mt-8">
                             Box#<span style={{ color: "red" }}>*</span>
                         </p>
-                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="field-width mt-2" />
+                        <InputText type="text" value={formik.values.box} name="box" onChange={formik.handleChange} onBlur={formik.handleBlur} className="w-full " />
                         {formik.errors.box && formik.touched.box && (
                             <div className="mt-2" style={{ color: "red" }}>
                                 {formik.errors.box}
@@ -284,10 +276,11 @@ function SIMSingleUploadAddAndAssignNonActivateProvision2({ permissions,unit,mod
                         )}
                     </div>
                 </div>
-                <div className="flex flex-wrap justify-content-center align-item-center">
+                <div className="flex flex-wrap justify-content-end w-full">
                     <Button
+                        style={{ marginTop: "3rem", position: "absolute" }}
                         label="Submit"
-                        className="field-width"
+                        className="btn"
                         onClick={() => {
                             formik.handleSubmit();
                             //  handlesubmit()

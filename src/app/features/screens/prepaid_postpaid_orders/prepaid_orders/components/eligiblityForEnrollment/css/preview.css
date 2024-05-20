@@ -1,0 +1,25 @@
+.prev {
+    font-size: 20px;
+    font-family: Inter;
+    color: #c68301;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 10px;
+}
+.previewdiv {
+    width: 100%;
+    color: #0475b4;
+    font-weight: 500;
+    background-color: #e6f1f7;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    border-radius: 20px;
+}
+.dot {
+    border: "2px dotted red";
+}
+.p-steps .p-steps-item.p-highlight .p-steps-title {
+    color: #0475b4;
+    font-weight: 400;
+}
