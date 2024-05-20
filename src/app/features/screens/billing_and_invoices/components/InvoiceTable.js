@@ -19,7 +19,6 @@ const InvoiceTable = ({ setRefresh,refresh, userDetails, invoiceData }) => {
     const [invoiceDownload,setInvoiceDownload]=useState(false)
 
     const rowClassName = (rowData) => {  
-          console.log(rowData.invoiceStatus)
         // Example condition: apply different classes based on status
         if (rowData.invoiceStatus === "Paid" || rowData.invoiceStatus === "Partially Paid" || rowData.invoiceStatus === "Partial") {
             if (rowData.invoiceStatus === "Paid") {

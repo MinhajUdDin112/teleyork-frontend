@@ -6,7 +6,7 @@ export default function PortInHistory({currentSelected}){
 const BASE_URL = process.env.REACT_APP_BASE_URL;   
        useEffect(()=>{ 
         Axios.get(`${BASE_URL}/api/user/getMdnHistory?customerId=${currentSelected?._id}`).then(res=>{ 
-          console.log(res)
+     
      }).catch(err=>{  
      })
        },[]) 

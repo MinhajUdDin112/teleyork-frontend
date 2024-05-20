@@ -490,8 +490,7 @@ const App = () => {
                                             <Route exact path="/add_vendors" element={<Add_Vendors />} />
                                             <Route exact path="/update_vendors" element={<Update_Vendors />} />
                                             <Route path="/create-department" element={isPermitted("/create-department") ? <CreateDepartment /> : <Dashboard />} />
-                                            <Route path="/Porting" element={isPermitted("/Porting") ? <Porting /> : <Dashboard />} />
-                                            
+                                            <Route path="/Porting" element={isPermitted("/Porting") ? <Porting /> : <Dashboard />} />   
                                                 <Route
                                                     exact
                                                     path="/customer-profile"

@@ -96,7 +96,6 @@ export default function SIMBulkUploadAddActivateProvision({ permissions, unit, m
         },
     });
     function ApiResponseShow({ res }) {
-        console.log("Response of data is", res);
         return (
             <div className="flex flex-wrap justify-content-left ">
                 <p>{res?.msg}</p>
