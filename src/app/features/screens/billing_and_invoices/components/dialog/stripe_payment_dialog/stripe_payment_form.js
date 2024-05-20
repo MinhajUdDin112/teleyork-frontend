@@ -30,7 +30,8 @@ export default function PaymentStripeForm({setRefresh,setPaymentDialogVisibility
             toast.current.show({ severity: "success", summary: "Payment Processed", detail: "Payment has been successfully processed" });
 
             const dataToSend = {
-                customerId: userDetails?._id,
+                customerId: userDetails?._id,        
+                 paymentId:paymentIntent?.id,
                 amountPaid: paid,
                 invoicePaymentMethod: "Credit Card",
             };
@@ -39,7 +40,7 @@ export default function PaymentStripeForm({setRefresh,setPaymentDialogVisibility
          dataToSend.invoiceStatus="Paid"
       } 
       else{ 
-        dataToSend.invoiceStatus="Partially Paid" 
+        dataToSend.invoiceStatus="Partial Paid" 
       }
             try {
                 const response = await Axios.put(`${BASE_URL}/api/web/invoices/updateInvoice?invoiceId=${invoiceId}`, dataToSend);
