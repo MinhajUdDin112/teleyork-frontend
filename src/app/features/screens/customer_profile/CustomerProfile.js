@@ -33,6 +33,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     if (selectedId === undefined) {
         navigate("/");
     }
+    const [isLoading, setIsLoading] = useState(false)
     const [mvno, setmvno] = useState("");
     const [expand, setExpand] = useState(false);
     const [noteLength, setNoteLength] = useState(null);
@@ -54,6 +55,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const [refresh, setRefresh] = useState(false);
     const [isSwapEsn,setIsSwapEsn]=useState()
     const [isSwapMdn,setIsSwapMdn]=useState()
+    const [showPwgBtn,setShowPwgBtn]=useState(true)
     useEffect(() => {
         if (customerServicesIndex !== undefined) {
             if (activeTab !== undefined) {
@@ -142,6 +144,7 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     });
 
     const getCustomerProfileData = async () => {
+        console.log("called")
         try {
             const res = await Axios.get(`${BASE_URL}/api/user/userDetails?userId=${selectedId}`);
             if (res?.status == 200 || res?.status == 201) {
@@ -293,6 +296,44 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
     const swapEsn =()=>{
          setIsSwapEsn(true)
     }
+    useEffect(() => {
+        if (cpData?.status === "active") {
+            const requiredFields = [
+                cpData.serviceStatus,
+                cpData.talkBalance,
+                cpData.textBalance,
+                cpData.dataBalance,
+                cpData.planExpirationDate,
+                cpData.socs,
+                cpData.PUK1,
+                cpData.PUK2,
+                cpData.simStatus
+            ];
+
+            const hasUndefinedFields = requiredFields.some(field => field === undefined);
+
+            setShowPwgBtn(hasUndefinedFields);
+        } else {
+            setShowPwgBtn(false);
+        }
+    }, [cpData]);
+
+    const callPwgAPi = async()=>{
+        setIsLoading(true)
+        try {
+        const response =  await Axios.post(`${BASE_URL}/api/user/getPwgInfo?customerId=${cpData?._id}`)
+        if(response?.status=='200' || response?.status=="201"){
+            toast.success(response?.data?.msg) 
+            setRefresh(prev=>!prev)
+            setIsLoading(false)
+        }
+           
+        } catch (error) {
+            toast.error(error?.response?.data?.error)
+        }
+        setIsLoading(false)
+    }
+   
 
     return (
         <div className="card">
@@ -322,6 +363,13 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                     <DialogeForSwapMdn cpData={cpData} setRefresh={setRefresh} setIsSwapMdn={setIsSwapMdn} />
                 </Dialog>
                 <div className="pt-3">
+                {showPwgBtn &&
+                        <div className="PWG-button mr-5">
+                        <Button  label="Fetch Details" onClick={callPwgAPi}  icon={isLoading === true ? "pi pi-spin pi-spinner " : ""}  disabled={isLoading}/>
+                        </div>
+                    }
+                    
+                    
                     <div className="grid">
                         <div className="col-12 lg:col-4 ">
                             <div className="p-3 ">
@@ -708,10 +756,10 @@ const CustomerProfile = ({ refreshEsn, setRefreshEsn, setRefreshBell, setActiveT
                                                     <td>Data Balance</td>
                                                     <td>{cpData?.dataBalance !== undefined ? cpData?.dataBalance : "NIL"}</td>
                                                 </tr>
-                                                <tr>
+                                                {/* <tr>
                                                     <td>Last Usage</td>
                                                     <td>NIL</td>
-                                                </tr>
+                                                </tr> */}
                                                 <tr>
                                                     <td>Plan ID</td>
                                                     <td>{cpData?.plan?.planId !== undefined ? (cpData?.plan?.planId !== undefined ? cpData?.plan?.planId : "NIL") : "NIL"}</td>
