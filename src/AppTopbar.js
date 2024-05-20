@@ -13,12 +13,29 @@ import { Sidebar } from "primereact/sidebar";
 import "./app.css";
 import { DropdownIcon, NotificationIcon } from "./utility";
 import Axios from "axios";
-import io from "socket.io-client";
+//import io from "socket.io-client";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const AppTopbar = (props) => {
     const [visibleRight, setVisibleRight] = useState(false);
     const location = useLocation();
-    const [counter, setCounter] = useState("");
+    const [counter, setCounter] = useState("");         
+     const [currentLocation,setCurrentLocation]=useState(location.pathname)
+    useEffect(() => {
+        const handleRouteChange = (newLocation) => {  
+            if (newLocation.pathname !== currentLocation ) {    
+                  // if(props.searchByValueClick || props.searchBy){ 
+                props.setSearchBy(null);
+                props.setSearchByValueClick(false);  
+                setCurrentLocation(newLocation.pathname) 
+                 //  }
+            }
+          };
+          handleRouteChange(location);
+          window.addEventListener('popstate', handleRouteChange);
+          return () => {
+            window.removeEventListener('popstate', handleRouteChange);  
+          };  
+        }, [location]);  
     useEffect(() => {
         document.addEventListener("click", docOnClick, false);
     });
@@ -115,22 +132,6 @@ export const AppTopbar = (props) => {
             </p>
         </div>
     );
-    function capitalizeEveryWord(sentence) {
-        // Split the sentence into an array of words
-        var words = sentence?.split(" ");
-
-        // Capitalize the first letter of each word
-        var capitalizedWords = words?.map(function (word) {
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        });
-
-        // Join the words back into a sentence
-        var capitalizedSentence = capitalizedWords.join(" ");
-
-        return capitalizedSentence;
-    }
-
-    // counter notification API
     useEffect(() => {
         const getCounter = async () => {
             setInterval(async () => {
@@ -192,7 +193,7 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             props.setSearchBy(null);
-                            props.setSearchByValueClick(false); 
+                            props.setSearchByValueClick(false);
                         }}
                     >
                         <img className="w-8rem h-4rem" src={process.env.PUBLIC_URL + "/zisfonelogo.png"} alt="Logo" />
@@ -279,7 +280,7 @@ export const AppTopbar = (props) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             setVisibleSearch(false);
-                            props.setSearchBy(null);
+                            props.setSearchBy(null); 
                             props.setSearchByValueClick(true);
                             if (props.searchByValueClick === true) {
                                 props.setCallSearchApi((prev) => !prev);

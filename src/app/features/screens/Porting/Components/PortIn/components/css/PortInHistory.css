@@ -1,0 +1,13 @@
+.tablebody{ 
+ background-color: rgb(255, 236, 161);  
+ width: 100%; 
+ margin-top: 25px; 
+ border-collapse: collapse; 
+} 
+.tablebody tr{ 
+    border: solid black .5px;
+} 
+.tablebody tr td{ 
+    border: solid black .5px;    
+   padding: 3px;
+}

@@ -11,8 +11,6 @@ import PaymentStripModuleAlternateCard from "../../Alternate card Dialogs/stripe
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function PaymentStripeForm({ plan, clientSecret, paid, object, setActiveIndex, setPaymentDialogVisibility }) {
     const submitbuttonref = useRef(null);
-
-    console.log("Paid is ", paid);
     const [cardNumber, setCardNumber] = useState("");
     const [cvcNumber, setCvcNumber] = useState("");
     const [cardMonth, setCardMonth] = "";
@@ -165,7 +163,6 @@ export default function PaymentStripeForm({ plan, clientSecret, paid, object, se
                                     let dataToSend = {
                                         paymentId: paymentIntent.id,
                                         isAutopay: autoPay,
-
                                         customerId: object.customerid,
                                         invoiceType: "Sign Up",
                                         totalAmount: object.totalamount,

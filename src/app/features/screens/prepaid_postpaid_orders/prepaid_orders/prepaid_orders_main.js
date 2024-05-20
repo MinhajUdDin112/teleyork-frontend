@@ -19,7 +19,6 @@ export default function MainPrepaidOrders() {
               if(counter === 0){
               } 
               else{ 
-              
              setZipVerified(false) 
               } 
               setcounter(prev=>prev=prev+1)

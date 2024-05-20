@@ -1,0 +1,19 @@
+.changemsisdn_field{ 
+    width: 33%;  
+
+}  
+.changemsisdn_field input{ 
+     height: 40px; 
+    font-weight: normal !important; 
+    font-family: "Inter";
+} 
+.opacitydim{ 
+    opacity: 0.5;
+}
+@media(max-width:1000px) {
+    .changemsisdn_field{ 
+        width: 49%;  
+        transition: opacity 500ms ease-in-out;
+        margin-top: 10px;
+    }   
+} 
